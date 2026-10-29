@@ -35,3 +35,9 @@ CI URL: https://github.com/sunshihao001/grok/actions/runs/40847971329
 
 - knowledge/research_ledger.v0.json: 4 source-scoped negative findings plus 6 explicitly unvalidated research hypotheses; all source IDs validated by offline tests. No inferred ownership or profitability claims.
 - Fixed the gate chronology: prospective outcome must be observed after the declared entry time, not merely after a decision.
+
+
+## Final added-ledger CI
+
+- Commit 1cf27c919eeaa70913134e8ad3d37292f0812026 (ledger + stricter chronology): GitHub Actions push run 40848426930: **48 tests, OK**. https://github.com/sunshihao001/grok/actions/runs/40848426930
+- Regression outcome is an engineering integrity check only, not source-independent falsification, true strategy profit or live deployment.
