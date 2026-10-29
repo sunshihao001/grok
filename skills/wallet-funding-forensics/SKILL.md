@@ -5,7 +5,7 @@ description: Explore wallet roles, source-of-funds graph, coordinated buys, exit
 
 # wallet-funding-forensics
 
-**Status:** reviewed skill *template*, not proof of installation in Grok UI. Role owners: B03.
+**Status:** draft skill *template*. Phase 1: **Paper-Only**. This is not proof of installation or review in the Grok UI. Role owners: B03.
 
 ## When to use
 

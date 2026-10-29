@@ -5,7 +5,7 @@ description: Collect and audit read-only Solana/GMGN observations, timestamps, r
 
 # gmgn-readonly-source
 
-**Status:** reviewed skill *template*, not proof of installation in Grok UI. Role owners: B02.
+**Status:** draft skill *template*. Phase 1: **Paper-Only**. This is not proof of installation or review in the Grok UI. Role owners: B02.
 
 ## When to use
 

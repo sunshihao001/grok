@@ -24,7 +24,11 @@ class BotKnowledgeTests(unittest.TestCase):
             for skill in role["skills_to_configure"]:
                 path=ROOT/"skills"/skill/"SKILL.md"
                 self.assertTrue(path.is_file(), str(path))
-                self.assertIn("Paper-Only", path.read_text(encoding="utf-8") if "solana-meme" not in skill else "Paper-Only")
+                body = path.read_text(encoding="utf-8")
+                self.assertIn("name:", body)
+                if "solana-meme" not in skill:
+                    self.assertIn("Paper-Only", body)
+                    self.assertIn("not proof of installation", body)
 
     def test_role_routes_only_role_relevant_materials(self):
         x=build_role_brief("B03","同源钱包和资金回流可能是交易所节点吗")

@@ -5,7 +5,7 @@ description: Normalize Solana Meme research question, route ontology and pinned 
 
 # research-intake
 
-**Status:** reviewed skill *template*, not proof of installation in Grok UI. Role owners: B01, B02, B03, B04, B05.
+**Status:** draft skill *template*. Phase 1: **Paper-Only**. This is not proof of installation or review in the Grok UI. Role owners: B01, B02, B03, B04, B05.
 
 ## When to use
 

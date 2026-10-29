@@ -5,7 +5,7 @@ description: Perform blinded independent Solana case replay, time/cluster holdou
 
 # independent-case-replay
 
-**Status:** reviewed skill *template*, not proof of installation in Grok UI. Role owners: B06.
+**Status:** draft skill *template*. Phase 1: **Paper-Only**. This is not proof of installation or review in the Grok UI. Role owners: B06.
 
 ## When to use
 
