@@ -8,12 +8,12 @@
 - Hermes 旧结构设计的共同资金源/5分钟/类似卖出规则具有发现价值，但未验证同一人/同组织/收益。
 - qb Wallet-Intel 合同要求 raw / normalized / evidence / inference 分层，有利于数据护照。
 - 参考项目 [Why-Solana-Memecoins-Are-Over](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over) 的方法强调基础设施、粉尘、null、采集完整度、截止时点，原作者文档不被复制；它的历史样本结论不外推为自动规则。
-- 8 个原始文件准确版本在 \`knowledge/registry.v0.json\`，与 KB-001 的 7 个原始来源共存。
+- 8 个原始文件准确版本在 `knowledge/registry.v0.json`，与 KB-001 的 7 个原始来源共存。
 
 ## 工程边界
 
-- 新增独立 \`funding_evidence.py\` 及 fixture 和测试，不改现有 monitor/GMGN collector 阈值。
-- 输入必须明示 \`mode=fixture\`、\`policy.status=illustrative\`、时间、证据 ref 和 coverage。
+- 新增独立 `funding_evidence.py` 及 fixture 和测试，不改现有 monitor/GMGN collector 阈值。
+- 输入必须明示 `mode=fixture`、`policy.status=illustrative`、时间、证据 ref 和 coverage。
 - 校验 transfer 的可见时间，区分 hub/未验证 hub/被审查非 hub 三类，按配置示例材料性阈值保留证据；不做 owner 识别。
 - 预期可测试风险：重复交易、缺页、dust、hub 膨胀、未来泄漏、RPC 失败、错误标签。
 
@@ -23,4 +23,4 @@
 
 ## CI
 
-命令：\`PYTHONPATH=src python -m unittest discover -s tests -v\`。**仅在 GitHub CI 实际完成后填写通过结果**。
+命令：`PYTHONPATH=src python -m unittest discover -s tests -v`。**仅在 GitHub CI 实际完成后填写通过结果**。
