@@ -45,3 +45,7 @@ Plain-language knowledge routing example:
 Read `knowledge/README.md`, `knowledge/legacy-audit.md` and `skills/solana-meme-knowledge/SKILL.md`. The engine is a deterministic starter; true Grok language understanding and source discovery still require configuring and testing the actual Grok Bots.
 
 The first preservation wave also includes [21 original Markdown knowledge snapshots](knowledge/legacy-snapshots/README.md) with pinned source commit paths and SHA entries, so the Grok OS can read those sources locally without requiring Hermes or the original repositories to be live.
+
+## 增量知识审查包 KNOW-001
+
+保留现有 `knowledge/catalog.v1.json` 15 张知识卡、21 份历史快照、`knowledge.py` 检索/监控接口；本次只新增 `knowledge/registry.v0.json`、`knowledge/packs/KB-001-evidence-bounds.md`，用于按需深入核对来源、替代解释和反证条件。见 `docs/knowledge-intake.md`。本次并未迁移全部知识，也未验证交易优势。

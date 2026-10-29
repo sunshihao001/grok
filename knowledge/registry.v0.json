@@ -1,0 +1,112 @@
+{
+  "schema_version": "1.0",
+  "version": "KB-001.0",
+  "updated_at": "2026-10-29",
+  "source_policy": "immutable source commit + blob SHA; original repositories retain canonical authority",
+  "sources": [
+    {
+      "id": "legacy-contract",
+      "repository": "sunshihao001/-",
+      "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+      "path": "design/phase0-workflow-contract.md",
+      "blob_sha": "9c1ce0087c539b88d97d74b1e6905ab1a197ccdc",
+      "role": "evidence contract"
+    },
+    {
+      "id": "missing-data",
+      "repository": "sunshihao001/-",
+      "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+      "path": "docs/missing_data_policy.md",
+      "blob_sha": "ca4ee160efc498074130211a91a9eddb9ecfc8cd",
+      "role": "missingness and downgrade"
+    },
+    {
+      "id": "data-passport",
+      "repository": "sunshihao001/qb-",
+      "commit": "8377ad5611255df5cd4562666a826708575334f0",
+      "path": "hermes_harness/01_control_plane/wallet_intel_data_passport_rule_v2.md",
+      "blob_sha": "d2fb9d13a7b6610125f788f173de941eaac23ef2",
+      "role": "data passport semantics, not Hermes runtime"
+    },
+    {
+      "id": "truth-map",
+      "repository": "sunshihao001/meme-",
+      "commit": "5ab2b01f08e4e512fa4fcd1aed88953ff534bd0a",
+      "path": "SOURCE_OF_TRUTH.md",
+      "blob_sha": "eb1963479337facf53382acb05f241684d2e1413",
+      "role": "knowledge source precedence"
+    },
+    {
+      "id": "fcz",
+      "repository": "sunshihao001/meme-",
+      "commit": "5ab2b01f08e4e512fa4fcd1aed88953ff534bd0a",
+      "path": "03_语义概念/第一控盘区定义_v0.1.md",
+      "blob_sha": "839077e2180ee3eec7a543994811717361ff9293",
+      "role": "first-control-zone hypothesis"
+    },
+    {
+      "id": "reacceptance",
+      "repository": "sunshihao001/meme-",
+      "commit": "5ab2b01f08e4e512fa4fcd1aed88953ff534bd0a",
+      "path": "03_语义概念/POC与AVWAP重新接受定义_v0.1.md",
+      "blob_sha": "4bba3056dab549c1d68124a3b112ebb3282d5f56",
+      "role": "reacceptance research semantics"
+    },
+    {
+      "id": "falsification",
+      "repository": "sunshihao001/meme-",
+      "commit": "5ab2b01f08e4e512fa4fcd1aed88953ff534bd0a",
+      "path": "09_规则与回测/反证实验设计_v0.1.md",
+      "blob_sha": "21c321922254eaeececf8fb48957b858c0a3bc4b",
+      "role": "counterexample protocol"
+    }
+  ],
+  "packs": [
+    {
+      "id": "KB-001",
+      "version": "0.1.0",
+      "stage": "reference_only",
+      "path": "knowledge/packs/KB-001-evidence-bounds.md",
+      "scope": "Evidence, fact-vs-inference, missing-data, and anti-hindsight interpretation. Not a predictive rule.",
+      "source_ids": [
+        "legacy-contract",
+        "missing-data",
+        "data-passport",
+        "truth-map",
+        "fcz",
+        "reacceptance",
+        "falsification"
+      ],
+      "triggers": [
+        "SNAPSHOT",
+        "LIQUIDITY_DROP",
+        "TOP10_SHARE_RISE",
+        "NEW_SOURCE_EVENT",
+        "MISSING_DATA"
+      ],
+      "trigger_guidance": {
+        "SNAPSHOT": {
+          "interpretation": "单次快照只能证明来源报告的观测值；不能推出庄家身份、操纵动机或正期望。",
+          "verify": "核对来源原始字段、单位、token mint、观测时间与同一池/同一口径。"
+        },
+        "LIQUIDITY_DROP": {
+          "interpretation": "流动性指标下降是观测变化，不等同撤池、砸盘或死亡盘。",
+          "verify": "复核池地址、报价币种、计价单位、时点；与其他池和真实链上流动性事件交叉核验。"
+        },
+        "TOP10_SHARE_RISE": {
+          "interpretation": "前十持仓占比上升不等同同源钱包或筹码控制权增加。",
+          "verify": "检查 token account/所有者映射、LP/CEX/合约账户排除、持仓分母变化及资金来源图。"
+        },
+        "NEW_SOURCE_EVENT": {
+          "interpretation": "新事件 ID 是待核验事件线索；观察到标签不等于确认交易动机。",
+          "verify": "关联链上交易签名、slot、地址归属、资金流和反例；排除重复采样。"
+        },
+        "MISSING_DATA": {
+          "interpretation": "缺失字段是 UNKNOWN，不是 0；不能由上游缺失推断安全或确认。",
+          "verify": "记录字段、来源命令、严重度、补采动作和下游决策上限。"
+        }
+      },
+      "promote_only_after": "independent source/field verification + reproducible counterexamples + holdout/ablation + explicit human acceptance"
+    }
+  ]
+}

@@ -17,3 +17,7 @@ description: Read-only, source-linked Solana Meme snapshot monitoring, with fres
 ## Expert knowledge is required, not optional
 
 After Step 2, read `knowledge.interpretation_candidates` from the monitor JSON. These are **candidate conceptual lenses**, not conclusions. For each alert, explain the actual measured change, what the proposed mechanism would imply, what other mechanisms could also produce it, and which missing source datum would best distinguish them. If an alert is unsupported by required evidence, say UNKNOWN and avoid upgrading risk status. See `skills/solana-meme-knowledge/SKILL.md`.
+
+## Supplemental staged evidence knowledge
+
+Keep existing `knowledge.interpretation_candidates` and `knowledge/catalog.v1.json` as the active routing contract. For source conflicts, missingness, liquidity/concentration caveats, or control-zone research, read `docs/knowledge-intake.md` and `knowledge/packs/KB-001-evidence-bounds.md` on demand. KB-001 is reference-only; it must not be auto-promoted into the monitoring rules.
