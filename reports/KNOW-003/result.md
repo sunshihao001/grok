@@ -29,3 +29,9 @@ CI: PYTHONPATH=src python -m unittest discover -s tests -v — GitHub Actions 40
 First CI on 61bea482 failed due to an incorrectly truncated source blob SHA; corrected via 4225ec1a, then 44 tests passed. This fail-closed behavior is retained as provenance safety.
 
 CI URL: https://github.com/sunshihao001/grok/actions/runs/40847971329
+
+
+## Added negative knowledge ledger
+
+- knowledge/research_ledger.v0.json: 4 source-scoped negative findings plus 6 explicitly unvalidated research hypotheses; all source IDs validated by offline tests. No inferred ownership or profitability claims.
+- Fixed the gate chronology: prospective outcome must be observed after the declared entry time, not merely after a decision.

@@ -37,6 +37,12 @@ class ResearchGateTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "future label"):
             audit(doc)
 
+    def test_outcome_cannot_precede_entry_fill(self):
+        doc = copy.deepcopy(BASE)
+        doc["rows"][2]["outcome_observed_at"] = doc["rows"][2]["decision_at"]
+        with self.assertRaisesRegex(ValueError, "chronology"):
+            audit(doc)
+
     def test_protocol_must_be_frozen_before_test(self):
         doc = copy.deepcopy(BASE)
         doc["protocol"]["locked_at"] = "2026-10-17T00:00:00Z"

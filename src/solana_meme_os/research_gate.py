@@ -122,7 +122,7 @@ def audit(document: dict[str, Any]) -> dict[str, Any]:
         entry = timestamp(r.get("entry_at"))
         exit_time = timestamp(r.get("exit_at"))
         outcome = timestamp(r.get("outcome_observed_at"))
-        if entry < decision or exit_time < entry or outcome < decision:
+        if entry < decision or exit_time < entry or outcome <= entry:
             raise ValueError("entry/exit/outcome chronology invalid")
         buy = money(r.get("buy_filled_usd"), "buy_filled_usd", positive=True)
         sell = money(r.get("sell_filled_usd"), "sell_filled_usd")
