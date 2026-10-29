@@ -1,7 +1,7 @@
 # KNOW-002｜直接入金证据知识包
 
 日期：2026-10-29  
-状态：开发分支候选；参考级；离线测试待 CI；**NOT HUMAN ACCEPTED**。
+状态：开发分支候选；参考级；离线测试已在 GitHub Actions 通过；**NOT HUMAN ACCEPTED**。
 
 ## 来源审查
 
@@ -23,4 +23,11 @@
 
 ## CI
 
-命令：`PYTHONPATH=src python -m unittest discover -s tests -v`。**仅在 GitHub CI 实际完成后填写通过结果**。
+命令：`PYTHONPATH=src python -m unittest discover -s tests -v`。2026-10-29 GitHub Actions run 40845060238，`PYTHONPATH=src python -m unittest discover -s tests -v`：**Ran 31 tests / OK**（commit `25da6a3e119084c37e3e19ba3d664b63b2401ce9`）。仅验证离线代码契约，**非真实钱包图准确率与净收益的验收**。
+
+
+## 审计结果
+
+- CI：https://github.com/sunshihao001/grok/actions/runs/40845060238
+- 结论：`OFFLINE_TESTS_PASS / SOURCE-PINNED_REFERENCE_ONLY / HUMAN_ACCEPTANCE_PENDING`。
+- 依赖：stacked PR #7 的 base 是 `feat/staged-knowledge-intake-001` (PR #3)，合并前需重新比对主分支。
