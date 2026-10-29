@@ -45,3 +45,11 @@ Plain-language knowledge routing example:
 Read `knowledge/README.md`, `knowledge/legacy-audit.md` and `skills/solana-meme-knowledge/SKILL.md`. The engine is a deterministic starter; true Grok language understanding and source discovery still require configuring and testing the actual Grok Bots.
 
 The first preservation wave also includes [21 original Markdown knowledge snapshots](knowledge/legacy-snapshots/README.md) with pinned source commit paths and SHA entries, so the Grok OS can read those sources locally without requiring Hermes or the original repositories to be live.
+
+## On-demand research engine (new)
+
+A 17-source registry now indexes the specialist external study [Why-Solana-Memecoins-Are-Over](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over) plus the three legacy repositories **without bulk copying their content**. A runnable question-to-evidence packet helps development Bots choose what to read and highlights missing observational evidence and decision-time leakage.
+
+    PYTHONPATH=src python -m solana_meme_os.research --question "同源钱包可能是交易所公共基础设施吗？"
+
+See [on-demand design](docs/on-demand-research-design.md), [source registry](knowledge/source_index.v1.json), and [usage](knowledge/source-index-README.md). Source previews are opt-in and ephemeral; research packets **are not automated conclusions or validated strategies**. Offline tests do not prove actual Grok Bot expertise.
