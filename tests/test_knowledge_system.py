@@ -43,6 +43,18 @@ class KnowledgeSystemTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "mapping"):
             validate_system(ontology=ontology)
 
+    def test_packets_reuse_ontology_without_promoting_reports(self):
+        from solana_meme_os.research import build_packet
+        packet = build_packet("钱包协调以后，跟单能赚钱吗？利润和成本如何判断")
+        self.assertIn("D08", packet["ontology_route"]["matched_domains"])
+        self.assertIn("D09", packet["ontology_route"]["matched_domains"])
+        self.assertTrue(packet["research_unit_candidates"])
+        self.assertTrue(all(x["runtime_policy"] == "research_reference_only"
+                            for x in packet["research_unit_candidates"]))
+
+    def test_on_demand_source_pins_match(self):
+        self.assertEqual(validate_system()["on_demand_source_pointers"], 17)
+
     def test_cycles_fail(self):
         ontology = copy.deepcopy(read("ontology.v1.json"))
         ontology["domains"][0]["depends_on"] = ["D12"]

@@ -15,6 +15,7 @@ from urllib.parse import quote
 from urllib.request import Request, urlopen
 
 from .knowledge import for_question
+from .knowledge_system import route_domains, read as read_knowledge_system
 
 ROOT = Path(__file__).resolve().parents[2]
 INDEX = ROOT / "knowledge/source_index.v1.json"
@@ -117,6 +118,14 @@ def build_packet(question: str, decision_time: str | None = None,
     refs = select_sources(question)
     domain = for_question(question)
     assessed = evaluate_observations(observations or [], decision_time)
+    ontology_route = route_domains(question)
+    research_unit_candidates = [
+        {"id": unit["id"], "title": unit["title"], "status": unit["status"],
+         "runtime_policy": unit["runtime_policy"],
+         "source_id": unit["primary_source"]["source_id"]}
+        for unit in read_knowledge_system("research-units.v1.json")["units"]
+        if set(unit["domains"]).intersection(ontology_route["matched_domains"])
+    ]
     return {
         "schema_version": "1.0",
         "purpose": "research_intake_not_conclusion",
@@ -125,6 +134,8 @@ def build_packet(question: str, decision_time: str | None = None,
         "research_status": "EVIDENCE_REQUIRED" if not assessed["accepted"] else "OBSERVATIONS_TO_CHALLENGE",
         "sources": refs,
         "domain_knowledge": domain["references"][:3],
+        "ontology_route": ontology_route,
+        "research_unit_candidates": research_unit_candidates,
         "observations": assessed,
         "validation_contract": CONSTANT_CHECKS,
         "next_action": "Read primary sources selectively, verify data definitions and test competing hypotheses; do not auto-promote a rule.",

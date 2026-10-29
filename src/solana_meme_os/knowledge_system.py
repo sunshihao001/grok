@@ -69,6 +69,12 @@ def validate_system(ontology=None, sources=None, units=None, catalog=None):
         if not e.get("boundary") or not e.get("license_review"):
             raise ValueError("missing source boundary")
         sources_by_id[e["id"]] = e
+    index_path = ROOT / "knowledge/source_index.v1.json"
+    index_items = json.loads(index_path.read_text(encoding="utf-8"))["items"] if index_path.exists() else []
+    by_repo = {e["repository"]: e for e in sources_by_id.values()}
+    for item in index_items:
+        if item["repository"] not in by_repo or item["commit"] != by_repo[item["repository"]]["commit"]:
+            raise ValueError("source-index pin conflicts with source-registry")
     units_by_id = {r["id"] for r in u["units"]}
     if len(units_by_id) != len(u["units"]):
         raise ValueError("duplicate research ID")
@@ -100,6 +106,7 @@ def validate_system(ontology=None, sources=None, units=None, catalog=None):
             "domains":len(ds), "legacy_cards_mapped":len(cards),
             "gaps":[d["id"] for d in ds if d["coverage"] == "declared_research_gap"],
             "relations":len(relations), "sources":len(sources_by_id),
+            "on_demand_source_pointers":len(index_items),
             "external_units":sum(r["status"] == "external_reported" for r in u["units"]),
             "production_trading_authorized":False}
 
