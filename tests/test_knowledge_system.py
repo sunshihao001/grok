@@ -1,6 +1,6 @@
 import copy
 import unittest
-from solana_meme_os.knowledge_system import read, validate_system, route_domains
+from solana_meme_os.knowledge_system import read, validate_system, route_domains, filter_plan
 
 class KnowledgeSystemTests(unittest.TestCase):
     def test_full_structural_map(self):
@@ -55,9 +55,45 @@ class KnowledgeSystemTests(unittest.TestCase):
     def test_on_demand_source_pins_match(self):
         self.assertEqual(validate_system()["on_demand_source_pointers"], 17)
 
+    def test_strategy_route_does_not_force_wallet_conspiracy(self):
+        r = route_domains("跟单")
+        self.assertIn("D08", r["required_domains"])
+        self.assertNotIn("D05", r["required_domains"])
+        self.assertNotIn("D06", r["required_domains"])
+        self.assertIn("D05", r["contextual_domain_candidates"])
+
+    def test_time_context_and_social_attention_are_searchable(self):
+        r = route_domains("社交叙事注意力变化")
+        self.assertIn("D07", r["matched_domains"])
+        self.assertNotIn("D05", r["required_domains"])
+
+    def test_statistical_method_can_be_studied_without_execution(self):
+        r = route_domains("反证回测")
+        self.assertEqual(r["required_domains"], ["D11"])
+        self.assertEqual(r["crosscut_evidence_controls"], ["D10", "D11"])
+
+    def test_gate_plan_never_self_approves(self):
+        v = filter_plan("ECONOMIC")
+        self.assertEqual(len(v["gates"]), 7)
+        self.assertEqual([g["id"] for g in v["gates"] if g["required_for_objective"]],
+                         ["F0", "F1", "F2", "F3", "F4", "F5"])
+        self.assertTrue(all(g["status"] != "PASS_WITH_EVIDENCE" for g in v["gates"]))
+        self.assertFalse(v["automatic_rule_promotion"])
+        self.assertEqual(filter_plan("EXPLAIN")["gates"][5]["status"], "NOT_APPLICABLE")
+
+    def test_wrong_filter_objective_rejected(self):
+        with self.assertRaisesRegex(ValueError, "unknown"):
+            filter_plan("BYPASS")
+
+    def test_research_packet_receives_unassessed_evidence_gates(self):
+        from solana_meme_os.research import build_packet
+        p = build_packet("同源资金能跟单吗？")
+        self.assertEqual(len(p["filter_plan"]["gates"]), 7)
+        self.assertTrue(all(g["status"] == "NOT_EVALUATED" for g in p["filter_plan"]["gates"]))
+
     def test_cycles_fail(self):
         ontology = copy.deepcopy(read("ontology.v1.json"))
-        ontology["domains"][0]["depends_on"] = ["D12"]
+        ontology["domains"][0]["depends_on"] = ["D02"]
         with self.assertRaisesRegex(ValueError, "cyclic"):
             validate_system(ontology=ontology)
 if __name__ == "__main__":

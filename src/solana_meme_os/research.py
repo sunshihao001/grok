@@ -15,7 +15,7 @@ from urllib.parse import quote
 from urllib.request import Request, urlopen
 
 from .knowledge import for_question
-from .knowledge_system import route_domains, read as read_knowledge_system
+from .knowledge_system import route_domains, read as read_knowledge_system, filter_plan
 
 ROOT = Path(__file__).resolve().parents[2]
 INDEX = ROOT / "knowledge/source_index.v1.json"
@@ -135,6 +135,8 @@ def build_packet(question: str, decision_time: str | None = None,
         "sources": refs,
         "domain_knowledge": domain["references"][:3],
         "ontology_route": ontology_route,
+        "filter_plan": filter_plan(),
+        "filter_note": "The filters are NOT_EVALUATED. Existing observation cutoff review is not primary-data verification.",
         "research_unit_candidates": research_unit_candidates,
         "observations": assessed,
         "validation_contract": CONSTANT_CHECKS,
