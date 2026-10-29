@@ -53,3 +53,7 @@ A 17-source registry now indexes the specialist external study [Why-Solana-Memec
     PYTHONPATH=src python -m solana_meme_os.research --question "同源钱包可能是交易所公共基础设施吗？"
 
 See [on-demand design](docs/on-demand-research-design.md), [source registry](knowledge/source_index.v1.json), and [usage](knowledge/source-index-README.md). Source previews are opt-in and ephemeral; research packets **are not automated conclusions or validated strategies**. Offline tests do not prove actual Grok Bot expertise.
+
+## Grok cloud-computer activation (offline acceptance)
+
+Use [docs/grok-cloud-activation.md](docs/grok-cloud-activation.md) for the exact first Bot handoff and acceptance gates. After cloning on Grok Bot's shared cloud computer, run `python3 scripts/grok_cloud_doctor.py`. It runs offline tests, knowledge/source retrieval and two fixture snapshots and prints JSON. `OFFLINE_READY` **does not** verify live GMGN mappings, a published Grok Skill or an enabled Routine.
