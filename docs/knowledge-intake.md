@@ -57,3 +57,12 @@
 ## 6. 与已有知识库共存
 
 在本批启动时，主分支已经拥有 `knowledge/catalog.v1.json` 15 张卡片、`knowledge/legacy-snapshots/` 21 份历史文本快照、`knowledge.py` 的关键词及监控路由。不能覆盖这些既有成果；KB-001 是增量审查的单独参考包。快照保留不等于全部内容已被深度吸收或独立验证。
+
+## 7. KB-002：小范围、可复算的钱包资金证据（2026-10-29）
+
+- 研究主体：**直接入金关系是否存在**，不是把每个 `wallet` 归到一个所谓庄家，也不是重写 15 张既有卡片。
+- 层级：`reference_only`。索引新增 8 份源文件，其中第三方参考只存 GitHub commit+路径+SHA 与独立方法说明；不复制其文章、图表、资金数据。
+- 学习入口：`knowledge/packs/KB-002-wallet-funding-evidence.md`；开发 Bot skill：`skills/solana-meme-funding-evidence/SKILL.md`。
+- 离线可复算：`PYTHONPATH=src python -m solana_meme_os.funding_evidence --input fixtures/kb002-funding.json --allow-fixture`。
+- 测试包含 known-hub 排除、dust、可见时间晚于 cutoff、缺页、重复事件、未知来源、同 signature 不同指令、标签未来泄漏与非真实运行模式。
+- **在真实 GMGN/RPC 原始字段、token-account owner、网络基础设施与对照分布核实前，不自动接入 Monitor。** 原先 KB-001 的源、文档与运行接口继续保留。后续研究首先决定何种非 hub 分类有可审计证据，而非先决定给谁加高风险标签。
