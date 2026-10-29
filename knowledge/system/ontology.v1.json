@@ -1,0 +1,445 @@
+{
+  "schema_version": "1.0",
+  "name": "Solana Meme Workflow OS Knowledge Ontology",
+  "structure_status": "complete_taxonomy_partial_population",
+  "layers": [
+    {
+      "id": "L0",
+      "slug": "provenance_governance",
+      "purpose": "来源、版权、版本、冲突与责任边界"
+    },
+    {
+      "id": "L1",
+      "slug": "onchain_primitives",
+      "purpose": "交易、Slot、账户、程序、时间语义与字段"
+    },
+    {
+      "id": "L2",
+      "slug": "market_mechanics",
+      "purpose": "市场生命周期、微观结构、流动性"
+    },
+    {
+      "id": "L3",
+      "slug": "actor_networks",
+      "purpose": "钱包行为、资金网络、筹码主体与时序"
+    },
+    {
+      "id": "L4",
+      "slug": "strategy_mechanisms",
+      "purpose": "可证伪的市场机制与策略假设"
+    },
+    {
+      "id": "L5",
+      "slug": "execution_economics",
+      "purpose": "执行、净期望、风险和可交易性"
+    },
+    {
+      "id": "L6",
+      "slug": "empirical_validation",
+      "purpose": "基准、负例、预注册、反证和样本外"
+    },
+    {
+      "id": "L7",
+      "slug": "agent_runtime_evolution",
+      "purpose": "多 Bot 研究、经审查的规则、单 Monitor"
+    }
+  ],
+  "domains": [
+    {
+      "id": "D01",
+      "name": "Solana 链上基础",
+      "layer": "L1",
+      "primary_card_ids": [],
+      "keywords": [
+        "Slot",
+        "交易解析",
+        "指令",
+        "账户",
+        "transaction"
+      ],
+      "depends_on": [],
+      "coverage": "declared_research_gap",
+      "coverage_note": "完整的主题定位已定义，尚无合格的主知识单元；禁止自动补造"
+    },
+    {
+      "id": "D02",
+      "name": "Meme 市场生命周期",
+      "layer": "L2",
+      "primary_card_ids": [
+        "market-lifecycle"
+      ],
+      "keywords": [
+        "launch",
+        "pump.fun",
+        "迁移",
+        "bonding curve",
+        "pool"
+      ],
+      "depends_on": [
+        "D01"
+      ],
+      "coverage": "legacy_seeded_unverified",
+      "coverage_note": "历史方法有索引，不代表已有经济有效性验证"
+    },
+    {
+      "id": "D03",
+      "name": "市场微观结构",
+      "layer": "L2",
+      "primary_card_ids": [
+        "liquidity-depth"
+      ],
+      "keywords": [
+        "流动性",
+        "滑点",
+        "深度",
+        "MEV",
+        "定价"
+      ],
+      "depends_on": [
+        "D01",
+        "D02"
+      ],
+      "coverage": "legacy_seeded_unverified",
+      "coverage_note": "历史方法有索引，不代表已有经济有效性验证"
+    },
+    {
+      "id": "D04",
+      "name": "钱包行为与角色",
+      "layer": "L3",
+      "primary_card_ids": [
+        "wallet-roles",
+        "deployer-history"
+      ],
+      "keywords": [
+        "sniper",
+        "钱包角色",
+        "部署者",
+        "smart money"
+      ],
+      "depends_on": [
+        "D01"
+      ],
+      "coverage": "legacy_seeded_unverified",
+      "coverage_note": "历史方法有索引，不代表已有经济有效性验证"
+    },
+    {
+      "id": "D05",
+      "name": "资金网络与主体关系",
+      "layer": "L3",
+      "primary_card_ids": [
+        "funding-graph"
+      ],
+      "keywords": [
+        "同源",
+        "资金回流",
+        "资金网络",
+        "funder",
+        "cluster"
+      ],
+      "depends_on": [
+        "D01",
+        "D04"
+      ],
+      "coverage": "legacy_seeded_unverified",
+      "coverage_note": "历史方法有索引，不代表已有经济有效性验证"
+    },
+    {
+      "id": "D06",
+      "name": "筹码与市场控制结构",
+      "layer": "L3",
+      "primary_card_ids": [
+        "concentration",
+        "sybil-wash"
+      ],
+      "keywords": [
+        "控盘",
+        "Top10",
+        "持仓",
+        "sybil",
+        "wash"
+      ],
+      "depends_on": [
+        "D03",
+        "D04",
+        "D05"
+      ],
+      "coverage": "legacy_seeded_unverified",
+      "coverage_note": "历史方法有索引，不代表已有经济有效性验证"
+    },
+    {
+      "id": "D07",
+      "name": "市场行为与时序",
+      "layer": "L3",
+      "primary_card_ids": [],
+      "keywords": [
+        "周期",
+        "同步",
+        "轮动",
+        "行为时序",
+        "筹码吸收"
+      ],
+      "depends_on": [
+        "D02",
+        "D04",
+        "D05"
+      ],
+      "coverage": "declared_research_gap",
+      "coverage_note": "完整的主题定位已定义，尚无合格的主知识单元；禁止自动补造"
+    },
+    {
+      "id": "D08",
+      "name": "交易策略与 Alpha",
+      "layer": "L4",
+      "primary_card_ids": [
+        "reclaim-theory"
+      ],
+      "keywords": [
+        "跟单",
+        "alpha",
+        "突破",
+        "FCZ",
+        "二次启动"
+      ],
+      "depends_on": [
+        "D03",
+        "D05",
+        "D06",
+        "D07"
+      ],
+      "coverage": "legacy_seeded_unverified",
+      "coverage_note": "历史方法有索引，不代表已有经济有效性验证"
+    },
+    {
+      "id": "D09",
+      "name": "交易执行与风险",
+      "layer": "L5",
+      "primary_card_ids": [
+        "token-security"
+      ],
+      "keywords": [
+        "风险",
+        "成本",
+        "止损",
+        "退出",
+        "成交"
+      ],
+      "depends_on": [
+        "D03",
+        "D08"
+      ],
+      "coverage": "legacy_seeded_unverified",
+      "coverage_note": "历史方法有索引，不代表已有经济有效性验证"
+    },
+    {
+      "id": "D10",
+      "name": "数据源与工程可靠性",
+      "layer": "L1",
+      "primary_card_ids": [
+        "candidate-entry",
+        "gmgn-field-combinations",
+        "gmgn-raw-prototype"
+      ],
+      "keywords": [
+        "GMGN",
+        "RPC",
+        "索引",
+        "字段",
+        "数据质量"
+      ],
+      "depends_on": [
+        "D01"
+      ],
+      "coverage": "legacy_seeded_unverified",
+      "coverage_note": "历史方法有索引，不代表已有经济有效性验证"
+    },
+    {
+      "id": "D11",
+      "name": "实证研究与反证",
+      "layer": "L6",
+      "primary_card_ids": [
+        "evidence-synthesis",
+        "research-states"
+      ],
+      "keywords": [
+        "反证",
+        "对照组",
+        "样本外",
+        "回测",
+        "假信号"
+      ],
+      "depends_on": [
+        "D09",
+        "D10"
+      ],
+      "coverage": "legacy_seeded_unverified",
+      "coverage_note": "历史方法有索引，不代表已有经济有效性验证"
+    },
+    {
+      "id": "D12",
+      "name": "AI 推理与知识进化",
+      "layer": "L7",
+      "primary_card_ids": [
+        "anti-false-completion"
+      ],
+      "keywords": [
+        "知识迁移",
+        "Agent",
+        "Grok",
+        "规则发布",
+        "校准"
+      ],
+      "depends_on": [
+        "D10",
+        "D11"
+      ],
+      "coverage": "legacy_seeded_unverified",
+      "coverage_note": "历史方法有索引，不代表已有经济有效性验证"
+    }
+  ],
+  "relations": [
+    {
+      "from": "D01",
+      "to": "D02",
+      "kind": "grounds",
+      "guard": "必须用链上事件确认发币阶段"
+    },
+    {
+      "from": "D02",
+      "to": "D03",
+      "kind": "changes_market_regime",
+      "guard": "发行/迁移切换改变流动性与可观测性"
+    },
+    {
+      "from": "D01",
+      "to": "D04",
+      "kind": "defines_observables",
+      "guard": "交易签名和账户角色需分开"
+    },
+    {
+      "from": "D04",
+      "to": "D05",
+      "kind": "links_behavior_to_funding",
+      "guard": "钱包角色需要资金关系与时间证据"
+    },
+    {
+      "from": "D05",
+      "to": "D06",
+      "kind": "supports_not_proves",
+      "guard": "共同出资不能单独证明共同控制"
+    },
+    {
+      "from": "D03",
+      "to": "D06",
+      "kind": "conditions",
+      "guard": "集中持仓判断需考虑池子与退出深度"
+    },
+    {
+      "from": "D05",
+      "to": "D07",
+      "kind": "reveals_cycles",
+      "guard": "循环资金和重复团队可形成时序假设"
+    },
+    {
+      "from": "D07",
+      "to": "D08",
+      "kind": "generates_hypothesis",
+      "guard": "观察到周期不等于存在预测能力"
+    },
+    {
+      "from": "D06",
+      "to": "D08",
+      "kind": "generates_hypothesis",
+      "guard": "控盘结构不等于价格必然上涨"
+    },
+    {
+      "from": "D03",
+      "to": "D09",
+      "kind": "constrains_executability",
+      "guard": "价格达到目标不等于可成交"
+    },
+    {
+      "from": "D08",
+      "to": "D09",
+      "kind": "requires_economic_test",
+      "guard": "策略必须在实际时点和成本下测试"
+    },
+    {
+      "from": "D10",
+      "to": "D11",
+      "kind": "qualifies_measurement",
+      "guard": "数据错误不能记为反证"
+    },
+    {
+      "from": "D09",
+      "to": "D11",
+      "kind": "defines_outcome",
+      "guard": "用净收益和可执行退出定义经济结果"
+    },
+    {
+      "from": "D11",
+      "to": "D12",
+      "kind": "gates_release",
+      "guard": "经独立审查的可复算证据才可触发规则升级"
+    },
+    {
+      "from": "D12",
+      "to": "D08",
+      "kind": "proposes_not_authorizes",
+      "guard": "AI 提议可产生候选，不能自我批准"
+    }
+  ],
+  "dimensions": {
+    "epistemic_object_types": [
+      "source",
+      "measurement",
+      "observation",
+      "mechanism",
+      "hypothesis",
+      "finding",
+      "counterexample",
+      "rule",
+      "decision"
+    ],
+    "evidence_states": [
+      "proposed",
+      "historical_documented",
+      "external_reported",
+      "locally_reproduced",
+      "independently_validated",
+      "falsified",
+      "superseded"
+    ],
+    "evidence_separation": [
+      "raw_observation",
+      "external_claim",
+      "derived_inference",
+      "unknown_or_error"
+    ],
+    "time_axes": [
+      "event_time_utc",
+      "source_capture_time_utc",
+      "decision_cutoff_utc",
+      "outcome_window",
+      "knowledge_review_time_utc"
+    ],
+    "economic_axes": [
+      "entry_price_executable",
+      "latency",
+      "fill_assumptions",
+      "fee",
+      "priority_fee",
+      "price_impact",
+      "exit_policy",
+      "net_return",
+      "max_drawdown"
+    ]
+  },
+  "guardrails": [
+    "taxonomy_coverage_not_empirical_validation",
+    "no_auto_rule_promotion",
+    "no_hermes_runtime_dependency",
+    "unknown_is_not_zero",
+    "causal_identity_requires_external_evidence",
+    "paper_only"
+  ]
+}

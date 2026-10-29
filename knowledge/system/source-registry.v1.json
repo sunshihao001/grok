@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "as_of_utc": "2026-10-29",
+  "source_entries": [
+    {
+      "id": "SRC-HERMES",
+      "repository": "sunshihao001/-",
+      "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+      "role": "legacy_business_workflow",
+      "authority": "historical_method_only",
+      "license_review": "required_before_redistribution",
+      "allowed_use": "read_refer_and_extract_original_mechanism_with_attribution",
+      "boundary": "do not import Hermes CLI, hooks, memory stores, fixed paths"
+    },
+    {
+      "id": "SRC-MEME",
+      "repository": "sunshihao001/meme-",
+      "commit": "5ab2b01f08e4e512fa4fcd1aed88953ff534bd0a",
+      "role": "strategy_and_knowledge_design",
+      "authority": "historical_theory_not_solana_alpha",
+      "license_review": "required_before_redistribution",
+      "allowed_use": "map provenance and independently test falsifiable hypotheses",
+      "boundary": "MQL5 FCZ/POC/AVWAP research is not validated on Solana"
+    },
+    {
+      "id": "SRC-GMGN",
+      "repository": "sunshihao001/qb-",
+      "commit": "8377ad5611255df5cd4562666a826708575334f0",
+      "role": "gmgn_data_and_prototype",
+      "authority": "field_candidate_not_verified_market_observation",
+      "license_review": "required_before_redistribution",
+      "allowed_use": "read-only reverse engineering of field semantics",
+      "boundary": "no swap, no guessing units, no raw secrets"
+    },
+    {
+      "id": "SRC-WHY",
+      "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+      "role": "external_adversarial_research",
+      "authority": "externally_reported_not_independently_reproduced",
+      "license_review": "docs/ and README are CC BY-NC-ND 4.0; code/ is MIT (verify file-specific exceptions)",
+      "allowed_use": "cite research, independently formulate hypotheses and reproduce permissively licensed code",
+      "boundary": "no modified redistribution of CC BY-NC-ND documents; detector code absent and some sources unavailable"
+    }
+  ],
+  "provenance_rules": [
+    "Always pin repository+40-character commit+path; do not use main as evidence",
+    "Source authority and verified economic outcome are separate concepts",
+    "If source claim conflicts with directly reproduced data, preserve both and open adjudication",
+    "No unlicensed bulk-copy of third-party text or diagrams",
+    "Source claims and inferred wallet identity remain qualified"
+  ]
+}

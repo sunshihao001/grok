@@ -1,0 +1,138 @@
+{
+  "schema_version": "1.0",
+  "units": [
+    {
+      "id": "EXT-WHY-001",
+      "title": "创建 Slot 协同买入存在可复查的链上结构",
+      "kind": "finding",
+      "status": "external_reported",
+      "domains": [
+        "D01",
+        "D02",
+        "D04",
+        "D05",
+        "D07",
+        "D11"
+      ],
+      "primary_source": {
+        "source_id": "SRC-WHY",
+        "path": "coordination_detection/results.md"
+      },
+      "claim": "该仓库的预筛选警报样本中，资金时间同步、重复共同出资和重复钱包对具有统计异常性。",
+      "population": "2026-08-21 至 2026-09-29 的 1,657 条限定规则警报；不是全部 Pump.fun 发币总体",
+      "decision_cutoff": "creation_slot_or_alert",
+      "support": [
+        "仓库称多种资金同步度指标在随机置换对照下显著",
+        "研究将资金钱包聚类与同一真实控制人明确区分"
+      ],
+      "counterevidence": [
+        "样本由至少四个各买入 >=5 SOL 的钱包预筛选，不能外推总体发生率",
+        "共享基础设施与执行服务可解释相似关联"
+      ],
+      "alternatives": [
+        "一个交易者分地址执行",
+        "按客户执行的交易服务",
+        "团队共同交易或共享基础设施"
+      ],
+      "not_established": [
+        "实际控制人",
+        "操作意图",
+        "由结构预测未来上涨"
+      ],
+      "falsification_test": "独立复算链上交易，以非该检测器筛选的随机新币为对照，排除基础设施枢纽",
+      "local_replication": "not_attempted",
+      "economic_status": "not_tested_for_this_claim",
+      "runtime_policy": "research_reference_only",
+      "links_to": [
+        "EXT-WHY-002"
+      ]
+    },
+    {
+      "id": "EXT-WHY-002",
+      "title": "提高翻倍概率不代表扣成本后能跟单盈利",
+      "kind": "finding",
+      "status": "external_reported",
+      "domains": [
+        "D03",
+        "D08",
+        "D09",
+        "D11"
+      ],
+      "primary_source": {
+        "source_id": "SRC-WHY",
+        "path": "post_detection_edge/results.md"
+      },
+      "claim": "研究在其 TEST 样本中发现一个信号将 15 分钟翻倍率从 31.0% 提升至 45.7%，但在 $500、警报后 10 秒入场的假设下，模拟平均净收益为 -23.3%。",
+      "population": "固定检测器警报、特定时间分割及仓库模拟成交成本；不是所有跟单策略",
+      "decision_cutoff": "alert_plus_10_seconds",
+      "support": [
+        "TEST 筛选样本 164 条，15 分钟翻倍率 45.7%",
+        "研究报告的主策略模拟净收益 -23.3%（依赖估算的价格冲击）"
+      ],
+      "counterevidence": [
+        "模拟滑点而非实盘成交验证",
+        "不同进出场策略、规模和市场阶段未完整穷举"
+      ],
+      "alternatives": [
+        "真实成交冲击与价格推算不同",
+        "微仓或其他市场窗口有不同成本结构"
+      ],
+      "not_established": [
+        "所有 Meme 交易没有正期望",
+        "真实订单能达到模拟价格",
+        "其他市场状态下的盈利能力"
+      ],
+      "falsification_test": "采用时间点一致的买卖报价、多个仓位、不同退出规则与新样本，报告净收益置信区间",
+      "local_replication": "not_attempted",
+      "economic_status": "externally_modelled_negative_not_live_verified",
+      "runtime_policy": "research_reference_only",
+      "links_to": [
+        "EXT-WHY-001",
+        "EXT-WHY-003"
+      ]
+    },
+    {
+      "id": "EXT-WHY-003",
+      "title": "负结果不能被误读成全市场无机会",
+      "kind": "methodology",
+      "status": "external_reported",
+      "domains": [
+        "D08",
+        "D10",
+        "D11",
+        "D12"
+      ],
+      "primary_source": {
+        "source_id": "SRC-WHY",
+        "path": "alpha_patterns/README.md"
+      },
+      "claim": "公开的 415 特征探索是受样本与检验功效约束的负结果；对较小作用量或小覆盖率信号没有充分排除力。",
+      "population": "相同的 1,657 警报池，多重检验与部分时间段验证；未覆盖非警报市场",
+      "decision_cutoff": "alert_plus_5_seconds",
+      "support": [
+        "仓库明确标记探索性而非全流程样本外证实",
+        "报告检测检验功效与尚未读取的 OOS 段"
+      ],
+      "counterevidence": [
+        "部分旧研究的 TEST 结论独立于探索性研究成立",
+        "大规模搜索存在过拟合和选择偏差"
+      ],
+      "alternatives": [
+        "存在但检验功效不足的低覆盖率优势",
+        "市场阶段变化或未观测信息决定结果",
+        "在该检测器选样范围内确实没有可交易优势"
+      ],
+      "not_established": [
+        "所有 Alpha 均不存在",
+        "负结果可以外推其他策略与时间尺度"
+      ],
+      "falsification_test": "明确新策略适用总体、锁定阈值与经济目标，在全新时间和市场机制上检验",
+      "local_replication": "not_attempted",
+      "economic_status": "not_tested_for_this_claim",
+      "runtime_policy": "research_reference_only",
+      "links_to": [
+        "EXT-WHY-002"
+      ]
+    }
+  ]
+}
