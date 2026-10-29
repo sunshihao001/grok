@@ -1,0 +1,156 @@
+{
+  "schema_version": "1.0",
+  "policy_revision": "1.1",
+  "name": "Seven-stage evidence filter, independent of 12 knowledge domains",
+  "scope": "Research-only. This file is not evidence of trading validity.",
+  "result_values": [
+    "NOT_EVALUATED",
+    "PASS_WITH_EVIDENCE",
+    "REJECTED",
+    "INSUFFICIENT",
+    "NOT_APPLICABLE",
+    "NEEDS_REVIEW"
+  ],
+  "no_automatic_pass": true,
+  "objective_profiles": {
+    "UNSPECIFIED": [
+      "F0",
+      "F1",
+      "F2",
+      "F3",
+      "F4",
+      "F5",
+      "F6"
+    ],
+    "EXPLAIN": [
+      "F0",
+      "F1",
+      "F2",
+      "F3"
+    ],
+    "PREDICT": [
+      "F0",
+      "F1",
+      "F2",
+      "F3",
+      "F4"
+    ],
+    "ECONOMIC": [
+      "F0",
+      "F1",
+      "F2",
+      "F3",
+      "F4",
+      "F5"
+    ],
+    "MONITOR_RELEASE": [
+      "F0",
+      "F1",
+      "F2",
+      "F3",
+      "F4",
+      "F5",
+      "F6"
+    ]
+  },
+  "always_on": [
+    "D10 Data integrity at every measurable stage",
+    "D11 Nulls, counterevidence and negative cases at every empirical claim",
+    "Unknown/insufficient data cannot become negative evidence or PASS",
+    "No source-borrowed claim may be promoted to profit signal"
+  ],
+  "gates": [
+    {
+      "id": "F0",
+      "name": "问题与决策时点",
+      "requires": [
+        "research_objective",
+        "population",
+        "decision_cutoff",
+        "outcome_horizon_if_predictive"
+      ],
+      "rejection": "If objective is undefined, research only; do not infer a trading action.",
+      "continuation": "Define what needs explaining/predicting/executing and the information available at the decision."
+    },
+    {
+      "id": "F1",
+      "name": "相关知识与来源定位",
+      "requires": [
+        "matched_domain_or_explicit_discovery",
+        "source_provenance",
+        "applicability_scope"
+      ],
+      "rejection": "Keyword miss -> SOURCE_DISCOVERY_REQUIRED, not scientific falsehood.",
+      "continuation": "Select narrowly useful domains and optionally related context; preserve competing sources."
+    },
+    {
+      "id": "F2",
+      "name": "事实与数据质量",
+      "requires": [
+        "original_data_or_auditable_secondary_claim",
+        "units",
+        "event_time",
+        "available_at",
+        "provider_errors",
+        "coverage"
+      ],
+      "rejection": "Missing/late/unverified evidence -> INSUFFICIENT for factual or predictive conclusions.",
+      "continuation": "Use strict as-of cutoff, exclude future labels, separate missing/zero and re-query original Solana events."
+    },
+    {
+      "id": "F3",
+      "name": "结构机制及替代解释",
+      "requires": [
+        "observable_pattern",
+        "null_explanations",
+        "confounders",
+        "falsification_query"
+      ],
+      "rejection": "Wallet linkage without exclusion of common services does not establish control or intent.",
+      "continuation": "Distinguish correlation, funding association, economic control and actual identity."
+    },
+    {
+      "id": "F4",
+      "name": "预测增量与外部有效性",
+      "requires": [
+        "prospective_target",
+        "baseline",
+        "non_selected_controls",
+        "time_split",
+        "cluster_leakage_audit",
+        "multiple_testing_adjustment"
+      ],
+      "rejection": "Structural detection or in-sample hit rate alone -> no predictive assertion.",
+      "continuation": "Test only features observable at decision time; compare against simpler baselines and OOS."
+    },
+    {
+      "id": "F5",
+      "name": "可交易性与正净期望",
+      "requires": [
+        "fillable_entry",
+        "signal_latency",
+        "position_size",
+        "fees_tips",
+        "price_impact",
+        "exit_route",
+        "loss_tail",
+        "capacity"
+      ],
+      "rejection": "Peak price and 2x hit rate are not a viable copy trade.",
+      "continuation": "Evaluate executable entry/exit and expected net returns under varied sizes and failure scenarios."
+    },
+    {
+      "id": "F6",
+      "name": "发布、漂移与回滚",
+      "requires": [
+        "independent_review",
+        "frozen_rule_version",
+        "kill_conditions",
+        "drift_monitoring",
+        "manual_approval"
+      ],
+      "rejection": "Unreviewed or externally reported research cannot change the monitor.",
+      "continuation": "Limit this project to read-only/paper-only until separately authorized and validated."
+    }
+  ]
+}

@@ -59,7 +59,12 @@
       ],
       "depends_on": [],
       "coverage": "declared_research_gap",
-      "coverage_note": "完整的主题定位已定义，尚无合格的主知识单元；禁止自动补造"
+      "coverage_note": "目前没有专属主知识卡；历史仓库可能已有相关片段，需按需研究，不代表该领域没有知识。",
+      "domain_role": "foundation",
+      "scope": "链上交易、账户、指令、程序、Slot与可观测时间；不涉及钱包实控身份或盈亏判断",
+      "related_domains": [
+        "D10"
+      ]
     },
     {
       "id": "D02",
@@ -79,7 +84,14 @@
         "D01"
       ],
       "coverage": "legacy_seeded_unverified",
-      "coverage_note": "历史方法有索引，不代表已有经济有效性验证"
+      "coverage_note": "历史方法有索引，不代表已有经济有效性验证",
+      "domain_role": "market",
+      "scope": "发行路径、合约权限、Bonding Curve、迁移、建池和生命周期的技术状态",
+      "related_domains": [
+        "D03",
+        "D09",
+        "D10"
+      ]
     },
     {
       "id": "D03",
@@ -100,7 +112,14 @@
         "D02"
       ],
       "coverage": "legacy_seeded_unverified",
-      "coverage_note": "历史方法有索引，不代表已有经济有效性验证"
+      "coverage_note": "历史方法有索引，不代表已有经济有效性验证",
+      "domain_role": "market",
+      "scope": "池子深度、流动性、价格形成、路由、滑点与交易时点的微观结构",
+      "related_domains": [
+        "D06",
+        "D09",
+        "D10"
+      ]
     },
     {
       "id": "D04",
@@ -120,7 +139,14 @@
         "D01"
       ],
       "coverage": "legacy_seeded_unverified",
-      "coverage_note": "历史方法有索引，不代表已有经济有效性验证"
+      "coverage_note": "历史方法有索引，不代表已有经济有效性验证",
+      "domain_role": "actors",
+      "scope": "基于行为的地址角色候选及时间变化，不推断现实身份",
+      "related_domains": [
+        "D05",
+        "D06",
+        "D07"
+      ]
     },
     {
       "id": "D05",
@@ -137,11 +163,17 @@
         "cluster"
       ],
       "depends_on": [
-        "D01",
-        "D04"
+        "D01"
       ],
       "coverage": "legacy_seeded_unverified",
-      "coverage_note": "历史方法有索引，不代表已有经济有效性验证"
+      "coverage_note": "历史方法有索引，不代表已有经济有效性验证",
+      "domain_role": "actors",
+      "scope": "资金路径、共同出资、枢纽剔除、经济主体聚类与不确定性",
+      "related_domains": [
+        "D04",
+        "D06",
+        "D07"
+      ]
     },
     {
       "id": "D06",
@@ -159,12 +191,18 @@
         "wash"
       ],
       "depends_on": [
-        "D03",
-        "D04",
-        "D05"
+        "D01"
       ],
       "coverage": "legacy_seeded_unverified",
-      "coverage_note": "历史方法有索引，不代表已有经济有效性验证"
+      "coverage_note": "历史方法有索引，不代表已有经济有效性验证",
+      "domain_role": "actors",
+      "scope": "持有/可流通供应、地址集中度、经济控制候选与转移结构；集中不等于控盘",
+      "related_domains": [
+        "D03",
+        "D04",
+        "D05",
+        "D08"
+      ]
     },
     {
       "id": "D07",
@@ -176,15 +214,27 @@
         "同步",
         "轮动",
         "行为时序",
-        "筹码吸收"
+        "筹码吸收",
+        "叙事",
+        "KOL",
+        "注意力",
+        "传播",
+        "社交",
+        "跨币",
+        "市场状态",
+        "热度周期"
       ],
-      "depends_on": [
+      "depends_on": [],
+      "coverage": "declared_research_gap",
+      "coverage_note": "目前没有专属主知识卡；历史仓库可能已有相关片段，需按需研究，不代表该领域没有知识。",
+      "domain_role": "market_context",
+      "scope": "跨币/跨钱包行为序列、市场状态、叙事传播、注意力与信息扩散，不预设盈利方向",
+      "related_domains": [
         "D02",
         "D04",
-        "D05"
-      ],
-      "coverage": "declared_research_gap",
-      "coverage_note": "完整的主题定位已定义，尚无合格的主知识单元；禁止自动补造"
+        "D05",
+        "D08"
+      ]
     },
     {
       "id": "D08",
@@ -200,14 +250,21 @@
         "FCZ",
         "二次启动"
       ],
-      "depends_on": [
+      "depends_on": [],
+      "coverage": "legacy_seeded_unverified",
+      "coverage_note": "历史方法有索引，不代表已有经济有效性验证",
+      "domain_role": "hypotheses",
+      "scope": "跟单、突破、回收、风险过滤等策略的可证伪规则与适用总体；不预设任何钱包结构",
+      "related_domains": [
         "D03",
+        "D04",
         "D05",
         "D06",
-        "D07"
-      ],
-      "coverage": "legacy_seeded_unverified",
-      "coverage_note": "历史方法有索引，不代表已有经济有效性验证"
+        "D07",
+        "D09",
+        "D10",
+        "D11"
+      ]
     },
     {
       "id": "D09",
@@ -223,12 +280,18 @@
         "退出",
         "成交"
       ],
-      "depends_on": [
-        "D03",
-        "D08"
-      ],
+      "depends_on": [],
       "coverage": "legacy_seeded_unverified",
-      "coverage_note": "历史方法有索引，不代表已有经济有效性验证"
+      "coverage_note": "历史方法有索引，不代表已有经济有效性验证",
+      "domain_role": "economics",
+      "scope": "交易权限与可卖性、真实可成交价格、延迟、手续费/冲击/退出、持仓容量与尾部损失",
+      "related_domains": [
+        "D02",
+        "D03",
+        "D08",
+        "D10",
+        "D11"
+      ]
     },
     {
       "id": "D10",
@@ -246,11 +309,17 @@
         "字段",
         "数据质量"
       ],
-      "depends_on": [
-        "D01"
-      ],
+      "depends_on": [],
       "coverage": "legacy_seeded_unverified",
-      "coverage_note": "历史方法有索引，不代表已有经济有效性验证"
+      "coverage_note": "历史方法有索引，不代表已有经济有效性验证",
+      "domain_role": "crosscut_quality",
+      "scope": "数据提供者、字段与单位、索引延迟、缺失、采集覆盖率、取样完整性及数据可追溯性",
+      "related_domains": [
+        "D01",
+        "D03",
+        "D09",
+        "D11"
+      ]
     },
     {
       "id": "D11",
@@ -267,12 +336,19 @@
         "回测",
         "假信号"
       ],
-      "depends_on": [
+      "depends_on": [],
+      "coverage": "legacy_seeded_unverified",
+      "coverage_note": "历史方法有索引，不代表已有经济有效性验证",
+      "domain_role": "crosscut_validation",
+      "scope": "任意研究阶段的反证、零假设、基准、数据泄露、样本分组、功效与样本外复验",
+      "related_domains": [
+        "D05",
+        "D06",
+        "D07",
+        "D08",
         "D09",
         "D10"
-      ],
-      "coverage": "legacy_seeded_unverified",
-      "coverage_note": "历史方法有索引，不代表已有经济有效性验证"
+      ]
     },
     {
       "id": "D12",
@@ -288,12 +364,15 @@
         "规则发布",
         "校准"
       ],
-      "depends_on": [
+      "depends_on": [],
+      "coverage": "legacy_seeded_unverified",
+      "coverage_note": "历史方法有索引，不代表已有经济有效性验证",
+      "domain_role": "governance",
+      "scope": "Bot 推理与交接、知识冲突、版本/回滚、人工审阅与只读监控发布",
+      "related_domains": [
         "D10",
         "D11"
-      ],
-      "coverage": "legacy_seeded_unverified",
-      "coverage_note": "历史方法有索引，不代表已有经济有效性验证"
+      ]
     }
   ],
   "relations": [
@@ -441,5 +520,12 @@
     "unknown_is_not_zero",
     "causal_identity_requires_external_evidence",
     "paper_only"
+  ],
+  "ontology_revision": "1.1",
+  "dependency_semantics": "depends_on is an unconditional domain prerequisite ONLY. related_domains are optional context candidates; they do not automatically route. D10 and D11 are cross-cutting review controls, not always-loaded documents.",
+  "no_forced_chain": [
+    "D08 must not require D05/D06/D07 unless a specific hypothesis needs them",
+    "D11 should run across each evidentiary step, not after economics",
+    "D10 is an integrity gate for any measured claim"
   ]
 }

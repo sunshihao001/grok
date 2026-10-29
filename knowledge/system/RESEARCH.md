@@ -28,3 +28,7 @@
 ## 四、发布制度
 
 开发 Bot 只能写候选与实验；独立审阅者检查时点、总体、选择偏差、经济成本与原始交易；Owner 冻结规则；Monitor 读取冻结版本。错误回滚优先于修改历史叙事。Phase 1 始终 read-only / paper-only。
+
+## 七道证据过滤（V1.1）
+
+参考 `knowledge/system/filter-policy.v1.json`；结构解释到 F3、预测到 F4、经济验证到 F5、Monitor 规则发布到 F6。D10 数据可见性和 D11 反证贯穿每阶段；无证据为 `INSUFFICIENT`，不是假或真。固定 `depends_on` 仅用于必需的学科原语，`related_domains` 不应无条件导入。默认研究包只返回 `NOT_EVALUATED` 的研究计划，不能据此声称过滤结果已经通过。

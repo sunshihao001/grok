@@ -76,3 +76,7 @@
 **主入口是 `python -m solana_meme_os.research`**，而不是并行建立第二套检索器。它的研究包新增 `ontology_route`（12 领域路径）、`research_unit_candidates`（有证据状态的反证线索），原本的 `sources`（17 个按需固定版本文档）与 `domain_knowledge`（15 张常驻卡）继续保留。这个组合只有“知识导航”能力，不声称实时链上事实或获利判断。
 
 `source-registry.v1.json` 属于 L0，约束来源的 commit、版权、权限和适用范围；`knowledge/source_index.v1.json` 属于 K1，只负责在问题出现时定位某份文档。审计器检查两者的来源版本一致。K0 是少量常驻原则/概念，K1 是按需文献，K2 是待建设的真实链上证据与反例数据。8 层和 12 领域是横跨 K0–K2 的知识本体，而非三套相互孤立的目录。
+
+## 分类 ≠ 依赖 ≠ 证据过滤（V1.1 审查）
+
+[领域审查与过滤方案](REVIEW-V1.1.md) 将 D01–D12 保留为稳定专业分类；`depends_on` 仅表示真正无条件前置，`related_domains` 为可选上下文。**F0–F6 七个证据门槛**独立定义在 [filter-policy.v1.json](filter-policy.v1.json)。D10/D11 作为每一步的横切证据质量与反证检查，而非依赖链终端。研究入口只提出过滤计划，不可自动宣布 PASS。
