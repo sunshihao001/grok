@@ -18,7 +18,7 @@
 | 竞争解释 | 交易所/托管/路由/粉尘/市场同时反应/同一标注来源 | 无法反驳的控盘叙事 |
 | 研究评估 | 事前冻结、普通钱包对照、随机连边/保持节点度数的 null、跨时窗检验 | 直接买卖理由 |
 
-**观察与推断边界：** \`transfer A→B\` 是可验证事件；\`A 资助了 B 的买入\` 还需要 B 的余额历史、指令执行/购买来源与时间先后；\`A 和 B 同主人\` 在没有更强独立证据时不可证实。
+**观察与推断边界：** `transfer A→B` 是可验证事件；`A 资助了 B 的买入` 还需要 B 的余额历史、指令执行/购买来源与时间先后；`A 和 B 同主人` 在没有更强独立证据时不可证实。
 
 ## 为什么不直接迁移旧规则？
 
@@ -30,17 +30,17 @@
 - **交易产生时间≠Bot 获知时间**：即使交易在截止时点之前上链，数据服务如果在截止之后才提供，也不允许作为当时能用的特征。
 - **空图≠没有同源**：RPC 出错、分页遗漏、超出最大跳数、地址未覆盖时，都只能判「未能证实」。
 
-参考项目区分直接跨组转账、共同基础设施和共同终端，并使用 null/sensitivity 检验。在特定研究中同源图的大组件对 hub 是否参与极其敏感；这项方法学经验**不能直接外推到本 Bot 的候选币**。其成果并不证明盈利，也不提供普适权重。源文引用见 \`knowledge/registry.v0.json\`（\`external-*\`），版权归原作者所有；此处不拷贝论文、图表或源表。
+参考项目区分直接跨组转账、共同基础设施和共同终端，并使用 null/sensitivity 检验。在特定研究中同源图的大组件对 hub 是否参与极其敏感；这项方法学经验**不能直接外推到本 Bot 的候选币**。其成果并不证明盈利，也不提供普适权重。源文引用见 `knowledge/registry.v0.json`（`external-*`），版权归原作者所有；此处不拷贝论文、图表或源表。
 
 ## KB-002 首批可复算契约
 
 仅在测试数据上运行：
-\`\`\`bash
+```bash
 PYTHONPATH=src python -m solana_meme_os.funding_evidence --input fixtures/kb002-funding.json --allow-fixture
-\`\`\`
-输入为 \`schema_version=1.0\`, \`chain=sol\`, \`mode=fixture\`，明确 \`analysis_cutoff\`、\`target_wallets\`、\`sources\`（地址分类及原始证据）、\`transfers\`（原生 lamports 单位）、\`coverage\`（complete、rpc_errors、truncated）和 \`policy.min_material_lamports\`（研究参数，非链上事实）。交易唯一键为 signature+instruction_index。只分析 **block_time 与 available_at 均不晚于 cutoff** 的事件；晚于 cutoff 的记录记入 \`excluded_future_available\`。
+```
+输入为 `schema_version=1.0`, `chain=sol`, `mode=fixture`，明确 `analysis_cutoff`、`target_wallets`、`sources`（地址分类及原始证据）、`transfers`（原生 lamports 单位）、`coverage`（complete、rpc_errors、truncated）和 `policy.min_material_lamports`（研究参数，非链上事实）。交易唯一键为 signature+instruction_index。只分析 **block_time 与 available_at 均不晚于 cutoff** 的事件；晚于 cutoff 的记录记入 `excluded_future_available`。
 
-输出只产生：\`observed_shared_inbound\`、\`hub_excluded\`、\`needs_hub_review\`、\`dust_like_count\`、\`coverage_state\`、来源事件证据、需要继续采集的条件。所有分组都标为 **observational_candidate**；没有任何代码推断真正所有者、盈利率或交易方向。
+输出只产生：`observed_shared_inbound`、`hub_excluded`、`needs_hub_review`、`dust_like_count`、`coverage_state`、来源事件证据、需要继续采集的条件。所有分组都标为 **observational_candidate**；没有任何代码推断真正所有者、盈利率或交易方向。
 
 ## 七个必答理解检验
 
@@ -48,10 +48,10 @@ PYTHONPATH=src python -m solana_meme_os.funding_evidence --input fixtures/kb002-
 2. 「给 50 个钱包各转 1 lamport」→ 不构成足以驱动交易的资金证明；说明 dust 干扰风险。
 3. 「独立非 hub 给两个目标转账」→ 允许报告 *同源直接入金候选*，但仍不是同一人证据。
 4. 「跨 1 小时资金流到一起」→ 要验证方向、每一跳时间、循环/聚合、缺失交易，不把共享终端视为直接资金转移。
-5. 「RPC 两页失败，没查到资金联系」→ \`UNKNOWN_INCOMPLETE\`，不是无关系。
+5. 「RPC 两页失败，没查到资金联系」→ `UNKNOWN_INCOMPLETE`，不是无关系。
 6. 「事件上链时间早于信号、数据直到信号后才返回」→ 未来数据必须排除，不能事后复盘冒充实时。
 7. 「模型认为某团伙交易收益很高」→ 还需真实可复制时点、对照样本、净费用、滑点、行情拥挤与选择偏差，属于下一研究包。
 
 ## 升级条件与不迁移清单
 
-本包 **不迁移** 原 Hermes \`suspected_controller_wallets\` / 「同源 20% = 高风险」等未校准阈值，也不导入旧 \`/root/sikk-gmgn\`、钱包私钥、真实地址缓存或参考研究的数据集。下一阶段才能验证链上 raw→normalized、ATA owner 映射、hub 的采样频率、null 模型、跨币 holdout、误报和跟单可执行性。没有这些，不得从 S1 晋级 S2/S3。
+本包 **不迁移** 原 Hermes `suspected_controller_wallets` / 「同源 20% = 高风险」等未校准阈值，也不导入旧 `/root/sikk-gmgn`、钱包私钥、真实地址缓存或参考研究的数据集。下一阶段才能验证链上 raw→normalized、ATA owner 映射、hub 的采样频率、null 模型、跨币 holdout、误报和跟单可执行性。没有这些，不得从 S1 晋级 S2/S3。
