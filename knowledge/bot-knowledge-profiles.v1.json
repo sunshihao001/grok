@@ -279,8 +279,7 @@
         "B03",
         "B04",
         "B05",
-        "B06",
-        "B07"
+        "B06"
       ],
       "tools": [
         "approved read-only Solana RPC",
@@ -1098,8 +1097,7 @@
         "solana-meme-knowledge"
       ],
       "consumes_from": [
-        "human_approved_frozen_rules",
-        "B02"
+        "human_approved_frozen_rules"
       ],
       "produces_for": [
         "B01"

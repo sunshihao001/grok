@@ -100,3 +100,7 @@ One real case including at least one matched negative and one untradeable case s
 ## 6. Immediate next research experiment
 
 **Theme:** Wallet cohort recurrence, relay/funder edge and *net executable* copy trading. Source documentation includes `external-reentry-negative` and `external-post-detection-results`. Define two cohorts (detector alerted vs non-alerted). Match by time, launch platform, market cap and liquidity where observable. Track raw signatures, snapshot coverage, decision cutoff, queue delay and sell-side exit depth. Let B03 establish structural role; B04 compute increment over baseline and economic distributions; B05 attack selection bias; B06 run untouched OOS and record negative cases. Do not claim the outcome in advance.
+
+## Rule-to-Monitor transfer is not a Bot-to-Bot message
+
+B02 develops and tests raw input contracts; B07 runs its separately approved collector directly. **B02 does not send live mutable research findings into B07**. The only research-to-production path is B05/B06 review → human F6 approval → frozen rule hash → B07. Alerts and unknowns can return from B07 to B01 as research tickets. This prevents a developer Bot from replacing a frozen rule through a shared directory.

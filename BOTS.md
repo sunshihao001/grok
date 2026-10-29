@@ -36,3 +36,7 @@ All Bots for one user share a persistent cloud computer, browser logins, filesys
 3. Create **B07** after a human-approved frozen paper-only ruleset, state concurrency work and an end-to-end Routine test.
 
 No source repository or knowledge migration is allowed to bypass primary data, timestamps, independent falsification or manual release. Phase 1 prohibits live orders, signing, swap or broadcast.
+
+## Deep knowledge initialization and handoff (initial research)
+
+Each role has a detailed [startup instruction and syllabus](bots/profiles/) and a machine-readable [K0/K1/K2 knowledge reserve](knowledge/bot-knowledge-profiles.v1.json). Use the [single source-aware handoff contract](docs/bot-knowledge-integration.md) and [offline validator](src/solana_meme_os/bot_knowledge.py). B02's data-contract proposal is **not a direct production message**: only a human-approved frozen collector/rule release may be consumed by B07. Grok Bot objects and private skills still require manual configuration in the Grok application; repository CI does not provision the computer.

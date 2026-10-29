@@ -24,3 +24,7 @@ These files do not by themselves create Bots on Grok's cloud computer, activate 
 - Excerpts from external written studies with CC BY-NC-ND terms must be referenced rather than redistributed as rewritten text.
 - A readable source and a passing unit test do **not** imply positive Alpha, live monitoring, data integrity or safe trade execution.
 - Phase 1 remains research-only / paper-only.
+
+## Enforced publication boundary
+
+Before enabling B07, ensure no development Bot writes to B07's runtime state, normalized live input buffer or frozen rules. B02's field/schema evolution is delivered via reviewed PR and explicit release, not via a live B02-to-B07 Bot chat.

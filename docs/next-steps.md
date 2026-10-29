@@ -57,3 +57,13 @@ Start with `knowledge/system/README.md`. **Structure complete does not imply tha
 - [x] Add machine-readable roster + offline structural tests; note shared-computer limitations.
 - [ ] Create B01/B02/B05 in the Grok app and test source-to-review handoff.
 - [ ] Add B03/B04/B06 for wallet/Alpha/OOS cases with original evidence, then B07 after human-approved frozen rule and tested single-writer Routine.
+
+## Role-specific deep knowledge and handoff preparation (initial research)
+
+- [x] Seven Bot expertise curricula with epistemic boundaries, K0 cards, K1 pinned source pointers and minimum K2 evidence requirements.
+- [x] Four selectively verified new K1 references, total 21 (no bulk source copying).
+- [x] Seven detailed startup instructions, shared-cloud-computer manual activation guide and cross-Bot handoff map.
+- [x] Offline handoff structure validator and negative-case tests (CI pass must be observed after the PR commits).
+- [ ] Manually install/enroll private skills in Grok UI and test actual real Bot-to-Bot handoff.
+- [ ] Collect real live read-only K2 observations and evaluate independent source/market accuracy in real Grok cloud tasks.
+- [ ] Test B04/B05/B06 on blinded strategies/net economics; only a human may release frozen B07 rules.

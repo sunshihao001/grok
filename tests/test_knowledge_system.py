@@ -53,7 +53,7 @@ class KnowledgeSystemTests(unittest.TestCase):
                             for x in packet["research_unit_candidates"]))
 
     def test_on_demand_source_pins_match(self):
-        self.assertEqual(validate_system()["on_demand_source_pointers"], 17)
+        self.assertEqual(validate_system()["on_demand_source_pointers"], 21)
 
     def test_strategy_route_does_not_force_wallet_conspiracy(self):
         r = route_domains("跟单")

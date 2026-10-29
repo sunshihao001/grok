@@ -61,3 +61,11 @@ See [on-demand design](docs/on-demand-research-design.md), [source registry](kno
 ## Bot 架构 V1.1：6 个按需研发 + 1 个只读监控
 
 [Bot 分工](BOTS.md) 与 [机器可读名单](design/bot-roster.v1.json)：B01 知识主控、B02 链上数据、B03 钱包资金、B04 Alpha/交易经济学、B05 证据反证、B06 独立 QA、B07 最终只读监控。12 个知识领域不是 12 个 Bot，七级过滤也不是七个独立 Bot。应用内 Bot 尚未创建。
+
+## 各 Bot 的专业知识初始化包（初步研究）
+
+[七个可复制的角色说明](bots/profiles/B01-chief-knowledge-architect.md)（同目录 B01–B07）、[知识储备清单](knowledge/bot-knowledge-profiles.v1.json)、[Bot 交接契约](docs/bot-knowledge-integration.md) 和 [Grok 云电脑激活步骤](docs/grok-knowledge-installation.md)。按需来源从 17 个增加至 21 个固定提交的入口；不批量复制理论库，也不意味着 Bot 已安装或具备实盘数据。
+
+    PYTHONPATH=src python -m solana_meme_os.bot_knowledge --audit
+    PYTHONPATH=src python -m solana_meme_os.bot_knowledge --bot B03 --question "同源资金可能是交易所服务吗"
+    PYTHONPATH=src python -m solana_meme_os.bot_knowledge --validate-handoff fixtures/bot-handoff-brief.fixture.json
