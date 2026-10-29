@@ -2,7 +2,7 @@
 
 - 日期：2026-10-29
 - 范围：Grok 源码分支 `feat/staged-knowledge-intake-001`；源仓只读。
-- 状态：首次 CI 因覆盖已有 knowledge API 失败；修复提交已恢复原接口并新增独立 intake 模块，等待复验；**非人工最终接受**。
+- 状态：首次 CI 因覆盖已有 knowledge API 失败；修复提交已恢复原接口并新增独立 intake 模块，CI 已通过；**非人工最终接受**。
 - 目标：原文不丢失、首包可读取、Bot 产物可见、解释不冒充交易信号。
 
 ## 已审查
@@ -20,7 +20,7 @@
 - 原有 `src/solana_meme_os/monitor.py` 的知识卡上下文保持不变；`README.md`、`AGENTS.md`、`skills/solana-meme-monitor/SKILL.md` 补阅读契约。
 - **未修改**：任何 GMGN CLI 交易操作、`rules/monitor.v0.json` 的阈值、私钥、线上 Bot/Routine。
 - 测试命令：`PYTHONPATH=src python -m unittest discover -s tests -v`。
-- 验证结果：以合并请求 CI 为准；不把未观测 CI 写成 PASS。
+- 验证结果：GitHub Actions `monitor-tests` 成功，run 40843874372，20 tests / OK（commit `28aaed3974be43396a8bbdf6352df126ce9b1bcf`）。该验证只覆盖离线单元测试，不构成实盘数据或研究有效性认证。
 
 ## 待处理
 
@@ -29,3 +29,10 @@
 ## 并行基线冲突处理
 
 PR 首次 CI 暴露 `ImportError: for_observation`：新知识读取逻辑误替换了主分支已有的 15 卡引擎。纠正方式是完全恢复 `knowledge.py`、`monitor.py`、`tests/test_knowledge.py`，独立添加 `knowledge_intake.py` 与测试。禁止将首次 CI 失败标为通过。
+
+## CI 证据
+
+- 运行记录：https://github.com/sunshihao001/grok/actions/runs/40843874372
+- 对应 commit：`28aaed3974be43396a8bbdf6352df126ce9b1bcf`
+- `PYTHONPATH=src python -m unittest discover -s tests -v` → **Ran 20 tests, OK**。
+- 原有 `test_knowledge.py` 九项测试继续通过，新的 `test_knowledge_intake.py` 四项通过。此时仍为 `INTERNAL_TEST_PASS / HUMAN_ACCEPTANCE_PENDING`。
