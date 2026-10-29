@@ -60,3 +60,11 @@ The above six roles remain unchanged. All six read `knowledge/README.md` and the
 - Meme Monitor: **read the knowledge lenses attached to observation output**, fetch relevant new evidence, avoid causal claims from a single metric. Remain non-developing and read-only.
 
 Each cross-Bot handoff should contain `knowledge_ids`, pinned source URLs, applicability conditions, actual observed evidence, alternative explanations, missing evidence and the outcome of independent checking.
+
+## On-demand research packet handoff
+
+- Rule Architect chooses hypothesis / population / refutation plan, without reusing published thresholds as trading rules.
+- GMGN Data Bot and Wallet Structure Bot retrieve only relevant source docs through the `research` intake packet and verify actual time-of-knowledge for source fields.
+- Evidence & Gate Bot requires a denominator, counter-example/null model and source-linked factual ledger, and never calls an observed cluster 'profitable alpha'.
+- QA / Fixture Bot tries selection bias, out-of-time features, shared infrastructure and sensor failures before promoting research claims.
+- Meme Monitor remains one read-only runtime Bot. It must not ingest third-party documents wholesale or update approved rules by itself.

@@ -30,3 +30,12 @@ Rule Engineer passing local tests **does not** imply an economically valid or pr
 - [ ] Import concrete real on-chain cases and source-linked failures, not only conceptual documents.
 - [ ] Test whether Grok Bot with knowledge improves judgment vs a no-knowledge baseline using blinded examples; measure false alerts and missed events.
 - [ ] Improve semantic applicability and source reading in an actual Grok Bot instead of claiming literal keyword routing is full expert reasoning.
+
+## On-demand research architecture
+- [x] Read the pinned Why-Solana-Memecoins-Are-Over research methods, error audits, structural-mechanism tests, economic edge failures and source licenses.
+- [x] Add a small source index of 17 pinned documents instead of copying another entire research repository.
+- [x] Implement bounded optional source preview and structured research intake with a decision-time availability check.
+- [x] Add offline tests for source selection, authenticity/allowlist, time-of-knowledge rejection and no-edge claims.
+- [ ] Run genuine source retrieval in a configured Grok Bot and inspect live handoffs; not the same as unit tests.
+- [ ] Add real transaction datasets and delayed-outcome evaluation, including null baselines, execution costs and alerts not selected on winners.
+- [ ] Compare Grok with/without the on-demand source workflow under blinded case review to test reduction in unsupported assertions.

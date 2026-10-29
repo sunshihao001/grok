@@ -43,3 +43,7 @@ Recommended future package structure: `knowledge/catalog.v1.json` (indexed), `kn
     PYTHONPATH=src python -m unittest discover -s tests -v
 
 References: `docs/sources.md`, `knowledge/legacy-audit.md` and `skills/solana-meme-knowledge/SKILL.md`.
+
+## Second wave — do not bulk migrate
+
+New model: keep the resident 15 cards and 21 prior snapshots as a bounded historical baseline, but use `knowledge/source_index.v1.json` to consult external specialist sources **on demand**. The repo now indexes 17 documents, including methodological references from `Why-Solana-Memecoins-Are-Over`, without importing its licensed analysis into Grok. Run `python -m solana_meme_os.research --question ...` to create an evidence intake packet; see `docs/on-demand-research-design.md`. The goal is better judgment, not maximizing token count or the number of copied files.

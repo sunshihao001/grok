@@ -35,3 +35,7 @@ Every significant rule or skill change should produce a short result note under 
 - Label historical claims as documented_legacy_method / unverified_hypothesis / source_contract. Historical provenance does NOT validate financial effectiveness.
 - A rule release requires actual market/source data, counterexamples, error attribution and independent review. Revisions go to a reviewed PR, not automatic self-upgrade.
 - When retrieval has no match, explicitly expand research, add sources and a candidate card; never hallucinate missing knowledge.
+
+## Demand-driven source reasoning
+
+For ambiguous research tasks run `PYTHONPATH=src python -m solana_meme_os.research --question "原始问题"` and review `docs/on-demand-research-design.md`. Never fill a prompt with the entire corpus or mistake keyword matching for understanding. Use sources selectively and challenge them using original primary data. Record decision_at, observed_at, available_at; no future-info features. Treat statistical pattern detection, causal explanation and positive net executable expectancy as three independent evidentiary claims.

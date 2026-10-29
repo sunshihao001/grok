@@ -15,3 +15,9 @@ Inputs: user's plain-language question, new source-linked observation data, know
 6. For new insights create a proposed source-pinned card with failure cases. Do not rewrite source history or treat a bot-generated claim as validated truth.
 
 Prohibitions: No automatic trades, private keys, swap, signing, broadcast or fake live claims. No dependencies on Hermes binaries, /HER_* commands, hooks or fixed local directories. Offline catalog checks do not prove live analytics.
+
+## On-demand source selection and time-locked evidence
+
+Begin a novel question with `PYTHONPATH=src python -m solana_meme_os.research --question "原始问题"`. Inspect the returned `sources`, then obtain **only** the needed pinned source documents; `--fetch-excerpts` is optional read-only GitHub preview and may be unavailable. Study `docs/on-demand-research-design.md` and `knowledge/source-index-README.md`. Cite original authors and source revisions.
+
+A research packet without `observations.accepted` is NOT a verified market answer. When decision timing matters, pass `--decision-at` and evidence entries containing observed_at and available_at; reject later or missing data. Do not turn the Why-Solana study's detected structural patterns into copy-trading alpha: its own research showed that some detectable patterns were not economically tradable. New findings require negative controls, a frozen evaluation plan and evidence of costs/latency.
