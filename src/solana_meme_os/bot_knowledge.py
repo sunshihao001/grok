@@ -237,6 +237,17 @@ def validate_handoff(packet: dict[str, Any]) -> dict[str, Any]:
                 raise ValueError("raw observation cannot be supported by a K1 document alone")
             if packet["mode"] == "research_only":
                 raise ValueError("raw observations require real or fixture source mode")
+        if claim["epistemic_status"] == "raw_observation" and (
+            not claim.get("event_at_utc") or not claim.get("available_at_utc")
+        ):
+            raise ValueError("raw chain observation requires event and available timestamps")
+        if claim["epistemic_status"] == "external_reported" and (
+            not refs or not any(
+                ref["ref_id"] in refs and ref["kind"] == "pinned_document"
+                for ref in packet["source_refs"]
+            )
+        ):
+            raise ValueError("external report claim needs pinned document provenance")
         observed = claim.get("event_at_utc")
         available = claim.get("available_at_utc")
         if observed is not None or available is not None or claim.get("predictive_feature"):
@@ -261,6 +272,11 @@ def validate_handoff(packet: dict[str, Any]) -> dict[str, Any]:
             refs = g.get("source_ref_ids")
             if packet["mode"] == "fixture" or not refs or set(refs) - source_ids:
                 raise ValueError("gate pass needs non-fixture cited evidence")
+            if gate_id in {"F4", "F5", "F6"} and not any(
+                ref["ref_id"] in refs and ref["kind"] == "primary_chain"
+                for ref in packet["source_refs"]
+            ):
+                raise ValueError("predictive/economic gate cannot pass from K1 papers alone")
             if gate_id in {"F4", "F5", "F6"} and (
                 g.get("reviewer_bot_id") not in {"B05", "B06"} or g.get("reviewer_bot_id") == producer
             ):

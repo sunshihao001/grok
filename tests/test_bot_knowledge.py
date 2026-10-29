@@ -71,6 +71,26 @@ class BotKnowledgeTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"non-fixture"):
             validate_handoff(v)
 
+    def test_real_observation_must_have_explicit_available_at(self):
+        v=copy.deepcopy(EXAMPLE)
+        v["mode"]="real_observation"
+        v["claims"][0]["epistemic_status"]="raw_observation"
+        v["source_refs"]=[{"ref_id":"primary-tx","kind":"primary_chain",
+                            "source_uri":"solana:signature:fixture-example",
+                            "signature_or_slot":"sample-slot"}]
+        v["claims"][0]["source_ref_ids"]=["primary-tx"]
+        with self.assertRaisesRegex(ValueError,"requires event and available timestamps"):
+            validate_handoff(v)
+
+    def test_external_document_alone_cannot_pass_alpha_gate(self):
+        v=copy.deepcopy(EXAMPLE)
+        v["mode"]="real_observation"
+        v["gate_results"]=[{"gate_id":"F4","status":"PASS_WITH_EVIDENCE",
+                            "source_ref_ids":["hermes-source-relations"],
+                            "reviewer_bot_id":"B05"}]
+        with self.assertRaisesRegex(ValueError,"cannot pass from K1 papers alone"):
+            validate_handoff(v)
+
     def test_wrong_bot_cannot_publish_monitor_message(self):
         v=copy.deepcopy(EXAMPLE)
         v["packet_type"]="monitor_observation"
