@@ -97,6 +97,10 @@ def process(observation: dict, rules: dict, state_dir: Path, now: datetime | Non
             seen.add(event["id"])
     next_state = {"observed_at": observation["observed_at"], "metrics": observation["metrics"],
                   "seen_events": sorted(seen)[-1000:], "source": observation["source"], "mode": mode}
+    # Source-linked domain knowledge is attached as competing questions, not automatic conclusions.
+    from .knowledge import for_observation
+    result["knowledge"] = for_observation(result)
+
     with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=state_dir, prefix=".tmp-", delete=False) as fh:
         tmp = Path(fh.name)
         json.dump(next_state, fh, ensure_ascii=False, indent=2)

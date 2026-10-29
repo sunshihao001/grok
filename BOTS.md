@@ -47,3 +47,16 @@ All Bots share the same computer (user's) and can read this repo. State and arti
 
 All Bots inherit the Solana Meme Safety Boundary from AGENTS.md / CONTEXT.md.
 No Bot may access private keys or broadcast transactions without explicit future human approval.
+
+## Knowledge responsibilities (Grok Edition)
+
+The above six roles remain unchanged. All six read `knowledge/README.md` and the source-pinned catalog before specialist work; **none treats the historical corpus as verified signal data**.
+
+- Rule Architect: choose the relevant knowledge mechanisms and formulate falsifiable hypotheses, including what evidence could disprove them. Do not freeze models solely because they exist in the source archive.
+- GMGN Data: own field-level raw source/units/time validity; produce a traceable normalized observation, not label-based identities.
+- Wallet Structure: compare financing, time behavior, role candidates and alternative benign explanations.
+- Evidence & Gate: preserve contradictory evidence, missing observations and stopping rules; distinguish report state from trades.
+- QA / Fixture: challenge legacy claims, build controls and real-case replay, track false alerts and sample leakage.
+- Meme Monitor: **read the knowledge lenses attached to observation output**, fetch relevant new evidence, avoid causal claims from a single metric. Remain non-developing and read-only.
+
+Each cross-Bot handoff should contain `knowledge_ids`, pinned source URLs, applicability conditions, actual observed evidence, alternative explanations, missing evidence and the outcome of independent checking.
