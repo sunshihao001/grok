@@ -66,3 +66,12 @@
 - 离线可复算：`PYTHONPATH=src python -m solana_meme_os.funding_evidence --input fixtures/kb002-funding.json --allow-fixture`。
 - 测试包含 known-hub 排除、dust、可见时间晚于 cutoff、缺页、重复事件、未知来源、同 signature 不同指令、标签未来泄漏与非真实运行模式。
 - **在真实 GMGN/RPC 原始字段、token-account owner、网络基础设施与对照分布核实前，不自动接入 Monitor。** 原先 KB-001 的源、文档与运行接口继续保留。后续研究首先决定何种非 hub 分类有可审计证据，而非先决定给谁加高风险标签。
+
+
+## 8. KNOW-003 科学研究准入层（2026-10-29）
+
+引入原仓的强项：反证优先、样本与分母先冻结、独立对照、可用时间审计、失败结果沉淀、执行成本和尾部亏损先于命中率。新研究包 knowledge/packs/KB-003-scientific-edge-admission.md 按需由开发 Bot 读取；不会像行情触发包一样自动进入 runtime。
+
+代码 src/solana_meme_os/research_gate.py 是 fixture-only 的协议与现金流审计器；fixtures/know003-study.json 展示人为设计的 75% 目标命中率却仍为负的净收益。它没有构造真实订单簿、API 首次可见时间、真正匹配对照或随机置换检验。返回 NO_TRADING 和 DO_NOT_PROMOTE；**不等于完成 alpha 回测**。多源链上数据、执行模型与对照实现留给后续独立 PR。
+
+架构方向：docs/research-evolution-os.md。新增 skill 提醒研究 Bot 不得将结构显著、统计显著、可交易净优势混为一谈。

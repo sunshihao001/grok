@@ -17,9 +17,9 @@ SECOND = json.loads((ROOT / "fixtures/observation-2.json").read_text(encoding="u
 class TestKnowledgeIntake(unittest.TestCase):
     def test_pinned_sources_and_pack_are_present(self):
         reg = load_registry()
-        self.assertEqual(reg["version"], "KB-002.0")
-        self.assertEqual(len(reg["sources"]), 15)
-        self.assertEqual(len(reg["packs"]), 2)
+        self.assertEqual(reg["version"], "KB-003.0")
+        self.assertEqual(len(reg["sources"]), 24)
+        self.assertEqual(len(reg["packs"]), 3)
         self.assertTrue(all(p["stage"] == "reference_only" for p in reg["packs"]))
         self.assertTrue((ROOT / reg["packs"][0]["path"]).exists())
 
@@ -38,6 +38,7 @@ class TestKnowledgeIntake(unittest.TestCase):
                 doc = directory / "knowledge" / "packs" / "KB-001-evidence-bounds.md"
                 doc.write_text("known pack", encoding="utf-8")
                 (directory / "knowledge" / "packs" / "KB-002-wallet-funding-evidence.md").write_text("known pack", encoding="utf-8")
+                (directory / "knowledge" / "packs" / "KB-003-scientific-edge-admission.md").write_text("known pack", encoding="utf-8")
                 reg = copy.deepcopy(original)
                 if mutate == "sha":
                     reg["sources"][0]["blob_sha"] = "unverified"
@@ -47,6 +48,11 @@ class TestKnowledgeIntake(unittest.TestCase):
                 catalog.write_text(json.dumps(reg), encoding="utf-8")
                 with self.assertRaises(ValueError):
                     load_registry(catalog)
+
+    def test_kb003_is_explicitly_on_demand_not_an_alert_rule(self):
+        output = contextualize({"alerts": [{"type": "NEW_SOURCE_EVENT"}], "missing_fields": []})
+        self.assertNotIn("KB-003", [p["id"] for p in output["packs"]])
+        self.assertEqual(load_registry()["packs"][2]["stage"], "reference_only")
 
     def test_kb002_routes_only_on_relevant_questions(self):
         output = contextualize({"alerts": [{"type": "NEW_SOURCE_EVENT"}], "missing_fields": []})

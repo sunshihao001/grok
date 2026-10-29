@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "version": "KB-002.0",
+  "version": "KB-003.0",
   "updated_at": "2026-10-29",
   "source_policy": "immutable source commit + blob SHA; original repositories retain canonical authority",
   "sources": [
@@ -123,6 +123,78 @@
       "path": "funder_network/tables/H_nulls_robustness.md",
       "blob_sha": "476e7e09b311deeeb07a55b4ec6d4a5b7b90b488",
       "role": "Negative controls and hub sensitivity; source-specific, not a universal cutoff"
+    },
+    {
+      "id": "research-act-iv",
+      "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+      "path": "docs/ACT_IV.md",
+      "blob_sha": "42e1dfeb5ba874b69616ceb80cf59d81ddf5808e",
+      "role": "Mechanism evidence and failed predictive paths"
+    },
+    {
+      "id": "research-post-detect-edge",
+      "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+      "path": "post_detection_edge/results.md",
+      "blob_sha": "2a89e77cb3f92340275f46067b37e95b1dfaafda",
+      "role": "Precision uplift vs net loss"
+    },
+    {
+      "id": "research-forensics",
+      "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+      "path": "post_detection_forensics/results.md",
+      "blob_sha": "b414df5aec126257276cbdfce05b0b7d666c50e3",
+      "role": "Operator/price confounding"
+    },
+    {
+      "id": "research-known-group",
+      "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+      "path": "known_group_reentry/results.md",
+      "blob_sha": "774152f25f41cd785c8ad583528a64bbba9adbd7",
+      "role": "Group recognition vs incremental alpha"
+    },
+    {
+      "id": "research-exploration",
+      "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+      "path": "alpha_patterns/README.md",
+      "blob_sha": "de689e2801a89272cd94d79e805ea13aeaf738f0",
+      "role": "Multiple comparisons and power limits"
+    },
+    {
+      "id": "research-temporal-audit",
+      "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+      "path": "post_detection_forensics/temporal_leakage_audit.md",
+      "blob_sha": "62dbf4375cb871740321d7e77a90c633398ae1b6",
+      "role": "Feature availability and lookahead"
+    },
+    {
+      "id": "research-mechanics",
+      "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+      "path": "coordination_detection/results.md",
+      "blob_sha": "9a9dc250f3d21cf7bd10aca30b9ab4f2226003dc",
+      "role": "Coordinated behavior not intent"
+    },
+    {
+      "id": "research-sniper-negative",
+      "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+      "path": "sniper_capital/results.md",
+      "blob_sha": "6c293e5be16c090bdf67bbf887fbbef775c3958",
+      "role": "Capital ratio negative research"
+    },
+    {
+      "id": "research-entry-negative",
+      "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+      "path": "entry_zone/results.md",
+      "blob_sha": "0b769b09d71304cc3d8a7233f4f38dd6133c34ae",
+      "role": "No robust entry zone"
     }
   ],
   "packs": [
@@ -208,6 +280,36 @@
         }
       },
       "promote_only_after": "live chain source equivalence + verified owner and hub labels + representative controls + blind holdout + human review; no identity attribution"
+    },
+    {
+      "id": "KB-003",
+      "version": "0.1.0",
+      "stage": "reference_only",
+      "path": "knowledge/packs/KB-003-scientific-edge-admission.md",
+      "scope": "Non-executable research falsification: structural vs predictive vs capture-stage inference; time-safe synthetic gate.",
+      "source_ids": [
+        "research-act-iv",
+        "research-post-detect-edge",
+        "research-forensics",
+        "research-known-group",
+        "research-exploration",
+        "research-temporal-audit",
+        "research-mechanics",
+        "research-sniper-negative",
+        "research-entry-negative",
+        "external-pitfalls",
+        "external-methodology"
+      ],
+      "triggers": [
+        "RESEARCH_PROPOSAL"
+      ],
+      "trigger_guidance": {
+        "RESEARCH_PROPOSAL": {
+          "interpretation": "链上协调不等于未来正收益，命中率不等于净收益，理论必须经历分层反证。",
+          "verify": "独立查时钟、样本分母、对照、null、负结果、成交价、延迟及净费用，样本外验证后再提规则。"
+        }
+      },
+      "promote_only_after": "read-only chain validation, verified as-of clocks, null/controls and prospectively independent executable cost data, with human approval"
     }
   ]
 }
