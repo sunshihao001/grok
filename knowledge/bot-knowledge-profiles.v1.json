@@ -1,0 +1,1132 @@
+{
+  "schema_version": "1.0",
+  "as_of_utc": "2026-10-29",
+  "purpose": "knowledge_reserves_not_runtime_provisioning",
+  "source_index_version": "1.1",
+  "resident_policy": "K0 minimal per role; 2-5 relevant K1 sources per task; K2 source time and negative examples required for factual claims.",
+  "shared_skill_assumption": "Grok private skills library is shared across Bots but must be enabled/accessible; repository skill files do not provision UI skills.",
+  "external_licensing": "Reference third-party documentation via pinned links; no copying or remixing CC BY-NC-ND research prose in distributed skills.",
+  "update_policy": "Edit syllabus and retrieval pointers by reviewed PR; domain/source update must not mutate historical case facts; rejected findings persist.",
+  "profiles": [
+    {
+      "id": "B01",
+      "title": "主控/知识架构",
+      "status": "planned_not_provisioned",
+      "phase": "development",
+      "responsibility": "Research intake, ontology/source routing, hypothesis briefs and handoffs; cannot verify its own conclusions.",
+      "primary_domains": [
+        "D08",
+        "D12"
+      ],
+      "gate_responsibility": [
+        "F0",
+        "F1"
+      ],
+      "always_resident": [
+        "Read-only, Paper-Only; no signing, swap, private keys, trading, or rule self-promotion.",
+        "Source + knowledge IDs, original data and time-of-availability outrank Bot memory and labels.",
+        "Distinguish fact, provider derivative, hypothesis, independently validated finding, and unknown.",
+        "Source citations/commits demonstrate traceability, not the truth or profitability of a claim.",
+        "Apply F0–F6 to the research objective; D10 quality and D11 falsification run cross-cutting.",
+        "Observe without lookahead: event_at, available_at, decision_at and outcome horizon must be separate.",
+        "Negative and missing cases must remain in the evidence corpus; avoid selecting only winners."
+      ],
+      "minimum_knowledge_files": [
+        "AGENTS.md",
+        "CONTEXT.md",
+        "BOTS.md",
+        "knowledge/system/README.md",
+        "knowledge/system/ontology.v1.json",
+        "knowledge/system/filter-policy.v1.json",
+        "knowledge/system/REVIEW-V1.1.md",
+        "knowledge/source_index.v1.json",
+        "knowledge/system/source-registry.v1.json"
+      ],
+      "resident_knowledge": [
+        {
+          "id": "B01-K01",
+          "title": "研究问题契约",
+          "domain_id": "D12",
+          "method": "将问题拆为解释/预测/经济验证/发布；指定样本总体、时点、反证与交付。",
+          "do_not_infer": "不能把按关键词匹配的领域等同于研究已完成。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B01-K02",
+          "title": "知识来源等级",
+          "domain_id": "D10",
+          "method": "常驻卡、精确 commit 的原始资料、外部论文与实时链上事实相互独立。",
+          "do_not_infer": "来源锚定不是有效性验证。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B01-K03",
+          "title": "多策略动态研究",
+          "domain_id": "D08",
+          "method": "FCZ 只是一个候选机制；允许事件驱动、风险过滤、二阶段结构等独立路径。",
+          "do_not_infer": "不可将一套阈值重命名为整个交易系统。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B01-K04",
+          "title": "跨Bot 任务分解",
+          "domain_id": "D12",
+          "method": "依据最小领域组合而不是把一个问题分配给所有 Bot。",
+          "do_not_infer": "内部结论不能直接当作另一个 Bot 的原始事实。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B01-K05",
+          "title": "假设生命周期",
+          "domain_id": "D11",
+          "method": "提议、反证、复算、样本外、失效、版本回滚与审阅权限分离。",
+          "do_not_infer": "Agent 提议不等于人工批准。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B01-K06",
+          "title": "未知与反例入口",
+          "domain_id": "D12",
+          "method": "保留未覆盖领域、失效案例和新学说的研究入口。",
+          "do_not_infer": "无匹配/无数据不能证明策略无效。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        }
+      ],
+      "legacy_card_ids": [
+        "evidence-synthesis",
+        "research-states",
+        "anti-false-completion",
+        "reclaim-theory"
+      ],
+      "read_on_demand_source_ids": [
+        "meme-sources",
+        "meme-multistrategy-direction",
+        "research-methodology",
+        "failure-modes",
+        "meme-falsification-experiment"
+      ],
+      "k2_required_fields": [
+        "question",
+        "objective",
+        "population",
+        "decision_cutoff_utc",
+        "knowledge_ids",
+        "source_refs",
+        "explicit_unknowns",
+        "requested_handoff"
+      ],
+      "skills_to_configure": [
+        "solana-meme-knowledge",
+        "research-intake"
+      ],
+      "consumes_from": [],
+      "produces_for": [
+        "B02",
+        "B03",
+        "B04",
+        "B05",
+        "B06"
+      ],
+      "tools": [
+        "read-only GitHub repository",
+        "local knowledge_system/research CLIs"
+      ],
+      "start_condition": "Novel research question, unresolved evidence gap, changed market assumption.",
+      "stop_condition": "Objective, cutoff, data requirements, independent reviewer and requested deliverable specified.",
+      "permitted_actions": [
+        "read",
+        "research",
+        "write_scoped_proposal_or_evidence_packet",
+        "create_feature_branch_pr"
+      ],
+      "prohibited_actions": [
+        "real_trade",
+        "swap",
+        "sign",
+        "broadcast",
+        "read_private_key",
+        "self_approve_rule",
+        "treat_memory_as_market_evidence"
+      ],
+      "success_criterion": "Produces a source-bound, time-safe handoff that an independent reviewer can challenge."
+    },
+    {
+      "id": "B02",
+      "title": "链上数据",
+      "status": "planned_not_provisioned",
+      "phase": "development",
+      "responsibility": "Real read-only GMGN/RPC/transaction provenance, units, available-at time, provider failure and coverage.",
+      "primary_domains": [
+        "D01",
+        "D02",
+        "D03",
+        "D10"
+      ],
+      "gate_responsibility": [
+        "F2"
+      ],
+      "always_resident": [
+        "Read-only, Paper-Only; no signing, swap, private keys, trading, or rule self-promotion.",
+        "Source + knowledge IDs, original data and time-of-availability outrank Bot memory and labels.",
+        "Distinguish fact, provider derivative, hypothesis, independently validated finding, and unknown.",
+        "Source citations/commits demonstrate traceability, not the truth or profitability of a claim.",
+        "Apply F0–F6 to the research objective; D10 quality and D11 falsification run cross-cutting.",
+        "Observe without lookahead: event_at, available_at, decision_at and outcome horizon must be separate.",
+        "Negative and missing cases must remain in the evidence corpus; avoid selecting only winners."
+      ],
+      "minimum_knowledge_files": [
+        "AGENTS.md",
+        "CONTEXT.md",
+        "BOTS.md",
+        "knowledge/system/README.md",
+        "knowledge/system/ontology.v1.json",
+        "knowledge/system/filter-policy.v1.json",
+        "knowledge/system/REVIEW-V1.1.md",
+        "knowledge/source_index.v1.json",
+        "knowledge/system/source-registry.v1.json"
+      ],
+      "resident_knowledge": [
+        {
+          "id": "B02-K01",
+          "title": "Solana 事件与程序解析",
+          "domain_id": "D01",
+          "method": "交易签名、Slot、账户、Inner Instruction、token program、日志与最终性。",
+          "do_not_infer": "索引器聚合结果不可替代原始交易语义。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B02-K02",
+          "title": "Meme 生命周期",
+          "domain_id": "D02",
+          "method": "发行、Bonding Curve、迁移、DEX 建池与阶段切换。",
+          "do_not_infer": "不同阶段价格、池子指标不可直接拼接。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B02-K03",
+          "title": "时间可获得性",
+          "domain_id": "D10",
+          "method": "event_at、indexed_at、available_at、decision_at、provider lag 独立记录。",
+          "do_not_infer": "未来才可见的特征不能用于历史入场判断。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B02-K04",
+          "title": "GMGN 字段映射",
+          "domain_id": "D10",
+          "method": "raw JSON、单位、字段版本、空值/零值/错误码、读操作与限制。",
+          "do_not_infer": "GMGN 标签/百分比口径未核验前只是提示。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B02-K05",
+          "title": "可交易性原语",
+          "domain_id": "D03",
+          "method": "池子储备、可卖权限、价格冲击估计、路由数据完整性。",
+          "do_not_infer": "报价和历史 OHLC 不等于实际成交。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B02-K06",
+          "title": "采集完整率",
+          "domain_id": "D10",
+          "method": "订阅中断、重复事件、分页、429/403、缺失时间窗和生存偏差。",
+          "do_not_infer": "采集失败不能当作市场无事件。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B02-K07",
+          "title": "证据可重放",
+          "domain_id": "D10",
+          "method": "保留原始响应指纹、源 URL、signature、slot、时间及解析脚本版本。",
+          "do_not_infer": "fixture 不得标记为实盘真实结果。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        }
+      ],
+      "legacy_card_ids": [
+        "market-lifecycle",
+        "liquidity-depth",
+        "gmgn-field-combinations",
+        "gmgn-raw-prototype",
+        "token-security"
+      ],
+      "read_on_demand_source_ids": [
+        "hermes-gmgn-dimensions",
+        "gmgn-collector-example",
+        "time-safe-features",
+        "temporal-leakage-audit",
+        "reproducible-pipeline"
+      ],
+      "k2_required_fields": [
+        "source_ref",
+        "raw_data_locator",
+        "source_fingerprint",
+        "signature_or_slot",
+        "event_at",
+        "available_at",
+        "unit_map",
+        "provider_status",
+        "coverage_window"
+      ],
+      "skills_to_configure": [
+        "research-intake",
+        "gmgn-readonly-source"
+      ],
+      "consumes_from": [
+        "B01"
+      ],
+      "produces_for": [
+        "B03",
+        "B04",
+        "B05",
+        "B06",
+        "B07"
+      ],
+      "tools": [
+        "approved read-only Solana RPC",
+        "GMGN read-only CLI if installed",
+        "local JSON validators"
+      ],
+      "start_condition": "Request for specific timed raw observations.",
+      "stop_condition": "Malformed schema, missing timestamps, unknown units, source unavailable or no coverage.",
+      "permitted_actions": [
+        "read",
+        "research",
+        "write_scoped_proposal_or_evidence_packet",
+        "create_feature_branch_pr"
+      ],
+      "prohibited_actions": [
+        "real_trade",
+        "swap",
+        "sign",
+        "broadcast",
+        "read_private_key",
+        "self_approve_rule",
+        "treat_memory_as_market_evidence"
+      ],
+      "success_criterion": "Produces a source-bound, time-safe handoff that an independent reviewer can challenge."
+    },
+    {
+      "id": "B03",
+      "title": "钱包与资金结构",
+      "status": "planned_not_provisioned",
+      "phase": "development",
+      "responsibility": "Wallet roles, capital networks, holding structures, market sequences and non-identity confounders.",
+      "primary_domains": [
+        "D04",
+        "D05",
+        "D06",
+        "D07"
+      ],
+      "gate_responsibility": [
+        "F3"
+      ],
+      "always_resident": [
+        "Read-only, Paper-Only; no signing, swap, private keys, trading, or rule self-promotion.",
+        "Source + knowledge IDs, original data and time-of-availability outrank Bot memory and labels.",
+        "Distinguish fact, provider derivative, hypothesis, independently validated finding, and unknown.",
+        "Source citations/commits demonstrate traceability, not the truth or profitability of a claim.",
+        "Apply F0–F6 to the research objective; D10 quality and D11 falsification run cross-cutting.",
+        "Observe without lookahead: event_at, available_at, decision_at and outcome horizon must be separate.",
+        "Negative and missing cases must remain in the evidence corpus; avoid selecting only winners."
+      ],
+      "minimum_knowledge_files": [
+        "AGENTS.md",
+        "CONTEXT.md",
+        "BOTS.md",
+        "knowledge/system/README.md",
+        "knowledge/system/ontology.v1.json",
+        "knowledge/system/filter-policy.v1.json",
+        "knowledge/system/REVIEW-V1.1.md",
+        "knowledge/source_index.v1.json",
+        "knowledge/system/source-registry.v1.json"
+      ],
+      "resident_knowledge": [
+        {
+          "id": "B03-K01",
+          "title": "钱包角色与时间语义",
+          "domain_id": "D04",
+          "method": "创建、出资、早买、流通、派发、退出等角色是可变化的行为假设。",
+          "do_not_infer": "标签不是身份或内幕证据。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B03-K02",
+          "title": "资金图与 HUB 排除",
+          "domain_id": "D05",
+          "method": "交易所、桥、路由器和公共支付集散节点的排除与角色路径。",
+          "do_not_infer": "同源一次转账不代表共同实际控制。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B03-K03",
+          "title": "同步行为零假设",
+          "domain_id": "D07",
+          "method": "创建 Slot、同秒出资、共同反应市场事件、机器人基础设施对照。",
+          "do_not_infer": "同步不必然代表同一操作者。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B03-K04",
+          "title": "资金循环与退出钱包",
+          "domain_id": "D05",
+          "method": "从首次资金补给、建币、买入、内部转移到退出钱包的时间链。",
+          "do_not_infer": "链上收益归属不能直接推断现实团队总利润。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B03-K05",
+          "title": "筹码经济控制",
+          "domain_id": "D06",
+          "method": "Top10 地址集中、聚类后持仓、 LP/CEX 过滤、可转移持仓。",
+          "do_not_infer": "地址数量不等于独立参与者数。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B03-K06",
+          "title": "开发者/系列币历史",
+          "domain_id": "D04",
+          "method": "部署者变化、重复资金来源、重启系列、可疑阶段变化。",
+          "do_not_infer": "重复模式也可能来自公开服务商。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B03-K07",
+          "title": "跨币叙事与扩散",
+          "domain_id": "D07",
+          "method": "钱包迁移、社交信号、KOL 传播及注意力变化与可见性。",
+          "do_not_infer": "关联/叙事相关不自动具有领先价格的时间优势。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B03-K08",
+          "title": "负面对照",
+          "domain_id": "D11",
+          "method": "随机匹配地址、公开枢纽剔除、团伙重现与控制特征条件化。",
+          "do_not_infer": "研究到行为结构只满足 F3，不是 F4/F5。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        }
+      ],
+      "legacy_card_ids": [
+        "wallet-roles",
+        "funding-graph",
+        "sybil-wash",
+        "concentration",
+        "deployer-history"
+      ],
+      "read_on_demand_source_ids": [
+        "hermes-wallet-method",
+        "hermes-source-relations",
+        "coordination-null-model",
+        "funding-graph-control",
+        "economic-cycle",
+        "external-reentry-negative"
+      ],
+      "k2_required_fields": [
+        "source_ref",
+        "wallet_or_cluster_ids",
+        "graph_edges_with_signatures",
+        "event_at",
+        "available_at",
+        "hub_controls",
+        "competing_mechanisms",
+        "negative_controls"
+      ],
+      "skills_to_configure": [
+        "research-intake",
+        "wallet-funding-forensics"
+      ],
+      "consumes_from": [
+        "B01",
+        "B02"
+      ],
+      "produces_for": [
+        "B04",
+        "B05",
+        "B06"
+      ],
+      "tools": [
+        "source-linked on-chain transaction and funder graphs",
+        "read-only address research"
+      ],
+      "start_condition": "Wallet/capital/holding mechanism under examination.",
+      "stop_condition": "Only service hub links, unsourced owner attribution, or insufficient observations.",
+      "permitted_actions": [
+        "read",
+        "research",
+        "write_scoped_proposal_or_evidence_packet",
+        "create_feature_branch_pr"
+      ],
+      "prohibited_actions": [
+        "real_trade",
+        "swap",
+        "sign",
+        "broadcast",
+        "read_private_key",
+        "self_approve_rule",
+        "treat_memory_as_market_evidence"
+      ],
+      "success_criterion": "Produces a source-bound, time-safe handoff that an independent reviewer can challenge."
+    },
+    {
+      "id": "B04",
+      "title": "Alpha与交易经济学",
+      "status": "planned_not_provisioned",
+      "phase": "development",
+      "responsibility": "Discover and preregister hypotheses, OOS predictive increment, executable entry/exit/size/latency/net expectancy.",
+      "primary_domains": [
+        "D03",
+        "D07",
+        "D08",
+        "D09"
+      ],
+      "gate_responsibility": [
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "always_resident": [
+        "Read-only, Paper-Only; no signing, swap, private keys, trading, or rule self-promotion.",
+        "Source + knowledge IDs, original data and time-of-availability outrank Bot memory and labels.",
+        "Distinguish fact, provider derivative, hypothesis, independently validated finding, and unknown.",
+        "Source citations/commits demonstrate traceability, not the truth or profitability of a claim.",
+        "Apply F0–F6 to the research objective; D10 quality and D11 falsification run cross-cutting.",
+        "Observe without lookahead: event_at, available_at, decision_at and outcome horizon must be separate.",
+        "Negative and missing cases must remain in the evidence corpus; avoid selecting only winners."
+      ],
+      "minimum_knowledge_files": [
+        "AGENTS.md",
+        "CONTEXT.md",
+        "BOTS.md",
+        "knowledge/system/README.md",
+        "knowledge/system/ontology.v1.json",
+        "knowledge/system/filter-policy.v1.json",
+        "knowledge/system/REVIEW-V1.1.md",
+        "knowledge/source_index.v1.json",
+        "knowledge/system/source-registry.v1.json"
+      ],
+      "resident_knowledge": [
+        {
+          "id": "B04-K01",
+          "title": "策略假设空间",
+          "domain_id": "D08",
+          "method": "跟单、行为领先、周期/吸收、负面过滤、流动性回收、叙事扩散作为独立候选。",
+          "do_not_infer": "禁止把 FCZ 定为唯一策略。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B04-K02",
+          "title": "决策时点与成本锚",
+          "domain_id": "D08",
+          "method": "任何 FCZ/POC/AVWAP 必须明确在决策前可识别的边界。",
+          "do_not_infer": "不能使用事后第一波上涨定义历史入场。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B04-K03",
+          "title": "预测基准",
+          "domain_id": "D11",
+          "method": "原始基率、匹配对照、同运营者聚类、样本外、时间滚动。",
+          "do_not_infer": "观察命中率不是增量 Alpha。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B04-K04",
+          "title": "多重比较与注册",
+          "domain_id": "D11",
+          "method": "冻结假设、模型、阈值、特征、退出规则；区分探索和验证。",
+          "do_not_infer": "超大特征搜索的最优值不作独立证据。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B04-K05",
+          "title": "入场与容量",
+          "domain_id": "D09",
+          "method": "报警延迟、网络与路由迟滞、成交价、手续费、tip、冲击、仓位。",
+          "do_not_infer": "报价/ATH/MFE 不能作为成交价。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B04-K06",
+          "title": "退出和失败尾部",
+          "domain_id": "D09",
+          "method": "真实卖盘深度、失败时的极端回撤、止盈止损触发和不可成交。",
+          "do_not_infer": "高翻倍率可能伴随负净期望。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B04-K07",
+          "title": "策略切换与防过拟合",
+          "domain_id": "D08",
+          "method": "市场阶段、时间特征漂移、禁用行情、按策略归因。",
+          "do_not_infer": "不能用当日亏损后即时改规则来回填历史。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B04-K08",
+          "title": "收益评价",
+          "domain_id": "D09",
+          "method": "分布、基准超额、胜负尾部、置信区间、覆盖率、执行成本敏感性。",
+          "do_not_infer": "没有实际或可信模拟成交证据，不得声称盈利。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        }
+      ],
+      "legacy_card_ids": [
+        "reclaim-theory",
+        "liquidity-depth",
+        "token-security",
+        "evidence-synthesis"
+      ],
+      "read_on_demand_source_ids": [
+        "meme-first-control-zone",
+        "meme-multistrategy-direction",
+        "meme-falsification-experiment",
+        "tradability-vs-structure",
+        "external-post-detection-results",
+        "pre-registered-failure",
+        "external-reentry-negative",
+        "time-safe-features"
+      ],
+      "k2_required_fields": [
+        "strategy_version",
+        "population",
+        "decision_cutoff_utc",
+        "baseline",
+        "registered_features",
+        "outcome_horizon",
+        "entry_latency",
+        "position_size",
+        "gross_net_distinction",
+        "fees",
+        "exit_policy",
+        "negative_cases"
+      ],
+      "skills_to_configure": [
+        "research-intake",
+        "alpha-economic-experiment"
+      ],
+      "consumes_from": [
+        "B01",
+        "B02",
+        "B03"
+      ],
+      "produces_for": [
+        "B05",
+        "B06"
+      ],
+      "tools": [
+        "offline research/replay",
+        "read-only liquidity/quote snapshots",
+        "cost stress test"
+      ],
+      "start_condition": "Predictive or economically actionable candidate hypothesis.",
+      "stop_condition": "Lookahead, no executable exit, unmeasurable costs, or no independent baseline.",
+      "permitted_actions": [
+        "read",
+        "research",
+        "write_scoped_proposal_or_evidence_packet",
+        "create_feature_branch_pr"
+      ],
+      "prohibited_actions": [
+        "real_trade",
+        "swap",
+        "sign",
+        "broadcast",
+        "read_private_key",
+        "self_approve_rule",
+        "treat_memory_as_market_evidence"
+      ],
+      "success_criterion": "Produces a source-bound, time-safe handoff that an independent reviewer can challenge."
+    },
+    {
+      "id": "B05",
+      "title": "证据反证审查",
+      "status": "planned_not_provisioned",
+      "phase": "development",
+      "responsibility": "Independent evidence, causal alternative, confounder, leaked-feature, coverage and economic-assumption challenges.",
+      "primary_domains": [
+        "D10",
+        "D11"
+      ],
+      "gate_responsibility": [
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "always_resident": [
+        "Read-only, Paper-Only; no signing, swap, private keys, trading, or rule self-promotion.",
+        "Source + knowledge IDs, original data and time-of-availability outrank Bot memory and labels.",
+        "Distinguish fact, provider derivative, hypothesis, independently validated finding, and unknown.",
+        "Source citations/commits demonstrate traceability, not the truth or profitability of a claim.",
+        "Apply F0–F6 to the research objective; D10 quality and D11 falsification run cross-cutting.",
+        "Observe without lookahead: event_at, available_at, decision_at and outcome horizon must be separate.",
+        "Negative and missing cases must remain in the evidence corpus; avoid selecting only winners."
+      ],
+      "minimum_knowledge_files": [
+        "AGENTS.md",
+        "CONTEXT.md",
+        "BOTS.md",
+        "knowledge/system/README.md",
+        "knowledge/system/ontology.v1.json",
+        "knowledge/system/filter-policy.v1.json",
+        "knowledge/system/REVIEW-V1.1.md",
+        "knowledge/source_index.v1.json",
+        "knowledge/system/source-registry.v1.json"
+      ],
+      "resident_knowledge": [
+        {
+          "id": "B05-K01",
+          "title": "证据账本",
+          "domain_id": "D11",
+          "method": "每个主张需要原始时间、作者/数据源、事实与推断分离及相反证据。",
+          "do_not_infer": "同一二手渠道重复报道不是多源独立证据。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B05-K02",
+          "title": "样本选择和分母",
+          "domain_id": "D11",
+          "method": "先定义全体，再判断取样、触发、漏采、删失、幸存者偏差。",
+          "do_not_infer": "不能把筛选群体的成功率外推总体。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B05-K03",
+          "title": "时序泄露",
+          "domain_id": "D10",
+          "method": "可见时间、滚动窗口、事后标签、ATH 和观察者效应检查。",
+          "do_not_infer": "没有 as-of 证据不准推断可预测。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B05-K04",
+          "title": "CEX/HUB 混淆",
+          "domain_id": "D11",
+          "method": "公共结算、机器人平台、第三方执行者与真实经济控制的替代解释。",
+          "do_not_infer": "资金图不能直接实控实名。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B05-K05",
+          "title": "自信数值校准",
+          "domain_id": "D11",
+          "method": "检查旧文任意 0.8 confidence、阈值拼装和未复算的概率值。",
+          "do_not_infer": "Bot 自评置信度不等于频率学概率。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B05-K06",
+          "title": "独立挑战机制",
+          "domain_id": "D11",
+          "method": "不重复创造者自己的论据；提出可改变判断的原始数据查询。",
+          "do_not_infer": "不能由同一假设生成自己的反证及其通过结论。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B05-K07",
+          "title": "净收益挑战",
+          "domain_id": "D09",
+          "method": "重做延迟/成本/退出假设、压力、基线和真实可卖性。",
+          "do_not_infer": "结构关联和训练命中均不能越过 F5。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B05-K08",
+          "title": "失效与回滚",
+          "domain_id": "D12",
+          "method": "审查结果保持版本化，记录可复审的不足与负例。",
+          "do_not_infer": "不默默删除失败假设。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        }
+      ],
+      "legacy_card_ids": [
+        "evidence-synthesis",
+        "research-states",
+        "funding-graph",
+        "anti-false-completion"
+      ],
+      "read_on_demand_source_ids": [
+        "research-methodology",
+        "failure-modes",
+        "temporal-leakage-audit",
+        "coordination-null-model",
+        "meme-falsification-experiment",
+        "external-post-detection-results"
+      ],
+      "k2_required_fields": [
+        "claim_id",
+        "primary_evidence_refs",
+        "alternative_explanations",
+        "missingness",
+        "null_model",
+        "leakage_audit",
+        "gate_decision_and_reason"
+      ],
+      "skills_to_configure": [
+        "research-intake",
+        "evidence-falsification"
+      ],
+      "consumes_from": [
+        "B01",
+        "B02",
+        "B03",
+        "B04",
+        "B06"
+      ],
+      "produces_for": [
+        "B01",
+        "B04",
+        "B06"
+      ],
+      "tools": [
+        "immutable evidence ledger",
+        "independent raw source queries",
+        "falsification templates"
+      ],
+      "start_condition": "Any material causal/predictive/economic claim requiring independent challenge.",
+      "stop_condition": "Cannot resolve source contradiction or evidence is missing => INSUFFICIENT.",
+      "permitted_actions": [
+        "read",
+        "research",
+        "write_scoped_proposal_or_evidence_packet",
+        "create_feature_branch_pr"
+      ],
+      "prohibited_actions": [
+        "real_trade",
+        "swap",
+        "sign",
+        "broadcast",
+        "read_private_key",
+        "self_approve_rule",
+        "treat_memory_as_market_evidence"
+      ],
+      "success_criterion": "Produces a source-bound, time-safe handoff that an independent reviewer can challenge."
+    },
+    {
+      "id": "B06",
+      "title": "独立QA与回测",
+      "status": "planned_not_provisioned",
+      "phase": "development",
+      "responsibility": "Blind case replay, temporal/group holdout, null controls, test regression and release recommendation.",
+      "primary_domains": [
+        "D09",
+        "D10",
+        "D11"
+      ],
+      "gate_responsibility": [
+        "F4",
+        "F5",
+        "F6"
+      ],
+      "always_resident": [
+        "Read-only, Paper-Only; no signing, swap, private keys, trading, or rule self-promotion.",
+        "Source + knowledge IDs, original data and time-of-availability outrank Bot memory and labels.",
+        "Distinguish fact, provider derivative, hypothesis, independently validated finding, and unknown.",
+        "Source citations/commits demonstrate traceability, not the truth or profitability of a claim.",
+        "Apply F0–F6 to the research objective; D10 quality and D11 falsification run cross-cutting.",
+        "Observe without lookahead: event_at, available_at, decision_at and outcome horizon must be separate.",
+        "Negative and missing cases must remain in the evidence corpus; avoid selecting only winners."
+      ],
+      "minimum_knowledge_files": [
+        "AGENTS.md",
+        "CONTEXT.md",
+        "BOTS.md",
+        "knowledge/system/README.md",
+        "knowledge/system/ontology.v1.json",
+        "knowledge/system/filter-policy.v1.json",
+        "knowledge/system/REVIEW-V1.1.md",
+        "knowledge/source_index.v1.json",
+        "knowledge/system/source-registry.v1.json"
+      ],
+      "resident_knowledge": [
+        {
+          "id": "B06-K01",
+          "title": "可重放样本协议",
+          "domain_id": "D11",
+          "method": "fixture 与真实链上样本分离，源指纹、观察时点、结果窗和抽样规则齐全。",
+          "do_not_infer": "离线测试 PASS 不能证明真实市场盈利。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B06-K02",
+          "title": "时间与群组独立拆分",
+          "domain_id": "D11",
+          "method": "时间顺序锁定、团队/资金图聚类跨分割防漏。",
+          "do_not_infer": "随机切分同一运营组可能产生伪泛化。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B06-K03",
+          "title": "对照与消融",
+          "domain_id": "D11",
+          "method": "无人为挑赢家的总体、简单基准、匹配变量、零模型和因素移除。",
+          "do_not_infer": "单个显著结果不自动包含经济收益。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B06-K04",
+          "title": "统计功效",
+          "domain_id": "D11",
+          "method": "样本数、有效样本、置信区间、多重检验和低覆盖信号。",
+          "do_not_infer": "负检验结果可能只是功效不足，不能无限外推。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B06-K05",
+          "title": "回测成交审计",
+          "domain_id": "D09",
+          "method": "决策时已知特征、实际可成交路由/规模、费用、尾部退出、退出失败。",
+          "do_not_infer": "禁止使用未来可见价格或最高点作成交。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B06-K06",
+          "title": "数据故障仿真",
+          "domain_id": "D10",
+          "method": "索引延迟、重复读、长时间停机、RPC 403/429、空数据和时间戳失真。",
+          "do_not_infer": "技术失败和真正市场阴性分开处理。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B06-K07",
+          "title": "代码与规则回归",
+          "domain_id": "D11",
+          "method": "测试快照、输入契约、schema 漂移、前后兼容与差异审查。",
+          "do_not_infer": "单测不能替代数据检验或人工授权。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B06-K08",
+          "title": "规则发布隔离",
+          "domain_id": "D12",
+          "method": "独立复核、冻结版本、回滚/漂移阈值和监控上线观察。",
+          "do_not_infer": "QA 只建议，发布需人工批准。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        }
+      ],
+      "legacy_card_ids": [
+        "evidence-synthesis",
+        "research-states",
+        "anti-false-completion",
+        "gmgn-raw-prototype"
+      ],
+      "read_on_demand_source_ids": [
+        "reproducible-pipeline",
+        "failure-modes",
+        "pre-registered-failure",
+        "meme-falsification-experiment",
+        "external-reentry-negative",
+        "external-post-detection-results"
+      ],
+      "k2_required_fields": [
+        "case_manifest",
+        "sample_selection",
+        "time_and_cluster_split",
+        "source_hashes",
+        "test_commands",
+        "failed_cases",
+        "net_return_sensitivity",
+        "reviewer_note"
+      ],
+      "skills_to_configure": [
+        "independent-case-replay",
+        "evidence-falsification"
+      ],
+      "consumes_from": [
+        "B01",
+        "B02",
+        "B03",
+        "B04",
+        "B05"
+      ],
+      "produces_for": [
+        "B01",
+        "B05"
+      ],
+      "tools": [
+        "offline pytest/unittest",
+        "replay harness",
+        "versioned regression suite"
+      ],
+      "start_condition": "Proposed model/rule has frozen spec and evidence packets.",
+      "stop_condition": "No untouched test data, missing outcomes, test contamination or failed cost robustness.",
+      "permitted_actions": [
+        "read",
+        "research",
+        "write_scoped_proposal_or_evidence_packet",
+        "create_feature_branch_pr"
+      ],
+      "prohibited_actions": [
+        "real_trade",
+        "swap",
+        "sign",
+        "broadcast",
+        "read_private_key",
+        "self_approve_rule",
+        "treat_memory_as_market_evidence"
+      ],
+      "success_criterion": "Produces a source-bound, time-safe handoff that an independent reviewer can challenge."
+    },
+    {
+      "id": "B07",
+      "title": "最终监控",
+      "status": "planned_not_provisioned",
+      "phase": "production",
+      "responsibility": "Only reads human-approved frozen rules and writes source-linked paper-only alerts/abstentions; never authors rules.",
+      "primary_domains": [
+        "D01",
+        "D03",
+        "D04",
+        "D05",
+        "D06",
+        "D07",
+        "D08",
+        "D09",
+        "D10",
+        "D11",
+        "D12"
+      ],
+      "gate_responsibility": [
+        "F6"
+      ],
+      "always_resident": [
+        "Read-only, Paper-Only; no signing, swap, private keys, trading, or rule self-promotion.",
+        "Source + knowledge IDs, original data and time-of-availability outrank Bot memory and labels.",
+        "Distinguish fact, provider derivative, hypothesis, independently validated finding, and unknown.",
+        "Source citations/commits demonstrate traceability, not the truth or profitability of a claim.",
+        "Apply F0–F6 to the research objective; D10 quality and D11 falsification run cross-cutting.",
+        "Observe without lookahead: event_at, available_at, decision_at and outcome horizon must be separate.",
+        "Negative and missing cases must remain in the evidence corpus; avoid selecting only winners."
+      ],
+      "minimum_knowledge_files": [
+        "AGENTS.md",
+        "CONTEXT.md",
+        "BOTS.md",
+        "knowledge/system/README.md",
+        "knowledge/system/ontology.v1.json",
+        "knowledge/system/filter-policy.v1.json",
+        "knowledge/system/REVIEW-V1.1.md",
+        "knowledge/source_index.v1.json",
+        "knowledge/system/source-registry.v1.json"
+      ],
+      "resident_knowledge": [
+        {
+          "id": "B07-K01",
+          "title": "冻结规则与只读边界",
+          "domain_id": "D12",
+          "method": "仅加载人工批准的版本/规则和本次上下文。",
+          "do_not_infer": "不能自研新阈值或现场覆盖规则。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B07-K02",
+          "title": "候选输入与来源追溯",
+          "domain_id": "D10",
+          "method": "GMGN 入口、代币/池子唯一标识、采集时间、原始查询/版本。",
+          "do_not_infer": "未经授权的字段推算/补造不允许。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B07-K03",
+          "title": "观察状态机",
+          "domain_id": "D10",
+          "method": "per mint 持续状态、时间单调性、去重、过期和错误恢复。",
+          "do_not_infer": "多 Bot 共享状态并发不能双写。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B07-K04",
+          "title": "行情/持仓观察约束",
+          "domain_id": "D03",
+          "method": "流动性变化、Top10 变化和来源事件都仅是观察型告警。",
+          "do_not_infer": "观察性 alert 不等于成交方向。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B07-K05",
+          "title": "知识引用限度",
+          "domain_id": "D11",
+          "method": "按需召回少量相关卡和历史机制问题，带来源和失败条件。",
+          "do_not_infer": "外部研究/旧理论绝不能自动改变生产门槛。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B07-K06",
+          "title": "退避与故障报告",
+          "domain_id": "D10",
+          "method": "源不可用、滞后、权限变化、覆盖中断和未知上报。",
+          "do_not_infer": "缺失绝不自动判成安全。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        },
+        {
+          "id": "B07-K07",
+          "title": "研究回流与人工升级",
+          "domain_id": "D12",
+          "method": "把陌生事件交给 B01 创建研究任务，不自行触发新的盈利结论。",
+          "do_not_infer": "Routine 只能按审核许可的观察范围持续运行。",
+          "epistemic_state": "curriculum_target_not_empirically_validated"
+        }
+      ],
+      "legacy_card_ids": [
+        "candidate-entry",
+        "liquidity-depth",
+        "concentration",
+        "evidence-synthesis",
+        "research-states",
+        "token-security"
+      ],
+      "read_on_demand_source_ids": [
+        "hermes-gmgn-dimensions",
+        "hermes-wallet-method",
+        "hermes-source-relations",
+        "failure-modes"
+      ],
+      "k2_required_fields": [
+        "mint",
+        "normalized_source",
+        "observed_at",
+        "rule_version",
+        "source_refs",
+        "event_ids",
+        "missing_fields",
+        "monitor_state",
+        "alert_or_abstention"
+      ],
+      "skills_to_configure": [
+        "solana-meme-monitor",
+        "solana-meme-knowledge"
+      ],
+      "consumes_from": [
+        "human_approved_frozen_rules",
+        "B02"
+      ],
+      "produces_for": [
+        "B01"
+      ],
+      "tools": [
+        "approved read-only source collector",
+        "frozen monitor runtime",
+        "paper-only alert output"
+      ],
+      "start_condition": "Only after owner-approved rule freeze, tested scheduling and state locking.",
+      "stop_condition": "Source stale, invalid rule hash, unsafe actions, write conflict or missing required data.",
+      "permitted_actions": [
+        "read",
+        "research",
+        "write_scoped_proposal_or_evidence_packet",
+        "create_feature_branch_pr"
+      ],
+      "prohibited_actions": [
+        "real_trade",
+        "swap",
+        "sign",
+        "broadcast",
+        "read_private_key",
+        "self_approve_rule",
+        "treat_memory_as_market_evidence"
+      ],
+      "success_criterion": "Source-linked read-only alert with dedupe/stale handling and no rule mutation."
+    }
+  ]
+}

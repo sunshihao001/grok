@@ -13,3 +13,7 @@ Third-party reference is authored by Benjamin Da Cunha. The author's CC BY-NC-ND
 ## 完整知识本体联动
 
 按需检索的 17 条文献入口（K1）与 `knowledge/system/ontology.v1.json` 的 12 领域本体互补，不重复存储知识。前者找文献，后者定义问题、上游依赖和边界。引用提交需与 L0 `knowledge/system/source-registry.v1.json` 相符。
+
+## Bot role-aware expansion v1
+
+Curated entry count is now **21** (17 existing + 4 verified new pointers). Use `knowledge/bot-knowledge-profiles.v1.json` to select a small role-specific retrieval subset; do not bulk-ingest external prose or infer its empirical truth.
