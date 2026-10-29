@@ -13,3 +13,7 @@ description: Read-only, source-linked Solana Meme snapshot monitoring, with fres
 4. On invalid, stale or missing inputs or unavailable login, stop and report error. Never fabricate numbers or classify hypotheses as confirmed identities.
 
 **Validation:** PYTHONPATH=src python -m unittest discover -s tests -v. All code here is read-only; the actual Grok Routine and any production deployment require separate human review and live-source testing. No trade or transaction actions.
+
+## Expert knowledge is required, not optional
+
+After Step 2, read `knowledge.interpretation_candidates` from the monitor JSON. These are **candidate conceptual lenses**, not conclusions. For each alert, explain the actual measured change, what the proposed mechanism would imply, what other mechanisms could also produce it, and which missing source datum would best distinguish them. If an alert is unsupported by required evidence, say UNKNOWN and avoid upgrading risk status. See `skills/solana-meme-knowledge/SKILL.md`.

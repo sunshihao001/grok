@@ -21,3 +21,12 @@
 Problem, version, owner, raw sources/commits/times, units, proposed mechanism, competitive explanation, tested baseline, counterexamples, false alerts, regression commands/results, rollback and explicit human approval.
 
 Rule Engineer passing local tests **does not** imply an economically valid or production-ready monitoring rule.
+
+## Knowledge migration (preserved, with explicit uncertainty)
+- [x] Import 15 source-pinned knowledge units covering Solana lifecycle, GMGN fields, wallet roles/funding, structure, risk, evidence and tool failure modes.
+- [x] Connect a deterministic knowledge selection function to monitor observations and plain-language research question routing.
+- [x] Add regression tests for relevant concept retrieval, source integrity, negative cases and missing-data behavior.
+- [ ] Verify original external theoretical references, look for corrected recent primary sources, and distinguish stale assumptions from currently valid mechanisms.
+- [ ] Import concrete real on-chain cases and source-linked failures, not only conceptual documents.
+- [ ] Test whether Grok Bot with knowledge improves judgment vs a no-knowledge baseline using blinded examples; measure false alerts and missed events.
+- [ ] Improve semantic applicability and source reading in an actual Grok Bot instead of claiming literal keyword routing is full expert reasoning.
