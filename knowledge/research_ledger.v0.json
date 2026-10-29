@@ -1,0 +1,244 @@
+{
+  "schema_version": "1.0",
+  "version": "KNOW-003.1",
+  "stage": "reference_only",
+  "policy": "Negative results are scope-bounded, prospective hypotheses never trade or become validated by fixture tests. Never change original source files.",
+  "records": [
+    {
+      "id": "N-001",
+      "kind": "negative_reference",
+      "state": "EXTERNAL_NEGATIVE_SCOPE_BOUND",
+      "title": "已知组回归并不自动形成可交易增量",
+      "claim": "研究中已知 group 裸对比优于未知，但按价格/大小匹配和成交成本后没有可靠净优势。",
+      "scope": "source study held-out validation, 2026 Aug-Sep detector only",
+      "source_ids": [
+        "research-known-group",
+        "research-forensics"
+      ],
+      "reopen_only_if": "新的不可泄漏特征、不同执行延迟或新的独立样本能使净回报和基线增量转正",
+      "not_claimed": "所有未来钱包跟单都亏损"
+    },
+    {
+      "id": "N-002",
+      "kind": "negative_reference",
+      "state": "EXTERNAL_NEGATIVE_SCOPE_BOUND",
+      "title": "二倍命中概率的提升不等于净回报",
+      "claim": "source study logistic-selected target probability uplift but observed negative net per predeclared strategy.",
+      "scope": "post_detection_edge TEST 2026-09, specific exit/fee assumptions",
+      "source_ids": [
+        "research-post-detect-edge"
+      ],
+      "reopen_only_if": "可复算的不同订单路由、尾部退出和成本模型在独立前瞻样本转正",
+      "not_claimed": "所有高胜率策略都无效"
+    },
+    {
+      "id": "N-003",
+      "kind": "negative_reference",
+      "state": "EXTERNAL_NEGATIVE_SCOPE_BOUND",
+      "title": "过宽的 shared funder 检测在随机组也会触发",
+      "claim": "the source P13 null showed a high random-group alarm rate for a specific shared-funder criterion",
+      "scope": "source PITFALLS P13 control population and detector rule C",
+      "source_ids": [
+        "external-pitfalls"
+      ],
+      "reopen_only_if": "用同规模同时间同度数 null、明确 hub 排除、非随机证据增益重新检验",
+      "not_claimed": "一切同源资金关系都是假的"
+    },
+    {
+      "id": "N-004",
+      "kind": "negative_reference",
+      "state": "EXTERNAL_NEGATIVE_SCOPE_BOUND",
+      "title": "出现在池子里的相似早期买入并不证明有足够前瞻信息",
+      "claim": "alpha_patterns reported no exploitable pattern in the explored feature space; genuine new OOS still necessary",
+      "scope": "2026-10 exploratory predeclared studies, some source matrices not public",
+      "source_ids": [
+        "research-act-iv",
+        "research-exploration"
+      ],
+      "reopen_only_if": "先定明确独立 OOS/成本模型和新信息时钟，再在新样本测试",
+      "not_claimed": "未来无法出现任何新 alpha"
+    },
+    {
+      "id": "H-001",
+      "kind": "hypothesis",
+      "state": "UNVALIDATED_NEEDS_RAW_DATA",
+      "priority": 1,
+      "title": "先于公开信号识别资金循环，会否创造提前可见的跟单窗口",
+      "mechanism": "发币操作者可能循环注资钱包，但下一次目标币可能尚不可知",
+      "decision_clock": "资金转账 first_seen_at；目标关联必须在新币公开之前获得",
+      "population": "连续观察的全部目标钱包资金活动（包括未发币和假阳性）",
+      "baseline": "随机相似资金流及同频率操作群；按平台/日/钱包活动强度匹配",
+      "null_model": "保持资金图节点度数和时间分桶的置换",
+      "primary_metric": "可复制净 ROI 相对基线，不是是否发生发行",
+      "falsifier": "关联信息直到币已发射才可得，或资金循环在未发币事件中同样常见，或前瞻净值不优于基线",
+      "alternatives": [
+        "交易所/服务自动转账",
+        "多代币策略钱包正常轮换",
+        "观察者事后只挑已发币的资金流"
+      ],
+      "source_ids": [
+        "research-act-iv",
+        "research-mechanics",
+        "external-funder-plan"
+      ],
+      "required_data": [
+        "raw transfer & first_seen_at",
+        "future mint identification before decision",
+        "full negative sample frame",
+        "quoted fills and timing"
+      ],
+      "next_experiment": "先只读完整样本框与提前量统计，不先做交易"
+    },
+    {
+      "id": "H-002",
+      "kind": "hypothesis",
+      "state": "UNVALIDATED_NEEDS_EXECUTION",
+      "priority": 1,
+      "title": "领先钱包盈利中究竟有多少在跟单者决策时仍可捕获",
+      "mechanism": "运营群提前持币而跟单者只能在公开确认后获知交易；费用和退出失败可能吃掉优势",
+      "decision_clock": "Bot first_seen_at < quote_at < entry_fill_at",
+      "population": "监控钱包发出的全部可复算交易信号（包括卖出失败与无成交）",
+      "baseline": "相同规模/时间同池的简单观察或随机跟单",
+      "null_model": "同日同阶段随机延迟和普通钱包替代信号",
+      "primary_metric": "全交易、含失败成交的净 ROI 与收益尾部分位",
+      "falsifier": "优于基线只在事后回填成交或不计成本时出现",
+      "alternatives": [
+        "运营者拥有不同价格与库存",
+        "热门钱包复制拥挤加剧滑点",
+        "快速上涨币在数据源中被过采样"
+      ],
+      "source_ids": [
+        "research-post-detect-edge",
+        "research-known-group",
+        "research-temporal-audit"
+      ],
+      "required_data": [
+        "signal clocks & deduped transactions",
+        "executable quotes and fill fees",
+        "independent negative sample",
+        "forced exit policy"
+      ],
+      "next_experiment": "构建 read-only 时钟→纸面成交的来源护照并跑零前视成交回放"
+    },
+    {
+      "id": "H-003",
+      "kind": "hypothesis",
+      "state": "UNVALIDATED_NEEDS_EXECUTION",
+      "priority": 2,
+      "title": "资金图是否更适合用于避险而非产生买入指令",
+      "mechanism": "共享 hub/粉尘/多账户虚假需求可能标识高失败退出风险",
+      "decision_clock": "只有在 token 风险判定前真实可见的图和 LP 数据可用",
+      "population": "全部候选和所有因风险门过滤的币",
+      "baseline": "不做风控与单一流动性阈值风控",
+      "null_model": "同窗口同池深/市值匹配的 hub 与非 hub 组",
+      "primary_metric": "避免尾部损失减去被误拒绝币的净收益机会成本",
+      "falsifier": "风险下降在控制池深/阶段后消失或错失盈利成本更高",
+      "alternatives": [
+        "hub只是交易所共用服务",
+        "价格/池深直接解释风险",
+        "只统计成功规避而遗漏误杀"
+      ],
+      "source_ids": [
+        "external-pitfalls",
+        "external-funder-null",
+        "research-post-detect-edge"
+      ],
+      "required_data": [
+        "holder owner mapping",
+        "reliable pool depth and exit quote",
+        "all filtered candidate outcomes"
+      ],
+      "next_experiment": "研究负向 gate 的机会成本，不自动阻止正式规则"
+    },
+    {
+      "id": "H-004",
+      "kind": "hypothesis",
+      "state": "UNVALIDATED_NEEDS_OOS",
+      "priority": 3,
+      "title": "已知运营群是否存在短暂的条件性可交易状态",
+      "mechanism": "团队节奏/库存转移与外部需求可能在某些后续窗口重合，但存在价格已反映问题",
+      "decision_clock": "独立记录每个发币之后的需求事件 first_seen_at",
+      "population": "包含好坏发币的全部跨时间团队系列",
+      "baseline": "相同入场 premium/池深/时间/运营群",
+      "null_model": "同群内部时间顺序随机化，保留每周发币频次",
+      "primary_metric": "holdout 增量净 ROI 和成交覆盖率",
+      "falsifier": "所谓买入机会只在未来需求已经发生后出现，或匹配后增量不可区分于零",
+      "alternatives": [
+        "operator identity只是 premium 代理变量",
+        "外部需求在公开价后才可见",
+        "存活者偏差"
+      ],
+      "source_ids": [
+        "research-exploration",
+        "research-known-group",
+        "research-act-iv"
+      ],
+      "required_data": [
+        "ex ante team ID and first_seen",
+        "actual demand availability",
+        "net fill and failure accounting"
+      ],
+      "next_experiment": "仅在新数据时代/平台机制变化后重开已失败研究"
+    },
+    {
+      "id": "H-005",
+      "kind": "hypothesis",
+      "state": "UNVALIDATED_NEEDS_RAW_DATA",
+      "priority": 3,
+      "title": "第一控盘区和 POC/AVWAP 回收是否有不同于旧买入机制的可成交条件",
+      "mechanism": "某些二次接受模式可能不同于发币瞬时抢购，但阈值常因事后锚点泄漏而失效",
+      "decision_clock": "位置/成交量只从决定时刻之前的订单流计算",
+      "population": "所有真实出现与未出现重新接受候选",
+      "baseline": "按日内阶段/深度/波动匹配的价格回归策略",
+      "null_model": "保留波动和成交量分布的窗口平移",
+      "primary_metric": "固定执行假设下 net ROI、最大亏损和失败退出率",
+      "falsifier": "重建零前视锚点后净值消失，或被 fees/slippage 反转",
+      "alternatives": [
+        "预先放量造成虚假供需",
+        "波动率变化而非供需重新接受",
+        "价格源或盘口聚合错误"
+      ],
+      "source_ids": [
+        "fcz",
+        "reacceptance",
+        "research-temporal-audit"
+      ],
+      "required_data": [
+        "time-stamped market/pool trades",
+        "independently reconstructible anchored VWAP",
+        "entry/exit executable quotes"
+      ],
+      "next_experiment": "先形成固定 cutoff 的回收/未回收全样本"
+    },
+    {
+      "id": "H-006",
+      "kind": "hypothesis",
+      "state": "UNVALIDATED_NEEDS_OBSERVATION",
+      "priority": 2,
+      "title": "钱包操作者识别可否用于检测市场机制更迭而非直接预测涨幅",
+      "mechanism": "角色与筹码转移的频率变化可能标示机器人结构/市场阶段变化",
+      "decision_clock": "按周冻结真实可见的钱包图特征",
+      "population": "同来源平台所有检测到的发行及无效发行",
+      "baseline": "基础的流动性和候选分布漂移监测",
+      "null_model": "分周随机化实体/发币配对及移除高活跃 hub",
+      "primary_metric": "独立验证的环境漂移提前预警准确率，而非跟单 ROI",
+      "falsifier": "漂移信号只是采样/传输问题或不能领先更简单的平台指标",
+      "alternatives": [
+        "RPC/GMGN字段变更",
+        "共享交易所地址活跃度上升",
+        "监控候选组成改变"
+      ],
+      "source_ids": [
+        "research-mechanics",
+        "research-forensics",
+        "external-pitfalls"
+      ],
+      "required_data": [
+        "monthly source audit",
+        "stable feature definitions",
+        "counterfactual platform changes"
+      ],
+      "next_experiment": "建立指标漂移报警的原始数据一致性检查"
+    }
+  ]
+}

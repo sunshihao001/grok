@@ -1,0 +1,232 @@
+{
+  "schema_version": "1.0",
+  "study_id": "KNOW-003-SYNTHETIC-LEARN",
+  "data_mode": "synthetic_fixture",
+  "hypothesis": {
+    "mechanism": "shared funding may reflect an operating mechanism",
+    "prediction": "known funding clusters might increase later hit rates after controls",
+    "falsification": "no stable incremental outcome and/or negative net after fees",
+    "alternatives": [
+      "shared service hub creates correlated funding",
+      "entry premium and liquidity explain apparent signal",
+      "common news causes synchronized buying"
+    ]
+  },
+  "protocol": {
+    "sample_frame": "all synthetic alerts in fixture, not selected on outcome",
+    "independence_unit": "launch-and-operator cluster",
+    "baseline": "ordinary alerts observed at same as-of decision",
+    "matched_controls": "match entry premium, depth and calendar block in actual study",
+    "null_model": "within-day and degree-preserving rewiring in actual study",
+    "missing_policy": "MISSING retains denominator and reason",
+    "multiple_testing_policy": "pre-register primary test and apply Holm if multiple rules",
+    "exit_convention": "failed exit has zero realized proceeds",
+    "fee_convention": "buy/sell/priority fees included; slippage baked into fills",
+    "raw_source_ref": "synthetic:local-fixture-only",
+    "metric": "realized_net_roi",
+    "locked_at": "2026-10-15T00:00:00Z",
+    "test_start": "2026-10-16T00:00:00Z"
+  },
+  "rows": [
+    {
+      "id": "synthetic-1",
+      "split": "TRAIN",
+      "decision_at": "2026-10-14T01:00:00Z",
+      "features": [
+        {
+          "name": "pre_entry_funding_observation",
+          "source_ref": "synthetic:feat-1",
+          "event_at": "2026-10-14T01:00:00Z",
+          "available_at": "2026-10-14T01:00:00Z"
+        }
+      ],
+      "measurement_status": "MEASURED",
+      "signal": true,
+      "hit_target": true,
+      "entry_at": "2026-10-14T01:00:05Z",
+      "exit_at": "2026-10-14T01:00:40Z",
+      "outcome_observed_at": "2026-10-14T01:00:50Z",
+      "exit_status": "FILLED",
+      "buy_filled_usd": 100,
+      "sell_filled_usd": 112,
+      "buy_fees_usd": 1,
+      "sell_fees_usd": 1,
+      "priority_fees_usd": 1
+    },
+    {
+      "id": "synthetic-2",
+      "split": "TRAIN",
+      "decision_at": "2026-10-14T02:00:00Z",
+      "features": [
+        {
+          "name": "pre_entry_funding_observation",
+          "source_ref": "synthetic:feat-2",
+          "event_at": "2026-10-14T02:00:00Z",
+          "available_at": "2026-10-14T02:00:00Z"
+        }
+      ],
+      "measurement_status": "MEASURED",
+      "signal": false,
+      "hit_target": false,
+      "entry_at": "2026-10-14T02:00:05Z",
+      "exit_at": "2026-10-14T02:00:40Z",
+      "outcome_observed_at": "2026-10-14T02:00:50Z",
+      "exit_status": "FILLED",
+      "buy_filled_usd": 100,
+      "sell_filled_usd": 60,
+      "buy_fees_usd": 1,
+      "sell_fees_usd": 1,
+      "priority_fees_usd": 1
+    },
+    {
+      "id": "synthetic-3",
+      "split": "TEST",
+      "decision_at": "2026-10-16T03:00:00Z",
+      "features": [
+        {
+          "name": "pre_entry_funding_observation",
+          "source_ref": "synthetic:feat-3",
+          "event_at": "2026-10-16T03:00:00Z",
+          "available_at": "2026-10-16T03:00:00Z"
+        }
+      ],
+      "measurement_status": "MEASURED",
+      "signal": true,
+      "hit_target": true,
+      "entry_at": "2026-10-16T03:00:05Z",
+      "exit_at": "2026-10-16T03:00:40Z",
+      "outcome_observed_at": "2026-10-16T03:00:50Z",
+      "exit_status": "FILLED",
+      "buy_filled_usd": 100,
+      "sell_filled_usd": 112,
+      "buy_fees_usd": 1,
+      "sell_fees_usd": 1,
+      "priority_fees_usd": 1
+    },
+    {
+      "id": "synthetic-4",
+      "split": "TEST",
+      "decision_at": "2026-10-16T04:00:00Z",
+      "features": [
+        {
+          "name": "pre_entry_funding_observation",
+          "source_ref": "synthetic:feat-4",
+          "event_at": "2026-10-16T04:00:00Z",
+          "available_at": "2026-10-16T04:00:00Z"
+        }
+      ],
+      "measurement_status": "MEASURED",
+      "signal": true,
+      "hit_target": true,
+      "entry_at": "2026-10-16T04:00:05Z",
+      "exit_at": "2026-10-16T04:00:40Z",
+      "outcome_observed_at": "2026-10-16T04:00:50Z",
+      "exit_status": "FILLED",
+      "buy_filled_usd": 100,
+      "sell_filled_usd": 112,
+      "buy_fees_usd": 1,
+      "sell_fees_usd": 1,
+      "priority_fees_usd": 1
+    },
+    {
+      "id": "synthetic-5",
+      "split": "TEST",
+      "decision_at": "2026-10-16T05:00:00Z",
+      "features": [
+        {
+          "name": "pre_entry_funding_observation",
+          "source_ref": "synthetic:feat-5",
+          "event_at": "2026-10-16T05:00:00Z",
+          "available_at": "2026-10-16T05:00:00Z"
+        }
+      ],
+      "measurement_status": "MEASURED",
+      "signal": true,
+      "hit_target": true,
+      "entry_at": "2026-10-16T05:00:05Z",
+      "exit_at": "2026-10-16T05:00:40Z",
+      "outcome_observed_at": "2026-10-16T05:00:50Z",
+      "exit_status": "FILLED",
+      "buy_filled_usd": 100,
+      "sell_filled_usd": 112,
+      "buy_fees_usd": 1,
+      "sell_fees_usd": 1,
+      "priority_fees_usd": 1
+    },
+    {
+      "id": "synthetic-6",
+      "split": "TEST",
+      "decision_at": "2026-10-16T06:00:00Z",
+      "features": [
+        {
+          "name": "pre_entry_funding_observation",
+          "source_ref": "synthetic:feat-6",
+          "event_at": "2026-10-16T06:00:00Z",
+          "available_at": "2026-10-16T06:00:00Z"
+        }
+      ],
+      "measurement_status": "MEASURED",
+      "signal": true,
+      "hit_target": false,
+      "entry_at": "2026-10-16T06:00:05Z",
+      "exit_at": "2026-10-16T06:00:40Z",
+      "outcome_observed_at": "2026-10-16T06:00:50Z",
+      "exit_status": "FAILED",
+      "buy_filled_usd": 100,
+      "sell_filled_usd": 0,
+      "buy_fees_usd": 1,
+      "sell_fees_usd": 1,
+      "priority_fees_usd": 1
+    },
+    {
+      "id": "synthetic-7",
+      "split": "TEST",
+      "decision_at": "2026-10-16T07:00:00Z",
+      "features": [
+        {
+          "name": "pre_entry_funding_observation",
+          "source_ref": "synthetic:feat-7",
+          "event_at": "2026-10-16T07:00:00Z",
+          "available_at": "2026-10-16T07:00:00Z"
+        }
+      ],
+      "measurement_status": "MEASURED",
+      "signal": false,
+      "hit_target": true,
+      "entry_at": "2026-10-16T07:00:05Z",
+      "exit_at": "2026-10-16T07:00:40Z",
+      "outcome_observed_at": "2026-10-16T07:00:50Z",
+      "exit_status": "FILLED",
+      "buy_filled_usd": 100,
+      "sell_filled_usd": 103,
+      "buy_fees_usd": 1,
+      "sell_fees_usd": 1,
+      "priority_fees_usd": 1
+    },
+    {
+      "id": "synthetic-8",
+      "split": "TEST",
+      "decision_at": "2026-10-16T08:00:00Z",
+      "features": [
+        {
+          "name": "pre_entry_funding_observation",
+          "source_ref": "synthetic:feat-8",
+          "event_at": "2026-10-16T08:00:00Z",
+          "available_at": "2026-10-16T08:00:00Z"
+        }
+      ],
+      "measurement_status": "MEASURED",
+      "signal": false,
+      "hit_target": false,
+      "entry_at": "2026-10-16T08:00:05Z",
+      "exit_at": "2026-10-16T08:00:40Z",
+      "outcome_observed_at": "2026-10-16T08:00:50Z",
+      "exit_status": "FILLED",
+      "buy_filled_usd": 100,
+      "sell_filled_usd": 60,
+      "buy_fees_usd": 1,
+      "sell_fees_usd": 1,
+      "priority_fees_usd": 1
+    }
+  ]
+}
