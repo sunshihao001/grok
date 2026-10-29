@@ -22,3 +22,7 @@ B03 can discover funding-cluster structures and exclude hub confounders; B04 mus
 ## Quality and governance
 
 All `resident_knowledge` entries are **competency targets**, not proven claims; every one identifies a mechanism and a prohibited inference. For each Bot, `legacy_card_ids` reuse existing curated cards, `read_on_demand_source_ids` point to pinned K1 documents, `k2_required_fields` define primary fact requirements, and `consumes_from/produces_for` define upstream and downstream handoffs. The single monitor reads frozen versions only. Add examples and real replay cases gradually; a source index pointer, snapshot or generated text never counts as a passed market experiment.
+
+## Actual Skill artifact templates
+
+The shared skill library has **eight versioned templates** under `skills/`: the two existing `solana-meme-knowledge` / `solana-meme-monitor` and six specialist `research-intake`, `gmgn-readonly-source`, `wallet-funding-forensics`, `alpha-economic-experiment`, `evidence-falsification`, `independent-case-replay`. `bot_knowledge.py --audit` now verifies each role's configured Skill template file exists. This is not proof of Grok UI installation/activation or live service access.

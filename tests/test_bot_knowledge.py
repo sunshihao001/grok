@@ -18,6 +18,14 @@ class BotKnowledgeTests(unittest.TestCase):
         self.assertGreaterEqual(a["resident_curriculum_topics"],50)
         self.assertFalse(a["cloud_bots_provisioned"])
 
+    def test_role_has_concrete_skill_templates_and_no_live_credentials(self):
+        p=json.loads((ROOT/"knowledge/bot-knowledge-profiles.v1.json").read_text(encoding="utf-8"))
+        for role in p["profiles"]:
+            for skill in role["skills_to_configure"]:
+                path=ROOT/"skills"/skill/"SKILL.md"
+                self.assertTrue(path.is_file(), str(path))
+                self.assertIn("Paper-Only", path.read_text(encoding="utf-8") if "solana-meme" not in skill else "Paper-Only")
+
     def test_role_routes_only_role_relevant_materials(self):
         x=build_role_brief("B03","同源钱包和资金回流可能是交易所节点吗")
         ids=[s["source_id"] for s in x["on_demand_source_candidates"]]

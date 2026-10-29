@@ -96,6 +96,9 @@ def validate_profiles(program: dict[str, Any] | None = None,
                 raise ValueError("unverified syllabus incorrectly promoted as market truth")
             ids.add(unit["id"])
             knowledge_count += 1
+        for skill in p["skills_to_configure"]:
+            if not isinstance(skill, str) or "/" in skill or ".." in skill or not (ROOT / "skills" / skill / "SKILL.md").is_file():
+                raise ValueError(f"missing or unsafe skill instruction template: {skill}")
         for k in ("consumes_from", "produces_for"):
             if not isinstance(p[k], list):
                 raise ValueError("Bot connections must be listed")

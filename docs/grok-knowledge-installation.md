@@ -28,3 +28,17 @@ These files do not by themselves create Bots on Grok's cloud computer, activate 
 ## Enforced publication boundary
 
 Before enabling B07, ensure no development Bot writes to B07's runtime state, normalized live input buffer or frozen rules. B02's field/schema evolution is delivered via reviewed PR and explicit release, not via a live B02-to-B07 Bot chat.
+
+## Which skill to activate for each Bot
+
+| Bot | Private skill templates to configure |
+|---|---|
+| B01 | `solana-meme-knowledge`, `research-intake` |
+| B02 | `research-intake`, `gmgn-readonly-source` |
+| B03 | `research-intake`, `wallet-funding-forensics` |
+| B04 | `research-intake`, `alpha-economic-experiment` |
+| B05 | `research-intake`, `evidence-falsification` |
+| B06 | `independent-case-replay`, `evidence-falsification` |
+| B07 | `solana-meme-monitor`, `solana-meme-knowledge` |
+
+Enable the configured private skills in the Grok Bot app and run one dry task per skill. The local `skills/` path is a repository template library and does not automatically register private Grok Bot skills.
