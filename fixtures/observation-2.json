@@ -1,0 +1,7 @@
+{
+  "schema_version": "1.0", "chain": "sol", "token_address": "So11111111111111111111111111111111111111112",
+  "observed_at": "2026-10-29T07:05:00Z", "mode": "fixture",
+  "source": {"tool": "test-fixture", "ref": "fixtures/observation-2.json"},
+  "metrics": {"liquidity_usd": 70000.0, "top10_holder_pct": 53.0},
+  "events": [{"id": "fixture-event-001", "kind": "transfer-observation", "source_ref": "fixture:tx-001"}]
+}

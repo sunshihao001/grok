@@ -1,0 +1,8 @@
+{
+  "version": "0.1.0",
+  "status": "experimental",
+  "max_age_minutes": 30,
+  "liquidity_drop_fraction": 0.25,
+  "top10_holder_rise_pp": 10.0,
+  "notes": "Thresholds are engineering examples, NOT validated predictors or trading signals."
+}

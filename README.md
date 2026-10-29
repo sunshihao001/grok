@@ -20,3 +20,14 @@ Phase 1：只读研究 / 纸面门控，禁止真实交易、私钥、签名、�
 
 - 仅 BLOCK / WATCH / PAPER_ONLY / NEED_MORE_DATA
 - 禁止真实下单、gmgn-cli swap、私钥访问
+
+
+## Runnable read-only monitor bootstrap (development PR)
+
+Offline monitor implementation and tests are being added via feature branch. This component accepts **normalized observation JSON**, tracks per-mint state, labels fixtures, detects observed changes and records source-linked history; it is not the original 7-Skill Hermes pipeline. GMGN collector supports token info/security/pool read commands only; raw field/unit mappings are **not yet validated**.
+
+    PYTHONPATH=src python -m unittest discover -s tests -v
+    PYTHONPATH=src python -m solana_meme_os.monitor --input fixtures/observation-1.json --allow-fixture --state-dir .runtime/demo
+    PYTHONPATH=src python -m solana_meme_os.monitor --input fixtures/observation-2.json --allow-fixture --state-dir .runtime/demo
+
+See docs/sources.md, docs/migration.md, docs/next-steps.md, skills/solana-meme-monitor/SKILL.md and routines/monitor.md. The 0.1.0 rule thresholds are **illustrative**. No scheduled Grok Routine has been created and no live GMGN data has been verified.
