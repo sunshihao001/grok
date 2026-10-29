@@ -12,3 +12,5 @@ jobs:
           python-version: '3.12'
       - name: Run offline tests
         run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Verify Grok cloud offline handoff
+        run: python3 scripts/grok_cloud_doctor.py
