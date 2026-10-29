@@ -50,3 +50,10 @@ Rule Engineer passing local tests **does not** imply an economically valid or pr
 - [ ] Blind knowledge vs no-knowledge decision test, economic evaluation and human-frozen rules.
 
 Start with `knowledge/system/README.md`. **Structure complete does not imply that content or market Alpha is verified.**
+
+## Bot allocation and release
+
+- [x] Specify 7 roles (6 on-demand development / 1 read-only monitor), mapped to knowledge domains and gates.
+- [x] Add machine-readable roster + offline structural tests; note shared-computer limitations.
+- [ ] Create B01/B02/B05 in the Grok app and test source-to-review handoff.
+- [ ] Add B03/B04/B06 for wallet/Alpha/OOS cases with original evidence, then B07 after human-approved frozen rule and tested single-writer Routine.

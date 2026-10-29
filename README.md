@@ -57,3 +57,7 @@ See [on-demand design](docs/on-demand-research-design.md), [source registry](kno
 ## 知识体系架构 V1.0
 
 完整结构：**8 层 / 12 专业领域 / 统一溯源和反证 / 分批迁移**。这里的完整指分类、依赖和验证机制完整，不表示已迁移全部材料或证明交易策略有效。请先读 [知识系统总纲](knowledge/system/README.md)、[研究契约](knowledge/system/RESEARCH.md) 和 [分批迁移](knowledge/system/MIGRATION.md)。监控器仍是 Paper-Only，不会消费未验证的外部研究作为交易规则。
+
+## Bot 架构 V1.1：6 个按需研发 + 1 个只读监控
+
+[Bot 分工](BOTS.md) 与 [机器可读名单](design/bot-roster.v1.json)：B01 知识主控、B02 链上数据、B03 钱包资金、B04 Alpha/交易经济学、B05 证据反证、B06 独立 QA、B07 最终只读监控。12 个知识领域不是 12 个 Bot，七级过滤也不是七个独立 Bot。应用内 Bot 尚未创建。

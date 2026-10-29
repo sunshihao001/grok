@@ -25,3 +25,7 @@ Expected entry points (to be implemented):
 - Output: structured JSON + human summary
 
 Implementation of the actual monitoring logic is the job of the Dev Bots + final Monitor Bot.
+
+## Seven-role update (V1.1)
+
+The authoritative Bot split is [BOTS.md](../BOTS.md): B01–B06 on-demand development, B07 one read-only Monitor. The D01–D12 ontology and F0–F6 validation gates are not twelve or seven Bot instances. Parallel Bot tasks require isolated branches/directories and shared state locking; all Bot screens still share a cloud computer and credentials. Bot roles do not provide security isolation.
