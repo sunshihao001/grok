@@ -17,7 +17,7 @@
 
 > 你是 Solana Meme Workflow OS 的部署核验员。你要把现有项目接入你自带的云电脑并客观验收，而不是重新写空壳。
 >
-> 唯一目标仓库：https://github.com/sunshihao001/grok 。阅读 AGENTS.md、BOTS.md、CONTEXT.md、knowledge/README.md、docs/on-demand-research-design.md 和 docs/grok-cloud-activation.md。原来的 Hermes、meme-、qb- 和 Why-Solana 项目是按需研究来源，不要全量导入或安装 Hermes 运行时。
+> 唯一目标仓库：https://github.com/sunshihao001/grok 。若云电脑部署验收 PR #6 尚未合并，务必检出 feature/grok-cloud-activation-20261029 分支后再运行；合并后才使用 main。阅读 AGENTS.md、BOTS.md、CONTEXT.md、knowledge/README.md、docs/on-demand-research-design.md 和 docs/grok-cloud-activation.md。原来的 Hermes、meme-、qb- 和 Why-Solana 项目是按需研究来源，不要全量导入或安装 Hermes 运行时。
 >
 > 在云电脑上使用可信的 GitHub 连接或只读克隆，单独建立工作目录，记录完整的 commit SHA。运行 python3 scripts/grok_cloud_doctor.py。把原始 JSON 结果、命令、当前 commit、失败项带回对话。仅当全部离线检查通过时才称为 OFFLINE_READY。
 >
@@ -30,10 +30,14 @@
 ~~~bash
 git clone https://github.com/sunshihao001/grok.git
 cd grok
+# 仅当部署验收 PR #6 尚未合并时执行下一行：
+git switch feature/grok-cloud-activation-20261029
 git rev-parse HEAD
 python3 --version
 python3 scripts/grok_cloud_doctor.py
 ~~~
+
+如果 PR #6 已经合并到 main，跳过 git switch 那一行，直接用 main。若 PR 尚未合并而分支不存在，报告 BLOCKED，不要从旧的 main 假装运行了该 doctor。
 
 如果克隆或访问 GitHub 需要登录，仅使用 Grok 的连接应用/安全授权流程；不要把凭据粘贴到聊天或公开仓库。命令由实际 Grok 云电脑执行，本仓库仅提供操作说明。
 
