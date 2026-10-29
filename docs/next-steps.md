@@ -30,3 +30,14 @@ Rule Engineer passing local tests **does not** imply an economically valid or pr
 - [ ] Import concrete real on-chain cases and source-linked failures, not only conceptual documents.
 - [ ] Test whether Grok Bot with knowledge improves judgment vs a no-knowledge baseline using blinded examples; measure false alerts and missed events.
 - [ ] Improve semantic applicability and source reading in an actual Grok Bot instead of claiming literal keyword routing is full expert reasoning.
+
+## Knowledge structure V1 (branch proposal)
+
+- [x] Eight layers, twelve professional domains, dependencies and typed links.
+- [x] Existing 15 source-pinned knowledge cards mapped to primary domains; no legacy source code/runtime copied.
+- [x] Four source pins including an independent adversarial research repository; three reported-only research units.
+- [x] Offline structural validation and tests authored; CI execution still to be verified.
+- [ ] Real GMGN/on-chain evidence and unsuccessful/untradeable cases, independent reproductions.
+- [ ] Blind knowledge vs no-knowledge decision test, economic evaluation and human-frozen rules.
+
+Start with `knowledge/system/README.md`. **Structure complete does not imply that content or market Alpha is verified.**

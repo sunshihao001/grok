@@ -45,3 +45,7 @@ Plain-language knowledge routing example:
 Read `knowledge/README.md`, `knowledge/legacy-audit.md` and `skills/solana-meme-knowledge/SKILL.md`. The engine is a deterministic starter; true Grok language understanding and source discovery still require configuring and testing the actual Grok Bots.
 
 The first preservation wave also includes [21 original Markdown knowledge snapshots](knowledge/legacy-snapshots/README.md) with pinned source commit paths and SHA entries, so the Grok OS can read those sources locally without requiring Hermes or the original repositories to be live.
+
+## 知识体系架构 V1.0
+
+完整结构：**8 层 / 12 专业领域 / 统一溯源和反证 / 分批迁移**。这里的完整指分类、依赖和验证机制完整，不表示已迁移全部材料或证明交易策略有效。请先读 [知识系统总纲](knowledge/system/README.md)、[研究契约](knowledge/system/RESEARCH.md) 和 [分批迁移](knowledge/system/MIGRATION.md)。监控器仍是 Paper-Only，不会消费未验证的外部研究作为交易规则。

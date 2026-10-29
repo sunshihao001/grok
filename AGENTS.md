@@ -35,3 +35,7 @@ Every significant rule or skill change should produce a short result note under 
 - Label historical claims as documented_legacy_method / unverified_hypothesis / source_contract. Historical provenance does NOT validate financial effectiveness.
 - A rule release requires actual market/source data, counterexamples, error attribution and independent review. Revisions go to a reviewed PR, not automatic self-upgrade.
 - When retrieval has no match, explicitly expand research, add sources and a candidate card; never hallucinate missing knowledge.
+
+## Unified knowledge-system constraints
+
+Read `knowledge/system/README.md`, `ontology.v1.json`, `MIGRATION.md`, and `RESEARCH.md` for knowledge/rule work. The taxonomy is structurally complete while the evidence remains incomplete. Never auto-promote an external study, keyword match, historic wallet category, or unvalidated strategy to Monitor rules. Preserve research population, cutoff, counterexamples, source validity, costs, unknowns, and independent review. Run `PYTHONPATH=src python -m solana_meme_os.knowledge_system --audit`.
