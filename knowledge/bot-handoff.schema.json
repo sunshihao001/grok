@@ -1,0 +1,260 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Bot knowledge evidence handoff v1 (machine contract, not signed authorization)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "packet_id",
+    "task_id",
+    "packet_type",
+    "mode",
+    "producer_bot_id",
+    "recipient_bot_ids",
+    "created_at_utc",
+    "objective",
+    "population",
+    "decision_cutoff_utc",
+    "domain_ids",
+    "knowledge_ids",
+    "source_refs",
+    "claims",
+    "alternatives",
+    "counterevidence",
+    "missing",
+    "gate_results",
+    "next_action"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "packet_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "packet_type": {
+      "enum": [
+        "research_brief",
+        "evidence_observation",
+        "structural_hypothesis",
+        "strategy_candidate",
+        "adversarial_review",
+        "qa_report",
+        "monitor_observation",
+        "research_gap"
+      ]
+    },
+    "mode": {
+      "enum": [
+        "fixture",
+        "research_only",
+        "real_observation"
+      ]
+    },
+    "producer_bot_id": {
+      "type": "string",
+      "pattern": "^B0[1-7]$"
+    },
+    "recipient_bot_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^B0[1-7]$"
+      }
+    },
+    "created_at_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "objective": {
+      "enum": [
+        "EXPLAIN",
+        "PREDICT",
+        "ECONOMIC",
+        "MONITOR_RELEASE"
+      ]
+    },
+    "population": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision_cutoff_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "domain_ids": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^D(0[1-9]|1[0-2])$"
+      }
+    },
+    "knowledge_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "ref_id",
+          "kind"
+        ],
+        "properties": {
+          "ref_id": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "pinned_document",
+              "primary_chain",
+              "fixture"
+            ]
+          },
+          "repository": {
+            "type": "string"
+          },
+          "commit": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "source_uri": {
+            "type": "string"
+          },
+          "signature_or_slot": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "claim_id",
+          "statement",
+          "epistemic_status",
+          "source_ref_ids"
+        ],
+        "properties": {
+          "claim_id": {
+            "type": "string"
+          },
+          "statement": {
+            "type": "string"
+          },
+          "epistemic_status": {
+            "enum": [
+              "hypothesis",
+              "external_reported",
+              "raw_observation",
+              "derived_inference"
+            ]
+          },
+          "source_ref_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "event_at_utc": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "available_at_utc": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "predictive_feature": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "alternatives": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "counterevidence": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "missing": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "gate_results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "gate_id",
+          "status"
+        ],
+        "properties": {
+          "gate_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "source_ref_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "reviewer_bot_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "next_action": {
+      "type": "string",
+      "minLength": 1
+    },
+    "human_approval_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "frozen_rule_commit": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}
