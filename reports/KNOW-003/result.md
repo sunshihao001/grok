@@ -24,4 +24,8 @@ True matched controls, degree/time-preserving null implementations, feature sele
 
 ## Acceptance evidence
 
-CI: PYTHONPATH=src python -m unittest discover -s tests -v (to be updated after actual GitHub Actions results).
+CI: PYTHONPATH=src python -m unittest discover -s tests -v — GitHub Actions 40847971329 passed (44 tests, OK) on commit 4225ec1a14945edea04207124c8b6ce1c93f465d. This is offline-contract validation ONLY; no live-trading validation.
+
+First CI on 61bea482 failed due to an incorrectly truncated source blob SHA; corrected via 4225ec1a, then 44 tests passed. This fail-closed behavior is retained as provenance safety.
+
+CI URL: https://github.com/sunshihao001/grok/actions/runs/40847971329
