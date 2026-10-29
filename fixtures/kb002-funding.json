@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0",
+  "chain": "sol",
+  "mode": "fixture",
+  "analysis_cutoff": "2026-10-29T08:30:00Z",
+  "target_wallets": [
+    "22222222222222222222222222222222",
+    "33333333333333333333333333333333",
+    "44444444444444444444444444444444",
+    "55555555555555555555555555555555"
+  ],
+  "sources": [
+    {
+      "address": "66666666666666666666666666666666",
+      "classification": "non_hub_reviewed",
+      "classification_ref": "fixture:source-review-1",
+      "checked_at": "2026-10-29T08:00:00Z"
+    },
+    {
+      "address": "77777777777777777777777777777777",
+      "classification": "known_hub",
+      "classification_ref": "fixture:source-review-2",
+      "checked_at": "2026-10-29T08:00:00Z"
+    }
+  ],
+  "policy": {
+    "min_material_lamports": 10000000,
+    "status": "illustrative"
+  },
+  "coverage": {
+    "complete": true,
+    "truncated": false,
+    "rpc_errors": 0
+  },
+  "transfers": [
+    {
+      "asset": "SOL_NATIVE",
+      "signature": "SIMULATED-a",
+      "instruction_index": 0,
+      "from_wallet": "66666666666666666666666666666666",
+      "to_wallet": "22222222222222222222222222222222",
+      "lamports": 15000000,
+      "block_time": "2026-10-29T08:10:00Z",
+      "available_at": "2026-10-29T08:10:02Z",
+      "source_ref": "fixture:tx-a"
+    },
+    {
+      "asset": "SOL_NATIVE",
+      "signature": "SIMULATED-b",
+      "instruction_index": 0,
+      "from_wallet": "66666666666666666666666666666666",
+      "to_wallet": "33333333333333333333333333333333",
+      "lamports": 30000000,
+      "block_time": "2026-10-29T08:10:10Z",
+      "available_at": "2026-10-29T08:10:11Z",
+      "source_ref": "fixture:tx-b"
+    },
+    {
+      "asset": "SOL_NATIVE",
+      "signature": "SIMULATED-c",
+      "instruction_index": 0,
+      "from_wallet": "77777777777777777777777777777777",
+      "to_wallet": "44444444444444444444444444444444",
+      "lamports": 20000000,
+      "block_time": "2026-10-29T08:11:00Z",
+      "available_at": "2026-10-29T08:11:02Z",
+      "source_ref": "fixture:tx-c"
+    },
+    {
+      "asset": "SOL_NATIVE",
+      "signature": "SIMULATED-d",
+      "instruction_index": 0,
+      "from_wallet": "77777777777777777777777777777777",
+      "to_wallet": "55555555555555555555555555555555",
+      "lamports": 20000000,
+      "block_time": "2026-10-29T08:11:02Z",
+      "available_at": "2026-10-29T08:11:05Z",
+      "source_ref": "fixture:tx-d"
+    },
+    {
+      "asset": "SOL_NATIVE",
+      "signature": "SIMULATED-e",
+      "instruction_index": 0,
+      "from_wallet": "88888888888888888888888888888888",
+      "to_wallet": "22222222222222222222222222222222",
+      "lamports": 1,
+      "block_time": "2026-10-29T08:11:10Z",
+      "available_at": "2026-10-29T08:11:12Z",
+      "source_ref": "fixture:tx-e"
+    },
+    {
+      "asset": "SOL_NATIVE",
+      "signature": "SIMULATED-f",
+      "instruction_index": 0,
+      "from_wallet": "88888888888888888888888888888888",
+      "to_wallet": "33333333333333333333333333333333",
+      "lamports": 20000000,
+      "block_time": "2026-10-29T08:12:00Z",
+      "available_at": "2026-10-29T08:40:00Z",
+      "source_ref": "fixture:tx-f"
+    }
+  ]
+}

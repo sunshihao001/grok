@@ -53,10 +53,13 @@ def load_registry(path: Path = DEFAULT_REGISTRY) -> dict[str, Any]:
         guidance = pack.get("trigger_guidance")
         triggers = pack.get("triggers")
         if (not isinstance(guidance, dict) or not isinstance(triggers, list)
-                or set(guidance) != set(triggers) or not _REQUIRED.issubset(guidance)):
+                or set(guidance) != set(triggers) or not guidance):
             raise ValueError("knowledge trigger coverage incomplete")
         if any(not isinstance(v, dict) or not v.get("interpretation") or not v.get("verify") for v in guidance.values()):
             raise ValueError("knowledge guidance requires interpretation and verify")
+    # Required monitoring topics must be covered collectively, not redundantly by each pack.
+    if not _REQUIRED.issubset(set().union(*(set(p["triggers"]) for p in packs))):
+        raise ValueError("knowledge trigger coverage incomplete")
     return obj
 
 

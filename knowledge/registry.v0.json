@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "version": "KB-001.0",
+  "version": "KB-002.0",
   "updated_at": "2026-10-29",
   "source_policy": "immutable source commit + blob SHA; original repositories retain canonical authority",
   "sources": [
@@ -59,6 +59,70 @@
       "path": "09_规则与回测/反证实验设计_v0.1.md",
       "blob_sha": "21c321922254eaeececf8fb48957b858c0a3bc4b",
       "role": "counterexample protocol"
+    },
+    {
+      "id": "wallet-structure-design",
+      "repository": "sunshihao001/-",
+      "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+      "path": "design/phase1-skill-04-wallet-structure.md",
+      "blob_sha": "810381b90feb2d1533b2dd0134a66c3420eced48",
+      "role": "Legacy group and temporal heuristics; not verified attribution"
+    },
+    {
+      "id": "wallet-exclusion-test",
+      "repository": "sunshihao001/-",
+      "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+      "path": "skills/meme-wallet-structure/tests/test_wallet_structure_exclusions.py",
+      "blob_sha": "a06fbe67b0755245f825cffed8002bfd0955a0cd",
+      "role": "Historical LP/exchange exclusion intention"
+    },
+    {
+      "id": "qb-wallet-contracts",
+      "repository": "sunshihao001/qb-",
+      "commit": "8377ad5611255df5cd4562666a826708575334f0",
+      "path": "hermes_harness/01_control_plane/wallet_intel_data_contracts_rule_v2.md",
+      "blob_sha": "364dbb37ef367df359059fd0bdd62ef38373932e",
+      "role": "Fact/normalized/evidence/group contract hierarchy"
+    },
+    {
+      "id": "external-methodology",
+      "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+      "path": "docs/METHODOLOGY.md",
+      "blob_sha": "89ae8c2cf1668b2363cc2b531013bd55788cff32",
+      "role": "Observed-vs-attributed and denominator/temporal methodology"
+    },
+    {
+      "id": "external-pitfalls",
+      "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+      "path": "docs/PITFALLS.md",
+      "blob_sha": "35933b70ceff0f368decec6f44cff7fe84653264",
+      "role": "Hub-null, controls and lookahead failure modes"
+    },
+    {
+      "id": "external-funder-plan",
+      "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+      "path": "funder_network/analysis_plan.md",
+      "blob_sha": "624dcda6ee2fa3b4272169c949d11d2857e832cc",
+      "role": "Protocol separating transfer/terminal/infrastructure"
+    },
+    {
+      "id": "external-dust-study",
+      "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+      "path": "code/r1_dust_vs_funding.py",
+      "blob_sha": "4cb603e9337ceb74fa162e53b792f8a5542bdfd7",
+      "role": "Amount materiality and dust ambiguity"
+    },
+    {
+      "id": "external-funder-null",
+      "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+      "path": "funder_network/tables/H_nulls_robustness.md",
+      "blob_sha": "476e7e09b311deeeb07a55b4ec6d4a5b7b90b488",
+      "role": "Negative controls and hub sensitivity; source-specific, not a universal cutoff"
     }
   ],
   "packs": [
@@ -107,6 +171,43 @@
         }
       },
       "promote_only_after": "independent source/field verification + reproducible counterexamples + holdout/ablation + explicit human acceptance"
+    },
+    {
+      "id": "KB-002",
+      "version": "0.1.0",
+      "stage": "reference_only",
+      "path": "knowledge/packs/KB-002-wallet-funding-evidence.md",
+      "scope": "Time-safe direct inbound funding relationships; infrastructure/dust/coverage confounds and competing explanations. Research fixture only.",
+      "source_ids": [
+        "wallet-structure-design",
+        "wallet-exclusion-test",
+        "qb-wallet-contracts",
+        "external-methodology",
+        "external-pitfalls",
+        "external-funder-plan",
+        "external-dust-study",
+        "external-funder-null"
+      ],
+      "triggers": [
+        "TOP10_SHARE_RISE",
+        "NEW_SOURCE_EVENT",
+        "MISSING_DATA"
+      ],
+      "trigger_guidance": {
+        "TOP10_SHARE_RISE": {
+          "interpretation": "集中度上升不证明钱包共控；owner/token-account/LP/PDA/CEX口径和时间快照必须独立审计。",
+          "verify": "先确认 wallet->owner 映射与排除名单，再按截止时点读取原始转账签名、资金量和可见时间。"
+        },
+        "NEW_SOURCE_EVENT": {
+          "interpretation": "共同转入或同步交易是关系候选，不等于同一实际控制人；共享服务和粉尘可制造伪关联。",
+          "verify": "核对方向、金额、独立签名与指令索引、网络中心度、服务地址、对照组以及样本外稳定性。"
+        },
+        "MISSING_DATA": {
+          "interpretation": "缺失交易页、RPC失败、过早截断或错误的源地址归属，会使未发现关系成为未知而非无关系。",
+          "verify": "保留覆盖率/异常原因，列出未读地址与起止窗口；重新采集前输出 NEED_MORE_DATA。"
+        }
+      },
+      "promote_only_after": "live chain source equivalence + verified owner and hub labels + representative controls + blind holdout + human review; no identity attribution"
     }
   ]
 }

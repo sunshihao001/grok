@@ -17,9 +17,10 @@ SECOND = json.loads((ROOT / "fixtures/observation-2.json").read_text(encoding="u
 class TestKnowledgeIntake(unittest.TestCase):
     def test_pinned_sources_and_pack_are_present(self):
         reg = load_registry()
-        self.assertEqual(reg["version"], "KB-001.0")
-        self.assertEqual(len(reg["sources"]), 7)
-        self.assertEqual(reg["packs"][0]["stage"], "reference_only")
+        self.assertEqual(reg["version"], "KB-002.0")
+        self.assertEqual(len(reg["sources"]), 15)
+        self.assertEqual(len(reg["packs"]), 2)
+        self.assertTrue(all(p["stage"] == "reference_only" for p in reg["packs"]))
         self.assertTrue((ROOT / reg["packs"][0]["path"]).exists())
 
     def test_snapshot_and_missing_data_have_readable_guidance(self):
@@ -36,6 +37,7 @@ class TestKnowledgeIntake(unittest.TestCase):
                 (directory / "knowledge" / "packs").mkdir(parents=True)
                 doc = directory / "knowledge" / "packs" / "KB-001-evidence-bounds.md"
                 doc.write_text("known pack", encoding="utf-8")
+                (directory / "knowledge" / "packs" / "KB-002-wallet-funding-evidence.md").write_text("known pack", encoding="utf-8")
                 reg = copy.deepcopy(original)
                 if mutate == "sha":
                     reg["sources"][0]["blob_sha"] = "unverified"
@@ -45,6 +47,13 @@ class TestKnowledgeIntake(unittest.TestCase):
                 catalog.write_text(json.dumps(reg), encoding="utf-8")
                 with self.assertRaises(ValueError):
                     load_registry(catalog)
+
+    def test_kb002_routes_only_on_relevant_questions(self):
+        output = contextualize({"alerts": [{"type": "NEW_SOURCE_EVENT"}], "missing_fields": []})
+        self.assertIn("KB-002", [p["id"] for p in output["packs"]])
+        self.assertTrue(any(x["pack"] == "KB-002" for x in output["guidance"]))
+        baseline = contextualize({"alerts": [], "missing_fields": []})
+        self.assertNotIn("KB-002", [p["id"] for p in baseline["packs"]])
 
     def test_monitor_attaches_knowledge_without_changing_existing_alerts(self):
         with TemporaryDirectory() as tmp:
