@@ -33,7 +33,9 @@ Only reads human-approved frozen rules and writes source-linked paper-only alert
 - **hermes-source-relations** — sunshihao001/- @ `2bf694b37cce…` / `learning/11.md`. 阅读场景：Legacy funding relationship vocabulary and caveats.
 - **failure-modes** — sunshihao001/Why-Solana-Memecoins-Are-Over @ `9a7ad51d5632…` / `docs/PITFALLS.md`. 阅读场景：Systematic falsification, wrong denominators, future leakage, shared hubs, tool failure.。版权约束：Written analysis: CC BY-NC-ND 4.0; reference/cite, do not publish adapted text.
 
-**检索操作**：用 `python -m solana_meme_os.research --question "具体问题"` 获得完整领域路由和来源候选；再按 `knowledge/bot-knowledge-profiles.v1.json` 的本角色 source IDs 定向核对原始文档。如找不到相关文献，向 B01 提交 `SOURCE_DISCOVERY_REQUIRED`，不得编造。
+**重要运行边界：** 本角色的历史文献只允许在人工审阅/规则版本更新时定向查阅；**B07 定时监控 Routine 不实时下载或重写 K1 文献，也不生成研究 PR**。实时监控只消费批准冻结的知识及已校验数据源。
+
+**检索操作（仅人工复核时）**：用 `python -m solana_meme_os.research --question "具体问题"` 获得完整领域路由和来源候选；再按 `knowledge/bot-knowledge-profiles.v1.json` 的本角色 source IDs 定向核对原始文档。如找不到相关文献，向 B01 提交 `SOURCE_DISCOVERY_REQUIRED`，不得编造。
 
 ## 四、任务当场必须获取的证据（K2）
 

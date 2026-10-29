@@ -99,6 +99,14 @@ def validate_profiles(program: dict[str, Any] | None = None,
         for skill in p["skills_to_configure"]:
             if not isinstance(skill, str) or "/" in skill or ".." in skill or not (ROOT / "skills" / skill / "SKILL.md").is_file():
                 raise ValueError(f"missing or unsafe skill instruction template: {skill}")
+        if p["id"] == "B07":
+            if p.get("source_access_mode") != "frozen_context_only_during_routine":
+                raise ValueError("Monitor cannot dynamically expand source corpus during scheduled observations")
+            if any(x in p["permitted_actions"] for x in ("create_feature_branch_pr",
+                    "write_scoped_proposal_or_evidence_packet", "real_trade")):
+                raise ValueError("Monitor cannot author research or source mutations")
+        elif p.get("source_access_mode") != "selective_on_demand_for_research":
+            raise ValueError("development research needs explicit on-demand source policy")
         for k in ("consumes_from", "produces_for"):
             if not isinstance(p[k], list):
                 raise ValueError("Bot connections must be listed")

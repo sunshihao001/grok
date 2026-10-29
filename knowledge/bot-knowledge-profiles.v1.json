@@ -148,7 +148,8 @@
         "self_approve_rule",
         "treat_memory_as_market_evidence"
       ],
-      "success_criterion": "Produces a source-bound, time-safe handoff that an independent reviewer can challenge."
+      "success_criterion": "Produces a source-bound, time-safe handoff that an independent reviewer can challenge.",
+      "source_access_mode": "selective_on_demand_for_research"
     },
     {
       "id": "B02",
@@ -303,7 +304,8 @@
         "self_approve_rule",
         "treat_memory_as_market_evidence"
       ],
-      "success_criterion": "Produces a source-bound, time-safe handoff that an independent reviewer can challenge."
+      "success_criterion": "Produces a source-bound, time-safe handoff that an independent reviewer can challenge.",
+      "source_access_mode": "selective_on_demand_for_research"
     },
     {
       "id": "B03",
@@ -465,7 +467,8 @@
         "self_approve_rule",
         "treat_memory_as_market_evidence"
       ],
-      "success_criterion": "Produces a source-bound, time-safe handoff that an independent reviewer can challenge."
+      "success_criterion": "Produces a source-bound, time-safe handoff that an independent reviewer can challenge.",
+      "source_access_mode": "selective_on_demand_for_research"
     },
     {
       "id": "B04",
@@ -635,7 +638,8 @@
         "self_approve_rule",
         "treat_memory_as_market_evidence"
       ],
-      "success_criterion": "Produces a source-bound, time-safe handoff that an independent reviewer can challenge."
+      "success_criterion": "Produces a source-bound, time-safe handoff that an independent reviewer can challenge.",
+      "source_access_mode": "selective_on_demand_for_research"
     },
     {
       "id": "B05",
@@ -800,7 +804,8 @@
         "self_approve_rule",
         "treat_memory_as_market_evidence"
       ],
-      "success_criterion": "Produces a source-bound, time-safe handoff that an independent reviewer can challenge."
+      "success_criterion": "Produces a source-bound, time-safe handoff that an independent reviewer can challenge.",
+      "source_access_mode": "selective_on_demand_for_research"
     },
     {
       "id": "B06",
@@ -965,7 +970,8 @@
         "self_approve_rule",
         "treat_memory_as_market_evidence"
       ],
-      "success_criterion": "Produces a source-bound, time-safe handoff that an independent reviewer can challenge."
+      "success_criterion": "Produces a source-bound, time-safe handoff that an independent reviewer can challenge.",
+      "source_access_mode": "selective_on_demand_for_research"
     },
     {
       "id": "B07",
@@ -1110,10 +1116,11 @@
       "start_condition": "Only after owner-approved rule freeze, tested scheduling and state locking.",
       "stop_condition": "Source stale, invalid rule hash, unsafe actions, write conflict or missing required data.",
       "permitted_actions": [
-        "read",
-        "research",
-        "write_scoped_proposal_or_evidence_packet",
-        "create_feature_branch_pr"
+        "read_frozen_context",
+        "read_approved_collector",
+        "single_writer_state_update",
+        "emit_paper_alert_or_abstention",
+        "send_research_ticket_B01"
       ],
       "prohibited_actions": [
         "real_trade",
@@ -1124,7 +1131,8 @@
         "self_approve_rule",
         "treat_memory_as_market_evidence"
       ],
-      "success_criterion": "Source-linked read-only alert with dedupe/stale handling and no rule mutation."
+      "success_criterion": "Source-linked read-only alert with dedupe/stale handling and no rule mutation.",
+      "source_access_mode": "frozen_context_only_during_routine"
     }
   ]
 }

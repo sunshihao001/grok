@@ -30,6 +30,15 @@ class BotKnowledgeTests(unittest.TestCase):
                     self.assertIn("Paper-Only", body)
                     self.assertIn("not proof of installation", body)
 
+    def test_monitor_is_not_an_autonomous_researcher_or_rule_author(self):
+        program=json.loads((ROOT/"knowledge/bot-knowledge-profiles.v1.json").read_text(encoding="utf-8"))
+        monitor=next(p for p in program["profiles"] if p["id"]=="B07")
+        self.assertEqual(monitor["source_access_mode"],"frozen_context_only_during_routine")
+        self.assertNotIn("create_feature_branch_pr",monitor["permitted_actions"])
+        monitor["permitted_actions"].append("create_feature_branch_pr")
+        with self.assertRaisesRegex(ValueError,"cannot author research"):
+            validate_profiles(program=program)
+
     def test_role_routes_only_role_relevant_materials(self):
         x=build_role_brief("B03","同源钱包和资金回流可能是交易所节点吗")
         ids=[s["source_id"] for s in x["on_demand_source_candidates"]]
