@@ -46,6 +46,14 @@ Read `knowledge/README.md`, `knowledge/legacy-audit.md` and `skills/solana-meme-
 
 The first preservation wave also includes [21 original Markdown knowledge snapshots](knowledge/legacy-snapshots/README.md) with pinned source commit paths and SHA entries, so the Grok OS can read those sources locally without requiring Hermes or the original repositories to be live.
 
+## On-demand research engine (new)
+
+A 17-source registry now indexes the specialist external study [Why-Solana-Memecoins-Are-Over](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over) plus the three legacy repositories **without bulk copying their content**. A runnable question-to-evidence packet helps development Bots choose what to read and highlights missing observational evidence and decision-time leakage.
+
+    PYTHONPATH=src python -m solana_meme_os.research --question "同源钱包可能是交易所公共基础设施吗？"
+
+See [on-demand design](docs/on-demand-research-design.md), [source registry](knowledge/source_index.v1.json), and [usage](knowledge/source-index-README.md). Source previews are opt-in and ephemeral; research packets **are not automated conclusions or validated strategies**. Offline tests do not prove actual Grok Bot expertise.
+
 ## 知识体系架构 V1.0
 
 完整结构：**8 层 / 12 专业领域 / 统一溯源和反证 / 分批迁移**。这里的完整指分类、依赖和验证机制完整，不表示已迁移全部材料或证明交易策略有效。请先读 [知识系统总纲](knowledge/system/README.md)、[研究契约](knowledge/system/RESEARCH.md) 和 [分批迁移](knowledge/system/MIGRATION.md)。监控器仍是 Paper-Only，不会消费未验证的外部研究作为交易规则。
