@@ -45,12 +45,12 @@ K2 只能由有来源、时间、原始观测或标明的模拟/fixture 组成�
 ## 五、与其他 Bot 的连接
 
 - 上游：`B01`。
-- 下游：`B03`、`B04`、`B05`、`B06`、`B07`。
+- 下游：`B03`、`B04`、`B05`、`B06`。
 - 启动条件：Request for specific timed raw observations.
 - 停止/降级条件：Malformed schema, missing timestamps, unknown units, source unavailable or no coverage.
 - 推荐工具与能力：`approved read-only Solana RPC`、`GMGN read-only CLI if installed`、`local JSON validators`。
 - 计划配置的技能：`research-intake`、`gmgn-readonly-source`。**技能名称不等于已在 Grok UI 安装**。
-- 交接格式：`docs/bot-evidence-handoff.md` 和 `knowledge/bot-handoff.schema.json`。只传递引用、原始数据定位、当前证据状态和反证，不传“已确认庄家/必中”等结论。
+- 交接格式：`docs/bot-knowledge-integration.md` 和 `knowledge/bot-handoff.schema.json`。只传递引用、原始数据定位、当前证据状态和反证，不传“已确认庄家/必中”等结论。
 
 ## 六、首个验证任务
 

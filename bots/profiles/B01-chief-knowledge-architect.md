@@ -49,7 +49,7 @@ K2 只能由有来源、时间、原始观测或标明的模拟/fixture 组成�
 - 停止/降级条件：Objective, cutoff, data requirements, independent reviewer and requested deliverable specified.
 - 推荐工具与能力：`read-only GitHub repository`、`local knowledge_system/research CLIs`。
 - 计划配置的技能：`solana-meme-knowledge`、`research-intake`。**技能名称不等于已在 Grok UI 安装**。
-- 交接格式：`docs/bot-evidence-handoff.md` 和 `knowledge/bot-handoff.schema.json`。只传递引用、原始数据定位、当前证据状态和反证，不传“已确认庄家/必中”等结论。
+- 交接格式：`docs/bot-knowledge-integration.md` 和 `knowledge/bot-handoff.schema.json`。只传递引用、原始数据定位、当前证据状态和反证，不传“已确认庄家/必中”等结论。
 
 ## 六、首个验证任务
 
