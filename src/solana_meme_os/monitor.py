@@ -11,8 +11,6 @@ import sys
 import tempfile
 from typing import Any
 
-from .knowledge import contextualize
-
 ADDRESS = re.compile(r"^[1-9A-HJ-NP-Za-km-z]{32,44}$")
 METRICS = {"liquidity_usd", "top10_holder_pct"}
 
@@ -78,7 +76,6 @@ def process(observation: dict, rules: dict, state_dir: Path, now: datetime | Non
         new_time = timestamp(observation["observed_at"])
         if new_time <= old_time:
             result["status"] = "IGNORED_NON_NEWER"
-            result["knowledge_context"] = contextualize(result)
             return result
         old = previous["metrics"]
         cur = observation["metrics"]
@@ -98,7 +95,6 @@ def process(observation: dict, rules: dict, state_dir: Path, now: datetime | Non
             result["alerts"].append({"type": "NEW_SOURCE_EVENT", "event_id": event["id"],
                        "kind": event["kind"], "source_ref": event["source_ref"], "interpretation": "unverified_observation"})
             seen.add(event["id"])
-    result["knowledge_context"] = contextualize(result)
     next_state = {"observed_at": observation["observed_at"], "metrics": observation["metrics"],
                   "seen_events": sorted(seen)[-1000:], "source": observation["source"], "mode": mode}
     # Source-linked domain knowledge is attached as competing questions, not automatic conclusions.

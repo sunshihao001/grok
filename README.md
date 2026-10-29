@@ -46,8 +46,6 @@ Read `knowledge/README.md`, `knowledge/legacy-audit.md` and `skills/solana-meme-
 
 The first preservation wave also includes [21 original Markdown knowledge snapshots](knowledge/legacy-snapshots/README.md) with pinned source commit paths and SHA entries, so the Grok OS can read those sources locally without requiring Hermes or the original repositories to be live.
 
-## 分批知识摄取（KB-001，参考级）
+## 增量知识审查包 KNOW-001
 
-监控现在会在 `knowledge_context` 附上知识包 ID、源引用与解释/反证核验提示。启动必读 `docs/knowledge-intake.md`、`knowledge/registry.v0.json`，遇到具体问题再按索引阅读 `knowledge/packs/KB-001-evidence-bounds.md`。**只迁移了一批经审查的参考知识，不是迁移整个理论库，也不是确认现有阈值有预测效力。**
-
-知识包或索引缺失/损坏会导致执行停止，避免以「空知识」继续声称分析完整。离线测试：`PYTHONPATH=src python -m unittest discover -s tests -v`。
+保留现有 `knowledge/catalog.v1.json` 15 张知识卡、21 份历史快照、`knowledge.py` 检索/监控接口；本次只新增 `knowledge/registry.v0.json`、`knowledge/packs/KB-001-evidence-bounds.md`，用于按需深入核对来源、替代解释和反证条件。见 `docs/knowledge-intake.md`。本次并未迁移全部知识，也未验证交易优势。

@@ -18,6 +18,6 @@ description: Read-only, source-linked Solana Meme snapshot monitoring, with fres
 
 After Step 2, read `knowledge.interpretation_candidates` from the monitor JSON. These are **candidate conceptual lenses**, not conclusions. For each alert, explain the actual measured change, what the proposed mechanism would imply, what other mechanisms could also produce it, and which missing source datum would best distinguish them. If an alert is unsupported by required evidence, say UNKNOWN and avoid upgrading risk status. See `skills/solana-meme-knowledge/SKILL.md`.
 
-## Mandatory domain reading (KB-001)
+## Supplemental staged evidence knowledge
 
-Before interpreting an alert, load `docs/knowledge-intake.md` and `knowledge/registry.v0.json`; read the pack named in `knowledge_context.packs` (currently `knowledge/packs/KB-001-evidence-bounds.md`). If context is absent, pack is unreadable, or source cannot be checked, stop with an explicit incomplete/unknown status. Treat `knowledge_context.guidance` as **reference-only** verification prompts, not as proof that a liquidity or holder change has a particular cause. State competing explanations and required next checks. Later packs must be reviewed independently before use.
+Keep existing `knowledge.interpretation_candidates` and `knowledge/catalog.v1.json` as the active routing contract. For source conflicts, missingness, liquidity/concentration caveats, or control-zone research, read `docs/knowledge-intake.md` and `knowledge/packs/KB-001-evidence-bounds.md` on demand. KB-001 is reference-only; it must not be auto-promoted into the monitoring rules.

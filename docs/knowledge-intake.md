@@ -14,8 +14,8 @@
 ## 1. 启动时怎样读取，不压爆上下文
 
 1. 始终阅读 `AGENTS.md`、`BOTS.md`、本说明和 `knowledge/registry.v0.json`（短索引）。
-2. 查看具体任务或当前监控 `knowledge_context` 提示的包 ID，而不是读取全部 474 篇理论库文件。
-3. 仅按触发问题打开 `knowledge/packs/KB-*.md`，需要复核时再从 registry 的 **commit + path + blob SHA** 定位源原文。
+2. 先使用既有 `knowledge/catalog.v1.json` 的 15 张知识卡按需路由；涉及证据边界时，再查新的 KB-001，而不是一次加载全部理论库。
+3. 仅按触发问题打开 `knowledge/packs/KB-*.md`；需要复核再从 registry 的 **commit + path + blob SHA** 定位原文。原有 21 份快照仍可查阅，但未自动验证为事实。
 4. 工作过程中逐条形成「证据卡」；超出受审包的内容标记 `UNREVIEWED`，先读源文，不凭记忆扩写。
 5. 每次迭代更新索引、变更记录、反例和测试。过时版本保留，不删除历史；任何「冻结」都需要独立 QA 与人工审查。
 
@@ -34,9 +34,9 @@
 ## 3. 第一批明确交付
 
 - `KB-001`：证据契约、源区分、缺失降级、第一控盘区误判和反证原则，来源锁在 registry。状态 **S1 / reference_only**。
-- `src/solana_meme_os/knowledge.py`：加载并检查知识包的路径与 source SHA 结构，按监控触发项输出解释边界和核验要求；监控无条件调用，知识丢失时 fail closed。
-- 现有监控仍只对归一化观测执行已存在的**示例阈值**；知识上下文不会更改告警阈值或自动给出 BLOCK/PAPER_ONLY。
-- `tests/test_knowledge.py`：知识目录存在性、篡改目录拒绝、触发指导、与监控输出关联检查。
+- `src/solana_meme_os/knowledge_intake.py`：独立验证本批知识索引与证据边界，保留既有 `knowledge.py` 和 15 张知识卡的运行时行为。
+- 原监控继续输出 `knowledge.interpretation_candidates`；本批知识由开发 Bot 按需读取，不自动晋级为规则。现有阈值仍属**未经校准的示例**。
+- `tests/test_knowledge_intake.py`：新增索引完整性、篡改拒绝、触发指导及与现有监控共存测试；原 `tests/test_knowledge.py` 保留。
 
 ## 4. 后续的最优顺序（而非照目录逐个搬）
 
@@ -53,3 +53,7 @@
 `id/version`、任务负责人、问题、源仓 commit 与 blob SHA、原文定位、吸收/不吸收边界、已知反证、独立复核人、至少一条成功/失败/缺失/冲突 fixture、回归命令及结果、未解决项、降级路径、人工接受状态。发生来源冲突先记录，不擅自默默覆盖。
 
 **当前未完成**：未验证 live GMGN 字段；未做多源链上实测；未统计误报/跟单净收益；未创建实际 Grok Bot/Routine；未取得人工冻结审批。
+
+## 6. 与已有知识库共存
+
+在本批启动时，主分支已经拥有 `knowledge/catalog.v1.json` 15 张卡片、`knowledge/legacy-snapshots/` 21 份历史文本快照、`knowledge.py` 的关键词及监控路由。不能覆盖这些既有成果；KB-001 是增量审查的单独参考包。快照保留不等于全部内容已被深度吸收或独立验证。
