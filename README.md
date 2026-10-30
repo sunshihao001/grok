@@ -69,3 +69,10 @@ See [on-demand design](docs/on-demand-research-design.md), [source registry](kno
     PYTHONPATH=src python -m solana_meme_os.bot_knowledge --audit
     PYTHONPATH=src python -m solana_meme_os.bot_knowledge --bot B03 --question "同源资金可能是交易所服务吗"
     PYTHONPATH=src python -m solana_meme_os.bot_knowledge --validate-handoff fixtures/bot-handoff-brief.fixture.json
+
+## GPT → GitHub → Grok：分级知识发布，不靠长对话复制
+
+[知识发布与反馈闭环](docs/gpt-github-grok-knowledge-loop.md) · [课程目录](knowledge/transfer/curriculum.v1.json) · [Grok 取课 Skill 模板](skills/github-knowledge-intake/SKILL.md)。首个 C1-001 证据课程为 **draft**，未获人工审阅发布，不能成为监控规则。
+
+    PYTHONPATH=src python -m solana_meme_os.knowledge_delivery --audit
+    PYTHONPATH=src python -m solana_meme_os.knowledge_delivery --bot B01 --through C1 --preview-drafts

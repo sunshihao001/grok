@@ -67,3 +67,13 @@ Start with `knowledge/system/README.md`. **Structure complete does not imply tha
 - [ ] Manually install/enroll private skills in Grok UI and test actual real Bot-to-Bot handoff.
 - [ ] Collect real live read-only K2 observations and evaluate independent source/market accuracy in real Grok cloud tasks.
 - [ ] Test B04/B05/B06 on blinded strategies/net economics; only a human may release frozen B07 rules.
+
+## GPT/GitHub/Grok incremental knowledge loop (new, staged)
+
+- [x] Draft-only C1-001 example tied to existing F0–F6 source policy, not duplicated evidence.
+- [x] Minimal curriculum manifest, role/level filtering, static validation and regression tests.
+- [x] Draft Grok read-and-feedback Skill template with explicit repository SHA and no rule release.
+- [ ] Human-review and approve a lesson for study before normal `--bot` loads it.
+- [ ] Actually connect Grok GitHub access; run one read-only preview and verify cited SHA/read paths.
+- [ ] Collect Grok feedback and independently review its reasoning; only then write the next C1/C2 lesson.
+- [ ] Only after repeated safe real tasks, save a verified private Skill and optionally add a scoped GitHub event Routine.

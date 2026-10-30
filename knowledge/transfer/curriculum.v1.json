@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "purpose": "GPT-researched learning units routed through versioned GitHub into Grok review; not market claims or production rule authorization.",
+  "level_order": [
+    "C0",
+    "C1",
+    "C2",
+    "C3",
+    "C4"
+  ],
+  "levels": [
+    {
+      "id": "C0",
+      "name": "项目认知",
+      "goal": "Project orientation, source-of-truth and safety."
+    },
+    {
+      "id": "C1",
+      "name": "基础原理",
+      "goal": "Original-data semantics, availability, evidence gates."
+    },
+    {
+      "id": "C2",
+      "name": "专业机制",
+      "goal": "Wallet, funding, market and causal alternatives."
+    },
+    {
+      "id": "C3",
+      "name": "研究方法",
+      "goal": "Falsification, predictive baselines, OOS and execution economics."
+    },
+    {
+      "id": "C4",
+      "name": "Skill应用",
+      "goal": "Reproducible real read-only task, tool errors, expert replay and feedback."
+    }
+  ],
+  "units": [
+    {
+      "id": "C1-001",
+      "title": "F0–F6 证据过滤的专业理解",
+      "level": "C1",
+      "status": "draft",
+      "approval_ref": null,
+      "target_bot_ids": [
+        "B01",
+        "B02",
+        "B03",
+        "B04",
+        "B05",
+        "B06"
+      ],
+      "domain_ids": [
+        "D10",
+        "D11",
+        "D12"
+      ],
+      "knowledge_path": "knowledge/transfer/modules/C1-001-evidence-gates.md",
+      "authority_paths": [
+        "knowledge/system/filter-policy.v1.json",
+        "knowledge/system/REVIEW-V1.1.md"
+      ],
+      "source_index_ids": [],
+      "prerequisite_unit_ids": [],
+      "review_questions": [
+        "同源资金还缺真实交易时，为什么 F2 不通过且 F3 只能保留假设？",
+        "F4 上涨预测能力为何不能代替 F5 净可执行盈利？",
+        "event_at 早于 decision_at 但 available_at 晚于 decision_at 的数据能否作为交易特征？",
+        "解释任务是否需要 F5，监控发布是否需要人工批准？"
+      ],
+      "success_conditions": [
+        "Correctly distinguishes NOT_EVALUATED, INSUFFICIENT, REJECTED, NOT_APPLICABLE and evidence-backed PASS.",
+        "Can state a falsifiable mechanism plus at least one benign explanation.",
+        "Does not treat documents or fixture as real chain evidence or gate-pass proof."
+      ],
+      "market_evidence_status": "not_evaluated",
+      "monitor_rule_authorized": false,
+      "notes": "Draft educational content linked to existing F0–F6 policy; not independently signed off or installed in Grok."
+    }
+  ]
+}
