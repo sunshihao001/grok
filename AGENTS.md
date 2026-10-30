@@ -47,3 +47,7 @@ Read `knowledge/system/README.md`, `ontology.v1.json`, `MIGRATION.md`, and `RESE
 ## GPT→GitHub→Grok knowledge publication boundary
 
 New GPT research must be proposed as **small source-linked learning units**, using `knowledge/transfer/curriculum.v1.json` and `knowledge/transfer/modules/`; do not directly paste conversations into Bot prompts, duplicate existing K0/K1 or promote content to a trading rule. A `draft` learning unit requires human review before `approved_for_study`. A learner's feedback may guide the next research unit but never validates live market findings or B07 Monitor release. Run `PYTHONPATH=src python -m solana_meme_os.knowledge_delivery --audit`. See `docs/gpt-github-grok-knowledge-loop.md`.
+
+## Expert research is not a monitor release
+
+The original research memo `research/2026-10-30-executable-copytrade-edge.md` proposes H-A–H-D for testing, and `knowledge/experiments/executable-edge-protocol.v1.json` contains an **unexecuted** experiment plan. Do not treat third-party reports as independent replication, `asof_audit.py` fixture results as live observability, or paper quotes as executable fills. Draft C2/C3 lessons must remain review-only until explicitly approved.

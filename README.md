@@ -76,3 +76,11 @@ See [on-demand design](docs/on-demand-research-design.md), [source registry](kno
 
     PYTHONPATH=src python -m solana_meme_os.knowledge_delivery --audit
     PYTHONPATH=src python -m solana_meme_os.knowledge_delivery --bot B01 --through C1 --preview-drafts
+
+## Expert research track: executable wallet alpha (proposed, not reproduced)
+
+[Original expert research memo](research/2026-10-30-executable-copytrade-edge.md) and [preregisterable protocol](knowledge/experiments/executable-edge-protocol.v1.json): distinguish observable actor coordination, time-eligible information, out-of-sample incremental prediction and net-executable outcomes. Four hypotheses H-A/H-B/H-C/H-D are **unproven**. As-of metadata offline checker:
+
+    PYTHONPATH=src python -m solana_meme_os.asof_audit --input fixtures/asof-audit.synthetic.json
+
+New [C2-001 and C3-001 knowledge units](knowledge/transfer/curriculum.v1.json) remain **draft**, build on C1-001 and must not be automatically loaded into B07.

@@ -76,6 +76,108 @@
       "market_evidence_status": "not_evaluated",
       "monitor_rule_authorized": false,
       "notes": "Draft educational content linked to existing F0–F6 policy; not independently signed off or installed in Grok."
+    },
+    {
+      "id": "C2-001",
+      "title": "钱包资金关联与群组的专业证据边界",
+      "level": "C2",
+      "status": "draft",
+      "approval_ref": null,
+      "target_bot_ids": [
+        "B01",
+        "B02",
+        "B03",
+        "B04",
+        "B05",
+        "B06"
+      ],
+      "domain_ids": [
+        "D01",
+        "D04",
+        "D05",
+        "D06",
+        "D07",
+        "D10",
+        "D11"
+      ],
+      "knowledge_path": "knowledge/transfer/modules/C2-001-wallet-mechanism.md",
+      "authority_paths": [
+        "knowledge/system/ontology.v1.json",
+        "research/2026-10-30-executable-copytrade-edge.md"
+      ],
+      "source_index_ids": [
+        "coordination-null-model",
+        "external-reentry-negative",
+        "funding-graph-control"
+      ],
+      "prerequisite_unit_ids": [
+        "C1-001"
+      ],
+      "review_questions": [
+        "Why is a funding edge neither common beneficial owner nor executable trading alpha?",
+        "How do CEX hubs and shared execution services become negative controls?",
+        "Why can operator recurrence be predictive unconditionally yet add no incremental information after matching?"
+      ],
+      "success_conditions": [
+        "Correctly distinguishes structural evidence, conditional increment and net profitability.",
+        "Preserves as-of time of any evidence and gives explicit alternative mechanisms.",
+        "Reports source-derived numbers as external claims, not independent local replication."
+      ],
+      "market_evidence_status": "not_evaluated",
+      "monitor_rule_authorized": false,
+      "notes": "Draft C2 expert lesson based on proposed method and reported third-party results."
+    },
+    {
+      "id": "C3-001",
+      "title": "AS-OF 可得时间、预测增量与净可交易性实验",
+      "level": "C3",
+      "status": "draft",
+      "approval_ref": null,
+      "target_bot_ids": [
+        "B01",
+        "B02",
+        "B04",
+        "B05",
+        "B06"
+      ],
+      "domain_ids": [
+        "D01",
+        "D03",
+        "D05",
+        "D08",
+        "D09",
+        "D10",
+        "D11"
+      ],
+      "knowledge_path": "knowledge/transfer/modules/C3-001-asof-economic-research.md",
+      "authority_paths": [
+        "research/2026-10-30-executable-copytrade-edge.md",
+        "knowledge/system/filter-policy.v1.json",
+        "knowledge/experiments/executable-edge-protocol.v1.json"
+      ],
+      "source_index_ids": [
+        "time-safe-features",
+        "external-post-detection-results",
+        "external-reentry-negative",
+        "meme-falsification-experiment"
+      ],
+      "prerequisite_unit_ids": [
+        "C1-001",
+        "C2-001"
+      ],
+      "review_questions": [
+        "Why is historical blockTime insufficient to prove real-time feature observability?",
+        "How should operator-linked OOS, non-alert denominators, route availability and fees be assessed?",
+        "Why does a valid paper quote fail to prove a real executable fill?"
+      ],
+      "success_conditions": [
+        "Distinguishes synthetic offline time validators from market evidence.",
+        "Defines preregistered target, baseline, group/time OOS, cost and tail loss.",
+        "Never promotes unreviewed candidate hypotheses into B07 release."
+      ],
+      "market_evidence_status": "not_evaluated",
+      "monitor_rule_authorized": false,
+      "notes": "Advanced methodology only; stages 1–5 have not been run on real market data."
     }
   ]
 }

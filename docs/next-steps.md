@@ -77,3 +77,14 @@ Start with `knowledge/system/README.md`. **Structure complete does not imply tha
 - [ ] Actually connect Grok GitHub access; run one read-only preview and verify cited SHA/read paths.
 - [ ] Collect Grok feedback and independently review its reasoning; only then write the next C1/C2 lesson.
 - [ ] Only after repeated safe real tasks, save a verified private Skill and optionally add a scoped GitHub event Routine.
+
+## Expert research R-2026-10-30-01 (stage 0, no market replication)
+
+- [x] Primary source review: Solana RPC observability, external repeat-group negative experiment, Jupiter V2 quote-versus-fill path and legacy multi-strategy/falsification approach.
+- [x] Proposed H-A time absorption, H-B independent secondary absorption, H-C future-mint identifiability, H-D controlled risk filter.
+- [x] Static time eligibility validator with synthetic positive/negative cases, not authenticity proof.
+- [x] Draft-only C2/C3 lessons linking to pinned external source pointers and current expert research.
+- [ ] Human review of novel hypotheses, sampling universe and paper quote sources.
+- [ ] B02 live read-only coverage/time-trace acquisition and units/decimals tests (K2 not present).
+- [ ] B05 matched negative controls, operator time/group split and selection-bias check.
+- [ ] B04/B06 independently evaluated preregistered F4 and F5; no positive net edge claimed.

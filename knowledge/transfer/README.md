@@ -9,3 +9,7 @@
 任何新的知识单元先以 `draft` 提交；校验器拒绝把课程通过标为真实市场验证或 B07 发布授权。课程获批准学习需要明确的 PR 审查记录，Grok 反馈应另经审查才能确认为课程测试通过。
 
 开始阅读 `docs/gpt-github-grok-knowledge-loop.md`。
+
+## Expert research staged lessons
+
+C2-001（资金图机制）与 C3-001（AS-OF、F4/F5）是来自 [专家研究 R-2026-10-30-01](../../research/2026-10-30-executable-copytrade-edge.md) 的**待审草稿**。它们引用 C1-001 作为前置，不代表课程已通过或真实交易证据成立。配套 `asof_audit.py` 仅验证输入时间字符串的一致性，无法认证数据来源。
