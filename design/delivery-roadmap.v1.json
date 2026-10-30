@@ -1,0 +1,138 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-10-30",
+  "baseline_document": "docs/project-baseline-2026-10-30.md",
+  "audited_commit_before_consolidation": "f8cf6a376905e163ed8e51bf8f922e3127c1931f",
+  "audited_test_count": 117,
+  "audited_github_checks": "2_success",
+  "repository": "sunshihao001/grok",
+  "active_pr": 5,
+  "pr_status_at_baseline": "OPEN_DRAFT_NOT_MERGED",
+  "current_operating_model": "GPT_BUILDS_GITHUB_VERSIONS_GROK_RUNS",
+  "current_deployment_status": "OFFLINE_PROTOTYPE_NOT_CLOUD_VERIFIED",
+  "code_release_requires_human_review": true,
+  "real_trading_authorized": false,
+  "read_only_phase": true,
+  "lessons_required_before_runtime": false,
+  "seven_grok_bots_required_before_runtime": false,
+  "milestones": [
+    {
+      "id": "S0",
+      "title": "项目认知与可交付代码基线",
+      "status": "DOCUMENTED_REVIEW_PENDING",
+      "depends_on": [],
+      "implementation_owner": "GPT and GitHub review",
+      "runtime_owner": "Human reviews current baseline/PR",
+      "acceptance": [
+        "Repository README and next-steps have one canonical link and old texts archived.",
+        "Existing 117 CI tests are correctly scoped as offline only.",
+        "Draft PR #5 is reviewed before any release declaration."
+      ],
+      "blockers": [
+        "PR draft and broad scope"
+      ]
+    },
+    {
+      "id": "S1",
+      "title": "固定 SHA 的 Grok 云电脑一次运行验收",
+      "status": "NOT_VERIFIED_IN_GROK",
+      "depends_on": [
+        "S0"
+      ],
+      "implementation_owner": "GPT and GitHub review",
+      "runtime_owner": "One Grok operator with explicitly granted terminal access",
+      "acceptance": [
+        "Verified exact 40-character Git commit SHA and clean checkout on actual Grok cloud.",
+        "One gpt-built operator demo completes locally with exit status and JSON logs.",
+        "Failed preflight never triggers installation, payment, trading or speculative fixes."
+      ],
+      "blockers": [
+        "Actual cloud terminal permission and operator execution logs not yet provided"
+      ]
+    },
+    {
+      "id": "S2",
+      "title": "单一真实只读链上来源",
+      "status": "NO_LIVE_ADAPTER",
+      "depends_on": [
+        "S1"
+      ],
+      "implementation_owner": "GPT and GitHub review",
+      "runtime_owner": "Grok runs approved read-only Python source adapter",
+      "acceptance": [
+        "One user-approved provider tested with strict read-method allowlist and no automatic payment/wallet action.",
+        "Original response hash, slot, received/available times, units/decimals, errors and missing data retained.",
+        "Negative tests cover quota, billing, timeout, provider failures and lookahead."
+      ],
+      "blockers": [
+        "Solana RPC vs OKX provider choice and permissions",
+        "OKX x402 automatic payment risk"
+      ]
+    },
+    {
+      "id": "S3",
+      "title": "K2 原始证据与专业研究可复算",
+      "status": "NO_INDEPENDENT_REAL_DATA_REPLAY",
+      "depends_on": [
+        "S2"
+      ],
+      "implementation_owner": "GPT and GitHub review",
+      "runtime_owner": "Grok executes GPT-built analysis programs",
+      "acceptance": [
+        "At least one source-authenticated, reproducible real case including negatives/unknowns.",
+        "Source tier K1 vs K2 cannot be silently promoted.",
+        "Any predictive or economic claim passes appropriate preregistered OOS and cost checks."
+      ],
+      "blockers": [
+        "K2 live receipt and coverage logs",
+        "Independent validation data"
+      ]
+    },
+    {
+      "id": "S4",
+      "title": "B07 安全冻结只读监控",
+      "status": "NOT_RELEASE_READY",
+      "depends_on": [
+        "S2"
+      ],
+      "implementation_owner": "GPT and GitHub review",
+      "runtime_owner": "Grok single frozen monitor with user-approved routine",
+      "acceptance": [
+        "Approved frozen-rule commit with human sign-off and rollback.",
+        "Single-writer durable state, dedupe, recovery/stop and real cloud smoke run.",
+        "Experimental monitor thresholds not silently treated as proven profitable signals.",
+        "F4/F5 economic-specific rules also depend on S3 evidence."
+      ],
+      "blockers": [
+        "Frozen rules",
+        "Single writer/recovery",
+        "Owner activation"
+      ]
+    },
+    {
+      "id": "S5",
+      "title": "仅按真实收益增加 Grok 专业 Bot",
+      "status": "OPTIONAL_NOT_SCHEDULED",
+      "depends_on": [
+        "S1"
+      ],
+      "implementation_owner": "GPT and GitHub review",
+      "runtime_owner": "Optional specialist Grok Bots",
+      "acceptance": [
+        "Prove measurable independent reasoning benefit relative to a single Operator and deterministic Python.",
+        "Explicit cost, shared-computer permissions and source authority documented."
+      ],
+      "blockers": [
+        "No current necessity"
+      ]
+    }
+  ],
+  "deferred": [
+    "Full C0-C4 Grok syllabus completion prior to code execution",
+    "Provisioning all seven Bot profiles by default",
+    "Enabling all 11 repository Skill templates in the Grok App",
+    "GMGN prepaid activation as a prerequisite",
+    "Automated onchainos installer or payment without approval",
+    "Real orders, signing, broadcasting, wallet secrets and strategy self-promotion"
+  ]
+}

@@ -259,3 +259,10 @@ GPT 完成单写入者状态、原始来源可靠性、告警幂等、故障恢�
 S1 完成后，优先由 GPT 开发**一个真实只读 provider adapter 的最小垂直链路**，而不是同时开发全部数据源、全部钱包图/Alpha 模型或创建七个 Grok App Bot。真实收费/API 行为没有经用户单独批准之前，可在 GPT/GitHub 完成模拟契约与错误测试，但不能让 Grok 擅自安装或调用可能产生付款的 CLI。
 
 **S0 至此收口：先澄清和审核；实际 S1 部署请作为下一项单独任务执行。**
+
+
+## 12. 本次收敛后的当前执行清单（非新增研发模块）
+
+本基线的 S0–S5 已整理为 [现行 next-steps](next-steps.md) 与 [机器可读 delivery-roadmap](../design/delivery-roadmap.v1.json)，方便未来 GPT 按统一状态检查，而不是重复建立课程或 Bot 框架。旧的长篇 README、历史累计待办保留在 `docs/archive/` 供追溯。
+
+**执行纪律**：先完成当前 Draft PR 的代码/文件审阅，再在真实 Grok 云电脑以固定 SHA 运行一次离线验收。没有这个实际结果，不宣称当前统一入口在 Grok 上已部署；不扩展到 OKX/RPC 真实付费/数据接入。

@@ -1,3 +1,5 @@
+> **当前执行权威入口（2026-10-30）**：从 [项目基线](docs/project-baseline-2026-10-30.md)、[现行清单](docs/next-steps.md) 与 [机器可读路线图](design/delivery-roadmap.v1.json) 开始。GPT 是主要研发方、GitHub 是版本真源、Grok 初期是薄运行端。以下保留的传统 AGENTS 约束不得被解释为必须先创建六个 Grok 开发 Bot、批量灌输 C0–C4 或依赖 GMGN 充值。Phase 1 仍只读/Paper-Only。
+
 # Project Agent / Bot Rules — Solana Meme Workflow OS (Grok Edition)
 
 **当前产品战略与状态真源：** docs/project-baseline-2026-10-30.md。此文件其他“Required Reading / Before Work”要求主要约束参与研发和修改源码的开发者；Grok 的只读运行 Bot 不需要读完所有历史资料或重新编写程序，须执行由 GPT/人工审阅的固定 SHA 与 docs/gpt-build-grok-run.md 的单入口流程。所有下方安全禁令对运行 Bot 同样有效。

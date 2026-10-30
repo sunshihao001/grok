@@ -1,115 +1,54 @@
-> **当前项目总览（2026-10-30）**：[项目基线、技术债务、架构决策和阶段验收计划](docs/project-baseline-2026-10-30.md)。最新工作模式是 GPT 主导研发、GitHub 交付、Grok 云电脑运行固定版本。本 README 下方的早期 GMGN/Hermes 表述为历史演变记录，不能代替上述基线。
+# Solana Meme Workflow OS — GPT 研发 / GitHub 真源 / Grok 云端运行
 
-# Solana Meme Workflow OS — Grok Bot Edition
+**当前状态：P0 离线可运行原型；尚未验证真实 Grok 云电脑统一入口和实时链上监控。**
 
-GMGN 入口 + 钱包情报 + 证据链 + 门控判断的 Solana Meme 研究工作流，适配 Grok Bots 多代理迭代。
+> [**2026-10-30 项目基线与认知统一（权威入口）**](docs/project-baseline-2026-10-30.md) · [现行执行清单](docs/next-steps.md) · [机器可读里程碑](design/delivery-roadmap.v1.json) · [GPT→Grok 交付方式](docs/gpt-build-grok-run.md)
 
-原 Hermes 版：https://github.com/sunshihao001/-
-理论库：https://github.com/sunshihao001/meme-
-GMGN 工具原型：https://github.com/sunshihao001/qb-
+## 目标与职责
 
-## 目标
+项目目标：围绕 Solana Meme 跟单与链上结构，研究可证伪、可复算、最终有机会在真实执行成本下捕获的正净期望信号，建设**只读/Paper-Only** 研究与监控系统。
 
-用多个开发 Bot 迭代规则与技能，最终留一个成品监控 Bot。
+- **GPT**：主要负责研究、知识整理、程序开发、Skill、测试、修复及版本候选。
+- **GitHub**：保存已审查源码/知识/实验协议及固定提交；当前主要工作在 [Draft PR #5](https://github.com/sunshihao001/grok/pull/5)。
+- **Grok 云电脑**：初期一个 Operator Bot 即可；负责运行固定提交的已有程序并回传 JSON/错误，而不是重写代码。
+- **用户**：批准云电脑访问、外部安装/收费和最终冻结监控规则。
 
-Phase 1：只读研究 / 纸面门控，禁止真实交易、私钥、签名、广播。
+B01–B07 是七个**逻辑专业职责**，不是必须先建立七个云端 Bot。C0–C4 是按需知识课程，不是运行已完成 Python 程序的前置要求。详见 [Bot 架构](BOTS.md) 和 [知识分层](knowledge/system/README.md)。
 
-## 快速开始
+## 已经拥有的资产与实际限制
 
-见 `docs/bot-architecture.md` 与 `BOTS.md`。
+| 资产 | 当前范围 | 不能证明 |
+|---|---|---|
+| 专业知识 | L0–L7 / D01–D12 / F0–F6；15 历史卡、21 快照、21 来源索引 | 原始链上数据已验证，或历史经验有正净收益 |
+| 工具与 Skill | 7 个 Bot 角色档案、11 个仓库 SKILL.md 模板 | Grok App 已创建并启用这些 Bot/Skill |
+| Python | 知识/研究选择、结构交接、as-of 审计、SQLite 队列、OKX 离线解析、模拟监控、统一入口 | OKX/RPC 真实接入、经济实证、B07 长期运行 |
+| 工程验证 | 审计基线提交 `f8cf6a376905e163ed8e51bf8f922e3127c1931f` 两项 GitHub CI success / 117 unittest 通过 | 实际 Grok 云电脑成功运行该版本 |
 
-## 安全边界
+本文件不声称当前工作分支的每个新提交都经过上述相同测试；发布前必须以**最终具体 SHA** 核查 CI。PR 仍为 Draft，未合并 main。
 
-- 仅 BLOCK / WATCH / PAPER_ONLY / NEED_MORE_DATA
-- 禁止真实下单、gmgn-cli swap、私钥访问
+## 当前唯一标准启动方式（仅在获准云电脑与固定审阅提交上）
 
+首次在**空白、可使用的**工作目录：
 
-## Runnable read-only monitor bootstrap (development PR)
+~~~bash
+git clone https://github.com/sunshihao001/grok.git /workspace/grok
+cd /workspace/grok
+git fetch origin design/knowledge-system-v1
+git checkout --detach FULL_REVIEWED_SHA
+python3 scripts/grok_operator.py --expected-sha FULL_REVIEWED_SHA demo
+~~~
 
-Offline monitor implementation and tests are being added via feature branch. This component accepts **normalized observation JSON**, tracks per-mint state, labels fixtures, detects observed changes and records source-linked history; it is not the original 7-Skill Hermes pipeline. GMGN collector supports token info/security/pool read commands only; raw field/unit mappings are **not yet validated**.
+将 `FULL_REVIEWED_SHA` 替换为 GPT 提供且经过审查的完整 40 位提交。若目录已存在，先检查工作树与运行中任务，不能强制覆盖。参见 [Grok 交付手册](docs/gpt-build-grok-run.md)。
 
-    PYTHONPATH=src python -m unittest discover -s tests -v
-    PYTHONPATH=src python -m solana_meme_os.monitor --input fixtures/observation-1.json --allow-fixture --state-dir .runtime/demo
-    PYTHONPATH=src python -m solana_meme_os.monitor --input fixtures/observation-2.json --allow-fixture --state-dir .runtime/demo
+**当前 demo 只用合成/已保存数据**：知识审计、unit tests、B01/B02/B05 SQLite 合成交接、OKX 离线 JSON、Monitor fixture 回放。它不安装 OKX、不进行实时网络采集、不收费、不下单、不签名、不启动 Routine。成功输出不是市场策略验证。
 
-See docs/sources.md, docs/migration.md, docs/next-steps.md, skills/solana-meme-monitor/SKILL.md and routines/monitor.md. The 0.1.0 rule thresholds are **illustrative**. No scheduled Grok Routine has been created and no live GMGN data has been verified.
+## 真实数据、知识来源与安全限制
 
-## Knowledge layer: preserve expertise without inheriting Hermes runtime
+- Solana 原始 RPC 与 [OKX OnchainOS](https://github.com/okx/onchainos-skills) 是下一阶段的**待授权只读来源**，目前没有可信 K2 实时适配器。OKX Market API 可能在既有账户收费授权下产生 x402 支付副作用；请看 [OKX 源码审查](docs/okx-onchainos-runtime-review.md)。
+- GMGN 因充值门槛暂停作为项目必需入口；`gmgn_collect.py` 只保留旧原型。
+- 历史来源：[Hermes 研究](https://github.com/sunshihao001/-) · [meme- 理论](https://github.com/sunshihao001/meme-) · [qb- 旧工具](https://github.com/sunshihao001/qb-) · [外部反证研究](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over)。只迁移可追溯知识，**不**迁移 Hermes 运行时或未经验证的阈值。
+- Phase 1 禁止真钱下单、私钥、签名、交易广播、自动付款、从研发队列自动发布规则。`rules/monitor.v0.json` 的阈值是实验样例，不是正式冻结规则。
 
-Knowledge is now a first-class, **actively consulted** input: `knowledge/catalog.v1.json` contains 15 source-pinned, status-labelled concepts and methods derived from Hermes business research, meme- theory and qb- field work. Each concept has an applicable context, the evidence needed, counter-explanations and an inference boundary.
+## 文档治理
 
-Monitor results now include `knowledge.interpretation_candidates` with sources and follow-up checks. This is **question/evidence generation, not an automatic classification of wallet identity or a trading signal**.
-
-Plain-language knowledge routing example:
-
-    PYTHONPATH=src python -m solana_meme_os.knowledge --question "前十持仓突然上升，是不是同源庄家？"
-
-Read `knowledge/README.md`, `knowledge/legacy-audit.md` and `skills/solana-meme-knowledge/SKILL.md`. The engine is a deterministic starter; true Grok language understanding and source discovery still require configuring and testing the actual Grok Bots.
-
-The first preservation wave also includes [21 original Markdown knowledge snapshots](knowledge/legacy-snapshots/README.md) with pinned source commit paths and SHA entries, so the Grok OS can read those sources locally without requiring Hermes or the original repositories to be live.
-
-## On-demand research engine (new)
-
-A 17-source registry now indexes the specialist external study [Why-Solana-Memecoins-Are-Over](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over) plus the three legacy repositories **without bulk copying their content**. A runnable question-to-evidence packet helps development Bots choose what to read and highlights missing observational evidence and decision-time leakage.
-
-    PYTHONPATH=src python -m solana_meme_os.research --question "同源钱包可能是交易所公共基础设施吗？"
-
-See [on-demand design](docs/on-demand-research-design.md), [source registry](knowledge/source_index.v1.json), and [usage](knowledge/source-index-README.md). Source previews are opt-in and ephemeral; research packets **are not automated conclusions or validated strategies**. Offline tests do not prove actual Grok Bot expertise.
-
-## 知识体系架构 V1.0
-
-完整结构：**8 层 / 12 专业领域 / 统一溯源和反证 / 分批迁移**。这里的完整指分类、依赖和验证机制完整，不表示已迁移全部材料或证明交易策略有效。请先读 [知识系统总纲](knowledge/system/README.md)、[研究契约](knowledge/system/RESEARCH.md) 和 [分批迁移](knowledge/system/MIGRATION.md)。监控器仍是 Paper-Only，不会消费未验证的外部研究作为交易规则。
-
-## Bot 架构 V1.1：6 个按需研发 + 1 个只读监控
-
-[Bot 分工](BOTS.md) 与 [机器可读名单](design/bot-roster.v1.json)：B01 知识主控、B02 链上数据、B03 钱包资金、B04 Alpha/交易经济学、B05 证据反证、B06 独立 QA、B07 最终只读监控。12 个知识领域不是 12 个 Bot，七级过滤也不是七个独立 Bot。应用内 Bot 尚未创建。
-
-## 各 Bot 的专业知识初始化包（初步研究）
-
-[七个可复制的角色说明](bots/profiles/B01-chief-knowledge-architect.md)（同目录 B01–B07）、[知识储备清单](knowledge/bot-knowledge-profiles.v1.json)、[Bot 交接契约](docs/bot-knowledge-integration.md) 和 [Grok 云电脑激活步骤](docs/grok-knowledge-installation.md)。按需来源从 17 个增加至 21 个固定提交的入口；不批量复制理论库，也不意味着 Bot 已安装或具备实盘数据。
-
-    PYTHONPATH=src python -m solana_meme_os.bot_knowledge --audit
-    PYTHONPATH=src python -m solana_meme_os.bot_knowledge --bot B03 --question "同源资金可能是交易所服务吗"
-    PYTHONPATH=src python -m solana_meme_os.bot_knowledge --validate-handoff fixtures/bot-handoff-brief.fixture.json
-
-## GPT → GitHub → Grok：分级知识发布，不靠长对话复制
-
-[知识发布与反馈闭环](docs/gpt-github-grok-knowledge-loop.md) · [课程目录](knowledge/transfer/curriculum.v1.json) · [Grok 取课 Skill 模板](skills/github-knowledge-intake/SKILL.md)。首个 C1-001 证据课程为 **draft**，未获人工审阅发布，不能成为监控规则。
-
-    PYTHONPATH=src python -m solana_meme_os.knowledge_delivery --audit
-    PYTHONPATH=src python -m solana_meme_os.knowledge_delivery --bot B01 --through C1 --preview-drafts
-
-## Expert research track: executable wallet alpha (proposed, not reproduced)
-
-[Original expert research memo](research/2026-10-30-executable-copytrade-edge.md) and [preregisterable protocol](knowledge/experiments/executable-edge-protocol.v1.json): distinguish observable actor coordination, time-eligible information, out-of-sample incremental prediction and net-executable outcomes. Four hypotheses H-A/H-B/H-C/H-D are **unproven**. As-of metadata offline checker:
-
-    PYTHONPATH=src python -m solana_meme_os.asof_audit --input fixtures/asof-audit.synthetic.json
-
-New [C2-001 and C3-001 knowledge units](knowledge/transfer/curriculum.v1.json) remain **draft**, build on C1-001 and must not be automatically loaded into B07.
-
-## Local/Grok-cloud executable framework (P0, offline-only)
-
-[Framework deepening](docs/local-runtime-framework.md) · [SQLite task inbox](src/solana_meme_os/runtime_store.py) · [Local/cloud doctor](scripts/grok_cloud_doctor.py) · [Provider capability declaration](design/local-provider-capabilities.v1.json) · [Grok handoff Skill template](skills/local-research-handoff/SKILL.md).
-
-    python3 scripts/grok_cloud_doctor.py --repo . --audits --self-test
-    PYTHONPATH=src python3 -m solana_meme_os.runtime_store init
-    PYTHONPATH=src python3 -m solana_meme_os.runtime_store submit --input fixtures/bot-handoff-brief.fixture.json
-    PYTHONPATH=src python3 -m solana_meme_os.runtime_store claim --bot B02
-    PYTHONPATH=src python3 -m solana_meme_os.runtime_store status
-
-The research SQLite queue does not execute its payload, authenticate Grok Bot identity, validate live market evidence or authorize B07 rules.
-
-## Offline OKX OnchainOS adapter research (no installation/billing)
-
-[OKX runtime framework review](docs/okx-onchainos-runtime-review.md) · [Grok terminal acceptance runbook](docs/grok-local-runbook.md) · [safe JSON snapshot parser](src/solana_meme_os/okx_snapshot.py). The repo has **not installed or called onchainos**. Its market queries may have x402 payment side effects on previously approved accounts; never execute its CLI under an unattended Routine.
-
-    PYTHONPATH=src python3 -m solana_meme_os.okx_snapshot --input fixtures/okx-price.synthetic.json --operation token_price_info --address EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
-
-
-## GPT 研发 → GitHub 交付 → Grok 云电脑运行
-
-[统一交付说明](docs/gpt-build-grok-run.md)和[云端只读操作 Skill 模板](skills/grok-release-operator/SKILL.md)。Grok 不负责临时开发；由 GPT 完成程序、知识与测试，再交给 Grok 一个固定 Git SHA 和一个启动命令。当前只支持 P0 synthetic offline 验收：
-
-    python3 scripts/grok_operator.py --expected-sha FULL_GPT_APPROVED_SHA demo
-
-通过 CI 和离线 demo 不代表真实 OKX/RPC、Grok Bot、私有 Skill 或 B07 监控已经部署。
+[项目基线](docs/project-baseline-2026-10-30.md) 解释所有知识轴、保留/废弃方案、真实阻塞和 S0–S5 路线；[现行执行清单](docs/next-steps.md) 只记录下一阶段需要做什么。旧 README 与历史累计待办保存在 [docs/archive/](docs/archive/README-pre-consolidation-2026-10-30.md) 和 [历史待办](docs/archive/next-steps-pre-consolidation-2026-10-30.md)，不再作为运行指令。
