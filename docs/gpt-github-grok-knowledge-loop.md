@@ -1,3 +1,5 @@
+> **现在是可选知识吸收子系统**：C0–C4 课程、反馈和学习验收可用于验证某个 AI 的理解，但不是运行已由 GPT 开发程序的必要前置步骤。当前主流程参阅 [项目基线](project-baseline-2026-10-30.md) 及 [GPT-build/Grok-run](gpt-build-grok-run.md)。
+
 # GPT → GitHub → Grok：渐进式知识发布与吸收（V0.1）
 
 ## 目的

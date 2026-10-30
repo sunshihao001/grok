@@ -1,3 +1,5 @@
+> **状态提示（2026-10-30）**：本文件按开发历史不断追加，包含“6 个测试”“17 个来源”“CI 待验证”等早期快照。当前状态、权威决策和实际计数以 [项目基线](project-baseline-2026-10-30.md)、JSON 注册表及最新 GitHub CI 为准；本文件仅作历史待办记录，不应逐条盲目继续执行。
+
 # Release backlog
 
 ## Initialization (completed locally)

@@ -1,3 +1,5 @@
+> **路线修订**：以下“先创建 B01/B02/B05 再扩展所有 Bot”属于较早的多 Bot 部署设想，不是当前最低部署前置。现行路线为 [GPT 开发、Grok 一 Bot 运行](project-baseline-2026-10-30.md)，仅在后续独立 AI 判断产生真实需求时再增加专业 Bot。
+
 # Grok Bot deployment V1.1 — roles not yet created
 
 Follow [BOTS.md](../BOTS.md) and [design/bot-roster.v1.json](../design/bot-roster.v1.json): six development Bots invoked on demand, one final read-only Monitor. A repository commit cannot create Grok Bot objects, cloud skills, credentials or Routines.

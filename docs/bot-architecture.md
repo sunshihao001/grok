@@ -1,3 +1,5 @@
+> **历史架构参考**：本文件对“由 Grok 开发 Bot 实际写代码”的设想已被 [当前项目基线](project-baseline-2026-10-30.md) 更新。现阶段由 GPT 完成代码与测试，Grok 只执行固定版本；B01–B07 仍可用作专业职责划分。
+
 # Bot Architecture Details
 
 ## Shared Computer

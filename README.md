@@ -1,3 +1,5 @@
+> **当前项目总览（2026-10-30）**：[项目基线、技术债务、架构决策和阶段验收计划](docs/project-baseline-2026-10-30.md)。最新工作模式是 GPT 主导研发、GitHub 交付、Grok 云电脑运行固定版本。本 README 下方的早期 GMGN/Hermes 表述为历史演变记录，不能代替上述基线。
+
 # Solana Meme Workflow OS — Grok Bot Edition
 
 GMGN 入口 + 钱包情报 + 证据链 + 门控判断的 Solana Meme 研究工作流，适配 Grok Bots 多代理迭代。
