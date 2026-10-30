@@ -64,8 +64,9 @@ def audit_event(record: dict[str, Any]) -> dict[str, Any]:
                 "eligible_as_decision_feature":False,
                 "reason":"feature was available only after the decision cutoff"}
     return {"event_id":record["event_id"],"status":"TIME_CUTOFF_ELIGIBLE_UNVERIFIED",
-            "eligible_as_decision_feature":True,
-            "reason":"supplied live timestamps pass order/cutoff; source authenticity and data content remain unverified"}
+            "time_order_consistent":True,
+            "eligible_as_decision_feature":False,
+            "reason":"supplied timestamps are consistent only; source authentication is required before decision eligibility"}
 
 
 def audit_batch(events: list[dict[str, Any]]) -> dict[str, Any]:
