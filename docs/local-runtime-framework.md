@@ -109,3 +109,7 @@ https://docs.x.ai/grok-bot/computer-and-apps
 https://docs.x.ai/grok-bot/skills-routines-and-automations
 https://docs.x.ai/grok-bot/approvals-security-and-privacy
 https://github.com/okx/onchainos-skills/tree/73904b636a0f022dcc13b6d7a0dd2ed3b3195f25
+
+## Offline OKX import is implemented separately (not a network adapter)
+
+As part of P1 investigation, src/solana_meme_os/okx_snapshot.py reads a saved JSON response without invoking onchainos or signing x402 charges. It checks response envelope, optional provider notifications, Solana mint address and Decimal candidate fields, and returns an explicitly unverified source envelope. See docs/okx-onchainos-runtime-review.md and docs/grok-local-runbook.md. The provider remains disabled for live fetching, and the returned fields must not enter B07 metrics directly.

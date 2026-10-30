@@ -81,7 +81,13 @@
         "contemporaneous_availability_logs"
       ],
       "enabled_in_runtime": false,
-      "credentials_in_repo": false
+      "credentials_in_repo": false,
+      "offline_snapshot_parser": "src/solana_meme_os/okx_snapshot.py",
+      "offline_snapshot_parser_available": true,
+      "live_api_adapter_implemented": false,
+      "payment_side_effect_risk": "CLI can auto-sign confirmed x402 payment tier when quota exhausted; never invoke without a separate approved billing control.",
+      "node_engine_requirement": ">=22.14.0",
+      "billing_reference_path": "skills/okx-dex-market/_shared/payment-notifications.md"
     },
     {
       "id": "okx_agentic_wallet",

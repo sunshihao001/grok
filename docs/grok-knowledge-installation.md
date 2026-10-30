@@ -46,3 +46,7 @@ Enable the configured private skills in the Grok Bot app and run one dry task pe
 ## First executable environment check
 
 On the actual Grok cloud terminal at a pinned checkout, run python3 scripts/grok_cloud_doctor.py --repo . --audits --self-test; next use runtime_store.py with the fixture B01 packet. A passing GitHub CI job or a Skill document in the repository does not install or authenticate a Grok Bot. OKX DEX market remains candidate only, with no installer, paid feature, wallet or trading authorization. See docs/local-runtime-framework.md.
+
+## One-shot local execution acceptance
+
+Use docs/grok-local-runbook.md for a minimal Grok cloud test before any Skill or Routine installation. It covers actual checkout, doctor, SQLite B01/B02/B05 packet handling and wholly offline OKX synthetic JSON parsing. The ONCHAINOS market CLI may incur x402 automatic payments once a tier has been confirmed: **do not install or run it without separate human approval**.

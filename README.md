@@ -96,3 +96,9 @@ New [C2-001 and C3-001 knowledge units](knowledge/transfer/curriculum.v1.json) r
     PYTHONPATH=src python3 -m solana_meme_os.runtime_store status
 
 The research SQLite queue does not execute its payload, authenticate Grok Bot identity, validate live market evidence or authorize B07 rules.
+
+## Offline OKX OnchainOS adapter research (no installation/billing)
+
+[OKX runtime framework review](docs/okx-onchainos-runtime-review.md) · [Grok terminal acceptance runbook](docs/grok-local-runbook.md) · [safe JSON snapshot parser](src/solana_meme_os/okx_snapshot.py). The repo has **not installed or called onchainos**. Its market queries may have x402 payment side effects on previously approved accounts; never execute its CLI under an unattended Routine.
+
+    PYTHONPATH=src python3 -m solana_meme_os.okx_snapshot --input fixtures/okx-price.synthetic.json --operation token_price_info --address EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v

@@ -98,3 +98,13 @@ Start with `knowledge/system/README.md`. **Structure complete does not imply tha
 - [ ] Perform B01/B02/B05 end-to-end synthetic packet with independent B05 challenge.
 - [ ] Implement exactly one read-only source adapter, verify raw schema, units, errors, availability/receipt timing.
 - [ ] Implement B07 single-writer monitor runtime and approved frozen rule loader (research SQLite queue is insufficient).
+
+## P1 OKX framework and program integration (offline subset completed)
+
+- [x] Reviewed pinned OnchainOS CLI references for token info, price, Meme developers/bundles, tracker and WS commands.
+- [x] Identified x402 charging side effect; no automated onchainos/installer invocation permitted.
+- [x] Implemented offline saved-response parser with Decimal, token-address, missing-field, payment notification and provider-error tests.
+- [x] Expanded runtime doctor to report Node >=22.14.0 prerequisite.
+- [ ] Verify actual Grok cloud environment and offline P0/B01-B02-B05 workflow using docs/grok-local-runbook.md.
+- [ ] Obtain explicit approval for any OKX install/API/billing inquiry; test error and response schemas without auto payment.
+- [ ] Only then implement bounded read-only network client and real data unit/as-of validation.
