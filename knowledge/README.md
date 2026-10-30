@@ -2,6 +2,12 @@
 
 **Purpose:** preserve the expert learning, domain research, adversarial perspectives and practical lessons from three earlier projects while discarding Hermes-specific *runtime* assumptions. A working Bot without validated external knowledge is only orchestration.
 
+## 专家主导的全领域知识建设（本轮 96+8 单元，未实证）
+
+[**从小到大的 Solana Meme 全域知识总图**](atlas/README.md)是当前 D01–D12 的系统性导航：保留现有 8 层、21 位专家、7 个 Bot 角色、52 项历史能力和 15 张旧卡，向每个 D 域增加 8 个真正的专业机制问题（共 96 个）以及 L0 的 8 项治理基础。可直接阅读 [12 条跨领域推演链](atlas/cross-domain-chains.md) 与 [来源、覆盖和深度缺口审计](atlas/source-coverage-and-gaps.md)。**这是完整研究覆盖的第一轮内容，不等于 96 个市场结论均得到实证或专家已全部精通。**
+
+本地只读知识导航：`PYTHONPATH=src python -m solana_meme_os.knowledge_atlas --audit`；也可 `--domain D03`、`--unit D05-01`、`--expert E-L3-02` 按现有本体与专家查询具体机制。程序不会联网、启动 Bot、提供交易信号或更改来源准入。
+
 ## L0–L7 专属专家视角（Draft，非已安装 Bot）
 
 [21 位内部专业专家与完整分析程序](experts/README.md) 分布在全部八个知识层：从原始来源/交易/市场/钱包资金，到策略机会、执行、独立反证与监控治理。每位专家都有自己的知识、观察顺序、相反机制、关键查询、停止条件，并映射现有 B01–B07 工作责任；**不创建 21 个 Grok Bot**。机器注册表为 [registry.v1.json](experts/registry.v1.json)，离线专家方法查询：`PYTHONPATH=src python -m solana_meme_os.expert_brief --question "同源钱包能跟单吗？" --objective ECONOMIC`。仅提供研究材料与调查计划，不是大模型专家自动执行器或市场验证结果。
