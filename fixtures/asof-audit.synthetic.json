@@ -1,0 +1,32 @@
+[
+  {
+    "event_id": "SYNTHETIC-VALID-TIME-ONLY",
+    "source_ref": "synthetic:test-only",
+    "capture_mode": "live_recorded",
+    "event_at_utc": "2026-10-01T00:00:00Z",
+    "provider_received_at_utc": "2026-10-01T00:00:02Z",
+    "parsed_at_utc": "2026-10-01T00:00:03Z",
+    "feature_available_at_utc": "2026-10-01T00:00:04Z",
+    "decision_cutoff_utc": "2026-10-01T00:00:05Z"
+  },
+  {
+    "event_id": "SYNTHETIC-LATE",
+    "source_ref": "synthetic:test-only",
+    "capture_mode": "live_recorded",
+    "event_at_utc": "2026-10-01T00:00:00Z",
+    "provider_received_at_utc": "2026-10-01T00:00:08Z",
+    "parsed_at_utc": "2026-10-01T00:00:09Z",
+    "feature_available_at_utc": "2026-10-01T00:00:10Z",
+    "decision_cutoff_utc": "2026-10-01T00:00:05Z"
+  },
+  {
+    "event_id": "SYNTHETIC-BACKFILL",
+    "source_ref": "synthetic:test-only",
+    "capture_mode": "historical_backfill",
+    "event_at_utc": "2026-10-01T00:00:00Z",
+    "provider_received_at_utc": "2026-10-01T01:00:00Z",
+    "parsed_at_utc": "2026-10-01T01:00:01Z",
+    "feature_available_at_utc": "2026-10-01T01:00:02Z",
+    "decision_cutoff_utc": "2026-10-01T02:00:00Z"
+  }
+]

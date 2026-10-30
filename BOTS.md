@@ -1,70 +1,53 @@
-# Bot Architecture — Grok Bot Edition
+# Bot architecture V1.1 — 7 roles, 1 final monitor
 
-## Overview
+**当前部署默认：一个 Grok 运行操作 Bot，而不是先创建七个 Grok 实例。** B01–B07 保留为研发能力、专业职责和独立审核设计，具体开发由 GPT/GitHub 主导。早期“Practical staged creation”属于可选多 Bot 扩展顺序，不是近期 S1 离线部署前置。以 docs/project-baseline-2026-10-30.md 为当前规划权威。
 
-Multiple specialized **Development Bots** iterate on rules, skills, and evidence logic.
-One **Monitoring Bot** is the finished product that consumes the frozen rules for ongoing Solana meme monitoring (paper-only / research).
+**Recommendation: 6 on-demand specialist development Bots + 1 production read-only Monitoring Bot.** They are proposed roles, not already-created Grok app instances. See [machine-readable roster](design/bot-roster.v1.json), [12-domain ontology](knowledge/system/ontology.v1.json) and [F0–F6 gate policy](knowledge/system/filter-policy.v1.json).
 
-All Bots share the same computer (user's) and can read this repo. State and artifacts go into `state/` or Bot memory / artifacts.
+## Role allocation
 
-## Recommended Bot Set
+| Bot | Specialism | Domains | Gate ownership |
+|---|---|---|---|
+| B01 主控/知识架构 | Define objective, as-of time, knowledge routing, hypothesis and task handoffs | D08,D12 | F0–F1 |
+| B02 链上数据 | GMGN, RPC, raw transaction, units and data availability | D01,D02,D03,D10 | F2 data producer |
+| B03 钱包与资金结构 | Wallet behavior, funding groups, chip control candidates and market sequences | D04–D07 | F3 mechanism proposer |
+| B04 Alpha与交易经济学 | Prediction, preregistration, entry/exit, cost and net executability | D03,D07,D08,D09 | F3–F5 hypothesis owner |
+| B05 证据反证审查 | Challenge original facts, confounders, bias, models and claims | D10,D11 | F2–F5 independent gate |
+| B06 独立QA与回测 | Blind replay, OOS, negative controls, tests and rollback | D09,D10,D11 | F4–F6 independent QA |
+| B07 最终监控 | Only consumes approved frozen rules; produces read-only alerts | Just-in-time relevant topics | F6 frozen release only |
 
-### Development Phase (iterate rules)
+**D01–D12 are knowledge subjects; F0–F6 are research/evidence checks. Neither dimension should become a separate Bot for every category.**
 
-1. **Rule Architect Bot**
-   - Purpose: design and refine skill contracts, evidence schemas, gate logic.
-   - Iterates on `rules/`, `design/`, CONTEXT.md.
+## Decision flow, not seven permanently running processes
 
-2. **GMGN Data Bot**
-   - Purpose: prototype and refine GMGN data ingestion, field mapping, byte-combination reasoning.
-   - References qb- and design/phase1-research/.
+- **Explain funding links**: B01 → B02/B03 → B05, stop at F3. Do not run an expensive trade simulation for a purely structural question.
+- **Find a profitable copy-trade**: B01 → B02/B03 where relevant → B04 (prediction and net execution) → B05 challenge → B06 independent OOS/real-case replay. F5 must be evidenced; a 2x hit rate or wallet cluster is not enough.
+- **Observe approved tokens**: B07 runs alone, consulting the frozen rule version and matching source evidence; ambiguous cases are recorded as research gaps instead of being converted into trades or auto-approved rule changes.
+- **Release rule**: B06 prepares audit; B05 independently challenges it; a **human** approves frozen version and rollback; only then may B07 load it.
 
-3. **Wallet Structure Bot**
-   - Purpose: iterate wallet-roles, wallet-structure, chip-control, same-source detection.
-   - Theory from meme- knowledge base.
+## Cloud-computer deployment constraints
 
-4. **Evidence & Gate Bot**
-   - Purpose: evidence-chain, trade-gate, negative-gate, paper validation.
-   - Ensures Safe Mode and auditability.
+Official Grok Bot documentation: https://docs.x.ai/grok-bot/computer-and-apps and https://docs.x.ai/grok-bot/approvals-security-and-privacy.
 
-5. **QA / Fixture Bot**
-   - Purpose: maintain fixtures, test cases, acceptance criteria.
+All Bots for one user share a persistent cloud computer, browser logins, filesystem and credentials. **Separate Bot identities are not a permissions/security boundary.** Coordinate tasks via versioned Git branches and isolated working dirs; use single-writer state/locking; never put private keys or trading secrets into the shared computer. Distinct Bot memories are not a source of verified market facts.
 
-### Production
+## Practical staged creation
 
-6. **Meme Monitor Bot** (final product)
-   - Purpose: run the frozen Phase 1 pipeline on candidate tokens or trending lists.
-   - Output: structured reports, gate decisions, Telegram-style summaries.
-   - No development rights; only executes approved rules.
+1. Configure **B01, B02, B05** first and test one source-backed real-data research handoff.
+2. Add **B03, B04, B06** to test specialized market mechanisms, losses and positive/negative OOS controls.
+3. Create **B07** after a human-approved frozen paper-only ruleset, state concurrency work and an end-to-end Routine test.
 
-## Workflow
+No source repository or knowledge migration is allowed to bypass primary data, timestamps, independent falsification or manual release. Phase 1 prohibits live orders, signing, swap or broadcast.
 
-- Dev Bots propose changes via PRs or direct commits to feature branches.
-- Human or Review Bot freezes versions (tag or `rules/frozen/`).
-- Monitor Bot pulls latest frozen rules.
+## Deep knowledge initialization and handoff (initial research)
 
-## Safety
+Each role has a detailed [startup instruction and syllabus](bots/profiles/) and a machine-readable [K0/K1/K2 knowledge reserve](knowledge/bot-knowledge-profiles.v1.json). Use the [single source-aware handoff contract](docs/bot-knowledge-integration.md) and [offline validator](src/solana_meme_os/bot_knowledge.py). B02's data-contract proposal is **not a direct production message**: only a human-approved frozen collector/rule release may be consumed by B07. Grok Bot objects and private skills still require manual configuration in the Grok application; repository CI does not provision the computer.
 
-All Bots inherit the Solana Meme Safety Boundary from AGENTS.md / CONTEXT.md.
-No Bot may access private keys or broadcast transactions without explicit future human approval.
+## Executable local handoff prototype
 
-## Knowledge responsibilities (Grok Edition)
+Research Bot task delivery is now modeled by the SQLite queue in src/solana_meme_os/runtime_store.py. The runtime performs atomic per-recipient claims and explicit complete/block/requeue but **never runs Grok models or third-party commands**. All Bots on one cloud computer can access the filesystem; role IDs are declarations, not OS permissions. B07's monitor state/rule loader remain separate and unimplemented for production. See docs/local-runtime-framework.md.
 
-The above six roles remain unchanged. All six read `knowledge/README.md` and the source-pinned catalog before specialist work; **none treats the historical corpus as verified signal data**.
 
-- Rule Architect: choose the relevant knowledge mechanisms and formulate falsifiable hypotheses, including what evidence could disprove them. Do not freeze models solely because they exist in the source archive.
-- GMGN Data: own field-level raw source/units/time validity; produce a traceable normalized observation, not label-based identities.
-- Wallet Structure: compare financing, time behavior, role candidates and alternative benign explanations.
-- Evidence & Gate: preserve contradictory evidence, missing observations and stopping rules; distinguish report state from trades.
-- QA / Fixture: challenge legacy claims, build controls and real-case replay, track false alerts and sample leakage.
-- Meme Monitor: **read the knowledge lenses attached to observation output**, fetch relevant new evidence, avoid causal claims from a single metric. Remain non-developing and read-only.
+## Operator role is distinct from B01-B07 research roles
 
-Each cross-Bot handoff should contain `knowledge_ids`, pinned source URLs, applicability conditions, actual observed evidence, alternative explanations, missing evidence and the outcome of independent checking.
-
-## On-demand research packet handoff
-
-- Rule Architect chooses hypothesis / population / refutation plan, without reusing published thresholds as trading rules.
-- GMGN Data Bot and Wallet Structure Bot retrieve only relevant source docs through the `research` intake packet and verify actual time-of-knowledge for source fields.
-- Evidence & Gate Bot requires a denominator, counter-example/null model and source-linked factual ledger, and never calls an observed cluster 'profitable alpha'.
-- QA / Fixture Bot tries selection bias, out-of-time features, shared infrastructure and sensor failures before promoting research claims.
-- Meme Monitor remains one read-only runtime Bot. It must not ingest third-party documents wholesale or update approved rules by itself.
+Grok does not have to individually study all C0-C4 courses or redevelop the project to run an already tested release. GPT authors and tests modules; GitHub pins artifacts; Grok runs scripts/grok_operator.py at an approved Git SHA. The P0 demo does not provision Bots or grant B07 live permissions.

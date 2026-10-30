@@ -1,3 +1,5 @@
+> **历史术语提示**：本文件保留 Hermes/GMGN-first 时代的工作流词汇作为检索索引，不构成目前程序部署或数据来源的强制要求。当前执行模式以 [项目基线](docs/project-baseline-2026-10-30.md) 为准；GMGN 暂缓为必需来源，OKX/RPC 仍是未验证候选。
+
 # CONTEXT — Solana Meme Workflow OS (Grok Bot Edition)
 
 Glossary and domain language. Adapted from Hermes version for multi-Bot iteration.

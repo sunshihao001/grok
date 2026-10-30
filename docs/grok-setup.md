@@ -1,14 +1,16 @@
-# Grok Bot setup — implementation handoff
+> **路线修订**：以下“先创建 B01/B02/B05 再扩展所有 Bot”属于较早的多 Bot 部署设想，不是当前最低部署前置。现行路线为 [GPT 开发、Grok 一 Bot 运行](project-baseline-2026-10-30.md)，仅在后续独立 AI 判断产生真实需求时再增加专业 Bot。
 
-The existing **BOTS.md** is authoritative for the six roles: Rule Architect, GMGN Data, Wallet Structure, Evidence & Gate, QA / Fixture, and final Meme Monitor. The new bots/04-monitor.md adds the runtime owner's operating instructions; it is not an extra sixth development Bot. These roles are Grok app objects to create later, not processes initialized by this repository.
+# Grok Bot deployment V1.1 — roles not yet created
 
-1. Connect GitHub with least privilege. Development Bots may propose scoped PRs. Only human-approved versions are available to the final Monitor.
-2. Create the six Bots described in BOTS.md in the Grok Bot app; assign one owner per handoff. They share one cloud computer, so isolate work by branches and local directories.
-3. Clone the repo in the shared cloud computer, install Python 3.11+, and run the offline unit tests from README.
-4. Optional GMGN integration: install legitimate read-only gmgn-cli access, capture raw source samples and validate exact units/field mappings. Do not commit secrets or assume this is already working.
-5. First test one real-data observation and a second changed observation while verifying the source timestamp, token address, source links, missing fields and duplicate suppression.
-6. After a successful one-time test, save skills/solana-meme-monitor/SKILL.md as a Grok private Skill available to final Monitor.
-7. Ask Monitor to create a **paused** Routine using routines/monitor.md; verify schedule, time zone, input, output and approval controls in the Grok app, then use its Test feature before enabling.
+Follow [BOTS.md](../BOTS.md) and [design/bot-roster.v1.json](../design/bot-roster.v1.json): six development Bots invoked on demand, one final read-only Monitor. A repository commit cannot create Grok Bot objects, cloud skills, credentials or Routines.
 
-Never assume a GitHub commit provisions Grok Bots, credentials, Skills or a Routine.
-Official: https://docs.x.ai/grok-bot/get-started and https://docs.x.ai/grok-bot/skills-routines-and-automations.
+1. Create B01 (main coordinator), B02 (chain data) and B05 (independent evidence) in the Grok Bot app. Give them distinct scope, not credentials that are assumed to be isolated.
+2. Connect read-only sources, clone the project on the shared cloud computer, run `PYTHONPATH=src python -m unittest discover -s tests -v` and `python -m solana_meme_os.knowledge_system --audit`.
+3. Verify real GMGN/raw Solana transaction JSON, time-of-availability, units, missingness and source error reporting. Fixtures never count as real proof.
+4. Create B03 (wallet), B04 (Alpha/execution economics), B06 (independent OOS QA). Use separate branches/task dirs. B04 cannot approve its own Alpha.
+5. Human-review the versioned evidence/QA release packet before freezing any Monitor rule. Development Bots do not auto-promote rules.
+6. Create B07 (final read-only Monitor). Configure its shared Skill and a **paused** Routine, then verify timestamps, alert de-dup, source links and single-writer state before enabling a schedule.
+
+All Bots share a single cloud computer with shared files, sessions and credentials: **Bot separation is not security isolation**. Never store wallet keys on it. No swaps, signing, broadcast or real trades in Phase 1.
+
+Official: https://docs.x.ai/grok-bot/bots ; https://docs.x.ai/grok-bot/computer-and-apps ; https://docs.x.ai/grok-bot/skills-routines-and-automations .

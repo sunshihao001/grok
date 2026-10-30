@@ -1,41 +1,55 @@
-# Release backlog
+# 当前唯一执行清单｜2026-10-30
 
-## Initialization (completed locally)
-- [x] Source pins, agent roles, migration map and Grok Bot setup instructions.
-- [x] Read-only source validation, per-mint state, observed deltas, event de-dup and JSONL log.
-- [x] Explicit fixture/live separation and rejection of stale live input.
-- [x] GMGN CLI raw-only read collector with no guessing of metric values.
-- [x] Six offline tests; CI workflow authored.
-- [ ] GitHub-hosted CI job result observed after push.
+本文件取代旧的“不断追加式 backlog”作为**当前执行顺序**。完整认知、状态与依据见 [项目基线](project-baseline-2026-10-30.md)，结构化计划见 [delivery-roadmap.v1.json](../design/delivery-roadmap.v1.json)。[旧清单完整存档](archive/next-steps-pre-consolidation-2026-10-30.md) 不删除历史。
 
-## Real monitoring prerequisites
-- [ ] Capture real GMGN CLI JSON, field descriptions, timestamp semantics and units without committing secrets.
-- [ ] Test mappings for liquidity and holder share, add authoritative chain references for events, measure drift and missingness.
-- [ ] Add single-writer locking/recovery or SQLite before Grok scheduling/multiwriter workflows.
-- [ ] Port wallet and deployer intelligence one tested observation at a time.
-- [ ] Reproduce actual historical cases; measure false alerts, coverage, abstentions, and detect data leakage.
-- [ ] Human-review rule thresholds and release notes; current numbers are **unvalidated examples**.
-- [ ] Actually create Grok Bots, the shared Skill and a tested Routine within Grok app.
+## S0｜认知与代码基线（已有，需审阅）
 
-## Rule promotion packet
-Problem, version, owner, raw sources/commits/times, units, proposed mechanism, competitive explanation, tested baseline, counterexamples, false alerts, regression commands/results, rollback and explicit human approval.
+- [x] 分清 GPT 主研发、GitHub 真源、Grok 运行端与用户审批。
+- [x] 明确 L0–L7、D01–D12、K0/K1/K2、C0–C4、F0–F6、B01–B07、W0–W5 的不同职责。
+- [x] 审计已有 15 张知识卡、21 历史快照、21 份来源指针、3 个外部研究摘要、3 份课程草稿、11 份 Skill 模板。
+- [x] 核对审计前提交 `f8cf6a376905e163ed8e51bf8f922e3127c1931f` 两项 CI success，117 项离线单测通过。
+- [x] 把原 README 和累计待办保留为历史文件，现行入口转向本文件与基线。
+- [ ] 审阅仍为 Draft 的 PR #5（文件多、覆盖知识与程序，需注意是否分批审查/合并）。新提交须以最新 SHA 重验。
 
-Rule Engineer passing local tests **does not** imply an economically valid or production-ready monitoring rule.
+## S1｜真正 Grok 云电脑交付验证（当前下一件事）
 
-## Knowledge migration (preserved, with explicit uncertainty)
-- [x] Import 15 source-pinned knowledge units covering Solana lifecycle, GMGN fields, wallet roles/funding, structure, risk, evidence and tool failure modes.
-- [x] Connect a deterministic knowledge selection function to monitor observations and plain-language research question routing.
-- [x] Add regression tests for relevant concept retrieval, source integrity, negative cases and missing-data behavior.
-- [ ] Verify original external theoretical references, look for corrected recent primary sources, and distinguish stale assumptions from currently valid mechanisms.
-- [ ] Import concrete real on-chain cases and source-linked failures, not only conceptual documents.
-- [ ] Test whether Grok Bot with knowledge improves judgment vs a no-knowledge baseline using blinded examples; measure false alerts and missed events.
-- [ ] Improve semantic applicability and source reading in an actual Grok Bot instead of claiming literal keyword routing is full expert reasoning.
+- [ ] 由用户授权使用 Grok 云电脑终端，检出一个**明确审批的固定 SHA**；现有工作树不能被强制覆盖。
+- [ ] Grok 只运行 GPT 已开发的 `python3 scripts/grok_operator.py --expected-sha FULL_SHA demo`，**不编程、不安装 OKX**。
+- [ ] 回传真实运行环境、返回码、JSON 和失败日志；确认重复任务领取、合成 JSON 解析与 Monitor fixture 都达到预期。
+- [ ] 若失败，修复责任回到 GPT/GitHub；Grok 不自行重写内核。
 
-## On-demand research architecture
-- [x] Read the pinned Why-Solana-Memecoins-Are-Over research methods, error audits, structural-mechanism tests, economic edge failures and source licenses.
-- [x] Add a small source index of 17 pinned documents instead of copying another entire research repository.
-- [x] Implement bounded optional source preview and structured research intake with a decision-time availability check.
-- [x] Add offline tests for source selection, authenticity/allowlist, time-of-knowledge rejection and no-edge claims.
-- [ ] Run genuine source retrieval in a configured Grok Bot and inspect live handoffs; not the same as unit tests.
-- [ ] Add real transaction datasets and delayed-outcome evaluation, including null baselines, execution costs and alerts not selected on winners.
-- [ ] Compare Grok with/without the on-demand source workflow under blinded case review to test reduction in unsupported assertions.
+**通过条件**：真实云电脑上的一次固定提交离线演示成功，失败恢复/版本不匹配能明确退出。GitHub CI 通过不能代替此条件。
+
+## S2｜第一条真实只读来源（S1 后才选择和接入）
+
+- [ ] GPT 先独立审查 Solana RPC 与 OKX Read-only CLI 可用性、服务限额与实际收费。
+- [ ] 在用户确认外部授权后，开发一条**方法白名单**的真实数据适配器；保留源响应、hash、slot、commitment、收到时间、单位/decimals、错误及覆盖。
+- [ ] 负向测试：超时、429、错误对象、字段 null、未来信息、来源不符、超限/收费。
+- [ ] 未审查的 GMGN 付费入口不作为开发前置，不启用钱包、签名、支付、交易功能。
+
+**通过条件**：一条真实只读数据可审计、可重放、不会自动付费，不把历史回补误称实时可见。
+
+## S3｜K2 专业研究程序（S2 数据成立后）
+
+- [ ] 先选一条可证伪真实案例：资金图/发币行为/结构时序，建立包括非信号和失败样本的总体。
+- [ ] GPT 实现确定性图/回放/反例/执行成本程序；保留 K1 参考与 K2 原始来源区别。
+- [ ] B05/B06 的独立审查要求由可独立复算的测试与证据体现，不以“两个 Bot 同意”代替。
+- [ ] 每份经济收益结论都需相应 F4/F5 样本外、规模/延迟、进出场和成本证据。
+
+## S4｜冻结只读监控（需 S2 可信来源、独立发布审查）
+
+- [ ] GPT 完成 B07 的独立状态存储、单写入者、去重、异常退出恢复、暂停与回滚。
+- [ ] 从实验规则中分离已批准的 frozen paper-only 规则；不能用 `rules/monitor.v0.json` 默认冒充正式版本。
+- [ ] 在 Grok 实际云电脑先手工验证，再在用户许可下创建/启用 Routine，检查实际存活与通知重复情况。
+- [ ] 对任何预测/盈利特定规则，需要 S3 的独立证据与 F0–F6 关卡批准。
+
+## S5｜可选多 Bot 扩展（无当前部署前置性）
+
+- [ ] 仅当真实运维/独立分析需要且效果能客观衡量时，单独评估再创建 B01–B06 专业 Grok 实例。
+- [ ] 不因为有七份角色文档、多个 Skill 模板或 C0–C4 学习等级，就一次性在 Grok 上全部启用。
+
+## 暂缓
+
+不做超长知识导入、不重复基础 Solana 课程、不恢复 Hermes 运行时、不主动开通 GMGN、未授权安装 OKX、不引入重型 Agent 框架、不自动交易、不把 CI/fixture 当市场收益证据。
+
+**维护纪律**：后续每个阶段更新 Git SHA、真实执行证据、已核对的界限和阻塞，必要时修订原路线图，而不是再次把几份不一致的待办堆在一起。

@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sunshihao001/grok/blob/main/knowledge/system/research-unit.schema.json",
+  "title": "Research Unit V1 — not a Monitor rule",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "kind",
+    "status",
+    "domains",
+    "primary_source",
+    "claim",
+    "population",
+    "decision_cutoff",
+    "support",
+    "counterevidence",
+    "alternatives",
+    "not_established",
+    "falsification_test",
+    "local_replication",
+    "economic_status",
+    "runtime_policy",
+    "links_to"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9-]+$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "kind": {
+      "enum": [
+        "observation",
+        "mechanism",
+        "hypothesis",
+        "finding",
+        "counterexample",
+        "methodology"
+      ]
+    },
+    "status": {
+      "enum": [
+        "proposed",
+        "historical_documented",
+        "external_reported",
+        "locally_reproduced",
+        "independently_validated",
+        "falsified",
+        "superseded"
+      ]
+    },
+    "domains": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^D(0[1-9]|1[0-2])$"
+      }
+    },
+    "primary_source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "path"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "claim": {
+      "type": "string",
+      "minLength": 1
+    },
+    "population": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision_cutoff": {
+      "type": "string",
+      "minLength": 1
+    },
+    "support": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "counterevidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "alternatives": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "not_established": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "falsification_test": {
+      "type": "string",
+      "minLength": 1
+    },
+    "local_replication": {
+      "enum": [
+        "not_attempted",
+        "attempted_failed",
+        "reproduced",
+        "independently_reviewed"
+      ]
+    },
+    "economic_status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runtime_policy": {
+      "enum": [
+        "research_reference_only",
+        "review_candidate",
+        "approved_monitor_only"
+      ]
+    },
+    "links_to": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

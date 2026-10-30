@@ -47,3 +47,15 @@ References: `docs/sources.md`, `knowledge/legacy-audit.md` and `skills/solana-me
 ## Second wave — do not bulk migrate
 
 New model: keep the resident 15 cards and 21 prior snapshots as a bounded historical baseline, but use `knowledge/source_index.v1.json` to consult external specialist sources **on demand**. The repo now indexes 17 documents, including methodological references from `Why-Solana-Memecoins-Are-Over`, without importing its licensed analysis into Grok. Run `python -m solana_meme_os.research --question ...` to create an evidence intake packet; see `docs/on-demand-research-design.md`. The goal is better judgment, not maximizing token count or the number of copied files.
+
+## 完整结构与逐批填充
+
+请优先阅读 [`system/README.md`](system/README.md) 的 8 层、12 专业领域架构，以及 [领域关系图](system/ontology.v1.json)、[来源注册](system/source-registry.v1.json)、[研究对象](system/research-units.v1.json)。现有 15 张概念卡、21 个历史快照不复制、不删除；D01/D07 的缺口保持明示。新增外部研究只是 `external_reported`，未做本地独立复算，也不改变 Monitor 规则。
+
+```bash
+PYTHONPATH=src python -m solana_meme_os.knowledge_system --audit
+PYTHONPATH=src python -m solana_meme_os.knowledge_system --question "跟单资金网络滑点退出成本"
+PYTHONPATH=src python -m unittest discover -s tests -v
+```
+
+领域导航为确定性关键词与依赖预选，不能替代真实 Grok Bot 的语义推理或经济性检验。

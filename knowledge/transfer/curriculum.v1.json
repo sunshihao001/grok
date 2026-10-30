@@ -1,0 +1,183 @@
+{
+  "schema_version": "1.0",
+  "purpose": "GPT-researched learning units routed through versioned GitHub into Grok review; not market claims or production rule authorization.",
+  "level_order": [
+    "C0",
+    "C1",
+    "C2",
+    "C3",
+    "C4"
+  ],
+  "levels": [
+    {
+      "id": "C0",
+      "name": "项目认知",
+      "goal": "Project orientation, source-of-truth and safety."
+    },
+    {
+      "id": "C1",
+      "name": "基础原理",
+      "goal": "Original-data semantics, availability, evidence gates."
+    },
+    {
+      "id": "C2",
+      "name": "专业机制",
+      "goal": "Wallet, funding, market and causal alternatives."
+    },
+    {
+      "id": "C3",
+      "name": "研究方法",
+      "goal": "Falsification, predictive baselines, OOS and execution economics."
+    },
+    {
+      "id": "C4",
+      "name": "Skill应用",
+      "goal": "Reproducible real read-only task, tool errors, expert replay and feedback."
+    }
+  ],
+  "units": [
+    {
+      "id": "C1-001",
+      "title": "F0–F6 证据过滤的专业理解",
+      "level": "C1",
+      "status": "draft",
+      "approval_ref": null,
+      "target_bot_ids": [
+        "B01",
+        "B02",
+        "B03",
+        "B04",
+        "B05",
+        "B06"
+      ],
+      "domain_ids": [
+        "D10",
+        "D11",
+        "D12"
+      ],
+      "knowledge_path": "knowledge/transfer/modules/C1-001-evidence-gates.md",
+      "authority_paths": [
+        "knowledge/system/filter-policy.v1.json",
+        "knowledge/system/REVIEW-V1.1.md"
+      ],
+      "source_index_ids": [],
+      "prerequisite_unit_ids": [],
+      "review_questions": [
+        "同源资金还缺真实交易时，为什么 F2 不通过且 F3 只能保留假设？",
+        "F4 上涨预测能力为何不能代替 F5 净可执行盈利？",
+        "event_at 早于 decision_at 但 available_at 晚于 decision_at 的数据能否作为交易特征？",
+        "解释任务是否需要 F5，监控发布是否需要人工批准？"
+      ],
+      "success_conditions": [
+        "Correctly distinguishes NOT_EVALUATED, INSUFFICIENT, REJECTED, NOT_APPLICABLE and evidence-backed PASS.",
+        "Can state a falsifiable mechanism plus at least one benign explanation.",
+        "Does not treat documents or fixture as real chain evidence or gate-pass proof."
+      ],
+      "market_evidence_status": "not_evaluated",
+      "monitor_rule_authorized": false,
+      "notes": "Draft educational content linked to existing F0–F6 policy; not independently signed off or installed in Grok."
+    },
+    {
+      "id": "C2-001",
+      "title": "钱包资金关联与群组的专业证据边界",
+      "level": "C2",
+      "status": "draft",
+      "approval_ref": null,
+      "target_bot_ids": [
+        "B01",
+        "B02",
+        "B03",
+        "B04",
+        "B05",
+        "B06"
+      ],
+      "domain_ids": [
+        "D01",
+        "D04",
+        "D05",
+        "D06",
+        "D07",
+        "D10",
+        "D11"
+      ],
+      "knowledge_path": "knowledge/transfer/modules/C2-001-wallet-mechanism.md",
+      "authority_paths": [
+        "knowledge/system/ontology.v1.json",
+        "research/2026-10-30-executable-copytrade-edge.md"
+      ],
+      "source_index_ids": [
+        "coordination-null-model",
+        "external-reentry-negative",
+        "funding-graph-control"
+      ],
+      "prerequisite_unit_ids": [
+        "C1-001"
+      ],
+      "review_questions": [
+        "Why is a funding edge neither common beneficial owner nor executable trading alpha?",
+        "How do CEX hubs and shared execution services become negative controls?",
+        "Why can operator recurrence be predictive unconditionally yet add no incremental information after matching?"
+      ],
+      "success_conditions": [
+        "Correctly distinguishes structural evidence, conditional increment and net profitability.",
+        "Preserves as-of time of any evidence and gives explicit alternative mechanisms.",
+        "Reports source-derived numbers as external claims, not independent local replication."
+      ],
+      "market_evidence_status": "not_evaluated",
+      "monitor_rule_authorized": false,
+      "notes": "Draft C2 expert lesson based on proposed method and reported third-party results."
+    },
+    {
+      "id": "C3-001",
+      "title": "AS-OF 可得时间、预测增量与净可交易性实验",
+      "level": "C3",
+      "status": "draft",
+      "approval_ref": null,
+      "target_bot_ids": [
+        "B01",
+        "B02",
+        "B04",
+        "B05",
+        "B06"
+      ],
+      "domain_ids": [
+        "D01",
+        "D03",
+        "D05",
+        "D08",
+        "D09",
+        "D10",
+        "D11"
+      ],
+      "knowledge_path": "knowledge/transfer/modules/C3-001-asof-economic-research.md",
+      "authority_paths": [
+        "research/2026-10-30-executable-copytrade-edge.md",
+        "knowledge/system/filter-policy.v1.json",
+        "knowledge/experiments/executable-edge-protocol.v1.json"
+      ],
+      "source_index_ids": [
+        "time-safe-features",
+        "external-post-detection-results",
+        "external-reentry-negative",
+        "meme-falsification-experiment"
+      ],
+      "prerequisite_unit_ids": [
+        "C1-001",
+        "C2-001"
+      ],
+      "review_questions": [
+        "Why is historical blockTime insufficient to prove real-time feature observability?",
+        "How should operator-linked OOS, non-alert denominators, route availability and fees be assessed?",
+        "Why does a valid paper quote fail to prove a real executable fill?"
+      ],
+      "success_conditions": [
+        "Distinguishes synthetic offline time validators from market evidence.",
+        "Defines preregistered target, baseline, group/time OOS, cost and tail loss.",
+        "Never promotes unreviewed candidate hypotheses into B07 release."
+      ],
+      "market_evidence_status": "not_evaluated",
+      "monitor_rule_authorized": false,
+      "notes": "Advanced methodology only; stages 1–5 have not been run on real market data."
+    }
+  ]
+}
