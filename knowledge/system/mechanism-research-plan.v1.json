@@ -11,6 +11,7 @@
     "evidence_filter": "knowledge/system/filter-policy.v1.json"
   },
   "selection_policy": [
+    "项目起点优先：明确旧Hermes/meme-/qb-哪个具体Meme钱包/结构知识正在被推进，现有业务场景、原字段/角色、旧推理缺陷是什么",
     "先考虑解释杠杆和未解矛盾",
     "看当前专家理解深度及一手资料能否继续向下",
     "看是否能影响另一个领域的市场解释或研究决策",
@@ -26,65 +27,82 @@
   "tracks": [
     {
       "id": "M01",
-      "name": "市场价格与有效流动性",
+      "name": "从现有关键钱包识别体系走向真正的Meme跟单剩余信息",
       "status": "next_planned_not_started",
-      "lead": "E-L2-02",
+      "lead": "E-L4-02",
       "challengers": [
+        "E-L3-01",
         "E-L3-02",
         "E-L3-03",
-        "E-L5-01",
-        "E-L2-01"
+        "E-L1-02",
+        "E-L2-01",
+        "E-L2-02",
+        "E-L5-01"
       ],
-      "root_question": "一笔真实买入如何从资产转移变成池子储备变化、边际价/平均价变化、后来者可卖容量和不同主体的利益变化？",
+      "root_question": "原qb的GMGN Top Holder/获利者/Smart Money/Bundler/Transfer-in关键钱包矩阵，在某新发Mint创建slot、曲线、迁移时分别意味着什么？我们知道这些行为的时点，是否还有未发生的后续市场状态可供研究，而不是复制已结束的首买优势？",
       "focus_units": [
-        "D03-K01",
-        "D03-K02",
-        "D03-K04",
-        "D03-K06",
-        "D03-K08",
-        "D03-K09",
-        "D03-K11",
-        "D03-K12",
+        "D04-K01",
+        "D04-K02",
+        "D04-K03",
+        "D04-K04",
+        "D04-K07",
+        "D05-K01",
         "D05-K02",
-        "D05-K05",
+        "D05-K03",
+        "D05-K06",
         "D06-K05",
+        "D06-K07",
+        "D06-K09",
+        "D07-K01",
+        "D07-K02",
+        "D07-K11",
+        "D07-K12",
+        "D08-K02",
+        "D08-K03",
         "D09-K01",
-        "D09-K06"
+        "D09-K04"
       ],
       "on_demand_primitives": [
         "D01-K07",
         "D01-K08",
         "D02-K03",
         "D02-K06",
+        "D03-K01",
+        "D03-K02",
+        "D03-K04",
+        "D03-K08",
         "D10-K03",
+        "D10-K05",
         "D11-K03"
       ],
-      "depth_breakthrough": "从账户余额/储备变化到价格冲击、套利/LP反馈和后续卖出容量的一条完整条件因果链",
+      "depth_breakthrough": "以原qb单Mint关键地址报告为真实业务入口，完整解释标签→swap/资金/Token库存→发币阶段→我们实际可见时点→可能尚未发生的需求与后续可卖条件；明确哪些是研究预警、哪些只描述已完成价格优势",
       "competitive_worlds": [
-        "同样涨价来自独立持续买盘",
-        "同样涨价主要来自薄池大幅冲击",
-        "同样高量主要来自套利/库存换手而非新增持有"
+        "钱包看似SM/狙击，但优势仅来自创建slot原始执行成本，跟随者无法复制",
+        "早买钱包其实是同一资金服务/公共机器人客户，未必拥有独立信息",
+        "某种钱包/库存变化提示迁移后或后续独立承接的候选状态，但需要相应后续条件，不能直接等于上涨",
+        "表面钱包PnL来自转仓、LP或平台样本筛选，而非可复制的方向判断"
       ],
       "condition_changes": [
-        "增加/减少实储备或LP",
-        "先后两笔交易换顺序/规模",
-        "只改变SOL/USD不改变储备数量",
-        "曲线迁移或多池出现"
+        "同一行为在创建slot/曲线中期/迁移后观察",
+        "钱包仍持币或已转入/卖出库存",
+        "提供者信号提前/滞后、存在历史回填",
+        "薄池/有真实独立承接/有人群跟随挤占价差"
       ],
-      "deliverable": "knowledge/domain/D03-price-formation-mechanisms-deepstudy.md（专题，不是单元清单复述）",
-      "ready_when": "先把理想CPMM/真实与虚拟储备/LP变化的成立边界说清，再连接钱包库存和跟单者双向可得报价；不必先拿真实Mint案例"
+      "deliverable": "knowledge/domain/D04-D08-key-wallet-followability-deepstudy.md（后续专题；先读 qb/Hermes/meme-现有业务知识）",
+      "ready_when": "主专家从旧qb的候选钱包矩阵、Hermes钱包/同源/筹码和meme-具体阶段出发；不需要先讲完通用AMM。D03只在解释该Mint真实报价和库存承接时按需深入"
     },
     {
       "id": "M02",
-      "name": "自由可卖库存与筹码影响",
+      "name": "关键钱包剩余库存、派发与Meme二阶段/死亡盘区分",
       "status": "planned_after_M01_primitives",
       "lead": "E-L3-03",
       "challengers": [
         "E-L3-02",
         "E-L2-02",
-        "E-L2-03"
+        "E-L2-03",
+        "E-L4-03"
       ],
-      "root_question": "同一Mint的地址集中、经济控制、可处置库存、LP权利和真正能换出的SOL之间究竟是什么关系？",
+      "root_question": "原Hermes Skill4同源群清仓与meme-的FCZ/深洗/死亡盘，怎样在同一Mint上成为相互约束的库存/价格解释？哪些图形只是过去成交锚点，哪些钱包退出会改变后续机会？",
       "focus_units": [
         "D06-K01",
         "D06-K02",
@@ -97,7 +115,11 @@
         "D06-K11",
         "D03-K06",
         "D03-K08",
-        "D05-K10"
+        "D05-K10",
+        "D08-K06",
+        "D08-K08",
+        "D04-K03",
+        "D07-K07"
       ],
       "on_demand_primitives": [
         "D01-K03",
@@ -118,20 +140,22 @@
         "某类Token授权改变"
       ],
       "deliverable": "knowledge/domain/D06-inventory-and-exit-control-deepstudy.md",
-      "ready_when": "M01给出价格冲击和储备约束的可解释基础；否则仍可以并行研究协议权限"
+      "ready_when": "M01澄清关键钱包的经济职能与真实时点后，用D03储备和D09卖出报价作为局部技术基础；无需完成所有池型课程"
     },
     {
       "id": "M03",
-      "name": "群体时序、注意力和剩余信息",
+      "name": "跨Mint资金复用、开发者系列币与市场注意力",
       "status": "planned_flexible",
       "lead": "E-L3-05",
       "challengers": [
         "E-L1-02",
         "E-L3-01",
         "E-L4-02",
-        "E-L6-01"
+        "E-L6-01",
+        "E-L3-04",
+        "E-L3-02"
       ],
-      "root_question": "钱包同步、市场热点、跨币资金回收与模仿交易在不同时间条件下，怎样产生看似相同但经济含义不同的序列？",
+      "root_question": "旧Hermes跨Mint资金回流及meme-市场阶段中，哪些行为是同一执行服务/公开事件造成，哪些可能反映资金组织的再次部署；下一Mint何时事前可得？",
       "focus_units": [
         "D07-K01",
         "D07-K02",
@@ -169,17 +193,17 @@
     },
     {
       "id": "M04",
-      "name": "策略可复制性与执行净经济",
+      "name": "多策略Meme跟单与风险排除的经济增量",
       "status": "planned_after_M01_M03_core",
-      "lead": "E-L4-02",
+      "lead": "E-L4-01",
       "challengers": [
-        "E-L4-01",
+        "E-L4-02",
         "E-L4-03",
         "E-L5-01",
         "E-L5-02",
         "E-L6-01"
       ],
-      "root_question": "原钱包的不同能力在观察者收到信号后，究竟还有哪一部分可见、可预测且在双向交易成本后可能剩余？",
+      "root_question": "原meme-已否定单一FCZ，应该怎样比较首买复制、后续承接、FCZ回收、事件驱动和仅风险过滤的不同可见信息与后入场净经济，而非只优化一套固定门控？",
       "focus_units": [
         "D08-K01",
         "D08-K02",
@@ -276,10 +300,14 @@
     "empirical_claim": "requires_additional_F4_F5_as_appropriate",
     "monitor_publish": "requires_separate_human_approval_F6"
   },
-  "dynamic_reprioritization": "每次深入后根据最大的因果解释缺口/新条件反转重新决定下一条机制；默认M01→M02→M03→M04，F01并行，可据证据调整",
+  "dynamic_reprioritization": "项目专属M01关键钱包→M02库存/FCZ真假→M03跨Mint/Dev/注意力→M04多策略/净经济，F01基础按需并行；D03辅助按具体Mint发行/池/卖出问题触发，非固定AMM大课",
   "notes": [
+    "2026-10-30从五个参考项目专项审读后调整：此前通用D03 AMM价格形成作为M01不够项目专属，改为真实Meme关键钱包到可跟性；原D03任务只作辅助研究分支",
     "原子条目未全部独立验证；每条研究主线所列原子单元仅为研究范围，不自动变更状态",
     "不增加运行Bot或交易权限、不要求先跑真实Mint案例、不自动下载整库",
     "保存错误推断的具体替代机制，不用虚构概率或专家投票产生结论"
-  ]
+  ],
+  "project_origin_audit": "knowledge/system/reference-projects-meme-knowledge-audit-20261030.md",
+  "first_project_mechanism_brief": "knowledge/domain/D04-D08-key-wallet-followability-research-brief.md",
+  "previous_d03_brief": "knowledge/domain/D03-market-price-mechanism-research-brief.md"
 }
