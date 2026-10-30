@@ -1,0 +1,285 @@
+{
+  "schema_version": "1.0",
+  "identity": "expert_mechanism_research_roadmap_not_new_ontology",
+  "method": "knowledge/system/expert-mechanism-research-method.md",
+  "status": "draft_knowledge_workplan_not_executed",
+  "source_of_truth": {
+    "ontology": "knowledge/system/ontology.v1.json",
+    "units": "knowledge/system/whole-domain-atlas.v1.json",
+    "specialists": "knowledge/experts/registry.v1.json",
+    "source_admission": "knowledge/source-admission.v1.json",
+    "evidence_filter": "knowledge/system/filter-policy.v1.json"
+  },
+  "selection_policy": [
+    "先考虑解释杠杆和未解矛盾",
+    "看当前专家理解深度及一手资料能否继续向下",
+    "看是否能影响另一个领域的市场解释或研究决策",
+    "不将优先级写成伪精确权重、收益概率或强制顺序"
+  ],
+  "default_mode": "GPT_theory_first_with_protocol_primary_sources",
+  "separate_operations_track": {
+    "status": "Grok_cloud_S1_not_verified_in_this_work",
+    "details": "docs/next-steps.md",
+    "does_not_gate": "GPT深层理论研究",
+    "not_proved_by": "GitHub CI / 合成fixtures"
+  },
+  "tracks": [
+    {
+      "id": "M01",
+      "name": "市场价格与有效流动性",
+      "status": "next_planned_not_started",
+      "lead": "E-L2-02",
+      "challengers": [
+        "E-L3-02",
+        "E-L3-03",
+        "E-L5-01",
+        "E-L2-01"
+      ],
+      "root_question": "一笔真实买入如何从资产转移变成池子储备变化、边际价/平均价变化、后来者可卖容量和不同主体的利益变化？",
+      "focus_units": [
+        "D03-K01",
+        "D03-K02",
+        "D03-K04",
+        "D03-K06",
+        "D03-K08",
+        "D03-K09",
+        "D03-K11",
+        "D03-K12",
+        "D05-K02",
+        "D05-K05",
+        "D06-K05",
+        "D09-K01",
+        "D09-K06"
+      ],
+      "on_demand_primitives": [
+        "D01-K07",
+        "D01-K08",
+        "D02-K03",
+        "D02-K06",
+        "D10-K03",
+        "D11-K03"
+      ],
+      "depth_breakthrough": "从账户余额/储备变化到价格冲击、套利/LP反馈和后续卖出容量的一条完整条件因果链",
+      "competitive_worlds": [
+        "同样涨价来自独立持续买盘",
+        "同样涨价主要来自薄池大幅冲击",
+        "同样高量主要来自套利/库存换手而非新增持有"
+      ],
+      "condition_changes": [
+        "增加/减少实储备或LP",
+        "先后两笔交易换顺序/规模",
+        "只改变SOL/USD不改变储备数量",
+        "曲线迁移或多池出现"
+      ],
+      "deliverable": "knowledge/domain/D03-price-formation-mechanisms-deepstudy.md（专题，不是单元清单复述）",
+      "ready_when": "先把理想CPMM/真实与虚拟储备/LP变化的成立边界说清，再连接钱包库存和跟单者双向可得报价；不必先拿真实Mint案例"
+    },
+    {
+      "id": "M02",
+      "name": "自由可卖库存与筹码影响",
+      "status": "planned_after_M01_primitives",
+      "lead": "E-L3-03",
+      "challengers": [
+        "E-L3-02",
+        "E-L2-02",
+        "E-L2-03"
+      ],
+      "root_question": "同一Mint的地址集中、经济控制、可处置库存、LP权利和真正能换出的SOL之间究竟是什么关系？",
+      "focus_units": [
+        "D06-K01",
+        "D06-K02",
+        "D06-K03",
+        "D06-K04",
+        "D06-K05",
+        "D06-K06",
+        "D06-K08",
+        "D06-K09",
+        "D06-K11",
+        "D03-K06",
+        "D03-K08",
+        "D05-K10"
+      ],
+      "on_demand_primitives": [
+        "D01-K03",
+        "D01-K05",
+        "D02-K09",
+        "D09-K10",
+        "D11-K10"
+      ],
+      "depth_breakthrough": "区分持仓量、控制权、真实可卖容量以及不同阶段集中抛售形成的价格冲击",
+      "competitive_worlds": [
+        "真实独立持有者增加",
+        "同一经济主体拆分地址",
+        "同一托管/LP账户被误计为普通持币钱包"
+      ],
+      "condition_changes": [
+        "相同供应下持仓分布变化",
+        "池深度增减但Top10不变",
+        "某类Token授权改变"
+      ],
+      "deliverable": "knowledge/domain/D06-inventory-and-exit-control-deepstudy.md",
+      "ready_when": "M01给出价格冲击和储备约束的可解释基础；否则仍可以并行研究协议权限"
+    },
+    {
+      "id": "M03",
+      "name": "群体时序、注意力和剩余信息",
+      "status": "planned_flexible",
+      "lead": "E-L3-05",
+      "challengers": [
+        "E-L1-02",
+        "E-L3-01",
+        "E-L4-02",
+        "E-L6-01"
+      ],
+      "root_question": "钱包同步、市场热点、跨币资金回收与模仿交易在不同时间条件下，怎样产生看似相同但经济含义不同的序列？",
+      "focus_units": [
+        "D07-K01",
+        "D07-K02",
+        "D07-K03",
+        "D07-K05",
+        "D07-K06",
+        "D07-K07",
+        "D07-K09",
+        "D07-K10",
+        "D07-K11",
+        "D07-K12",
+        "D04-K10",
+        "D08-K02"
+      ],
+      "on_demand_primitives": [
+        "D01-K09",
+        "D05-K06",
+        "D10-K05",
+        "D11-K03",
+        "D11-K04"
+      ],
+      "depth_breakthrough": "公共事件→信息扩散→成交→价格反馈→后续持仓行为的多主体因果结构和可见时间",
+      "competitive_worlds": [
+        "独立机器人响应公开事件",
+        "同一资本管理者协调行动",
+        "市场总体beta和叙事热度导致跨币同向变化"
+      ],
+      "condition_changes": [
+        "信号提前或延后到达",
+        "同样消息更早/更晚传播",
+        "跟随者密度改变但原钱包策略不变"
+      ],
+      "deliverable": "knowledge/domain/D07-sequencing-attention-mechanisms-deepstudy.md",
+      "ready_when": "可以研究传播与时钟；涉及成交可得性时回访M01/D09"
+    },
+    {
+      "id": "M04",
+      "name": "策略可复制性与执行净经济",
+      "status": "planned_after_M01_M03_core",
+      "lead": "E-L4-02",
+      "challengers": [
+        "E-L4-01",
+        "E-L4-03",
+        "E-L5-01",
+        "E-L5-02",
+        "E-L6-01"
+      ],
+      "root_question": "原钱包的不同能力在观察者收到信号后，究竟还有哪一部分可见、可预测且在双向交易成本后可能剩余？",
+      "focus_units": [
+        "D08-K01",
+        "D08-K02",
+        "D08-K03",
+        "D08-K04",
+        "D08-K06",
+        "D08-K07",
+        "D08-K08",
+        "D08-K10",
+        "D08-K12",
+        "D09-K01",
+        "D09-K03",
+        "D09-K04",
+        "D09-K06",
+        "D09-K10",
+        "D09-K12"
+      ],
+      "on_demand_primitives": [
+        "D03-K08",
+        "D04-K02",
+        "D07-K11",
+        "D10-K05",
+        "D11-K02",
+        "D11-K06",
+        "D11-K08"
+      ],
+      "depth_breakthrough": "把发现价值、因果预测、复制时差、后入场成交与尾部退出分开；竞争FCZ/动量/事件/纯监控等候选",
+      "competitive_worlds": [
+        "领先钱包只拥有速度优势",
+        "领先钱包确实提前揭示持续独立需求",
+        "钱包历史胜率来自回填/榜单选择或未计成本"
+      ],
+      "condition_changes": [
+        "观察者延迟",
+        "仓位规模/手续费/出场时间",
+        "市场深度和后续竞争订单"
+      ],
+      "deliverable": "knowledge/domain/D08-D09-follower-information-and-economics-deepstudy.md",
+      "ready_when": "解释机制可先研究；若要提出正净期望则另需D11/实证和交易证据，不得由本计划自我批准"
+    },
+    {
+      "id": "F01",
+      "name": "基础事实与可靠性纵深补课",
+      "status": "parallel_only_when_needed",
+      "lead": "E-L1-01",
+      "challengers": [
+        "E-L2-01",
+        "E-L0-02",
+        "E-L6-01",
+        "E-L7-01"
+      ],
+      "root_question": "哪些协议/字段/时间/来源的真实语义正在限制M01-M04的机制判断？",
+      "focus_units": [
+        "D01-K01",
+        "D01-K05",
+        "D01-K07",
+        "D01-K08",
+        "D01-K09",
+        "D02-K03",
+        "D02-K06",
+        "D02-K11",
+        "D10-K02",
+        "D10-K03",
+        "D10-K05",
+        "D11-K03",
+        "D11-K04",
+        "D12-K05"
+      ],
+      "on_demand_primitives": [
+        "L0-K01",
+        "L0-K03",
+        "D10-K01",
+        "D12-K04"
+      ],
+      "depth_breakthrough": "对当前主线涉及的一手链上对象/协议版本和数据语义做局部高质量补足；不可将这一轨当作先背完全部基础学科",
+      "competitive_worlds": [
+        "原始交易和供应商字段统计口径不同",
+        "同名协议在不同版本中权利/费率不同",
+        "历史回填时间晚于策略决策时间"
+      ],
+      "condition_changes": [
+        "Token Program/协议版本变化",
+        "索引器缺失与错误变动",
+        "必要字段不可得"
+      ],
+      "deliverable": "优先回填相关D01/D02/D10单元的权威来源和机制笔记，必要时形成独立主卡",
+      "ready_when": "随当前机制的真实知识缺口触发，并行存在，不阻塞纯理论研究"
+    }
+  ],
+  "review_separation": {
+    "research_intake": "expert-led_mechanism_study",
+    "atom_mapping": "map_relevant_Dxx-Kxx_without_auto_upgrading_coverage",
+    "theory_completion": "reviewed_conceptual_coherence_not_empirical_proof",
+    "empirical_claim": "requires_additional_F4_F5_as_appropriate",
+    "monitor_publish": "requires_separate_human_approval_F6"
+  },
+  "dynamic_reprioritization": "每次深入后根据最大的因果解释缺口/新条件反转重新决定下一条机制；默认M01→M02→M03→M04，F01并行，可据证据调整",
+  "notes": [
+    "原子条目未全部独立验证；每条研究主线所列原子单元仅为研究范围，不自动变更状态",
+    "不增加运行Bot或交易权限、不要求先跑真实Mint案例、不自动下载整库",
+    "保存错误推断的具体替代机制，不用虚构概率或专家投票产生结论"
+  ]
+}
