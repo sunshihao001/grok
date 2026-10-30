@@ -2,6 +2,10 @@
 
 **Purpose:** preserve the expert learning, domain research, adversarial perspectives and practical lessons from three earlier projects while discarding Hermes-specific *runtime* assumptions. A working Bot without validated external knowledge is only orchestration.
 
+## 当前知识研究的思维逻辑
+
+先读 [《专家主导的核心机制纵深研究法》](system/expert-mechanism-research-method.md)，再按 [核心机制研究进度](system/mechanism-research-plan.v1.json) 选择有真实解释价值的问题。**全域知识目录保证不遗漏；一个主专家和必要的跨域挑战负责钻深；新认知最终按原152项ID回填。** 下一轮聚焦 [D03 AMM市场价格、储备与可卖容量](domain/D03-market-price-mechanism-research-brief.md)。这条知识研究线与 `docs/next-steps.md` 中待完成的 Grok S1 云电脑验收并行、互不冒充完成状态。
+
 ## 全领域系统知识建设（草稿，非实证完成）
 
 以 [全领域专家手册](system/whole-domain-expert-handbook.md) 为项目知识整体阅读入口；[152 项原子知识图谱](system/whole-domain-atlas.v1.json) 对现有 L0–L7 / D01–D12 从小到大逐项编号，关联21位专家、市场问题、经济机制、错误捷径和既有知识入口；[覆盖审计](system/whole-domain-coverage-audit.md) 独立列出每个领域尚未研究透的技术与市场问题。范围已系统化不等于专业知识全部完成，更不等于市场真实数据、可赚钱结论或 Grok 已上线。
