@@ -31,6 +31,27 @@ class LayerExpertTests(unittest.TestCase):
         self.assertTrue(brief["source_admission_required"])
         self.assertFalse(brief["is_deployed_bot"])
 
+    def test_l3_specialists_open_with_expert_view_not_academic_chapter(self):
+        from pathlib import Path
+
+        registry = load_registry()
+        lead = "knowledge/domain/L3-actor-expert-perspectives.md"
+        leads = [x for x in registry["specialists"] if x["layer"] == "L3"]
+        self.assertEqual({x["id"] for x in leads},
+                         {"E-L3-01", "E-L3-02", "E-L3-03", "E-L3-04", "E-L3-05"})
+        self.assertTrue(all(x["knowledge_files"][0] == lead for x in leads))
+        self.assertFalse(any(lead in x["knowledge_files"]
+                             for x in registry["specialists"] if x["layer"] != "L3"))
+        root = Path(__file__).resolve().parents[1]
+        text = (root / lead).read_text(encoding="utf-8")
+        for e in leads:
+            self.assertIn(e["id"], text)
+        self.assertIn("真正专家不会", text)
+        self.assertIn("市场提问", text)
+        self.assertIn("L0–L7", text)
+        self.assertIn("概念情境", text)
+        self.assertIn("不是", text)
+
     def test_copytrading_economic_question_routes_cost_specialist(self):
         x = recommend_experts("钱包跟单后滑点和退出成本", objective="ECONOMIC")
         self.assertEqual(x["status"], "SPECIALISTS_SELECTED_FOR_RESEARCH_ONLY")
