@@ -16,6 +16,7 @@ from .knowledge_system import ROOT, read as read_system, route_domains
 REGISTRY = ROOT / "knowledge/experts/registry.v1.json"
 ROSTER = ROOT / "design/bot-roster.v1.json"
 CATALOG = ROOT / "knowledge/catalog.v1.json"
+PROFILES = ROOT / "knowledge/bot-knowledge-profiles.v1.json"
 REVIEW_IDS = {"E-L6-01", "E-L6-02"}
 NO_AUTO_ID = "E-L7-02"
 VALID_OBJECTIVES = {"EXPLAIN", "PREDICT", "ECONOMIC", "MONITOR_RELEASE"}
@@ -30,6 +31,9 @@ def audit_registry(registry: dict[str, Any] | None = None) -> dict[str, Any]:
     ontology = read_system("ontology.v1.json")
     roster = json.loads(ROSTER.read_text(encoding="utf-8"))
     catalog = json.loads(CATALOG.read_text(encoding="utf-8"))
+    profiles = json.loads(PROFILES.read_text(encoding="utf-8"))
+    prior = {p["id"]: {k["id"] for k in p["resident_knowledge"]}
+             for p in profiles["profiles"]}
     layers = {x["id"] for x in ontology["layers"]}
     domains = {x["id"] for x in ontology["domains"]}
     bots = {x["id"] for x in roster["bots"]}
@@ -50,6 +54,11 @@ def audit_registry(registry: dict[str, Any] | None = None) -> dict[str, Any]:
             raise ValueError("invalid specialist mapping")
         if set(x.get("legacy_card_ids", [])) - cards or len(x.get("specialist_knowledge_primitives", [])) < 3:
             raise ValueError("expert knowledge is incomplete")
+        competencies = x.get("prior_research_competency_ids")
+        if (not isinstance(competencies, list) or len(competencies) < 2 or
+                len(competencies) != len(set(competencies)) or
+                set(competencies) - prior.get(x["workflow_owner"], set())):
+            raise ValueError("expert is not grounded in its owner Bot prior knowledge")
         if (len(x.get("reasoning_sequence", [])) < 3 or
                 not x.get("competing_mechanisms") or
                 not x.get("decisive_next_check") or
@@ -81,7 +90,8 @@ def _brief(expert: dict[str, Any]) -> dict[str, Any]:
               "specialist_knowledge_primitives", "cognitive_model",
               "reasoning_sequence", "competing_mechanisms",
               "decisive_next_check", "abstain_or_downgrade_when",
-              "knowledge_files", "legacy_card_ids", "handoff_to_expert_ids")
+              "knowledge_files", "legacy_card_ids", "prior_research_competency_ids",
+              "handoff_to_expert_ids")
     return {key: expert[key] for key in fields}
 
 
