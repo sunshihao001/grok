@@ -44,6 +44,10 @@
 
 **知识位置：** `knowledge/domain/L6-L7-investigation-cases.md`；旧知识卡 `evidence-synthesis`、`anti-false-completion`。
 
+**承接原有研究能力：** `B01-K01`、`B01-K04`（定义见 `knowledge/bot-knowledge-profiles.v1.json`；并非已部署/已测）。
+
+**承接原有研究能力：** `B01-K02`、`B01-K05`（定义见 `knowledge/bot-knowledge-profiles.v1.json`；并非已部署/已测）。
+
 **交接对象：** `E-L0-02`、`E-L6-01`。
 
 **E-L0-02｜字段口径与供应商语义专家**（B02；D10、D01）
@@ -61,6 +65,8 @@
 **停止或降级：** 任何关键字段的单位或有效时间不明确。
 
 **知识位置：** `knowledge/domain/L1-L2-chain-market.md`；旧知识卡 `gmgn-field-combinations`、`gmgn-raw-prototype`。
+
+**承接原有研究能力：** `B02-K04`、`B02-K06`（定义见 `knowledge/bot-knowledge-profiles.v1.json`；并非已部署/已测）。
 
 **交接对象：** `E-L1-01`、`E-L1-02`。
 
@@ -84,6 +90,8 @@
 
 **知识位置：** `knowledge/domain/L1-L2-chain-market.md`；旧知识卡 `market-lifecycle`、`wallet-roles`。
 
+**承接原有研究能力：** `B02-K01`、`B02-K07`（定义见 `knowledge/bot-knowledge-profiles.v1.json`；并非已部署/已测）。
+
 **交接对象：** `E-L2-01`、`E-L3-01`。
 
 **E-L1-02｜链上信号时钟与可见性专家**（B02；D01、D10）
@@ -101,6 +109,8 @@
 **停止或降级：** available_at缺失、迟于decision或被补造。
 
 **知识位置：** `knowledge/domain/L1-L2-chain-market.md`；旧知识卡 `evidence-synthesis`、`candidate-entry`。
+
+**承接原有研究能力：** `B02-K03`、`B02-K06`（定义见 `knowledge/bot-knowledge-profiles.v1.json`；并非已部署/已测）。
 
 **交接对象：** `E-L4-02`、`E-L6-02`。
 
@@ -124,6 +134,8 @@
 
 **知识位置：** `knowledge/domain/L1-L2-chain-market.md`；旧知识卡 `market-lifecycle`、`candidate-entry`。
 
+**承接原有研究能力：** `B02-K02`、`B02-K01`（定义见 `knowledge/bot-knowledge-profiles.v1.json`；并非已部署/已测）。
+
 **交接对象：** `E-L2-02`、`E-L3-01`。
 
 **E-L2-02｜AMM流动性与价格形成专家**（B02；D03、D09）
@@ -142,9 +154,11 @@
 
 **知识位置：** `knowledge/domain/L1-L2-chain-market.md`；旧知识卡 `liquidity-depth`。
 
+**承接原有研究能力：** `B02-K05`、`B02-K02`（定义见 `knowledge/bot-knowledge-profiles.v1.json`；并非已部署/已测）。
+
 **交接对象：** `E-L5-01`、`E-L3-03`。
 
-**E-L2-03｜Token权限与假安全识别专家**（B05；D02、D09）
+**E-L2-03｜Token权限与假安全识别专家**（B02；D02、D09）
 
 **专属知识：** Mint/freeze authority 与 Token-2022 扩展；池资产与 LP 控制、交易路由错误区分；卖出限制/拥堵/滑点故障的不同处理。
 
@@ -159,6 +173,8 @@
 **停止或降级：** Program语义未知或只有供应商单一安全标签。
 
 **知识位置：** `knowledge/domain/L1-L2-chain-market.md`；旧知识卡 `token-security`。
+
+**承接原有研究能力：** `B02-K02`、`B02-K05`（定义见 `knowledge/bot-knowledge-profiles.v1.json`；并非已部署/已测）。
 
 **交接对象：** `E-L5-02`、`E-L6-01`。
 
@@ -182,6 +198,8 @@
 
 **知识位置：** `knowledge/domain/L3-wallet-actors.md`；旧知识卡 `wallet-roles`、`deployer-history`。
 
+**承接原有研究能力：** `B03-K01`、`B03-K06`（定义见 `knowledge/bot-knowledge-profiles.v1.json`；并非已部署/已测）。
+
 **交接对象：** `E-L3-02`、`E-L4-02`。
 
 **E-L3-02｜资金溯源与经济主体取证专家**（B03；D05、D04）
@@ -199,6 +217,8 @@
 **停止或降级：** 仅有一跳同源或无法排除公共HUB。
 
 **知识位置：** `knowledge/domain/L3-wallet-actors.md`；旧知识卡 `funding-graph`、`sybil-wash`。
+
+**承接原有研究能力：** `B03-K02`、`B03-K04`（定义见 `knowledge/bot-knowledge-profiles.v1.json`；并非已部署/已测）。
 
 **交接对象：** `E-L3-03`、`E-L3-05`、`E-L6-01`。
 
@@ -218,6 +238,8 @@
 
 **知识位置：** `knowledge/domain/L3-wallet-actors.md`；旧知识卡 `concentration`、`sybil-wash`。
 
+**承接原有研究能力：** `B03-K05`、`B03-K08`（定义见 `knowledge/bot-knowledge-profiles.v1.json`；并非已部署/已测）。
+
 **交接对象：** `E-L3-02`、`E-L4-03`。
 
 **E-L3-04｜开发者与系列币生命周期专家**（B03；D04、D07）
@@ -236,6 +258,8 @@
 
 **知识位置：** `knowledge/domain/L3-wallet-actors.md`；旧知识卡 `deployer-history`。
 
+**承接原有研究能力：** `B03-K06`、`B03-K01`（定义见 `knowledge/bot-knowledge-profiles.v1.json`；并非已部署/已测）。
+
 **交接对象：** `E-L3-02`、`E-L3-05`。
 
 **E-L3-05｜群体时序、资金轮动与注意力专家**（B03；D07、D04）
@@ -253,6 +277,8 @@
 **停止或降级：** 时序精度不足或下一Mint在当时不可识别。
 
 **知识位置：** `knowledge/domain/L3-wallet-actors.md`；旧知识卡 `sybil-wash`、`candidate-entry`。
+
+**承接原有研究能力：** `B03-K03`、`B03-K07`（定义见 `knowledge/bot-knowledge-profiles.v1.json`；并非已部署/已测）。
 
 **交接对象：** `E-L4-01`、`E-L4-02`。
 
@@ -276,6 +302,8 @@ FCZ 只是一位策略专家；异常发现和钱包跟随优势是另外两条�
 
 **知识位置：** `knowledge/domain/L4-L5-copytrade-edge.md`；旧知识卡 `gmgn-field-combinations`、`sybil-wash`。
 
+**承接原有研究能力：** `B04-K01`、`B04-K04`（定义见 `knowledge/bot-knowledge-profiles.v1.json`；并非已部署/已测）。
+
 **交接对象：** `E-L4-02`、`E-L6-02`。
 
 **E-L4-02｜钱包跟随优势与信息时差专家**（B04；D08、D04、D07）
@@ -294,6 +322,8 @@ FCZ 只是一位策略专家；异常发现和钱包跟随优势是另外两条�
 
 **知识位置：** `knowledge/domain/L4-L5-copytrade-edge.md`；旧知识卡 `wallet-roles`、`research-states`。
 
+**承接原有研究能力：** `B04-K03`、`B04-K05`（定义见 `knowledge/bot-knowledge-profiles.v1.json`；并非已部署/已测）。
+
 **交接对象：** `E-L5-01`、`E-L6-02`。
 
 **E-L4-03｜二次结构、回收与反向陷阱专家**（B04；D08、D03、D06）
@@ -311,6 +341,8 @@ FCZ 只是一位策略专家；异常发现和钱包跟随优势是另外两条�
 **停止或降级：** 锚点只能在价格大涨后定义或未通过基础比较。
 
 **知识位置：** `knowledge/domain/L4-L5-copytrade-edge.md`；旧知识卡 `reclaim-theory`、`liquidity-depth`。
+
+**承接原有研究能力：** `B04-K02`、`B04-K07`（定义见 `knowledge/bot-knowledge-profiles.v1.json`；并非已部署/已测）。
 
 **交接对象：** `E-L5-02`、`E-L6-01`。
 
@@ -334,6 +366,8 @@ FCZ 只是一位策略专家；异常发现和钱包跟随优势是另外两条�
 
 **知识位置：** `knowledge/domain/L4-L5-copytrade-edge.md`；旧知识卡 `liquidity-depth`。
 
+**承接原有研究能力：** `B04-K05`、`B04-K06`（定义见 `knowledge/bot-knowledge-profiles.v1.json`；并非已部署/已测）。
+
 **交接对象：** `E-L5-02`、`E-L6-02`。
 
 **E-L5-02｜尾部风险、可卖性与机会成本专家**（B04；D09、D11）
@@ -351,6 +385,8 @@ FCZ 只是一位策略专家；异常发现和钱包跟随优势是另外两条�
 **停止或降级：** 过滤条件事后挑选、未记录拒绝后的市场结局。
 
 **知识位置：** `knowledge/domain/L4-L5-copytrade-edge.md`；旧知识卡 `token-security`、`research-states`。
+
+**承接原有研究能力：** `B04-K06`、`B04-K08`（定义见 `knowledge/bot-knowledge-profiles.v1.json`；并非已部署/已测）。
 
 **交接对象：** `E-L6-01`、`E-L6-02`。
 
@@ -374,6 +410,8 @@ FCZ 只是一位策略专家；异常发现和钱包跟随优势是另外两条�
 
 **知识位置：** `knowledge/domain/L6-L7-investigation-cases.md`；旧知识卡 `evidence-synthesis`、`sybil-wash`。
 
+**承接原有研究能力：** `B05-K01`、`B05-K06`（定义见 `knowledge/bot-knowledge-profiles.v1.json`；并非已部署/已测）。
+
 **交接对象：** `E-L6-02`、`E-L7-01`。
 
 **E-L6-02｜盲回放、样本外与收益审计专家**（B06；D11、D09）
@@ -391,6 +429,8 @@ FCZ 只是一位策略专家；异常发现和钱包跟随优势是另外两条�
 **停止或降级：** 没有时点/分母/两侧成交或test被研究中调参。
 
 **知识位置：** `knowledge/domain/L6-L7-investigation-cases.md`；旧知识卡 `evidence-synthesis`、`research-states`。
+
+**承接原有研究能力：** `B06-K01`、`B06-K05`（定义见 `knowledge/bot-knowledge-profiles.v1.json`；并非已部署/已测）。
 
 **交接对象：** `E-L7-01`、`E-L7-02`。
 
@@ -431,6 +471,8 @@ FCZ 只是一位策略专家；异常发现和钱包跟随优势是另外两条�
 **停止或降级：** 未批准规则、源故障、持久状态争用或环境不匹配。
 
 **知识位置：** `knowledge/domain/L6-L7-investigation-cases.md`；旧知识卡 `research-states`、`anti-false-completion`。
+
+**承接原有研究能力：** `B07-K01`、`B07-K06`（定义见 `knowledge/bot-knowledge-profiles.v1.json`；并非已部署/已测）。
 
 **交接对象：** 人工复核/研究回流，不自行发布新规则。
 
