@@ -59,3 +59,8 @@ Use docs/local-runtime-framework.md for the supported offline execution shape: p
 ## OKX read-only != billing-free
 
 The OKX review in docs/okx-onchainos-runtime-review.md identifies x402 payment side effects in the upstream market CLI after opt-in. External read-only API commands can still spend funds; Phase 1 forbids automatic spending. The implemented okx_snapshot.py parses only already-saved JSON and never calls the OKX binary. Never promote its unverified candidate fields into live Monitor observations.
+
+
+## GPT-built / Grok-run release
+
+All engineering design, scripts, tests, knowledge updates and troubleshooting are authored through GPT and GitHub. Grok serves as a thin execution and log-reporting operator on a pinned reviewed release. See docs/gpt-build-grok-run.md and scripts/grok_operator.py. Do not delegate spontaneous architecture, Python rewrites, payments or live rule changes to Grok.

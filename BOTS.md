@@ -44,3 +44,8 @@ Each role has a detailed [startup instruction and syllabus](bots/profiles/) and 
 ## Executable local handoff prototype
 
 Research Bot task delivery is now modeled by the SQLite queue in src/solana_meme_os/runtime_store.py. The runtime performs atomic per-recipient claims and explicit complete/block/requeue but **never runs Grok models or third-party commands**. All Bots on one cloud computer can access the filesystem; role IDs are declarations, not OS permissions. B07's monitor state/rule loader remain separate and unimplemented for production. See docs/local-runtime-framework.md.
+
+
+## Operator role is distinct from B01-B07 research roles
+
+Grok does not have to individually study all C0-C4 courses or redevelop the project to run an already tested release. GPT authors and tests modules; GitHub pins artifacts; Grok runs scripts/grok_operator.py at an approved Git SHA. The P0 demo does not provision Bots or grant B07 live permissions.

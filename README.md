@@ -102,3 +102,12 @@ The research SQLite queue does not execute its payload, authenticate Grok Bot id
 [OKX runtime framework review](docs/okx-onchainos-runtime-review.md) · [Grok terminal acceptance runbook](docs/grok-local-runbook.md) · [safe JSON snapshot parser](src/solana_meme_os/okx_snapshot.py). The repo has **not installed or called onchainos**. Its market queries may have x402 payment side effects on previously approved accounts; never execute its CLI under an unattended Routine.
 
     PYTHONPATH=src python3 -m solana_meme_os.okx_snapshot --input fixtures/okx-price.synthetic.json --operation token_price_info --address EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
+
+
+## GPT 研发 → GitHub 交付 → Grok 云电脑运行
+
+[统一交付说明](docs/gpt-build-grok-run.md)和[云端只读操作 Skill 模板](skills/grok-release-operator/SKILL.md)。Grok 不负责临时开发；由 GPT 完成程序、知识与测试，再交给 Grok 一个固定 Git SHA 和一个启动命令。当前只支持 P0 synthetic offline 验收：
+
+    python3 scripts/grok_operator.py --expected-sha FULL_GPT_APPROVED_SHA demo
+
+通过 CI 和离线 demo 不代表真实 OKX/RPC、Grok Bot、私有 Skill 或 B07 监控已经部署。
