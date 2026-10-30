@@ -2,6 +2,10 @@
 
 **Purpose:** preserve the expert learning, domain research, adversarial perspectives and practical lessons from three earlier projects while discarding Hermes-specific *runtime* assumptions. A working Bot without validated external knowledge is only orchestration.
 
+## 项目原点优先：现有Meme交易储备审计
+
+在任何新研究方向前，先查 [《五个参考仓库的Meme交易知识储备与阶段》](system/reference-projects-meme-knowledge-audit-20261030.md)。它明确原Hermes、meme-、qb-分别已有何种Meme专有知识和程序；外部Why-Solana仍是review_only；当前grok最大的断层是**关键钱包识别到后续真正可跟随的信息**。现行 [M01](domain/D04-D08-key-wallet-followability-research-brief.md) 已以旧项目关键钱包的业务问题为第一优先，先前通用AMM研究仅按需参与。
+
 ## 当前知识研究的思维逻辑
 
 先读 [《专家主导的核心机制纵深研究法》](system/expert-mechanism-research-method.md)，再按 [核心机制研究进度](system/mechanism-research-plan.v1.json) 选择有真实解释价值的问题。**全域知识目录保证不遗漏；一个主专家和必要的跨域挑战负责钻深；新认知最终按原152项ID回填。** 下一轮聚焦 [D03 AMM市场价格、储备与可卖容量](domain/D03-market-price-mechanism-research-brief.md)。这条知识研究线与 `docs/next-steps.md` 中待完成的 Grok S1 云电脑验收并行、互不冒充完成状态。
