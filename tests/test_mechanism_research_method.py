@@ -97,7 +97,7 @@ class MechanismFirstMethodTests(unittest.TestCase):
         self.assertIn("尚未撰写", text)
         old_d03 = (ROOT / self.plan["previous_d03_brief"]).read_text(
             encoding="utf-8")
-        self.assertIn("辅助", old_d03)
+        self.assertIn("技术辅稿", old_d03)
         self.assertIn("不再决定研究执行顺序", old_d03)
         origin_audit = (ROOT / self.plan["project_origin_audit"]).read_text(
             encoding="utf-8")
