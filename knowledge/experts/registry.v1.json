@@ -1,0 +1,764 @@
+{
+  "schema_version": "1.0",
+  "status": "DESIGNED_NOT_DEPLOYED_OR_MARKET_VALIDATED",
+  "project": "sunshihao001/grok",
+  "ontology_reference": "knowledge/system/ontology.v1.json",
+  "bot_roster_reference": "design/bot-roster.v1.json",
+  "expert_is_not_bot": true,
+  "release_policy": "Each expert proposes evidence-bound hypotheses; B07 only frozen human-reviewed rules. No trades, installation, autonomous promotion.",
+  "source_priority": "Original chain observations (K2) > independently replayed case > historically pinned domain methods > external reported research; pin does not imply truth.",
+  "activation": "Select 1–3 specialists by actual problem. Other specialists consulted only when their discriminating check is necessary. No fixed full-chain processing or majority voting.",
+  "specialists": [
+    {
+      "id": "E-L0-01",
+      "layer": "L0",
+      "name": "来源溯源与版本法证专家",
+      "kind": "internal_specialist_lens_not_installed_bot",
+      "workflow_owner": "B01",
+      "domain_ids": [
+        "D10",
+        "D12"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L6-L7-investigation-cases.md"
+      ],
+      "legacy_card_ids": [
+        "evidence-synthesis",
+        "anti-false-completion"
+      ],
+      "cognitive_model": "知识污染不是时间先后本身，而是来源、样本、时点、推论级别错配",
+      "reasoning_sequence": [
+        "把原文版本、观察时间、获取时间、回填时间拆开",
+        "追溯指标是否来自真实K2还是引用/派生标签",
+        "相互冲突来源保留并给出调解所需证据"
+      ],
+      "competing_mechanisms": [
+        "同一报告被二次引用当两次独立证据",
+        "早期发布但数据来自事后回填"
+      ],
+      "decisive_next_check": "打开原始签名或生成脚本核对一项核心数字",
+      "abstain_or_downgrade_when": "来源版本未固定或数据来源不可定位",
+      "handoff_to_expert_ids": [
+        "E-L0-02",
+        "E-L6-01"
+      ],
+      "authority": "hypotheses_and_readonly_evidence_only",
+      "evidence_status": "proposed_not_live_validated"
+    },
+    {
+      "id": "E-L0-02",
+      "layer": "L0",
+      "name": "字段口径与供应商语义专家",
+      "kind": "internal_specialist_lens_not_installed_bot",
+      "workflow_owner": "B02",
+      "domain_ids": [
+        "D10",
+        "D01"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L1-L2-chain-market.md"
+      ],
+      "legacy_card_ids": [
+        "gmgn-field-combinations",
+        "gmgn-raw-prototype"
+      ],
+      "cognitive_model": "从市场事实倒推链上痕迹，再定位供应商字段；分母决定语义",
+      "reasoning_sequence": [
+        "先问字段在测量哪一个链上事件",
+        "核验 JSON 路径、单位、分母和采样窗口",
+        "区分原始值、计算特征和平台推断标签"
+      ],
+      "competing_mechanisms": [
+        "不同接口共享字段名但时间窗不同",
+        "空值代表限流而非零"
+      ],
+      "decisive_next_check": "对同一签名用原始RPC和供应商响应双源比较",
+      "abstain_or_downgrade_when": "任何关键字段的单位或有效时间不明确",
+      "handoff_to_expert_ids": [
+        "E-L1-01",
+        "E-L1-02"
+      ],
+      "authority": "hypotheses_and_readonly_evidence_only",
+      "evidence_status": "proposed_not_live_validated"
+    },
+    {
+      "id": "E-L1-01",
+      "layer": "L1",
+      "name": "Solana 交易逆向与账户关系专家",
+      "kind": "internal_specialist_lens_not_installed_bot",
+      "workflow_owner": "B02",
+      "domain_ids": [
+        "D01",
+        "D10"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L1-L2-chain-market.md"
+      ],
+      "legacy_card_ids": [
+        "market-lifecycle",
+        "wallet-roles"
+      ],
+      "cognitive_model": "以状态变化和程序调用还原经济行为，不从转账次数直接推交易",
+      "reasoning_sequence": [
+        "区分Mint/Token Account/owner/PDA/fee payer",
+        "按签名检查外层指令、inner CPI与余额前后差",
+        "按实际主体重构swap/转账/LP/失败交易"
+      ],
+      "competing_mechanisms": [
+        "aggregator跨池多腿被重复计为多次买入",
+        "ATA创建被当作新增真人持仓"
+      ],
+      "decisive_next_check": "取签名及指令索引检查净Token和SOL余额变化",
+      "abstain_or_downgrade_when": "原始指令缺失或交易失败却被标为成交",
+      "handoff_to_expert_ids": [
+        "E-L2-01",
+        "E-L3-01"
+      ],
+      "authority": "hypotheses_and_readonly_evidence_only",
+      "evidence_status": "proposed_not_live_validated"
+    },
+    {
+      "id": "E-L1-02",
+      "layer": "L1",
+      "name": "链上信号时钟与可见性专家",
+      "kind": "internal_specialist_lens_not_installed_bot",
+      "workflow_owner": "B02",
+      "domain_ids": [
+        "D01",
+        "D10"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L1-L2-chain-market.md"
+      ],
+      "legacy_card_ids": [
+        "evidence-synthesis",
+        "candidate-entry"
+      ],
+      "cognitive_model": "以观察者实际知道的时间决定信号是否能复现，不用历史blockTime代替真实收到时间",
+      "reasoning_sequence": [
+        "区分event/slot/provider_received/parsed/feature_available/decision/quote",
+        "检查提供者延迟、commitment和回填来源",
+        "只保留决策前实际已知的特征"
+      ],
+      "competing_mechanisms": [
+        "历史回填模拟出零延迟",
+        "cluster身份标签在行情结束后才生成"
+      ],
+      "decisive_next_check": "核对带时区实时接收日志及其raw hash",
+      "abstain_or_downgrade_when": "available_at缺失、迟于decision或被补造",
+      "handoff_to_expert_ids": [
+        "E-L4-02",
+        "E-L6-02"
+      ],
+      "authority": "hypotheses_and_readonly_evidence_only",
+      "evidence_status": "proposed_not_live_validated"
+    },
+    {
+      "id": "E-L2-01",
+      "layer": "L2",
+      "name": "Meme 发行与迁移生命周期专家",
+      "kind": "internal_specialist_lens_not_installed_bot",
+      "workflow_owner": "B02",
+      "domain_ids": [
+        "D02",
+        "D01"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L1-L2-chain-market.md"
+      ],
+      "legacy_card_ids": [
+        "market-lifecycle",
+        "candidate-entry"
+      ],
+      "cognitive_model": "先判定发行程序和市场阶段，再解释价格/钱包指标",
+      "reasoning_sequence": [
+        "确认为具体Mint和launchpad程序",
+        "由曲线/毕业/建池链上事件确定阶段",
+        "标记迁移前后的报价/分母不可直接拼接"
+      ],
+      "competing_mechanisms": [
+        "一个token有多个池和迁移路径",
+        "迁移时池规模突变被误认新资金吸筹"
+      ],
+      "decisive_next_check": "检查curve状态和pool创建的原始签名",
+      "abstain_or_downgrade_when": "市场阶段依赖单个供应商标签且无法对链上事件",
+      "handoff_to_expert_ids": [
+        "E-L2-02",
+        "E-L3-01"
+      ],
+      "authority": "hypotheses_and_readonly_evidence_only",
+      "evidence_status": "proposed_not_live_validated"
+    },
+    {
+      "id": "E-L2-02",
+      "layer": "L2",
+      "name": "AMM流动性与价格形成专家",
+      "kind": "internal_specialist_lens_not_installed_bot",
+      "workflow_owner": "B02",
+      "domain_ids": [
+        "D03",
+        "D09"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L1-L2-chain-market.md"
+      ],
+      "legacy_card_ids": [
+        "liquidity-depth"
+      ],
+      "cognitive_model": "观察储备、边际价格和双侧成交路径，而不是把last price当可成交价",
+      "reasoning_sequence": [
+        "按池拆解reserve数量与USD估值变化",
+        "对目标仓位同时比较buy/SELL quote及冲击",
+        "核实LP变化、池间路径与交易拥堵"
+      ],
+      "competing_mechanisms": [
+        "SOL下跌造成liquidity_usd下降",
+        "成交量刷高但卖出深度枯竭"
+      ],
+      "decisive_next_check": "查看同时间同池真实reserve与买卖方向quote",
+      "abstain_or_downgrade_when": "池地址/储备或退出路由不完整",
+      "handoff_to_expert_ids": [
+        "E-L5-01",
+        "E-L3-03"
+      ],
+      "authority": "hypotheses_and_readonly_evidence_only",
+      "evidence_status": "proposed_not_live_validated"
+    },
+    {
+      "id": "E-L2-03",
+      "layer": "L2",
+      "name": "Token权限与假安全识别专家",
+      "kind": "internal_specialist_lens_not_installed_bot",
+      "workflow_owner": "B05",
+      "domain_ids": [
+        "D02",
+        "D09"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L1-L2-chain-market.md"
+      ],
+      "legacy_card_ids": [
+        "token-security"
+      ],
+      "cognitive_model": "把可铸造/冻结/程序扩展/LP控制/卖出错误分拆为独立风险机制",
+      "reasoning_sequence": [
+        "识别Token Program、扩展与当前authority",
+        "通过交易证明LP真实变动而非美元估值变化",
+        "测试模拟卖出路线与错误类型，不把平台风险标签当结论"
+      ],
+      "competing_mechanisms": [
+        "卖出失败源自滑点而非黑名单",
+        "mint authority撤销但大额持仓可抛售"
+      ],
+      "decisive_next_check": "复核Mint账户权限快照和失败交易错误码",
+      "abstain_or_downgrade_when": "Program语义未知或只有供应商单一安全标签",
+      "handoff_to_expert_ids": [
+        "E-L5-02",
+        "E-L6-01"
+      ],
+      "authority": "hypotheses_and_readonly_evidence_only",
+      "evidence_status": "proposed_not_live_validated"
+    },
+    {
+      "id": "E-L3-01",
+      "layer": "L3",
+      "name": "钱包行为与PnL解剖专家",
+      "kind": "internal_specialist_lens_not_installed_bot",
+      "workflow_owner": "B03",
+      "domain_ids": [
+        "D04",
+        "D07"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L3-wallet-actors.md"
+      ],
+      "legacy_card_ids": [
+        "wallet-roles",
+        "deployer-history"
+      ],
+      "cognitive_model": "钱包角色随Mint和时间变化，真实账本优先于聪明钱排行榜",
+      "reasoning_sequence": [
+        "逐笔区分swap/转仓/赠与和手续费",
+        "复原入场价格、持仓时间、离场方式及未实现仓位",
+        "对比同阶段类似钱包、失败钱包与自身其他币表现"
+      ],
+      "competing_mechanisms": [
+        "极早买入是机器人执行优势而非内幕",
+        "胜率由遗漏亏损交易/幸存者筛选造成"
+      ],
+      "decisive_next_check": "对一笔平台标注盈利交易做完整资金与持仓复算",
+      "abstain_or_downgrade_when": "原始历史不全、成本未知或只剩平台标签",
+      "handoff_to_expert_ids": [
+        "E-L3-02",
+        "E-L4-02"
+      ],
+      "authority": "hypotheses_and_readonly_evidence_only",
+      "evidence_status": "proposed_not_live_validated"
+    },
+    {
+      "id": "E-L3-02",
+      "layer": "L3",
+      "name": "资金溯源与经济主体取证专家",
+      "kind": "internal_specialist_lens_not_installed_bot",
+      "workflow_owner": "B03",
+      "domain_ids": [
+        "D05",
+        "D04"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L3-wallet-actors.md"
+      ],
+      "legacy_card_ids": [
+        "funding-graph",
+        "sybil-wash"
+      ],
+      "cognitive_model": "转账事实→资金关联→经济控制是假设阶梯，不能跨级跳跃",
+      "reasoning_sequence": [
+        "按signature+instruction_index建SOL/token转账图",
+        "分类CEX/HUB/PDA/池/支付服务并排除dust与共用服务",
+        "比较跨币重复资金准备与买卖时序，输出多种控制解释"
+      ],
+      "competing_mechanisms": [
+        "共享交易所提款地址可服务无关主体",
+        "相似金额同步买入可能是批量第三方机器人服务"
+      ],
+      "decisive_next_check": "查资金来源的公共基础设施角色和多轮独立重复关联",
+      "abstain_or_downgrade_when": "仅有一跳同源或无法排除公共HUB",
+      "handoff_to_expert_ids": [
+        "E-L3-03",
+        "E-L3-05",
+        "E-L6-01"
+      ],
+      "authority": "hypotheses_and_readonly_evidence_only",
+      "evidence_status": "proposed_not_live_validated"
+    },
+    {
+      "id": "E-L3-03",
+      "layer": "L3",
+      "name": "筹码供应与疑似控制结构专家",
+      "kind": "internal_specialist_lens_not_installed_bot",
+      "workflow_owner": "B03",
+      "domain_ids": [
+        "D06",
+        "D03"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L3-wallet-actors.md"
+      ],
+      "legacy_card_ids": [
+        "concentration",
+        "sybil-wash"
+      ],
+      "cognitive_model": "地址集中度和经济控制不是一个变量，持有数量也不是可卖能力",
+      "reasoning_sequence": [
+        "按Mint和slot冻结供应分母、pool与托管排除口径",
+        "同时计算地址Top10及待证实群组区间",
+        "核验token在owner间转移与真实独立买方需求"
+      ],
+      "competing_mechanisms": [
+        "迁移池vault进入Top10导致比例变化",
+        "holder数量增长来自同一主体拆账户"
+      ],
+      "decisive_next_check": "对Top10名单逐项匹配owner/LP/vault与转移边",
+      "abstain_or_downgrade_when": "供应量/排除口径不一致或cluster只是标签",
+      "handoff_to_expert_ids": [
+        "E-L3-02",
+        "E-L4-03"
+      ],
+      "authority": "hypotheses_and_readonly_evidence_only",
+      "evidence_status": "proposed_not_live_validated"
+    },
+    {
+      "id": "E-L3-04",
+      "layer": "L3",
+      "name": "开发者与系列币生命周期专家",
+      "kind": "internal_specialist_lens_not_installed_bot",
+      "workflow_owner": "B03",
+      "domain_ids": [
+        "D04",
+        "D07"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L3-wallet-actors.md"
+      ],
+      "legacy_card_ids": [
+        "deployer-history"
+      ],
+      "cognitive_model": "分析发币行为的可见序列与服务商混淆，而非给创始人贴永久标签",
+      "reasoning_sequence": [
+        "区分deployer、mint authority、工厂程序与真实签名方",
+        "建立历史发币全集、发行间隔、初始资金及退出方式",
+        "沿跨Mint路径寻找重复模式并排除公用发币工具"
+      ],
+      "competing_mechanisms": [
+        "共用launchpad部署地址不是同一开发者",
+        "只选rug样本导致假高重复率"
+      ],
+      "decisive_next_check": "核对至少一组历史发币的实际发起签名者与资金来源",
+      "abstain_or_downgrade_when": "部署者身份只能由公共程序地址代替",
+      "handoff_to_expert_ids": [
+        "E-L3-02",
+        "E-L3-05"
+      ],
+      "authority": "hypotheses_and_readonly_evidence_only",
+      "evidence_status": "proposed_not_live_validated"
+    },
+    {
+      "id": "E-L3-05",
+      "layer": "L3",
+      "name": "群体时序、资金轮动与注意力专家",
+      "kind": "internal_specialist_lens_not_installed_bot",
+      "workflow_owner": "B03",
+      "domain_ids": [
+        "D07",
+        "D04"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L3-wallet-actors.md"
+      ],
+      "legacy_card_ids": [
+        "sybil-wash",
+        "candidate-entry"
+      ],
+      "cognitive_model": "用顺序、重复和市场对照解释群体行动，而非把同步交易等于内幕",
+      "reasoning_sequence": [
+        "把启动/同步/买入/退出/资金回流排成可见时间线",
+        "配合同期同类型Mint和市场总体波动作对照",
+        "区分独立需求、共同新闻、社交放大和机器人服务"
+      ],
+      "competing_mechanisms": [
+        "价格上涨之后登热榜是滞后",
+        "A币退出与B币上涨并无可见资金连接"
+      ],
+      "decisive_next_check": "检查相同钱包序列是否独立于公共市场事件重复出现",
+      "abstain_or_downgrade_when": "时序精度不足或下一Mint在当时不可识别",
+      "handoff_to_expert_ids": [
+        "E-L4-01",
+        "E-L4-02"
+      ],
+      "authority": "hypotheses_and_readonly_evidence_only",
+      "evidence_status": "proposed_not_live_validated"
+    },
+    {
+      "id": "E-L4-01",
+      "layer": "L4",
+      "name": "异常发现与未知模式探索专家",
+      "kind": "internal_specialist_lens_not_installed_bot",
+      "workflow_owner": "B04",
+      "domain_ids": [
+        "D08",
+        "D10"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L4-L5-copytrade-edge.md"
+      ],
+      "legacy_card_ids": [
+        "gmgn-field-combinations",
+        "sybil-wash"
+      ],
+      "cognitive_model": "从问题定义驱动字段组合，并允许无预设标签探索；异常只是问题不是策略",
+      "reasoning_sequence": [
+        "先问想发现的市场行为和反面世界如何",
+        "探索合理归一化/时序/聚类/反向机制但控制字段试验数量",
+        "把意外组合转化为可解释的链上假说并冻结独立测试"
+      ],
+      "competing_mechanisms": [
+        "极端比值是分母接近零",
+        "全字段穷举产生选择偏差/未来变量泄露"
+      ],
+      "decisive_next_check": "找原始交易与负例验证一个异常组合是否存在且可事前计算",
+      "abstain_or_downgrade_when": "字段语义不清、没有非信号总体或仅样本内成立",
+      "handoff_to_expert_ids": [
+        "E-L4-02",
+        "E-L6-02"
+      ],
+      "authority": "hypotheses_and_readonly_evidence_only",
+      "evidence_status": "proposed_not_live_validated"
+    },
+    {
+      "id": "E-L4-02",
+      "layer": "L4",
+      "name": "钱包跟随优势与信息时差专家",
+      "kind": "internal_specialist_lens_not_installed_bot",
+      "workflow_owner": "B04",
+      "domain_ids": [
+        "D08",
+        "D04",
+        "D07"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L4-L5-copytrade-edge.md"
+      ],
+      "legacy_card_ids": [
+        "wallet-roles",
+        "research-states"
+      ],
+      "cognitive_model": "钱包盈利不是跟随者盈利；研究优势被市场吸收的时间和价格",
+      "reasoning_sequence": [
+        "复算钱包实际买入事件与我方最早收到信号",
+        "计算可见时点价格/深度变化及可取得的买卖报价",
+        "对比普通候选和其他钱包，衡量独立的跟随者增量"
+      ],
+      "competing_mechanisms": [
+        "原钱包靠抢首秒获利、后来者买在局部高点",
+        "钱包排行榜取样导致虚假的稳定优势"
+      ],
+      "decisive_next_check": "同一时点对原钱包成交价与跟随者首个双向quote做差",
+      "abstain_or_downgrade_when": "没有实时available_at或只有历史OHLC",
+      "handoff_to_expert_ids": [
+        "E-L5-01",
+        "E-L6-02"
+      ],
+      "authority": "hypotheses_and_readonly_evidence_only",
+      "evidence_status": "proposed_not_live_validated"
+    },
+    {
+      "id": "E-L4-03",
+      "layer": "L4",
+      "name": "二次结构、回收与反向陷阱专家",
+      "kind": "internal_specialist_lens_not_installed_bot",
+      "workflow_owner": "B04",
+      "domain_ids": [
+        "D08",
+        "D03",
+        "D06"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L4-L5-copytrade-edge.md"
+      ],
+      "legacy_card_ids": [
+        "reclaim-theory",
+        "liquidity-depth"
+      ],
+      "cognitive_model": "把FCZ/POC/AVWAP作为一种可证伪的结构视角，与独立承接/简单突破平等竞争",
+      "reasoning_sequence": [
+        "在决策前固定成本锚、观测窗口与二次启动条件",
+        "分清真实净承接、同主体换手、死亡盘诱多",
+        "比较失败回收、成功无回收、同流动性普通反弹"
+      ],
+      "competing_mechanisms": [
+        "回踩成本锚只是低流动性随机波动",
+        "事后重画区间把失败样本排除"
+      ],
+      "decisive_next_check": "检查触发前能否画出同一成本锚并找到失败案例",
+      "abstain_or_downgrade_when": "锚点只能在价格大涨后定义或未通过基础比较",
+      "handoff_to_expert_ids": [
+        "E-L5-02",
+        "E-L6-01"
+      ],
+      "authority": "hypotheses_and_readonly_evidence_only",
+      "evidence_status": "proposed_not_live_validated"
+    },
+    {
+      "id": "E-L5-01",
+      "layer": "L5",
+      "name": "路径报价与执行容量专家",
+      "kind": "internal_specialist_lens_not_installed_bot",
+      "workflow_owner": "B04",
+      "domain_ids": [
+        "D09",
+        "D03"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L4-L5-copytrade-edge.md"
+      ],
+      "legacy_card_ids": [
+        "liquidity-depth"
+      ],
+      "cognitive_model": "可见价格≠可成交价格≠真实fill，给定仓位的双向路由才有经济意义",
+      "reasoning_sequence": [
+        "用观察时点买/卖方向、raw units和路由计算纸面成本",
+        "估计延迟、拥堵、费用/tip、价格冲击与退出深度",
+        "在多仓位规模和多个失效路由场景下分析净收益敏感性"
+      ],
+      "competing_mechanisms": [
+        "报价单边有效但无法卖回SOL",
+        "浮动滑点伴随热门行情内生上升"
+      ],
+      "decisive_next_check": "取决策时点对应规模的买入和预定退出时点卖出报价",
+      "abstain_or_downgrade_when": "无卖出路径、报价过期或无成交核验却声称fill",
+      "handoff_to_expert_ids": [
+        "E-L5-02",
+        "E-L6-02"
+      ],
+      "authority": "hypotheses_and_readonly_evidence_only",
+      "evidence_status": "proposed_not_live_validated"
+    },
+    {
+      "id": "E-L5-02",
+      "layer": "L5",
+      "name": "尾部风险、可卖性与机会成本专家",
+      "kind": "internal_specialist_lens_not_installed_bot",
+      "workflow_owner": "B04",
+      "domain_ids": [
+        "D09",
+        "D11"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L4-L5-copytrade-edge.md"
+      ],
+      "legacy_card_ids": [
+        "token-security",
+        "research-states"
+      ],
+      "cognitive_model": "把不交易、退出失败、资金占用和被漏掉的机会一起计入风险判断",
+      "reasoning_sequence": [
+        "先检查权限/池深度/已知不可卖路径等硬拒绝条件",
+        "模拟尾部情境的退出失败及部分成交",
+        "比较同一资金预算下过滤与不过滤的机会成本"
+      ],
+      "competing_mechanisms": [
+        "排除所有高波动币会降低亏损也降低全部机会",
+        "静态流动性高却因LP撤出突失卖出能力"
+      ],
+      "decisive_next_check": "对相同候选池构建过滤/不过滤与简单深度规则的对照",
+      "abstain_or_downgrade_when": "过滤条件事后挑选、未记录拒绝后的市场结局",
+      "handoff_to_expert_ids": [
+        "E-L6-01",
+        "E-L6-02"
+      ],
+      "authority": "hypotheses_and_readonly_evidence_only",
+      "evidence_status": "proposed_not_live_validated"
+    },
+    {
+      "id": "E-L6-01",
+      "layer": "L6",
+      "name": "反证、混淆因素与证据对抗专家",
+      "kind": "internal_specialist_lens_not_installed_bot",
+      "workflow_owner": "B05",
+      "domain_ids": [
+        "D11",
+        "D10"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L6-L7-investigation-cases.md"
+      ],
+      "legacy_card_ids": [
+        "evidence-synthesis",
+        "sybil-wash"
+      ],
+      "cognitive_model": "主动寻找可推翻主解释的低成本证据，而非写同意意见",
+      "reasoning_sequence": [
+        "把主张拆事实/机制/预测/经济四类",
+        "列至少两种能产生相同观察的竞争机制与混淆变量",
+        "挑一条最能区别假说的原始取证和负对照"
+      ],
+      "competing_mechanisms": [
+        "共享HUB造成虚假的控制关系",
+        "外部研究报告被当作本项目独立复算"
+      ],
+      "decisive_next_check": "指定最小证据查询能让主张从成立变为不成立",
+      "abstain_or_downgrade_when": "来源无法复现或多个所谓独立证据来自同一口径",
+      "handoff_to_expert_ids": [
+        "E-L6-02",
+        "E-L7-01"
+      ],
+      "authority": "hypotheses_and_readonly_evidence_only",
+      "evidence_status": "proposed_not_live_validated"
+    },
+    {
+      "id": "E-L6-02",
+      "layer": "L6",
+      "name": "盲回放、样本外与收益审计专家",
+      "kind": "internal_specialist_lens_not_installed_bot",
+      "workflow_owner": "B06",
+      "domain_ids": [
+        "D11",
+        "D09"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L6-L7-investigation-cases.md"
+      ],
+      "legacy_card_ids": [
+        "evidence-synthesis",
+        "research-states"
+      ],
+      "cognitive_model": "不读策略作者的标签，重放当时数据和成交条件检查是否存在增量",
+      "reasoning_sequence": [
+        "先冻结Universe、触发时点、阈值与结局窗口",
+        "按时间和操作者群组切分，保留失败/未观测/无成交样本",
+        "与简单基准比较增量，严格区分预测与扣成本后的结果"
+      ],
+      "competing_mechanisms": [
+        "胜率提升但滑点后净值为负",
+        "同一资金群跨训练和测试造成伪独立性"
+      ],
+      "decisive_next_check": "用独立时间+群组样本重放一个被称为成功的信号",
+      "abstain_or_downgrade_when": "没有时点/分母/两侧成交或test被研究中调参",
+      "handoff_to_expert_ids": [
+        "E-L7-01",
+        "E-L7-02"
+      ],
+      "authority": "hypotheses_and_readonly_evidence_only",
+      "evidence_status": "proposed_not_live_validated"
+    },
+    {
+      "id": "E-L7-01",
+      "layer": "L7",
+      "name": "专业研究综合与知识编译专家",
+      "kind": "internal_specialist_lens_not_installed_bot",
+      "workflow_owner": "B01",
+      "domain_ids": [
+        "D12",
+        "D08"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L6-L7-investigation-cases.md"
+      ],
+      "legacy_card_ids": [
+        "evidence-synthesis",
+        "anti-false-completion"
+      ],
+      "cognitive_model": "先组织分歧、提问和证据缺口；不以专家投票决定市场结论",
+      "reasoning_sequence": [
+        "根据问题选最少必要专家，限定各自输入和未知",
+        "比较专家事实引用是否共享同一源，标明尚未解决的冲突",
+        "归纳只有证据支持的结论与可改变结论的下一次查询"
+      ],
+      "competing_mechanisms": [
+        "三位专家都复述同一平台标签并非三证合一",
+        "单一FCZ专家强行解释所有市场走势"
+      ],
+      "decisive_next_check": "找到专家冲突中最能区分解释的一笔原始交易/观察",
+      "abstain_or_downgrade_when": "任何关键结论无法溯源或F门槛未通过",
+      "handoff_to_expert_ids": [
+        "E-L7-02"
+      ],
+      "authority": "hypotheses_and_readonly_evidence_only",
+      "evidence_status": "proposed_not_live_validated"
+    },
+    {
+      "id": "E-L7-02",
+      "layer": "L7",
+      "name": "冻结规则监控与故障隔离专家",
+      "kind": "internal_specialist_lens_not_installed_bot",
+      "workflow_owner": "B07",
+      "domain_ids": [
+        "D12",
+        "D10"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L6-L7-investigation-cases.md"
+      ],
+      "legacy_card_ids": [
+        "research-states",
+        "anti-false-completion"
+      ],
+      "cognitive_model": "生产监控只报告审批规则能确定的观察与未知，不在运行中创作策略",
+      "reasoning_sequence": [
+        "核对固定SHA、批准规则、状态单写入及来源健康",
+        "只读输出警报/弃权/错误，保存签名、时间与规则版本",
+        "把未知、漂移、重复告警和研究缺口送回人工审阅"
+      ],
+      "competing_mechanisms": [
+        "供应商429被解释为币突然没有买入",
+        "旧文献被动态检索后改变正式监控阈值"
+      ],
+      "decisive_next_check": "检测到实际错误后可复现的停止与恢复日志",
+      "abstain_or_downgrade_when": "未批准规则、源故障、持久状态争用或环境不匹配",
+      "handoff_to_expert_ids": [],
+      "authority": "hypotheses_and_readonly_evidence_only",
+      "evidence_status": "proposed_not_live_validated"
+    }
+  ]
+}
