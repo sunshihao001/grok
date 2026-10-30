@@ -25,3 +25,9 @@ A research packet without `observations.accepted` is NOT a verified market answe
 ## Full-system knowledge use
 
 Consult `knowledge/system/README.md` and `ontology.v1.json` for cross-domain prerequisites and `knowledge/system/RESEARCH.md` for the structural/predictive/economic separation. New external findings in `research-units.v1.json` are claims for adversarial investigation, never auto-published trading rules. `python -m solana_meme_os.knowledge_system --question "问题"` is only literal domain navigation.
+
+## Domain-depth knowledge: use the existing D01–D12 structure
+
+After selecting domains with `knowledge/system/ontology.v1.json`, consult [knowledge/domain/README.md](../../knowledge/domain/README.md) and read **only the relevant specialist file**: `L1-L2-chain-market.md` (D01/02/03/10), `L3-wallet-actors.md` (D04/05/06/07), `L4-L5-copytrade-edge.md` (D08/09), or `L6-L7-investigation-cases.md` (D11/12). These are **domain_method_candidate** content to guide concrete observations and discriminating checks, not validated K2 market claims or approved trading rules. Preserve the existing 15 source cards and the F0–F6 boundaries; do not indiscriminately load all specialist files for every question.
+
+For a wallet-copytrading question, never stop at wallet PnL or a provider smart-money label: explicitly separate real swap/transfer observations, wallet capital relationships, earliest follower data availability, actual two-sided quote coverage, and follower net outcome. For a new-token investigation, first resolve Mint/program/market stage/pool before interpreting wallet and holder statistics. Apply `knowledge/source-admission.v1.json` before external K1 retrieval; review-only sources may only be read during an explicit source audit and must not be treated as independently verified facts.
