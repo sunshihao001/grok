@@ -52,6 +52,42 @@ class LayerExpertTests(unittest.TestCase):
         self.assertIn("概念情境", text)
         self.assertIn("不是", text)
 
+    def test_funding_expert_has_non_generic_mechanism_study(self):
+        from pathlib import Path
+
+        registry = load_registry()
+        path = "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md"
+        funder = next(e for e in registry["specialists"] if e["id"] == "E-L3-02")
+        self.assertEqual(funder["knowledge_files"][1], path)
+        self.assertFalse(any(path in e["knowledge_files"] for e in registry["specialists"]
+                             if e["id"] != "E-L3-02"))
+        text = (Path(__file__).resolve().parents[1] / path).read_text(encoding="utf-8")
+        for required in ("风险本金", "执行预算", "托管与归集", "LP 资本",
+                         "创建者收入", "不同的“真实世界”", "CPMM", "Raydium"):
+            self.assertIn(required, text)
+        self.assertIn("不是某个真实 Mint", text)
+        self.assertIn("不直接证明", text)
+
+    def test_illustrative_cpmm_follower_cost_math_is_self_consistent(self):
+        # Strictly fee-free theoretical constant-product model, NOT a market signal.
+        x, y = 1_000_000.0, 100.0
+        trade_sol = 10.0
+        leader_tokens = x * trade_sol / (y + trade_sol)
+        x1, y1 = x - leader_tokens, y + trade_sol
+        follower_tokens = x1 * trade_sol / (y1 + trade_sol)
+        x2, y2 = x1 - follower_tokens, y1 + trade_sol
+        self.assertAlmostEqual(leader_tokens, 90909.09090909, places=5)
+        self.assertAlmostEqual(follower_tokens, 75757.57575758, places=5)
+        self.assertAlmostEqual(follower_tokens / leader_tokens, 5 / 6)
+        self.assertAlmostEqual((trade_sol / follower_tokens) /
+                               (trade_sol / leader_tokens), 1.2)
+        self.assertAlmostEqual((y1 / x1) / (y / x), 1.21)
+        self.assertAlmostEqual((y2 / x2) / (y / x), 1.44)
+        # A fee-free immediate exact reversal restores the original quote input;
+        # price impact alone does not make this round trip lose money.
+        recovered_sol = y2 * follower_tokens / (x2 + follower_tokens)
+        self.assertAlmostEqual(recovered_sol, trade_sol)
+
     def test_copytrading_economic_question_routes_cost_specialist(self):
         x = recommend_experts("钱包跟单后滑点和退出成本", objective="ECONOMIC")
         self.assertEqual(x["status"], "SPECIALISTS_SELECTED_FOR_RESEARCH_ONLY")
