@@ -64,6 +64,15 @@ class LayerExpertTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "knowledge source"):
             audit_registry(r)
 
+    def test_prior_52_topic_ids_are_not_invented_or_cross_role(self):
+        registry = load_registry()
+        self.assertTrue(all(len(x["prior_research_competency_ids"]) >= 2
+                            for x in registry["specialists"]))
+        corrupt = copy.deepcopy(registry)
+        corrupt["specialists"][0]["prior_research_competency_ids"] = ["B07-K01"]
+        with self.assertRaisesRegex(ValueError, "prior knowledge"):
+            audit_registry(corrupt)
+
     def test_expert_cannot_silently_upgrade_authority(self):
         r = copy.deepcopy(load_registry())
         r["specialists"][0]["authority"] = "approve_live_trades"
