@@ -59,6 +59,15 @@ def inspect(repo: Path, run_audits: bool = False,
             s=_command([git,"status","--porcelain"],repo)
             dirty=bool(s["stdout"]) if s["exit_code"]==0 else None
     tools={name:bool(shutil.which(name)) for name in ("git","node","npm","npx","onchainos","gmgn-cli")}
+    node_version=None
+    node_meets_okx_engine=None
+    if tools["node"]:
+        r=_command([shutil.which("node"),"--version"],repo,timeout=4)
+        version=str(r["stdout"]).strip()
+        matched=re.fullmatch(r"v?(\d+)\.(\d+)\.(\d+)",version)
+        if r["exit_code"]==0 and matched:
+            node_version=version
+            node_meets_okx_engine=tuple(map(int,matched.groups()))>=(22,14,0)
     data:dict[str,object]={
         "status":"PREFLIGHT_NOT_GROK_PROVISIONING",
         "repo_path":str(repo),
@@ -69,6 +78,8 @@ def inspect(repo: Path, run_audits: bool = False,
         "python_supported":sys.version_info>=(3,11),
         "required_files":files,
         "tools_present":tools,
+        "node_version":node_version,
+        "node_meets_okx_minimum_22_14_0":node_meets_okx_engine,
         "audits":{},
         "offline_unittest":None,
         "grok_bot_created":None,

@@ -259,7 +259,9 @@ def main() -> int:
     finish=commands.add_parser("complete")
     finish.add_argument("--bot",required=True)
     finish.add_argument("--packet-id",required=True)
-    finish.add_argument("--result-sha256",required=True)
+    digest_group=finish.add_mutually_exclusive_group(required=True)
+    digest_group.add_argument("--result-sha256")
+    digest_group.add_argument("--result-file",type=Path)
     block=commands.add_parser("block")
     block.add_argument("--bot",required=True)
     block.add_argument("--packet-id",required=True)
@@ -283,7 +285,14 @@ def main() -> int:
         elif args.command=="claim":
             result=store.claim(args.bot)
         elif args.command=="complete":
-            result=store.complete(args.packet_id,args.bot,args.result_sha256)
+            digest=args.result_sha256
+            if args.result_file is not None:
+                if args.result_file.is_symlink() or not args.result_file.is_file():
+                    raise ValueError("result file must be an existing regular file (not symlink)")
+                if args.result_file.stat().st_size>8*1024*1024:
+                    raise ValueError("result file exceeds 8 MiB limit")
+                digest=hashlib.sha256(args.result_file.read_bytes()).hexdigest()
+            result=store.complete(args.packet_id,args.bot,digest)
         elif args.command=="block":
             result=store.block(args.packet_id,args.bot,args.reason)
         elif args.command=="requeue":

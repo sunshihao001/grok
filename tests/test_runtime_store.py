@@ -135,6 +135,34 @@ class LocalRuntimeStoreTests(unittest.TestCase):
         self.assertFalse(result["authenticated_actor"])
         self.assertFalse(self.store.inspect()["market_evidence_verified"])
 
+    def test_claim_is_serialized_across_threads(self):
+        from concurrent.futures import ThreadPoolExecutor
+        self.store.init()
+        self.store.submit(self.packet)
+        with ThreadPoolExecutor(max_workers=6) as pool:
+            claims=list(pool.map(lambda _: LocalHandoffStore(self.db).claim("B02"), range(6)))
+        self.assertEqual(sum(x["status"]=="CLAIMED" for x in claims),1)
+        self.assertEqual(sum(x["status"]=="EMPTY" for x in claims),5)
+
+    def test_complete_cli_calculates_existing_file_digest(self):
+        import os
+        env=os.environ.copy()
+        env["PYTHONPATH"]=str(ROOT/"src")
+        self.store.init()
+        self.store.submit(self.packet)
+        self.store.claim("B02")
+        path=Path(self.tmp.name)/"result.json"
+        path.write_text('{"status":"synthetic"}',encoding="utf-8")
+        cmd=[sys.executable,"-m","solana_meme_os.runtime_store","--db",str(self.db),
+             "complete","--bot","B02","--packet-id",self.packet["packet_id"],
+             "--result-file",str(path)]
+        r=subprocess.run(cmd,cwd=ROOT,env=env,text=True,capture_output=True)
+        self.assertEqual(r.returncode,0,r.stderr)
+        self.assertEqual(json.loads(r.stdout)["status"],"COMPLETED")
+        expected=hashlib.sha256(path.read_bytes()).hexdigest()
+        deliveries=self.store.inspect(self.packet["packet_id"])["deliveries"]
+        self.assertEqual(deliveries[0]["result_sha256"],expected)
+
     def test_cli_cycle_works_after_restart(self):
         root=self.db
         cmd=[sys.executable,"-m","solana_meme_os.runtime_store","--db",str(root)]

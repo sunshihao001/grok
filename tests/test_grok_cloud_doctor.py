@@ -25,6 +25,7 @@ class GrokCloudDoctorTests(unittest.TestCase):
         doc=self._load().inspect(ROOT)
         self.assertTrue(all(doc["required_files"].values()))
         self.assertFalse(doc["trading_authorized"])
+        self.assertIn("node_meets_okx_minimum_22_14_0",doc)
         self.assertFalse(doc["rpc_live_data_verified"])
         self.assertIsNone(doc["grok_bot_created"])
         self.assertIsNone(doc["grok_skill_installed"])
