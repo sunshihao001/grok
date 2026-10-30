@@ -333,7 +333,8 @@
         "D07"
       ],
       "knowledge_files": [
-        "knowledge/domain/L3-wallet-actors.md"
+        "knowledge/domain/L3-wallet-actors.md",
+        "knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md"
       ],
       "legacy_card_ids": [
         "wallet-roles",
@@ -378,7 +379,8 @@
         "D04"
       ],
       "knowledge_files": [
-        "knowledge/domain/L3-wallet-actors.md"
+        "knowledge/domain/L3-wallet-actors.md",
+        "knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md"
       ],
       "legacy_card_ids": [
         "funding-graph",
@@ -424,7 +426,8 @@
         "D03"
       ],
       "knowledge_files": [
-        "knowledge/domain/L3-wallet-actors.md"
+        "knowledge/domain/L3-wallet-actors.md",
+        "knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md"
       ],
       "legacy_card_ids": [
         "concentration",
@@ -469,7 +472,8 @@
         "D07"
       ],
       "knowledge_files": [
-        "knowledge/domain/L3-wallet-actors.md"
+        "knowledge/domain/L3-wallet-actors.md",
+        "knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md"
       ],
       "legacy_card_ids": [
         "deployer-history"
@@ -513,7 +517,8 @@
         "D04"
       ],
       "knowledge_files": [
-        "knowledge/domain/L3-wallet-actors.md"
+        "knowledge/domain/L3-wallet-actors.md",
+        "knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md"
       ],
       "legacy_card_ids": [
         "sybil-wash",
