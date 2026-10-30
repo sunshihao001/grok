@@ -2,6 +2,10 @@
 
 **Purpose:** preserve the expert learning, domain research, adversarial perspectives and practical lessons from three earlier projects while discarding Hermes-specific *runtime* assumptions. A working Bot without validated external knowledge is only orchestration.
 
+## Project-internal specialist knowledge expansion (Draft)
+
+The existing D01–D12 ontology now has a **practical domain content entry point**: [domain/README.md](domain/README.md). Four targeted knowledge files explain actual Solana transaction/market mechanisms, wallet/funding/holder behavior, copy-trading executability, and evidence-safe cases. These are **review candidates**, not independently validated Alpha, live data integrations, or a replacement for the 15 archived source cards. Do not bulk load them into the monitor; choose only relevant domain content per question, observe the K1 source-admission restrictions, and require K2 original evidence for factual claims.
+
 ## What has been migrated
 
 The initial catalog has 15 source-pinned cards in `knowledge/catalog.v1.json` covering:
