@@ -2,6 +2,10 @@
 
 > **状态：内部知识角色协议草案（非 21 个已部署 Bot）。** 沿用 `knowledge/system/ontology.v1.json` 的 8 层和 12 个领域；`design/bot-roster.v1.json` 的 B01–B07 仍是研发与运行责任边界，不能简单按专家数重新部署 Grok。每位专家是独立的**专业知识 + 可检验的分析步骤 + 反例习惯**，本文件不是学术认知理论。
 
+## 主专家必须理解原项目的交易认知
+
+现行 [《五参考项目Meme知识储备审计》](../system/reference-projects-meme-knowledge-audit-20261030.md) 指出：旧qb已按Top Holder、盈利交易者、Smart Money、Bundler、Transfer-in构建单币关键钱包矩阵；原Hermes研究了同源/资金回流/筹码状态；meme-发展了FCZ/深洗/死亡盘和多策略思维。**先由 E-L4-02 跟单剩余信息专家以这些业务对象发问**，再让钱包/资金/筹码/时钟专家挑战。D03通用价格仅按实际Meme场景补充。当前任务：[关键钱包可跟性纵深任务](../domain/D04-D08-key-wallet-followability-research-brief.md)，而非先开一门新的AMM课。
+
 ## 主专家的真正工作方法
 
 见 [《专家主导的核心机制纵深研究法》](../system/expert-mechanism-research-method.md)。先选择一条核心市场矛盾，**一位主专家**必须推导权利/资金/库存/价格/激励的具体机制及其条件变化；只有另一个专家能提出不同因果路径或收益函数时才加入。**152个最小单元用于回填和审计，不是21位专家轮流汇报的清单**。下一轮 [E-L2-02/D03市场价格机制研究](../domain/D03-market-price-mechanism-research-brief.md) 是上述方法的第一个待执行专题，不应宣称已经研究完成。
