@@ -47,6 +47,18 @@ class BotKnowledgeTests(unittest.TestCase):
         self.assertTrue(all(x["source_is_not_market_evidence"] for x in x["on_demand_source_candidates"]))
         self.assertFalse(x["can_claim_source_observed"])
 
+    def test_default_role_brief_withholds_review_only_sources(self):
+        q = "同源钱包资金回流交易所hub"
+        brief = build_role_brief("B03", q)
+        self.assertGreater(brief["review_only_source_matches_withheld"], 0)
+        self.assertTrue(all(src["admission_state"] == "context_candidate"
+                            for src in brief["on_demand_source_candidates"]))
+        manual = build_role_brief("B03", q, include_review_only=True)
+        self.assertTrue(any(src["admission_state"] == "review_only"
+                            for src in manual["on_demand_source_candidates"]))
+        with self.assertRaisesRegex(ValueError, "frozen monitor"):
+            build_role_brief("B07", q, include_review_only=True)
+
     def test_unknown_role_or_question_does_not_invent_knowledge(self):
         with self.assertRaisesRegex(ValueError,"unknown Bot"):
             build_role_brief("B99","资金")

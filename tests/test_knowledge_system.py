@@ -48,9 +48,12 @@ class KnowledgeSystemTests(unittest.TestCase):
         packet = build_packet("钱包协调以后，跟单能赚钱吗？利润和成本如何判断")
         self.assertIn("D08", packet["ontology_route"]["matched_domains"])
         self.assertIn("D09", packet["ontology_route"]["matched_domains"])
-        self.assertTrue(packet["research_unit_candidates"])
+        self.assertEqual(packet["research_unit_candidates"], [])
+        self.assertGreater(packet["review_only_source_matches_withheld"], 0)
+        audit_packet = build_packet("钱包协调以后，跟单能赚钱吗？利润和成本如何判断", include_review_only=True)
+        self.assertTrue(audit_packet["research_unit_candidates"])
         self.assertTrue(all(x["runtime_policy"] == "research_reference_only"
-                            for x in packet["research_unit_candidates"]))
+                            for x in audit_packet["research_unit_candidates"]))
 
     def test_on_demand_source_pins_match(self):
         self.assertEqual(validate_system()["on_demand_source_pointers"], 21)

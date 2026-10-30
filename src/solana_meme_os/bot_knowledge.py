@@ -14,6 +14,7 @@ from typing import Any
 from urllib.parse import quote
 
 from .knowledge_system import ROOT, filter_plan, route_domains
+from .source_admission import load_admission, is_routable
 
 PROFILES = ROOT / "knowledge/bot-knowledge-profiles.v1.json"
 SOURCE_INDEX = ROOT / "knowledge/source_index.v1.json"
@@ -132,7 +133,8 @@ def validate_profiles(program: dict[str, Any] | None = None,
     }
 
 
-def build_role_brief(bot_id: str, question: str, limit: int = 4) -> dict[str, Any]:
+def build_role_brief(bot_id: str, question: str, limit: int = 4,
+                     include_review_only: bool = False) -> dict[str, Any]:
     if not isinstance(question, str) or not question.strip():
         raise ValueError("question required")
     if not 1 <= limit <= 5:
@@ -141,12 +143,19 @@ def build_role_brief(bot_id: str, question: str, limit: int = 4) -> dict[str, An
     profile = next((p for p in prog["profiles"] if p["id"] == bot_id), None)
     if not profile:
         raise ValueError("unknown Bot")
+    if bot_id == "B07" and include_review_only:
+        raise ValueError("frozen monitor cannot opt into review-only sources")
+    admission = load_admission(idx)
     entries = {s["id"]: s for s in idx["items"]}
     query = question.casefold()
     relevant = []
+    withheld = 0
     for source_id in profile["read_on_demand_source_ids"]:
         s = entries[source_id]
         hits = [k for k in s["topics"] if k.casefold() in query]
+        if hits and not is_routable(source_id, admission, include_review_only):
+            withheld += 1
+            continue
         if hits:
             relevant.append((len(hits), source_id, s, hits))
     relevant.sort(key=lambda t: (-t[0], t[1]))
@@ -163,13 +172,15 @@ def build_role_brief(bot_id: str, question: str, limit: int = 4) -> dict[str, An
              "boundary": t["do_not_infer"]} for t in profile["resident_knowledge"]
         ],
         "historical_card_ids": profile["legacy_card_ids"],
-        "source_match_state": "MATCHED_CANDIDATES" if chosen else "SOURCE_DISCOVERY_REQUIRED",
+        "source_match_state": "MATCHED_CANDIDATES" if chosen else ("REVIEW_ONLY_SOURCES_WITHHELD" if withheld else "SOURCE_DISCOVERY_REQUIRED"),
+        "review_only_source_matches_withheld": withheld,
         "on_demand_source_candidates": [
             {"source_id": source_id, "repository": s["repository"], "commit": s["commit"],
              "path": s["path"], "matched_topics": hits,
              "url": f"https://github.com/{s['repository']}/blob/{s['commit']}/" +
                     "/".join(quote(segment, safe="") for segment in s["path"].split("/")),
-             "source_is_not_market_evidence": True} for _, source_id, s, hits in chosen
+             "source_is_not_market_evidence": True,
+              "admission_state": admission[source_id]["admission_state"]} for _, source_id, s, hits in chosen
         ],
         "k2_required_fields": profile["k2_required_fields"],
         "can_claim_source_observed": False,

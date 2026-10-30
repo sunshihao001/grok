@@ -16,6 +16,7 @@ from urllib.request import Request, urlopen
 
 from .knowledge import for_question
 from .knowledge_system import route_domains, read as read_knowledge_system, filter_plan
+from .source_admission import load_admission, is_routable
 
 ROOT = Path(__file__).resolve().parents[2]
 INDEX = ROOT / "knowledge/source_index.v1.json"
@@ -70,19 +71,25 @@ def _ref(item: dict[str, Any], hits: list[str]) -> dict[str, Any]:
             "availability": item["availability"], "license_note": item.get("license_note")}
 
 
-def select_sources(question: str, index: dict[str, Any] | None = None, limit: int = 5) -> list[dict[str, Any]]:
+def select_sources(question: str, index: dict[str, Any] | None = None, limit: int = 5,
+                   include_review_only: bool = False) -> list[dict[str, Any]]:
     if not isinstance(question, str) or not question.strip():
         raise ValueError("question is required")
     if not 1 <= limit <= 12:
         raise ValueError("limit out of range")
     index = index or load_index()
+    admission = load_admission(index)
     query = question.casefold()
     found = []
     for item in index["items"]:
+        if not is_routable(item["id"], admission, include_review_only):
+            continue
         hits = [tag for tag in item["topics"] if tag.casefold() in query]
         if hits:
             # Prefer specific matches but don't claim this is semantic understanding.
-            found.append((len(hits), item["id"], _ref(item, hits)))
+            ref = _ref(item, hits)
+            ref["admission_state"] = admission[item["id"]]["admission_state"]
+            found.append((len(hits), item["id"], ref))
     found.sort(key=lambda e: (-e[0], e[1]))
     return [r for _, _, r in found[:limit]]
 
@@ -114,8 +121,25 @@ def evaluate_observations(observations: list[dict[str, Any]], decision_time: str
 
 
 def build_packet(question: str, decision_time: str | None = None,
-                 observations: list[dict[str, Any]] | None = None) -> dict[str, Any]:
-    refs = select_sources(question)
+                 observations: list[dict[str, Any]] | None = None,
+                 include_review_only: bool = False) -> dict[str, Any]:
+    refs = select_sources(question, include_review_only=include_review_only)
+    index = load_index()
+    admission = load_admission(index)
+    query = question.casefold()
+    withheld = sum(1 for item in index["items"]
+                   if admission[item["id"]]["admission_state"] == "review_only"
+                   and not include_review_only
+                   and any(tag.casefold() in query for tag in item["topics"]))
+    source_repos = {s["id"]: s["repository"] for s in
+                    read_knowledge_system("source-registry.v1.json")["source_entries"]}
+
+    def unit_admitted(unit: dict[str, Any]) -> bool:
+        repo = source_repos.get(unit["primary_source"]["source_id"])
+        path = unit["primary_source"]["path"]
+        return any(is_routable(item["id"], admission, include_review_only)
+                   for item in index["items"]
+                   if item["repository"] == repo and item["path"] == path)
     domain = for_question(question)
     assessed = evaluate_observations(observations or [], decision_time)
     ontology_route = route_domains(question)
@@ -124,13 +148,15 @@ def build_packet(question: str, decision_time: str | None = None,
          "runtime_policy": unit["runtime_policy"],
          "source_id": unit["primary_source"]["source_id"]}
         for unit in read_knowledge_system("research-units.v1.json")["units"]
-        if set(unit["domains"]).intersection(ontology_route["matched_domains"])
+        if set(unit["domains"]).intersection(ontology_route["matched_domains"]) and unit_admitted(unit)
     ]
     return {
         "schema_version": "1.0",
         "purpose": "research_intake_not_conclusion",
         "question": question,
-        "reference_status": "SOURCES_INDEXED" if refs else "SOURCE_DISCOVERY_REQUIRED",
+        "reference_status": "SOURCES_INDEXED" if refs else ("REVIEW_ONLY_SOURCES_WITHHELD" if withheld else "SOURCE_DISCOVERY_REQUIRED"),
+        "review_only_source_matches_withheld": withheld,
+        "admission_policy": "Pinned source references are study candidates, not independently verified market observations.",
         "research_status": "EVIDENCE_REQUIRED" if not assessed["accepted"] else "OBSERVATIONS_TO_CHALLENGE",
         "sources": refs,
         "domain_knowledge": domain["references"][:3],
@@ -145,12 +171,14 @@ def build_packet(question: str, decision_time: str | None = None,
     }
 
 
-def ephemeral_excerpt(ref: dict[str, Any], question: str, max_chars: int = 1200) -> dict[str, Any]:
+def ephemeral_excerpt(ref: dict[str, Any], question: str, max_chars: int = 1200,
+                      include_review_only: bool = False) -> dict[str, Any]:
     """Fetch only a pinned approved source; never store or publish a derived source copy."""
     if not 200 <= max_chars <= 2000:
         raise ValueError("excerpt size out of range")
     # Re-validate caller reference against the approved index, not arbitrary URLs.
-    originals = {r["id"]: r for r in select_sources(question, limit=12)}
+    originals = {r["id"]: r for r in select_sources(question, limit=12,
+                         include_review_only=include_review_only)}
     approved = originals.get(ref.get("id"))
     if not approved or any(approved[k] != ref.get(k) for k in ("repository", "commit", "path")):
         raise ValueError("source not selected from approved registry")
@@ -177,15 +205,18 @@ def main() -> int:
     p.add_argument("--decision-at", help="timezone-aware ISO 8601")
     p.add_argument("--observations", type=Path, help="JSON list of evidence facts")
     p.add_argument("--fetch-excerpts", action="store_true", help="Optional read-only source previews")
+    p.add_argument("--include-review-only", action="store_true", help="Explicit source audit, not normal routing or claim validation")
     args = p.parse_args()
     try:
         facts = json.loads(args.observations.read_text(encoding="utf-8")) if args.observations else None
-        packet = build_packet(args.question, args.decision_at, facts)
+        packet = build_packet(args.question, args.decision_at, facts,
+                              include_review_only=args.include_review_only)
         if args.fetch_excerpts:
             packet["ephemeral_source_previews"] = []
             for ref in packet["sources"][:3]:
                 try:
-                    packet["ephemeral_source_previews"].append(ephemeral_excerpt(ref, args.question))
+                    packet["ephemeral_source_previews"].append(ephemeral_excerpt(
+                        ref, args.question, include_review_only=args.include_review_only))
                 except (OSError, UnicodeError, ValueError) as exc:
                     packet["ephemeral_source_previews"].append({"source_url": ref["source_url"],
                         "status": "UNAVAILABLE", "error": str(exc)})
