@@ -48,6 +48,12 @@
 - [ ] 仅当真实运维/独立分析需要且效果能客观衡量时，单独评估再创建 B01–B06 专业 Grok 实例。
 - [ ] 不因为有七份角色文档、多个 Skill 模板或 C0–C4 学习等级，就一次性在 Grok 上全部启用。
 
+## 本轮项目认知纠偏：先把旧Meme知识真正吃透
+
+- [x] 对原 `sunshihao001/-` Hermes、`meme-`、`qb-`、外部review_only的 `Why-Solana-Memecoins-Are-Over` 与当前 `grok` **逐库阅读核心知识/程序**，形成 [Meme交易知识储备与阶段审计](../knowledge/system/reference-projects-meme-knowledge-audit-20261030.md)；不宣称对全部文件或链上数据独立复算。
+- [x] 认知纠偏：原M01“先全面研究一般AMM价格形成”太宽泛，没有围绕旧qb关键钱包矩阵/同源/筹码与meme-具体Meme结构。修改当前 [研究计划](../knowledge/system/mechanism-research-plan.v1.json)，使M01改为 [关键钱包→Mint阶段→剩余筹码→信号可见与可跟性](../knowledge/domain/D04-D08-key-wallet-followability-research-brief.md)；旧D03一般价格研究为按需辅助。
+- [ ] 按该新M01真正完成下一份专业纵深专题（目前只有研究任务，尚无实证/已证盈利）并对照旧项目逐机制检验认知是否增加。
+
 ## 并行知识研究进度（GPT 专业研究，独立于 S0–S5 运行交付）
 
 > 本段仅记录**知识纵深建设**，不是新的发布门槛或 Grok 云电脑验收。现行 S1 的真实云电脑固定SHA离线验证仍未完成，不可由 GitHub CI 或知识论文替代；反过来，GPT 深度专业知识研究不必等 S1 才开始。
