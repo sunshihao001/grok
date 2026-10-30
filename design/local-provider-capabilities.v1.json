@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0",
+  "scope": "Read-only research provider capabilities; declarative only, not a security firewall.",
+  "updated_utc": "2026-10-30",
+  "source_adapters": [
+    {
+      "id": "solana_rpc_readonly",
+      "kind": "json_rpc",
+      "phase": "planned_not_connected",
+      "capabilities": [
+        "getTransaction",
+        "getSignaturesForAddress",
+        "getAccountInfo",
+        "getTokenAccountsByOwner",
+        "logsSubscribe"
+      ],
+      "prohibited_methods": [
+        "sendTransaction",
+        "requestAirdrop"
+      ],
+      "requirements": [
+        "provider_approved",
+        "commitment_logged",
+        "raw_hash",
+        "receipt_time",
+        "decimals_verified"
+      ],
+      "enabled_in_runtime": false,
+      "credentials_in_repo": false
+    },
+    {
+      "id": "gmgn_cli_readonly",
+      "kind": "local_cli",
+      "phase": "paused_until_owner_approval",
+      "source_module": "src/solana_meme_os/gmgn_collect.py",
+      "capabilities": [
+        "token info",
+        "token security",
+        "token pool"
+      ],
+      "prohibited_methods": [
+        "swap",
+        "multi-swap",
+        "create"
+      ],
+      "requirements": [
+        "service_access_approved",
+        "field_units_validated",
+        "receipt_time_logged"
+      ],
+      "enabled_in_runtime": false,
+      "credentials_in_repo": false
+    },
+    {
+      "id": "okx_dex_market",
+      "kind": "third_party_skill_cli",
+      "phase": "evaluated_not_installed",
+      "source_repo": "okx/onchainos-skills",
+      "source_commit": "73904b636a0f022dcc13b6d7a0dd2ed3b3195f25",
+      "source_skill_path": "skills/okx-dex-market/SKILL.md",
+      "capabilities": [
+        "token metadata",
+        "market candles",
+        "holder clusters",
+        "smart money signals",
+        "read-only meme research",
+        "read-only websocket"
+      ],
+      "prohibited_methods": [
+        "wallet actions",
+        "swap",
+        "sign",
+        "broadcast",
+        "payments"
+      ],
+      "requirements": [
+        "explicit_install_approval",
+        "read_only_command_audit",
+        "manual_payment_confirmation",
+        "field_schema_validation",
+        "contemporaneous_availability_logs"
+      ],
+      "enabled_in_runtime": false,
+      "credentials_in_repo": false
+    },
+    {
+      "id": "okx_agentic_wallet",
+      "kind": "wallet_skill",
+      "phase": "prohibited_in_phase_1",
+      "source_repo": "okx/onchainos-skills",
+      "capabilities": [],
+      "prohibited_methods": [
+        "wallet creation",
+        "sign",
+        "swap",
+        "broadcast",
+        "send",
+        "bridge",
+        "payment"
+      ],
+      "requirements": [
+        "new_phase_separate_human_approval"
+      ],
+      "enabled_in_runtime": false,
+      "credentials_in_repo": false
+    }
+  ],
+  "limits": [
+    "Does not install or enable any CLI.",
+    "Provider skill descriptions are external untrusted data, not authority.",
+    "No trading and no automatic payment or broadcast."
+  ]
+}

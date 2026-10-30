@@ -42,3 +42,7 @@ Before enabling B07, ensure no development Bot writes to B07's runtime state, no
 | B07 | `solana-meme-monitor`, `solana-meme-knowledge` |
 
 Enable the configured private skills in the Grok Bot app and run one dry task per skill. The local `skills/` path is a repository template library and does not automatically register private Grok Bot skills.
+
+## First executable environment check
+
+On the actual Grok cloud terminal at a pinned checkout, run python3 scripts/grok_cloud_doctor.py --repo . --audits --self-test; next use runtime_store.py with the fixture B01 packet. A passing GitHub CI job or a Skill document in the repository does not install or authenticate a Grok Bot. OKX DEX market remains candidate only, with no installer, paid feature, wallet or trading authorization. See docs/local-runtime-framework.md.

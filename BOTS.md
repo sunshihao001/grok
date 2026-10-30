@@ -40,3 +40,7 @@ No source repository or knowledge migration is allowed to bypass primary data, t
 ## Deep knowledge initialization and handoff (initial research)
 
 Each role has a detailed [startup instruction and syllabus](bots/profiles/) and a machine-readable [K0/K1/K2 knowledge reserve](knowledge/bot-knowledge-profiles.v1.json). Use the [single source-aware handoff contract](docs/bot-knowledge-integration.md) and [offline validator](src/solana_meme_os/bot_knowledge.py). B02's data-contract proposal is **not a direct production message**: only a human-approved frozen collector/rule release may be consumed by B07. Grok Bot objects and private skills still require manual configuration in the Grok application; repository CI does not provision the computer.
+
+## Executable local handoff prototype
+
+Research Bot task delivery is now modeled by the SQLite queue in src/solana_meme_os/runtime_store.py. The runtime performs atomic per-recipient claims and explicit complete/block/requeue but **never runs Grok models or third-party commands**. All Bots on one cloud computer can access the filesystem; role IDs are declarations, not OS permissions. B07's monitor state/rule loader remain separate and unimplemented for production. See docs/local-runtime-framework.md.

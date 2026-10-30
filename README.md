@@ -84,3 +84,15 @@ See [on-demand design](docs/on-demand-research-design.md), [source registry](kno
     PYTHONPATH=src python -m solana_meme_os.asof_audit --input fixtures/asof-audit.synthetic.json
 
 New [C2-001 and C3-001 knowledge units](knowledge/transfer/curriculum.v1.json) remain **draft**, build on C1-001 and must not be automatically loaded into B07.
+
+## Local/Grok-cloud executable framework (P0, offline-only)
+
+[Framework deepening](docs/local-runtime-framework.md) · [SQLite task inbox](src/solana_meme_os/runtime_store.py) · [Local/cloud doctor](scripts/grok_cloud_doctor.py) · [Provider capability declaration](design/local-provider-capabilities.v1.json) · [Grok handoff Skill template](skills/local-research-handoff/SKILL.md).
+
+    python3 scripts/grok_cloud_doctor.py --repo . --audits --self-test
+    PYTHONPATH=src python3 -m solana_meme_os.runtime_store init
+    PYTHONPATH=src python3 -m solana_meme_os.runtime_store submit --input fixtures/bot-handoff-brief.fixture.json
+    PYTHONPATH=src python3 -m solana_meme_os.runtime_store claim --bot B02
+    PYTHONPATH=src python3 -m solana_meme_os.runtime_store status
+
+The research SQLite queue does not execute its payload, authenticate Grok Bot identity, validate live market evidence or authorize B07 rules.

@@ -88,3 +88,13 @@ Start with `knowledge/system/README.md`. **Structure complete does not imply tha
 - [ ] B02 live read-only coverage/time-trace acquisition and units/decimals tests (K2 not present).
 - [ ] B05 matched negative controls, operator time/group split and selection-bias check.
 - [ ] B04/B06 independently evaluated preregistered F4 and F5; no positive net edge claimed.
+
+## Local execution engineering P0, not market fundamentals
+
+- [x] scripts/grok_cloud_doctor.py source and binary preflight, optional audit/test.
+- [x] src/solana_meme_os/runtime_store.py SQLite WAL per-recipient task queue with digest idempotency and blocking/recovery.
+- [x] Local handoff private Skill template (uninstalled) and disabled external provider capability declaration.
+- [ ] Run P0 on real Grok cloud terminal and record exact SHA, permissions and command outputs.
+- [ ] Perform B01/B02/B05 end-to-end synthetic packet with independent B05 challenge.
+- [ ] Implement exactly one read-only source adapter, verify raw schema, units, errors, availability/receipt timing.
+- [ ] Implement B07 single-writer monitor runtime and approved frozen rule loader (research SQLite queue is insufficient).
