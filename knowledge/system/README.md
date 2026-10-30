@@ -2,6 +2,10 @@
 
 **状态：体系结构已定义；知识内容仅部分填充；不代表策略已验证。** 本目录是 Grok 项目领域知识的上层契约，不替代已有 `knowledge/catalog.v1.json`（15 张遗留知识候选卡）和 `knowledge/legacy-snapshots/`（21 份固定快照）。
 
+## 先理解项目已有Meme交易知识，再确定下一条机制
+
+当前优先阅读 [《五个参考项目的知识阶段与缺口审计》](reference-projects-meme-knowledge-audit-20261030.md)：以Hermes钱包/同源/证据链、meme- FCZ/深洗/多策略、qb-单币关键钱包矩阵为**实在的研究起点**，并审阅Why-Solana的review_only外部反例和当前grok已有能力。审计发现此前 D03 通用AMM优先过于宏观；[当前M01](../domain/D04-D08-key-wallet-followability-research-brief.md) 已修订为“关键钱包→发币阶段→真实资金/筹码→后续可见信息→可跟与不可跟”，而AMM是按需解释具体池价格的底层支撑。
+
 ## 专家如何真正深入研究（当前研究方法）
 
 **不能按152项逐个背诵，也不能一次性铺开全部十二领域。** 新的研究方法见 [《专家主导的核心机制纵深研究法》](expert-mechanism-research-method.md)：从核心市场矛盾出发，由一位主专家向下追到资产/权利/现金流/程序价格机制，向上推导经济激励、动态反馈与新知识；只用必要挑战专家修正因果；最后按原ID回填知识单元，重新选择认知瓶颈。其 [分阶段研究计划](mechanism-research-plan.v1.json) 目前确定由 D03/E-L2-02 先连接 D05 资金知识与 D06/D09 库存/可交易性，具体要求见 [首轮D03专家任务](../domain/D03-market-price-mechanism-research-brief.md)。这些是**方法和下一轮计划**，不代表研究专题已完成或市场规律已实证。
