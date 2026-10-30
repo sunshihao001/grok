@@ -1,5 +1,7 @@
 # Bot architecture V1.1 — 7 roles, 1 final monitor
 
+**当前部署默认：一个 Grok 运行操作 Bot，而不是先创建七个 Grok 实例。** B01–B07 保留为研发能力、专业职责和独立审核设计，具体开发由 GPT/GitHub 主导。早期“Practical staged creation”属于可选多 Bot 扩展顺序，不是近期 S1 离线部署前置。以 docs/project-baseline-2026-10-30.md 为当前规划权威。
+
 **Recommendation: 6 on-demand specialist development Bots + 1 production read-only Monitoring Bot.** They are proposed roles, not already-created Grok app instances. See [machine-readable roster](design/bot-roster.v1.json), [12-domain ontology](knowledge/system/ontology.v1.json) and [F0–F6 gate policy](knowledge/system/filter-policy.v1.json).
 
 ## Role allocation

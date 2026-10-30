@@ -1,5 +1,7 @@
 # Project Agent / Bot Rules — Solana Meme Workflow OS (Grok Edition)
 
+**当前产品战略与状态真源：** docs/project-baseline-2026-10-30.md。此文件其他“Required Reading / Before Work”要求主要约束参与研发和修改源码的开发者；Grok 的只读运行 Bot 不需要读完所有历史资料或重新编写程序，须执行由 GPT/人工审阅的固定 SHA 与 docs/gpt-build-grok-run.md 的单入口流程。所有下方安全禁令对运行 Bot 同样有效。
+
 ## Safety Boundary (Hard)
 
 Phase 1 is read-only research / paper-only gating.
