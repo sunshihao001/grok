@@ -2,6 +2,10 @@
 
 **Purpose:** preserve the expert learning, domain research, adversarial perspectives and practical lessons from three earlier projects while discarding Hermes-specific *runtime* assumptions. A working Bot without validated external knowledge is only orchestration.
 
+## 全领域系统知识建设（草稿，非实证完成）
+
+以 [全领域专家手册](system/whole-domain-expert-handbook.md) 为项目知识整体阅读入口；[152 项原子知识图谱](system/whole-domain-atlas.v1.json) 对现有 L0–L7 / D01–D12 从小到大逐项编号，关联21位专家、市场问题、经济机制、错误捷径和既有知识入口；[覆盖审计](system/whole-domain-coverage-audit.md) 独立列出每个领域尚未研究透的技术与市场问题。范围已系统化不等于专业知识全部完成，更不等于市场真实数据、可赚钱结论或 Grok 已上线。
+
 ## L0–L7 专属专家视角（Draft，非已安装 Bot）
 
 [21 位内部专业专家与完整分析程序](experts/README.md) 分布在全部八个知识层：从原始来源/交易/市场/钱包资金，到策略机会、执行、独立反证与监控治理。每位专家都有自己的知识、观察顺序、相反机制、关键查询、停止条件，并映射现有 B01–B07 工作责任；**不创建 21 个 Grok Bot**。机器注册表为 [registry.v1.json](experts/registry.v1.json)，离线专家方法查询：`PYTHONPATH=src python -m solana_meme_os.expert_brief --question "同源钱包能跟单吗？" --objective ECONOMIC`。仅提供研究材料与调查计划，不是大模型专家自动执行器或市场验证结果。
