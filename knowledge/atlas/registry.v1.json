@@ -1,0 +1,1857 @@
+{
+  "schema_version": "1.0",
+  "name": "Solana Meme Whole Domain Knowledge Atlas",
+  "status": "research_content_drafted_not_market_validated",
+  "preserves_existing_ontology": true,
+  "ontology": "knowledge/system/ontology.v1.json",
+  "expert_registry": "knowledge/experts/registry.v1.json",
+  "bot_competencies": "knowledge/bot-knowledge-profiles.v1.json",
+  "provenance": "knowledge/system/source-registry.v1.json",
+  "knowledge_layer_L0_document": "knowledge/atlas/L0-governance.md",
+  "coverage_semantics": {
+    "atlas_content_state": "Every domain has eight topic-specific mechanism descriptions, not exhaustive authoritative or empirical knowledge",
+    "existing_ontology_coverage": "Copied from preexisting ontology; no promotion or rewrite",
+    "units_state": "Not a validated trading signal or rule"
+  },
+  "counts": {
+    "layers": 8,
+    "domains": 12,
+    "mechanism_units": 96,
+    "specialists": 21,
+    "bot_owners": 7,
+    "prior_competencies": 52,
+    "legacy_primary_cards": 15
+  },
+  "domains": [
+    {
+      "id": "D01",
+      "name": "Solana 链上基础",
+      "layer": "L1",
+      "unit_count": 8,
+      "units": [
+        "D01-01",
+        "D01-02",
+        "D01-03",
+        "D01-04",
+        "D01-05",
+        "D01-06",
+        "D01-07",
+        "D01-08"
+      ],
+      "lead_expert_ids": [
+        "E-L1-01",
+        "E-L1-02"
+      ],
+      "involved_expert_ids": [
+        "E-L0-02",
+        "E-L1-01",
+        "E-L1-02",
+        "E-L2-01"
+      ],
+      "workflow_owners": [
+        "B02",
+        "B07"
+      ],
+      "existing_legacy_card_ids": [],
+      "existing_ontology_coverage": "declared_research_gap",
+      "prior_competency_ids": [
+        "B02-K01"
+      ],
+      "atlas_document": "knowledge/atlas/D01.md",
+      "atlas_content_state": "8_mechanism_units_written_not_empirically_validated"
+    },
+    {
+      "id": "D02",
+      "name": "Meme 市场生命周期",
+      "layer": "L2",
+      "unit_count": 8,
+      "units": [
+        "D02-01",
+        "D02-02",
+        "D02-03",
+        "D02-04",
+        "D02-05",
+        "D02-06",
+        "D02-07",
+        "D02-08"
+      ],
+      "lead_expert_ids": [
+        "E-L2-01",
+        "E-L2-03"
+      ],
+      "involved_expert_ids": [
+        "E-L2-01",
+        "E-L2-03"
+      ],
+      "workflow_owners": [
+        "B02"
+      ],
+      "existing_legacy_card_ids": [
+        "market-lifecycle"
+      ],
+      "existing_ontology_coverage": "legacy_seeded_unverified",
+      "prior_competency_ids": [
+        "B02-K02"
+      ],
+      "atlas_document": "knowledge/atlas/D02.md",
+      "atlas_content_state": "8_mechanism_units_written_not_empirically_validated"
+    },
+    {
+      "id": "D03",
+      "name": "市场微观结构",
+      "layer": "L2",
+      "unit_count": 8,
+      "units": [
+        "D03-01",
+        "D03-02",
+        "D03-03",
+        "D03-04",
+        "D03-05",
+        "D03-06",
+        "D03-07",
+        "D03-08"
+      ],
+      "lead_expert_ids": [
+        "E-L2-02"
+      ],
+      "involved_expert_ids": [
+        "E-L2-02",
+        "E-L3-03",
+        "E-L4-03",
+        "E-L5-01"
+      ],
+      "workflow_owners": [
+        "B02",
+        "B04",
+        "B07"
+      ],
+      "existing_legacy_card_ids": [
+        "liquidity-depth"
+      ],
+      "existing_ontology_coverage": "legacy_seeded_unverified",
+      "prior_competency_ids": [
+        "B02-K05",
+        "B07-K04"
+      ],
+      "atlas_document": "knowledge/atlas/D03.md",
+      "atlas_content_state": "8_mechanism_units_written_not_empirically_validated"
+    },
+    {
+      "id": "D04",
+      "name": "钱包行为与角色",
+      "layer": "L3",
+      "unit_count": 8,
+      "units": [
+        "D04-01",
+        "D04-02",
+        "D04-03",
+        "D04-04",
+        "D04-05",
+        "D04-06",
+        "D04-07",
+        "D04-08"
+      ],
+      "lead_expert_ids": [
+        "E-L3-01",
+        "E-L3-04"
+      ],
+      "involved_expert_ids": [
+        "E-L3-01",
+        "E-L3-02",
+        "E-L3-04",
+        "E-L3-05",
+        "E-L4-02"
+      ],
+      "workflow_owners": [
+        "B03",
+        "B07"
+      ],
+      "existing_legacy_card_ids": [
+        "wallet-roles",
+        "deployer-history"
+      ],
+      "existing_ontology_coverage": "legacy_seeded_unverified",
+      "prior_competency_ids": [
+        "B03-K01",
+        "B03-K06"
+      ],
+      "atlas_document": "knowledge/atlas/D04.md",
+      "atlas_content_state": "8_mechanism_units_written_not_empirically_validated"
+    },
+    {
+      "id": "D05",
+      "name": "资金网络与主体关系",
+      "layer": "L3",
+      "unit_count": 8,
+      "units": [
+        "D05-01",
+        "D05-02",
+        "D05-03",
+        "D05-04",
+        "D05-05",
+        "D05-06",
+        "D05-07",
+        "D05-08"
+      ],
+      "lead_expert_ids": [
+        "E-L3-02"
+      ],
+      "involved_expert_ids": [
+        "E-L3-02"
+      ],
+      "workflow_owners": [
+        "B03",
+        "B07"
+      ],
+      "existing_legacy_card_ids": [
+        "funding-graph"
+      ],
+      "existing_ontology_coverage": "legacy_seeded_unverified",
+      "prior_competency_ids": [
+        "B03-K02",
+        "B03-K04"
+      ],
+      "atlas_document": "knowledge/atlas/D05.md",
+      "atlas_content_state": "8_mechanism_units_written_not_empirically_validated"
+    },
+    {
+      "id": "D06",
+      "name": "筹码与市场控制结构",
+      "layer": "L3",
+      "unit_count": 8,
+      "units": [
+        "D06-01",
+        "D06-02",
+        "D06-03",
+        "D06-04",
+        "D06-05",
+        "D06-06",
+        "D06-07",
+        "D06-08"
+      ],
+      "lead_expert_ids": [
+        "E-L3-03"
+      ],
+      "involved_expert_ids": [
+        "E-L3-03",
+        "E-L4-03"
+      ],
+      "workflow_owners": [
+        "B03",
+        "B07"
+      ],
+      "existing_legacy_card_ids": [
+        "concentration",
+        "sybil-wash"
+      ],
+      "existing_ontology_coverage": "legacy_seeded_unverified",
+      "prior_competency_ids": [
+        "B03-K05"
+      ],
+      "atlas_document": "knowledge/atlas/D06.md",
+      "atlas_content_state": "8_mechanism_units_written_not_empirically_validated"
+    },
+    {
+      "id": "D07",
+      "name": "市场行为与时序",
+      "layer": "L3",
+      "unit_count": 8,
+      "units": [
+        "D07-01",
+        "D07-02",
+        "D07-03",
+        "D07-04",
+        "D07-05",
+        "D07-06",
+        "D07-07",
+        "D07-08"
+      ],
+      "lead_expert_ids": [
+        "E-L3-05"
+      ],
+      "involved_expert_ids": [
+        "E-L3-01",
+        "E-L3-04",
+        "E-L3-05",
+        "E-L4-02"
+      ],
+      "workflow_owners": [
+        "B03",
+        "B04",
+        "B07"
+      ],
+      "existing_legacy_card_ids": [],
+      "existing_ontology_coverage": "declared_research_gap",
+      "prior_competency_ids": [
+        "B03-K03",
+        "B03-K07"
+      ],
+      "atlas_document": "knowledge/atlas/D07.md",
+      "atlas_content_state": "8_mechanism_units_written_not_empirically_validated"
+    },
+    {
+      "id": "D08",
+      "name": "交易策略与 Alpha",
+      "layer": "L4",
+      "unit_count": 8,
+      "units": [
+        "D08-01",
+        "D08-02",
+        "D08-03",
+        "D08-04",
+        "D08-05",
+        "D08-06",
+        "D08-07",
+        "D08-08"
+      ],
+      "lead_expert_ids": [
+        "E-L4-01",
+        "E-L4-02",
+        "E-L4-03"
+      ],
+      "involved_expert_ids": [
+        "E-L4-01",
+        "E-L4-02",
+        "E-L4-03",
+        "E-L7-01"
+      ],
+      "workflow_owners": [
+        "B01",
+        "B04",
+        "B07"
+      ],
+      "existing_legacy_card_ids": [
+        "reclaim-theory"
+      ],
+      "existing_ontology_coverage": "legacy_seeded_unverified",
+      "prior_competency_ids": [
+        "B01-K03",
+        "B04-K01",
+        "B04-K02",
+        "B04-K07"
+      ],
+      "atlas_document": "knowledge/atlas/D08.md",
+      "atlas_content_state": "8_mechanism_units_written_not_empirically_validated"
+    },
+    {
+      "id": "D09",
+      "name": "交易执行与风险",
+      "layer": "L5",
+      "unit_count": 8,
+      "units": [
+        "D09-01",
+        "D09-02",
+        "D09-03",
+        "D09-04",
+        "D09-05",
+        "D09-06",
+        "D09-07",
+        "D09-08"
+      ],
+      "lead_expert_ids": [
+        "E-L5-01",
+        "E-L5-02"
+      ],
+      "involved_expert_ids": [
+        "E-L2-02",
+        "E-L2-03",
+        "E-L5-01",
+        "E-L5-02",
+        "E-L6-02"
+      ],
+      "workflow_owners": [
+        "B04",
+        "B06",
+        "B07"
+      ],
+      "existing_legacy_card_ids": [
+        "token-security"
+      ],
+      "existing_ontology_coverage": "legacy_seeded_unverified",
+      "prior_competency_ids": [
+        "B04-K05",
+        "B04-K06",
+        "B04-K08",
+        "B05-K07",
+        "B06-K05"
+      ],
+      "atlas_document": "knowledge/atlas/D09.md",
+      "atlas_content_state": "8_mechanism_units_written_not_empirically_validated"
+    },
+    {
+      "id": "D10",
+      "name": "数据源与工程可靠性",
+      "layer": "L1",
+      "unit_count": 8,
+      "units": [
+        "D10-01",
+        "D10-02",
+        "D10-03",
+        "D10-04",
+        "D10-05",
+        "D10-06",
+        "D10-07",
+        "D10-08"
+      ],
+      "lead_expert_ids": [
+        "E-L0-02",
+        "E-L0-01"
+      ],
+      "involved_expert_ids": [
+        "E-L0-01",
+        "E-L0-02",
+        "E-L1-01",
+        "E-L1-02",
+        "E-L4-01",
+        "E-L6-01",
+        "E-L7-02"
+      ],
+      "workflow_owners": [
+        "B02",
+        "B05",
+        "B06",
+        "B07"
+      ],
+      "existing_legacy_card_ids": [
+        "candidate-entry",
+        "gmgn-field-combinations",
+        "gmgn-raw-prototype"
+      ],
+      "existing_ontology_coverage": "legacy_seeded_unverified",
+      "prior_competency_ids": [
+        "B01-K02",
+        "B02-K03",
+        "B02-K04",
+        "B02-K06",
+        "B02-K07",
+        "B05-K03",
+        "B06-K06",
+        "B07-K02",
+        "B07-K03",
+        "B07-K06"
+      ],
+      "atlas_document": "knowledge/atlas/D10.md",
+      "atlas_content_state": "8_mechanism_units_written_not_empirically_validated"
+    },
+    {
+      "id": "D11",
+      "name": "实证研究与反证",
+      "layer": "L6",
+      "unit_count": 8,
+      "units": [
+        "D11-01",
+        "D11-02",
+        "D11-03",
+        "D11-04",
+        "D11-05",
+        "D11-06",
+        "D11-07",
+        "D11-08"
+      ],
+      "lead_expert_ids": [
+        "E-L6-01",
+        "E-L6-02"
+      ],
+      "involved_expert_ids": [
+        "E-L5-02",
+        "E-L6-01",
+        "E-L6-02"
+      ],
+      "workflow_owners": [
+        "B05",
+        "B06",
+        "B07"
+      ],
+      "existing_legacy_card_ids": [
+        "evidence-synthesis",
+        "research-states"
+      ],
+      "existing_ontology_coverage": "legacy_seeded_unverified",
+      "prior_competency_ids": [
+        "B01-K05",
+        "B03-K08",
+        "B04-K03",
+        "B04-K04",
+        "B05-K01",
+        "B05-K02",
+        "B05-K04",
+        "B05-K05",
+        "B05-K06",
+        "B06-K01",
+        "B06-K02",
+        "B06-K03",
+        "B06-K04",
+        "B06-K07",
+        "B07-K05"
+      ],
+      "atlas_document": "knowledge/atlas/D11.md",
+      "atlas_content_state": "8_mechanism_units_written_not_empirically_validated"
+    },
+    {
+      "id": "D12",
+      "name": "AI 推理与知识进化",
+      "layer": "L7",
+      "unit_count": 8,
+      "units": [
+        "D12-01",
+        "D12-02",
+        "D12-03",
+        "D12-04",
+        "D12-05",
+        "D12-06",
+        "D12-07",
+        "D12-08"
+      ],
+      "lead_expert_ids": [
+        "E-L7-01",
+        "E-L7-02"
+      ],
+      "involved_expert_ids": [
+        "E-L0-01",
+        "E-L7-01",
+        "E-L7-02"
+      ],
+      "workflow_owners": [
+        "B01",
+        "B07"
+      ],
+      "existing_legacy_card_ids": [
+        "anti-false-completion"
+      ],
+      "existing_ontology_coverage": "legacy_seeded_unverified",
+      "prior_competency_ids": [
+        "B01-K01",
+        "B01-K04",
+        "B01-K06",
+        "B05-K08",
+        "B06-K08",
+        "B07-K01",
+        "B07-K07"
+      ],
+      "atlas_document": "knowledge/atlas/D12.md",
+      "atlas_content_state": "8_mechanism_units_written_not_empirically_validated"
+    }
+  ],
+  "units": [
+    {
+      "id": "D01-01",
+      "domain_id": "D01",
+      "layer": "L1",
+      "title": "Mint、Token Program 与 decimals",
+      "mechanism": "同样的 Token 名称并不是同样的资产；以 Mint、公钥、Token Program、精度、供应权限建立身份。Token Account owner 与程序 owner 不同。",
+      "invalid_inference": "符号相同、价格相近、平台标签相同都不能合并 Mint。",
+      "lead_expert_ids": [
+        "E-L1-01",
+        "E-L1-02"
+      ],
+      "document": "knowledge/atlas/D01.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D01-02",
+      "domain_id": "D01",
+      "layer": "L1",
+      "title": "System Account、Token Account、ATA 与 PDA",
+      "mechanism": "ATA 是默认 Token Account；同 owner 可有多个 token account；PDA 可按程序规则授权；创建 ATA 的 payer 不等于受益人。",
+      "invalid_inference": "不能把一个 Token Account 当一个自然人，把 PDA 当普通私钥钱包。",
+      "lead_expert_ids": [
+        "E-L1-01",
+        "E-L1-02"
+      ],
+      "document": "knowledge/atlas/D01.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D01-03",
+      "domain_id": "D01",
+      "layer": "L1",
+      "title": "Signer、fee payer、delegate 与权限",
+      "mechanism": "交易签名、费用承担、token 处分与经济受益是四种关系。Token-2022 扩展、Mint authority 与 Freeze authority 需要按标准/程序版本解释。",
+      "invalid_inference": "看见 fee payer 或转移批准者不能直接推断交易决策者。",
+      "lead_expert_ids": [
+        "E-L1-01",
+        "E-L1-02"
+      ],
+      "document": "knowledge/atlas/D01.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D01-04",
+      "domain_id": "D01",
+      "layer": "L1",
+      "title": "指令、CPI、innerInstructions 与余额净额",
+      "mechanism": "一笔聚合器 swap 可有多层 CPI 与多条转账腿；先解指令树与账户列表，再看前后 raw 余额、失败状态与费率，避免按转账数统计 swaps。",
+      "invalid_inference": "pre/postTokenBalances 单独不能还原所有中间经济意图；失败交易也可能付费。",
+      "lead_expert_ids": [
+        "E-L1-01",
+        "E-L1-02"
+      ],
+      "document": "knowledge/atlas/D01.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D01-05",
+      "domain_id": "D01",
+      "layer": "L1",
+      "title": "Slot、blockTime、commitment 与重组",
+      "mechanism": "事件发生 slot、RPC blockTime、processed/confirmed/finalized 与提供商实际收到的时间分别记录；提前可见性不能从历史回填重建。",
+      "invalid_inference": "交易历史出现的时间不是我方策略当时已知道它的证明。",
+      "lead_expert_ids": [
+        "E-L1-01",
+        "E-L1-02"
+      ],
+      "document": "knowledge/atlas/D01.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D01-06",
+      "domain_id": "D01",
+      "layer": "L1",
+      "title": "SOL、wSOL、rent、token fee 与单位",
+      "mechanism": "lamports、decimals、wSOL 包装/解绑、priority fee、tip、租金资金流分别处理；固定资产单位之后才能计算净额。",
+      "invalid_inference": "SOL 主账户余额差并非严格的单次买入金额，更不是账户最终利润。",
+      "lead_expert_ids": [
+        "E-L1-01",
+        "E-L1-02"
+      ],
+      "document": "knowledge/atlas/D01.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D01-07",
+      "domain_id": "D01",
+      "layer": "L1",
+      "title": "Swap、transfer、mint/burn、LP 的事件语义",
+      "mechanism": "按经济权利和资产变化区分买卖、内部转仓、供给变化、池储备变化；保留原指令的其他合理解释。",
+      "invalid_inference": "Token 到账或出账不能自动写成买入或获利卖出。",
+      "lead_expert_ids": [
+        "E-L1-01",
+        "E-L1-02"
+      ],
+      "document": "knowledge/atlas/D01.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D01-08",
+      "domain_id": "D01",
+      "layer": "L1",
+      "title": "可回放原始证据与去重键",
+      "mechanism": "保存签名、slot、instruction 路径、mint、owner、amount_raw、program_id、observed_at、available_at、provider 与来源哈希；按业务事件去重，避免聚合器多腿被双计。",
+      "invalid_inference": "只有处理后的平台 summary 时，不能声称能精确复算原始 swaps。",
+      "lead_expert_ids": [
+        "E-L1-01",
+        "E-L1-02"
+      ],
+      "document": "knowledge/atlas/D01.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D02-01",
+      "domain_id": "D02",
+      "layer": "L2",
+      "title": "Token 创建与权限初始化",
+      "mechanism": "区分 Mint 初始化、发行平台账号、创建交易 signer、权限设置、手续费安排和实际首次可交易时点。",
+      "invalid_inference": "不能把 creator 标签对应的工厂地址判为开发者个人。",
+      "lead_expert_ids": [
+        "E-L2-01",
+        "E-L2-03"
+      ],
+      "document": "knowledge/atlas/D02.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D02-02",
+      "domain_id": "D02",
+      "layer": "L2",
+      "title": "曲线定价类型与储备语义",
+      "mechanism": "虚拟储备、真实储备、恒定乘积、线性价/固定价机制不相同；曲线进度并不自动等于可提取 SOL 比例。",
+      "invalid_inference": "不应拿某平台曲线公式套用另一程序、另一版本。",
+      "lead_expert_ids": [
+        "E-L2-01",
+        "E-L2-03"
+      ],
+      "document": "knowledge/atlas/D02.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D02-03",
+      "domain_id": "D02",
+      "layer": "L2",
+      "title": "发行阶段中资金的经济职责",
+      "mechanism": "早期购买者承担价格风险；创建者/平台可能取得配置相关费用；执行者可能只提供手续费。区分各方不同收益函数。",
+      "invalid_inference": "早期钱包进场不等于团队吸筹，也不等于平台官方背书。",
+      "lead_expert_ids": [
+        "E-L2-01",
+        "E-L2-03"
+      ],
+      "document": "knowledge/atlas/D02.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D02-04",
+      "domain_id": "D02",
+      "layer": "L2",
+      "title": "毕业条件、事件边界与可交易性",
+      "mechanism": "毕业可能由售出量或报价储备等具体条件触发；跟踪 program event、交易时序、池启动及失败迁移。",
+      "invalid_inference": "curve_progress=1 不保证在所有时间都有有效 DEX SELL 路由。",
+      "lead_expert_ids": [
+        "E-L2-01",
+        "E-L2-03"
+      ],
+      "document": "knowledge/atlas/D02.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D02-05",
+      "domain_id": "D02",
+      "layer": "L2",
+      "title": "迁移前后价格连续性与池会计",
+      "mechanism": "曲线、迁移池、初始 LP 和池费率的价格单位可能不同；所谓‘平滑迁移’也要按具体合约验证可观测价格与实际 fill。",
+      "invalid_inference": "不同市场阶段 K 线不能只按 timestamp 拼在一起就研究趋势。",
+      "lead_expert_ids": [
+        "E-L2-01",
+        "E-L2-03"
+      ],
+      "document": "knowledge/atlas/D02.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D02-06",
+      "domain_id": "D02",
+      "layer": "L2",
+      "title": "多池并存、报价单位及套利",
+      "mechanism": "同 Mint 在不同池/路径的 SOL、USDC 价格可能短时不同，套利与新 LP 会改变深度；统一币种和时间才能比较。",
+      "invalid_inference": "最高报价不是所有持仓都能兑现的市场价格。",
+      "lead_expert_ids": [
+        "E-L2-01",
+        "E-L2-03"
+      ],
+      "document": "knowledge/atlas/D02.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D02-07",
+      "domain_id": "D02",
+      "layer": "L2",
+      "title": "阶段相关权限、LP 与安全机制",
+      "mechanism": "Token-2022 扩展、LP 控制、锁定或燃烧、授权变更均按版本分别识别；限制 LP 移除也不能阻止大户卖出导致冲击。",
+      "invalid_inference": "‘LP 安全’不能一票代替全部库存/卖出风险。",
+      "lead_expert_ids": [
+        "E-L2-01",
+        "E-L2-03"
+      ],
+      "document": "knowledge/atlas/D02.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D02-08",
+      "domain_id": "D02",
+      "layer": "L2",
+      "title": "生命周期中的参与者角色突变",
+      "mechanism": "初期狙击者可在毕业后成为主要潜在卖方；做市参与者进入后，价格形成从曲线驱动转为动态池与竞争订单共同决定。",
+      "invalid_inference": "把早期聪明钱角色永久冻结会误解下一阶段的供应压力。",
+      "lead_expert_ids": [
+        "E-L2-01",
+        "E-L2-03"
+      ],
+      "document": "knowledge/atlas/D02.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D03-01",
+      "domain_id": "D03",
+      "layer": "L2",
+      "title": "池模型和价格函数",
+      "mechanism": "CPMM、CLMM、launchpad 曲线和多池聚合器使用不同状态变量；CPMM 无费概念模型 k=x*y，交易数量影响平均成交价与边际价。",
+      "invalid_inference": "不能用同一个‘流动性 USD’代表所有价格冲击函数。",
+      "lead_expert_ids": [
+        "E-L2-02"
+      ],
+      "document": "knowledge/atlas/D03.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D03-02",
+      "domain_id": "D03",
+      "layer": "L2",
+      "title": "真实储备与虚拟储备",
+      "mechanism": "实际 vault 金额、曲线有效储备、已计提但未提出费用与美元估值区分；报价需使用程序实际参与曲线计算的净储备。",
+      "invalid_inference": "链上 vault 的 raw balance 不必然等于可用于曲线的储备。",
+      "lead_expert_ids": [
+        "E-L2-02"
+      ],
+      "document": "knowledge/atlas/D03.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D03-03",
+      "domain_id": "D03",
+      "layer": "L2",
+      "title": "交易费、创建者费与 LP 收益",
+      "mechanism": "trade fee、可选 creator fee、protocol/fund/LP 份额在不同 CPMM 配置下分别计算，方向和记账时点会影响净报价。",
+      "invalid_inference": "创建者持仓为 0 并不必然无费用收入，但未启用 fee 也不得假设有收入。",
+      "lead_expert_ids": [
+        "E-L2-02"
+      ],
+      "document": "knowledge/atlas/D03.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D03-04",
+      "domain_id": "D03",
+      "layer": "L2",
+      "title": "价格冲击、滑点与仓位容量",
+      "mechanism": "给定 SOL 输入与预期 token 输出、目标卖出 token 数量和报价资产输出，是不同方向的量；规模越大平均价通常越偏离边际价。",
+      "invalid_inference": "K 线最高价不是可一次性清仓的报价。",
+      "lead_expert_ids": [
+        "E-L2-02"
+      ],
+      "document": "knowledge/atlas/D03.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D03-05",
+      "domain_id": "D03",
+      "layer": "L2",
+      "title": "买卖成交量与风险敞口",
+      "mechanism": "反复套利/库存调整可以产生很高成交量，却未形成持久的独立风险敞口；同时净买和净卖指标可能因方向/池子定义改变。",
+      "invalid_inference": "buy_volume-sell_volume 不自动等于新增独立资本。",
+      "lead_expert_ids": [
+        "E-L2-02"
+      ],
+      "document": "knowledge/atlas/D03.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D03-06",
+      "domain_id": "D03",
+      "layer": "L2",
+      "title": "LP 增减与价格下跌来源",
+      "mechanism": "撤出 LP、单边 swap、美元计价 SOL 价格变化、池迁移能形成相似的表面 liquidity decline，需分类底层事件。",
+      "invalid_inference": "美元流动性下降不能只凭一个指标证明 LP 被开发者抽走。",
+      "lead_expert_ids": [
+        "E-L2-02"
+      ],
+      "document": "knowledge/atlas/D03.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D03-07",
+      "domain_id": "D03",
+      "layer": "L2",
+      "title": "MEV、排序、Jito 与价格传播",
+      "mechanism": "交易先后、优先费、Jito bundle 和套利会改变执行结果；领先买入可抬高后来者的成本，并可能影响领先者未来出售的可得报价。",
+      "invalid_inference": "同 slot 不等于同 bundle，更不证明同一经济受益人。",
+      "lead_expert_ids": [
+        "E-L2-02"
+      ],
+      "document": "knowledge/atlas/D03.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D03-08",
+      "domain_id": "D03",
+      "layer": "L2",
+      "title": "深度的动态性和尾部行情",
+      "mechanism": "当前小额 quote 不能保证未来大额退出；同步卖盘、流动性抽离、路由不可用和失败交易会使尾部损失非线性扩大。",
+      "invalid_inference": "某时刻‘买入流动性很高’不能代表危机时 sell-side capacity。",
+      "lead_expert_ids": [
+        "E-L2-02"
+      ],
+      "document": "knowledge/atlas/D03.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D04-01",
+      "domain_id": "D04",
+      "layer": "L3",
+      "title": "钱包角色不是单一身份",
+      "mechanism": "early buyer 描述时间、whale 描述规模、smart money 是平台筛选标签、sniper-like 描述执行风格、dev-linked 描述可见关系；同一地址可同时符合不同属性。",
+      "invalid_inference": "把标签当互斥人群或现实身份，必然造成角色错误。",
+      "lead_expert_ids": [
+        "E-L3-01",
+        "E-L3-04"
+      ],
+      "document": "knowledge/atlas/D04.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D04-02",
+      "domain_id": "D04",
+      "layer": "L3",
+      "title": "仓位获得路径",
+      "mechanism": "swap、转账、空投/发行、LP 变动和同 owner 多 Token Account 之间的转移具有不同成本与经济含义；先合并账本再讨论‘买入’。",
+      "invalid_inference": "收到 Token 不等于花钱买入；转出也不等于兑现收益。",
+      "lead_expert_ids": [
+        "E-L3-01",
+        "E-L3-04"
+      ],
+      "document": "knowledge/atlas/D04.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D04-03",
+      "domain_id": "D04",
+      "layer": "L3",
+      "title": "真实 PnL 与经济受益",
+      "mechanism": "已实现净收益、未实现仓位估值、费用、转仓成本、跨币资产、失败交易和残余不可卖仓位分离，平台 leaderboard 常缺一部分。",
+      "invalid_inference": "高胜率不能代替最大亏损、净现金流和成本可还原性。",
+      "lead_expert_ids": [
+        "E-L3-01",
+        "E-L3-04"
+      ],
+      "document": "knowledge/atlas/D04.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D04-04",
+      "domain_id": "D04",
+      "layer": "L3",
+      "title": "早期钱包优势来源",
+      "mechanism": "发现信息、执行排序、风险预算、选择标的、退出管理是不同能力；只有在本方可见时仍留有独立机会才可能支持跟单。",
+      "invalid_inference": "早买和赚钱不能直接证明选币天赋或可复制性。",
+      "lead_expert_ids": [
+        "E-L3-01",
+        "E-L3-04"
+      ],
+      "document": "knowledge/atlas/D04.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D04-05",
+      "domain_id": "D04",
+      "layer": "L3",
+      "title": "钱包策略状态随时变化",
+      "mechanism": "相同地址可先参与狙击、再变短期库存提供者、后转跨币轮动；角色变化随 Mint 阶段、成本、仓位和外部市场状态。",
+      "invalid_inference": "一个历史标签不应永久支配下一次分析。",
+      "lead_expert_ids": [
+        "E-L3-01",
+        "E-L3-04"
+      ],
+      "document": "knowledge/atlas/D04.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D04-06",
+      "domain_id": "D04",
+      "layer": "L3",
+      "title": "策略稳定性、样本和生存者偏差",
+      "mechanism": "观察最近与历史时间、同类发币总体、失败/停用钱包、市场 beta、不同币的重复表现，避免挑赚钱账号再解释其‘独特策略’。",
+      "invalid_inference": "只有盈利样本的深度画像并不会提供预测信息增量。",
+      "lead_expert_ids": [
+        "E-L3-01",
+        "E-L3-04"
+      ],
+      "document": "knowledge/atlas/D04.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D04-07",
+      "domain_id": "D04",
+      "layer": "L3",
+      "title": "开发者、创建者与真正经济权利",
+      "mechanism": "发行签名、Mint authority、创建平台费用账户、持币资产、LP 份额、收入分润可能属于不同主体；Creator=经济受益人只是候选。",
+      "invalid_inference": "Dev 已清仓不能推出所有经济激励消失。",
+      "lead_expert_ids": [
+        "E-L3-01",
+        "E-L3-04"
+      ],
+      "document": "knowledge/atlas/D04.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D04-08",
+      "domain_id": "D04",
+      "layer": "L3",
+      "title": "跟随者和原钱包的两份结果",
+      "mechanism": "原钱包价格、收到信号时刻、本方可报价仓位、以后独立需求和退出条件都不同；分别研究 wallet net 与 follower-asof net。",
+      "invalid_inference": "不能把原钱包回报作为后来者的投资收益。",
+      "lead_expert_ids": [
+        "E-L3-01",
+        "E-L3-04"
+      ],
+      "document": "knowledge/atlas/D04.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D05-01",
+      "domain_id": "D05",
+      "layer": "L3",
+      "title": "资金边的真实经济职能",
+      "mechanism": "本金、gas/rent/priority 赞助、交易所托管、LP 注资、creator fee 收入、服务商结算可能沿相似地址路径流动。",
+      "invalid_inference": "同一个上游地址不是同一个最终经济受益人。",
+      "lead_expert_ids": [
+        "E-L3-02"
+      ],
+      "document": "knowledge/atlas/D05.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D05-02",
+      "domain_id": "D05",
+      "layer": "L3",
+      "title": "地址图与权利图双层表达",
+      "mechanism": "转账边、批准权、delegate/PDA、交易执行权、风险承担与利润收益分别记录；同源、同执、同控、同收益是不同命题。",
+      "invalid_inference": "把交易支付者等同于决策者会错误聚类。",
+      "lead_expert_ids": [
+        "E-L3-02"
+      ],
+      "document": "knowledge/atlas/D05.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D05-03",
+      "domain_id": "D05",
+      "layer": "L3",
+      "title": "同源三重合与共同外因",
+      "mechanism": "共用交易所 HUB、公开上线事件、同价格曲线、共用执行软件导致同源/同刻/同成本相关；三个因素并非独立证据。",
+      "invalid_inference": "不能机械相乘三项吻合特征得到 95% 同控。",
+      "lead_expert_ids": [
+        "E-L3-02"
+      ],
+      "document": "knowledge/atlas/D05.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D05-04",
+      "domain_id": "D05",
+      "layer": "L3",
+      "title": "资金准备、归集、回收与再部署",
+      "mechanism": "多 Mint 的分配→风险仓位→退出→本金回流是资本管理候选；公共托管归集与机器人服务费也可能生成相同循环表象。",
+      "invalid_inference": "反复回流不必然是一个秘密团队。",
+      "lead_expert_ids": [
+        "E-L3-02"
+      ],
+      "document": "knowledge/atlas/D05.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D05-05",
+      "domain_id": "D05",
+      "layer": "L3",
+      "title": "服务枢纽、尘埃与多跳污染",
+      "mechanism": "识别 CEX/HUB/池 vault/协议服务账号、对 dust 小额边降权，追查每条边与实际付款或收费职能。",
+      "invalid_inference": "图上可达不意味着实际经济控制；多跳更不自动变强。",
+      "lead_expert_ids": [
+        "E-L3-02"
+      ],
+      "document": "knowledge/atlas/D05.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D05-06",
+      "domain_id": "D05",
+      "layer": "L3",
+      "title": "集中资本是否能够影响价格",
+      "mechanism": "资金统一未必有足够可处分库存、LP 权利或市场深度优势；钱包组持有 Token 和能以报价换出 SOL 是两个不同量。",
+      "invalid_inference": "经济关联不直接等于做市能力、护盘能力或盈利能力。",
+      "lead_expert_ids": [
+        "E-L3-02"
+      ],
+      "document": "knowledge/atlas/D05.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D05-07",
+      "domain_id": "D05",
+      "layer": "L3",
+      "title": "资本组织的经济激励分歧",
+      "mechanism": "服务商可赚运营费，LP 可赚手续费，创建者可持有收费权，方向性投资者承担 Token 价格波动；同一组织内部也可能利益不一致。",
+      "invalid_inference": "高交易额不等于所有相关钱包都希望币价上涨。",
+      "lead_expert_ids": [
+        "E-L3-02"
+      ],
+      "document": "knowledge/atlas/D05.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D05-08",
+      "domain_id": "D05",
+      "layer": "L3",
+      "title": "跨主体归因的不可识别性",
+      "mechanism": "公开授权/资产记录能够证实部分关系，但链下协议、交易所内账与实际受益权可能无法由链上唯一重建；应保留可比较的竞争世界。",
+      "invalid_inference": "严谨结论有时是控制关系不可识别，不能用数字置信度填空。",
+      "lead_expert_ids": [
+        "E-L3-02"
+      ],
+      "document": "knowledge/atlas/D05.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D06-01",
+      "domain_id": "D06",
+      "layer": "L3",
+      "title": "供应和分母是什么",
+      "mechanism": "total supply、circulating supply、曲线未售出、池 Vault、已锁定/冻结/销毁、托管余额需要单独定义；仅比较相同时间的同口径份额。",
+      "invalid_inference": "Top10=10% 在不同供应分母下不是同一个经济风险。",
+      "lead_expert_ids": [
+        "E-L3-03"
+      ],
+      "document": "knowledge/atlas/D06.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D06-02",
+      "domain_id": "D06",
+      "layer": "L3",
+      "title": "地址集中度与经济主体集中度",
+      "mechanism": "Top10/HHI 是地址级统计；同一主体拆地址会低估集中，托管/池地址可能虚增集中；主体归并必须注明推断边界。",
+      "invalid_inference": "地址数增加不能直接证明经济权力分散。",
+      "lead_expert_ids": [
+        "E-L3-03"
+      ],
+      "document": "knowledge/atlas/D06.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D06-03",
+      "domain_id": "D06",
+      "layer": "L3",
+      "title": "库存处分权与授权风险",
+      "mechanism": "Token owner、delegate、Mint 级授权、Token-2022 扩展及锁定/可转移限制会影响实际处分能力。",
+      "invalid_inference": "只统计持币数量不等于能一口气全部卖出。",
+      "lead_expert_ids": [
+        "E-L3-03"
+      ],
+      "document": "knowledge/atlas/D06.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D06-04",
+      "domain_id": "D06",
+      "layer": "L3",
+      "title": "LP、池 Vault 与市场可用深度",
+      "mechanism": "池中 Token 代表流动性机制而非普通鲸鱼仓位；池的报价储备、LP 移除权与 AMM 曲线决定 Token 销售可收回多少资产。",
+      "invalid_inference": "市值份额不等于等价的 SOL 退出额。",
+      "lead_expert_ids": [
+        "E-L3-03"
+      ],
+      "document": "knowledge/atlas/D06.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D06-05",
+      "domain_id": "D06",
+      "layer": "L3",
+      "title": "从‘吸筹’到实际净风险承接",
+      "mechanism": "地址间转账、统一主体拆分、自买自卖候选与真实独立买方买入需要分开；核心是风险敞口从谁转向谁、能持续多久。",
+      "invalid_inference": "没有看到派发并不自动等于吸筹已证实。",
+      "lead_expert_ids": [
+        "E-L3-03"
+      ],
+      "document": "knowledge/atlas/D06.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D06-06",
+      "domain_id": "D06",
+      "layer": "L3",
+      "title": "派发、尾仓及潜在卖压",
+      "mechanism": "已购早期库存、历史减仓、剩余持仓、分批出售路径、与池深度的相对规模会影响未来潜在供给。",
+      "invalid_inference": "某地址清仓不等于整个经济群体已经离场。",
+      "lead_expert_ids": [
+        "E-L3-03"
+      ],
+      "document": "knowledge/atlas/D06.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D06-07",
+      "domain_id": "D06",
+      "layer": "L3",
+      "title": "筹码变化与价格变化的因果竞争",
+      "mechanism": "价格上涨可能来自真实新增买盘、薄池价格冲击、跨池套利、换手与供给限制；筹码集中只是可能机制之一。",
+      "invalid_inference": "价格上涨本身不是控盘组织存在的证明。",
+      "lead_expert_ids": [
+        "E-L3-03"
+      ],
+      "document": "knowledge/atlas/D06.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D06-08",
+      "domain_id": "D06",
+      "layer": "L3",
+      "title": "尾部承接与集中持仓风险",
+      "mechanism": "多个可卖钱包若在同一阶段出售，动态储备与流动性抽离可能放大损失；风险应按真实 sell quote 而非峰值 K 线推算。",
+      "invalid_inference": "低 Top10 不意味着不存在突然流动性枯竭或退出失败。",
+      "lead_expert_ids": [
+        "E-L3-03"
+      ],
+      "document": "knowledge/atlas/D06.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D07-01",
+      "domain_id": "D07",
+      "layer": "L3",
+      "title": "多种时钟必须拆开",
+      "mechanism": "链上 slot/blocktime、提供商看到、我方解析完成、公众社交消息首次出现、下单报价和成交各有时间；统一时区不是统一可用时点。",
+      "invalid_inference": "历史首笔交易时刻不等于我们的先知时刻。",
+      "lead_expert_ids": [
+        "E-L3-05"
+      ],
+      "document": "knowledge/atlas/D07.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D07-02",
+      "domain_id": "D07",
+      "layer": "L3",
+      "title": "同步行为的共同事件模型",
+      "mechanism": "公开 Mint 开放、迁移、榜单通知、社群喊单、共用机器人会自然导致时间和成本接近；识别前需先考虑这些共同外因。",
+      "invalid_inference": "秒级同步本身不构成共同控制或内幕证据。",
+      "lead_expert_ids": [
+        "E-L3-05"
+      ],
+      "document": "knowledge/atlas/D07.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D07-03",
+      "domain_id": "D07",
+      "layer": "L3",
+      "title": "群体角色随阶段转换",
+      "mechanism": "早期狙击、短期获利、独立后续承接、晚期派发、LP/套利进入可出现在不同窗口；群体身份应随 Mint 阶段和仓位变化。",
+      "invalid_inference": "某阶段的积极买盘不能永久代表该群体看涨。",
+      "lead_expert_ids": [
+        "E-L3-05"
+      ],
+      "document": "knowledge/atlas/D07.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D07-04",
+      "domain_id": "D07",
+      "layer": "L3",
+      "title": "叙事和社交注意力的方向",
+      "mechanism": "某话题出现、传播、KOL 发言、榜单上升可能先于或后于价格；后者不能被事后重写成先验信号。",
+      "invalid_inference": "社交讨论热度高不直接证明独立风险资本新增。",
+      "lead_expert_ids": [
+        "E-L3-05"
+      ],
+      "document": "knowledge/atlas/D07.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D07-05",
+      "domain_id": "D07",
+      "layer": "L3",
+      "title": "跨 Mint 重复与资金再部署",
+      "mechanism": "同地址在 Mint A 退出并于 B 买入只证明该地址有序参与；若要声称资本搬家需查实际资金路径、另有本金和公共 HUB。",
+      "invalid_inference": "A 跌 B 涨不是 A 资金推动 B 的因果证明。",
+      "lead_expert_ids": [
+        "E-L3-05"
+      ],
+      "document": "knowledge/atlas/D07.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D07-06",
+      "domain_id": "D07",
+      "layer": "L3",
+      "title": "市场 beta、流动性环境和选择效应",
+      "mechanism": "多 Mint 同涨可能来自 SOL 走势、市场风险偏好、交易热潮和榜单机制；钱包特征要在可比较市场环境下解读。",
+      "invalid_inference": "某批钱包一直赚钱可能是刚好处在全市场上涨阶段。",
+      "lead_expert_ids": [
+        "E-L3-05"
+      ],
+      "document": "knowledge/atlas/D07.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D07-07",
+      "domain_id": "D07",
+      "layer": "L3",
+      "title": "事件先后与行为反身性",
+      "mechanism": "领先钱包交易会改变 AMM 储备，关注者追随又可能抬高早期库存可得退出价；信号传播本身影响市场状态。",
+      "invalid_inference": "领先交易是一条已经发生的市场影响，不是没有反馈的外部预测变量。",
+      "lead_expert_ids": [
+        "E-L3-05"
+      ],
+      "document": "knowledge/atlas/D07.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D07-08",
+      "domain_id": "D07",
+      "layer": "L3",
+      "title": "未被既有结构捕捉的模式发现",
+      "mechanism": "跨时点特征组合、无标签群体时序、逆向假说、市场阶段变化可发现旧策略解释不了的模式；之后需区分异常与增量信号。",
+      "invalid_inference": "发现罕见曲线形状不能立即命名为新盈利机制。",
+      "lead_expert_ids": [
+        "E-L3-05"
+      ],
+      "document": "knowledge/atlas/D07.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D08-01",
+      "domain_id": "D08",
+      "layer": "L4",
+      "title": "策略研究的四种不同目标",
+      "mechanism": "解释市场结构、预测未来状态、获得扣成本后的可交易收益、用于风险过滤各有不同目标与判据；一条解释可以很深却没有 Alpha。",
+      "invalid_inference": "不能将‘机制说得通’直接提升为交易信号。",
+      "lead_expert_ids": [
+        "E-L4-01",
+        "E-L4-02",
+        "E-L4-03"
+      ],
+      "document": "knowledge/atlas/D08.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D08-02",
+      "domain_id": "D08",
+      "layer": "L4",
+      "title": "直接复制钱包与二阶段信息",
+      "mechanism": "首买复制、群体预警、独立承接、跨币资金再部署、结构回收、风险过滤是不同策略家族；第二阶段可能与首买无关。",
+      "invalid_inference": "一条策略失败不代表其他机制不可能存在，反之亦然。",
+      "lead_expert_ids": [
+        "E-L4-01",
+        "E-L4-02",
+        "E-L4-03"
+      ],
+      "document": "knowledge/atlas/D08.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D08-03",
+      "domain_id": "D08",
+      "layer": "L4",
+      "title": "钱包信息的可观察窗口",
+      "mechanism": "将 wallet_event → provider_received → parsed → decision → quote 变为独立时钟；历史数据可见不等于当时可用。",
+      "invalid_inference": "回测中用事后钱包 PnL 选钱包不是实时可复现的信息。",
+      "lead_expert_ids": [
+        "E-L4-01",
+        "E-L4-02",
+        "E-L4-03"
+      ],
+      "document": "knowledge/atlas/D08.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D08-04",
+      "domain_id": "D08",
+      "layer": "L4",
+      "title": "信息增量与市场基线",
+      "mechanism": "与同阶段/池深度/热度/流动性/可见时点的非钱包候选比较，排除钱包只是公开市场条件的代理。",
+      "invalid_inference": "只看命中率高不能说明增加了独立预测能力。",
+      "lead_expert_ids": [
+        "E-L4-01",
+        "E-L4-02",
+        "E-L4-03"
+      ],
+      "document": "knowledge/atlas/D08.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D08-05",
+      "domain_id": "D08",
+      "layer": "L4",
+      "title": "FCZ、POC、AVWAP 与价量结构",
+      "mechanism": "成本锚是观察成交位置的统计物，不是确定的庄家真实成本；Sweep/Reclaim 与假突破需要明确时序和竞争机制。",
+      "invalid_inference": "某个 AVWAP 被价格尊重，不等于必有可复制收益。",
+      "lead_expert_ids": [
+        "E-L4-01",
+        "E-L4-02",
+        "E-L4-03"
+      ],
+      "document": "knowledge/atlas/D08.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D08-06",
+      "domain_id": "D08",
+      "layer": "L4",
+      "title": "异常发现、无标签探索与反直觉假说",
+      "mechanism": "从资金结构/交易时序/供给突变/结构转换中探索旧知识未命名的机制；字段穷举、聚类和逆向假说只生成候选。",
+      "invalid_inference": "异常组合被命名后不应自动变成盈利规律。",
+      "lead_expert_ids": [
+        "E-L4-01",
+        "E-L4-02",
+        "E-L4-03"
+      ],
+      "document": "knowledge/atlas/D08.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D08-07",
+      "domain_id": "D08",
+      "layer": "L4",
+      "title": "信号衰减、拥挤与市场反馈",
+      "mechanism": "领先钱包买入已改变池子价格，跟单拥挤又改变后续价格与领先者退出；区分信息发现、排序优势与真正持续需求。",
+      "invalid_inference": "原钱包交易价不是跟随者可获得的成交价。",
+      "lead_expert_ids": [
+        "E-L4-01",
+        "E-L4-02",
+        "E-L4-03"
+      ],
+      "document": "knowledge/atlas/D08.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D08-08",
+      "domain_id": "D08",
+      "layer": "L4",
+      "title": "触发、失效、退出和停止条件",
+      "mechanism": "定义可研究标的总体、可见触发、假说失败条件、风险否决、观察期与未成交/缺失状态；后续才进入 D11/D09 实证。",
+      "invalid_inference": "不允许失败后重画锚点或用未来高价倒推‘原本应该入场’。",
+      "lead_expert_ids": [
+        "E-L4-01",
+        "E-L4-02",
+        "E-L4-03"
+      ],
+      "document": "knowledge/atlas/D08.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D09-01",
+      "domain_id": "D09",
+      "layer": "L5",
+      "title": "信号价格与真实买入成本",
+      "mechanism": "last price、K 线 close、quote、模拟成交与链上真实 fill 不是同一种证据；买入方向、原始单位、路由、手续费需分开。",
+      "invalid_inference": "不能用原钱包 entry_price 作为后来者的成本。",
+      "lead_expert_ids": [
+        "E-L5-01",
+        "E-L5-02"
+      ],
+      "document": "knowledge/atlas/D09.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D09-02",
+      "domain_id": "D09",
+      "layer": "L5",
+      "title": "买卖双向报价",
+      "mechanism": "同一仓位既需当前买入报价又需对应 Token 数量的卖出报价；多个路径和池的状态可能动态变化。",
+      "invalid_inference": "当前‘可以买’不保证以后‘能卖’，无报价应明确不可交易。",
+      "lead_expert_ids": [
+        "E-L5-01",
+        "E-L5-02"
+      ],
+      "document": "knowledge/atlas/D09.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D09-03",
+      "domain_id": "D09",
+      "layer": "L5",
+      "title": "仓位与价格冲击的内生关系",
+      "mechanism": "增大订单会改变池储备、平均成交价和可能的套利反应；跟单人数变多也可能共同消耗剩余容量。",
+      "invalid_inference": "固定滑点百分数不能覆盖所有币种/市场阶段/规模。",
+      "lead_expert_ids": [
+        "E-L5-01",
+        "E-L5-02"
+      ],
+      "document": "knowledge/atlas/D09.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D09-04",
+      "domain_id": "D09",
+      "layer": "L5",
+      "title": "手续费、tip、失败交易与货币账本",
+      "mechanism": "base fee、priority fee、Jito tip、池费、可选 creator fee、token transfer fee、DEX 路由费与其他消耗分开；按 SOL 或统一计价单位结算。",
+      "invalid_inference": "不能既把价差写进 quote 又重复按同一成本扣两次。",
+      "lead_expert_ids": [
+        "E-L5-01",
+        "E-L5-02"
+      ],
+      "document": "knowledge/atlas/D09.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D09-05",
+      "domain_id": "D09",
+      "layer": "L5",
+      "title": "退出规则与残余仓位状态",
+      "mechanism": "分批止盈、止损、时间退出、流动性失效、部分成交、无路由及剩余不可卖仓位都应留在结局，不允许只统计成功退出。",
+      "invalid_inference": "MFE 高于 100% 不代表卖出曾经可以在那个价位发生。",
+      "lead_expert_ids": [
+        "E-L5-01",
+        "E-L5-02"
+      ],
+      "document": "knowledge/atlas/D09.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D09-06",
+      "domain_id": "D09",
+      "layer": "L5",
+      "title": "资金预算、并发与机会竞争",
+      "mechanism": "多个告警同时间发生时，有限 SOL 不能被每条信号重复使用；资金闲置、拒绝机会和被占用造成的机会成本需要同口径比较。",
+      "invalid_inference": "风控过滤减少交易数本身不是净收益提升证明。",
+      "lead_expert_ids": [
+        "E-L5-01",
+        "E-L5-02"
+      ],
+      "document": "knowledge/atlas/D09.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D09-07",
+      "domain_id": "D09",
+      "layer": "L5",
+      "title": "尾部风险与动态卖出容量",
+      "mechanism": "池变薄、LP 变更、权限风险、短时集体退出及路由失败时，损失可能非线性变化；风险分析重视可卖性与最坏合理情景。",
+      "invalid_inference": "历史低波动不能证明极端行情不存在。",
+      "lead_expert_ids": [
+        "E-L5-01",
+        "E-L5-02"
+      ],
+      "document": "knowledge/atlas/D09.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D09-08",
+      "domain_id": "D09",
+      "layer": "L5",
+      "title": "收益评价与跟单容量",
+      "mechanism": "wallet realized net、follower-asof paper net、失败/无报价频率、不同仓位的敏感性与市场阶段差异并列报告；扣成本后才讨论经济性。",
+      "invalid_inference": "没有独立可重放的实际双向报价，不能宣称已验证正净期望。",
+      "lead_expert_ids": [
+        "E-L5-01",
+        "E-L5-02"
+      ],
+      "document": "knowledge/atlas/D09.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D10-01",
+      "domain_id": "D10",
+      "layer": "L1",
+      "title": "供应商能力边界与真源等级",
+      "mechanism": "RPC 提供具体链上状态与历史查询；索引器、GMGN、OKX 可提供衍生标签和聚合统计；任何平台 smart-money 标签不是协议事实。",
+      "invalid_inference": "多平台报出相同标签可能来自同源数据，而非独立验证。",
+      "lead_expert_ids": [
+        "E-L0-02",
+        "E-L0-01"
+      ],
+      "document": "knowledge/atlas/D10.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D10-02",
+      "domain_id": "D10",
+      "layer": "L1",
+      "title": "字段路径、单位、分母、窗口",
+      "mechanism": "每字段保存路径、数值编码、Token decimals、SOL/USD 换算、窗口边界、是否累计值与 provider 版本，尤其区分 ratio 与百分数。",
+      "invalid_inference": "字段名相同不能假设口径一致；缺值不等于 0。",
+      "lead_expert_ids": [
+        "E-L0-02",
+        "E-L0-01"
+      ],
+      "document": "knowledge/atlas/D10.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D10-03",
+      "domain_id": "D10",
+      "layer": "L1",
+      "title": "采集时钟与 as-of 语义",
+      "mechanism": "记录链上 event_at、provider_first_seen、local_received、parsed、available、decision；历史 backfill 禁止冒充当时可用输入。",
+      "invalid_inference": "只有 chain blockTime 而无本地收到时间，不能证明实时先知。",
+      "lead_expert_ids": [
+        "E-L0-02",
+        "E-L0-01"
+      ],
+      "document": "knowledge/atlas/D10.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D10-04",
+      "domain_id": "D10",
+      "layer": "L1",
+      "title": "发现覆盖率与生存者偏差",
+      "mechanism": "热门榜/new listing/tracker 可能只覆盖入选资产；未进入来源的 Mint、无报警、RPC 限流与下线币必须成为总体缺口。",
+      "invalid_inference": "只研究热门候选会高估策略的选币成功率。",
+      "lead_expert_ids": [
+        "E-L0-02",
+        "E-L0-01"
+      ],
+      "document": "knowledge/atlas/D10.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D10-05",
+      "domain_id": "D10",
+      "layer": "L1",
+      "title": "异常和服务连续性",
+      "mechanism": "429、403、无响应、过期快照、重复页、链重组、RPC commitment 漂移要明确状态并可恢复；UNKNOWN 是状态不是价格变化。",
+      "invalid_inference": "服务源不可用时不允许输出‘无新钱包买入’。",
+      "lead_expert_ids": [
+        "E-L0-02",
+        "E-L0-01"
+      ],
+      "document": "knowledge/atlas/D10.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D10-06",
+      "domain_id": "D10",
+      "layer": "L1",
+      "title": "GMGN、OKX、RPC 的语义迁移",
+      "mechanism": "原 GMGN 的约 12 子类字段与旧组合思想可复用为问题清单，但不能假设 OKX 会提供完全同义字段；RPC 链上解码才可纠正部分平台推断。",
+      "invalid_inference": "仅把 provider-A 字段名替换成 provider-B 并不能完成语义适配。",
+      "lead_expert_ids": [
+        "E-L0-02",
+        "E-L0-01"
+      ],
+      "document": "knowledge/atlas/D10.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D10-07",
+      "domain_id": "D10",
+      "layer": "L1",
+      "title": "OKX CLI 收费与只读风险",
+      "mechanism": "OKX DEX market 的只读命令与 OnchainOS 整套钱包/支付 CLI 不同；文档中存在免费额外付费/自动支付机制，运行前需要单独确认账单与授权。",
+      "invalid_inference": "‘只读市场查询’不保证调用无财务副作用；离线解析不是实际联网认证。",
+      "lead_expert_ids": [
+        "E-L0-02",
+        "E-L0-01"
+      ],
+      "document": "knowledge/atlas/D10.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D10-08",
+      "domain_id": "D10",
+      "layer": "L1",
+      "title": "固定来源、版权与隔离状态",
+      "mechanism": "保存 repo+40-char commit+path 和许可状态；历史理论可作为 candidate，review_only 研究不得作为未经独立审计的规则证据；来源锚定只是可追溯。",
+      "invalid_inference": "把论文报告结果复制进内库，不代表本地复算或可商用授权。",
+      "lead_expert_ids": [
+        "E-L0-02",
+        "E-L0-01"
+      ],
+      "document": "knowledge/atlas/D10.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D11-01",
+      "domain_id": "D11",
+      "layer": "L6",
+      "title": "命题分解与证据状态",
+      "mechanism": "观察事实、供应商标签、机制推导、预测命题、经济可实现性、审批规则各有状态；学术解释不能占用实证结论状态。",
+      "invalid_inference": "论文中一个结果被其他卡引用十次仍只是同一来源。",
+      "lead_expert_ids": [
+        "E-L6-01",
+        "E-L6-02"
+      ],
+      "document": "knowledge/atlas/D11.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D11-02",
+      "domain_id": "D11",
+      "layer": "L6",
+      "title": "研究总体与选择机制",
+      "mechanism": "先定义发行总体、观察时间段与入选条件，保留未报警、失败池、断流、无报价、失败钱包，统一数据分母。",
+      "invalid_inference": "从最成功的 Mint 或热门榜后验筛选会制造虚假优势。",
+      "lead_expert_ids": [
+        "E-L6-01",
+        "E-L6-02"
+      ],
+      "document": "knowledge/atlas/D11.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D11-03",
+      "domain_id": "D11",
+      "layer": "L6",
+      "title": "时点冻结与无未来数据",
+      "mechanism": "feature_available_at 不晚于 decision_cutoff；historical backfill 不可冒充直播；预定义观测/标签/退出窗口，承诺之后不调整。",
+      "invalid_inference": "事后知道胜者再选择钱包会严重泄漏。",
+      "lead_expert_ids": [
+        "E-L6-01",
+        "E-L6-02"
+      ],
+      "document": "knowledge/atlas/D11.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D11-04",
+      "domain_id": "D11",
+      "layer": "L6",
+      "title": "竞争机制、零假设和负对照",
+      "mechanism": "同源钱要与公共 HUB、同平台公开事件、共用工具对照；涨价信号要与池深度/市值/热度等简单基准比较。",
+      "invalid_inference": "没有反证不能推出某种复杂机制已成立。",
+      "lead_expert_ids": [
+        "E-L6-01",
+        "E-L6-02"
+      ],
+      "document": "knowledge/atlas/D11.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D11-05",
+      "domain_id": "D11",
+      "layer": "L6",
+      "title": "消融、简洁基准和因果混淆",
+      "mechanism": "逐步拆去钱包标签、同步、FCZ、费用或时序信息，看增量是否仍在；检查同源特征重复计票和同一实体跨样本污染。",
+      "invalid_inference": "复杂策略胜率高不代表其复杂度必要。",
+      "lead_expert_ids": [
+        "E-L6-01",
+        "E-L6-02"
+      ],
+      "document": "knowledge/atlas/D11.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D11-06",
+      "domain_id": "D11",
+      "layer": "L6",
+      "title": "样本外、时间和群体双隔离",
+      "mechanism": "采用按时间滚动 OOS 与操作者/钱包群组隔离，防止同一资金组织通过多个地址同时出现在训练与测试。",
+      "invalid_inference": "随机拆交易行不是独立策略测试。",
+      "lead_expert_ids": [
+        "E-L6-01",
+        "E-L6-02"
+      ],
+      "document": "knowledge/atlas/D11.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D11-07",
+      "domain_id": "D11",
+      "layer": "L6",
+      "title": "真实/模拟/未经审计素材分离",
+      "mechanism": "模拟样本可测试机制计算，纸面价可研究报价假设，真实 live as-of 需独立日志；Why-Solana 回顾性报告保持 review_only，不能以自述数字当本地复验。",
+      "invalid_inference": "离线测试通过不是历史策略获利证明。",
+      "lead_expert_ids": [
+        "E-L6-01",
+        "E-L6-02"
+      ],
+      "document": "knowledge/atlas/D11.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D11-08",
+      "domain_id": "D11",
+      "layer": "L6",
+      "title": "拒绝、自我修正与失效退役",
+      "mechanism": "结果为 falsified、inconclusive、not_identifiable、source_unavailable 都应保留；事后修订触发条件要升级版本并重新样本外评估。",
+      "invalid_inference": "‘还没证明错’不能成为自动监控批准的理由。",
+      "lead_expert_ids": [
+        "E-L6-01",
+        "E-L6-02"
+      ],
+      "document": "knowledge/atlas/D11.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D12-01",
+      "domain_id": "D12",
+      "layer": "L7",
+      "title": "L0–L7、D01–D12 与知识类型",
+      "mechanism": "L 层代表研究职责，D 域代表专业主题；K0 常驻护栏、K1 按需知识、K2 真实观察；F0–F6 审批门、C0–C4 教学深度不要混成新本体。",
+      "invalid_inference": "创建新章节不能自称已安装 Bot 或已具备实盘研究能力。",
+      "lead_expert_ids": [
+        "E-L7-01",
+        "E-L7-02"
+      ],
+      "document": "knowledge/atlas/D12.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D12-02",
+      "domain_id": "D12",
+      "layer": "L7",
+      "title": "现有 21 位专家的认知职责",
+      "mechanism": "每位专家以专业问题和机制解释为主体，选 1 位主专家+必要挑战者；相同来源不能重复投票加权；专家角色与真正 Grok Bot 不同。",
+      "invalid_inference": "把 21 位专家同时发言不等于知识更深。",
+      "lead_expert_ids": [
+        "E-L7-01",
+        "E-L7-02"
+      ],
+      "document": "knowledge/atlas/D12.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D12-03",
+      "domain_id": "D12",
+      "layer": "L7",
+      "title": "B01–B07 分工与知识搬运",
+      "mechanism": "B01 组织研究、B02 数据、B03 资金、B04 策略、B05 反证、B06 独立 QA、B07 单监控；研究、审批、上线权限不应合并。",
+      "invalid_inference": "GitHub 的 Bot 文件不会自动在 Grok UI 创建 Bot。",
+      "lead_expert_ids": [
+        "E-L7-01",
+        "E-L7-02"
+      ],
+      "document": "knowledge/atlas/D12.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D12-04",
+      "domain_id": "D12",
+      "layer": "L7",
+      "title": "原始参考、来源准入和引用",
+      "mechanism": "Hermes 方法、meme 策略、qb- 数据与程序、Why-Solana 对抗方法、OKX 官方 Skills 逐域研究；固定版本、许可、隔离和未复验结论必须可追踪。",
+      "invalid_inference": "整库复制不代表 AI 真懂；未经审计论文不能直接进生产知识。",
+      "lead_expert_ids": [
+        "E-L7-01",
+        "E-L7-02"
+      ],
+      "document": "knowledge/atlas/D12.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D12-05",
+      "domain_id": "D12",
+      "layer": "L7",
+      "title": "知识最小单元到专家纵深研究",
+      "mechanism": "每个主题至少有对象、机制、竞争解释、专家问题、条件、专业交接、知识状态和来源；深度专题先由专家真实问题激发再回原理。",
+      "invalid_inference": "只有标签、术语或技能名称不构成专业知识。",
+      "lead_expert_ids": [
+        "E-L7-01",
+        "E-L7-02"
+      ],
+      "document": "knowledge/atlas/D12.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D12-06",
+      "domain_id": "D12",
+      "layer": "L7",
+      "title": "可复用本地程序和 Grok 运行边界",
+      "mechanism": "Python 3.11+ 离线入口、SQLite 研究任务队列、Git checkout SHA、doctor、合成样例和回归测试已在项目定义；真实 Grok 云部署要单独核查。",
+      "invalid_inference": "运行 CI 与一次合成 demo 不能证明真实网络接入或长期稳定。",
+      "lead_expert_ids": [
+        "E-L7-01",
+        "E-L7-02"
+      ],
+      "document": "knowledge/atlas/D12.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D12-07",
+      "domain_id": "D12",
+      "layer": "L7",
+      "title": "数据源、计费、权限与安全护栏",
+      "mechanism": "OKX/GMGN/RPC 真实调用按授权、费率/限流、只读参数白名单、日志、凭据隔离和审批处理；私人签名、swap、自动收费绝不从研究阶段偷偷启用。",
+      "invalid_inference": "标为 read-only 的 API 调用也可能存在第三方收费副作用。",
+      "lead_expert_ids": [
+        "E-L7-01",
+        "E-L7-02"
+      ],
+      "document": "knowledge/atlas/D12.md",
+      "state": "mechanism_drafted_unverified_market"
+    },
+    {
+      "id": "D12-08",
+      "domain_id": "D12",
+      "layer": "L7",
+      "title": "知识反馈、版本更新和冻结发布",
+      "mechanism": "GPT 提案 → 独立草稿 PR → 审查/测试 → 人工批准固定 SHA → Grok 按批准版本运行 → 报错反馈 GPT；研究假设与 B07 Monitor 冻结规则有隔离。",
+      "invalid_inference": "知识被研究、考试通过、源文件提交均不等于获批交易或部署。",
+      "lead_expert_ids": [
+        "E-L7-01",
+        "E-L7-02"
+      ],
+      "document": "knowledge/atlas/D12.md",
+      "state": "mechanism_drafted_unverified_market"
+    }
+  ]
+}
