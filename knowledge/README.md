@@ -8,7 +8,7 @@
 
 ## 当前知识研究的思维逻辑
 
-先读 [《专家主导的核心机制纵深研究法》](system/expert-mechanism-research-method.md)，再按 [核心机制研究进度](system/mechanism-research-plan.v1.json) 选择有真实解释价值的问题。**全域知识目录保证不遗漏；一个主专家和必要的跨域挑战负责钻深；新认知最终按原152项ID回填。** 下一轮聚焦 [D03 AMM市场价格、储备与可卖容量](domain/D03-market-price-mechanism-research-brief.md)。这条知识研究线与 `docs/next-steps.md` 中待完成的 Grok S1 云电脑验收并行、互不冒充完成状态。
+先读 [《专家主导的核心机制纵深研究法》](system/expert-mechanism-research-method.md)，再按 [核心机制研究进度](system/mechanism-research-plan.v1.json) 选择有真实解释价值的问题。**全域知识目录保证不遗漏；一个主专家和必要的跨域挑战负责钻深；新认知最终按原152项ID回填。** 当前下一轮聚焦 [从qb/Hermes关键钱包识别到实际可跟的后续信息](domain/D04-D08-key-wallet-followability-research-brief.md)，[D03 池价/储备](domain/D03-market-price-mechanism-research-brief.md) 仅按具体Mint业务需要补足。这条知识研究线与 `docs/next-steps.md` 中待完成的 Grok S1 云电脑验收并行、互不冒充完成状态。
 
 ## 全领域系统知识建设（草稿，非实证完成）
 
