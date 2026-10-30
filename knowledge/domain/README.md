@@ -10,7 +10,7 @@
 
 ## 新的专家研究入口：先机制突破，再回填知识单元
 
-每个领域的12个原子条目是**覆盖工具，不是研究执行顺序**。[《专家主导机制研究法》](../system/expert-mechanism-research-method.md) 用“核心矛盾→向下追问→向上推演→条件反转→跨专家挑战→知识回填”的方式深化专业知识。[《机制研究计划》](../system/mechanism-research-plan.v1.json) 当前将 D03 作为第一条核心主线；[《D03专家首轮任务》](D03-market-price-mechanism-research-brief.md) 明确市场价格、LP/储备、资金、筹码与跟单成本之间的具体机制和完成要求。**此处只是研究方法/计划，尚无新的D03实证或Alpha结论。**
+每个领域的12个原子条目是**覆盖工具，不是研究执行顺序**。[《专家主导机制研究法》](../system/expert-mechanism-research-method.md) 用“核心矛盾→向下追问→向上推演→条件反转→跨专家挑战→知识回填”的方式深化专业知识。[《机制研究计划》](../system/mechanism-research-plan.v1.json) 当前以qb/Hermes旧体系中的**关键钱包**为第一条M01主线，[《D04–D08关键钱包研究任务》](D04-D08-key-wallet-followability-research-brief.md)明确角色、资金、库存、信号可得与跟单剩余价值之间的机制；[《D03池价技术辅稿》](D03-market-price-mechanism-research-brief.md)按需补充。**本轮只有研究方法与任务，尚无新实证或Alpha结论。**
 
 ## 全部十二领域的最小知识入口
 
