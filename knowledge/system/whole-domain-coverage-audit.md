@@ -3,6 +3,10 @@
 > 此审计是 2026-10-30 在分支 `knowledge/whole-spectrum-20261030-v1` 的知识基线，不是对全部协议源码或历史数据的逐个事实复验。**目录完整**只表示从最小概念到上层经济研究的每个领域不再缺“讨论入口”；**研究深入**仍须由相关专家逐问题完成。  
 > 真源：`knowledge/system/ontology.v1.json`（八层十二域），`knowledge/experts/registry.v1.json`（21 专家）；各领域具体原子单元：`knowledge/system/whole-domain-atlas.v1.json`。
 
+## 2026-10-30 项目原点重新审查（优先级变更）
+
+本审计原本偏向“按学科完整”展开。现已阅读Hermes钱包/同源/筹码/字段、meme- FCZ/深洗/死亡盘/多策略、qb单币关键钱包程序和Why-Solana review_only反例，详见 [《五个参考项目知识阶段审计》](reference-projects-meme-knowledge-audit-20261030.md)。知识体系不是空白，当前最大缺口是**原业务识别出来的“关键钱包”怎样传导到可被后来者得知的独立市场状态**，而不是缺一本通用DeFi市场微观结构教科书。因此 [新M01](../domain/D04-D08-key-wallet-followability-research-brief.md) 主导，D03按具体问题研究。下面原十二域缺口表仍成立，但不是强制按领域顺序做课题。
+
 ## 一、逐域现状：已经有的与仍未吃透的
 
 | 领域 | 已有知识基线及入口 | 最需要深入、当前不能宣布完成的内容 | 关键参与专家 | 本轮成果 |
