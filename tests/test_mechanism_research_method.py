@@ -59,11 +59,12 @@ class MechanismFirstMethodTests(unittest.TestCase):
             self.assertTrue(track["root_question"])
             self.assertTrue(track["depth_breakthrough"])
             self.assertTrue(track["ready_when"])
-        self.assertEqual(tracks[0]["lead"], "E-L2-02")
+        self.assertEqual(tracks[0]["lead"], "E-L4-02")
         self.assertEqual(tracks[0]["status"], "next_planned_not_started")
-        self.assertIn("D03-K02", tracks[0]["focus_units"])
+        self.assertIn("D04-K02", tracks[0]["focus_units"])
         self.assertIn("D05-K02", tracks[0]["focus_units"])
         self.assertIn("D06-K05", tracks[0]["focus_units"])
+        self.assertIn("D07-K11", tracks[0]["focus_units"])
         self.assertIn("D09-K01", tracks[0]["focus_units"])
 
     def test_maturity_boundaries_and_no_production_promotion(self):
@@ -86,14 +87,23 @@ class MechanismFirstMethodTests(unittest.TestCase):
         for keyword in ["152", "主专家", "向下挖", "向上推", "条件反转",
                         "知识单元", "回填", "F0–F6"]:
             self.assertIn(keyword, method_text)
-        brief = (ROOT / "knowledge/domain/D03-market-price-mechanism-research-brief.md")
+        brief = ROOT / self.plan["first_project_mechanism_brief"]
         self.assertTrue(brief.is_file())
         text = brief.read_text(encoding="utf-8")
-        for keyword in ["E-L2-02", "M01", "CPMM", "虚拟储备",
+        for keyword in ["E-L4-02", "M01", "关键钱包", "Bundler",
                         "D05", "D06", "D09", "next_planned_not_started"]:
             self.assertIn(keyword, text)
-        self.assertIn("研究完成后", text)
-        self.assertIn("尚未创建", text)
+        self.assertIn("真正完成研究时", text)
+        self.assertIn("尚未撰写", text)
+        old_d03 = (ROOT / self.plan["previous_d03_brief"]).read_text(
+            encoding="utf-8")
+        self.assertIn("辅助", old_d03)
+        self.assertIn("不再决定研究执行顺序", old_d03)
+        origin_audit = (ROOT / self.plan["project_origin_audit"]).read_text(
+            encoding="utf-8")
+        for term in ["Hermes", "meme-", "qb-", "Why-Solana",
+                     "review_only", "关键钱包", "项目原点"]:
+            self.assertIn(term, origin_audit)
         for p in ["knowledge/README.md", "knowledge/domain/README.md",
                   "knowledge/system/README.md", "knowledge/experts/README.md",
                   "skills/solana-meme-knowledge/SKILL.md",
