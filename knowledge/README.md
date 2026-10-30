@@ -2,6 +2,10 @@
 
 **Purpose:** preserve the expert learning, domain research, adversarial perspectives and practical lessons from three earlier projects while discarding Hermes-specific *runtime* assumptions. A working Bot without validated external knowledge is only orchestration.
 
+## L0–L7 专属专家视角（Draft，非已安装 Bot）
+
+[21 位内部专业专家与完整分析程序](experts/README.md) 分布在全部八个知识层：从原始来源/交易/市场/钱包资金，到策略机会、执行、独立反证与监控治理。每位专家都有自己的知识、观察顺序、相反机制、关键查询、停止条件，并映射现有 B01–B07 工作责任；**不创建 21 个 Grok Bot**。机器注册表为 [registry.v1.json](experts/registry.v1.json)，离线专家方法查询：`PYTHONPATH=src python -m solana_meme_os.expert_brief --question "同源钱包能跟单吗？" --objective ECONOMIC`。仅提供研究材料与调查计划，不是大模型专家自动执行器或市场验证结果。
+
 ## Project-internal specialist knowledge expansion (Draft)
 
 The existing D01–D12 ontology now has a **practical domain content entry point**: [domain/README.md](domain/README.md). Four targeted knowledge files explain actual Solana transaction/market mechanisms, wallet/funding/holder behavior, copy-trading executability, and evidence-safe cases. These are **review candidates**, not independently validated Alpha, live data integrations, or a replacement for the 15 archived source cards. Do not bulk load them into the monitor; choose only relevant domain content per question, observe the K1 source-admission restrictions, and require K2 original evidence for factual claims.

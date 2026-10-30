@@ -20,11 +20,15 @@ Prohibitions: No automatic trades, private keys, swap, signing, broadcast or fak
 
 Begin a novel question with `PYTHONPATH=src python -m solana_meme_os.research --question "原始问题"`. Inspect the returned `sources`, then obtain **only** the needed pinned source documents; `--fetch-excerpts` is optional read-only GitHub preview and may be unavailable. Study `docs/on-demand-research-design.md` and `knowledge/source-index-README.md`. Cite original authors and source revisions.
 
-A research packet without `observations.accepted` is NOT a verified market answer. When decision timing matters, pass `--decision-at` and evidence entries containing observed_at and available_at; reject later or missing data. Do not turn the Why-Solana study's detected structural patterns into copy-trading alpha: its own research showed that some detectable patterns were not economically tradable. New findings require negative controls, a frozen evaluation plan and evidence of costs/latency.
+A research packet without `observations.accepted` is NOT a verified market answer. When decision timing matters, pass `--decision-at` and evidence entries containing observed_at and available_at; reject later or missing data. Do not turn the Why-Solana study's detected structural patterns into copy-trading alpha: the external report contains examples of detectable patterns without proven executable profits (review-only; no independent local replication). New findings require negative controls, a frozen evaluation plan and evidence of costs/latency.
 
 ## Full-system knowledge use
 
 Consult `knowledge/system/README.md` and `ontology.v1.json` for cross-domain prerequisites and `knowledge/system/RESEARCH.md` for the structural/predictive/economic separation. New external findings in `research-units.v1.json` are claims for adversarial investigation, never auto-published trading rules. `python -m solana_meme_os.knowledge_system --question "问题"` is only literal domain navigation.
+
+## Per-layer specialist reasoning (internal research personas, not deployed Bots)
+
+Consult `knowledge/experts/README.md` and `knowledge/experts/registry.v1.json` **after** selecting a concrete problem. Optionally call `PYTHONPATH=src python -m solana_meme_os.expert_brief --question "problem" --objective EXPLAIN` to obtain a deterministic 1–3-specialist brief, or `--expert-id E-L3-02` for a specific specialist. The selector does **not** execute 21 agents, reason over live Solana transactions, authorize rules, or fetch external sources. Read the chosen experts' specialist knowledge and `decisive_next_check`, ask a competing expert to challenge the underlying mechanism when needed, then retrieve only admitted K1 and real time-safe K2 evidence. Return fact, mechanism candidates, conflict, discriminating query, UNKNOWN/stop and source refs. B07 is frozen monitoring and may never dynamically change trading research rules.
 
 ## Domain-depth knowledge: use the existing D01–D12 structure
 
