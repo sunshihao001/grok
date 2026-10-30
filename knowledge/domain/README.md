@@ -4,6 +4,10 @@
 >
 > **状态**：`domain_method_candidate`，为审阅中的专用知识包。不是已完成 K2 实测、已证明正收益策略或已冻结 B07 规则。不同的 K1 来源受 `knowledge/source-admission.v1.json` 管理；被标记 review_only 的后期研究不自动成为本包事实。没有迁移整库历史文本。
 
+## 当前Meme交易的真实知识起点
+
+优先参照 [《从五个参考项目审查Meme知识储备》](../system/reference-projects-meme-knowledge-audit-20261030.md)：已有的GMGN字段、qb关键钱包、同源/筹码追踪和meme- FCZ/死亡盘不是空白。下一条主研究为 [《D04–D08关键钱包：谁值得研究，谁不能机械跟单？》](D04-D08-key-wallet-followability-research-brief.md)；D03一般AMM价格任务现为按需解释Meme特定池/报价的辅助材料。新方法应深化这些旧知识之间的断层，而非远离Meme业务另写金融学。
+
 ## 新的专家研究入口：先机制突破，再回填知识单元
 
 每个领域的12个原子条目是**覆盖工具，不是研究执行顺序**。[《专家主导机制研究法》](../system/expert-mechanism-research-method.md) 用“核心矛盾→向下追问→向上推演→条件反转→跨专家挑战→知识回填”的方式深化专业知识。[《机制研究计划》](../system/mechanism-research-plan.v1.json) 当前将 D03 作为第一条核心主线；[《D03专家首轮任务》](D03-market-price-mechanism-research-brief.md) 明确市场价格、LP/储备、资金、筹码与跟单成本之间的具体机制和完成要求。**此处只是研究方法/计划，尚无新的D03实证或Alpha结论。**
