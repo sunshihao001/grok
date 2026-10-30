@@ -43,7 +43,12 @@
         "E-L6-01"
       ],
       "authority": "hypotheses_and_readonly_evidence_only",
-      "evidence_status": "proposed_not_live_validated"
+      "evidence_status": "proposed_not_live_validated",
+      "specialist_knowledge_primitives": [
+        "repo+commit+blob SHA 引用与证据真实性分离",
+        "外部报告的样本总体、研究时点和生成流程",
+        "同源转载/后期回填/版本冲突的可审计标记"
+      ]
     },
     {
       "id": "E-L0-02",
@@ -79,7 +84,12 @@
         "E-L1-02"
       ],
       "authority": "hypotheses_and_readonly_evidence_only",
-      "evidence_status": "proposed_not_live_validated"
+      "evidence_status": "proposed_not_live_validated",
+      "specialist_knowledge_primitives": [
+        "原始字节→特征→结构候选不能跃级",
+        "分母选择决定 buy_volume 等比值语义",
+        "source_json_path、decimals、时间窗口、缺失原因"
+      ]
     },
     {
       "id": "E-L1-01",
@@ -115,7 +125,12 @@
         "E-L3-01"
       ],
       "authority": "hypotheses_and_readonly_evidence_only",
-      "evidence_status": "proposed_not_live_validated"
+      "evidence_status": "proposed_not_live_validated",
+      "specialist_knowledge_primitives": [
+        "Solana 交易外层与内层 CPI 解码",
+        "Token Account owner / fee payer / PDA 角色区分",
+        "交易成功状态及 swap/transfer/LP 的净余额复原"
+      ]
     },
     {
       "id": "E-L1-02",
@@ -151,7 +166,12 @@
         "E-L6-02"
       ],
       "authority": "hypotheses_and_readonly_evidence_only",
-      "evidence_status": "proposed_not_live_validated"
+      "evidence_status": "proposed_not_live_validated",
+      "specialist_knowledge_primitives": [
+        "slot、blockTime 与真实接收时间区别",
+        "provider→parsed→available→decision→quote 时钟链",
+        "历史 backfill、延迟与commitment 错配"
+      ]
     },
     {
       "id": "E-L2-01",
@@ -187,7 +207,12 @@
         "E-L3-01"
       ],
       "authority": "hypotheses_and_readonly_evidence_only",
-      "evidence_status": "proposed_not_live_validated"
+      "evidence_status": "proposed_not_live_validated",
+      "specialist_knowledge_primitives": [
+        "launchpad bonding curve/毕业/迁移的事件定义",
+        "多池、多程序和不同交易阶段窗口",
+        "候选入口只表示可研究而非可买"
+      ]
     },
     {
       "id": "E-L2-02",
@@ -222,7 +247,12 @@
         "E-L3-03"
       ],
       "authority": "hypotheses_and_readonly_evidence_only",
-      "evidence_status": "proposed_not_live_validated"
+      "evidence_status": "proposed_not_live_validated",
+      "specialist_knowledge_primitives": [
+        "AMM reserve、边际报价与规模冲击",
+        "SOL 价格引起的 USD 流动性重估",
+        "LP 真实 add/remove 与多路由双向报价"
+      ]
     },
     {
       "id": "E-L2-03",
@@ -257,7 +287,12 @@
         "E-L6-01"
       ],
       "authority": "hypotheses_and_readonly_evidence_only",
-      "evidence_status": "proposed_not_live_validated"
+      "evidence_status": "proposed_not_live_validated",
+      "specialist_knowledge_primitives": [
+        "Mint/freeze authority 与 Token-2022 扩展",
+        "池资产与 LP 控制、交易路由错误区分",
+        "卖出限制/拥堵/滑点故障的不同处理"
+      ]
     },
     {
       "id": "E-L3-01",
@@ -293,7 +328,12 @@
         "E-L4-02"
       ],
       "authority": "hypotheses_and_readonly_evidence_only",
-      "evidence_status": "proposed_not_live_validated"
+      "evidence_status": "proposed_not_live_validated",
+      "specialist_knowledge_primitives": [
+        "早期买/卖净额、仓位持续时间、PnL 已实未实",
+        "钱包画像按 mint×阶段×时间定位",
+        "排行榜选择偏差、跨地址转仓与成本缺失"
+      ]
     },
     {
       "id": "E-L3-02",
@@ -330,7 +370,12 @@
         "E-L6-01"
       ],
       "authority": "hypotheses_and_readonly_evidence_only",
-      "evidence_status": "proposed_not_live_validated"
+      "evidence_status": "proposed_not_live_validated",
+      "specialist_knowledge_primitives": [
+        "有向资金图与 signature+instruction_index 去重",
+        "公共 CEX/HUB 与 dust 排除",
+        "共同付款、实际协作、同一实控三种不同主张"
+      ]
     },
     {
       "id": "E-L3-03",
@@ -366,7 +411,12 @@
         "E-L4-03"
       ],
       "authority": "hypotheses_and_readonly_evidence_only",
-      "evidence_status": "proposed_not_live_validated"
+      "evidence_status": "proposed_not_live_validated",
+      "specialist_knowledge_primitives": [
+        "holder Top10 / HHI 与经济主体归并差异",
+        "池 vault、CEX/托管排除口径",
+        "独立承接与关联地址换手难题"
+      ]
     },
     {
       "id": "E-L3-04",
@@ -401,7 +451,12 @@
         "E-L3-05"
       ],
       "authority": "hypotheses_and_readonly_evidence_only",
-      "evidence_status": "proposed_not_live_validated"
+      "evidence_status": "proposed_not_live_validated",
+      "specialist_knowledge_primitives": [
+        "Mint 创建签名者与 launchpad 工厂账号区别",
+        "系列发币时间、资金准备、退出事件",
+        "共用服务导致开发者标签污染"
+      ]
     },
     {
       "id": "E-L3-05",
@@ -437,7 +492,12 @@
         "E-L4-02"
       ],
       "authority": "hypotheses_and_readonly_evidence_only",
-      "evidence_status": "proposed_not_live_validated"
+      "evidence_status": "proposed_not_live_validated",
+      "specialist_knowledge_primitives": [
+        "同步买入与同一市场触发的零假设",
+        "从一个币退出到下一币资金再部署的时间链",
+        "社交传播先后、市场 beta 与跨币轮动"
+      ]
     },
     {
       "id": "E-L4-01",
@@ -473,7 +533,12 @@
         "E-L6-02"
       ],
       "authority": "hypotheses_and_readonly_evidence_only",
-      "evidence_status": "proposed_not_live_validated"
+      "evidence_status": "proposed_not_live_validated",
+      "specialist_knowledge_primitives": [
+        "五问题字段反推：事实→痕迹→字段→配对→语义",
+        "字段穷举/无标签异常/反向机制仅是发现器",
+        "先冻结假设与测试集，再做新特征验证"
+      ]
     },
     {
       "id": "E-L4-02",
@@ -510,7 +575,12 @@
         "E-L6-02"
       ],
       "authority": "hypotheses_and_readonly_evidence_only",
-      "evidence_status": "proposed_not_live_validated"
+      "evidence_status": "proposed_not_live_validated",
+      "specialist_knowledge_primitives": [
+        "钱包入场优势≠跟随者首个可见报价优势",
+        "事件→收到→信号→询价的价格吸收",
+        "独立信号对照与双向可交易覆盖率"
+      ]
     },
     {
       "id": "E-L4-03",
@@ -547,7 +617,12 @@
         "E-L6-01"
       ],
       "authority": "hypotheses_and_readonly_evidence_only",
-      "evidence_status": "proposed_not_live_validated"
+      "evidence_status": "proposed_not_live_validated",
+      "specialist_knowledge_primitives": [
+        "第一控盘区、POC/AVWAP 的事前锚点约束",
+        "深洗/死亡盘与真承接/诱多反弹的对立解释",
+        "FCZ/简单突破/纯VWAP 的独立比较"
+      ]
     },
     {
       "id": "E-L5-01",
@@ -582,7 +657,12 @@
         "E-L6-02"
       ],
       "authority": "hypotheses_and_readonly_evidence_only",
-      "evidence_status": "proposed_not_live_validated"
+      "evidence_status": "proposed_not_live_validated",
+      "specialist_knowledge_primitives": [
+        "链上成交价、DEX quote、模拟fill 三者区分",
+        "仓位规模与 route/fee/tip/冲击的内生成本",
+        "买入+卖出双侧路径与失败退出账本"
+      ]
     },
     {
       "id": "E-L5-02",
@@ -618,7 +698,12 @@
         "E-L6-02"
       ],
       "authority": "hypotheses_and_readonly_evidence_only",
-      "evidence_status": "proposed_not_live_validated"
+      "evidence_status": "proposed_not_live_validated",
+      "specialist_knowledge_primitives": [
+        "权限、流动性、仓位容量、尾部卖出风险分开",
+        "filter/no-filter 在相同机会和资金预算下对比",
+        "拒绝机会的成本与未成交不记作零"
+      ]
     },
     {
       "id": "E-L6-01",
@@ -654,7 +739,12 @@
         "E-L7-01"
       ],
       "authority": "hypotheses_and_readonly_evidence_only",
-      "evidence_status": "proposed_not_live_validated"
+      "evidence_status": "proposed_not_live_validated",
+      "specialist_knowledge_primitives": [
+        "必要/增强/否决证据分别呈现",
+        "共享服务、数据泄露、同源重复和意图归因反证",
+        "选择最可能改变结论的负对照/原始签名"
+      ]
     },
     {
       "id": "E-L6-02",
@@ -690,7 +780,12 @@
         "E-L7-02"
       ],
       "authority": "hypotheses_and_readonly_evidence_only",
-      "evidence_status": "proposed_not_live_validated"
+      "evidence_status": "proposed_not_live_validated",
+      "specialist_knowledge_primitives": [
+        "时间与资金群组联合样本外隔离",
+        "失败/缺失/无卖出路径均计入分母",
+        "策略预测增量、净收益和真实成交分层检验"
+      ]
     },
     {
       "id": "E-L7-01",
@@ -725,7 +820,12 @@
         "E-L7-02"
       ],
       "authority": "hypotheses_and_readonly_evidence_only",
-      "evidence_status": "proposed_not_live_validated"
+      "evidence_status": "proposed_not_live_validated",
+      "specialist_knowledge_primitives": [
+        "按问题挑必要专家，不机械顺序全链",
+        "不同专家报告的同一数据不算独立证据",
+        "竞争解释以证据分歧处理、不靠共识投票"
+      ]
     },
     {
       "id": "E-L7-02",
@@ -758,7 +858,13 @@
       "abstain_or_downgrade_when": "未批准规则、源故障、持久状态争用或环境不匹配",
       "handoff_to_expert_ids": [],
       "authority": "hypotheses_and_readonly_evidence_only",
-      "evidence_status": "proposed_not_live_validated"
+      "evidence_status": "proposed_not_live_validated",
+      "specialist_knowledge_primitives": [
+        "B07 只能加载人工批准冻结只读规则",
+        "单写入者、去重、来源断连退避与事故日志",
+        "监控 UNKNOWN/Research Gap 与发布回滚分离"
+      ]
     }
-  ]
+  ],
+  "policy_note": "Old 00c 5 questions and three-tier conditions are epistemic investigation guides; old numeric age windows, correlation thresholds, HHI cutoffs and fixed confidence 0.8 are NOT calibrated rules. Old 00e combinatorial discoveries are hypothesis generators only."
 }
