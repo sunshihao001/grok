@@ -20,7 +20,7 @@
 
 ## 本轮验证 / 尚未验证
 
-- 将重新读取 GitHub 草案分支中的文件并检查相互引用及 Markdown metadata；此项以实际复核结果为准。
+- 已重新读取草案分支中的 Skill、两份参考文件、入口 README 和本报告，确认均存在且内容可读；主 Skill 含 `name: solana-meme-expert-writing` metadata，链接路径一致；主分支提交未变。
 - **未做**：Grok 云端 Skill 安装或加载、真实市场数据回放、与旧写作提示词的盲测对照、盈利模型检验。
 - 完成状态应描述为“写作 Skill 设计与原始研究示范已生成”，而非“Grok 已具备专家智能”。
 
