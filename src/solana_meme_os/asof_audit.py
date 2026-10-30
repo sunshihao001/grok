@@ -42,7 +42,7 @@ def audit_event(record: dict[str, Any]) -> dict[str, Any]:
     if record["capture_mode"] not in CAPTURES:
         raise ValueError("capture_mode must be live_recorded or historical_backfill")
     decision = _dt(record["decision_cutoff_utc"], "decision_cutoff_utc")
-    event = _dt(record["event_at_utc"], "event_at_utc")
+    if record["event_at_utc"] is None:\n        return {"event_id":record["event_id"],"status":"EVENT_TIME_UNKNOWN",\n                "eligible_as_decision_feature":False,\n                "reason":"null blockTime must remain unknown; require alternate slot/receipt audit"}\n    event = _dt(record["event_at_utc"], "event_at_utc")
     received = _dt(record["provider_received_at_utc"], "provider_received_at_utc")
     parsed = _dt(record["parsed_at_utc"], "parsed_at_utc")
     available = _dt(record["feature_available_at_utc"], "feature_available_at_utc")

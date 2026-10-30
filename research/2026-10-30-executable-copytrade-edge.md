@@ -184,3 +184,5 @@ B05/B06 对独立数据复跑，记录失效/滚动漂移。只有经人工审�
 **外部最新权威来源（未纳入 K1 固定提交，访问时仍需检查版本）**：Solana RPC, Indexing 和 Jupiter Swap V2/Jito 官方文档 URL 见 §2。第三方版权分析只保留短数据性摘要并引用原文，不拷贝报告长段落。
 
 **研究结论状态**：`proposed`、`local_replication=not_attempted`、`market_evidence=not_evaluated`。本报告中所有假设都是候选研究设计，不是做多/做空建议。  
+
+**时间审计保守出口**：当 `event_at_utc=null` 时返回 `EVENT_TIME_UNKNOWN`，不能以 0 填充。即使时间字段一致，离线审计也只返回 `TIME_CUTOFF_ELIGIBLE_UNVERIFIED` 与 `time_order_consistent=true`，同时 `eligible_as_decision_feature=false`；必须在实际原始来源、采集日志、Slot 和数据内容均独立核验后才能进入真实的决策特征集。

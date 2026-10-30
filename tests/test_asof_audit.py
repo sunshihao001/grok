@@ -21,7 +21,7 @@ class AsOfAuditTests(unittest.TestCase):
     def test_replay_timestamp_is_only_syntactically_eligible(self):
         value=audit_event(self.record)
         self.assertEqual(value["status"],"TIME_CUTOFF_ELIGIBLE_UNVERIFIED")
-        self.assertTrue(value["eligible_as_decision_feature"])
+        self.assertFalse(value["eligible_as_decision_feature"])\n        self.assertTrue(value["time_order_consistent"])
         self.assertFalse(audit_batch([self.record])["external_source_authenticated"])
 
     def test_provider_received_after_decision_cannot_leak(self):
@@ -62,9 +62,9 @@ class AsOfAuditTests(unittest.TestCase):
     def test_offset_timezone_normalized(self):
         modified=copy.deepcopy(self.record)
         modified["decision_cutoff_utc"]="2026-10-01T09:00:08+09:00"
-        self.assertTrue(audit_event(modified)["eligible_as_decision_feature"])
+        self.assertEqual(audit_event(modified)["status"],"TIME_CUTOFF_ELIGIBLE_UNVERIFIED")\n        self.assertFalse(audit_event(modified)["eligible_as_decision_feature"])
 
-    def test_duplicate_event_id_fails(self):
+    def test_null_blocktime_is_missing_not_fabricated(self):\n        modified=copy.deepcopy(self.record)\n        modified["event_at_utc"]=None\n        self.assertEqual(audit_event(modified)["status"],"EVENT_TIME_UNKNOWN")\n\n    def test_duplicate_event_id_fails(self):
         with self.assertRaisesRegex(ValueError,"duplicate event_id"):
             audit_batch([self.record,self.record])
 

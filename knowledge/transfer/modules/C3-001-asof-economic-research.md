@@ -37,3 +37,5 @@ PYTHONPATH=src python3 -m solana_meme_os.asof_audit --input fixtures/asof-audit.
 ## 通过条件
 
 能写出 `event <= provider_received <= parsed <= available <= decision` 的审计含义，并承认这只是必要条件，不是原始时间真实性证明；能给出完整分母、负例、group/time OOS、费用与可卖性约束，不虚构交易或盈利结果。
+
+**注意**：`asof_audit` 的“时间一致”不等于“可作为实盘决策特征”。离线程序因为不能独立认证采集日志，`eligible_as_decision_feature` 保守保持 false。真实数据的来源真实性必须在 B02/B05 的独立审查中证明。
