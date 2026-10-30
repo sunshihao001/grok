@@ -28,6 +28,12 @@ class LayerExpertTests(unittest.TestCase):
         self.assertEqual(x["workflow_owner"], "B03")
         self.assertIn("D05", x["domain_ids"])
         self.assertIn("HUB", " ".join(x["specialist_knowledge_primitives"]))
+        self.assertIn("风险本金", x["cognitive_model"])
+        self.assertIn("执行赞助", x["cognitive_model"])
+        self.assertIn("LP", x["cognitive_model"])
+        self.assertIn("跟随者", x["cognitive_model"])
+        self.assertIn("机器人", " ".join(x["competing_mechanisms"]))
+        self.assertIn("AMM", " ".join(x["specialist_knowledge_primitives"]))
         self.assertTrue(brief["source_admission_required"])
         self.assertFalse(brief["is_deployed_bot"])
 
