@@ -4,6 +4,10 @@
 >
 > **状态**：`domain_method_candidate`，为审阅中的专用知识包。不是已完成 K2 实测、已证明正收益策略或已冻结 B07 规则。不同的 K1 来源受 `knowledge/source-admission.v1.json` 管理；被标记 review_only 的后期研究不自动成为本包事实。没有迁移整库历史文本。
 
+## 新的专家研究入口：先机制突破，再回填知识单元
+
+每个领域的12个原子条目是**覆盖工具，不是研究执行顺序**。[《专家主导机制研究法》](../system/expert-mechanism-research-method.md) 用“核心矛盾→向下追问→向上推演→条件反转→跨专家挑战→知识回填”的方式深化专业知识。[《机制研究计划》](../system/mechanism-research-plan.v1.json) 当前将 D03 作为第一条核心主线；[《D03专家首轮任务》](D03-market-price-mechanism-research-brief.md) 明确市场价格、LP/储备、资金、筹码与跟单成本之间的具体机制和完成要求。**此处只是研究方法/计划，尚无新的D03实证或Alpha结论。**
+
 ## 全部十二领域的最小知识入口
 
 [《全领域专家手册》](../system/whole-domain-expert-handbook.md) 是从最小 Solana 对象、发币/AMM、钱包/资金/筹码、行为时序一直到策略、执行、数据、反证与 Grok 进化的主导航；[《152 项原子知识目录》](../system/whole-domain-atlas.v1.json) 为每个 D01–D12 领域列出十二个不能省略的研究问题；[《深度与缺口审计》](../system/whole-domain-coverage-audit.md) 防止目录覆盖被误报成知识吃透。继续使用现有 L0–L7/D01–D12/21 专家，按问题选主专家，不强制一次加载所有领域。
