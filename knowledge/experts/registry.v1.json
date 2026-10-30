@@ -271,7 +271,8 @@
       "specialist_knowledge_primitives": [
         "AMM reserve、边际报价与规模冲击",
         "SOL 价格引起的 USD 流动性重估",
-        "LP 真实 add/remove 与多路由双向报价"
+        "LP 真实 add/remove 与多路由双向报价",
+        "AMM池内前一个交易会改变下一交易的储备与成本；CPMM trade fee与可选creator fee必须按实际池配置分开"
       ],
       "prior_research_competency_ids": [
         "B02-K05",
@@ -333,7 +334,9 @@
         "D07"
       ],
       "knowledge_files": [
-        "knowledge/domain/L3-wallet-actors.md"
+        "knowledge/domain/L3-actor-expert-perspectives.md",
+        "knowledge/domain/L3-wallet-actors.md",
+        "knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md"
       ],
       "legacy_card_ids": [
         "wallet-roles",
@@ -378,23 +381,27 @@
         "D04"
       ],
       "knowledge_files": [
-        "knowledge/domain/L3-wallet-actors.md"
+        "knowledge/domain/L3-actor-expert-perspectives.md",
+        "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md",
+        "knowledge/domain/L3-wallet-actors.md",
+        "knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md"
       ],
       "legacy_card_ids": [
         "funding-graph",
         "sybil-wash"
       ],
-      "cognitive_model": "转账事实→资金关联→经济控制是假设阶梯，不能跨级跳跃",
+      "cognitive_model": "资金边只是表面：先辨认每笔钱是风险本金、执行赞助、托管结算、LP还是费用收入，区分谁能操作、谁承担损益和谁实际受益，再推导对库存、价格及跟随者的影响",
       "reasoning_sequence": [
-        "按signature+instruction_index建SOL/token转账图",
-        "分类CEX/HUB/PDA/池/支付服务并排除dust与共用服务",
-        "比较跨币重复资金准备与买卖时序，输出多种控制解释"
+        "先从资本职责推演统一资本管理、公共托管、共用机器人执行与LP/费用网络四种组织；同源不能直接跨成同控",
+        "再核对signature+instruction_index、owner/delegate/PDA/fee payer与Token净仓位，拆开成本赞助、真实风险暴露与可回收收入",
+        "分析各组织的资本预算、净回流和收费权；让筹码/AMM/跟单专家挑战其对可卖库存、池价、后来者成本的含义"
       ],
       "competing_mechanisms": [
-        "共享交易所提款地址可服务无关主体",
-        "相似金额同步买入可能是批量第三方机器人服务"
+        "公共CEX/HUB广泛出金会制造同源但不共享决策的客户群",
+        "同一机器人服务统一路由和手续费赞助，但最终风险属于不同客户",
+        "LP或可选creator fee收入的生意可能与Token方向性持仓不同"
       ],
-      "decisive_next_check": "查资金来源的公共基础设施角色和多轮独立重复关联",
+      "decisive_next_check": "先识别一条资金边的经济职能及其后续净风险/回收关系，再核对对应Token授权、LP/creator fee权利；链下最终受益不可见时必须保留未知",
       "abstain_or_downgrade_when": "仅有一跳同源或无法排除公共HUB",
       "handoff_to_expert_ids": [
         "E-L3-03",
@@ -404,9 +411,11 @@
       "authority": "hypotheses_and_readonly_evidence_only",
       "evidence_status": "proposed_not_live_validated",
       "specialist_knowledge_primitives": [
-        "有向资金图与 signature+instruction_index 去重",
-        "公共 CEX/HUB 与 dust 排除",
-        "共同付款、实际协作、同一实控三种不同主张"
+        "签名与instruction索引还原资产/成本流，明确本金、执行费赞助、托管、LP和creator fee的不同现金流",
+        "Solana owner/delegate/PDA/fee payer及公共CEX/HUB不等于最终经济受益人",
+        "同一资金图可对应共同资本/公共托管/独立客户共用机器人/收费权网络的多种生意",
+        "内部转仓不会创造新的群体风险资本；成交量、Token净库存与独立资金需求必须分开",
+        "先动钱包买入会改变AMM储备与后入场成本，资金关系不直接证明可复制Alpha"
       ],
       "prior_research_competency_ids": [
         "B03-K02",
@@ -424,7 +433,9 @@
         "D03"
       ],
       "knowledge_files": [
-        "knowledge/domain/L3-wallet-actors.md"
+        "knowledge/domain/L3-actor-expert-perspectives.md",
+        "knowledge/domain/L3-wallet-actors.md",
+        "knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md"
       ],
       "legacy_card_ids": [
         "concentration",
@@ -469,7 +480,9 @@
         "D07"
       ],
       "knowledge_files": [
-        "knowledge/domain/L3-wallet-actors.md"
+        "knowledge/domain/L3-actor-expert-perspectives.md",
+        "knowledge/domain/L3-wallet-actors.md",
+        "knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md"
       ],
       "legacy_card_ids": [
         "deployer-history"
@@ -495,7 +508,8 @@
       "specialist_knowledge_primitives": [
         "Mint 创建签名者与 launchpad 工厂账号区别",
         "系列发币时间、资金准备、退出事件",
-        "共用服务导致开发者标签污染"
+        "共用服务导致开发者标签污染",
+        "真实经济利益不仅来自Dev Token库存，还可能来自启用且可收取的CPMM creator fee、LP权益与运营费用；须核对配置/收款权/净成本"
       ],
       "prior_research_competency_ids": [
         "B03-K06",
@@ -513,7 +527,9 @@
         "D04"
       ],
       "knowledge_files": [
-        "knowledge/domain/L3-wallet-actors.md"
+        "knowledge/domain/L3-actor-expert-perspectives.md",
+        "knowledge/domain/L3-wallet-actors.md",
+        "knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md"
       ],
       "legacy_card_ids": [
         "sybil-wash",
@@ -631,7 +647,8 @@
       "specialist_knowledge_primitives": [
         "钱包入场优势≠跟随者首个可见报价优势",
         "事件→收到→信号→询价的价格吸收",
-        "独立信号对照与双向可交易覆盖率"
+        "独立信号对照与双向可交易覆盖率",
+        "跟单交易对AMM储备具有内生价格反馈；领先买入给后来者的信息、价格位置和退出条件都发生改变"
       ],
       "prior_research_competency_ids": [
         "B04-K03",
