@@ -1,18 +1,31 @@
-# On-demand source registry — not a data lake
+# On-demand Source Registry｜固定版本文件指针，不是数据湖
 
-`source_index.v1.json` lists **30** curated entry points across the original Hermes domain work, the meme- theory repository, the qb- GMGN prototype, the third-party Why-Solana-Memecoins-Are-Over study, OKX OnchainOS read-only documentation, and screened forensic/developer/holder-cluster code references.
+当前 registry：knowledge/source_index.v1.json，**30个固定版本文件指针，来自8个仓库**。它服务按问题选择原始文件，不代表实时数据源已接通、接口权限已获得或源内容已独立复现。
 
-- Each source has a pinned Git commit, exact path, topic cues and *why to read*.
-- The local `knowledge/catalog.v1.json` and its 21 historical snapshots remain a limited resident baseline. No further wholesale knowledge copy is authorized by this design.
-- On an investigation, select a small set by mechanism; the existing keyword routing is only a deterministic shortlisting step. The Grok Bot must reason beyond it and search newly relevant primary sources.
-- Only the operator-requested `--fetch-excerpts` option retrieves short previews of the selected pinned public text. It prints ephemeral excerpts; it never uploads them into GitHub or validates the economic claim.
-- **Do not treat this index as evidence**. The actual market claim requires specific on-chain facts, observation timestamps, controls and later validation.
+## 来源覆盖
 
-Third-party reference is authored by Benjamin Da Cunha. The author's CC BY-NC-ND 4.0 license covers written analysis; see upstream LICENSE-CONTENT.md. We cite links rather than copying its articles. Methods are adapted independently and are not endorsements of a trading strategy.
+- sunshihao001/-：Hermes 钱包、来源关系、Sybil/协调和GMGN字段知识。
+- sunshihao001/meme-：FCZ与策略语义（明确标记为未验证理论）。
+- sunshihao001/qb-：GMGN只读原型和历史字段经验。
+- sunshihao001/Why-Solana-Memecoins-Are-Over：协调null、资金/库存/退出路径、时间安全和失败案例。
+- okx/onchainos-skills：候选只读市场/钱包接口文档；不是已接入数据源。
+- xorextrace/cyberleek-onchain：原始交易资金复算方法。
+- dnafund/Degen-Scanner：开发者/资金/买家路径源码。
+- jayrabol/solana-holder-clusters：first-funder、owner映射、覆盖和聚类边界源码。
 
-## Market-wide research routing
+另有 knowledge/reference-project-discovery.v1.json 的**14个项目/论文发现记录**，其中部分只读了 README/元数据或官方文档，尚无精确文件级来源指针，不会伪装成可直接检索的30项内容。
 
-- Source lookups now cover Hermes Sybil/coordination methods, downstream receiver exits, same-Slot sequencing code and OKX interface contracts.
-- Run: PYTHONPATH=src python -m solana_meme_os.research --question "同 Slot 钱包是否同控，资金从哪来？"
-- Run: PYTHONPATH=src python -m solana_meme_os.research --question "OKX 行情数据字段和时间戳定义"
-- These are research source pointers, not API authorization, an alert feed or proof of trader identity. See docs/knowledge-system-integration-v1.md.
+## 路由命令
+
+```bash
+PYTHONPATH=src python -m solana_meme_os.research --question "同Slot多钱包买入是否为Jito Bundle？"
+PYTHONPATH=src python -m solana_meme_os.research --question "历史分页不足时如何解释first funder未知？"
+PYTHONPATH=src python -m solana_meme_os.research --question "SOL流入是否可能来自CloseAccount或LP释放？"
+PYTHONPATH=src python -m solana_meme_os.research --question "如何用正常机器人生态建立协同检测null？"
+```
+
+检索结果是研究起点。必须打开具体原始文件/源码，核对commit、定义、样本范围、许可、作者主张和独立反例。多个专家引用同一来源不构成独立证据。
+
+## Registry字段
+
+每项记录必须固定 repository、commit、path、topics、why、kind、availability。当前统一标记 remote_on_demand；工具不会因此自动获取外部API或真实链上数据。
