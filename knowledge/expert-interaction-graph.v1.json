@@ -1,0 +1,496 @@
+{
+  "schema_version": "1.0",
+  "as_of_utc": "2026-10-31",
+  "status": "DESIGNED_TYPED_CONNECTIONS_NOT_LIVE_AGENTS",
+  "expert_map": "knowledge/expert-capability-map.v1.json",
+  "architecture": "EVENT_DRIVEN_EVIDENCE_BLACKBOARD_WITH_TYPED_HANDOFFS_AND_REVERSIBLE_CLAIMS",
+  "edge_semantics": {
+    "knowledge_link": "which specialist knowledge is invoked by task evidence",
+    "production_link": "which derived artifact depends on a source and algorithm",
+    "hypothesis_link": "competing economic explanations are not fact edges",
+    "challenge_link": "refutations target claim IDs and withdraw/supersede downstream inferences",
+    "action_link": "decision/research status is distinct from transaction execution"
+  },
+  "claim_contract": {
+    "required": [
+      "claim_id",
+      "claim_type",
+      "subject",
+      "predicate",
+      "object",
+      "evidence_refs",
+      "source_version",
+      "observed_at",
+      "available_at",
+      "produced_at",
+      "producer_expert",
+      "assumptions",
+      "counter_explanations",
+      "validity_status",
+      "depends_on_claim_ids"
+    ],
+    "claim_types": [
+      "OBSERVED_CHAIN_EVENT",
+      "DERIVED_METRIC",
+      "ROLE_HYPOTHESIS",
+      "ENTITY_HYPOTHESIS",
+      "STATISTICAL_DEVIATION",
+      "CAUSAL_HYPOTHESIS",
+      "MARKET_RISK",
+      "PREDICTION",
+      "PAPER_ECONOMIC_RESULT",
+      "UNKNOWN"
+    ],
+    "validity_status": [
+      "PROPOSED",
+      "SOURCE_DERIVED",
+      "RPC_CONFIRMED",
+      "CONTESTED",
+      "SUPERSEDED",
+      "RETRACTED",
+      "EXTERNALLY_TESTED"
+    ],
+    "rules": [
+      "SAME_SOURCE_TWO_EXPERTS_NOT_INDEPENDENT_EVIDENCE",
+      "PROVENANCE_REQUIRED_FOR_FACT_CLAIMS",
+      "UNKNOWN_NOT_ZERO",
+      "FUTURE_INFO_EXCLUDED_FROM_ASOF",
+      "SAME_SLOT_NOT_BUNDLE",
+      "ASSET_EDGE_NOT_ENTITY_IDENTITY",
+      "NO_UNCALIBRATED_PROBABILITY",
+      "RETRACTIONS_PROPAGATE_TO_DEPENDENTS",
+      "LATE_EVENTS_TRIGGER_WINDOW_REVISIONS",
+      "NO_LIVE_ORDER_ACTION"
+    ]
+  },
+  "links": [
+    {
+      "id": "L01",
+      "from": "data",
+      "to": "chain",
+      "link_type": "source_to_instruction",
+      "purpose": "原始RPC/供应商响应→逐指令解析",
+      "artifact": "raw_event_packet",
+      "contract": "原始签名、版本、余额、时点、源覆盖；链上专家须验证内指令",
+      "counter_signal": "raw_signature_or_balance_mismatch",
+      "on_counter_signal": "replace_downstream_derived_events"
+    },
+    {
+      "id": "L02",
+      "from": "chain",
+      "to": "event",
+      "link_type": "instruction_to_window",
+      "purpose": "指令事实→事件去重与窗口",
+      "artifact": "canonical_event",
+      "contract": "signature+instruction path+amount_raw+slot+block/available/receive时间",
+      "counter_signal": "incorrect_instruction_classification",
+      "on_counter_signal": "invalidate_related_window_counts"
+    },
+    {
+      "id": "L03",
+      "from": "data",
+      "to": "event",
+      "link_type": "coverage_feedback",
+      "purpose": "字段覆盖/迟到→滚动窗口修订",
+      "artifact": "coverage_and_lateness",
+      "contract": "每源水位/缺失、窗口临时或完成状态；不宣称链全量",
+      "counter_signal": "late_or_reorg_event",
+      "on_counter_signal": "recompute_window_and_dependents"
+    },
+    {
+      "id": "L04",
+      "from": "event",
+      "to": "wallet",
+      "link_type": "behavior_to_role",
+      "purpose": "事件序列→时变钱包角色候选",
+      "artifact": "wallet_activity_timeline",
+      "contract": "按钱包/SOL/Token/Swap分别记录，原地址不代表自然人",
+      "counter_signal": "service_wallet_or_account_owner_mismatch",
+      "on_counter_signal": "downgrade_role_candidate"
+    },
+    {
+      "id": "L05",
+      "from": "chain",
+      "to": "graph",
+      "link_type": "asset_semantics_to_graph",
+      "purpose": "真转账与Swap→事实资产图",
+      "artifact": "verified_asset_edge",
+      "contract": "签名、发送/接收owner、Mint、数量、程序指令和验证状态",
+      "counter_signal": "transfer_reclassified_as_swap",
+      "on_counter_signal": "rebuild_asset_edges"
+    },
+    {
+      "id": "L06",
+      "from": "wallet",
+      "to": "graph",
+      "link_type": "role_to_entity_hypothesis",
+      "purpose": "时变角色→可能的执行/受益关系",
+      "artifact": "role_hypothesis",
+      "contract": "可以多角色；共享资金不自动同控",
+      "counter_signal": "public_hub_identified",
+      "on_counter_signal": "split_or_relabel_hypothesis"
+    },
+    {
+      "id": "L07",
+      "from": "event",
+      "to": "graph",
+      "link_type": "burst_to_network",
+      "purpose": "多钱包时间簇→上游资金/下游库存调查",
+      "artifact": "burst_reference",
+      "contract": "精确地址集合、时间窗、交易签名、数额和候选图边",
+      "counter_signal": "duplicate_signature_found",
+      "on_counter_signal": "revise_network_scope"
+    },
+    {
+      "id": "L08",
+      "from": "graph",
+      "to": "inventory",
+      "link_type": "asset_to_inventory",
+      "purpose": "地址资产图→按账户逐笔仓位守恒",
+      "artifact": "inventory_ledger",
+      "contract": "token mint+账户+raw单位+初末余额+净流出/额外流入",
+      "counter_signal": "unreconciled_delta",
+      "on_counter_signal": "request_missing_positive_events"
+    },
+    {
+      "id": "L09",
+      "from": "graph",
+      "to": "adversarial",
+      "link_type": "network_to_competing_models",
+      "purpose": "非hub/共享hub资产网络→协同行为竞争机制",
+      "artifact": "asset_and_hub_cases",
+      "contract": "非公共边与公共基础设施证据分开；不合并控制者",
+      "counter_signal": "hub_reclassification",
+      "on_counter_signal": "reopen_coordination_hypotheses"
+    },
+    {
+      "id": "L10",
+      "from": "event",
+      "to": "statistics",
+      "link_type": "window_to_null",
+      "purpose": "观测窗口→同类正常基准",
+      "artifact": "population_and_windows",
+      "contract": "候选触发选择、事件完整分母、相近阶段和热度",
+      "counter_signal": "selected_only_population",
+      "on_counter_signal": "invalidate_abnormality_estimate"
+    },
+    {
+      "id": "L11",
+      "from": "adversarial",
+      "to": "statistics",
+      "link_type": "alternatives_to_null",
+      "purpose": "机器人/服务商/独立响应→置换和负例",
+      "artifact": "null_model_spec",
+      "contract": "保持钱包频率、发币活跃度、资金入度等关键机械结构",
+      "counter_signal": "failed_placebo_or_nonindependence",
+      "on_counter_signal": "recalibrate_or_remove_score"
+    },
+    {
+      "id": "L12",
+      "from": "statistics",
+      "to": "causal",
+      "link_type": "calibrated_to_mechanism",
+      "purpose": "同类偏离→因果竞争模型",
+      "artifact": "effect_or_deviation_packet",
+      "contract": "显著性不是操控/收益；选样本、混杂、时间与结果区分",
+      "counter_signal": "selection_or_confounding_detected",
+      "on_counter_signal": "revoke_causal_claim"
+    },
+    {
+      "id": "L13",
+      "from": "token",
+      "to": "liquidity",
+      "link_type": "program_to_liquidity",
+      "purpose": "Token/池权限与LP指令→真实深度风险",
+      "artifact": "program_and_lp_evidence",
+      "contract": "权限事实、LP增减、池迁移/估值口径",
+      "counter_signal": "valuation_only_drop",
+      "on_counter_signal": "downgrade_rug_claim"
+    },
+    {
+      "id": "L14",
+      "from": "liquidity",
+      "to": "inventory",
+      "link_type": "pool_to_supply",
+      "purpose": "池储备/估值与holder→可售库存评估",
+      "artifact": "supply_and_pool_context",
+      "contract": "排除池/CEX/托管地址，保留未知库存",
+      "counter_signal": "holder_denominator_shift",
+      "on_counter_signal": "recompute_concentration"
+    },
+    {
+      "id": "L15",
+      "from": "inventory",
+      "to": "regime",
+      "link_type": "position_to_market",
+      "purpose": "库存流向→候选市场阶段解释",
+      "artifact": "inventory_change_asof",
+      "contract": "转移与真实市场卖出分开；不使用未来出货定义当时阶段",
+      "counter_signal": "downstream_sale_unknown",
+      "on_counter_signal": "retain_stage_ambiguity"
+    },
+    {
+      "id": "L16",
+      "from": "liquidity",
+      "to": "regime",
+      "link_type": "microstructure_to_phase",
+      "purpose": "成交量/深度/曲线→市场状态",
+      "artifact": "microstructure_phase_context",
+      "contract": "价格冲击与独立外部需求分离；记录阶段所需时点",
+      "counter_signal": "own_buy_causes_price_move",
+      "on_counter_signal": "revoke_external_demand_inference"
+    },
+    {
+      "id": "L17",
+      "from": "regime",
+      "to": "statistics",
+      "link_type": "phase_to_stratified_baseline",
+      "purpose": "发行/迁移/横盘阶段→分层正常基准",
+      "artifact": "market_regime_strata",
+      "contract": "按市场阶段比较，不用事后成功结果确定分层",
+      "counter_signal": "phase_defined_posthoc",
+      "on_counter_signal": "restart_baseline"
+    },
+    {
+      "id": "L18",
+      "from": "graph",
+      "to": "causal",
+      "link_type": "capital_loop_to_hypothesis",
+      "purpose": "资产回路→经济控制与市场影响竞争假说",
+      "artifact": "capital_cycle_hypotheses",
+      "contract": "可闭合资金与可能同一控制是两种论证；不读心",
+      "counter_signal": "recipient_independent_service",
+      "on_counter_signal": "reject_same_operator_hypothesis"
+    },
+    {
+      "id": "L19",
+      "from": "causal",
+      "to": "execution",
+      "link_type": "mechanism_to_utility",
+      "purpose": "可证伪机制→是否值得研究净收益",
+      "artifact": "time_safe_test_hypothesis",
+      "contract": "先定义决策可见信息、同阶段对照、潜在市场方向",
+      "counter_signal": "no_out_of_sample_lift",
+      "on_counter_signal": "retain_monitoring_not_trade"
+    },
+    {
+      "id": "L20",
+      "from": "liquidity",
+      "to": "execution",
+      "link_type": "depth_to_fill",
+      "purpose": "可成交通道与池储备→入/出/滑点",
+      "artifact": "execution_cost_surface",
+      "contract": "必须考虑双向深度、失败订单、MEV/费用和延迟",
+      "counter_signal": "no_executable_quote",
+      "on_counter_signal": "block_paper_edge_claim"
+    },
+    {
+      "id": "L21",
+      "from": "token",
+      "to": "risk",
+      "link_type": "security_to_gate",
+      "purpose": "权限/流动性事件→已知风险",
+      "artifact": "security_evidence",
+      "contract": "UNKNOWN和明确风险两种状态；避免安全标签取代指令",
+      "counter_signal": "risk_provenance_invalidated",
+      "on_counter_signal": "withdraw_risk_assertion"
+    },
+    {
+      "id": "L22",
+      "from": "statistics",
+      "to": "risk",
+      "link_type": "evidence_to_gate",
+      "purpose": "偏离/误报/置信覆盖→调查状态",
+      "artifact": "statistical_state",
+      "contract": "无适当正常基准则不称统计异常",
+      "counter_signal": "false_discovery_or_drift",
+      "on_counter_signal": "downgrade_alert_status"
+    },
+    {
+      "id": "L23",
+      "from": "inventory",
+      "to": "risk",
+      "link_type": "concentration_to_risk",
+      "purpose": "可售库存/供应结构→卖压和集中风险",
+      "artifact": "inventory_risk_state",
+      "contract": "余额减少不等于市场卖出；未知实体敞口保留",
+      "counter_signal": "unclosed_inventory",
+      "on_counter_signal": "qualify_risk_as_hypothesis"
+    },
+    {
+      "id": "L24",
+      "from": "execution",
+      "to": "review",
+      "link_type": "paper_to_independent_review",
+      "purpose": "执行经济试验→样本外审查",
+      "artifact": "paper_evaluation_packet",
+      "contract": "预先冻结规则、时点、完整失败样本、交易成本",
+      "counter_signal": "future_leakage_or_loss",
+      "on_counter_signal": "withdraw_alpha_claim"
+    },
+    {
+      "id": "L25",
+      "from": "review",
+      "to": "knowledge",
+      "link_type": "review_to_knowledge",
+      "purpose": "独立审核结论→带反例的知识版本",
+      "artifact": "reviewed_claim_delta",
+      "contract": "保留作者、样本总体、版本、适用条件、反例、失败路径",
+      "counter_signal": "new_counterexample",
+      "on_counter_signal": "supersede_not_erase"
+    },
+    {
+      "id": "L26",
+      "from": "review",
+      "to": "data",
+      "link_type": "challenge_source",
+      "purpose": "反证指令错误/缺失→回溯原始数据",
+      "artifact": "reconstruction_request",
+      "contract": "指出具体签名/字段/时点问题，不能泛泛“再验证”",
+      "counter_signal": "raw_source_reconciled",
+      "on_counter_signal": "resume_affected_experts"
+    },
+    {
+      "id": "L27",
+      "from": "statistics",
+      "to": "event",
+      "link_type": "drift_to_monitor",
+      "purpose": "正常基准漂移→候选检测器重新校准",
+      "artifact": "drift_report",
+      "contract": "实时分布变化不等于链上行为变化；监控数据覆盖",
+      "counter_signal": "seasonality_or_feed_change",
+      "on_counter_signal": "relabel_old_alerts"
+    },
+    {
+      "id": "L28",
+      "from": "review",
+      "to": "chief",
+      "link_type": "adjudication_to_question",
+      "purpose": "独立挑战/领域冲突→调整问题和专家组",
+      "artifact": "conflict_dossier",
+      "contract": "先列各方原始证据与差异；不靠投票选答案",
+      "counter_signal": "unresolved_conflict",
+      "on_counter_signal": "preserve_parallel_hypotheses"
+    },
+    {
+      "id": "L29",
+      "from": "chief",
+      "to": "chain",
+      "link_type": "question_to_source",
+      "purpose": "新问题→链上可判别取证需求",
+      "artifact": "targeted_research_request",
+      "contract": "选择最大判别价值的签名/Token账户和样本，不要求全部链数据",
+      "counter_signal": "new_protocol_unknown",
+      "on_counter_signal": "extend_parser_ontology"
+    },
+    {
+      "id": "L30",
+      "from": "chief",
+      "to": "knowledge",
+      "link_type": "novel_to_registry",
+      "purpose": "新机制无法归档→开放领域和来源扩展",
+      "artifact": "novel_mechanism_proposal",
+      "contract": "不因17专家或12领域限制新事实；提案应可证伪且可寻源",
+      "counter_signal": "unsupported_novelty",
+      "on_counter_signal": "keep_as_unverified_idea"
+    },
+    {
+      "id": "L31",
+      "from": "knowledge",
+      "to": "chief",
+      "link_type": "knowledge_to_dispatch",
+      "purpose": "旧机制/失败案例/技能→初始问题路由",
+      "artifact": "knowledge_context",
+      "contract": "检索不等于验证；规则升级必须人工审核",
+      "counter_signal": "stale_source_or_unverified_label",
+      "on_counter_signal": "do_not_use_as_trigger_fact"
+    },
+    {
+      "id": "L32",
+      "from": "risk",
+      "to": "chief",
+      "link_type": "risk_to_prioritize",
+      "purpose": "已知风险及未知程度→调查/预警优先级",
+      "artifact": "risk_and_unknown_status",
+      "contract": "风险可独立触发预警；只有实证才讨论交易",
+      "counter_signal": "urgent_disconfirming_fact",
+      "on_counter_signal": "update_priority_without_order"
+    }
+  ],
+  "escalation_rules": [
+    {
+      "when": "derived event reclassified after raw instruction audit",
+      "to": [
+        "event",
+        "graph",
+        "inventory",
+        "statistics",
+        "causal",
+        "risk"
+      ],
+      "operation": "INVALIDATE_AFFECTED_DEPENDENTS_WITH_REASON"
+    },
+    {
+      "when": "late event or provider coverage changed",
+      "to": [
+        "event",
+        "statistics",
+        "review"
+      ],
+      "operation": "REOPEN_WINDOW_RECALCULATE_AND_VERSION"
+    },
+    {
+      "when": "public hub found in assumed same-control cluster",
+      "to": [
+        "graph",
+        "adversarial",
+        "statistics",
+        "causal"
+      ],
+      "operation": "SPLIT_ENTITY_HYPOTHESES_RETEST_NEGATIVE_CONTROLS"
+    },
+    {
+      "when": "market state defined using future price",
+      "to": [
+        "regime",
+        "statistics",
+        "execution",
+        "review"
+      ],
+      "operation": "REMOVE_LEAKED_FEATURE_AND_REPLAY"
+    },
+    {
+      "when": "causal hypothesis predicts value but no net positive after cost",
+      "to": [
+        "execution",
+        "causal",
+        "knowledge"
+      ],
+      "operation": "DOWNGRADE_TRADE_HYPOTHESIS_KEEP_MONITORING_MECHANISM"
+    },
+    {
+      "when": "new behavior cannot be explained by current 17 expert disciplines",
+      "to": [
+        "chief",
+        "knowledge",
+        "data"
+      ],
+      "operation": "CREATE_OPEN_DOMAIN_PROPOSAL_WITH_PREDICTIONS"
+    }
+  ],
+  "change_model": {
+    "immutable_raw_events": true,
+    "derived_claims_append_only_versions": true,
+    "supersedes": "claim ID of older revision; never overwrite published conclusion silently",
+    "propagation": "on retraction traverse depends_on_claim_ids to affected derived artifacts; recompute or mark contested",
+    "control": "production monitoring rules remain unchanged until reviewed release"
+  },
+  "sources": [
+    "https://www.w3.org/TR/prov-o/",
+    "https://nightlies.apache.org/flink/flink-docs-stable/docs/learn-flink/streaming_analytics/",
+    "https://opentelemetry.io/docs/specs/otel/overview/",
+    "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns/",
+    "https://miguelhernan.org/whatifbook",
+    "https://docs.jito.wtf/lowlatencytxnsend/"
+  ]
+}
