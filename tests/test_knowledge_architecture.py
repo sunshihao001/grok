@@ -31,6 +31,7 @@ class KnowledgeArchitectureTests(unittest.TestCase):
         cls.external = read_json("knowledge/external-method-sources.v1.json")
         cls.hypotheses = read_json("knowledge/mechanism-synthesis-hypotheses.v1.json")
         cls.projects = read_json("knowledge/reference-project-discovery.v1.json")
+        cls.domains = read_json("knowledge/domain-ontology.v1.json")
 
     def test_architecture_is_canonical_but_not_claimed_deployed(self):
         self.assertEqual(self.arch["status"], "CANONICAL_REFERENCE_NOT_DEPLOYED")
@@ -48,7 +49,7 @@ class KnowledgeArchitectureTests(unittest.TestCase):
         self.assertEqual(r["knowledge_cards"]["count"], len(self.catalog["cards"]))
         self.assertEqual(r["source_pointers"]["count"], len(self.sources["items"]))
         self.assertEqual(r["expert_disciplines"]["count"], len(self.mapping["experts"]))
-        self.assertEqual(r["knowledge_domains"]["count"], len(self.mapping["domains"]))
+        self.assertEqual(r["knowledge_domains"]["count"], len(self.domains["domains"]))
         self.assertEqual(r["research_stages"]["count"], len(self.mapping["stages"]))
         self.assertEqual(r["scenario_routes"]["count"], len(self.mapping["scenarios"]))
         self.assertEqual(r["expert_handoffs"]["count"], len(self.graph["links"]))
@@ -74,6 +75,28 @@ class KnowledgeArchitectureTests(unittest.TestCase):
         kx = self.arch["registries"]["cross_source_knowledge_units"]
         self.assertEqual(kx["count"], len(kx["items"]))
         self.assertTrue(set(kx["items"]) <= {c["id"] for c in self.catalog["cards"]})
+
+    def test_domain_ontology_matches_primary_card_ownership_and_routing(self):
+        domain_ids = {x["id"] for x in self.domains["domains"]}
+        self.assertEqual(domain_ids, {x["id"] for x in self.mapping["domains"]})
+        expert_ids = {x["id"] for x in self.mapping["experts"]}
+        source_ids = {x["id"] for x in self.sources["items"]}
+        for domain in self.domains["domains"]:
+            expected = {c["id"] for c in self.catalog["cards"]
+                        if c["domain"] == domain["id"]}
+            self.assertEqual(set(domain["knowledge_cards"]), expected, domain["id"])
+            routed = next(x for x in self.mapping["domains"] if x["id"] == domain["id"])
+            self.assertEqual(set(routed["cards"]), expected, domain["id"])
+            self.assertEqual(routed["primary_layers"], domain["primary_layers"])
+            self.assertTrue(set(domain["primary_layers"]) <= {f"L{i}" for i in range(8)})
+            self.assertTrue(set(domain["expert_panel"]) <= expert_ids)
+            self.assertTrue(set(domain["source_ids"]) <= source_ids)
+            self.assertTrue(domain["primary_questions"])
+            self.assertTrue(domain["core_objects"])
+            self.assertTrue(domain["required_evidence"])
+            self.assertTrue(domain["outputs"])
+            self.assertTrue(domain["inference_boundaries"])
+            self.assertTrue(domain["known_gaps"])
 
     def test_every_card_is_assigned_to_at_least_one_expert(self):
         card_ids = {c["id"] for c in self.catalog["cards"]}
