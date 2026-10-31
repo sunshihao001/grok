@@ -261,3 +261,7 @@ T3  增量复算：
 [同类项目研究](anomaly-wallet-reference-expansion-v1.md) 进一步核对 GitHub 取证脚本、资金聚类源码和 2026 新近学术论文，并把专业关系从 V2.0 的原始 32 条扩展到当前 **36 条**。新增 L33–L36：开发者手续费实际领取链、重复创建者资金网络、BUY/SELL 源分类正确性 Gate、公共 hub / giant component 反例的正常图基准。
 
 这是发现原有图不完整后主动修正专业连接的实例，而不是“所有原项目都已验证”。参见 [机器边定义](../knowledge/expert-interaction-graph.v1.json) 和 [分级来源目录](../knowledge/reference-project-discovery.v1.json)。之前记录的“32 条”是该文首版的历史快照，不表示当前实际连接数量仍为 32。
+
+## R006 补充（2026-10-31）：两条关键的反证型专业连接
+
+[现金流语义案例 R006](../knowledge/research/R006-sol-receipt-economic-semantics-v1.md) 说明直连 System Transfer 不能覆盖 Token CloseAccount/WSOL 释放等资金进入方式；相反单笔 SOL 余额净变化不证明源头出资者。我们对公开 40 钱包的 905 条衍生流入重新核对：61 条原文归为 `financement`、844 条归 `produit_de_vente`；这两种都是源脚本业务标签，必须经 Token 余额、内/外指令和池语义独立确认。新增 L39 `chain→graph`（多程序收款与经济流量）和 L40 `data→statistics`（事件类型/历史覆盖误差），当前正式专家交接共 **40 条**；首版 32 条保留为历史设计，不应误作当前数量。
