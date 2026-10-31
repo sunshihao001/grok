@@ -17,6 +17,10 @@
 - **未知状态**：错误/缺少 TokenAccount owner、Meta/CPI/lookup、Token-2022 扩展或晚到证据均 reject/mark unknown；当前未知使整个 fixture 的 `coverage.complete=false`，是保守粗粒度设计，不是已经完成按 Slot 的采集水位。Fixture 的 `complete=true` 也不是对真实链上全部交易的独立证明。
 - **C02/C05**：已有最小字段合同、11个模拟对抗场景，但**未实现两套运行监控器**。M01 聚合 JSON 只有人数统计，C02 必须另外持有 `frozen_group_members` 及原始标准化经济事件流；C05 必须另外有独立合格机会索引和可验证的窗口覆盖。
 
+### 官方资料发现的版本边界（2026-10-31）
+
+新外部核查确认 [Solana Versioned Transactions](https://solana.com/docs/core/transactions/versioned-transactions) 官方文档称 v1 已激活，v1 不使用 ALT，而是以内联账户和 transactionConfig 表示新的交易配置。现有 PR #16 原始适配器仍仅支持 legacy/v0；**version=1 应输出 UNSUPPORTED_TX_VERSION 且使窗口覆盖不完整，不得误记为没有交易**。工程 PR #16 已加入针对 v1 的明确 fail-closed 合成测试，等待/核查 GitHub CI；未实现 v1 解码或真实交易验证。后续官方 introspection 已有支持v1的实现参考：https://solana.com/docs/core/transactions/transaction-introspection 。此修订不更改 P3 当前阶段判断。
+
 ## 下一步优先顺序
 
 1. **P3-M01 只读小样本核验（最高优先级）**：选择少量可公开核查的真实 Solana 交易签名和官方/协议原始文档，人工写出正确的 TokenAccount owner、Token/SOL Transfer、CPI、版本/LUT、Swap 未知结果。对照适配器，记录可支持与应拒绝的实例，尤其检验实际 RPC 原始响应格式。不要求模拟数据“长得像真实”就算完成。
