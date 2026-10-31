@@ -309,5 +309,83 @@
   ],
   "project_origin_audit": "knowledge/system/reference-projects-meme-knowledge-audit-20261030.md",
   "first_project_mechanism_brief": "knowledge/domain/D04-D08-key-wallet-followability-research-brief.md",
-  "previous_d03_brief": "knowledge/domain/D03-market-price-mechanism-research-brief.md"
+  "previous_d03_brief": "knowledge/domain/D03-market-price-mechanism-research-brief.md",
+  "integration_method": "knowledge/system/rolling-reference-knowledge-integration.md",
+  "integration_mode": {
+    "approach": "rolling_vertical_slices",
+    "within_batch": [
+      "source_understanding",
+      "cross_project_expert_synthesis",
+      "reviewed_Grok_knowledge_compilation"
+    ],
+    "parallel_wip_limits": {
+      "main_expert_research": 1,
+      "next_batch_source_audit": 1,
+      "previous_batch_reviewed_compilation": 1
+    },
+    "no_global_repository_bulk_migration": true,
+    "not_a_new_ontology": true,
+    "batches": [
+      {
+        "id": "B01",
+        "status": "current_intake_mapped_deep_research_pending",
+        "topic": "qb单Mint关键钱包角色、来源与跟单剩余信息",
+        "connects": [
+          "sunshihao001/qb-",
+          "sunshihao001/-",
+          "sunshihao001/grok"
+        ],
+        "lead": "E-L4-02",
+        "related_track": "M01"
+      },
+      {
+        "id": "B02",
+        "status": "future_source_audit_optional",
+        "topic": "同源资金与早期库存、筹码可卖性",
+        "connects": [
+          "sunshihao001/-",
+          "sunshihao001/qb-",
+          "sunshihao001/grok"
+        ],
+        "lead": "E-L3-03",
+        "related_track": "M02"
+      },
+      {
+        "id": "B03",
+        "status": "planned",
+        "topic": "FCZ深洗/死亡盘与实际钱包供需",
+        "connects": [
+          "sunshihao001/meme-",
+          "sunshihao001/-",
+          "sunshihao001/grok"
+        ],
+        "lead": "E-L4-03",
+        "related_track": "M02"
+      },
+      {
+        "id": "B04",
+        "status": "planned",
+        "topic": "跨Mint群组和异常钱包批量转账的时序机制",
+        "connects": [
+          "sunshihao001/-",
+          "sunshihao001/qb-",
+          "sunshihao001/meme-"
+        ],
+        "lead": "E-L3-05",
+        "related_track": "M03"
+      },
+      {
+        "id": "B05",
+        "status": "planned",
+        "topic": "多策略市场机会与后入场净经济",
+        "connects": [
+          "sunshihao001/meme-",
+          "sunshihao001/-",
+          "sunshihao001/grok"
+        ],
+        "lead": "E-L4-02",
+        "related_track": "M04"
+      }
+    ]
+  }
 }
