@@ -212,6 +212,86 @@
       "reject_when": "冲突触发基本只反映同源重复推断，未发现额外真实语义错误",
       "utility": "数据架构自我修正/发现未知协议",
       "not_conclusion": "所有专家分歧都意味着市场操盘"
+    },
+    {
+      "id": "HX07",
+      "name": "LP等经济仓位释放主导表面融资金额",
+      "status": "TESTABLE_NEW_HYPOTHESIS",
+      "core": "频率少的非直接转账来源可主导一个钱包群的净SOL收入；将释放已有LP/桥/交易所资金和独立外部注资分开后，表面融资的经济来源结构可能发生根本变化",
+      "specialists": [
+        "data",
+        "chain",
+        "graph",
+        "wallet",
+        "liquidity",
+        "inventory",
+        "statistics",
+        "review"
+      ],
+      "uses": [
+        "h2w6-original-inflow-table",
+        "h2w6-funding-label-generator",
+        "h2w6-sol-balance-method",
+        "forensic-raw-sol-replay"
+      ],
+      "source_derived_observation": "R007: 61 financement receipts 858.582182029 SOL; 8 non-System source-labeled records = 759.911254848 SOL (88.5076%); of these 4 Meteora remove-liquidity = 739.476844669 SOL (86.1276%). Not independent RPC replay.",
+      "predicts": [
+        "某些大额融资记录复核后被解释为此前经济仓位的资产释放",
+        "若回流/再部署成立，同一经济资产路径跨发行或钱包角色可被重建"
+      ],
+      "alternatives": [
+        "原供应商为整个复合交易贴业务标签但同交易还包含真实外部注资",
+        "已知公共 LP/服务商结算造成与共同主体无关的金额集中",
+        "历史总额受单钱包极端值支配，不可推广至市场总体"
+      ],
+      "discriminator": "在明确的R007签名上以getTransaction指令、Token/WSOL余额和LP头寸前后变化复算，确定真实新外部资金与已有仓位释放；用匹配正常LP退出案例建立分母",
+      "baseline": "按钱包年龄/发行阶段/LP活动匹配的普通钱包与正常撤池；交易次数与资金规模的单变量基准",
+      "reject_when": "来源回放证实非System标签金额实为同交易独立外部转入，或经济仓位释放不具群体/跨Mint增量结构",
+      "utility": "资本循环法证、异常误报防护、跨协议经济行为识别",
+      "not_conclusion": "已证同一操盘者、LP释放即操纵、可直接跟买"
+    },
+    {
+      "id": "HX08",
+      "name": "历史覆盖缺口造成虚假零融资钱包",
+      "status": "TESTABLE_NEW_HYPOTHESIS",
+      "core": "钱包历史追溯不完整时，融资记录缺失会被下游错误解释为从未注资、独立新钱包或正常机器人；缺失不是身份",
+      "specialists": [
+        "data",
+        "chain",
+        "wallet",
+        "statistics",
+        "review",
+        "knowledge"
+      ],
+      "uses": [
+        "h2w6-original-inflow-table",
+        "wallet-first-funder-unknown",
+        "wallet-clustering-cross-layer-unknown"
+      ],
+      "source_derived_observation": "R007: 21/21 genesis-covered have >=1 labelled financement, only 4/19 genesis-uncovered have >=1, while 15/19 genesis-uncovered have zero labelled financing. This is association not proof of missing actual chain funding.",
+      "predicts": [
+        "补齐早期签名后部分表面0融资钱包出现可解释的非零资金来源",
+        "单凭现有历史缺口得出的独立/正常比例或群体数量需要改变"
+      ],
+      "alternatives": [
+        "不同活动年龄/角色导致真实融资分布差异",
+        "供应商抽样/程序覆盖差异与历史覆盖同时变化"
+      ],
+      "discriminator": "在时间安全情况下将历史缺口样本按钱包年龄/活动/协议匹配后补齐RPC早期历史，比较融资标签恢复率和聚类结果",
+      "baseline": "已完整追溯的可比钱包及相同采样窗口/来源的负对照",
+      "reject_when": "补全真实可验证历史后仍未找到被遗漏的相关融资，且条件分层后零融资比例差异不再存在",
+      "utility": "历史覆盖审计、钱包角色标签修复、正常基准分母校准",
+      "not_conclusion": "已证明缺失由RPC故障引起、所有无记录钱包实为同控"
     }
-  ]
+  ],
+  "expansion_wave": {
+    "date": "2026-10-31",
+    "source_case": "docs/economic-mechanism-discovery-charter-v5.md",
+    "added": [
+      "HX07",
+      "HX08"
+    ],
+    "evidence_class": "PINNED_SOURCE_DERIVED_NOT_INDEPENDENT_RPC",
+    "why": "The first concrete count-vs-value and history-coverage research tensions discovered by re-aggregating 40-wallet historical data"
+  }
 }
