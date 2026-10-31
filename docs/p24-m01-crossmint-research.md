@@ -69,3 +69,29 @@ PYTHONPATH=src python -m unittest discover -s tests -v
 - **P4：尚未对真实历史 Mint 或真实钱包进行回放与误报验证**。下一轮先以极少量独立链上交易做 read-only 语义核验，避免急于全网覆盖。
 
 **下一轮适合的任务**：在 P2.5 中为 C01、C02、C05 与 M01 打通能力依赖，审查哪些能在现有数据源和成本限制下获得早于目标事件的真实证据；并在 P3-M01 基础上开发一个可复核的 Solana 原始交易解析适配器及对抗性交易 fixture，仍不连接真实交易账户。
+
+## P2.5 补充审计：M01 实际原始交易适配器缺口（2026-10-31）
+
+**变更性质：AMEND 工程说明，未修改程序代码/生产规则。** 当前 `wallet_batch_monitor.py` 是 `fixture` 输入的下游窗口计算器，不具备“链上原始交易解码”能力。原有 `wallet_owner`、`kind` 和 `quote_amount_raw` 均由未实现的上游经济动作解析器提供；14项单测及 CI 仅证明合成契约的离线行为。
+
+### 解析层最小输入与决策
+
+| 原始取数对象 | M01 所需输出 | 未解决时如何处理 |
+|---|---|---|
+| `getTransaction(signature, encoding=json/jsonParsed, maxSupportedTransactionVersion=...)` 的 version、`meta.err`、blockTime/slot | 事件签名、时点、成功/失败状态 | `null`/缺元数据不能视为零交易；标记 UNKNOWN / 重试条件 |
+| static account keys、地址查找表 loadedAddresses、outer + inner CPI、指令层级 | 唯一经济动作的 `event_id`、指令位置和证据 | 不能把一个Swap的多条CPI Token Transfer计为多个Swap；不识别程序则 `UNRESOLVED` |
+| SPL Token Program / Token-2022 对应 Token Account的 mint、owner、delegate、PDA与指令时点 | 实际代币账户归属、执行授权者、fee payer分别记录 | `wallet_owner` 不能从fee payer或token account地址臆造；未定型主体不能计入独立人类钱包 |
+| Pump.fun/其他曲线、Raydium/Meteora及路由的真实成交语义 | BUY/SELL经济动作，目标Mint和quote amount | 仅有转账或Token余额变化不足以宣称是买卖 |
+| SOL、WSOL、SPL quote 的原始金额、decimal、费用和rent、Token-2022扩展 | 统一报价资产及单位，可靠的分窗口成交量 | 不同资产不可相加；transfer fee/hook/隐藏金额无法解释时标未知 |
+| 窗口采集范围、索引页码/slot/tx完整性、source、`available_at` 和修订水位 | COMPLETE/INCOMPLETE、as-of快照与修订结果 | 一次 `getSignaturesForAddress` 或少量 `getTransaction` 的结果**不能证明某个Mint的全量零活动**；源断流时不可输出沉默告警 |
+
+### 当前代码逐项观察和界限
+
+1. 输入只接受 `mode=fixture`，对真实 `mode=live` 明确拒绝。**这是正确的安全隔离，不要为了接真实数据先删除此限制。** 应先在独立适配器中测试真实交易解码，并继续输出离线验证文件。
+2. `wallet_owner` 是上游声称已经归一化的地址。代码按此去重，含 `TRANSFER` 的发起方参与活跃统计；不包含收款方自动主动参与。它既不是全市场持有人数，也不是实际控制者人数。
+3. 当前 `source_refs` 对单窗口证据最多保留30项；这适合摘要但**不是完整审计事件索引**。真实链上研究必须可通过签名和指令索引追查未列出的全部经济事件。
+4. 固定窗口为1/5/15分钟、3天输入上限与每Mint单报价资产；默认比较窗口间的BUY规模而**非外部净资本投入**。下一步不能把 C01 资金闭环或 C05 机会分母强行塞入现有指标。
+5. 旧测试已涵盖重复事件、Token Account owner 冲突、缺失窗口、晚到数据、失败交易、假设成员替换。**新增适配器测试**仍需要：LUT v0/版本变动、多层CPI、多Swap同交易、fee payer≠token owner、ATA/PDA、WSOL wrap/unwrap、Token-2022 TransferFee/TransferHook、真实缺失 meta、不同资产金额、同槽事件顺序。
+6. `available_at` 必须记录采集系统实际收到证据的时间，不能借用区块时间充当可得时间；同Slot内同时间事件要保留交易签名与可复核指令位置，不制造秒级因果顺序。
+
+**优先实现次序**（仅设计交接）：先用少量已核查 Solana 原始签名和有标准答案的交易类型建设独立只读适配器及其 fixture；严格验证经济动作、归属与来源；再将已归一化事件送入 M01，随后推进 C02 和 C05。优先借鉴官方 `@solana/transaction-introspection` 解析账户索引/LUT/CPI，而非自行简化所有协议结构；其为 JS 工具包，现有 Python 原型尚未接入该包。官方说明：https://solana.com/docs/core/transactions/transaction-introspection 。
