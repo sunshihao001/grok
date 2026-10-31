@@ -4,7 +4,8 @@
 
 | Skill | 职责 | 与其他技能的区别 |
 | --- | --- | --- |
-| [solana-meme-system-intelligence](solana-meme-system-intelligence/SKILL.md) | 全市场钱包异动、捆绑/协调候选、正常与异常基准、经济网络、市场结构及纸面机会的专家研判 | **顶层领域能力**；不是普通跟单或单币种监控引擎；[范围及阶段目标](../docs/solana-meme-marketwide-monitoring-scope-v1.md) |\n| [solana-meme-expert-writing](solana-meme-expert-writing/SKILL.md) | 深读系统各领域原始知识、重构监控机制、跨项目推演与专业研究写作；钱包可跟随性只是众多研究单元之一 | 面向专家研究文章与认知深化，不是普通关键词检索；附 [深入写作方法](solana-meme-expert-writing/references/research-writing-playbook.md) 和 [实际示范](solana-meme-expert-writing/references/wallet-copyability-worked-example.md) |
+| [solana-meme-system-intelligence](solana-meme-system-intelligence/SKILL.md) | 全市场钱包异动、捆绑/协调候选、正常与异常基准、经济网络、市场结构及纸面机会的专家研判 | **顶层领域能力**；不是普通跟单或单币种监控引擎；[范围及阶段目标](../docs/solana-meme-marketwide-monitoring-scope-v1.md) |
+| [solana-meme-expert-writing](solana-meme-expert-writing/SKILL.md) | 深读系统各领域原始知识、重构监控机制、跨项目推演与专业研究写作；钱包可跟随性只是众多研究单元之一 | 面向专家研究文章与认知深化，不是普通关键词检索；附 [深入写作方法](solana-meme-expert-writing/references/research-writing-playbook.md) 和 [实际示范](solana-meme-expert-writing/references/wallet-copyability-worked-example.md) |
 | [solana-meme-knowledge](solana-meme-knowledge/SKILL.md) | 基于已有知识卡与来源索引，按问题选择适用的知识并保留不确定性 | 适合常规知识调用；无法替代原文精读和新机制研究 |
 | [solana-meme-monitor](solana-meme-monitor/SKILL.md) | 只读行情快照与变动监控、证据和状态记录 | 负责观察与报告，不负责推导未经证实的交易策略 |
 
@@ -18,7 +19,7 @@
 
 当研究需要真实数据或 Grok 的实际监控输出时，按相应能力另行操作；没有数据不能编造已执行的验证。禁止在本阶段触发真实交易、签名、广播和自动部署。
 
-研究规划和规范见 `docs/solana-meme-copytrade-cognition-conversion-v1.md`、`docs/cognition-conversion-v1-rollout-plan.md`、`docs/knowledge-assets-logic-audit-wave1.md`（在其所在分支可用时）。
+项目总入口：[跨源知识整合](../docs/knowledge-system-integration-v1.md)、[全市场监控范围](../docs/solana-meme-marketwide-monitoring-scope-v1.md)。旧 [跟单专题规范](../docs/solana-meme-copytrade-cognition-conversion-v1.md) 和历史钱包研究仍保留，但不作为整个系统的最高目标。
 
 ## M2 离线聚合原型（2026-10-31）
 
