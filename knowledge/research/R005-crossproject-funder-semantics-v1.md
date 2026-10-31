@@ -4,6 +4,8 @@
 **日期**：2026-10-31；**状态**：已核对指定原始代码及官方 RPC 定义；未进行原项目全量运行、真实钱包归因或正常/异常准确率测评。  
 **适用范围**：全市场 Solana Meme 钱包监控的 **M1 原始链上证据 → M2 事件时序 → M3 钱包/资金网络 → M4 正常/异常基准**；跟单不是主问题。
 
+> **R006 重要反证更新（2026-10-31）**：本文件强调“用 System Transfer 指令校准直接 SOL 来源”是必要的，但**仅它不足以涵盖全部 SOL 流入**。官方 SPL Token `CloseAccount`（包括 Wrapped SOL 解包）可直接把 Token Account 的 lamports 给接收者；此外 LP 退出、桥和复合程序交易也可能产生正向余额变化。正确方法是**外/内指令 + Token/WSOL 账户状态 + SOL 前后余额/费用/租金的联合分解**，不是用 System Transfer 单一来源替换另一个余额差启发式。见 [R006 实例与 905 条派生流入审计](R006-sol-receipt-economic-semantics-v1.md) 和 [Solana 官方账户关闭说明](https://solana.com/docs/tokens/basics/close-account)。R005 中所有“System Transfer 确认”仅指该**直接转账子类型**。
+
 ## 1｜研究对象和来源固定
 
 一手来源（全部使用固定提交版本）：
