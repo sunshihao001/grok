@@ -4,17 +4,17 @@
 
 | Skill | 职责 | 与其他技能的区别 |
 | --- | --- | --- |
-| [solana-meme-expert-writing](solana-meme-expert-writing/SKILL.md) | 深读参考项目、重建市场机制、跨源知识融合、原创专业研究写作与知识转换 | 面向专家研究文章与认知深化，不是普通关键词检索；附 [深入写作方法](solana-meme-expert-writing/references/research-writing-playbook.md) 和 [实际示范](solana-meme-expert-writing/references/wallet-copyability-worked-example.md) |
+| [solana-meme-system-intelligence](solana-meme-system-intelligence/SKILL.md) | 全市场钱包异动、捆绑/协调候选、正常与异常基准、经济网络、市场结构及纸面机会的专家研判 | **顶层领域能力**；不是普通跟单或单币种监控引擎；[范围及阶段目标](../docs/solana-meme-marketwide-monitoring-scope-v1.md) |\n| [solana-meme-expert-writing](solana-meme-expert-writing/SKILL.md) | 深读系统各领域原始知识、重构监控机制、跨项目推演与专业研究写作；钱包可跟随性只是众多研究单元之一 | 面向专家研究文章与认知深化，不是普通关键词检索；附 [深入写作方法](solana-meme-expert-writing/references/research-writing-playbook.md) 和 [实际示范](solana-meme-expert-writing/references/wallet-copyability-worked-example.md) |
 | [solana-meme-knowledge](solana-meme-knowledge/SKILL.md) | 基于已有知识卡与来源索引，按问题选择适用的知识并保留不确定性 | 适合常规知识调用；无法替代原文精读和新机制研究 |
 | [solana-meme-monitor](solana-meme-monitor/SKILL.md) | 只读行情快照与变动监控、证据和状态记录 | 负责观察与报告，不负责推导未经证实的交易策略 |
 
 ## 研究与写作使用方式
 
-当任务是“把参考项目的知识吃透”“将某个市场机制写成专业研究”“跨仓库形成新认知”时，以 `solana-meme-expert-writing` 为入口；根据研究问题，按需调用 `solana-meme-knowledge` 检索参考文件。
+当任务是“分析哪些钱包在何时批量注资/买入、是否异常、可能怎样关联、有什么市场含义”时，以 `solana-meme-system-intelligence` 为入口；当任务要求写完整深度研究文章，再结合 `solana-meme-expert-writing`。根据研究问题，按需调用 `solana-meme-knowledge` 检索参考文件。
 
 建议的任务表述：
 
-> 使用 `solana-meme-expert-writing`，深入研究“某个盈利钱包为何不能直接跟单”。优先阅读原 Hermes 的钱包角色/结构资料、meme- 的筹码与市场结构理论及取证项目的方法和反例。提出互相竞争的解释，追问如何验证，写出完整专业论证，不仅输出总结或规划。允许提出新的市场机制，但要标记哪些仍未经证实。
+> 使用 `solana-meme-system-intelligence` 深入研究“同一批钱包为什么在某个时间窗口进行集中资金转入、买入与库存转移”。先明确时间、Mint、地址数、交易数和 SOL/Token 规模；再将同 Slot 协调、共享资金基础设施与同控执行的解释置于同类基准和反证中。延伸至流动性/筹码结构、跨 Mint 重复行为和纸面交易资格；使用 `solana-meme-expert-writing` 形成完整专业文章。
 
 当研究需要真实数据或 Grok 的实际监控输出时，按相应能力另行操作；没有数据不能编造已执行的验证。禁止在本阶段触发真实交易、签名、广播和自动部署。
 
