@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "policy": "Index sources and retrieve selectively. Never bulk-sync external repositories or treat methodological examples as profitable rules.",
-  "as_of_utc": "2026-10-29",
+  "policy": "Pin all specialist sources and retrieve selectively for event/network/market questions. Sources are pointers, not real-time data, confirmed operator identity, abnormality calibration or trade triggers. Do not bulk-sync external repositories.",
+  "as_of_utc": "2026-10-31",
   "items": [
     {
       "id": "research-methodology",
@@ -345,6 +345,113 @@
       "why": "Raw collection and heuristic classifications; verify actual current field semantics.",
       "kind": "historical_tool_example",
       "availability": "remote_on_demand"
+    },
+    {
+      "id": "hermes-sybil-coordination",
+      "repository": "sunshihao001/-",
+      "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+      "path": "learning/12.md",
+      "topics": [
+        "Sybil",
+        "批量钱包",
+        "洗量",
+        "刷量",
+        "协调",
+        "异常",
+        "正常",
+        "钱包群",
+        "同 Slot",
+        "同控"
+      ],
+      "why": "Historic role and sybil/wash hypotheses; test normal robot infrastructure and avoid identity overclaim.",
+      "kind": "historical_domain_method",
+      "availability": "remote_on_demand"
+    },
+    {
+      "id": "downstream-exit-structure",
+      "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+      "path": "exit_destination/results.md",
+      "topics": [
+        "接收钱包",
+        "库存转移",
+        "代币汇集",
+        "下游卖出",
+        "SOL回流",
+        "资金循环",
+        "出货",
+        "跨地址",
+        "exit"
+      ],
+      "why": "Distinguish token-account transfers from downstream actual swap/settlement; selected-cohort limitation applies.",
+      "kind": "method_reference",
+      "availability": "remote_on_demand",
+      "license_note": "Written analysis CC BY-NC-ND 4.0: reference and summarize independently.",
+      "origin_author": "Benjamin Da Cunha"
+    },
+    {
+      "id": "slot-sequence-case",
+      "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+      "path": "code/v04_slot_order.py",
+      "topics": [
+        "Slot",
+        "交易顺序",
+        "index",
+        "同槽",
+        "创建交易",
+        "价格形成",
+        "捆绑",
+        "bundle",
+        "交易位置"
+      ],
+      "why": "Source code for same-slot creation and buy ordering; sequence alone does not establish a Jito bundle.",
+      "kind": "source_code_reference",
+      "availability": "remote_on_demand",
+      "license_note": "Check original code license and version before reuse; read for method only."
+    },
+    {
+      "id": "okx-market-readonly",
+      "repository": "okx/onchainos-skills",
+      "commit": "73904b636a0f022dcc13b6d7a0dd2ed3b3195f25",
+      "path": "skills/okx-dex-market/SKILL.md",
+      "topics": [
+        "OKX",
+        "OnchainOS",
+        "行情",
+        "链上接口",
+        "钱包交易",
+        "数据源",
+        "市场",
+        "代币",
+        "price",
+        "market"
+      ],
+      "why": "Candidate read-only market/transaction adapter; verify actual fields, units, timeliness, coverage and permissions.",
+      "kind": "tool_documentation",
+      "availability": "remote_on_demand",
+      "license_note": "Refer to upstream repository license; no endpoint access or response quality verified."
+    },
+    {
+      "id": "okx-market-reference",
+      "repository": "okx/onchainos-skills",
+      "commit": "73904b636a0f022dcc13b6d7a0dd2ed3b3195f25",
+      "path": "skills/okx-dex-market/references/market.md",
+      "topics": [
+        "OKX",
+        "K线",
+        "成交",
+        "钱包数据",
+        "数据字段",
+        "时间戳",
+        "行情",
+        "市场快照",
+        "market"
+      ],
+      "why": "Source contract and timestamps for market-data candidate, not proof of historical feature availability.",
+      "kind": "tool_documentation",
+      "availability": "remote_on_demand",
+      "license_note": "Refer to upstream repository license; original docs not copied."
     }
   ]
 }
