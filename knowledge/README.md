@@ -6,7 +6,7 @@
 
 **This knowledge base serves market-wide Solana Meme event, wallet-cluster, funding-network, market-structure and risk research; copy trading is one specialist use case.**
 
-Existing 15 resident concept cards and 21 historical snapshots are a bounded legacy baseline, not a full market ontology. The on-demand registry now has **27 curated source pointers** across legacy Hermes, meme-, qb-, Why-Solana and OKX read-only documentation.
+Existing 15 resident concept cards and 21 historical snapshots are a bounded legacy baseline, not a full market ontology. The on-demand registry now has **30 curated source pointers** across legacy Hermes, meme-, qb-, Why-Solana and OKX read-only documentation.
 
 Primary knowledge pathway: observed events and time windows -> wallet/asset networks -> conditional normal baseline and competing mechanisms -> market structure and risk -> independently tested prediction/paper economics.
 
@@ -14,7 +14,7 @@ Start from [system integration](../docs/knowledge-system-integration-v1.md) and 
 
 ## Expert knowledge routing (2026-10-31)
 
-The initial 15 cards and 27 source pointers are now mapped into [17 expert disciplines, 12 domains and five dynamic investigation scenarios](expert-capability-map.v1.json). The map is a **knowledge coordination contract**, not an implemented Grok multi-agent runtime. The optional deterministic `python -m solana_meme_os.expert_router --event FUNDING_FANOUT` suggests source-bound expert panels; it is not independent analysis or an automated strategy. For actual cross-disciplinary source and counterexample reasoning, read [expert orchestration](../docs/solana-meme-expert-knowledge-orchestration-v1.md) and [R002 cross-examination case](cases/R002-expert-cross-examination-v1.md). Experts can question or invalidate prior conclusions and introduce new ontology instead of forcing every question through the old eight-layer gate.
+The initial 15 cards and 30 source pointers are now mapped into [17 expert disciplines, 12 domains and five dynamic investigation scenarios](expert-capability-map.v1.json). The map is a **knowledge coordination contract**, not an implemented Grok multi-agent runtime. The optional deterministic `python -m solana_meme_os.expert_router --event FUNDING_FANOUT` suggests source-bound expert panels; it is not independent analysis or an automated strategy. For actual cross-disciplinary source and counterexample reasoning, read [expert orchestration](../docs/solana-meme-expert-knowledge-orchestration-v1.md) and [R002 cross-examination case](cases/R002-expert-cross-examination-v1.md). Experts can question or invalidate prior conclusions and introduce new ontology instead of forcing every question through the old eight-layer gate.
 
 ## Evidence-connected knowledge architecture V2 (2026-10-31)
 
@@ -67,7 +67,7 @@ References: `docs/sources.md`, `knowledge/legacy-audit.md` and `skills/solana-me
 
 ## Second wave — do not bulk migrate
 
-New model: keep the resident 15 cards and 21 prior snapshots as a bounded historical baseline, but use `knowledge/source_index.v1.json` to consult external specialist sources **on demand**. The repo now indexes 27 curated source entries, including methodological references from `Why-Solana-Memecoins-Are-Over`, without importing its licensed analysis into Grok. Run `python -m solana_meme_os.research --question ...` to create an evidence intake packet; see `docs/on-demand-research-design.md`. The goal is better judgment, not maximizing token count or the number of copied files.
+New model: keep the resident 15 cards and 21 prior snapshots as a bounded historical baseline, but use `knowledge/source_index.v1.json` to consult external specialist sources **on demand**. The repo now indexes 30 curated source entries, including methodological references from `Why-Solana-Memecoins-Are-Over`, without importing its licensed analysis into Grok. Run `python -m solana_meme_os.research --question ...` to create an evidence intake packet; see `docs/on-demand-research-design.md`. The goal is better judgment, not maximizing token count or the number of copied files.
 
 ## Expanded anomalous-wallet source research (2026-10-31)
 
@@ -82,3 +82,9 @@ The external [14-project discovery registry](reference-project-discovery.v1.json
 ## R005: cross-repository forensic state conservation (2026-10-31)
 
 [Cross-source code audit](research/R005-crossproject-funder-semantics-v1.md) examines what first-funder data means **after** it travels from raw chain source to holder clustering to statistics. The confirmed code-level mismatch is `funders.ts` returns `null` for unresolved history while `clusters.ts` includes `null` in `independent[]`; Degen Scanner also preserves some rate-limited `sig_count=0` candidate holders. [Read-only funder semantics](../src/solana_meme_os/funder_evidence.py) and [11 synthetic tests](../tests/test_funder_evidence.py) preserve UNKNOWN, heuristic and hub ambiguity. Expert interaction graph now includes **38** links; L37/L38 bind source observability and wallet-role uncertainty to statistical denominators. Python tests are written but not yet executed on the repository.
+
+## R006: multi-program receipts and economic causality (2026-10-31)
+
+[Case R006](research/R006-sol-receipt-economic-semantics-v1.md) crosses official Solana Token CloseAccount semantics with Why-Solana's pinned 40-wallet/905-inflow derived table and generation script. System Transfer is **one** direct SOL-transfer mechanism; SPL token-account close/WSOL unwrap and LP withdrawal can change lamport balances without a matching direct System Transfer. It is not enough to count money; a capital graph must distinguish transfers, released token-account lamports, AMM withdrawal, economic sales, and unexplained residuals.
+
+[Cashflow label auditor](../src/solana_meme_os/cashflow_semantics.py) and [six synthetic Python tests](../tests/test_cashflow_semantics.py) were actually executed in an isolated local package layout with six successes; the committed source and test Git Blob SHAs match those exact tested files. However, the original historical source-derived table was cross-recomputed from GitHub data with JavaScript, not replayed independently through Solana RPC or run through the Python CLI in the complete Grok repository. Source index now has **30** entries. Expert handoff graph now has **40** links after L39/L40; earlier count mentions describe historical phases.
