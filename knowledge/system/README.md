@@ -6,6 +6,12 @@
 
 [《GPT Meme 项目全领域知识主册》](gpt-meme-project-core.v1.md) 包含现有全部152项原子研究问题/机制/禁错、21专家及跨域经济机制导航。 [《累积与双向关联规范》](gpt-meme-knowledge-accumulation.v1.md) 把发现保存为**原问题—来源—资产/库存/价格/时点因果—竞争世界—关系边—单元回填—下一轮未知**；[《Project简短指令》](gpt-meme-project-instructions.v1.md) 和 [机器索引](gpt-meme-project-index.v1.json) 帮助不同GPT会话按需恢复已有专业知识，减少零散讨论。系统仍按原L0–L7/D01–D12组织，不新增一个平行本体。Project附件与GitHub版本更新为人工同步，**不能声称已直接改动ChatGPT项目附件**。
 
+## GPT Meme 项目持续推进与恢复点（2026-10-31）
+
+新增 [《持续研究推进、阶段判断与下一轮输入规范 V1.0》](gpt-meme-continuous-progression.v1.md)：每轮给出阶段定位、实质成果、关键未知、晋级判断、下一动作和可直接复制的研究输入，按整体P1–P6及子阶段动态推进。它是**研究运行坐标**，不替换 L0–L7 / D01–D12 或证据等级，不机械串行。
+
+[《当前研究进度与直接恢复执行提示词》](gpt-meme-progress-current.md)：P2.1 已完成创意初筛，当前建议转入 P2.2 时间×钱包群体×资金×行为的组合异动研究；旧B01保留未完成状态。**GitHub 文档和个人 Library 文件不能自动修改 ChatGPT Project Instructions 或 Project 附件**，需分别核查同步状态。
+
 ## 参考知识融合的实际节奏
 
 [《滚动式参考项目知识融合》](rolling-reference-knowledge-integration.md) 确定“**每批一个Meme业务矛盾；批内先准确理解、后跨专家融合、再转换成Grok专家知识；批次间轻量并行**”。从 B01 旧 qb- 关键钱包矩阵开始；B02 同源和筹码、B03 FCZ真假二阶段、B04 跨Mint批量异常钱包时序、B05 多策略可跟性作为暂定问题，不是按序搬文件的五个新框架。未审阅的研究假说不能升级为确定知识或运行规则。
