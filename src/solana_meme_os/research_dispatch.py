@@ -169,13 +169,18 @@ def make_plan(report: dict, *, max_cases: int = 4,
     grouped.sort(key=lambda t: (t[0], t[1]))
     accepted = grouped[:max_cases]
     remaining_checks = max_source_checks
+    already_proposed: set[str] = set()
     tasks = []
     for level, scope, kinds, signatures, evidence in accepted:
         route_out = route(kinds, question="Explain structure and rule out ordinary mechanisms",
                           mapping=expert_map)
-        # All source checks are read-only proposals; no RPC method dispatched.
-        n = min(max_per_case, remaining_checks, len(signatures))
-        checked = signatures[:n]
+        # Signature verification is re-used across cases. Do not charge the
+        # same raw transaction against two independent research tasks.
+        reused = [sig for sig in signatures if sig in already_proposed]
+        fresh = [sig for sig in signatures if sig not in already_proposed]
+        n = min(max_per_case, remaining_checks, len(fresh))
+        checked = fresh[:n]
+        already_proposed.update(checked)
         remaining_checks -= n
         status = ("OFFLINE_SYNTHETIC_ONLY" if mode == "fixture" else
                   "SOURCE_CONFIRMATION_REQUIRED")
@@ -191,7 +196,8 @@ def make_plan(report: dict, *, max_cases: int = 4,
             "unique_signatures_in_input": len(signatures),
             "verification_status": status,
             "source_checks_proposed": checked,
-            "unselected_signatures": len(signatures) - n,
+            "reusable_prior_case_signature_checks": reused,
+            "unselected_signatures": len(signatures) - n - len(reused),
             "research_role_ids": route_out["primary_experts"],
             "independent_review_roles": route_out["independent_challengers"],
             "optional_role_ids": route_out["conditional_experts"],
