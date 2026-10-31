@@ -157,4 +157,4 @@ Mint: <示例代币地址>
 
 ## 10. 实际 M2 开发增量（2026-10-31）
 
-已新增研究型 `src/solana_meme_os/market_observatory.py`、`tests/test_market_observatory.py`、`fixtures/market-observatory-synthetic.json`，详见 [M2 使用契约](market-observatory-m2-v0.1.md)。这是离线、规范化事件输入的确定性聚合层；仅对所提供的事件集合进行观察，不提供全市场 RPC 实时数据、异常统计模型、同控推断或交易触发。已经交叉核算示例金额和地址数，但实际 Python unittest 仍未在本地仓库执行，不能将其标为测试已通过。
+已新增研究型 `src/solana_meme_os/market_observatory.py`、`tests/test_market_observatory.py`、`fixtures/market-observatory-synthetic.json`，详见 [M2 使用契约](market-observatory-m2-v0.1.md)。这是离线、规范化事件输入的确定性聚合层；仅对所提供的事件集合进行观察，不提供全市场 RPC 实时数据、异常统计模型、同控推断或交易触发。已经交叉核算示例金额和地址数，但本地容器未执行完整仓库测试；GitHub Actions 已在草案提交 `f6f19062edd402ce17691abbcf049fa9d34c2169` 验证完整离线测试成功（[运行记录](https://github.com/sunshihao001/grok/actions/runs/41167185465)），但仍不构成真实数据准确性的证明。
