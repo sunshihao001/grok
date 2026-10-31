@@ -863,7 +863,8 @@
         "wallet",
         "statistics"
       ],
-      "maturity_basis": "公开派生数据已复算历史覆盖与融资标签张力；原始 RPC 首注资仍未逐签名核验。"
+      "maturity_basis": "公开派生数据已复算历史覆盖与融资标签张力；原始 RPC 首注资仍未逐签名核验。",
+      "research_unit_id": "R005"
     },
     {
       "id": "sol-receipt-economic-semantics",
@@ -931,7 +932,8 @@
         "chain",
         "graph"
       ],
-      "maturity_basis": "多程序/WSOL/Token close 等 SOL 收入语义已形成离线审计方法；尚未全面 RPC 重放。"
+      "maturity_basis": "多程序/WSOL/Token close 等 SOL 收入语义已形成离线审计方法；尚未全面 RPC 重放。",
+      "research_unit_id": "R006"
     },
     {
       "id": "cashflow-count-value-inversion",
@@ -987,7 +989,8 @@
         "graph",
         "causal"
       ],
-      "maturity_basis": "R007 的次数/金额反转在公开派生表已复算；资本释放机制仍是假说。"
+      "maturity_basis": "R007 的次数/金额反转在公开派生表已复算；资本释放机制仍是假说。",
+      "research_unit_id": "R007"
     },
     {
       "id": "creator-fee-economic-path",
@@ -1051,7 +1054,8 @@
         "token",
         "graph"
       ],
-      "maturity_basis": "创建者费用配置/累计/领取的概念已拆分；具体全链领取路径待核验。"
+      "maturity_basis": "创建者费用配置/累计/领取的概念已拆分；具体全链领取路径待核验。",
+      "knowledge_unit_id": "KX-01"
     },
     {
       "id": "multichannel-wallet-evidence",
@@ -1118,7 +1122,8 @@
         "adversarial",
         "statistics"
       ],
-      "maturity_basis": "多通道证据与共享资金误归并风险已形式化；需盲样本评估。"
+      "maturity_basis": "多通道证据与共享资金误归并风险已形式化；需盲样本评估。",
+      "knowledge_unit_id": "KX-02"
     },
     {
       "id": "capital-role-invariance",
@@ -1183,7 +1188,8 @@
         "graph",
         "causal"
       ],
-      "maturity_basis": "地址轮换后的经济角色不变量是待验证新假说。"
+      "maturity_basis": "地址轮换后的经济角色不变量是待验证新假说。",
+      "knowledge_unit_id": "KX-03"
     },
     {
       "id": "normal-bot-ecology-baseline",
@@ -1248,7 +1254,8 @@
         "statistics",
         "adversarial"
       ],
-      "maturity_basis": "正常机器人生态与公共基础设施反例已形成研究方法；本地全市场分布未知。"
+      "maturity_basis": "正常机器人生态与公共基础设施反例已形成研究方法；本地全市场分布未知。",
+      "knowledge_unit_id": "KX-04"
     },
     {
       "id": "trade-direction-source-gate",
@@ -1314,7 +1321,8 @@
         "data",
         "review"
       ],
-      "maturity_basis": "BUY/SELL 源指令与资产变化分离已成为证据 Gate；协议覆盖仍不足。"
+      "maturity_basis": "BUY/SELL 源指令与资产变化分离已成为证据 Gate；协议覆盖仍不足。",
+      "knowledge_unit_id": "KX-05"
     },
     {
       "id": "market-utility-vs-tradability",
@@ -1381,7 +1389,8 @@
         "execution",
         "risk"
       ],
-      "maturity_basis": "市场发现、风险和净可交易价值的独立评估合同已建立；真实净收益未验证。"
+      "maturity_basis": "市场发现、风险和净可交易价值的独立评估合同已建立；真实净收益未验证。",
+      "knowledge_unit_id": "KX-06"
     }
   ]
 }
