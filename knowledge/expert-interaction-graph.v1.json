@@ -459,6 +459,28 @@
       "contract": "保留公共hub、边源、时间发生、结构/来源交叉验证; 同等预警预算与活跃度条件下比较",
       "counter_signal": "giant_component_or_placebo_equal_or_better",
       "on_counter_signal": "downgrade_group_detection_to_descriptive_only"
+    },
+    {
+      "id": "L37",
+      "from": "data",
+      "to": "wallet",
+      "link_type": "history_coverage_to_wallet_role",
+      "purpose": "首次资金来源及钱包年龄推断必须携带查询历史覆盖/限流/失败原因",
+      "artifact": "first_funder_observability_packet",
+      "contract": "传递 source transaction signature、source provenance、history pagination and RPC status；未查/截断/失败/确无历史各自独立；对RPC错误不得填交易数零",
+      "counter_signal": "rpc_rate_limit_or_history_page_full_mapped_to_zero_or_fresh",
+      "on_counter_signal": "revoke_fresh_wallet_role_and_rerun_historical_coverage_audit"
+    },
+    {
+      "id": "L38",
+      "from": "wallet",
+      "to": "statistics",
+      "link_type": "uncertainty_preserved_to_normal_baseline",
+      "purpose": "钱包角色中的未知首次来源、公共服务、来源不明及疑似共享资助必须保留为不同的统计分层",
+      "artifact": "role_and_funder_status_denominator_packet",
+      "contract": "输出每类状态的真实人数/观察范围/不可追溯比例；不把未找到funding关系当独立人，也不因公共hub相连就并为同控",
+      "counter_signal": "independent_normal_cohort_contains_unresolved_or_high_degree_unknown",
+      "on_counter_signal": "retract_normal_cohort_baseline_and_reestimate_false_alerts"
     }
   ],
   "escalation_rules": [
@@ -547,5 +569,14 @@
       "L36"
     ],
     "rationale": "Creator fees, source-label gate and hub-aware normal model learned from newly surveyed forensic projects."
+  },
+  "expansion_wave_2": {
+    "date": "2026-10-31",
+    "case": "knowledge/research/R005-crossproject-funder-semantics-v1.md",
+    "added_links": [
+      "L37",
+      "L38"
+    ],
+    "basis": "Cross-file null->independent and RPC count zero source ambiguity from pinned original implementations"
   }
 }
