@@ -158,6 +158,19 @@ class RawAdapterTests(unittest.TestCase):
         self.assertEqual(r["events"], [])
         self.assertIn("UNSUPPORTED_TX_VERSION", [x["reason"] for x in r["adapter_audit"]["unresolved"]])
 
+    def test_current_v1_format_fails_closed_until_decoder_supports_it(self):
+        # Solana transaction v1 is supported by the chain, not by this adapter.
+        # An unsupported version must NEVER be interpreted as an empty activity window.
+        p = initial()
+        t = record()
+        t["rpc"]["version"] = 1
+        p["transactions"] = [t]
+        r = normalize(p)
+        self.assertFalse(r["coverage"]["complete"])
+        self.assertEqual(r["events"], [])
+        self.assertIn("UNSUPPORTED_TX_VERSION",
+                      [x["reason"] for x in r["adapter_audit"]["unresolved"]])
+
     def test_token_2022_transferchecked_supported_but_fee_extension_not(self):
         self.assertEqual(TOKEN_2022, "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb")
         p = initial(); t = record(program=TOKEN_2022)
