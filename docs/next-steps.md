@@ -89,7 +89,7 @@
 
 
 - [x] 审查HoldTech代表性真实路由/函数和其他成品开源模块，建立 [外部功能长期复用台账](../knowledge/system/reference-capability-reuse-ledger.v1.md)。逐模块标明实际存在、仅设计、受商业API限制、许可证/安全阻断和本项目能力缺口；本项完成是“审查文档”，不是已接入外部功能。
-- [ ] **优先最小离线对照**：比较 \`0xfnzero/sol-parser-sdk-python\`（固定版本）、Solana官方交易结构工具与现有 \`raw_tx_adapter.py\` 的同一组已审公开/合成交易；先不安装不可信整库、不调用收费源；记录Swap/Transfer、Token owner、CPI、v1和UNKNOWN差异。只在实测后决定用现成解析库的可选适配器取代哪部分自研。
+- [ ] **优先最小离线对照**：比较 `0xfnzero/sol-parser-sdk-python`（固定版本）、Solana官方交易结构工具与现有 `raw_tx_adapter.py` 的同一组已审公开/合成交易；先不安装不可信整库、不调用收费源；记录Swap/Transfer、Token owner、CPI、v1和UNKNOWN差异。只在实测后决定用现成解析库的可选适配器取代哪部分自研。
 - [ ] **次级可复用功能**：HoldTech holder-overlap/集中度、pumpwatch Creator历史频率优先用现有可信事件或holder快照实现纯计算原型；保留测试分母/公共节点/历史时点，不能拷贝源码缺陷或凭证。
 - [ ] **持续回访**：每轮发现新的成品能力，就把真实源码/路径/输入输出/版本/许可/成本/误判与当前代码落差写回同一台账；被阻断的项目保留知识和回访触发条件。
 
