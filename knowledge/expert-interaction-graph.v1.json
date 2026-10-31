@@ -415,6 +415,50 @@
       "contract": "风险可独立触发预警；只有实证才讨论交易",
       "counter_signal": "urgent_disconfirming_fact",
       "on_counter_signal": "update_priority_without_order"
+    },
+    {
+      "id": "L33",
+      "from": "token",
+      "to": "graph",
+      "link_type": "creator_fee_to_economic_network",
+      "purpose": "开发者/creator fee真实分配记录→扩大资本循环而非只看买卖盈利",
+      "artifact": "fee_claim_and_verified_spl_sol_distribution",
+      "contract": "记录费用分配配置、真实手续费领取签名、接收owner、Token账户、发生时间、来源与未能归属资金",
+      "counter_signal": "apparent_fee_share_only_in_config_not_paid_or_transferred",
+      "on_counter_signal": "separate_entitlement_from_realized_flow"
+    },
+    {
+      "id": "L34",
+      "from": "graph",
+      "to": "token",
+      "link_type": "deployer_network_to_creator_history",
+      "purpose": "重复资金Hub与开发者/创建签名→追查跨发行复现",
+      "artifact": "deployer_funder_paths_with_service_hubs",
+      "contract": "过去与当前发行时间锁定，区分共同资金/费用服务/同控; 加入开发者新地址反例",
+      "counter_signal": "funder_is_public_exchange_or_shared_platform",
+      "on_counter_signal": "relabel_service_infrastructure_then_retest"
+    },
+    {
+      "id": "L35",
+      "from": "chain",
+      "to": "statistics",
+      "link_type": "trade_decoder_truth_to_null",
+      "purpose": "原始BUY/SELL事件标签精度先于协同统计与对照设计",
+      "artifact": "directional_trade_event_confusion_audit",
+      "contract": "分层抽取真实指令与trade event，检验BUY与SELL分类准确率及漏检; 使用修正数据重构分母",
+      "counter_signal": "sell_as_buy_or_missing_buys_discovered",
+      "on_counter_signal": "invalidate_cohort_membership_and_all_downstream_estimates"
+    },
+    {
+      "id": "L36",
+      "from": "graph",
+      "to": "statistics",
+      "link_type": "hub_excluded_graph_to_null",
+      "purpose": "非公共资助/联合签名/跨币种共同活动→按活动频率/市场条件的正常图基准",
+      "artifact": "hub_aware_group_edge_universe",
+      "contract": "保留公共hub、边源、时间发生、结构/来源交叉验证; 同等预警预算与活跃度条件下比较",
+      "counter_signal": "giant_component_or_placebo_equal_or_better",
+      "on_counter_signal": "downgrade_group_detection_to_descriptive_only"
     }
   ],
   "escalation_rules": [
@@ -492,5 +536,16 @@
     "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns/",
     "https://miguelhernan.org/whatifbook",
     "https://docs.jito.wtf/lowlatencytxnsend/"
-  ]
+  ],
+  "expansion_wave": {
+    "date": "2026-10-31",
+    "source_registry": "knowledge/reference-project-discovery.v1.json",
+    "new_links": [
+      "L33",
+      "L34",
+      "L35",
+      "L36"
+    ],
+    "rationale": "Creator fees, source-label gate and hub-aware normal model learned from newly surveyed forensic projects."
+  }
 }
