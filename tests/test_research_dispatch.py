@@ -70,6 +70,15 @@ class ResearchDispatchTests(unittest.TestCase):
         self.assertEqual(fanout["unique_signatures_in_input"], 3)
         self.assertEqual(fanout["candidate_records_in_input"], 2)
 
+    def test_signature_source_checks_are_reused_across_distinct_cases(self):
+        x = make_plan(sample(), max_cases=10,
+                      max_source_checks=30, max_per_case=8)
+        fanout = next(c for c in x["cases"] if c["scope"].startswith("SOURCE:F:FANOUT_WINDOW:"))
+        self.assertIn("fund-b", fanout["reusable_prior_case_signature_checks"])
+        flat = [sig for c in x["cases"] for sig in c["source_checks_proposed"]]
+        self.assertEqual(len(flat), len(set(flat)))
+        self.assertEqual(x["signature_checks_planned"], len(flat))
+
     def test_same_mint_different_slots_are_separate_events(self):
         x = sample()
         x["group_candidates"].append({
