@@ -19,3 +19,7 @@
 当研究需要真实数据或 Grok 的实际监控输出时，按相应能力另行操作；没有数据不能编造已执行的验证。禁止在本阶段触发真实交易、签名、广播和自动部署。
 
 研究规划和规范见 `docs/solana-meme-copytrade-cognition-conversion-v1.md`、`docs/cognition-conversion-v1-rollout-plan.md`、`docs/knowledge-assets-logic-audit-wave1.md`（在其所在分支可用时）。
+
+## M2 离线聚合原型（2026-10-31）
+
+新增 [多钱包群体事件观察器](../docs/market-observatory-m2-v0.1.md)：从明确来源的规范化事件集合计算时间窗口、批量转账、同 Slot 买入、Token 汇集与跨 Mint 活动。**该模块尚未连接真实 Solana RPC 或 Grok 云端，不会自动发现全市场所有新币**；没有正常基准时仅输出候选，不给“异常/庄家/盈利”的确定标签。
