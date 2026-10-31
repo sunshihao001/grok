@@ -49,9 +49,12 @@
 1. SPL/Token-2022 的不同 Token Account 先映射回 owner 后才能讨论“有多少持有钱包”；若同 owner 持四个账户却被数成四个独立钱包，分散度是假象。
 2. 首次 funder 采用有限 RPC 历史的最早交易推断；当历史页已满，代码返回**未知**而非随便选择当前可见的一笔资金。已知 CEX/桥来源进入专门的公共基础设施桶。
 3. TopN 与 HHI 等指标必须标注分母是扫描到账户的合计供应、全部链上供应还是估计流通供应；另记录样本覆盖率。
+4. **新发现的跨层语义缺口**：`src/funders.ts` 在完整历史无法判定首次 funder 时返回 `null`；但 `src/clusters.ts` 对 `f === null` 执行 `independent.push(addr)`。代码中的 `independent` 因而同时混入“真正已知唯一私人 funder”和“根本未能证实资金来源”的钱包。不能以这一数组人数当“真实独立钱包数”的分母。
+
+**必须修正的研究合同**：来源未知 `FIRST_FUNDER_UNRESOLVED`、已知独立来源 `KNOWN_UNIQUE_FUNDER`、公共 CEX/Hub `SHARED_INFRASTRUCTURE`、同私人 funder `SHARED_PRIVATE_FUNDER_CANDIDATE` 应是不同输出状态；不允许下游聚类/统计层把 UNKNOWN 默默变为正常独立。
 
 **专家连接：** `chain → wallet → graph ↔ statistics → inventory`。  
-**应迁移：** owner 对齐、真实 funder 未知状态、公共 hub 排除、分母可追溯、聚类只是结构观察。  
+**应迁移：** owner 对齐、保留未知与真正独立的区别、公共 hub 排除、分母可追溯、聚类只是结构观察。**不直接复用该项目现有 `independent` 的语义。**  
 **反证：** “两个地址有同一个 funder”不足以证明其私钥/经济受益人相同。该项目 README 的“同一实体”是营销化提问，源码的共享 funder 规则仍只是一个有噪声的近似。
 
 ### D. 2026-10-29 大规模多通道论文 — 群体发现与“可复制性”反证专家
