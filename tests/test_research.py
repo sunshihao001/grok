@@ -22,6 +22,34 @@ class SourceBridgeTests(TestCase):
         self.assertTrue(all(i.get("license_note") for i in third_party))
         self.assertTrue(all(i["availability"] == "remote_on_demand" for i in idx["items"]))
 
+    def test_new_wallet_forensics_sources_pinned_and_discoverable(self):
+        idx = load_index()
+        self.assertGreaterEqual(len(idx["items"]), 27)
+        named = {x["id"]: x for x in idx["items"]}
+        required = ("forensic-raw-sol-replay",
+                    "developer-funding-convergence",
+                    "wallet-first-funder-unknown",
+                    "wallet-clustering-cross-layer-unknown",
+                    "holder-supply-coverage-method")
+        for key in required:
+            self.assertIn(key, named)
+            self.assertEqual(len(named[key]["commit"]), 40)
+            self.assertEqual(named[key]["availability"], "remote_on_demand")
+        funding = select_sources("最早资金 首次资金来源 未知 RPC分页", limit=12)
+        self.assertIn("wallet-first-funder-unknown", [x["id"] for x in funding])
+        dev = select_sources("开发者 发币钱包 上游资金 多跳 dev", limit=12)
+        self.assertIn("developer-funding-convergence", [x["id"] for x in dev])
+        recon = select_sources("原始交易 交易复算 SOL资金 原始签名 forensic", limit=12)
+        self.assertIn("forensic-raw-sol-replay", [x["id"] for x in recon])
+
+    def test_unknown_first_funder_is_not_proof_of_independence(self):
+        idx = load_index()
+        a = next(x for x in idx["items"] if x["id"] == "wallet-first-funder-unknown")
+        b = next(x for x in idx["items"] if x["id"] == "wallet-clustering-cross-layer-unknown")
+        self.assertIn("null", a["why"])
+        self.assertIn("independent[]", b["why"])
+        self.assertIn("must not be treated", a["why"])
+
     def test_real_problem_fetches_precise_source_topics(self):
         packet = build_packet("同源资金是不是交易所hub，如何排除共同基础设施？")
         ids = {r["id"] for r in packet["sources"]}
