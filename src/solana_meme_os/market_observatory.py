@@ -102,6 +102,9 @@ def validate_and_deduplicate(doc: dict, *, allow_fixture: bool = False,
         slot = row.get("slot")
         if type(slot) is not int or slot < 0:
             raise ValueError("slot must be nonnegative integer")
+        txidx = row.get("transaction_index")
+        if txidx is not None and (type(txidx) is not int or txidx < 0):
+            raise ValueError("transaction_index must be nonnegative integer")
         idx = row.get("instruction_index")
         inner = row.get("inner_instruction_index")
         if type(idx) is not int or idx < 0 or (inner is not None and (type(inner) is not int or inner < 0)):
@@ -130,6 +133,8 @@ def validate_and_deduplicate(doc: dict, *, allow_fixture: bool = False,
         else:
             if row.get("mint") is not None:
                 raise ValueError("SOL_TRANSFER must not assert a mint association")
+        if available is not None and received is not None and received < available:
+            raise ValueError("received_at cannot precede available_at")
         if decision:
             if available is None or received is None:
                 excluded["unknown_availability"] += 1
@@ -164,13 +169,14 @@ def summarize(rows: list[dict], window_seconds: int) -> list[dict]:
     for e in rows:
         dt = parse_time(e["block_time"], "block_time")
         bucket = _window_start(dt, window_seconds)
-        buckets[("MARKET_WIDE", bucket)].append(e)
+        buckets[("INPUT_COHORT_ALL_MINTS", bucket)].append(e)
         if e["event_kind"] in TOKEN_KINDS:
             buckets[(e["mint"], bucket)].append(e)
     out = []
     for (scope, start), ev in sorted(buckets.items(), key=lambda item: (item[0][1], item[0][0])):
         kinds: dict[str, int] = defaultdict(int)
         actors = set()
+        traders = set()
         senders, receivers = set(), set()
         sol_sent = sol_bought = sol_sold = 0
         token_transfers: dict[str, int] = defaultdict(int)
@@ -191,6 +197,7 @@ def summarize(rows: list[dict], window_seconds: int) -> list[dict]:
                     decimals[e["mint"]] = e["decimals"]
             else:
                 actors.add(e["wallet"])
+                traders.add(e["wallet"])
                 if kind == "SWAP_BUY":
                     sol_bought += raw_units(e, "sol_amount_lamports")
                 else:
@@ -198,7 +205,8 @@ def summarize(rows: list[dict], window_seconds: int) -> list[dict]:
         out.append({"scope": scope, "window_seconds": window_seconds,
                     "start": iso(start), "end_exclusive": iso(start + timedelta(seconds=window_seconds)),
                     "event_count": len(ev), "transaction_count": len(sigs),
-                    "unique_wallet_count": len(actors), "unique_senders": len(senders),
+                    "unique_actor_addresses": len(actors), "unique_trade_wallets": len(traders),
+                    "unique_senders": len(senders),
                     "unique_receivers": len(receivers), "event_kinds": dict(sorted(kinds.items())),
                     "sol_transferred": sol(sol_sent), "sol_spent_on_buys": sol(sol_bought),
                     "sol_received_from_sells": sol(sol_sold),
@@ -305,7 +313,11 @@ def candidates(rows: list[dict], *, seconds: int = 60, funding_lookback: int = 3
         when = parse_time(e["block_time"], "block_time")
         eligible = [x for x in credits[e["wallet"]] if
                     timedelta(0) <= when-parse_time(x["block_time"], "block_time") <= timedelta(seconds=funding_lookback)
-                    and x["slot"] <= e["slot"]]
+                    and (x["slot"] < e["slot"] or
+                         (x["slot"] == e["slot"] and
+                          type(x.get("transaction_index")) is int and
+                          type(e.get("transaction_index")) is int and
+                          x["transaction_index"] < e["transaction_index"]))]
         funders = {x["from_owner"] for x in eligible}
         for funder in funders:
             k = (funder, e["mint"])
@@ -365,6 +377,7 @@ def analyze(doc: dict, *, allow_fixture: bool = False, decision_at: str | None =
             "window_aggregates": [agg for size in sorted(set(windows)) for agg in summarize(events, size)],
             "group_candidates": candidates(events),
             "normalized_event_count": len(events), "no_trading": True,
+            "coverage_status": "INPUT_COHORT_ONLY_NO_CHAIN_WIDE_COMPLETENESS_CLAIM",
             "abnormality_confirmed": False, "ownership_confirmed": False,
             "jito_bundle_confirmed": False, "paper_trade_qualified": False,
             "limitations": ["Input records require external RPC/instruction verification",
