@@ -1107,6 +1107,74 @@
         "real_sale_vs_transfer_status",
         "economic_cashflow_open_questions"
       ]
+    },
+    {
+      "id": "capital_receipt_value_inversion",
+      "triggers": [
+        "COUNT_VALUE_ECONOMIC_TYPE_INVERSION"
+      ],
+      "lead": "graph",
+      "panel": [
+        "data",
+        "chain",
+        "liquidity",
+        "inventory",
+        "statistics"
+      ],
+      "conditional": [
+        "wallet",
+        "token",
+        "causal",
+        "knowledge"
+      ],
+      "vetoReview": [
+        "review",
+        "risk"
+      ],
+      "questions": [
+        "总金额主要来自真实外部注资，还是LP/WSOL/市场业务仓位释放？",
+        "按大额交易签名核验实际资产/对价/原始仓位和资金再次部署的真实路径",
+        "该类来源在正常LP撤出/普通服务商中占比多高，极端钱包是否制造样本假象？"
+      ],
+      "outputs": [
+        "cashflow_type_reconciliation",
+        "asset_position_before_after",
+        "false_financing_total_corrected",
+        "competing_capital_origin_hypotheses",
+        "source_signatures_to_replay"
+      ]
+    },
+    {
+      "id": "wallet_history_silence",
+      "triggers": [
+        "HISTORY_COVERAGE_RECEIPT_SILENCE_TENSION"
+      ],
+      "lead": "data",
+      "panel": [
+        "chain",
+        "wallet",
+        "statistics",
+        "knowledge"
+      ],
+      "conditional": [
+        "graph",
+        "adversarial",
+        "causal"
+      ],
+      "vetoReview": [
+        "review"
+      ],
+      "questions": [
+        "零笔历史资金记录是实际0还是覆盖范围以外的未知？",
+        "Genesis历史缺口是否关联地址年龄、数据接口、事件活跃度或完整性？",
+        "补齐缺失早期交易后正常基准分母、钱包聚类是否改变？"
+      ],
+      "outputs": [
+        "wallet_coverage_contingency",
+        "source_history_recovery_requests",
+        "false_zero_retraction_candidates",
+        "normal_denominator_recalibration"
+      ]
     }
   ],
   "legacy_translation": {
@@ -1160,5 +1228,14 @@
       "CROSS_MINT_FUNDING_REUSE",
       "CROSS_MINT_WALLET_ACTIVITY"
     ]
+  },
+  "mechanism_discovery_routes": {
+    "date": "2026-10-31",
+    "source": "src/solana_meme_os/mechanism_discovery.py",
+    "mechanism_ids": [
+      "COUNT_VALUE_ECONOMIC_TYPE_INVERSION",
+      "HISTORY_COVERAGE_RECEIPT_SILENCE_TENSION"
+    ],
+    "note": "Routes source-derived research observations to expertise. Not an M2 live candidate type or an executed multiagent workflow."
   }
 }
