@@ -46,7 +46,7 @@ description: |
 
 先读 [R005 原始资金来源跨项目法证案例](../../knowledge/research/R005-crossproject-funder-semantics-v1.md)：`solana-holder-clusters` 的 `funders.ts` 遇历史不足返回 `null`，但 `clusters.ts` 把该 `null` 放入 `independent[]`；其另一处以“交易最大SOL余额减少者”猜测付款地址；`Degen-Scanner` 保留查询失败计数为零的候选持有人进入后续追查。**可观察性失败≠真实独立、低活跃或同控**。
 
-运行层研究修正：[只读首次资金状态合约](../../src/solana_meme_os/funder_evidence.py) 将 `FIRST_FUNDER_UNKNOWN`、`FUNDER_HEURISTIC_UNCONFIRMED`、`KNOWN_PUBLIC_INFRASTRUCTURE`、`HIGH_DEGREE_SOURCE_AMBIGUOUS`、`SHARED_PRIVATE_FUNDER_CANDIDATE` 等分开输出。此模块消费已归一化候选，未实现 RPC 解码和实时采集。[`tests/test_funder_evidence.py`](../../tests/test_funder_evidence.py) 为 11 项**已写入但尚未实际执行**的合成单元测试。
+运行层研究修正：[只读首次资金状态合约](../../src/solana_meme_os/funder_evidence.py) 将 `FIRST_FUNDER_UNKNOWN`、`FUNDER_HEURISTIC_UNCONFIRMED`、`KNOWN_PUBLIC_INFRASTRUCTURE`、`HIGH_DEGREE_SOURCE_AMBIGUOUS`、`SHARED_PRIVATE_FUNDER_CANDIDATE` 等分开输出。此模块消费已归一化候选，未实现 RPC 解码和实时采集。[`tests/test_funder_evidence.py`](../../tests/test_funder_evidence.py) 为11项合成单元测试，现已纳入GitHub Actions完整离线测试套件并通过；未验证真实RPC归因准确性。
 
 新增专业交接 L37 `data→wallet` 要求保留完整历史查询状态；L38 `wallet→statistics` 要求未知/公共服务/高连接源在正常样本统计中单列。一次错误标签必须能够要求 QA 重新审核上游来源，而不是被综合异常评分掩盖。
 
@@ -80,7 +80,7 @@ description: |
 - 只读专家路由：`PYTHONPATH=src python -m solana_meme_os.expert_router --event FUNDING_FANOUT --event SAME_SLOT_MULTIWALLET_BUY --question "这组钱包是否独立？"`。输出调用的知识/专家建议，不执行实际专家模型，也不判断操盘或交易机会。
 - [R002 专家交叉反证案例](../../knowledge/cases/R002-expert-cross-examination-v1.md)：说明事实、资金/筹码、统计基准和执行经济如何互相改写结论。
 
-**专家不是 Bot 数量，也不是固定下游传话链。** 按事件和不确定性召集相关能力，至少让一种专业假说受到另一种独立机制检验。若链上指令不支持某个卖出标签，事件统计必须撤回；若没有正常同类基准，不允许发布已证异常；若同控关系未知，不必暂停市场流动性与独立协同观察。新机制可新增知识领域，不能受现有 15 张卡或五种事件路由限制。
+**专家不是 Bot 数量，也不是固定下游传话链。** 按事件和不确定性召集相关能力，至少让一种专业假说受到另一种独立机制检验。若链上指令不支持某个卖出标签，事件统计必须撤回；若没有正常同类基准，不允许发布已证异常；若同控关系未知，不必暂停市场流动性与独立协同观察。新机制可新增知识领域，不能受现有24张卡或9个典型场景路由限制。
 
 ## 0｜进入技能前先判断任务对象，而不是把所有事改写为跟单
 
