@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "title": "Solana Meme knowledge migration, source-bound hypotheses and methods",
-  "note": "This catalog contains reviewed descriptions of historical documentation, NOT verified on-chain truths, calibrated financial signals or proof of profitable prediction. Updated 2026-10-31: the 15-card legacy baseline is extended with 9 source-linked research/knowledge cards from R005-R007 and KX-01..KX-06. This is a curated operational index, not an exhaustive ontology.",
+  "note": "This catalog contains reviewed descriptions of historical documentation, NOT verified on-chain truths, calibrated financial signals or proof of profitable prediction. Updated 2026-10-31: the 15-card legacy baseline is extended with 9 source-linked research/knowledge cards from R005-R007 and KX-01..KX-06. This is a curated operational index, not an exhaustive ontology. Each card now carries a primary domain, conservative K0-K2 maturity, owner disciplines and an explicit basis; these do not claim live-chain validation.",
   "cards": [
     {
       "id": "candidate-entry",
@@ -40,7 +40,14 @@
           "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/06.md",
           "snapshot_path": "knowledge/legacy-snapshots/solana-learning/L06.md"
         }
-      ]
+      ],
+      "domain": "market_event",
+      "maturity": "K1",
+      "owner_experts": [
+        "chief",
+        "data"
+      ],
+      "maturity_basis": "来源入口的含义与筛选偏差已整理；尚未建立全市场候选覆盖率。"
     },
     {
       "id": "market-lifecycle",
@@ -78,7 +85,14 @@
           "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/05.md",
           "snapshot_path": "knowledge/legacy-snapshots/solana-learning/L05.md"
         }
-      ]
+      ],
+      "domain": "market_regime",
+      "maturity": "K1",
+      "owner_experts": [
+        "token",
+        "regime"
+      ],
+      "maturity_basis": "生命周期/迁移阶段差异有来源方法；协议覆盖和实时检测尚未复算。"
     },
     {
       "id": "token-security",
@@ -124,7 +138,14 @@
           "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/08.md",
           "snapshot_path": "knowledge/legacy-snapshots/solana-learning/L08.md"
         }
-      ]
+      ],
+      "domain": "token_security",
+      "maturity": "K1",
+      "owner_experts": [
+        "token",
+        "risk"
+      ],
+      "maturity_basis": "权限风险类型已整理；具体 Token/Token2022 真实样本和误报率未独立验证。"
     },
     {
       "id": "liquidity-depth",
@@ -171,7 +192,14 @@
           "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/08.md",
           "snapshot_path": "knowledge/legacy-snapshots/solana-learning/L08.md"
         }
-      ]
+      ],
+      "domain": "microstructure",
+      "maturity": "K1",
+      "owner_experts": [
+        "liquidity",
+        "regime"
+      ],
+      "maturity_basis": "流动性变化与重估/迁移的竞争解释已整理；真实池状态重放仍缺。"
     },
     {
       "id": "wallet-roles",
@@ -219,7 +247,14 @@
           "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/design/phase1-skill-03-wallet-roles.md",
           "snapshot_path": "knowledge/legacy-snapshots/domain-contracts/wallet-roles.md"
         }
-      ]
+      ],
+      "domain": "wallet_behavior",
+      "maturity": "K1",
+      "owner_experts": [
+        "wallet",
+        "event"
+      ],
+      "maturity_basis": "角色按行为形成候选的原则已迁移；真实主体归属尚未验证。"
     },
     {
       "id": "funding-graph",
@@ -267,7 +302,14 @@
           "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/design/phase1-skill-04-wallet-structure.md",
           "snapshot_path": "knowledge/legacy-snapshots/domain-contracts/wallet-structure.md"
         }
-      ]
+      ],
+      "domain": "capital_graph",
+      "maturity": "K2",
+      "owner_experts": [
+        "graph",
+        "wallet"
+      ],
+      "maturity_basis": "已形成资金路径、公共 hub 和同控边界的可检验研究契约；真实完整闭环未验证。"
     },
     {
       "id": "sybil-wash",
@@ -315,7 +357,14 @@
           "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/01-04-%E5%9F%BA%E7%A1%80%E7%90%86%E8%AE%BA/04-%E9%93%BE%E4%B8%8A%E6%9C%AC%E8%B4%A8%E6%80%9D%E7%BB%B4%E5%B7%A5%E5%85%B7%E7%AE%B1.md",
           "snapshot_path": "knowledge/legacy-snapshots/solana-learning/field-forensics-toolbox.md"
         }
-      ]
+      ],
+      "domain": "coordination",
+      "maturity": "K2",
+      "owner_experts": [
+        "adversarial",
+        "statistics"
+      ],
+      "maturity_basis": "已整理协调与独立机器人竞争解释及基准方法；全市场误报率未校准。"
     },
     {
       "id": "concentration",
@@ -361,7 +410,14 @@
           "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/design/phase1-skill-04-wallet-structure.md",
           "snapshot_path": "knowledge/legacy-snapshots/domain-contracts/wallet-structure.md"
         }
-      ]
+      ],
+      "domain": "inventory_control",
+      "maturity": "K1",
+      "owner_experts": [
+        "inventory",
+        "statistics"
+      ],
+      "maturity_basis": "地址集中与经济控制差异已定义；完整供应量和未归属库存尚未复算。"
     },
     {
       "id": "deployer-history",
@@ -406,7 +462,14 @@
           "path": "sikk_gmgn_token_report.py",
           "url": "https://github.com/sunshihao001/qb-/blob/8377ad5611255df5cd4562666a826708575334f0/sikk_gmgn_token_report.py"
         }
-      ]
+      ],
+      "domain": "token_security",
+      "maturity": "K1",
+      "owner_experts": [
+        "token",
+        "graph"
+      ],
+      "maturity_basis": "部署者历史作为风险/关联线索已整理；跨地址同控不能由此推出。"
     },
     {
       "id": "gmgn-field-combinations",
@@ -458,7 +521,14 @@
           "path": "sikk_gmgn_token_report.py",
           "url": "https://github.com/sunshihao001/qb-/blob/8377ad5611255df5cd4562666a826708575334f0/sikk_gmgn_token_report.py"
         }
-      ]
+      ],
+      "domain": "market_event",
+      "maturity": "K1",
+      "owner_experts": [
+        "data",
+        "chief"
+      ],
+      "maturity_basis": "供应商字段组合可用于提出问题；字段定义/延迟/完整性仍需真实接口核验。"
     },
     {
       "id": "evidence-synthesis",
@@ -508,7 +578,14 @@
           "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/design/phase1-skill-05-evidence-chain.md",
           "snapshot_path": "knowledge/legacy-snapshots/domain-contracts/evidence-chain.md"
         }
-      ]
+      ],
+      "domain": "knowledge_engineering",
+      "maturity": "K2",
+      "owner_experts": [
+        "review",
+        "chief"
+      ],
+      "maturity_basis": "已形成事实/假说/未知/反证的结构化研究约束；尚无持久 Claim 数据库。"
     },
     {
       "id": "research-states",
@@ -552,7 +629,14 @@
           "path": "rules/downgrade_rules_v1.json",
           "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/rules/downgrade_rules_v1.json"
         }
-      ]
+      ],
+      "domain": "risk_and_action",
+      "maturity": "K2",
+      "owner_experts": [
+        "risk",
+        "knowledge"
+      ],
+      "maturity_basis": "观察、风险、研究与纸面资格已分离；不是交易许可。"
     },
     {
       "id": "reclaim-theory",
@@ -599,7 +683,14 @@
           "url": "https://github.com/sunshihao001/meme-/blob/5ab2b01f08e4e512fa4fcd1aed88953ff534bd0a/04_%E9%A3%8E%E9%99%A9%E7%AE%A1%E7%90%86/%E7%BB%93%E6%9E%84%E9%A3%8E%E9%99%A9%E8%AF%84%E5%88%86%E5%AD%97%E6%AE%B5%E8%A1%A8_v0.1.md",
           "snapshot_path": "knowledge/legacy-snapshots/theory/structure-risk-fields.md"
         }
-      ]
+      ],
+      "domain": "market_regime",
+      "maturity": "K0",
+      "owner_experts": [
+        "regime",
+        "causal"
+      ],
+      "maturity_basis": "FCZ/POC/AVWAP 回收仍属未验证策略假说，需事前特征和样本外测试。"
     },
     {
       "id": "gmgn-raw-prototype",
@@ -644,7 +735,14 @@
           "path": "skills/common/gmgn_client.py",
           "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/skills/common/gmgn_client.py"
         }
-      ]
+      ],
+      "domain": "execution_semantics",
+      "maturity": "K1",
+      "owner_experts": [
+        "data",
+        "chain"
+      ],
+      "maturity_basis": "旧原型的供应商标签和字段限制已审阅；无真实 API 校准。"
     },
     {
       "id": "anti-false-completion",
@@ -691,7 +789,14 @@
           "url": "https://github.com/sunshihao001/qb-/blob/8377ad5611255df5cd4562666a826708575334f0/hermes_harness/16_reliability_calibration/README.md",
           "snapshot_path": "knowledge/legacy-snapshots/method/calibration.md"
         }
-      ]
+      ],
+      "domain": "knowledge_engineering",
+      "maturity": "K2",
+      "owner_experts": [
+        "review",
+        "knowledge"
+      ],
+      "maturity_basis": "计划/测试/部署/效果的状态分离已有工程约束和测试。"
     },
     {
       "id": "first-funder-history-coverage",
@@ -750,7 +855,15 @@
           "path": "dev_tracer.py",
           "url": "https://github.com/dnafund/Degen-Scanner/blob/69a08d5589c47bdc33e9c6c2793cc0a69acdd85d/dev_tracer.py"
         }
-      ]
+      ],
+      "domain": "wallet_behavior",
+      "maturity": "K2",
+      "owner_experts": [
+        "data",
+        "wallet",
+        "statistics"
+      ],
+      "maturity_basis": "公开派生数据已复算历史覆盖与融资标签张力；原始 RPC 首注资仍未逐签名核验。"
     },
     {
       "id": "sol-receipt-economic-semantics",
@@ -811,7 +924,14 @@
           "path": "scripts/verify.py",
           "url": "https://github.com/xorextrace/cyberleek-onchain/blob/283bec233a6c24849799da6e051e91689a0f187a/scripts/verify.py"
         }
-      ]
+      ],
+      "domain": "execution_semantics",
+      "maturity": "K2",
+      "owner_experts": [
+        "chain",
+        "graph"
+      ],
+      "maturity_basis": "多程序/WSOL/Token close 等 SOL 收入语义已形成离线审计方法；尚未全面 RPC 重放。"
     },
     {
       "id": "cashflow-count-value-inversion",
@@ -860,7 +980,14 @@
           "path": "data/trace_h2w6/etape2_financement.py",
           "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/data/trace_h2w6/etape2_financement.py"
         }
-      ]
+      ],
+      "domain": "capital_graph",
+      "maturity": "K2",
+      "owner_experts": [
+        "graph",
+        "causal"
+      ],
+      "maturity_basis": "R007 的次数/金额反转在公开派生表已复算；资本释放机制仍是假说。"
     },
     {
       "id": "creator-fee-economic-path",
@@ -917,7 +1044,14 @@
           "path": "economic_mechanics/results.md",
           "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/economic_mechanics/results.md"
         }
-      ]
+      ],
+      "domain": "token_security",
+      "maturity": "K1",
+      "owner_experts": [
+        "token",
+        "graph"
+      ],
+      "maturity_basis": "创建者费用配置/累计/领取的概念已拆分；具体全链领取路径待核验。"
     },
     {
       "id": "multichannel-wallet-evidence",
@@ -976,7 +1110,15 @@
           "path": "coordination_detection/results.md",
           "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/coordination_detection/results.md"
         }
-      ]
+      ],
+      "domain": "coordination",
+      "maturity": "K2",
+      "owner_experts": [
+        "graph",
+        "adversarial",
+        "statistics"
+      ],
+      "maturity_basis": "多通道证据与共享资金误归并风险已形式化；需盲样本评估。"
     },
     {
       "id": "capital-role-invariance",
@@ -1033,7 +1175,15 @@
           "path": "economic_mechanics/results.md",
           "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/economic_mechanics/results.md"
         }
-      ]
+      ],
+      "domain": "capital_graph",
+      "maturity": "K0",
+      "owner_experts": [
+        "wallet",
+        "graph",
+        "causal"
+      ],
+      "maturity_basis": "地址轮换后的经济角色不变量是待验证新假说。"
     },
     {
       "id": "normal-bot-ecology-baseline",
@@ -1091,7 +1241,14 @@
           "path": "docs/METHODOLOGY.md",
           "url": "https://github.com/jayrabol/solana-holder-clusters/blob/a75a72965479a7b715b041148803d8004fe25079/docs/METHODOLOGY.md"
         }
-      ]
+      ],
+      "domain": "baseline",
+      "maturity": "K2",
+      "owner_experts": [
+        "statistics",
+        "adversarial"
+      ],
+      "maturity_basis": "正常机器人生态与公共基础设施反例已形成研究方法；本地全市场分布未知。"
     },
     {
       "id": "trade-direction-source-gate",
@@ -1149,7 +1306,15 @@
           "path": "code/v04_slot_order.py",
           "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/code/v04_slot_order.py"
         }
-      ]
+      ],
+      "domain": "execution_semantics",
+      "maturity": "K2",
+      "owner_experts": [
+        "chain",
+        "data",
+        "review"
+      ],
+      "maturity_basis": "BUY/SELL 源指令与资产变化分离已成为证据 Gate；协议覆盖仍不足。"
     },
     {
       "id": "market-utility-vs-tradability",
@@ -1208,7 +1373,15 @@
           "path": "coordination_detection/results.md",
           "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/coordination_detection/results.md"
         }
-      ]
+      ],
+      "domain": "risk_and_action",
+      "maturity": "K2",
+      "owner_experts": [
+        "causal",
+        "execution",
+        "risk"
+      ],
+      "maturity_basis": "市场发现、风险和净可交易价值的独立评估合同已建立；真实净收益未验证。"
     }
   ]
 }
