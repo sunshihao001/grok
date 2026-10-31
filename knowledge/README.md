@@ -2,6 +2,26 @@
 
 **Purpose:** preserve the expert learning, domain research, adversarial perspectives and practical lessons from three earlier projects while discarding Hermes-specific *runtime* assumptions. A working Bot without validated external knowledge is only orchestration.
 
+## ChatGPT「跟单」Project 与 GitHub 的全领域知识主册
+
+为避免知识散落在历史对话，新增可移植 [《GPT Meme 项目知识主册》](system/gpt-meme-project-core.v1.md)：统一收纳8层、12域、21位专家、152单元的具体问题/机制/错误捷径、十条重点跨域知识链与当前B01进展。 [《知识逐层累积与双向关系规范》](system/gpt-meme-knowledge-accumulation.v1.md) 规定把每轮机制、竞争解释、原业务来源和新发现回填到旧单元；[《GPT Project 建议指令》](system/gpt-meme-project-instructions.v1.md) 用于项目设置，[机器索引](system/gpt-meme-project-index.v1.json) 保持原分类ID不变。**当前 GPT Project 附件未被工具自动更新**；需要用户将同版本文件添加到 Project 知识区，GitHub 是审阅真源，Library副本/当前聊天与项目附件不能混称。此处只是专业知识镜像与方法，非Grok部署或Alpha实证完成。
+
+## 如何逐批将已有知识真正连到Grok？
+
+当前执行方式见 [《小批次滚动融合与B01试点》](system/rolling-reference-knowledge-integration.md)：每批由一个具体的Meme钱包/资金/筹码/策略问题驱动，3–6份原有关键资料先被理解，再由原21位专家按需融合，审阅后回填现有知识单位和专家入口。**只同时保持一条主研究**，另一批最多做来源核查，前一批可完成小量入库。不要先把三库全量搬进Grok，也不同时让每个参考库各自写一套专家知识。
+
+## 项目原点优先：现有Meme交易储备审计
+
+在任何新研究方向前，先查 [《五个参考仓库的Meme交易知识储备与阶段》](system/reference-projects-meme-knowledge-audit-20261030.md)。它明确原Hermes、meme-、qb-分别已有何种Meme专有知识和程序；外部Why-Solana仍是review_only；当前grok最大的断层是**关键钱包识别到后续真正可跟随的信息**。现行 [M01](domain/D04-D08-key-wallet-followability-research-brief.md) 已以旧项目关键钱包的业务问题为第一优先，先前通用AMM研究仅按需参与。
+
+## 当前知识研究的思维逻辑
+
+先读 [《专家主导的核心机制纵深研究法》](system/expert-mechanism-research-method.md)，再按 [核心机制研究进度](system/mechanism-research-plan.v1.json) 选择有真实解释价值的问题。**全域知识目录保证不遗漏；一个主专家和必要的跨域挑战负责钻深；新认知最终按原152项ID回填。** 当前下一轮聚焦 [从qb/Hermes关键钱包识别到实际可跟的后续信息](domain/D04-D08-key-wallet-followability-research-brief.md)，[D03 池价/储备](domain/D03-market-price-mechanism-research-brief.md) 仅按具体Mint业务需要补足。这条知识研究线与 `docs/next-steps.md` 中待完成的 Grok S1 云电脑验收并行、互不冒充完成状态。
+
+## 全领域系统知识建设（草稿，非实证完成）
+
+以 [全领域专家手册](system/whole-domain-expert-handbook.md) 为项目知识整体阅读入口；[152 项原子知识图谱](system/whole-domain-atlas.v1.json) 对现有 L0–L7 / D01–D12 从小到大逐项编号，关联21位专家、市场问题、经济机制、错误捷径和既有知识入口；[覆盖审计](system/whole-domain-coverage-audit.md) 独立列出每个领域尚未研究透的技术与市场问题。范围已系统化不等于专业知识全部完成，更不等于市场真实数据、可赚钱结论或 Grok 已上线。
+
 ## L0–L7 专属专家视角（Draft，非已安装 Bot）
 
 [21 位内部专业专家与完整分析程序](experts/README.md) 分布在全部八个知识层：从原始来源/交易/市场/钱包资金，到策略机会、执行、独立反证与监控治理。每位专家都有自己的知识、观察顺序、相反机制、关键查询、停止条件，并映射现有 B01–B07 工作责任；**不创建 21 个 Grok Bot**。机器注册表为 [registry.v1.json](experts/registry.v1.json)，离线专家方法查询：`PYTHONPATH=src python -m solana_meme_os.expert_brief --question "同源钱包能跟单吗？" --objective ECONOMIC`。仅提供研究材料与调查计划，不是大模型专家自动执行器或市场验证结果。

@@ -1,0 +1,1864 @@
+{
+  "schema_version": "1.0",
+  "name": "Full-spectrum expert knowledge minimum units",
+  "generated_for": "knowledge/whole-spectrum-20261030-v1",
+  "anchor_ontology": "knowledge/system/ontology.v1.json",
+  "status": "exhaustive_scope_inventory_not_complete_research",
+  "definition_of_done": "结构目录完整≠知识解释完整≠来源审计完成≠实证可交易。每个单元需有专家机制、竞争解释、来源与适用边界，后续独立审查才能升级",
+  "separation": [
+    "protocol_fact",
+    "economic_mechanism",
+    "competing_explanation",
+    "empirical_hypothesis",
+    "verified_market_finding",
+    "approved_readonly_rule"
+  ],
+  "core_governance": [
+    {
+      "id": "L0-K01",
+      "domain": "L0",
+      "title": "来源与版本固定",
+      "expert_question": "知识从哪里来、是否与当前协议一致？",
+      "mechanism_to_study": "原始版本指纹+许可证+获取时点",
+      "forbidden_shortcut": "资料有链接就一定正确",
+      "research_state": "mapped_unverified",
+      "source_anchor": "knowledge/system/README.md",
+      "primary_expert_id": "E-L0-01"
+    },
+    {
+      "id": "L0-K02",
+      "domain": "L0",
+      "title": "领域本体",
+      "expert_question": "L0-L7和D01-D12分类是否相互替代？",
+      "mechanism_to_study": "层代表层次、领域代表知识问题",
+      "forbidden_shortcut": "为了完整性再生新分类体系",
+      "research_state": "mapped_unverified",
+      "source_anchor": "knowledge/system/README.md",
+      "primary_expert_id": "E-L0-01"
+    },
+    {
+      "id": "L0-K03",
+      "domain": "L0",
+      "title": "事实等级",
+      "expert_question": "技术事实、供应商主张、机制推论、经验规律如何分开？",
+      "mechanism_to_study": "多重证据状态与结论授权分离",
+      "forbidden_shortcut": "理论推导就是实证收益",
+      "research_state": "mapped_unverified",
+      "source_anchor": "knowledge/system/README.md",
+      "primary_expert_id": "E-L0-01"
+    },
+    {
+      "id": "L0-K04",
+      "domain": "L0",
+      "title": "依赖边界",
+      "expert_question": "哪个领域是必需前提哪个只是相关候选？",
+      "mechanism_to_study": "按问题动态调最小专家组合",
+      "forbidden_shortcut": "任何研究强制经过所有层",
+      "research_state": "mapped_unverified",
+      "source_anchor": "knowledge/system/README.md",
+      "primary_expert_id": "E-L0-01"
+    },
+    {
+      "id": "L0-K05",
+      "domain": "L0",
+      "title": "权利与许可证",
+      "expert_question": "历史研究与第三方文档是否允许整篇迁移？",
+      "mechanism_to_study": "保留来源和许可证、谨慎引用",
+      "forbidden_shortcut": "GitHub公开=可无限复制改写",
+      "research_state": "mapped_unverified",
+      "source_anchor": "knowledge/system/README.md",
+      "primary_expert_id": "E-L0-01"
+    },
+    {
+      "id": "L0-K06",
+      "domain": "L0",
+      "title": "未知与冲突",
+      "expert_question": "证据不够或来源冲突如何保留？",
+      "mechanism_to_study": "UNKNOWN不等于零，分歧作为研究入口",
+      "forbidden_shortcut": "没有反证就已证明正面主张",
+      "research_state": "mapped_unverified",
+      "source_anchor": "knowledge/system/README.md",
+      "primary_expert_id": "E-L0-01"
+    },
+    {
+      "id": "L0-K07",
+      "domain": "L0",
+      "title": "研究与交易权限",
+      "expert_question": "哪些行动属于只读、哪些会改变外部状态？",
+      "mechanism_to_study": "隔离签名/广播/真实交易和研究PR",
+      "forbidden_shortcut": "写了Skill即可授权交易",
+      "research_state": "mapped_unverified",
+      "source_anchor": "knowledge/system/README.md",
+      "primary_expert_id": "E-L0-01"
+    },
+    {
+      "id": "L0-K08",
+      "domain": "L0",
+      "title": "术语与语义演进",
+      "expert_question": "不同时代使用的SM/庄家/控盘术语如何对齐？",
+      "mechanism_to_study": "保留历史原词和新精确定义的区别",
+      "forbidden_shortcut": "旧词重命名便代表知识深化",
+      "research_state": "mapped_unverified",
+      "source_anchor": "knowledge/system/README.md",
+      "primary_expert_id": "E-L0-01"
+    }
+  ],
+  "domains": [
+    {
+      "id": "D01",
+      "lead_expert_id": "E-L1-01",
+      "support_expert_ids": [
+        "E-L1-02",
+        "E-L0-02"
+      ],
+      "existing_anchor": "knowledge/domain/L1-L2-chain-market.md",
+      "source_research_lane": "Solana 官方账户/交易/RPC 文档",
+      "coverage": "catalogued_partial_mechanism_depth",
+      "units": [
+        {
+          "id": "D01-K01",
+          "domain": "D01",
+          "title": "公钥与账户类型",
+          "expert_question": "不同账户被谁授权、由谁的程序拥有？",
+          "mechanism_to_study": "区分地址、公钥、程序owner、Token owner、经济主体",
+          "forbidden_shortcut": "地址相同或同签名便是同一最终受益人",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L1-01"
+        },
+        {
+          "id": "D01-K02",
+          "domain": "D01",
+          "title": "Mint 与 Token Program",
+          "expert_question": "同名代币对应哪个 Mint、哪一版 Token Program？",
+          "mechanism_to_study": "Mint+program 标识资产，decimals 与供应由状态定义",
+          "forbidden_shortcut": "symbol相同即同一币",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L1-01"
+        },
+        {
+          "id": "D01-K03",
+          "domain": "D01",
+          "title": "Token Account 与 ATA",
+          "expert_question": "Token余额究竟存在哪里，owner是谁？",
+          "mechanism_to_study": "ATA是默认地址，非全部Token账户，payer可为第三方",
+          "forbidden_shortcut": "Token账户数就是投资者数",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L1-01"
+        },
+        {
+          "id": "D01-K04",
+          "domain": "D01",
+          "title": "PDA与程序授权",
+          "expert_question": "没有私钥的地址怎样移动资产？",
+          "mechanism_to_study": "PDA由程序通过签名种子受控，授权链不同于热钱包",
+          "forbidden_shortcut": "PDA就是普通用户钱包",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L1-01"
+        },
+        {
+          "id": "D01-K05",
+          "domain": "D01",
+          "title": "Authority与Delegate",
+          "expert_question": "哪些主体具有铸造、冻结或授权转出权？",
+          "mechanism_to_study": "区分Mint、freeze、token delegate与扩展权利",
+          "forbidden_shortcut": "renounced标签代表所有安全风险解除",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L1-01"
+        },
+        {
+          "id": "D01-K06",
+          "domain": "D01",
+          "title": "交易消息与版本",
+          "expert_question": "v0交易、地址查找表和账户索引怎样影响解析？",
+          "mechanism_to_study": "结合版本、loaded addresses和索引重建指令地址",
+          "forbidden_shortcut": "只读静态accountKeys即完整地址列表",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L1-01"
+        },
+        {
+          "id": "D01-K07",
+          "domain": "D01",
+          "title": "外层指令与inner CPI",
+          "expert_question": "一笔聚合交易到底调用了哪些程序？",
+          "mechanism_to_study": "按交易上下文复原swap、transfer、LP等实际经济动作",
+          "forbidden_shortcut": "转账次数就是交易次数",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L1-01"
+        },
+        {
+          "id": "D01-K08",
+          "domain": "D01",
+          "title": "余额守恒与单位",
+          "expert_question": "raw amount、decimals、SOL/wSOL、rent应怎样记账？",
+          "mechanism_to_study": "多资产pre/post余额与fee共同解释净变化",
+          "forbidden_shortcut": "Token变化直接等于美元净盈利",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L1-01"
+        },
+        {
+          "id": "D01-K09",
+          "domain": "D01",
+          "title": "Slot/Blocktime/Finality",
+          "expert_question": "链上发生时间和可用时间有何区别？",
+          "mechanism_to_study": "slot、blockTime、commitment、链重组与提供者收到时间分离",
+          "forbidden_shortcut": "历史blockTime就是实时时钟",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L1-01"
+        },
+        {
+          "id": "D01-K10",
+          "domain": "D01",
+          "title": "失败交易与日志",
+          "expert_question": "一笔失败交易可能付费但没有成功swap吗？",
+          "mechanism_to_study": "交易状态、错误码、logs及fee需分别处理",
+          "forbidden_shortcut": "有signature就认为完成买入",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L1-01"
+        },
+        {
+          "id": "D01-K11",
+          "domain": "D01",
+          "title": "发行和跨程序事件",
+          "expert_question": "Mint创建、建池、迁移怎样确定对象和阶段？",
+          "mechanism_to_study": "程序与账户状态变更而非平台标签确定事件",
+          "forbidden_shortcut": "钱包首次活动就是币的发行时间",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L1-01"
+        },
+        {
+          "id": "D01-K12",
+          "domain": "D01",
+          "title": "交易重建的可识别边界",
+          "expert_question": "链上可见授权与链下最终受益关系如何分开？",
+          "mechanism_to_study": "协议事实支持对动作的解释但不自动揭示私人合同",
+          "forbidden_shortcut": "链上图能够唯一证明现实身份",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L1-01"
+        }
+      ]
+    },
+    {
+      "id": "D02",
+      "lead_expert_id": "E-L2-01",
+      "support_expert_ids": [
+        "E-L2-03",
+        "E-L2-02"
+      ],
+      "existing_anchor": "knowledge/domain/L1-L2-chain-market.md",
+      "source_research_lane": "具体launchpad程序/版本及Solana Token资料",
+      "coverage": "catalogued_partial_mechanism_depth",
+      "units": [
+        {
+          "id": "D02-K01",
+          "domain": "D02",
+          "title": "创建与初始化",
+          "expert_question": "Mint何时创建、实际交易开放何时发生？",
+          "mechanism_to_study": "区分创建、初始化、实际可交易三个事件",
+          "forbidden_shortcut": "币存在便可买卖",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-01"
+        },
+        {
+          "id": "D02-K02",
+          "domain": "D02",
+          "title": "发币平台识别",
+          "expert_question": "相同形态的新币是否都来自同一机制？",
+          "mechanism_to_study": "按程序ID与版本区分launchpad/工厂/自建池",
+          "forbidden_shortcut": "所有Meme都是单一路径",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-01"
+        },
+        {
+          "id": "D02-K03",
+          "domain": "D02",
+          "title": "Bonding Curve类型",
+          "expert_question": "曲线价格由哪些状态变量决定？",
+          "mechanism_to_study": "真实储备与虚拟储备及不同曲线形状分离",
+          "forbidden_shortcut": "所有curve都是恒定乘积",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-01"
+        },
+        {
+          "id": "D02-K04",
+          "domain": "D02",
+          "title": "曲线买卖权限",
+          "expert_question": "曲线阶段的出售路径和可用余额是什么？",
+          "mechanism_to_study": "区分曲线程序约束与普通AMM报价",
+          "forbidden_shortcut": "买得到必定同样卖得掉",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-01"
+        },
+        {
+          "id": "D02-K05",
+          "domain": "D02",
+          "title": "毕业条件",
+          "expert_question": "达到什么事件才进入迁移或毕业阶段？",
+          "mechanism_to_study": "由程序阈值、状态转变、执行交易确认毕业",
+          "forbidden_shortcut": "UI 进度100%等于链上已迁移",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-01"
+        },
+        {
+          "id": "D02-K06",
+          "domain": "D02",
+          "title": "迁移事件链",
+          "expert_question": "曲线结束到新池可用之间可能发生什么？",
+          "mechanism_to_study": "识别迁移请求、实际池创建、储备注入与交易开始",
+          "forbidden_shortcut": "迁移期间没有执行/定价风险",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-01"
+        },
+        {
+          "id": "D02-K07",
+          "domain": "D02",
+          "title": "池重建与分母重置",
+          "expert_question": "迁移前后价格、流动性、volume怎样拼接？",
+          "mechanism_to_study": "不同市场机制需要新池、新单位和起算口径",
+          "forbidden_shortcut": "曲线末价和池首价可无条件接续",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-01"
+        },
+        {
+          "id": "D02-K08",
+          "domain": "D02",
+          "title": "多池与跨路径",
+          "expert_question": "同一Mint是否会同时存在多个交易池？",
+          "mechanism_to_study": "价格与深度按pool和route区分，关注套利",
+          "forbidden_shortcut": "一个Mint只有一个唯一市场价格",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-01"
+        },
+        {
+          "id": "D02-K09",
+          "domain": "D02",
+          "title": "LP权利与锁定",
+          "expert_question": "谁拥有撤出流动性的权利？",
+          "mechanism_to_study": "LP Token、位置头寸、锁定方式与可赎回量分开",
+          "forbidden_shortcut": "LP被锁就不可能跌价",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-01"
+        },
+        {
+          "id": "D02-K10",
+          "domain": "D02",
+          "title": "Token权限和扩展",
+          "expert_question": "Transfer Hook/fee/permanent delegate怎样影响流通？",
+          "mechanism_to_study": "按Token Program与启用扩展逐一评估",
+          "forbidden_shortcut": "SPL Token都没有附加转账约束",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-01"
+        },
+        {
+          "id": "D02-K11",
+          "domain": "D02",
+          "title": "创建者与协议费",
+          "expert_question": "在发行/迁移各阶段谁收取什么费用？",
+          "mechanism_to_study": "区分协议费、creator fee、LP fee和版本配置",
+          "forbidden_shortcut": "Dev不持币就没有收益渠道",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-01"
+        },
+        {
+          "id": "D02-K12",
+          "domain": "D02",
+          "title": "市场阶段的玩家激励",
+          "expert_question": "早期持币、毕业套利和后期持仓群的动机怎样变化？",
+          "mechanism_to_study": "行为策略相对可交易供应和执行条件随阶段转移",
+          "forbidden_shortcut": "钱包在每个阶段扮演不变角色",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-01"
+        }
+      ]
+    },
+    {
+      "id": "D03",
+      "lead_expert_id": "E-L2-02",
+      "support_expert_ids": [
+        "E-L5-01",
+        "E-L3-03"
+      ],
+      "existing_anchor": "knowledge/domain/L1-L2-chain-market.md",
+      "source_research_lane": "Raydium CPMM/LaunchLab及各池协议一手文档",
+      "coverage": "catalogued_partial_mechanism_depth",
+      "units": [
+        {
+          "id": "D03-K01",
+          "domain": "D03",
+          "title": "价格是什么",
+          "expert_question": "最近成交价、边际价、TWAP和可成交报价有何区别？",
+          "mechanism_to_study": "时间、方向、数量决定可实现价格",
+          "forbidden_shortcut": "一根K线价格就是该仓位fill价",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-02"
+        },
+        {
+          "id": "D03-K02",
+          "domain": "D03",
+          "title": "CPMM与恒定乘积",
+          "expert_question": "买入改变储备后后来者的价格会怎样？",
+          "mechanism_to_study": "非线性储备曲线和边际/平均价区别",
+          "forbidden_shortcut": "涨跌幅和投入额线性对应",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-02"
+        },
+        {
+          "id": "D03-K03",
+          "domain": "D03",
+          "title": "CLMM/DLMM流动性",
+          "expert_question": "集中区间或分箱流动性如何改变价格冲击？",
+          "mechanism_to_study": "池类型和有效活跃区间决定深度",
+          "forbidden_shortcut": "所有池可用同一x*y公式",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-02"
+        },
+        {
+          "id": "D03-K04",
+          "domain": "D03",
+          "title": "虚拟储备与真实报价",
+          "expert_question": "curve虚拟深度意味着真实能提出多少资产吗？",
+          "mechanism_to_study": "定价状态与实际可支付报价储备独立",
+          "forbidden_shortcut": "虚拟流动性等于可卖现金",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-02"
+        },
+        {
+          "id": "D03-K05",
+          "domain": "D03",
+          "title": "买卖方向成交量",
+          "expert_question": "已成交swap计数和真正独立买方需求差什么？",
+          "mechanism_to_study": "交易方向不证明经济受益人和长期风险敞口",
+          "forbidden_shortcut": "buy_volume>sell_volume就是资金净流入",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-02"
+        },
+        {
+          "id": "D03-K06",
+          "domain": "D03",
+          "title": "LP增加撤出",
+          "expert_question": "池reserve变动究竟来自swap还是LP动作？",
+          "mechanism_to_study": "指令、储备数量和份额权益协同解析",
+          "forbidden_shortcut": "美元流动性下降就是抽池",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-02"
+        },
+        {
+          "id": "D03-K07",
+          "domain": "D03",
+          "title": "报价路径与聚合器",
+          "expert_question": "多池最优路线是否随规模和拥堵变化？",
+          "mechanism_to_study": "路径、费用、报价存活时间都制约执行",
+          "forbidden_shortcut": "单池last price就是最优路由",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-02"
+        },
+        {
+          "id": "D03-K08",
+          "domain": "D03",
+          "title": "冲击成本与容量",
+          "expert_question": "买入规模增加时平均成交价和退出价如何变化？",
+          "mechanism_to_study": "非线性冲击与对手后续交易状态相互作用",
+          "forbidden_shortcut": "小单quote可线性外推大单",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-02"
+        },
+        {
+          "id": "D03-K09",
+          "domain": "D03",
+          "title": "套利与价格联动",
+          "expert_question": "不同池价格为何可能接近却不完全一致？",
+          "mechanism_to_study": "套利费用、路径延迟与流动性限制塑造价差",
+          "forbidden_shortcut": "池价差一定是套利利润",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-02"
+        },
+        {
+          "id": "D03-K10",
+          "domain": "D03",
+          "title": "MEV/Bundle与排序",
+          "expert_question": "抢跑、夹击、优先费与Jito如何改变执行？",
+          "mechanism_to_study": "交易排序和竞争成本改变预期可得价格",
+          "forbidden_shortcut": "同slot代表同bundle或同一操作者",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-02"
+        },
+        {
+          "id": "D03-K11",
+          "domain": "D03",
+          "title": "成交质量与换手",
+          "expert_question": "高换手是否真正增加可持续风险资本？",
+          "mechanism_to_study": "套利/做市/投机/关联交易都可能贡献volume",
+          "forbidden_shortcut": "大交易量必有长期持币需求",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-02"
+        },
+        {
+          "id": "D03-K12",
+          "domain": "D03",
+          "title": "市场状态跃迁",
+          "expert_question": "流动性薄、突然迁移、拥堵时价格统计为何失真？",
+          "mechanism_to_study": "市场机制变化使统一阈值和价格窗口失效",
+          "forbidden_shortcut": "整个生命周期同一滑点模型",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L2-02"
+        }
+      ]
+    },
+    {
+      "id": "D04",
+      "lead_expert_id": "E-L3-01",
+      "support_expert_ids": [
+        "E-L3-04",
+        "E-L4-02"
+      ],
+      "existing_anchor": "knowledge/domain/L3-wallet-actors.md",
+      "source_research_lane": "Hermes learning/10及钱包行为原始交易语义",
+      "coverage": "catalogued_partial_mechanism_depth",
+      "units": [
+        {
+          "id": "D04-K01",
+          "domain": "D04",
+          "title": "地址与主体多重身份",
+          "expert_question": "一个地址在不同Mint阶段可能承担哪些角色？",
+          "mechanism_to_study": "角色按Mint×阶段×时间，而非永久单一标签",
+          "forbidden_shortcut": "一次sniper标签代表终身身份",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-01"
+        },
+        {
+          "id": "D04-K02",
+          "domain": "D04",
+          "title": "早期进入与可见领先",
+          "expert_question": "抢先买入是发现优势还是执行优势？",
+          "mechanism_to_study": "分离信息获取、订单构建、路由与承担风险",
+          "forbidden_shortcut": "最早成交必定掌握内幕",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-01"
+        },
+        {
+          "id": "D04-K03",
+          "domain": "D04",
+          "title": "Swap与转仓区别",
+          "expert_question": "钱包余额变化来自交易还是内部/外部移转？",
+          "mechanism_to_study": "按owner合并Token账户和多资产现金流",
+          "forbidden_shortcut": "Token转出就记为卖出获利",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-01"
+        },
+        {
+          "id": "D04-K04",
+          "domain": "D04",
+          "title": "已实现/未实现PnL",
+          "expert_question": "利润和成本基础如何分配部分出售与转仓？",
+          "mechanism_to_study": "成本口径、费用、残余库存分开报告",
+          "forbidden_shortcut": "平台总利润就是可提现净收益",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-01"
+        },
+        {
+          "id": "D04-K05",
+          "domain": "D04",
+          "title": "胜率与样本选择",
+          "expert_question": "平台聪明钱排名筛出了哪些失败钱包？",
+          "mechanism_to_study": "参与总体、退出与归档覆盖影响胜率",
+          "forbidden_shortcut": "排行榜胜率可外推未来表现",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-01"
+        },
+        {
+          "id": "D04-K06",
+          "domain": "D04",
+          "title": "钱包规模与容量",
+          "expert_question": "同一利润率在不同仓位下经济意义相同吗？",
+          "mechanism_to_study": "仓位/池深度决定进入和退出成本",
+          "forbidden_shortcut": "鲸鱼大赚代表小额跟随也同样赚",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-01"
+        },
+        {
+          "id": "D04-K07",
+          "domain": "D04",
+          "title": "持仓周期与策略类型",
+          "expert_question": "秒级快进快出与长持分别承担什么风险？",
+          "mechanism_to_study": "持有时长+资金周转+退出方式映射策略机制",
+          "forbidden_shortcut": "获利多的快进快出就是好的长期信号",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-01"
+        },
+        {
+          "id": "D04-K08",
+          "domain": "D04",
+          "title": "跨币仓位管理",
+          "expert_question": "多Mint并发和轮动怎样改变钱包可用本金？",
+          "mechanism_to_study": "资本占用、净回流与跨币仓位分配共同约束",
+          "forbidden_shortcut": "A卖后B买必然是同一笔资金",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-01"
+        },
+        {
+          "id": "D04-K09",
+          "domain": "D04",
+          "title": "对冲/做市与纯投机",
+          "expert_question": "买卖频繁是方向策略还是库存管理？",
+          "mechanism_to_study": "双向敞口和LP权益改变盈亏解释",
+          "forbidden_shortcut": "高交易频率必是wash",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-01"
+        },
+        {
+          "id": "D04-K10",
+          "domain": "D04",
+          "title": "跟单拥挤与自反性",
+          "expert_question": "被大量观察的钱包是否改变市场后续需求？",
+          "mechanism_to_study": "信号传播引起成交价内生变化和执行竞争",
+          "forbidden_shortcut": "监控的人越多信号越可靠",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-01"
+        },
+        {
+          "id": "D04-K11",
+          "domain": "D04",
+          "title": "账户/收益分离",
+          "expert_question": "执行代理、费用支付者与实际盈利主体是否一致？",
+          "mechanism_to_study": "授权、服务费与投资损益可能分离",
+          "forbidden_shortcut": "同一个fee payer就是PnL所有人",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-01"
+        },
+        {
+          "id": "D04-K12",
+          "domain": "D04",
+          "title": "持续竞争能力",
+          "expert_question": "历史优势因平台、市场阶段变化是否衰减？",
+          "mechanism_to_study": "比较相同市场机会集内的行为稳定性",
+          "forbidden_shortcut": "过去赚钱等于未来仍有可复制优势",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-01"
+        }
+      ]
+    },
+    {
+      "id": "D05",
+      "lead_expert_id": "E-L3-02",
+      "support_expert_ids": [
+        "E-L3-01",
+        "E-L3-05"
+      ],
+      "existing_anchor": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md",
+      "source_research_lane": "Hermes learning/11与L3现有专家纵深研究",
+      "coverage": "catalogued_partial_mechanism_depth",
+      "units": [
+        {
+          "id": "D05-K01",
+          "domain": "D05",
+          "title": "资金路径边类型",
+          "expert_question": "SOL转账、Token转移、LP、执行补款有何经济差异？",
+          "mechanism_to_study": "每条边保留asset/instruction/时间/权益属性",
+          "forbidden_shortcut": "address→address边都代表投资本金",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md",
+          "primary_expert_id": "E-L3-02"
+        },
+        {
+          "id": "D05-K02",
+          "domain": "D05",
+          "title": "风险资本与执行赞助",
+          "expert_question": "手续费付款方和承担仓位亏损的人是同一个吗？",
+          "mechanism_to_study": "区分本金补充与交易执行成本赞助",
+          "forbidden_shortcut": "谁出SOL都等于控制仓位",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md",
+          "primary_expert_id": "E-L3-02"
+        },
+        {
+          "id": "D05-K03",
+          "domain": "D05",
+          "title": "CEX/HUB与公共基础设施",
+          "expert_question": "高连接资金节点是否具有共同控制识别力？",
+          "mechanism_to_study": "公共服务覆盖广，关联关系可能低辨识度",
+          "forbidden_shortcut": "共同出金平台就证明同控",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md",
+          "primary_expert_id": "E-L3-02"
+        },
+        {
+          "id": "D05-K04",
+          "domain": "D05",
+          "title": "托管/委托/受益",
+          "expert_question": "资产控制权与经济受益如何脱钩？",
+          "mechanism_to_study": "delegate/PDA/托管服务和链下分润可能分离",
+          "forbidden_shortcut": "谁签名谁最终赚钱",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md",
+          "primary_expert_id": "E-L3-02"
+        },
+        {
+          "id": "D05-K05",
+          "domain": "D05",
+          "title": "资金图谱净流守恒",
+          "expert_question": "资金在内部地址循环是否产生新增市场资本？",
+          "mechanism_to_study": "合并候选群体时内部流互相抵消",
+          "forbidden_shortcut": "多次转账算多次新资金",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md",
+          "primary_expert_id": "E-L3-02"
+        },
+        {
+          "id": "D05-K06",
+          "domain": "D05",
+          "title": "跨币资金回收",
+          "expert_question": "一个群体重复准备与归集可能说明什么？",
+          "mechanism_to_study": "资本周转与服务结算是相互竞争的机制",
+          "forbidden_shortcut": "看到回流就等于套现套利",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md",
+          "primary_expert_id": "E-L3-02"
+        },
+        {
+          "id": "D05-K07",
+          "domain": "D05",
+          "title": "行为同步的共同原因",
+          "expert_question": "同源、同价、同时间为何可能是同一事件投影？",
+          "mechanism_to_study": "上线共同冲击使证据相关，不能相乘",
+          "forbidden_shortcut": "三重合意味着高置信度同一人",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md",
+          "primary_expert_id": "E-L3-02"
+        },
+        {
+          "id": "D05-K08",
+          "domain": "D05",
+          "title": "公开执行服务与机器人",
+          "expert_question": "共用程序、tip、费用模式是否证明同一策略？",
+          "mechanism_to_study": "统一软件和多客户经济主体可共存",
+          "forbidden_shortcut": "一套机器人就一个庄家",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md",
+          "primary_expert_id": "E-L3-02"
+        },
+        {
+          "id": "D05-K09",
+          "domain": "D05",
+          "title": "资金同源反例",
+          "expert_question": "dust、账户租金、空投和支付服务能制造怎样的误判？",
+          "mechanism_to_study": "审查金额职能与先后净风险敞口",
+          "forbidden_shortcut": "任意转账连接都可聚类",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md",
+          "primary_expert_id": "E-L3-02"
+        },
+        {
+          "id": "D05-K10",
+          "domain": "D05",
+          "title": "资金主体身份不可识别性",
+          "expert_question": "链下合同不可见时能确认到什么层级？",
+          "mechanism_to_study": "将授权关系与最终受益未知清楚分离",
+          "forbidden_shortcut": "图做得更密即可证明真人",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md",
+          "primary_expert_id": "E-L3-02"
+        },
+        {
+          "id": "D05-K11",
+          "domain": "D05",
+          "title": "费用性收入与库存利润",
+          "expert_question": "创建者、服务商是否可能与持币者有不同激励？",
+          "mechanism_to_study": "交易收费权与方向性仓位收益分开",
+          "forbidden_shortcut": "所有参与方都只想价格上涨",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md",
+          "primary_expert_id": "E-L3-02"
+        },
+        {
+          "id": "D05-K12",
+          "domain": "D05",
+          "title": "经济控制对跟单影响",
+          "expert_question": "即使确认资金组织，对后来者有什么剩余信息？",
+          "mechanism_to_study": "需要新的可见状态和可成交空间",
+          "forbidden_shortcut": "找到资金群即可自动产生alpha",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md",
+          "primary_expert_id": "E-L3-02"
+        }
+      ]
+    },
+    {
+      "id": "D06",
+      "lead_expert_id": "E-L3-03",
+      "support_expert_ids": [
+        "E-L3-02",
+        "E-L2-03"
+      ],
+      "existing_anchor": "knowledge/domain/L3-wallet-actors.md",
+      "source_research_lane": "Hermes Skill4筹码设计及当前L3机制研究",
+      "coverage": "catalogued_partial_mechanism_depth",
+      "units": [
+        {
+          "id": "D06-K01",
+          "domain": "D06",
+          "title": "总供应和流通口径",
+          "expert_question": "Mint supply、可售供应、池储备应如何定义分母？",
+          "mechanism_to_study": "冻结统一Mint/slot和可比供应口径",
+          "forbidden_shortcut": "Top10百分比没有分母差别",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-03"
+        },
+        {
+          "id": "D06-K02",
+          "domain": "D06",
+          "title": "Token Account集中度",
+          "expert_question": "Top holders按地址还是owner汇总？",
+          "mechanism_to_study": "合并同owner账户，区分池/托管vault",
+          "forbidden_shortcut": "账户Top10就是经济主体Top10",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-03"
+        },
+        {
+          "id": "D06-K03",
+          "domain": "D06",
+          "title": "候选实体集中度",
+          "expert_question": "共同控制未证实时如何表示区间？",
+          "mechanism_to_study": "保留地址级量与候选群组敏感性区间",
+          "forbidden_shortcut": "共享资金即实控可合并",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-03"
+        },
+        {
+          "id": "D06-K04",
+          "domain": "D06",
+          "title": "LP/托管持仓排除",
+          "expert_question": "池子Token储备是否是某鲸鱼可直接卖出库存？",
+          "mechanism_to_study": "池份额和托管权不同于方向性Token持有",
+          "forbidden_shortcut": "pool vault等于单一大持有人",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-03"
+        },
+        {
+          "id": "D06-K05",
+          "domain": "D06",
+          "title": "可卖库存与现金深度",
+          "expert_question": "持有量和可提走SOL数量之间是什么关系？",
+          "mechanism_to_study": "仓位卖出冲击受到储备与动态流动性约束",
+          "forbidden_shortcut": "持10%就可提10%市值",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-03"
+        },
+        {
+          "id": "D06-K06",
+          "domain": "D06",
+          "title": "权限改变库存处分",
+          "expert_question": "冻结、delegate、Token扩展会怎样影响卖出能力？",
+          "mechanism_to_study": "协议级转让权和最终经济权利独立",
+          "forbidden_shortcut": "账户owner有绝对独占处置权",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-03"
+        },
+        {
+          "id": "D06-K07",
+          "domain": "D06",
+          "title": "早期/狙击库存供应",
+          "expert_question": "前期买入者剩余库存何时成为潜在卖压？",
+          "mechanism_to_study": "结合净仓位、持仓时间、退出节奏",
+          "forbidden_shortcut": "早期买家都在吸筹",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-03"
+        },
+        {
+          "id": "D06-K08",
+          "domain": "D06",
+          "title": "筹码分散与Sybil",
+          "expert_question": "地址数增加时经济控制可能仍集中吗？",
+          "mechanism_to_study": "同一受益人拆地址改变表面集中度",
+          "forbidden_shortcut": "Top10下降就是健康",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-03"
+        },
+        {
+          "id": "D06-K09",
+          "domain": "D06",
+          "title": "转移、成交与派发",
+          "expert_question": "大量Token转出是否真的在市场中卖掉？",
+          "mechanism_to_study": "transfer与swap不同，识别对价和受益方变化",
+          "forbidden_shortcut": "转账到新地址就是派发兑现",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-03"
+        },
+        {
+          "id": "D06-K10",
+          "domain": "D06",
+          "title": "市场制造与刷量",
+          "expert_question": "高volume弱独立持仓是否意味着wash？",
+          "mechanism_to_study": "套利/库存管理/真实高换手是竞争解释",
+          "forbidden_shortcut": "高换手就是关联自成交",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-03"
+        },
+        {
+          "id": "D06-K11",
+          "domain": "D06",
+          "title": "筹码周期与FCZ",
+          "expert_question": "POC/AVWAP可等于真实控制者成本吗？",
+          "mechanism_to_study": "成交价格分布不是剩余持仓成本账本",
+          "forbidden_shortcut": "价格守住POC就是庄家护盘",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-03"
+        },
+        {
+          "id": "D06-K12",
+          "domain": "D06",
+          "title": "风险控制与操纵归因",
+          "expert_question": "怎样描述潜在经济集中却不诬指真实身份？",
+          "mechanism_to_study": "分开可观察库存、权利、行为模式与未知最终控制",
+          "forbidden_shortcut": "高集中就必然违法操纵",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-03"
+        }
+      ]
+    },
+    {
+      "id": "D07",
+      "lead_expert_id": "E-L3-05",
+      "support_expert_ids": [
+        "E-L1-02",
+        "E-L4-01"
+      ],
+      "existing_anchor": "knowledge/domain/L3-wallet-actors.md",
+      "source_research_lane": "meme 方向转型、Hermes多维推理与跨币时序",
+      "coverage": "catalogued_partial_mechanism_depth",
+      "units": [
+        {
+          "id": "D07-K01",
+          "domain": "D07",
+          "title": "市场事件时间轴",
+          "expert_question": "Mint创建、开放、迁移和KOL消息按什么时钟排列？",
+          "mechanism_to_study": "事件发生/服务商可见/决策可得时间分开",
+          "forbidden_shortcut": "历史记录就能当时预测",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-05"
+        },
+        {
+          "id": "D07-K02",
+          "domain": "D07",
+          "title": "同步交易与共因",
+          "expert_question": "多个钱包为何可能同时买入？",
+          "mechanism_to_study": "公共上线/榜单/机器人触发与协作竞争解释",
+          "forbidden_shortcut": "几秒内买就有内幕",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-05"
+        },
+        {
+          "id": "D07-K03",
+          "domain": "D07",
+          "title": "注意力传播机制",
+          "expert_question": "社区话题、热门榜和价格谁先影响谁？",
+          "mechanism_to_study": "传播延迟与价格内生反馈分开",
+          "forbidden_shortcut": "热度必领先价格",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-05"
+        },
+        {
+          "id": "D07-K04",
+          "domain": "D07",
+          "title": "叙事与基本面缺位",
+          "expert_question": "Meme价格由什么注意力与流动性机制推动？",
+          "mechanism_to_study": "符号、话题、流量与可变卖盘相互作用",
+          "forbidden_shortcut": "叙事热门就是长期现金流价值",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-05"
+        },
+        {
+          "id": "D07-K05",
+          "domain": "D07",
+          "title": "跨Mint共同参与",
+          "expert_question": "钱包群反复买不同Mint是资金轮动还是市场beta？",
+          "mechanism_to_study": "与同期市场普遍交易活动分开",
+          "forbidden_shortcut": "同群出现就意味着发币团队",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-05"
+        },
+        {
+          "id": "D07-K06",
+          "domain": "D07",
+          "title": "资金轮动与净回收",
+          "expert_question": "退出A再买B是否存在确切资产连续性？",
+          "mechanism_to_study": "外部收入/不同钱包/托管路径可能混淆",
+          "forbidden_shortcut": "时间相邻必为一笔钱",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-05"
+        },
+        {
+          "id": "D07-K07",
+          "domain": "D07",
+          "title": "生命周期角色转变",
+          "expert_question": "毕业前sniper如何变为毕业后供应提供者？",
+          "mechanism_to_study": "阶段改变库存、成交路线和对手群",
+          "forbidden_shortcut": "标签永远不变",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-05"
+        },
+        {
+          "id": "D07-K08",
+          "domain": "D07",
+          "title": "异常序列发现",
+          "expert_question": "怎样发现未命名的先后条件与节奏？",
+          "mechanism_to_study": "事件顺序、条件概率、序列对照而非事后故事",
+          "forbidden_shortcut": "看见复杂轨迹就有预测规律",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-05"
+        },
+        {
+          "id": "D07-K09",
+          "domain": "D07",
+          "title": "市场总体状态",
+          "expert_question": "Solana整体热度/行情如何影响单币结构？",
+          "mechanism_to_study": "独立控制共时beta与同类launch cohort",
+          "forbidden_shortcut": "单币上涨都是该钱包功劳",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-05"
+        },
+        {
+          "id": "D07-K10",
+          "domain": "D07",
+          "title": "价格与传播的双向反馈",
+          "expert_question": "钱包出手后被更多监控者模仿会怎样？",
+          "mechanism_to_study": "市场注意力本身可能改变后续成交和容量",
+          "forbidden_shortcut": "信号监控不会改变被监控市场",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-05"
+        },
+        {
+          "id": "D07-K11",
+          "domain": "D07",
+          "title": "时钟泄露与回填",
+          "expert_question": "观察时当时没有的标签如何误导策略？",
+          "mechanism_to_study": "event/available/decision/feature build分开",
+          "forbidden_shortcut": "历史可查询就是历史可得",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-05"
+        },
+        {
+          "id": "D07-K12",
+          "domain": "D07",
+          "title": "第二阶段机会与时差",
+          "expert_question": "早期买入后的后续承接能否独立形成新窗口？",
+          "mechanism_to_study": "区分已完成信息优势与未发生的需求变化",
+          "forbidden_shortcut": "错过首买就不值得观察任何后续",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L3-wallet-actors.md",
+          "primary_expert_id": "E-L3-05"
+        }
+      ]
+    },
+    {
+      "id": "D08",
+      "lead_expert_id": "E-L4-02",
+      "support_expert_ids": [
+        "E-L4-01",
+        "E-L4-03"
+      ],
+      "existing_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+      "source_research_lane": "Hermes策略研究、meme FCZ理论、Grok跟单假说",
+      "coverage": "catalogued_partial_mechanism_depth",
+      "units": [
+        {
+          "id": "D08-K01",
+          "domain": "D08",
+          "title": "研究目标层次",
+          "expert_question": "解释机制、预测变化、净收益能否各自独立成立？",
+          "mechanism_to_study": "解释/预测/可交易性三级并列",
+          "forbidden_shortcut": "能够解释历史就证明可以盈利",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L4-02"
+        },
+        {
+          "id": "D08-K02",
+          "domain": "D08",
+          "title": "监控领先钱包",
+          "expert_question": "到底复制哪笔swap和哪个可见时间？",
+          "mechanism_to_study": "钱包事件→源收到→特征可得→询价→假定fill",
+          "forbidden_shortcut": "原钱包价就是跟随者价",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L4-02"
+        },
+        {
+          "id": "D08-K03",
+          "domain": "D08",
+          "title": "发现型策略",
+          "expert_question": "钱包先买能否提高候选Mint发现覆盖？",
+          "mechanism_to_study": "指标是新增可研究对象和时效，不必立即交易",
+          "forbidden_shortcut": "发现越早必然盈利",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L4-02"
+        },
+        {
+          "id": "D08-K04",
+          "domain": "D08",
+          "title": "多钱包协作策略",
+          "expert_question": "同源/同步聚集是否有额外信息？",
+          "mechanism_to_study": "公共HUB和共同事件对照决定解释力",
+          "forbidden_shortcut": "钱包群多就代表alpha",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L4-02"
+        },
+        {
+          "id": "D08-K05",
+          "domain": "D08",
+          "title": "资金再部署策略",
+          "expert_question": "上一币退出后能否前瞻知道下一币？",
+          "mechanism_to_study": "必须事前识别next Mint与独立可见信号",
+          "forbidden_shortcut": "历史资金流可推知未来代币地址",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L4-02"
+        },
+        {
+          "id": "D08-K06",
+          "domain": "D08",
+          "title": "FCZ/POC/AVWAP结构",
+          "expert_question": "回收成本锚机制为什么可能成立或失效？",
+          "mechanism_to_study": "成交价锚不等于真实持仓成本，允许竞争路径",
+          "forbidden_shortcut": "FCZ是唯一获利结构",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L4-02"
+        },
+        {
+          "id": "D08-K07",
+          "domain": "D08",
+          "title": "动量与突破",
+          "expert_question": "趋势什么时候持续，什么时候是流动性诱多？",
+          "mechanism_to_study": "市场深度、后来者需求与供应库存共同影响",
+          "forbidden_shortcut": "强K线就可追",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L4-02"
+        },
+        {
+          "id": "D08-K08",
+          "domain": "D08",
+          "title": "均值回归与二次启动",
+          "expert_question": "什么状态下回收有经济含义？",
+          "mechanism_to_study": "回撤、承接、仓位变化的事件顺序需固定",
+          "forbidden_shortcut": "价格跌多必有反弹",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L4-02"
+        },
+        {
+          "id": "D08-K09",
+          "domain": "D08",
+          "title": "事件驱动与迁移",
+          "expert_question": "迁移/社交触发是机制变化还是纯热度？",
+          "mechanism_to_study": "协议变化对照普通市场beta和时点",
+          "forbidden_shortcut": "事件发生后价格必上涨",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L4-02"
+        },
+        {
+          "id": "D08-K10",
+          "domain": "D08",
+          "title": "负面策略与过滤",
+          "expert_question": "风险过滤能否产生正增量经济价值？",
+          "mechanism_to_study": "减少尾部损失同时考虑漏掉机会和资金占用",
+          "forbidden_shortcut": "不交易就等于好策略",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L4-02"
+        },
+        {
+          "id": "D08-K11",
+          "domain": "D08",
+          "title": "组合和并发",
+          "expert_question": "同时出现多个候选币时资金如何分配？",
+          "mechanism_to_study": "相关性、容量、机会预算和重复告警决定组合",
+          "forbidden_shortcut": "逐币各自赚钱可机械求和",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L4-02"
+        },
+        {
+          "id": "D08-K12",
+          "domain": "D08",
+          "title": "未知模式探索",
+          "expert_question": "自动发现异常是否会过拟合或自证？",
+          "mechanism_to_study": "预设试验总次数、冻结发现、对照验证",
+          "forbidden_shortcut": "无限字段组合总能挖出alpha",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L4-02"
+        }
+      ]
+    },
+    {
+      "id": "D09",
+      "lead_expert_id": "E-L5-01",
+      "support_expert_ids": [
+        "E-L5-02",
+        "E-L2-03"
+      ],
+      "existing_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+      "source_research_lane": "Solana费率/Raydium/OKX只读报价及旧风险门控",
+      "coverage": "catalogued_partial_mechanism_depth",
+      "units": [
+        {
+          "id": "D09-K01",
+          "domain": "D09",
+          "title": "双向可交易性",
+          "expert_question": "买得进与卖得出是两种不同条件吗？",
+          "mechanism_to_study": "要在相同时点和规模下区分BUY/SELL quote",
+          "forbidden_shortcut": "有池子就能退出",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L5-01"
+        },
+        {
+          "id": "D09-K02",
+          "domain": "D09",
+          "title": "滑点定义",
+          "expert_question": "报价容差与实际价格冲击有何区别？",
+          "mechanism_to_study": "额外执行滑点、曲线冲击、路由价差分别记账",
+          "forbidden_shortcut": "把quote冲击与fee再扣一次",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L5-01"
+        },
+        {
+          "id": "D09-K03",
+          "domain": "D09",
+          "title": "手续费全分类",
+          "expert_question": "base fee、priority fee、tip、DEX fee怎么记？",
+          "mechanism_to_study": "每种成本支付主体和计价资产不同",
+          "forbidden_shortcut": "每单手续费统一固定值",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L5-01"
+        },
+        {
+          "id": "D09-K04",
+          "domain": "D09",
+          "title": "执行延迟与确定性",
+          "expert_question": "信号到确认之间状态会发生什么？",
+          "mechanism_to_study": "包含provider/解析/询价/签名/广播/落地不同时间",
+          "forbidden_shortcut": "历史收盘价可当可得成交",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L5-01"
+        },
+        {
+          "id": "D09-K05",
+          "domain": "D09",
+          "title": "路由与DEX报价",
+          "expert_question": "多池、失败route、聚合器估价的可靠性如何？",
+          "mechanism_to_study": "quote不是保证fill，路线会失效",
+          "forbidden_shortcut": "某次询价成功等于成交成功",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L5-01"
+        },
+        {
+          "id": "D09-K06",
+          "domain": "D09",
+          "title": "仓位冲击与容量",
+          "expert_question": "不同规模是否导致收益非线性变化？",
+          "mechanism_to_study": "交易规模相对可用储备与其他并发者的重要性",
+          "forbidden_shortcut": "小额利润率外推巨额",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L5-01"
+        },
+        {
+          "id": "D09-K07",
+          "domain": "D09",
+          "title": "部分退出与余仓",
+          "expert_question": "卖出一部分后如何记实际残余风险？",
+          "mechanism_to_study": "清算路由、账面未实现、手续费和时间约束",
+          "forbidden_shortcut": "达止盈价即全部成交",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L5-01"
+        },
+        {
+          "id": "D09-K08",
+          "domain": "D09",
+          "title": "失败交易与不可卖",
+          "expert_question": "失败日志代表权限风险、滑点还是拥堵？",
+          "mechanism_to_study": "分辨token transfer约束、路由状态、余额与手续费",
+          "forbidden_shortcut": "一次失败就绝对貔貅",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L5-01"
+        },
+        {
+          "id": "D09-K09",
+          "domain": "D09",
+          "title": "MEV与竞争对手",
+          "expert_question": "热门钱包被跟踪时优先级竞争会怎样？",
+          "mechanism_to_study": "排序、tip与抢跑导致动态成本和信息价值衰减",
+          "forbidden_shortcut": "提前看到消息即先成交",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L5-01"
+        },
+        {
+          "id": "D09-K10",
+          "domain": "D09",
+          "title": "尾部风险与池蒸发",
+          "expert_question": "价格暴跌时还剩多少可执行退出能力？",
+          "mechanism_to_study": "多状态流动性、权限、路由中断与相关卖压",
+          "forbidden_shortcut": "固定止损必定成交",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L5-01"
+        },
+        {
+          "id": "D09-K11",
+          "domain": "D09",
+          "title": "风险预算与机会成本",
+          "expert_question": "跳过风险币的收益/成本怎么比较？",
+          "mechanism_to_study": "资金占用、漏掉上行、候选总体纳入评估",
+          "forbidden_shortcut": "减少交易次数必提高期望",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L5-01"
+        },
+        {
+          "id": "D09-K12",
+          "domain": "D09",
+          "title": "净期望与币本位",
+          "expert_question": "SOL/USD变化和多资产交易怎样统一计价？",
+          "mechanism_to_study": "净收益考虑真实对价、时间与全部成本",
+          "forbidden_shortcut": "Token涨幅等于SOL净利润",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L4-L5-copytrade-edge.md",
+          "primary_expert_id": "E-L5-01"
+        }
+      ]
+    },
+    {
+      "id": "D10",
+      "lead_expert_id": "E-L0-02",
+      "support_expert_ids": [
+        "E-L0-01",
+        "E-L1-02"
+      ],
+      "existing_anchor": "knowledge/domain/L1-L2-chain-market.md",
+      "source_research_lane": "OKX OnchainOS/GMGN/RPC字段与项目source-admission",
+      "coverage": "catalogued_partial_mechanism_depth",
+      "units": [
+        {
+          "id": "D10-K01",
+          "domain": "D10",
+          "title": "来源身份与许可",
+          "expert_question": "每个供应商能合法稳定提供哪些读能力？",
+          "mechanism_to_study": "区分API文档、权限、版本、限流与实际安装",
+          "forbidden_shortcut": "GitHub上有Skill等于云电脑已可用",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L0-02"
+        },
+        {
+          "id": "D10-K02",
+          "domain": "D10",
+          "title": "RPC与索引器差异",
+          "expert_question": "原始链上交易和平台派生标签分别是什么？",
+          "mechanism_to_study": "provider-derived指标不可取代链上签名与程序状态",
+          "forbidden_shortcut": "平台口径就是链上真值",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L0-02"
+        },
+        {
+          "id": "D10-K03",
+          "domain": "D10",
+          "title": "字段路径与单位",
+          "expert_question": "JSON path/decimals/币本位/百分数分母如何标注？",
+          "mechanism_to_study": "保留原始值、规范化值、版本、窗口和时区",
+          "forbidden_shortcut": "同名字段在不同API完全一致",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L0-02"
+        },
+        {
+          "id": "D10-K04",
+          "domain": "D10",
+          "title": "覆盖范围与观察总体",
+          "expert_question": "榜单入口漏掉了哪些币或钱包？",
+          "mechanism_to_study": "公开入口、实际扫描范围、漏采与过滤分开",
+          "forbidden_shortcut": "只看到的就是全部市场",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L0-02"
+        },
+        {
+          "id": "D10-K05",
+          "domain": "D10",
+          "title": "时间可得与回填",
+          "expert_question": "服务商何时返回字段，是否事后补写？",
+          "mechanism_to_study": "event_at/received_at/available_at独立存储",
+          "forbidden_shortcut": "历史请求能拿到等于当时能拿到",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L0-02"
+        },
+        {
+          "id": "D10-K06",
+          "domain": "D10",
+          "title": "空值错误与零值",
+          "expert_question": "429/403/超时/空列表/无事件如何区别？",
+          "mechanism_to_study": "错误码、请求id、覆盖窗和缺失原因是分析对象",
+          "forbidden_shortcut": "没返回买单代表没人买",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L0-02"
+        },
+        {
+          "id": "D10-K07",
+          "domain": "D10",
+          "title": "去重与消息顺序",
+          "expert_question": "WS重连、分页、重复事件怎样防双算？",
+          "mechanism_to_study": "signature+instruction/slot/asset作为去重参考",
+          "forbidden_shortcut": "每条消息都代表新交易",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L0-02"
+        },
+        {
+          "id": "D10-K08",
+          "domain": "D10",
+          "title": "供应商交叉检验",
+          "expert_question": "OKX与GMGN价格/钱包PnL不一致怎么办？",
+          "mechanism_to_study": "按字段语义、时间和来源状态比较而非简单平均",
+          "forbidden_shortcut": "多平台一致就必然为真",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L0-02"
+        },
+        {
+          "id": "D10-K09",
+          "domain": "D10",
+          "title": "快照和来源固定",
+          "expert_question": "研究结论如何绑定原始响应与生成代码？",
+          "mechanism_to_study": "hash、commit、endpoint、run id、时间完整保存",
+          "forbidden_shortcut": "固定URL就可保证内容永不变化",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L0-02"
+        },
+        {
+          "id": "D10-K10",
+          "domain": "D10",
+          "title": "敏感权限与只读边界",
+          "expert_question": "哪些OKX命令可能签名或广播？",
+          "mechanism_to_study": "按动作权限分级，研究与交换接口隔离",
+          "forbidden_shortcut": "所有CLI都是只读",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L0-02"
+        },
+        {
+          "id": "D10-K11",
+          "domain": "D10",
+          "title": "数据漂移与退化",
+          "expert_question": "字段变化、接口废弃、缺采怎样报警？",
+          "mechanism_to_study": "schema diff与最小可用字段、降级策略",
+          "forbidden_shortcut": "监控静默就是市场无信号",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L0-02"
+        },
+        {
+          "id": "D10-K12",
+          "domain": "D10",
+          "title": "多源成本与可持续性",
+          "expert_question": "调用额度、延迟、付费限制如何改变研究策略？",
+          "mechanism_to_study": "选择足够可用的源而非只靠某平台",
+          "forbidden_shortcut": "研究信息越多接口越可靠",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L1-L2-chain-market.md",
+          "primary_expert_id": "E-L0-02"
+        }
+      ]
+    },
+    {
+      "id": "D11",
+      "lead_expert_id": "E-L6-01",
+      "support_expert_ids": [
+        "E-L6-02",
+        "E-L0-01"
+      ],
+      "existing_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+      "source_research_lane": "原项目反证实验、Why-Solana 方法论文审计后择用",
+      "coverage": "catalogued_partial_mechanism_depth",
+      "units": [
+        {
+          "id": "D11-K01",
+          "domain": "D11",
+          "title": "问题与总体",
+          "expert_question": "到底研究全部新币还是被榜单发现的候选？",
+          "mechanism_to_study": "冻结eligibility、市场和样本起点",
+          "forbidden_shortcut": "只挑成功案例代表整体",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L6-01"
+        },
+        {
+          "id": "D11-K02",
+          "domain": "D11",
+          "title": "解释/预测/经济区分",
+          "expert_question": "解释出现的结构是否能预测或赚钱？",
+          "mechanism_to_study": "三个结论必须分别审查",
+          "forbidden_shortcut": "结构可解释就有净alpha",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L6-01"
+        },
+        {
+          "id": "D11-K03",
+          "domain": "D11",
+          "title": "竞争假设与共同原因",
+          "expert_question": "同源/同步/价格关系有哪些零假设？",
+          "mechanism_to_study": "控制公共事件、市场beta、服务商等替代解释",
+          "forbidden_shortcut": "三个相关字段是三份独立证据",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L6-01"
+        },
+        {
+          "id": "D11-K04",
+          "domain": "D11",
+          "title": "时点冻结与前瞻",
+          "expert_question": "特征何时能用，标签是否来自未来？",
+          "mechanism_to_study": "observed/available/decision和训练结果不能混用",
+          "forbidden_shortcut": "未来形成的群组可用于早期买入",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L6-01"
+        },
+        {
+          "id": "D11-K05",
+          "domain": "D11",
+          "title": "反例与缺失样本",
+          "expert_question": "无信号、不可成交、死亡盘、漏捕怎么处理？",
+          "mechanism_to_study": "失败/未覆盖/暂停都保留在分母",
+          "forbidden_shortcut": "只有成功触发样本需要记录",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L6-01"
+        },
+        {
+          "id": "D11-K06",
+          "domain": "D11",
+          "title": "简单基准与消融",
+          "expert_question": "复杂规则是否优于简单价格/年龄/流动性过滤？",
+          "mechanism_to_study": "同一总体/成本/触发时点下比较增量",
+          "forbidden_shortcut": "模型越复杂越专业",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L6-01"
+        },
+        {
+          "id": "D11-K07",
+          "domain": "D11",
+          "title": "多重检验与数据挖掘",
+          "expert_question": "字段穷举和反复调整如何产生假规律？",
+          "mechanism_to_study": "发现/冻结/独立验证分离并登记试验次数",
+          "forbidden_shortcut": "试验多总能找到真优势",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L6-01"
+        },
+        {
+          "id": "D11-K08",
+          "domain": "D11",
+          "title": "样本外与群组泄漏",
+          "expert_question": "跨币同团队与时间相关怎样阻断泄漏？",
+          "mechanism_to_study": "按时间与经济群组共同隔离可能泄漏",
+          "forbidden_shortcut": "随机拆币就是独立样本",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L6-01"
+        },
+        {
+          "id": "D11-K09",
+          "domain": "D11",
+          "title": "成交可达与极端值",
+          "expert_question": "K线高点和实际退出是什么关系？",
+          "mechanism_to_study": "买卖方向、规模、报价和失败结局共同记账",
+          "forbidden_shortcut": "触达价就是可卖净收益",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L6-01"
+        },
+        {
+          "id": "D11-K10",
+          "domain": "D11",
+          "title": "因果叙事与可识别性",
+          "expert_question": "资金图能否唯一证明市场操纵或动机？",
+          "mechanism_to_study": "可观察事实与不可见受益身份区分",
+          "forbidden_shortcut": "解释合理就等于已证实",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L6-01"
+        },
+        {
+          "id": "D11-K11",
+          "domain": "D11",
+          "title": "效应大小与不确定性",
+          "expert_question": "样本稀少或分层多时结论稳定吗？",
+          "mechanism_to_study": "分布、基率、选择偏差与置信范围分别报告",
+          "forbidden_shortcut": "单个胜率即可量化真实优势",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L6-01"
+        },
+        {
+          "id": "D11-K12",
+          "domain": "D11",
+          "title": "复算与知识失效",
+          "expert_question": "何种新证据应让专家主动修正旧理论？",
+          "mechanism_to_study": "版本化反例、来源变化、独立复查、撤回规则",
+          "forbidden_shortcut": "知识沉淀后不可被推翻",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L6-01"
+        }
+      ]
+    },
+    {
+      "id": "D12",
+      "lead_expert_id": "E-L7-01",
+      "support_expert_ids": [
+        "E-L7-02",
+        "E-L0-01"
+      ],
+      "existing_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+      "source_research_lane": "Grok专家注册表/Bot知识/Source准入与部署文档",
+      "coverage": "catalogued_partial_mechanism_depth",
+      "units": [
+        {
+          "id": "D12-K01",
+          "domain": "D12",
+          "title": "研究问题路由",
+          "expert_question": "自然语言请求怎样调用最少的相关专家？",
+          "mechanism_to_study": "按实际机制选择而非固定21人全量运行",
+          "forbidden_shortcut": "专家越多结果越好",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L7-01"
+        },
+        {
+          "id": "D12-K02",
+          "domain": "D12",
+          "title": "专家知识分工",
+          "expert_question": "同一专家职责和领域知识应如何关联？",
+          "mechanism_to_study": "现有E-L0至E-L7不可被误作21个Bot实例",
+          "forbidden_shortcut": "知识专家=部署Bot",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L7-01"
+        },
+        {
+          "id": "D12-K03",
+          "domain": "D12",
+          "title": "K0/K1/K2层级",
+          "expert_question": "常驻原则、按需理论、市场观察如何分配？",
+          "mechanism_to_study": "K0短、K1按需、K2带真实来源与可见时点",
+          "forbidden_shortcut": "把整库塞进prompt就算学会",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L7-01"
+        },
+        {
+          "id": "D12-K04",
+          "domain": "D12",
+          "title": "知识来源准入",
+          "expert_question": "旧仓库与外部研究怎样分批纳入？",
+          "mechanism_to_study": "pin+license+review_only审计，不默默提升主张",
+          "forbidden_shortcut": "旧论文统计数字自动为真",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L7-01"
+        },
+        {
+          "id": "D12-K05",
+          "domain": "D12",
+          "title": "专家分歧和编译",
+          "expert_question": "不同观点如何在知识里保存而不投票？",
+          "mechanism_to_study": "保存冲突机制、条件、何时适用、反证",
+          "forbidden_shortcut": "多数专家赞同就证明真",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L7-01"
+        },
+        {
+          "id": "D12-K06",
+          "domain": "D12",
+          "title": "跨Bot合同与责任",
+          "expert_question": "B01-B07如何传数据和禁止权限混用？",
+          "mechanism_to_study": "handoff字段、来源、unknown与职责清晰",
+          "forbidden_shortcut": "交接只需复制一句结论",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L7-01"
+        },
+        {
+          "id": "D12-K07",
+          "domain": "D12",
+          "title": "本地程序能力边界",
+          "expert_question": "GPT开发什么，GitHub保存什么，Grok运行什么？",
+          "mechanism_to_study": "代码/测试/凭证/网络/权限/设备分离",
+          "forbidden_shortcut": "仓库有脚本=云电脑已经部署",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L7-01"
+        },
+        {
+          "id": "D12-K08",
+          "domain": "D12",
+          "title": "OKX只读接入",
+          "expert_question": "市场/钱包/信号Skill怎么按需获取？",
+          "mechanism_to_study": "先确认CLI版本、链支持、实际源可用性",
+          "forbidden_shortcut": "API文档=实时可调用",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L7-01"
+        },
+        {
+          "id": "D12-K09",
+          "domain": "D12",
+          "title": "知识增长机制",
+          "expert_question": "专家新想法什么时候进主知识？",
+          "mechanism_to_study": "研究问题→底稿→竞争解释→审查→专家检索入口",
+          "forbidden_shortcut": "一篇新研究自动是发布知识",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L7-01"
+        },
+        {
+          "id": "D12-K10",
+          "domain": "D12",
+          "title": "测试与CI含义",
+          "expert_question": "offline unit test证明了什么？",
+          "mechanism_to_study": "结构性通过与真实市场/收入验证区别",
+          "forbidden_shortcut": "CI绿色就有Alpha",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L7-01"
+        },
+        {
+          "id": "D12-K11",
+          "domain": "D12",
+          "title": "监控规则冻结",
+          "expert_question": "何时能将机制升级为正式只读监控？",
+          "mechanism_to_study": "人工批准、固定版本、独立验证、回滚及错误状态",
+          "forbidden_shortcut": "研究专家可自我批准监控阈值",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L7-01"
+        },
+        {
+          "id": "D12-K12",
+          "domain": "D12",
+          "title": "长期运行演进",
+          "expert_question": "运行漂移、数据中断、错误告警和策略失效怎样回馈？",
+          "mechanism_to_study": "记录异常→知识问题→复审PR，生产与研究隔离",
+          "forbidden_shortcut": "Bot能自动研究便可自动实盘",
+          "research_state": "mapped_unverified",
+          "source_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
+          "primary_expert_id": "E-L7-01"
+        }
+      ]
+    }
+  ],
+  "cross_domain_requirements": [
+    "D01→D02：资产/程序/时钟决定发行阶段",
+    "D02→D03：曲线/池类型决定价格与可用深度",
+    "D03×D05×D06：交易冲击/资金组织/库存共同作用于供需",
+    "D04×D07→D08：钱包能力与群体时序在观察者时钟下产生候选机会",
+    "D08×D09：事前预测经容量与执行成本才可能产生净优势",
+    "D10×D11：所有基于观测数据的断言始终受字段质量与反证约束",
+    "D12：专家研究、知识沉淀、冻结监控由不同授权管理"
+  ],
+  "notes": [
+    "单元知识描述的是具体研究问题与机制，不能因有名字就声称研究完成",
+    "不按编号顺序机械调用所有专家；问题驱动最小集合",
+    "现有领域文档是研究入口，不代表每条独立经过来源或实测审计",
+    "保持 Why-Solana 研究的 review_only 来源准入限制",
+    "GMGN字段清单是历史提供者口径，OKX提供者能力另行确认"
+  ]
+}

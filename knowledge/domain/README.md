@@ -4,6 +4,18 @@
 >
 > **状态**：`domain_method_candidate`，为审阅中的专用知识包。不是已完成 K2 实测、已证明正收益策略或已冻结 B07 规则。不同的 K1 来源受 `knowledge/source-admission.v1.json` 管理；被标记 review_only 的后期研究不自动成为本包事实。没有迁移整库历史文本。
 
+## 当前Meme交易的真实知识起点
+
+优先参照 [《从五个参考项目审查Meme知识储备》](../system/reference-projects-meme-knowledge-audit-20261030.md)：已有的GMGN字段、qb关键钱包、同源/筹码追踪和meme- FCZ/死亡盘不是空白。下一条主研究为 [《D04–D08关键钱包：谁值得研究，谁不能机械跟单？》](D04-D08-key-wallet-followability-research-brief.md)；D03一般AMM价格任务现为按需解释Meme特定池/报价的辅助材料。新方法应深化这些旧知识之间的断层，而非远离Meme业务另写金融学。
+
+## 新的专家研究入口：先机制突破，再回填知识单元
+
+每个领域的12个原子条目是**覆盖工具，不是研究执行顺序**。[《专家主导机制研究法》](../system/expert-mechanism-research-method.md) 用“核心矛盾→向下追问→向上推演→条件反转→跨专家挑战→知识回填”的方式深化专业知识。[《机制研究计划》](../system/mechanism-research-plan.v1.json) 当前以qb/Hermes旧体系中的**关键钱包**为第一条M01主线，[《D04–D08关键钱包研究任务》](D04-D08-key-wallet-followability-research-brief.md)明确角色、资金、库存、信号可得与跟单剩余价值之间的机制；[《D03池价技术辅稿》](D03-market-price-mechanism-research-brief.md)按需补充。**本轮只有研究方法与任务，尚无新实证或Alpha结论。**
+
+## 全部十二领域的最小知识入口
+
+[《全领域专家手册》](../system/whole-domain-expert-handbook.md) 是从最小 Solana 对象、发币/AMM、钱包/资金/筹码、行为时序一直到策略、执行、数据、反证与 Grok 进化的主导航；[《152 项原子知识目录》](../system/whole-domain-atlas.v1.json) 为每个 D01–D12 领域列出十二个不能省略的研究问题；[《深度与缺口审计》](../system/whole-domain-coverage-audit.md) 防止目录覆盖被误报成知识吃透。继续使用现有 L0–L7/D01–D12/21 专家，按问题选主专家，不强制一次加载所有领域。
+
 ## 从一位专家向下追到真正的经济机制
 
 **优先阅读这份纵深成果**：[E-L3-02 资金组织、经济利益与跟单价格反馈](L3-E-L3-02-capital-organization-incentives.md)：不是再扩写“同源未必同控”，而是追问同一笔 SOL 是本金、执行费、托管、LP 还是创建者收入；区分执行授权与最终风险承担；将同一个资金图推演为四种不同经济组织；接入 Raydium CPMM 可选 creator fee 与交易手续费机制；用无费 CPMM 的严谨算例说明领先买入怎样改变后来者的买入价格。**它是已有 E-L3-02 的纵深知识，不是新专家、已获利的实证策略或强制全部专家同时读取的文档。**

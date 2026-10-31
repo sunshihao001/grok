@@ -2,6 +2,36 @@
 
 **状态：体系结构已定义；知识内容仅部分填充；不代表策略已验证。** 本目录是 Grok 项目领域知识的上层契约，不替代已有 `knowledge/catalog.v1.json`（15 张遗留知识候选卡）和 `knowledge/legacy-snapshots/`（21 份固定快照）。
 
+## GPT Project 持续积累的完整专业知识镜像
+
+[《GPT Meme 项目全领域知识主册》](gpt-meme-project-core.v1.md) 包含现有全部152项原子研究问题/机制/禁错、21专家及跨域经济机制导航。 [《累积与双向关联规范》](gpt-meme-knowledge-accumulation.v1.md) 把发现保存为**原问题—来源—资产/库存/价格/时点因果—竞争世界—关系边—单元回填—下一轮未知**；[《Project简短指令》](gpt-meme-project-instructions.v1.md) 和 [机器索引](gpt-meme-project-index.v1.json) 帮助不同GPT会话按需恢复已有专业知识，减少零散讨论。系统仍按原L0–L7/D01–D12组织，不新增一个平行本体。Project附件与GitHub版本更新为人工同步，**不能声称已直接改动ChatGPT项目附件**。
+
+## GPT Meme 知识成果自动编译与同步 V2（2026-10-31）
+
+研究成果的当前执行入口：[《持续研究知识闭环 V2》](gpt-meme-continuity-v2.md) + [《专业研究写作 Skill V2》](gpt-meme-research-writing-skill.v2.md)。先从真实研究抽取新增认识和反例，检索旧知识并去重，**修订原专题而非每轮堆一份总结**；读回 GitHub commit/PR、核实 Library 镜像和 Project 文件实际状态，再更新 [唯一恢复点](gpt-meme-progress-current.md)。P2.1–P2.4方法成果已经编译为[异常发现方法融合目录](../domain/meme-anomaly-discovery-state.v1.md)。本 V2 继承 V1 阶段推进原则，不新建本体，也不自动发布到生产监控或真实交易。
+
+## GPT Meme 项目持续推进与恢复点（2026-10-31）
+
+新增 [《持续研究推进、阶段判断与下一轮输入规范 V1.0》](gpt-meme-continuous-progression.v1.md)：每轮给出阶段定位、实质成果、关键未知、晋级判断、下一动作和可直接复制的研究输入，按整体P1–P6及子阶段动态推进。它是**研究运行坐标**，不替换 L0–L7 / D01–D12 或证据等级，不机械串行。
+
+[《当前研究进度与直接恢复执行提示词》](gpt-meme-progress-current.md)：P2.1 已完成创意初筛，当前建议转入 P2.2 时间×钱包群体×资金×行为的组合异动研究；旧B01保留未完成状态。**GitHub 文档和个人 Library 文件不能自动修改 ChatGPT Project Instructions 或 Project 附件**，需分别核查同步状态。
+
+## 参考知识融合的实际节奏
+
+[《滚动式参考项目知识融合》](rolling-reference-knowledge-integration.md) 确定“**每批一个Meme业务矛盾；批内先准确理解、后跨专家融合、再转换成Grok专家知识；批次间轻量并行**”。从 B01 旧 qb- 关键钱包矩阵开始；B02 同源和筹码、B03 FCZ真假二阶段、B04 跨Mint批量异常钱包时序、B05 多策略可跟性作为暂定问题，不是按序搬文件的五个新框架。未审阅的研究假说不能升级为确定知识或运行规则。
+
+## 先理解项目已有Meme交易知识，再确定下一条机制
+
+当前优先阅读 [《五个参考项目的知识阶段与缺口审计》](reference-projects-meme-knowledge-audit-20261030.md)：以Hermes钱包/同源/证据链、meme- FCZ/深洗/多策略、qb-单币关键钱包矩阵为**实在的研究起点**，并审阅Why-Solana的review_only外部反例和当前grok已有能力。审计发现此前 D03 通用AMM优先过于宏观；[当前M01](../domain/D04-D08-key-wallet-followability-research-brief.md) 已修订为“关键钱包→发币阶段→真实资金/筹码→后续可见信息→可跟与不可跟”，而AMM是按需解释具体池价格的底层支撑。
+
+## 专家如何真正深入研究（当前研究方法）
+
+**不能按152项逐个背诵，也不能一次性铺开全部十二领域。** 新的研究方法见 [《专家主导的核心机制纵深研究法》](expert-mechanism-research-method.md)：从核心市场矛盾出发，由一位主专家向下追到资产/权利/现金流/程序价格机制，向上推导经济激励、动态反馈与新知识；只用必要挑战专家修正因果；最后按原ID回填知识单元，重新选择认知瓶颈。其 [分阶段研究计划](mechanism-research-plan.v1.json) 目前确定由 D03/E-L2-02 先连接 D05 资金知识与 D06/D09 库存/可交易性，具体要求见 [首轮D03专家任务](../domain/D03-market-price-mechanism-research-brief.md)。这些是**方法和下一轮计划**，不代表研究专题已完成或市场规律已实证。
+
+## 全域知识的可检查颗粒度（2026-10-30 草稿）
+
+**先从小单元进入**：[152 项原子知识总表](whole-domain-atlas.v1.json) 明确 L0 八项 + D01–D12 各十二项的专家问题、机制、禁止推断捷径与来源入口；[全领域专家手册](whole-domain-expert-handbook.md) 逐域从链上最小对象推到市场主体、策略、经济结果和知识进化，包含跨域机制；[成熟度审计](whole-domain-coverage-audit.md) 区分目录覆盖和研究深度。它们是**本体系内部填充清单**，不是新本体，所有原子条目目前统一 `mapped_unverified`，不能说 152 项专业知识已经研究透或经过实证。
+
 ## 一、两种完整性
 
 1. **结构完整**：8 层、12 领域、跨域关系、来源注册、事实/推断/反证区分、样本与成本、规则发布门槛、Owner 和版本、失效退役均有定义。

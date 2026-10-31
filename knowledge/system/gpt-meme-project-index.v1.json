@@ -1,0 +1,452 @@
+{
+  "schema_version": "1.0",
+  "title": "GPT Project Solana Meme expertise index; scoped historical content, not verified alpha",
+  "classification_source": "knowledge/system/ontology.v1.json",
+  "atomic_source": "knowledge/system/whole-domain-atlas.v1.json",
+  "expert_source": "knowledge/experts/registry.v1.json",
+  "core_mirror": "knowledge/system/gpt-meme-project-core.v1.md",
+  "accumulation_protocol": "knowledge/system/gpt-meme-knowledge-accumulation.v1.md",
+  "instructions": "knowledge/system/gpt-meme-project-instructions.v1.md",
+  "current_research": "knowledge/system/mechanism-research-plan.v1.json",
+  "current_research_batch": "B01",
+  "current_research_status": "intake_mapped_deep_study_pending",
+  "mirror_state": "GitHub_draft_source_created_ChatGPT_Project_file_attachment_requires_user_action",
+  "source_admission": "knowledge/source-admission.v1.json",
+  "operational_status": "Grok_S1_not_verified",
+  "counts": {
+    "layers": 8,
+    "domains": 12,
+    "core_governance": 8,
+    "atomic_units": 152,
+    "specialists": 21
+  },
+  "domain_index": [
+    {
+      "id": "D01",
+      "name": "Solana 链上基础",
+      "layer": "L1",
+      "lead": "E-L1-01",
+      "related_domains": [
+        "D10"
+      ],
+      "unit_ids": [
+        "D01-K01",
+        "D01-K02",
+        "D01-K03",
+        "D01-K04",
+        "D01-K05",
+        "D01-K06",
+        "D01-K07",
+        "D01-K08",
+        "D01-K09",
+        "D01-K10",
+        "D01-K11",
+        "D01-K12"
+      ],
+      "research_status": "declared_research_gap"
+    },
+    {
+      "id": "D02",
+      "name": "Meme 市场生命周期",
+      "layer": "L2",
+      "lead": "E-L2-01",
+      "related_domains": [
+        "D03",
+        "D09",
+        "D10"
+      ],
+      "unit_ids": [
+        "D02-K01",
+        "D02-K02",
+        "D02-K03",
+        "D02-K04",
+        "D02-K05",
+        "D02-K06",
+        "D02-K07",
+        "D02-K08",
+        "D02-K09",
+        "D02-K10",
+        "D02-K11",
+        "D02-K12"
+      ],
+      "research_status": "legacy_seeded_unverified"
+    },
+    {
+      "id": "D03",
+      "name": "市场微观结构",
+      "layer": "L2",
+      "lead": "E-L2-02",
+      "related_domains": [
+        "D06",
+        "D09",
+        "D10"
+      ],
+      "unit_ids": [
+        "D03-K01",
+        "D03-K02",
+        "D03-K03",
+        "D03-K04",
+        "D03-K05",
+        "D03-K06",
+        "D03-K07",
+        "D03-K08",
+        "D03-K09",
+        "D03-K10",
+        "D03-K11",
+        "D03-K12"
+      ],
+      "research_status": "legacy_seeded_unverified"
+    },
+    {
+      "id": "D04",
+      "name": "钱包行为与角色",
+      "layer": "L3",
+      "lead": "E-L3-01",
+      "related_domains": [
+        "D05",
+        "D06",
+        "D07"
+      ],
+      "unit_ids": [
+        "D04-K01",
+        "D04-K02",
+        "D04-K03",
+        "D04-K04",
+        "D04-K05",
+        "D04-K06",
+        "D04-K07",
+        "D04-K08",
+        "D04-K09",
+        "D04-K10",
+        "D04-K11",
+        "D04-K12"
+      ],
+      "research_status": "legacy_seeded_unverified"
+    },
+    {
+      "id": "D05",
+      "name": "资金网络与主体关系",
+      "layer": "L3",
+      "lead": "E-L3-02",
+      "related_domains": [
+        "D04",
+        "D06",
+        "D07"
+      ],
+      "unit_ids": [
+        "D05-K01",
+        "D05-K02",
+        "D05-K03",
+        "D05-K04",
+        "D05-K05",
+        "D05-K06",
+        "D05-K07",
+        "D05-K08",
+        "D05-K09",
+        "D05-K10",
+        "D05-K11",
+        "D05-K12"
+      ],
+      "research_status": "legacy_seeded_unverified"
+    },
+    {
+      "id": "D06",
+      "name": "筹码与市场控制结构",
+      "layer": "L3",
+      "lead": "E-L3-03",
+      "related_domains": [
+        "D03",
+        "D04",
+        "D05",
+        "D08"
+      ],
+      "unit_ids": [
+        "D06-K01",
+        "D06-K02",
+        "D06-K03",
+        "D06-K04",
+        "D06-K05",
+        "D06-K06",
+        "D06-K07",
+        "D06-K08",
+        "D06-K09",
+        "D06-K10",
+        "D06-K11",
+        "D06-K12"
+      ],
+      "research_status": "legacy_seeded_unverified"
+    },
+    {
+      "id": "D07",
+      "name": "市场行为与时序",
+      "layer": "L3",
+      "lead": "E-L3-05",
+      "related_domains": [
+        "D02",
+        "D04",
+        "D05",
+        "D08"
+      ],
+      "unit_ids": [
+        "D07-K01",
+        "D07-K02",
+        "D07-K03",
+        "D07-K04",
+        "D07-K05",
+        "D07-K06",
+        "D07-K07",
+        "D07-K08",
+        "D07-K09",
+        "D07-K10",
+        "D07-K11",
+        "D07-K12"
+      ],
+      "research_status": "declared_research_gap"
+    },
+    {
+      "id": "D08",
+      "name": "交易策略与 Alpha",
+      "layer": "L4",
+      "lead": "E-L4-02",
+      "related_domains": [
+        "D03",
+        "D04",
+        "D05",
+        "D06",
+        "D07",
+        "D09",
+        "D10",
+        "D11"
+      ],
+      "unit_ids": [
+        "D08-K01",
+        "D08-K02",
+        "D08-K03",
+        "D08-K04",
+        "D08-K05",
+        "D08-K06",
+        "D08-K07",
+        "D08-K08",
+        "D08-K09",
+        "D08-K10",
+        "D08-K11",
+        "D08-K12"
+      ],
+      "research_status": "legacy_seeded_unverified"
+    },
+    {
+      "id": "D09",
+      "name": "交易执行与风险",
+      "layer": "L5",
+      "lead": "E-L5-01",
+      "related_domains": [
+        "D02",
+        "D03",
+        "D08",
+        "D10",
+        "D11"
+      ],
+      "unit_ids": [
+        "D09-K01",
+        "D09-K02",
+        "D09-K03",
+        "D09-K04",
+        "D09-K05",
+        "D09-K06",
+        "D09-K07",
+        "D09-K08",
+        "D09-K09",
+        "D09-K10",
+        "D09-K11",
+        "D09-K12"
+      ],
+      "research_status": "legacy_seeded_unverified"
+    },
+    {
+      "id": "D10",
+      "name": "数据源与工程可靠性",
+      "layer": "L1",
+      "lead": "E-L0-02",
+      "related_domains": [
+        "D01",
+        "D03",
+        "D09",
+        "D11"
+      ],
+      "unit_ids": [
+        "D10-K01",
+        "D10-K02",
+        "D10-K03",
+        "D10-K04",
+        "D10-K05",
+        "D10-K06",
+        "D10-K07",
+        "D10-K08",
+        "D10-K09",
+        "D10-K10",
+        "D10-K11",
+        "D10-K12"
+      ],
+      "research_status": "legacy_seeded_unverified"
+    },
+    {
+      "id": "D11",
+      "name": "实证研究与反证",
+      "layer": "L6",
+      "lead": "E-L6-01",
+      "related_domains": [
+        "D05",
+        "D06",
+        "D07",
+        "D08",
+        "D09",
+        "D10"
+      ],
+      "unit_ids": [
+        "D11-K01",
+        "D11-K02",
+        "D11-K03",
+        "D11-K04",
+        "D11-K05",
+        "D11-K06",
+        "D11-K07",
+        "D11-K08",
+        "D11-K09",
+        "D11-K10",
+        "D11-K11",
+        "D11-K12"
+      ],
+      "research_status": "legacy_seeded_unverified"
+    },
+    {
+      "id": "D12",
+      "name": "AI 推理与知识进化",
+      "layer": "L7",
+      "lead": "E-L7-01",
+      "related_domains": [
+        "D10",
+        "D11"
+      ],
+      "unit_ids": [
+        "D12-K01",
+        "D12-K02",
+        "D12-K03",
+        "D12-K04",
+        "D12-K05",
+        "D12-K06",
+        "D12-K07",
+        "D12-K08",
+        "D12-K09",
+        "D12-K10",
+        "D12-K11",
+        "D12-K12"
+      ],
+      "research_status": "legacy_seeded_unverified"
+    }
+  ],
+  "layers": [
+    {
+      "id": "L0",
+      "slug": "provenance_governance",
+      "purpose": "来源、版权、版本、冲突与责任边界"
+    },
+    {
+      "id": "L1",
+      "slug": "onchain_primitives",
+      "purpose": "交易、Slot、账户、程序、时间语义与字段"
+    },
+    {
+      "id": "L2",
+      "slug": "market_mechanics",
+      "purpose": "市场生命周期、微观结构、流动性"
+    },
+    {
+      "id": "L3",
+      "slug": "actor_networks",
+      "purpose": "钱包行为、资金网络、筹码主体与时序"
+    },
+    {
+      "id": "L4",
+      "slug": "strategy_mechanisms",
+      "purpose": "可证伪的市场机制与策略假设"
+    },
+    {
+      "id": "L5",
+      "slug": "execution_economics",
+      "purpose": "执行、净期望、风险和可交易性"
+    },
+    {
+      "id": "L6",
+      "slug": "empirical_validation",
+      "purpose": "基准、负例、预注册、反证和样本外"
+    },
+    {
+      "id": "L7",
+      "slug": "agent_runtime_evolution",
+      "purpose": "多 Bot 研究、经审查的规则、单 Monitor"
+    }
+  ],
+  "expert_ids": [
+    "E-L0-01",
+    "E-L0-02",
+    "E-L1-01",
+    "E-L1-02",
+    "E-L2-01",
+    "E-L2-02",
+    "E-L2-03",
+    "E-L3-01",
+    "E-L3-02",
+    "E-L3-03",
+    "E-L3-04",
+    "E-L3-05",
+    "E-L4-01",
+    "E-L4-02",
+    "E-L4-03",
+    "E-L5-01",
+    "E-L5-02",
+    "E-L6-01",
+    "E-L6-02",
+    "E-L7-01",
+    "E-L7-02"
+  ],
+  "source_repos": [
+    {
+      "name": "Hermes",
+      "repo": "sunshihao001/-",
+      "sha": "2bf694b37cce25b4a3c9364298b784039f3ecc84"
+    },
+    {
+      "name": "Meme Theory",
+      "repo": "sunshihao001/meme-",
+      "sha": "5ab2b01f08e4e512fa4fcd1aed88953ff534bd0a"
+    },
+    {
+      "name": "GMGN qb",
+      "repo": "sunshihao001/qb-",
+      "sha": "8377ad5611255df5cd4562666a826708575334f0"
+    },
+    {
+      "name": "Why Solana",
+      "repo": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "sha": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+      "admission": "review_only"
+    },
+    {
+      "name": "OKX OnchainOS",
+      "repo": "okx/onchainos-skills",
+      "sha": "73904b636a0f022dcc13b6d7a0dd2ed3b3195f25"
+    }
+  ],
+  "epistemic_separation": [
+    "scope_mapping",
+    "researched_mechanism",
+    "independent_empirics",
+    "approved_runtime"
+  ],
+  "mirror_instructions": [
+    "GitHub is authoritative versioned source",
+    "GPT Project attachment requires explicit user upload; Library alone is not Project attachment",
+    "Mirror updates are manual; never imply auto sync",
+    "Review-only third-party work cannot be auto promoted to verified"
+  ]
+}
