@@ -6,6 +6,10 @@
 
 [《GPT Meme 项目全领域知识主册》](gpt-meme-project-core.v1.md) 包含现有全部152项原子研究问题/机制/禁错、21专家及跨域经济机制导航。 [《累积与双向关联规范》](gpt-meme-knowledge-accumulation.v1.md) 把发现保存为**原问题—来源—资产/库存/价格/时点因果—竞争世界—关系边—单元回填—下一轮未知**；[《Project简短指令》](gpt-meme-project-instructions.v1.md) 和 [机器索引](gpt-meme-project-index.v1.json) 帮助不同GPT会话按需恢复已有专业知识，减少零散讨论。系统仍按原L0–L7/D01–D12组织，不新增一个平行本体。Project附件与GitHub版本更新为人工同步，**不能声称已直接改动ChatGPT项目附件**。
 
+## GPT Meme 知识成果自动编译与同步 V2（2026-10-31）
+
+研究成果的当前执行入口：[《持续研究知识闭环 V2》](gpt-meme-continuity-v2.md) + [《专业研究写作 Skill V2》](gpt-meme-research-writing-skill.v2.md)。先从真实研究抽取新增认识和反例，检索旧知识并去重，**修订原专题而非每轮堆一份总结**；读回 GitHub commit/PR、核实 Library 镜像和 Project 文件实际状态，再更新 [唯一恢复点](gpt-meme-progress-current.md)。P2.1–P2.4方法成果已经编译为[异常发现方法融合目录](../domain/meme-anomaly-discovery-state.v1.md)。本 V2 继承 V1 阶段推进原则，不新建本体，也不自动发布到生产监控或真实交易。
+
 ## GPT Meme 项目持续推进与恢复点（2026-10-31）
 
 新增 [《持续研究推进、阶段判断与下一轮输入规范 V1.0》](gpt-meme-continuous-progression.v1.md)：每轮给出阶段定位、实质成果、关键未知、晋级判断、下一动作和可直接复制的研究输入，按整体P1–P6及子阶段动态推进。它是**研究运行坐标**，不替换 L0–L7 / D01–D12 或证据等级，不机械串行。
