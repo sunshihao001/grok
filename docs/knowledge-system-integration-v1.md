@@ -8,11 +8,13 @@
 
 ## V3｜从专家知识分工升级为跨领域经济机制合成
 
+> 本文为 V1 跨仓整合记录；知识层级现统一由 [V2.0](knowledge-architecture-v2.0.md) 管理。
+
 新增 [经济机制合成与认知判真 V3](economic-mechanism-synthesis-and-judgment-v3.md) 与 [六项可证伪合成假说](../knowledge/mechanism-synthesis-hypotheses.v1.json)：不再仅建立专家的来源与交接，而是将时序角色、资金循环、动态正常基准、市场自己造成的价格冲击和目标导向的取证放在**同一可观察经济机制**中研究。对已被协议事实反证的推断应直接判错；对新机制大胆预测，随后用同等研究预算和样本外结果挑战它。现有策略、部署和真实收益状态不因此自动升级。
 
 ## 多轮外部研究后的专家知识连接 V2.0
 
-以 [跨层知识与专家连接研究](knowledge-expert-interconnection-v2.md) 为新的纵深入口，衔接 [17 专家知识映射](../knowledge/expert-capability-map.v1.json)、[32 条类型化专家交接](../knowledge/expert-interaction-graph.v1.json) 与 [12 条外部方法原始出处](../knowledge/external-method-sources.v1.json)。这不是多个专家重复打分，而是事实来源、角色/资产图、正常基准、市场反馈、因果反证及纸面净值的动态交接：任何新证据都可以沿依赖关系撤回旧结论，未知机制允许开放新增专家与知识源。
+以 [跨层知识与专家连接研究](knowledge-expert-interconnection-v2.md) 为新的纵深入口，衔接 [17 专家知识映射](../knowledge/expert-capability-map.v1.json)、[40 条类型化专家交接](../knowledge/expert-interaction-graph.v1.json) 与 [12 条外部方法原始出处](../knowledge/external-method-sources.v1.json)。这不是多个专家重复打分，而是事实来源、角色/资产图、正常基准、市场反馈、因果反证及纸面净值的动态交接：任何新证据都可以沿依赖关系撤回旧结论，未知机制允许开放新增专家与知识源。
 
 `src/solana_meme_os/expert_interaction.py` 增加了只读图检查和撤回影响清单，`expert_router.py` 会附带当前被选专家之间的 `typed_expert_handoffs` 建议；**未连接真实RPC或运行自动多智能体**。
 
