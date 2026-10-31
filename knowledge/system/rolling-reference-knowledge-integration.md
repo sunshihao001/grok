@@ -149,7 +149,7 @@
 ## 2026-11-01｜从项目参考转向持续功能复用
 
 
-已增加唯一功能级资产台账 [\`reference-capability-reuse-ledger.v1.md\`](reference-capability-reuse-ledger.v1.md)，目前初审 HoldTech API/分析函数/浏览器扩展与 SPEC，FnZero Python/Rust DEX解析器、pumpwatch Creator Reputation、GMGN Wallet Skills、MadeOnSol字段。以后在 **项目研究、源码开发或监控方案** 出现任何新的功能需求时，先查该表判断 \`DIRECT_USE/WRAP_EXISTING/ADAPT_SMALL/KNOWLEDGE_ONLY/REJECT\`，再决定是否编写程序。不能把仅看过README的“功能已覆盖”写成已拥有，更不能把外部工具的语义缺陷和权限一同导入。
+已增加唯一功能级资产台账 [`reference-capability-reuse-ledger.v1.md`](reference-capability-reuse-ledger.v1.md)，目前初审 HoldTech API/分析函数/浏览器扩展与 SPEC，FnZero Python/Rust DEX解析器、pumpwatch Creator Reputation、GMGN Wallet Skills、MadeOnSol字段。以后在 **项目研究、源码开发或监控方案** 出现任何新的功能需求时，先查该表判断 `DIRECT_USE/WRAP_EXISTING/ADAPT_SMALL/KNOWLEDGE_ONLY/REJECT`，再决定是否编写程序。不能把仅看过README的“功能已覆盖”写成已拥有，更不能把外部工具的语义缺陷和权限一同导入。
 
-**当前关键方向变化**：P3-M01优先比较已存在的 \`0xfnzero/sol-parser-sdk-python\` 与Solana官方交易解析工具，而不是继续默认自行补齐所有DEX的解码；HoldTech的持有人交集/集中度/Dev历史/钱包扫描功能先加入可复用资产队列，但其部分错误归因、缺少LICENSE文件、疑似硬编码凭证属于明确阻断。pumpwatch的SQLite发行历史模块是另一个可在以后小成本移植的候选。上述都是审查/知识成果，**未安装未运行第三方代码**。
+**当前关键方向变化**：P3-M01优先比较已存在的 `0xfnzero/sol-parser-sdk-python` 与Solana官方交易解析工具，而不是继续默认自行补齐所有DEX的解码；HoldTech的持有人交集/集中度/Dev历史/钱包扫描功能先加入可复用资产队列，但其部分错误归因、缺少LICENSE文件、疑似硬编码凭证属于明确阻断。pumpwatch的SQLite发行历史模块是另一个可在以后小成本移植的候选。上述都是审查/知识成果，**未安装未运行第三方代码**。
 
