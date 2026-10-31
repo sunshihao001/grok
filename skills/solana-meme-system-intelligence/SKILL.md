@@ -1,3 +1,11 @@
+## V5｜新的主目标：经济机制生成、跨领域认知合成与主动反证
+
+正式研究文档：[V5 机制研究宪章](../../docs/economic-mechanism-discovery-charter-v5.md)，具体源数据案例：[R007 资金类型价值反转与历史覆盖偏差](../../knowledge/research/R007-capital-flow-composition-inversion-v1.md)。
+
+**研究执行准则**：先将原始事实、数量统计、资产规模和交易指令的业务语义分开；当它们在同一研究对象上发生冲突，不应把结果笼统汇总为“需要验证”。对逻辑/协议已错的推断直接判错；对可能揭示新资本机制的差异，推导可复算预测、正常竞争机制、最小反证交易；把真实反证回流为新知识版本。专家调用的价值在于引入独立的来源或可区分证据，而不是同意票数。
+
+目前可运行的**离线源表矛盾研究器** `PYTHONPATH=src python -m solana_meme_os.mechanism_discovery --input <本地完整源表JSON>`：原型会输出 `COUNT_VALUE_ECONOMIC_TYPE_INVERSION`、`HISTORY_COVERAGE_RECEIPT_SILENCE_TENSION` 两类可选调查对象与源签名。两项已注册为 HX07/HX08 竞争机制，由 `expert_router.py` 分流给资金/流动性/链上专家或数据法证/钱包/统计专家；没有实际触发多 Bot/外部 RPC。R007 是公开**派生表**的复算，尚无独立 getTransaction 回放；不可直接升格为真实融资、同控或可交易盈利结论。
+
 ## V4｜最佳运行方式：事件双循环、预算化调查、证据回流
 
 优先阅读 [双循环运行架构 V4](../../docs/dual-loop-research-runtime-architecture-v4.md)。选型结论：**确定性 M1/M2 快循环 + 按需专家慢循环 + 独立 QA/知识更新回路**；常态 Bot 不用逐笔启动 17 专家，也不允许一个模型凭摘要覆盖原始证据。初期一个只读 Monitor 与一个动态 Research Manager 即可承载大多数任务；实际云环境 Bot 并未创建。
