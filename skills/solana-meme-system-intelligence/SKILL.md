@@ -21,6 +21,8 @@ description: |
 面对复杂新问题，首先阅读：
 - [全市场专家知识协作体系](../../docs/solana-meme-expert-knowledge-orchestration-v1.md)：12 个知识领域、17 类能力、8 阶段与真实职责；
 - [专家知识与场景映射](../../knowledge/expert-capability-map.v1.json)：`source_cards`、`source_ids`、必需观察、交付产物、竞争机制和不同事件的协作组合；
+- [知识成熟度审计](../../docs/knowledge-maturity-and-gaps-v1.md)：区分原始方法已读、研究协议已成、真实复算和独立市场验证；
+- 只读专家路由：`PYTHONPATH=src python -m solana_meme_os.expert_router --event FUNDING_FANOUT --event SAME_SLOT_MULTIWALLET_BUY --question "这组钱包是否独立？"`。输出调用的知识/专家建议，不执行实际专家模型，也不判断操盘或交易机会。
 - [R002 专家交叉反证案例](../../knowledge/cases/R002-expert-cross-examination-v1.md)：说明事实、资金/筹码、统计基准和执行经济如何互相改写结论。
 
 **专家不是 Bot 数量，也不是固定下游传话链。** 按事件和不确定性召集相关能力，至少让一种专业假说受到另一种独立机制检验。若链上指令不支持某个卖出标签，事件统计必须撤回；若没有正常同类基准，不允许发布已证异常；若同控关系未知，不必暂停市场流动性与独立协同观察。新机制可新增知识领域，不能受现有 15 张卡或五种事件路由限制。
