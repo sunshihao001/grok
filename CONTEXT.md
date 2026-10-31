@@ -18,6 +18,12 @@
 - **Observed / Available / Received / Decision Time**：事件在链上发生、数据首次可得、系统实际收到、研究做出判断的时间；事后标签不能倒灌为实时特征。
 - **Risk vs Trade Value**：行为异常、风险信号、未来预测和净执行收益必须分开评价。
 
+## 专家协作与层级的正确理解
+
+研究知识层、软件模块 M0–M7、Grok 开发 Bot 是三种不同对象。当前 [专家知识架构](docs/solana-meme-expert-knowledge-orchestration-v1.md) 以 17 类能力覆盖来源事实、经济主体、协同对照、市场状态、风险/执行和反证，并按实际事件动态召集；旧 Hermes 八层只作为历史职业分工参考，不应让未确认的实体归并阻断独立市场研究，也不能强迫将未知库存划归已知实体。
+
+静态专家映射见 [`knowledge/expert-capability-map.v1.json`](knowledge/expert-capability-map.v1.json)；它尚不是 Grok 实际 Bot 调度代码。
+
 ## 模块语义
 
 M0 市场采集 → M1 事件账 → M2 群体时间窗 → M3 资金/库存图 → M4 条件基准与反证 → M5 市场状态 → M6 风险/纸面机会 → M7 告警与复盘。
