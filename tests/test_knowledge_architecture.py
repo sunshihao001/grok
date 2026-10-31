@@ -58,6 +58,23 @@ class KnowledgeArchitectureTests(unittest.TestCase):
         self.assertEqual(r["legacy_snapshots"]["count"], len(manifest["documents"]))
         self.assertEqual(r["research_units"]["count"], len(list((ROOT / "knowledge/research").glob("R*.md"))))
 
+    def test_canonical_documents_and_card_source_ids_resolve(self):
+        for label, path in self.arch["canonical_documents"].items():
+            self.assertTrue((ROOT / path).is_file(), f"{label}: {path}")
+        source_by_id = {item["id"]: item for item in self.sources["items"]}
+        for card in self.catalog["cards"]:
+            for src in card["sources"]:
+                source_id = src.get("source_id")
+                if source_id:
+                    self.assertIn(source_id, source_by_id, card["id"])
+                    indexed = source_by_id[source_id]
+                    self.assertEqual(src["repository"], indexed["repository"])
+                    self.assertEqual(src["commit"], indexed["commit"])
+                    self.assertEqual(src["path"], indexed["path"])
+        kx = self.arch["registries"]["cross_source_knowledge_units"]
+        self.assertEqual(kx["count"], len(kx["items"]))
+        self.assertTrue(set(kx["items"]) <= {c["id"] for c in self.catalog["cards"]})
+
     def test_every_card_is_assigned_to_at_least_one_expert(self):
         card_ids = {c["id"] for c in self.catalog["cards"]}
         assigned = {card for expert in self.mapping["experts"]
