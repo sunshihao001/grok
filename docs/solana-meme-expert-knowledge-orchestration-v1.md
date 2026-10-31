@@ -194,6 +194,6 @@ Grok 的 `market_observatory.py` 目前有离线标准化事件输入、若干�
 
 ## V2 扩展：专家“连接”已不止于“专家选择”
 
-[跨层专家连接 V2.0](knowledge-expert-interconnection-v2.md) 在本 V1 的 17 类能力和 8 个阶段之上增加**五张分离的图、32 条有方向的专家交接、来源血缘/晚到修订/跨专家挑战**。所有交接以有来源的 `claim_id` 和 `depends_on_claim_ids` 传播，可模拟一条上游错误让风险、库存或纸面研究结论进入待复算状态，而不把多个专家的话当独立证据。外部方法根据 Solana/Jito、W3C PROV、流式数据、微软 Agent、因果推断和市场概念漂移的实际研究加以改造；仍允许出现完全新的机制类型和专家群。
+[跨层专家连接 V2.0](knowledge-expert-interconnection-v2.md) 在本 V1 的 17 类能力和 8 个阶段之上增加**五张分离的图、40 条有方向的专家交接（32 条为首版历史快照，后续增加 L33–L40）、来源血缘/晚到修订/跨专家挑战**。所有交接以有来源的 `claim_id` 和 `depends_on_claim_ids` 传播，可模拟一条上游错误让风险、库存或纸面研究结论进入待复算状态，而不把多个专家的话当独立证据。外部方法根据 Solana/Jito、W3C PROV、流式数据、微软 Agent、因果推断和市场概念漂移的实际研究加以改造；仍允许出现完全新的机制类型和专家群。
 
 研究图仅是知识工程规范；当前 `expert_router.py` 不会自动运行 Grok 多 Agent，`expert_interaction.py` 也不保存真实历史事件、自动更新生产规则。
