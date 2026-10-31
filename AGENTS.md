@@ -68,3 +68,7 @@ The OKX review in docs/okx-onchainos-runtime-review.md identifies x402 payment s
 ## GPT-built / Grok-run release
 
 All engineering design, scripts, tests, knowledge updates and troubleshooting are authored through GPT and GitHub. Grok serves as a thin execution and log-reporting operator on a pinned reviewed release. See docs/gpt-build-grok-run.md and scripts/grok_operator.py. Do not delegate spontaneous architecture, Python rewrites, payments or live rule changes to Grok.
+
+## 持续研究成果的知识编译（Draft，2026-10-31）
+
+对于具有可长期复用增量的 Solana Meme 研究，优先阅读 `knowledge/system/gpt-meme-continuity-v2.md` 和 `knowledge/system/gpt-meme-research-writing-skill.v2.md`。先比对现有 Dxx-Kxx/专题，再修订原位、记录来源与反证、提交草案并核查结果；不要把聊天或模拟数据写成已实证结论。活跃阶段请参考 `knowledge/system/gpt-meme-progress-current.md`。普通问答无增量可 `NO_CHANGE`；Grok Monitor 仍只消费审核过的规则，不得自动交易。
