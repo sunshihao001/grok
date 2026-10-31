@@ -564,6 +564,73 @@
       "kind": "method_reference",
       "availability": "remote_on_demand",
       "license_note": "MIT repository. Quoted concepts only, not reusing prose wholesale; metrics are descriptive not price forecasts."
+    },
+    {
+      "id": "h2w6-original-inflow-table",
+      "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+      "path": "data/trace_h2w6/e2_funding_h2w6gm6jz.json",
+      "topics": [
+        "资金来源",
+        "钱包起点",
+        "覆盖率",
+        "正向SOL流入",
+        "融资",
+        "出售所得",
+        "LP撤出",
+        "WSOL",
+        "资金标签",
+        "funding",
+        "receipt",
+        "balance"
+      ],
+      "why": "40-wallet historical source-derived cohort: 21 genesis-covered, 34 prebuy-covered, 905 inflow rows. Labels require program and instruction-level audit before economic source attribution.",
+      "kind": "source_derived_case",
+      "availability": "remote_on_demand",
+      "license_note": "Research source pinned; figures and labels must remain cohort-scoped. No RPC original events verified independently."
+    },
+    {
+      "id": "h2w6-funding-label-generator",
+      "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+      "path": "data/trace_h2w6/etape2_financement.py",
+      "topics": [
+        "资金分类",
+        "成交方向",
+        "tokenBalanceChanges",
+        "最大负余额",
+        "净流入",
+        "买前资金",
+        "正常基准",
+        "数据泄漏",
+        "source"
+      ],
+      "why": "Shows `financement` vs `produit_de_vente` are research labels from source token balance negative and transaction metadata, not independently decoded transaction causal type.",
+      "kind": "source_code_reference",
+      "availability": "remote_on_demand",
+      "license_note": "Historical research method; do not import scripts or presume label accuracy."
+    },
+    {
+      "id": "h2w6-sol-balance-method",
+      "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+      "path": "data/trace_h2w6/lib_trace.py",
+      "topics": [
+        "WSOL",
+        "SPL CloseAccount",
+        "System Transfer",
+        "资金闭环",
+        "SOL余额",
+        "事件解析",
+        "分页",
+        "历史覆盖",
+        "wrapped sol",
+        "first funder"
+      ],
+      "why": "Explains why only System Transfer misses some native lamport receipts (e.g. WSOL close); balance-delta inclusion still needs instruction + fee/rent reconciliation.",
+      "kind": "source_code_reference",
+      "availability": "remote_on_demand",
+      "license_note": "Code method source; no independent transaction replay performed."
     }
   ]
 }
