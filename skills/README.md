@@ -5,7 +5,7 @@ Skills 是可移植的任务规范，不等于实际 Grok 云端已安装。知�
 | Skill | 所在能力 | 职责 | 不负责 |
 |---|---|---|---|
 | [solana-meme-system-intelligence](solana-meme-system-intelligence/SKILL.md) | 全局领域研究入口 | 理解市场问题、调度领域知识、提出竞争机制与反证，组织市场监控/研判 | 自行伪造链上事实或下单 |
-| [solana-meme-knowledge](solana-meme-knowledge/SKILL.md) | 知识检索与来源治理 | 根据问题查 15 张种子卡、30 条来源指针、原始历史快照与专题研究；保留未知 | 用关键词匹配代替深度理解 |
+| [solana-meme-knowledge](solana-meme-knowledge/SKILL.md) | 知识检索与来源治理 | 根据问题查 24 张知识卡（15 初始 + 9 扩展）、30 条来源指针、原始历史快照与专题研究；保留未知 | 用关键词匹配代替深度理解 |
 | [solana-meme-expert-writing](solana-meme-expert-writing/SKILL.md) | 深度研究与知识转换 | 原文精读、概念拆解、跨领域机制推演、证伪设计、研究写作 | 把漂亮文章当作验证 |
 | [solana-meme-monitor](solana-meme-monitor/SKILL.md) | 只读监控操作 | 执行已有单 Mint 或规范事件输入程序、报告来源和状态 | 未经验证的异常/同控/交易结论 |
 
