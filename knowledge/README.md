@@ -1,57 +1,76 @@
-# Knowledge Base｜知识架构 V2.0
+# Knowledge Base｜知识资产、来源路由与研究成熟度
 
-**唯一结构规范**：[知识架构 V2.0](../docs/knowledge-architecture-v2.0.md)，机器可读合同为 [`architecture.v2.json`](architecture.v2.json)。本目录保存可复用领域知识、来源指针、专家映射、机制假说、案例和历史快照；它不是一个已被完整验证的市场真相数据库。
+**唯一知识架构入口**：[知识体系架构 V2.0](../docs/knowledge-architecture-v2.md)；机器可读索引：[architecture.v2.json](architecture.v2.json)。
 
-## 1. 当前资产清单
+本知识库服务 Solana Meme 全市场事件、钱包行为、资金/库存网络、开发者、市场结构、正常基准、机制研究和风险研判。跟单只是一个专项应用。
 
-| 资产 | 数量 | 解释 |
+## 当前资产清单（2026-10-31）
+
+| 资产 | 数量 | 用途 |
 |---|---:|---|
-| 知识卡 `catalog.v1.json` | 24（15 初始 + 9 扩展） | 历史领域种子和新研究/语义契约卡，不是全域目录 |
-| 历史快照 | 21 | Hermes 重要方法/合同片段，不是完整旧仓迁移 |
-| 按需来源索引 `source_index.v1.json` | 30 | 原始来源、代码、工具文档和方法的 pinned pointers |
-| 专家能力映射 | 17 | 专业能力，不是 17 个云 Bot |
-| 知识领域 | 12 | 当前领域导航分类，允许扩展 |
-| 专家交接图 | 40 | 类型化知识/证据交接设计，不是自动工作流 |
-| 机制假说 | 8 | 待检验或工程方法提案 |
-| 外部方法引用 | 17 | 架构/证据方法来源，不是市场策略证据 |
+| 常驻知识卡 | **24** | 原15张历史卡 + R005/R006/R007 与 KX-01–KX-06 的9张新增卡 |
+| 历史快照 | **21** | 原 Hermes 知识与设计合同；不包含旧 runtime |
+| 固定来源文件指针 | **30** | 8个仓库中的文件级commit/path；不是实时数据源 |
+| 参考项目/论文目录 | **14** | 来源成熟度和采用边界；部分仅读 README/元数据或公开文档 |
+| 外部方法出处 | **17** | Solana/Jito、流式处理、数据血缘、Agent、统计/因果方法 |
+| 专家能力 | **17** | 研究纪律与交付契约，不是17个Bot |
+| 专业领域 | **12** | 跨层知识分区 |
+| 研究阶段 | **8（S0–S7）** | 单个Case的开放研究流程 |
+| 典型场景路由 | **9** | 专家能力组合，不是封闭的事件字典 |
+| 专家交接 | **40（L01–L40）** | 类型化证据交接和反证路径 |
+| 机制假说 | **8（HX01–HX08）** | 研究候选，不是已验证市场规律 |
+| 研究单元 | **7** | R001、R001B、R002、R003、R005、R006、R007；当前无R004文件 |
 
-所有数字均为文件结构统计。是否掌握、是否真实复算、是否可用必须逐条 Claim 评估 K0–K4；参见 [成熟度核查](../docs/knowledge-maturity-and-gaps-v1.md)。
+## 知识如何组织
 
-## 2. 五类知识对象
+- **L0–L7**：知识依赖层，从治理边界、本体、事实证据、行为结构、统计基准、经济机制、用途效力到知识治理。
+- **G_event / G_economic / G_knowledge / G_expert / G_decision**：五张不同用途的图；不能把钱包资产流、同控假说和claim依赖混成一个图。
+- **S0–S7**：研究阶段；可并行、跳转和回溯。
+- **M0–M7**：产品能力；多数仍是目标能力，不代表代码已实现。
+- **V5**：机制生成和主动反证方法；**V4**：快慢双循环运行组织。
+- 17专家是研究能力；一个专家可以由知识卡、来源、算法和QA方法共同构成，不要求一人/一Bot。
 
-- **领域知识卡**：`catalog.v1.json`。已有 24 张知识卡（15 张初始卡 + 9 张扩展卡）；逐步增加 `domain`、`claim_ids`、`maturity`、`failure_modes`、`source_ids`、`supersedes`。
-- **来源指针**：`source_index.v1.json`。仅用于按需定位特定仓库/提交/路径；不是实时 API，也不是所有条目已完整阅读。
-- **专家能力与交接**：`expert-capability-map.v1.json`（17 专家/12 域/9 场景）和 `expert-interaction-graph.v1.json`（40 条交接边）。
-- **机制假说**：`mechanism-synthesis-hypotheses.v1.json`（HX01–HX08），必须含预测、竞争解释、基准、判别证据和 reject_when。
-- **研究案例/报告**：`cases/`、`research/`、`../reports/`。必须区分原始 RPC、外部派生数据、合成 fixture、方法参考。
+## 重要文件
 
-## 3. 当前研究脉络
+- [知识卡目录](catalog.v1.json)：每张卡有触发、机制、必需证据、竞争解释、推断边界、下一步和固定来源。
+- [来源索引](source_index.v1.json)：按需读取30个固定版本文件；只允许已审查仓库。
+- [来源索引说明](source-index-README.md)：来源类型、路由方法和覆盖边界。
+- [专家能力映射](expert-capability-map.v1.json)：17专家、12领域、8研究阶段、9场景路由。
+- [专家交接图](expert-interaction-graph.v1.json)：40条方向性关系、claim contract、反证/撤回约束。
+- [机制假说登记](mechanism-synthesis-hypotheses.v1.json)：HX01–HX08，含预测、竞争解释、判别证据和拒绝条件。
+- [参考项目发现](reference-project-discovery.v1.json)：14个来源项目/论文及成熟度分级。
+- [外部方法来源](external-method-sources.v1.json)：17个架构/方法参考及其支持边界。
+- [研究案例](research/)：保留R001–R003与R005–R007；[R002专家交叉反证](cases/R002-expert-cross-examination-v1.md) 是案例格式示范。
+- [历史快照审计](legacy-audit.md) 与 [快照清单](legacy-snapshots/README.md)：保留历史知识，隔离无证据快捷推断。
 
-- [V5 机制发现宪章](../docs/economic-mechanism-discovery-charter-v5.md)：从数据矛盾生成可证伪机制；R007 是派生表复算，不是独立 RPC 确认。
-- [V4 双循环架构](../docs/dual-loop-research-runtime-architecture-v4.md)：确定性快循环、预算化慢循环、独立反证回路。
-- [专家交互 V2](../docs/knowledge-expert-interconnection-v2.md)：五张图、六类交接、Claim 版本与回溯。
-- [专家知识协作 V1](../docs/solana-meme-expert-knowledge-orchestration-v1.md)：领域专家职责、S0–S7 研究阶段和动态路由的历史详细说明。
-- [成熟度与能力缺口](../docs/knowledge-maturity-and-gaps-v1.md)：各专业领域的证据成熟度及下一项有效验证。
+## 研究报告与知识卡的区别
 
-## 4. 如何调用知识
+研究报告保存特定样本、原始来源、计算过程、限制和结论；知识卡提炼跨案例可迁移的机制和检查方法。报告不会自动成为知识卡，更不会自动成为生产规则。本轮新增9张卡的目标是让 R005/R006/R007 与六项 KX 研究成果可被常规知识路由发现。
+
+## 研究/执行工具的真实边界
+
+- knowledge.py：24张卡的关键词检索；不理解未被词面覆盖的新语义。
+- research.py：固定来源指针检索；不是RPC接入器或实时数据服务。
+- expert_router.py：专家/知识路由建议；不调用真实Agent。
+- expert_interaction.py：交接图检查和claim撤回影响规划；没有持久claim数据库。
+- research_dispatch.py：根据M2报告产生限预算研究计划；不执行RPC。
+- mechanism_discovery.py / cashflow_semantics.py：对指定派生源表进行确定性审计；不证明原始链上事实。
+
+## 证据与成熟度纪律
+
+- 来源主张 ≠ 来源派生数据 ≠ 原始RPC事实。
+- 资产边 ≠ 主体控制；观察候选 ≠ 统计异常；机制支持 ≠ 交易收益。
+- UNKNOWN、历史缺口、查询失败和未扫描必须分开保存。
+- 知识成熟度按单个命题/用途评估：K0主题发现、K1原文审阅、K2可检验协议、K3独立原始数据复算、K4跨期/样本外验证、K5特定监控/风险用途有效、K6纸面交易净经济效力。
+- 当前许多专题处于K1–K2；真实RPC复算、正常总体和用途验证仍是主要缺口。
+
+## 命令
 
 ```bash
-PYTHONPATH=src python -m solana_meme_os.knowledge --question "同一批钱包资金同源吗？"
-PYTHONPATH=src python -m solana_meme_os.research --question "SOL 流入可能来自哪些程序和经济活动？"
-PYTHONPATH=src python -m solana_meme_os.expert_router --event FUNDING_FANOUT --event SAME_SLOT_MULTIWALLET_BUY
+PYTHONPATH=src python -m solana_meme_os.knowledge --question "历史覆盖不足能否证明钱包独立？"
+PYTHONPATH=src python -m solana_meme_os.research --question "CloseAccount导致SOL流入时如何分解资金来源？"
+PYTHONPATH=src python -m solana_meme_os.expert_router --event FUNDING_FANOUT --question "是否为公共服务商？"
 PYTHONPATH=src python -m unittest discover -s tests -v
 ```
 
-这些程序是确定性检索、规划或离线分析入口，不是自动专家推理、RPC 取证或真实交易执行。关键词匹配仅作候选召回；新问题必须允许开放发现，不能被现有 24 张卡或 9 个场景限制。
-
-## 5. 来源升级政策
-
-`reference-project-discovery.v1.json` 是筛选队列；`source_index.v1.json` 是固定版本的按需阅读入口；真实数据连接器是另一个工程对象。三者不得混称。
-
-新来源升级至少完成：仓库/作者/许可证核验 → README/论文 → 具体代码/方法 → 版本锁定 → 可迁移命题和局限 → 原始证据或独立复算计划 → 适当专家和测试映射。不能因 README 提及某能力就标记为已接通。
-
-## 6. 单个知识单元应达到的结构
-
-`id, domain, question, claim_type, mechanism, scope, source_refs, raw_evidence_refs, observed_at, available_at, produced_at, required_fields, competing_explanations, baseline, discriminator, reject_when, maturity, validity_status, depends_on_claim_ids, supersedes, test_refs, owner_expert, next_action`
-
-缺失字段写 UNKNOWN 并说明缺口；不可将缺失当零、平台标签当链上事实、专家重复意见当独立证据。
+以上是离线检索/测试入口，不是云端部署或实盘能力。
