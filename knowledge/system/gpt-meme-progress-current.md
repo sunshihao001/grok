@@ -12,7 +12,7 @@
 
 - **P2.1—P2.5**：概念探索、跨钱包/跨Mint方法比较和优先级筛选已经完成一轮；C02（同群体执行方式变化）和 C05（机会校正的沉默/迁移）获准进入局部 P3；C01（跨币资金再部署）保留候选，暂不做完整图。
 - **P3-M01**：原有 `wallet_batch_monitor.py` 已有 1/5/15 分钟窗口分析与14项离线测试。
-- **本轮真实新增**：在 Draft [PR #16](https://github.com/sunshihao001/grok/pull/16) 增加 `src/solana_meme_os/raw_tx_adapter.py`、24项离线对抗性测试、合成 `getTransaction` 形状 fixture、[原始解析与 C02/C05 合同](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/p3-m01-raw-adapter-contract.md)、11个合成合同场景。**38项本地离线测试通过，最新 GitHub monitor-tests CI 成功**。适配器→M01 模拟数据串联运行成功。
+- **本轮真实新增**：在 Draft [PR #16](https://github.com/sunshihao001/grok/pull/16) 增加 `src/solana_meme_os/raw_tx_adapter.py`、24项离线对抗性测试、合成 `getTransaction` 形状 fixture、[原始解析与 C02/C05 合同](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/p3-m01-raw-adapter-contract.md)、11个合成合同场景。**此前38项本地离线测试通过；此后新增v1失败封闭及7项官方示例回归，六个测试文件当前共71项测试方法，GitHub monitor-tests CI对最新工程提交成功**。适配器→M01 模拟数据串联运行成功。
 - **现有能力边界**：原始交易适配器只接受 `mode=fixture`；支持顶层 System Program SOL Transfer，以及顶层 SPL Token/Token-2022 的 Transfer/TransferChecked；`jsonParsed` 与部分已核对格式的 `json`/v0 loadedAddresses；区分 Token Account owner/authority/fee payer；保留 signature、slot、`available_at`、指令路径。单笔 CPI Token/SOL 转移不被猜作 Swap/用户充值。未实现 Pump.fun/Raydium/Meteora/Jupiter 的 BUY/SELL 协议级解析。
 - **未知状态**：错误/缺少 TokenAccount owner、Meta/CPI/lookup、Token-2022 扩展或晚到证据均 reject/mark unknown；当前未知使整个 fixture 的 `coverage.complete=false`，是保守粗粒度设计，不是已经完成按 Slot 的采集水位。Fixture 的 `complete=true` 也不是对真实链上全部交易的独立证明。
 - **C02/C05**：已有最小字段合同、11个模拟对抗场景，但**未实现两套运行监控器**。M01 聚合 JSON 只有人数统计，C02 必须另外持有 `frozen_group_members` 及原始标准化经济事件流；C05 必须另外有独立合格机会索引和可验证的窗口覆盖。
@@ -21,11 +21,23 @@
 
 新外部核查确认 [Solana Versioned Transactions](https://solana.com/docs/core/transactions/versioned-transactions) 官方文档称 v1 已激活，v1 不使用 ALT，而是以内联账户和 transactionConfig 表示新的交易配置。现有 PR #16 原始适配器仍仅支持 legacy/v0；**version=1 应输出 UNSUPPORTED_TX_VERSION 且使窗口覆盖不完整，不得误记为没有交易**。工程 PR #16 已加入针对 v1 的明确 fail-closed 合成测试，等待/核查 GitHub CI；未实现 v1 解码或真实交易验证。后续官方 introspection 已有支持v1的实现参考：https://solana.com/docs/core/transactions/transaction-introspection 。此修订不更改 P3 当前阶段判断。
 
+### 本轮公开文档样本核查与两项重要修正（2026-10-31）
+
+**已落地、可回读**：PR #16 的 `fixtures/official-solana-gettransaction-samples.json` 固定保存Solana官方 getTransaction 文档提供的**2笔Devnet签名、3份响应编码**，以及 `tests/test_official_gettransaction_examples.py` 的7项回归。Legacy原生SOL transfer（签名 `4ReKprwf…`）正确计为1 SOL独立资金事件、不产生买入；v0 ATA Create（`56rgv1Fq…`）的 json/jsonParsed 均无假BUY，但因尚未完整支持账户创建/CPI经济语义而报告未知。**没有独立 RPC 再抓取**；官方样本未提供历史可得时间，测试注入的 `available_at` 仅是fixture时点，不适合证明前兆实时性。来源固定到 [官方文档commit 4cb392f](https://github.com/solana-foundation/solana-com/blob/4cb392f61c2ab0f8953cc314378aaf8256b7699a/apps/docs/content/docs/en/rpc/http/gettransaction.mdx)。
+
+**修正两个真实代码错误**：
+1. `meta.err` 缺字段过去被当作 `err:null`（成功）；现改为 `TRANSACTION_STATUS_UNKNOWN` 并阻止事件输出。
+2. `available_at>as_of` 过去仅降级覆盖，但资金事件可能已经输出；现调整为先阻断，禁止未来证据渗入 `funding_events/events`，并标记未知。
+
+**新外部技术约束**：v1配置错误可导致 `getBlock` 整块失败；Token-2022 TransferFee、TransferHook和ConfidentialBalance对净到账、CPI与可见金额有直接影响。参见 [现有监控方法专题 §9.1](../domain/meme-anomaly-discovery-state.v1.md) 与 [P3-M01工程契约](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/p3-m01-raw-adapter-contract.md)。**代码没有因此自动支持v1/Swap/特殊Token-2022**。最新工程提交 `d79eafe647542b29745b2a814850be4000d9ccd8` 的 [GitHub CI](https://github.com/sunshihao001/grok/actions/runs/41216119575) 已成功；PR#14/#16仍未合并。
+
+**阶段**：P3 源语义验证继续；已有**官方文档响应格式**核查，未完成**独立RPC重取＋同一签名跨提供者对账**；不进入 P4 大规模实证。下一步优先独立只读重取这两笔签名（`maxSupportedTransactionVersion:1`、固定commitment、记录真实 fetched_at），再选一个协议和一类Swap做可核验解码与不支持样本测试。
+
 ## 下一步优先顺序
 
-1. **P3-M01 只读小样本核验（最高优先级）**：选择少量可公开核查的真实 Solana 交易签名和官方/协议原始文档，人工写出正确的 TokenAccount owner、Token/SOL Transfer、CPI、版本/LUT、Swap 未知结果。对照适配器，记录可支持与应拒绝的实例，尤其检验实际 RPC 原始响应格式。不要求模拟数据“长得像真实”就算完成。
-2. **P3 协议适配**：基于核验结果，选择**一个**协议和**一种**明确交易类型（例如 Pump.fun 的简单 Swap），检查其官方程序 ID、IDL/源码、余额变化与 CPI 语义，再设计可信 BUY/SELL 解析。不凭余额差直接分类，不扩展至所有 DEX。
-3. **C02/C05**：复用经过真实语义核验的标准化事件，先测试冻结群体、右删失和机会分母/UNKNOWN 的正确性；不用先建全网监控，也不推断庄家和盈利。
+1. **独立只读 RPC 对账**：对官方文档两笔已公布Devnet签名，由经授权的可用节点使用 `getTransaction`、`maxSupportedTransactionVersion:1` 与固定 `commitment` 读取真实响应，记录采集时间、请求参数、可用性和差异。当前环境对 RPC POST/完整私有历史不可直接取回，因此不得称本轮已完成独立节点核查；无需接私钥。
+2. **一个 Meme 协议、一个 Swap 类型**：先固定官方 program ID 与 IDL/源码、指令 discriminator 和CPI/余额校验，在明确正反例下才添加 BUY/SELL 解析。优先已有开放实现；未找到原始交易、转账和资产语义时宁可 `UNRESOLVED`。
+3. **C02/C05 依赖**：冻结群体成员、维护资金/动作 as-of 记录；独立定义发行机会和覆盖水位，避免因 v1 整块失败或未知CPI产生虚假群体沉默。
 
 ## 阶段晋级判断
 
@@ -34,13 +46,13 @@
 ## 下一轮可直接复制输入
 
 ```text
-继续 Solana Meme 项目，按照 V2 知识闭环执行。先读取唯一研究恢复点、P2.1–P2.5 方法融合专题与 Draft PR #16 的 raw_tx_adapter.py、tests 和工程契约，不重设架构。
+继续 Solana Meme 项目 P3-M01，按照 V2 知识闭环执行。读取唯一进度、现有知识专题第9.1节和 Draft PR #16 的 raw_tx_adapter.py、official-solana-gettransaction-samples.json、测试与工程契约，勿重建系统。
 
-本轮聚焦 P3-M01 的**少量公开真实 Solana 原始交易语义核查**：优先官方原始示例和可独立核对的真实签名，建立逐笔标准答案（交易版本、静态/loaded账户、TokenAccount owner、授权者、fee payer、outer/inner CPI、Token vs SOL 转账、未知Swap及采集时点），将实际 RPC 保存为只读 fixture，运行适配器和对抗测试。支持不足的协议必须标 UNRESOLVED，不得凭余额变化推定 BUY/SELL，不得根据少数签名声称 Mint 的窗口采集完整。
+优先取得官方文档中两笔Devnet签名的独立只读RPC回包（使用 maxSupportedTransactionVersion:1、固定 commitment），保留真实 fetched_at、数据来源、返回状态并与仓库保存的官方样本逐字段对账。若环境不能GET/POST该数据，明确报告阻碍；不要将合成 available_at 当成真实取得时间或把缺失meta/未知版本当0事件。
 
-随后从一个具体 Meme 协议中选择最简单、可公开核验的一种 Swap 类型，研究官方程序 ID、IDL 和原始源码，判断何时能增加协议级买卖解码。同步检查 C02/C05 的成员冻结、右删失和合格机会分母所需的具体事件还缺什么。
+接着选择一个具体 Meme 协议、一种 BUY 或 SELL 类型，研究固定 program ID/IDL/源码与可公开核验签名，以最小独立协议适配器正确区别顶层、CPI、Token账户owner/delegate、费用、WSOL/Token2022特殊金额；给对抗性正负例，只允许可解释的成功动作进入 M01，未知保留 UNRESOLVED。C02/C05 只在可信 as-of 事件与独立完整性可得时继续。
 
-把真正新增的字段、错误反例与测试结果修订进现有工程文档和监控专题，提交当前 Draft PR、读回核查，更新 GPT Library 镜像及唯一恢复点；无法直接修改 Project 文件时如实报告。最后给出是否具备进入 P4 的具体条件和下一轮可复制输入。
+只把新证据和修正写回已有工程合同及M01知识专题；提交GitHub PR#16/#14、回读复核、同步个人 Library 同名镜像并更新本唯一恢复点。不得签名、下单、部署正式监控；最后报告已实际完成的代码/来源/CI、未支持范围、是否进入P4和下一轮输入。
 ```
 
 ## 同步状态声明
