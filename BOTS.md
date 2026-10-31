@@ -1,6 +1,6 @@
 ## 运行架构决策 V4｜事件快循环 + 受预算约束的慢研究循环
 
-实际选型：[双循环研究运行架构 V4](docs/dual-loop-research-runtime-architecture-v4.md)。**正式拒绝**将 17 个专业能力等同 17 个持续在线的 Bot，也拒绝用固定八层解释每笔交易。当前建议只有一个只读市场监控入口和一个按需深入研究入口；17 专家是专家 Skill/方法/程序，不是同时启动的模型进程。
+实际选型：[双循环研究运行架构 V4](docs/dual-loop-research-runtime-architecture-v4.md)。**正式拒绝**将 17 个专业能力等同 17 个持续在线的 Bot，也拒绝用固定八层解释每笔交易。当前建议只有一个只读市场监控入口和一个按需深入研究入口；17 专家是专家 Skill/方法/程序，不是同时启动的模型进程。现有 M2 六类候选已通过 7 个可组合研究场景路由，测试在 GitHub Actions 真实运行通过。
 
 **可执行的离线纵切片**：`market_observatory.py` 输出 M2 群体候选；`research_dispatch.py` 按 Mint+Slot、资金源+时间窗、跨 Mint 总体和钱包活动分别生成 Case，且不自动把不同来源/时间的行为归并；`expert_router.py` 返回相关知识与专家，`expert_interaction.py` 给出类型化交接。研究预算限制 Case 数/拟查签名数，并复用跨 Case 同签名以避免重复查询。**尚未部署真正 RPC 调用、云端任务队列或自动 Grok 专家执行；本阶段只产生只读调查计划**。
 
@@ -22,7 +22,7 @@
 
 [跨层专家网络](docs/knowledge-expert-interconnection-v2.md) 使六个研发角色可共享 17 项专业能力，而不是建立 17 个重复工作的 Bot。知识交接必须指明来源/处理活动、原始事实、推断依赖、反例、首次可得时点与接收者要做的判别性检查。
 
-[32 条已定义交接](knowledge/expert-interaction-graph.v1.json) 区分源解码、群体、资金、正常对照、市场机制、风险/交易价值和 QA 回溯；`expert_router.py` 仅建议交接，`expert_interaction.py` 仅计算影响范围。**真实 Grok Agent Handoff、长期任务队列、自动向外发告警或批准真实交易没有实施。**
+[40 条已定义交接](knowledge/expert-interaction-graph.v1.json) 区分源解码、群体、资金、正常对照、市场机制、风险/交易价值和 QA 回溯；`expert_router.py` 仅建议交接，`expert_interaction.py` 仅计算影响范围。**真实 Grok Agent Handoff、长期任务队列、自动向外发告警或批准真实交易没有实施。**
 
 ## 角色和边界
 
