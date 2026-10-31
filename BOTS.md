@@ -4,7 +4,7 @@
 
 ## 架构分离
 
-- **L0–L7**：知识架构层，见 docs/knowledge-architecture-v2.md。
+- **L0–L7**：知识架构层，见 docs/knowledge-architecture-v2.0.md。
 - **S0–S7**：单个 Case 的研究阶段。
 - **M0–M7**：最终产品能力和软件模块。
 - **17 类专家 / 12 个知识领域 / 40 条交接**：研究能力与交接契约，不是 Bot 数量。
@@ -37,4 +37,4 @@
 
 ## 发布纪律
 
-不访问私钥、不签名、不广播、不下单、不自动激活 Routine、不自动修改生产规则。GitHub 文档/CI成功不代表云端 Bot 已部署。真实 RPC、持续运行、错误恢复和告警误报率需独立验收。见 [知识架构](docs/knowledge-architecture-v2.md)、[V4运行架构](docs/dual-loop-research-runtime-architecture-v4.md) 和 [下一步路线](docs/next-steps.md)。
+不访问私钥、不签名、不广播、不下单、不自动激活 Routine、不自动修改生产规则。GitHub 文档/CI成功不代表云端 Bot 已部署。真实 RPC、持续运行、错误恢复和告警误报率需独立验收。见 [知识架构](docs/knowledge-architecture-v2.0.md)、[V4运行架构](docs/dual-loop-research-runtime-architecture-v4.md) 和 [下一步路线](docs/next-steps.md)。
