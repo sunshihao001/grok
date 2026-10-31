@@ -11,6 +11,8 @@ description: |
 
 # Solana Meme Expert Research Writing｜专家研究写作技能 V1.0
 
+**知识结构依据：** [知识架构 V2.0](../../docs/knowledge-architecture-v2.0.md)。本 Skill 的工作位于深度研究/知识转换能力，不另建一套领域层级；研究原则遵循 [V5 机制发现宪章](../../docs/economic-mechanism-discovery-charter-v5.md)，运行/调度边界遵循 [V4 双循环架构](../../docs/dual-loop-research-runtime-architecture-v4.md)。
+
 > 目的：不是帮 AI 把资料“写漂亮”，而是驱动 AI **理解真实知识、发现机制连接、形成有深度且可审查的专业原创论述**，再把有价值的部分转换给 Grok 使用。
 >
 > 优先级：研究问题与证据 > 市场机制 > 新认知 > 表达技巧 > 文档格式。
