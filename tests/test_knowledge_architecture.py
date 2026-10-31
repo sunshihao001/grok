@@ -74,7 +74,12 @@ class KnowledgeArchitectureTests(unittest.TestCase):
                     self.assertEqual(src["path"], indexed["path"])
         kx = self.arch["registries"]["cross_source_knowledge_units"]
         self.assertEqual(kx["count"], len(kx["items"]))
-        self.assertTrue(set(kx["items"]) <= {c["id"] for c in self.catalog["cards"]})
+        card_by_id = {c["id"]: c for c in self.catalog["cards"]}
+        self.assertTrue(set(kx["items"]) <= set(card_by_id))
+        for card_id, unit_id in kx["mapping"].items():
+            self.assertEqual(card_by_id[card_id]["knowledge_unit_id"], unit_id)
+        for research_id, card_id in self.arch["registries"]["research_units"]["card_mapping"].items():
+            self.assertEqual(card_by_id[card_id]["research_unit_id"], research_id)
 
     def test_domain_ontology_matches_primary_card_ownership_and_routing(self):
         domain_ids = {x["id"] for x in self.domains["domains"]}
@@ -149,6 +154,7 @@ class KnowledgeArchitectureTests(unittest.TestCase):
 
     def test_new_research_cards_are_retrievable(self):
         cases = [
+            ("Creator Fee配置与实际领取和开发者收益路径", "creator-fee-economic-path"),
             ("first funder 历史覆盖不足，不能证明独立钱包", "first-funder-history-coverage"),
             ("SOL流入可能是 CloseAccount 或 LP撤出，不一定是外部注资", "sol-receipt-economic-semantics"),
             ("次数与金额反转，资本规模由少数LP释放主导", "cashflow-count-value-inversion"),
