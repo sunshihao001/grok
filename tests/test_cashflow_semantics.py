@@ -1,6 +1,6 @@
 import copy
 import unittest
-from cashflow_semantics import audit_funding_table
+from solana_meme_os.cashflow_semantics import audit_funding_table
 
 
 def sample():
