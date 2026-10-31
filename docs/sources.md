@@ -36,4 +36,4 @@ Legacy source pins below remain valid **as previously observed versions**, not n
 
 Pin an exact source file and commit for each imported claim. Technical tool descriptions are *candidate adapters*, not evidence of live data coverage. Original Hermes, meme- and qb- domain knowledge remains in source, and 21 bounded historical snapshots are preserved in Grok without importing Hermes runtime.
 
-Current full source selection list: `knowledge/source_index.v1.json` (22 pointers); program policy: `src/solana_meme_os/research.py`. For market-wide roles and per-source limitations see [integration](knowledge-system-integration-v1.md).
+Current full source selection list: `knowledge/source_index.v1.json` (**30 pinned pointers**); program policy: `src/solana_meme_os/research.py`. See [knowledge architecture V2.0](knowledge-architecture-v2.0.md) for the distinction between source discovery, reviewed sources and live data connectors. For market-wide roles and per-source limitations see [integration](knowledge-system-integration-v1.md).
