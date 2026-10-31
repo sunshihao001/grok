@@ -64,6 +64,16 @@ class KnowledgeArchitectureTests(unittest.TestCase):
                     for card in expert["source_cards"]}
         self.assertEqual(assigned, card_ids)
 
+    def test_cards_have_valid_domain_maturity_and_accountable_experts(self):
+        domains = {x["id"] for x in self.mapping["domains"]}
+        expert_ids = {x["id"] for x in self.mapping["experts"]}
+        for card in self.catalog["cards"]:
+            self.assertIn(card["domain"], domains)
+            self.assertIn(card["maturity"], {"K0", "K1", "K2", "K3", "K4"})
+            self.assertTrue(card["maturity_basis"])
+            self.assertTrue(set(card["owner_experts"]) <= expert_ids)
+            self.assertTrue(card["owner_experts"])
+
     def test_expert_source_and_scenario_references_resolve(self):
         source_ids = {x["id"] for x in self.sources["items"]}
         card_ids = {x["id"] for x in self.catalog["cards"]}
