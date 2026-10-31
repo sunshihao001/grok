@@ -2,6 +2,16 @@
 
 **Purpose:** preserve the expert learning, domain research, adversarial perspectives and practical lessons from three earlier projects while discarding Hermes-specific *runtime* assumptions. A working Bot without validated external knowledge is only orchestration.
 
+## Project scope update (2026-10-31)
+
+**This knowledge base serves market-wide Solana Meme event, wallet-cluster, funding-network, market-structure and risk research; copy trading is one specialist use case.**
+
+Existing 15 resident concept cards and 21 historical snapshots are a bounded legacy baseline, not a full market ontology. The on-demand registry now has **22 curated source pointers** across legacy Hermes, meme-, qb-, Why-Solana and OKX read-only documentation.
+
+Primary knowledge pathway: observed events and time windows -> wallet/asset networks -> conditional normal baseline and competing mechanisms -> market structure and risk -> independently tested prediction/paper economics.
+
+Start from [system integration](../docs/knowledge-system-integration-v1.md) and [system-intelligence Skill](../skills/solana-meme-system-intelligence/SKILL.md), then selectively read original source files. Monitor and event-observatory code do not establish abnormality or trader identity.
+
 ## What has been migrated
 
 The initial catalog has 15 source-pinned cards in `knowledge/catalog.v1.json` covering:
@@ -46,4 +56,4 @@ References: `docs/sources.md`, `knowledge/legacy-audit.md` and `skills/solana-me
 
 ## Second wave — do not bulk migrate
 
-New model: keep the resident 15 cards and 21 prior snapshots as a bounded historical baseline, but use `knowledge/source_index.v1.json` to consult external specialist sources **on demand**. The repo now indexes 17 documents, including methodological references from `Why-Solana-Memecoins-Are-Over`, without importing its licensed analysis into Grok. Run `python -m solana_meme_os.research --question ...` to create an evidence intake packet; see `docs/on-demand-research-design.md`. The goal is better judgment, not maximizing token count or the number of copied files.
+New model: keep the resident 15 cards and 21 prior snapshots as a bounded historical baseline, but use `knowledge/source_index.v1.json` to consult external specialist sources **on demand**. The repo now indexes 22 curated source entries, including methodological references from `Why-Solana-Memecoins-Are-Over`, without importing its licensed analysis into Grok. Run `python -m solana_meme_os.research --question ...` to create an evidence intake packet; see `docs/on-demand-research-design.md`. The goal is better judgment, not maximizing token count or the number of copied files.
