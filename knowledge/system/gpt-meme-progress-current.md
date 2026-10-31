@@ -74,3 +74,13 @@ GitHub 知识源在 PR #14；实现和测试在 PR #16；GPT Library 的当前�
 从 GMGN Skills、Birdeye、Cielo、Nansen、Bubblemaps、Watchtower、MadeOnSol SDK、HoldTech 部分公开源码补充不同钱包标签的来源语义与实际局限。核心新增认知：Sniper在GMGN和Cielo定义不一致；Bundler同笔原子交易/Jito Bundle/同Slot群体需要分开；KOL身份绑定与真正主动买入不是一回事；Smart Money盈利窗口与可复制交易分开；地址标签应按身份、执行、库存、历史表现/关系多维并存，并包含来源版本、覆盖、观察窗口及未知。
 
 已修订 knowledge/domain/L3-wallet-actors.md 的原专题与 rolling-reference-knowledge-integration.md 常驻参考池；只属于公开来源核查+源码局部审阅，尚无真实钱包样本独立标签验证，也不代表P3-M01已能解析DEX BUY/SELL。下一优先任务：按当前原始交易适配器能力，选择一个可核对的早期钱包标签使用场景，开展供应商定义→原交易→现持仓/转仓的只读语义对照；尤其先解决Swap经济动作和owner/funder分离，不急于编写万能自动标签分类器。
+
+## 2026-11-01｜功能复用优先与真实项目审计（P3-M01方向复核）
+
+
+**新增持久资产**：[\`reference-capability-reuse-ledger.v1.md\`](reference-capability-reuse-ledger.v1.md)。实际读过 HoldTech 主要API路由和部分源码，核查 holder-overlap /deep-scan /funding /analyze /bundler-feed /smart-money /deployer-profile /extension 与架构规格；并比较FnZero Python/Rust SDK、pumpwatch发行者SQLite模块、GMGN Wallet Skills和MadeOnSol接口。阅读源码不等于已执行。
+
+**方向结论：保持Meme经济监控目标，调整默认工程方法为 REUSE_FIRST。** M01目前仅fixture-only且未实现协议级DEX买卖；优先固定FnZero Python解析库并隔离对照现有M01测试与人工交易语义，必要时以Solana官方introspection补版本/CPI核查。不要直接把HoldTech运行代码移植：部分源码用fee payer猜买家和融资者、把钱包年龄当持仓时长、默认最大Holder为pool，且存在疑似硬编码API/Redis凭证、根目录无常规LICENSE文件。以后可将其Holdings、持有人交集、聚集可视化、Dev历史等**分模块**纳入本项目的只读分析。
+
+**当前未完成**：没有调用第三方实时/付费API、没有导入第三方依赖、没有修改PR#16原始适配器与测试；完整许可证/安全审核、外部SDK fixture比较和真实链上语义仍待完成。下轮首选“FnZero Python解析器与M01现有官方fixture的离线对照 + 负例”，并回访HoldTech剩余功能的实际实现/已发布状态，结论写回功能台账。现有P3与S1阶段位置不因文档审计而升级。
+
