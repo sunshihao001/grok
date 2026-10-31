@@ -1,3 +1,9 @@
+## V5｜项目正式研究主线
+
+**「经济机制生成、跨领域认知合成与主动反证研究」**是整个 Solana Meme 市场监控与知识系统的研究主线，不能被收缩为跟单、已知异常钱包标签或已有 17 类专家的固定目录。研究从真实事实发现结构，从不同结构推导竞争机制，再用事实矛盾驱动新的签名/资产仓位/时间基准取证。核心文件：[V5 正式研究宪章](docs/economic-mechanism-discovery-charter-v5.md)及[R007 已复算的真实派生案例](knowledge/research/R007-capital-flow-composition-inversion-v1.md)。
+
+V4 快慢双循环为**运行组织方式**，V5 是**研究思维与新机制生成方向**，二者不冲突。V5 已有一个仅离线可用的源分类矛盾检测原型 `mechanism_discovery.py`，识别“事件数量/资金规模反转”和“历史覆盖/零值耦合”，再路由至不同专家；不是完成真实市场监控，不是证明幕后控制者。
+
 ## V4｜确定性监控与动态研究的运行边界
 
 采用 [双循环架构 V4](docs/dual-loop-research-runtime-architecture-v4.md)：快循环维护原始事件与监控事实（目前仅 M2 已归一化外部输入），慢循环按候选的**Mint+Slot / 来源+时间窗 / 跨 Mint 汇总 / 钱包级事件**生成限预算调查 Case，并由研究总师按需调用现有专家知识。新 `research_dispatch.py` 使用 `expert_router.py` 的专业角色与交接约束，但只输出调度**计划**，不运行真实专家、RPC、交易或对外告警。
