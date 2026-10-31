@@ -16,6 +16,18 @@ description: |
 >
 > **边界：** 本 Skill 是研究/系统规范和知识调用入口。仓库存在文件≠Grok 云端已安装；本阶段只读、纸面模拟，不下单、签名或广播。
 
+## 同类异常钱包项目的新增知识入口（2026-10-31）
+
+以 [多项目异常钱包取证方法研究](../../docs/anomaly-wallet-reference-expansion-v1.md) 为入口，结合 [14 个来源分级与专家映射](../../knowledge/reference-project-discovery.v1.json) 阅读，不把搜索到的仓库全部并入生产能力。
+
+新增四条跨专业证据连接：
+- `token → graph`：开发者/Creator Fee 的**实际领取路径**进入经济资本循环；
+- `graph → token`：资金网络的跨发行重复，反向要求核实开发者与公共服务商角色；
+- `chain → statistics`：BUY/SELL 分类必须由指令审计通过后才能作为协同检测和正常对照输入；
+- `graph → statistics`：排除公共 Hub，加入同频率、同类市场热度及等预警预算的图/null 对照。
+
+优先级：独立复算 RPC 资金法证（CyberLeek）、首次资金源未知与公共 hub 过滤（solana-holder-clusters）、开发者→上游→买家→归集（Degen-Scanner）、2026 年最新多通道 prospective group 研究的真实反例；对 README 的“同控/内幕/庄家评分”只记录为供应商主张。旧 RED-COHORT 早期数值已被 2026-10 公开撤回，绝不能作为钱包协同检测的有效校准证据。
+
 ## V2.0｜跨层专家连接与真实反证协议（2026-10-31）
 
 新增 [知识与专家连接结构 V2.0](../../docs/knowledge-expert-interconnection-v2.md)，正式把领域分析从“先后层级”升级为**带来源、时点、依赖及反证路径的专业交接网络**：
