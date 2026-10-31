@@ -18,7 +18,7 @@ from .knowledge import for_question
 
 ROOT = Path(__file__).resolve().parents[2]
 INDEX = ROOT / "knowledge/source_index.v1.json"
-ALLOWED_REPOS = {"sunshihao001/Why-Solana-Memecoins-Are-Over", "sunshihao001/-", "sunshihao001/meme-", "sunshihao001/qb-"}
+ALLOWED_REPOS = {"sunshihao001/Why-Solana-Memecoins-Are-Over", "sunshihao001/-", "sunshihao001/meme-", "sunshihao001/qb-", "okx/onchainos-skills"}
 REQ = {"id", "repository", "commit", "path", "topics", "why", "kind", "availability"}
 CONSTANT_CHECKS = [
     "定义研究对象、决策时间、样本总体及分母；不存在的数据不能假装为零。",
