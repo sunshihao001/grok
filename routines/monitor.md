@@ -1,11 +1,17 @@
-# Grok Routine setup draft — NOT RUNNING
+# Monitor Routine | PAUSED DESIGN ONLY — NOT ACTIVE
 
-In the Grok app, after source and Skill verification, message the **Monitor Bot**:
+This file documents a **possible future scheduled run**; it does not configure a Grok Routine. User approval and tested input permissions are required before any creation or activation.
 
-> Create a **paused** draft Routine for Solana Meme observation; do not enable until I approve. Suggested starting cadence is every 30 minutes, subject to source limits and my local time zone. Monitor Bot is the sole owner. Use the solana-meme-monitor Skill and reviewed code in sunshihao001/grok. Only scan approved token mints with verified read-only data. Check field units, freshness and source authenticity. On each run report observed differences, counterevidence, missing fields and a source-linked audit trail to this Bot conversation. If GMGN mappings, login or fresh data are missing, report UNAVAILABLE and stop. Avoid duplicate notifications. Never place orders, swap, sign, broadcast, access secrets, alter active rules or contact third parties. Test once with safe data and report the result before I activate this Routine.
+## Preconditions before scheduling
 
-This Markdown is only an operator instruction. GitHub commits do not create a Grok Routine. See https://docs.x.ai/grok-bot/skills-routines-and-automations.
+1. A real, approved source delivers validated and timestamped normalized Solana events; source coverage/lag and budget documented.
+2. The selected version of event observatory / per-Mint snapshot code passes offline and real-data read-only tests with replayable evidence.
+3. Baseline availability and alert words distinguish candidate behavior from statistically validated anomaly, confirmed bundle and economic identity.
+4. Secrets, notifications, storage, quotas, concurrency, duplicate alerts, recovery and failure mode have been reviewed in the target Grok environment.
+5. A human explicitly approves a scoped schedule and recipients. Never assume this file or a GitHub commit authorizes a recurring task.
 
-## Required knowledge handoff
+## Proposed operator handoff when prerequisites are satisfied
 
-Monitor must consult `knowledge/catalog.v1.json` and use `knowledge.interpretation_candidates` returned by the monitor to guide **source verification and competing explanations**. This knowledge is not proof that an event indicates rug/control/insider activity. On an unknown question, flag a research gap for a development Bot; do not automatically change active rules.
+Ask the final Monitor Bot for a **paused draft** limited to an approved observed-mint and event scope, using reviewed source adapters and skills. On each run capture provenance, window, transaction count, distinct wallets, SOL/Token sizes, candidate graphs, counterexamples, missing data and a source-linked report; do not compute an unvalidated '庄家 probability'. Verify dedupe, time zone and one-time test before separate user approval to enable.
+
+Absolutely no orders, private keys, sign/broadcast, automated rule changes or notifications without approval. Historical scheduled 30-minute cadence was only a proposal, not the correct frequency for Slot/second-level bursts; actual sampling must follow latency and coverage evidence.
