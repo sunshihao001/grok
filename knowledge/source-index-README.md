@@ -1,6 +1,6 @@
 # On-demand source registry — not a data lake
 
-`source_index.v1.json` lists **22** curated entry points across the original Hermes domain work, the meme- theory repository, the qb- GMGN prototype, the third-party Why-Solana-Memecoins-Are-Over study, and OKX OnchainOS read-only documentation.
+`source_index.v1.json` lists **30** curated entry points across the original Hermes domain work, the meme- theory repository, the qb- GMGN prototype, the third-party Why-Solana-Memecoins-Are-Over study, OKX OnchainOS read-only documentation, and screened forensic/developer/holder-cluster code references.
 
 - Each source has a pinned Git commit, exact path, topic cues and *why to read*.
 - The local `knowledge/catalog.v1.json` and its 21 historical snapshots remain a limited resident baseline. No further wholesale knowledge copy is authorized by this design.
