@@ -1,0 +1,217 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-10-31",
+  "status": "HYPOTHESIS_REGISTRY_NOT_LIVE_RESULTS",
+  "purpose": "Creative cross-domain mechanisms and their decisive disconfirmation, not a universal suspicious-wallet score.",
+  "quality_states": [
+    "LOGICALLY_OR_PROTOCOL_FALSE",
+    "EMPIRICALLY_REFUTED_IN_SCOPE",
+    "UNTESTED_MECHANISM",
+    "SUPPORTED_WITH_SCOPE",
+    "REPRODUCED_OUT_OF_SAMPLE",
+    "USABLE_FOR_DEFINED_PURPOSE"
+  ],
+  "principles": [
+    "Wrong source-to-owner inference must be directly rejected, not softened to low confidence",
+    "No promotion from mechanism to strategy without decision-time, independent baseline, costs and repeatability",
+    "Novelty is not inferred from mere number of experts",
+    "Hypothesis tests must compare against simpler competitive baselines",
+    "Structural truth, causal explanation, market utility and net executable edge are distinct claims"
+  ],
+  "hypotheses": [
+    {
+      "id": "HX01",
+      "name": "时序经济行为指纹",
+      "status": "TESTABLE_NEW_HYPOTHESIS",
+      "core": "以同一事件簇的注资→买入→归集→市场反应→收益回流的有类型、带时点路径为基本单位，替代单钱包固定身份识别",
+      "specialists": [
+        "event",
+        "chain",
+        "graph",
+        "wallet",
+        "inventory",
+        "adversarial",
+        "statistics"
+      ],
+      "uses": [
+        "h2w6-original-inflow-table",
+        "h2w6-sol-balance-method",
+        "wallet-clustering-cross-layer-unknown"
+      ],
+      "predicts": [
+        "跨 Mint 重复的非公共角色关系在留出时间段仍复现",
+        "与活跃度、发行阶段匹配的独立机器人对照相比，真实角色转换更规律"
+      ],
+      "alternatives": [
+        "独立机器人面对同一公开发行刺激",
+        "CEX/共享服务商造成高连接资金图",
+        "部分指令解码失真"
+      ],
+      "discriminator": "对同一时间戳前成立的多通道边进行跨 Mint holdout；控制公共 Hub、资金度数、机器人活跃度，测重复经济关系的增量",
+      "baseline": "保留钱包活跃度和来源度数的时序图置换+同协议同阶段发行",
+      "reject_when": "剔除公共 Hub/相同刺激并按历史时点建图后，群体重复性不高于匹配对照",
+      "utility": "市场组织模式发现/开发者历史风险监控",
+      "not_conclusion": "已证明共同实际受益人或未来收益"
+    },
+    {
+      "id": "HX02",
+      "name": "资本循环与地址更替的角色不变量",
+      "status": "TESTABLE_NEW_HYPOTHESIS",
+      "core": "不同地址可替换但具体经济职责序列、非公共资产链和预算/周转节奏较稳定；用角色不变量观察操作网络，而非地址名单",
+      "specialists": [
+        "graph",
+        "wallet",
+        "chain",
+        "token",
+        "statistics",
+        "review"
+      ],
+      "uses": [
+        "developer-funding-convergence",
+        "forensic-raw-sol-replay",
+        "h2w6-funding-label-generator"
+      ],
+      "predicts": [
+        "换钱包的发行仍保留可验证的资金到库存路径拓扑和时序",
+        "角色重复性对下一次发行群体结构有增量预测"
+      ],
+      "alternatives": [
+        "同一种自动发币工具与做市模板被大量独立用户复用",
+        "资金、LP/服务费被错当回流"
+      ],
+      "discriminator": "冻结历史时点角色模板，检测此前未见新地址发行的关系一致率，并核实真正回流资产",
+      "baseline": "同工具/同平台非关联发行、随机角色置换与服务商过滤",
+      "reject_when": "角色模板的复现完全被公共工具/协议和市场阶段解释",
+      "utility": "跨币种操作网络、开发者监控",
+      "not_conclusion": "相同幕后庄家"
+    },
+    {
+      "id": "HX03",
+      "name": "自身价格冲击与独立需求分离",
+      "status": "TESTABLE_NEW_HYPOTHESIS",
+      "core": "检测钱包群自身买单依 AMM 曲线造成的机械价格变化与后续独立买方行为，在同池同阶段比较增量",
+      "specialists": [
+        "liquidity",
+        "chain",
+        "regime",
+        "statistics",
+        "causal",
+        "execution"
+      ],
+      "uses": [
+        "h2w6-original-inflow-table",
+        "slot-sequence-case",
+        "tradability-vs-structure"
+      ],
+      "predicts": [
+        "同 Slot 大额同步买入造成的短时涨价大部分可以由交易前池子状态和实际买单量解释",
+        "剥离自冲击后只剩特定机制群体的超额外部需求预测力"
+      ],
+      "alternatives": [
+        "同时发生外部新闻/迁移导致价格和群体活动共同变化",
+        "多池路由/MEV/LP变动使单池曲线预测失准"
+      ],
+      "discriminator": "从交易前 reserve/真实指令重放每笔成交，分离检测组与非检测组交易并观察事前定义的后续独立需求",
+      "baseline": "同池深/发行年龄/市场热度的其他发行；简化价格/交易强度模型",
+      "reject_when": "与对照相比无额外可预测后续需求或无法重建有效价格路径",
+      "utility": "市场后果解释、风险监控；只有进一步满足成本与样本外才纸面交易",
+      "not_conclusion": "涨价直接等于可跟单盈利"
+    },
+    {
+      "id": "HX04",
+      "name": "由反证价值驱动的研究调度",
+      "status": "ENGINEERING_METHOD_PROPOSAL",
+      "core": "让竞争经济解释给下一条最有判别性的交易/历史窗口打调查优先级，在给定RPC成本/延迟预算下主动选择证据",
+      "specialists": [
+        "chief",
+        "causal",
+        "statistics",
+        "data",
+        "review",
+        "knowledge"
+      ],
+      "uses": [
+        "h2w6-funding-label-generator",
+        "wallet-first-funder-unknown",
+        "wallet-clustering-cross-layer-unknown"
+      ],
+      "predicts": [
+        "高判别信息查询比随机扩展地址/固定深度搜索能更快排除错误机制",
+        "同样RPC调用预算下候选因果解释更少且保留更多真实机制"
+      ],
+      "alternatives": [
+        "只查大额/热钱包就足够",
+        "模型自报信息增益偏向错误先验"
+      ],
+      "discriminator": "预注册H1/H2/H3可观测后果；专家盲选下一条应查签名，与固定深度/随机/只查大额在相同查询预算下比较",
+      "baseline": "固定深度RPC遍历、最高金额、均匀随机和单模型猜测",
+      "reject_when": "同等预算下假说区分率、源分类纠错和结论准确率没有提升",
+      "utility": "降低调查成本、加速可证伪的发现",
+      "not_conclusion": "一个语言模型给的概率就是真实概率"
+    },
+    {
+      "id": "HX05",
+      "name": "正常基准的机制分层与漂移再评价",
+      "status": "TESTABLE_NEW_HYPOTHESIS",
+      "core": "按发行阶段、机器人密度、协议/池、时间和采集完整度建立可变化的正常对照；异常不是绝对新钱包数或同Slot数",
+      "specialists": [
+        "statistics",
+        "event",
+        "regime",
+        "adversarial",
+        "data",
+        "review"
+      ],
+      "uses": [
+        "wallet-clustering-cross-layer-unknown",
+        "holder-supply-coverage-method",
+        "h2w6-original-inflow-table"
+      ],
+      "predicts": [
+        "误报下降且新型协同模式仍被识别",
+        "协议迁移或机器人密度改变时旧基准的误报漂移能被先验监测识别"
+      ],
+      "alternatives": [
+        "分层过细造成小样本过拟合",
+        "新协议解析器的错标造成伪概念漂移"
+      ],
+      "discriminator": "滚动时点外验证；按市场活动/发行阶段与采集覆盖分组，与固定阈值和静态聚类做 precision@alert_budget/假阳性比较",
+      "baseline": "固定金额、固定钱包数、单一共享funder、静态风险评分",
+      "reject_when": "跨期误报未改善或正常样本经过同异常触发条件筛选",
+      "utility": "可维护的全市场异常监控",
+      "not_conclusion": "没有标签也能给准确异常概率"
+    },
+    {
+      "id": "HX06",
+      "name": "用专家分歧检测知识本体缺口",
+      "status": "ENGINEERING_METHOD_PROPOSAL",
+      "core": "同一资金收到SOL但链上专家判无System Transfer、市场专家判LP退出、资金图专家判外部注资，若冲突不能由来源区别解决，主动触发新事件类型/指令审计",
+      "specialists": [
+        "chain",
+        "data",
+        "graph",
+        "review",
+        "knowledge",
+        "statistics"
+      ],
+      "uses": [
+        "h2w6-original-inflow-table",
+        "h2w6-funding-label-generator",
+        "h2w6-sol-balance-method"
+      ],
+      "predicts": [
+        "跨层冲突可优先发现漏掉的Token CloseAccount/WSOL释放、复杂指令和数据分类污染",
+        "新本体分支降低同类错误和下游撤回次数"
+      ],
+      "alternatives": [
+        "专家其实引用同一坏数据源",
+        "冲突仅是普通定义歧义、无需新增语义"
+      ],
+      "discriminator": "在已知错误注入+真实人工核查签名的混合样本上比对冲突触发与普通异常阈值触发的解码错误捕获率",
+      "baseline": "单源单标签、常规QA随机抽样、多个专家多数投票",
+      "reject_when": "冲突触发基本只反映同源重复推断，未发现额外真实语义错误",
+      "utility": "数据架构自我修正/发现未知协议",
+      "not_conclusion": "所有专家分歧都意味着市场操盘"
+    }
+  ]
+}
