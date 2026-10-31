@@ -1,6 +1,6 @@
 # Knowledge Base｜知识资产、来源路由与研究成熟度
 
-**唯一知识架构入口**：[知识体系架构 V2.0](../docs/knowledge-architecture-v2.md)；机器可读索引：[architecture.v2.json](architecture.v2.json)。
+**唯一知识架构入口**：[知识体系架构 V2.0](../docs/knowledge-architecture-v2.0.md)；机器可读索引：[architecture.v2.json](architecture.v2.json)。
 
 本知识库服务 Solana Meme 全市场事件、钱包行为、资金/库存网络、开发者、市场结构、正常基准、机制研究和风险研判。跟单只是一个专项应用。
 
