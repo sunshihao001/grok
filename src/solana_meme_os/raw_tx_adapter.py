@@ -277,9 +277,22 @@ def normalize(payload: dict[str, Any]) -> dict[str, Any]:
         if not starts <= dt < ends or available < dt:
             raise ValueError("event time outside coverage or available before block")
         when, avail = iso(dt), iso(available)
+        # Knowledge-time barrier: future evidence must never reach the event stream
+        # or funding_events, even when the aggregate coverage is INCOMPLETE.
+        if available > as_of:
+            audit["unresolved"].append({"signature": signature, "source_ref": ref,
+                                        "reason": "EVIDENCE_ARRIVED_AFTER_AS_OF"})
+            result["coverage"] = {**result["coverage"], "complete": False}
+            continue
         meta = rpc.get("meta")
         if not isinstance(meta, dict) or not isinstance(rpc.get("transaction"), dict):
             audit["unresolved"].append({"signature": signature, "reason": "MISSING_META_OR_TRANSACTION", "source_ref": ref})
+            result["coverage"] = {**result["coverage"], "complete": False}
+            continue
+        # 'err': null means success; an absent field is UNKNOWN, not success.
+        if "err" not in meta:
+            audit["unresolved"].append({"signature": signature, "source_ref": ref,
+                                        "reason": "TRANSACTION_STATUS_UNKNOWN"})
             result["coverage"] = {**result["coverage"], "complete": False}
             continue
         version = rpc.get("version", "legacy")
@@ -361,10 +374,6 @@ def normalize(payload: dict[str, Any]) -> dict[str, Any]:
         if has_target and not decoded_target:
             audit["unresolved"].append({"signature": signature, "source_ref": ref,
                                         "reason": "TARGET_MINT_ECONOMIC_ACTION_UNCLASSIFIED"})
-            result["coverage"] = {**result["coverage"], "complete": False}
-        if available > as_of:
-            audit["unresolved"].append({"signature": signature, "source_ref": ref,
-                                        "reason": "EVIDENCE_ARRIVED_AFTER_AS_OF"})
             result["coverage"] = {**result["coverage"], "complete": False}
     audit["decoded_target_transfers"] = len(result["events"])
     audit["coverage_downgraded"] = not result["coverage"]["complete"]
