@@ -1,3 +1,9 @@
+## V5｜从被动监控到主动发现未认识的经济机制
+
+[经济机制生成与主动反证研究 V5](docs/economic-mechanism-discovery-charter-v5.md)优先于任何固定“庄家评分”清单。专家不通过多数投票产生新的事实。新知识由**矛盾发现→提出竞争机制→选最有判别力的原始签名/对照→结果纠错与知识版本化**形成。
+
+R007 已将此前的 `financement` 标签按交易次数与 SOL 金额分别分析，并识别历史覆盖不完整情况下的零记录语义问题。新增 [`mechanism_discovery.py`](src/solana_meme_os/mechanism_discovery.py)作为只读研究检测器，新增 [两项机制的知识登记](knowledge/mechanism-synthesis-hypotheses.v1.json)与两组专家路由（目前共9种场景）。此检测器与实际 Grok Cloud Bot/实时 Solana RPC 仍完全分开。
+
 ## 运行架构决策 V4｜事件快循环 + 受预算约束的慢研究循环
 
 实际选型：[双循环研究运行架构 V4](docs/dual-loop-research-runtime-architecture-v4.md)。**正式拒绝**将 17 个专业能力等同 17 个持续在线的 Bot，也拒绝用固定八层解释每笔交易。当前建议只有一个只读市场监控入口和一个按需深入研究入口；17 专家是专家 Skill/方法/程序，不是同时启动的模型进程。现有 M2 六类候选已通过 7 个可组合研究场景路由，测试在 GitHub Actions 真实运行通过。
