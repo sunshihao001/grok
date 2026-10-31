@@ -411,8 +411,9 @@
       "count": 17
     },
     "knowledge_domains": {
-      "path": "knowledge/expert-capability-map.v1.json",
-      "count": 12
+      "path": "knowledge/domain-ontology.v1.json",
+      "count": 12,
+      "meaning": "operational domain ontology with layer mapping, questions, objects, evidence, outputs and primary card ownership"
     },
     "research_stages": {
       "path": "knowledge/expert-capability-map.v1.json",
@@ -466,6 +467,7 @@
     "domain_experts": "docs/solana-meme-expert-knowledge-orchestration-v1.md",
     "maturity": "docs/knowledge-maturity-and-gaps-v1.md",
     "product_scope": "docs/solana-meme-marketwide-monitoring-scope-v1.md",
-    "migration_history": "docs/knowledge-system-integration-v1.md"
+    "migration_history": "docs/knowledge-system-integration-v1.md",
+    "domain_ontology": "knowledge/domain-ontology.v1.json"
   }
 }
