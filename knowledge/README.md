@@ -2,6 +2,10 @@
 
 **Purpose:** preserve the expert learning, domain research, adversarial perspectives and practical lessons from three earlier projects while discarding Hermes-specific *runtime* assumptions. A working Bot without validated external knowledge is only orchestration.
 
+## 如何逐批将已有知识真正连到Grok？
+
+当前执行方式见 [《小批次滚动融合与B01试点》](system/rolling-reference-knowledge-integration.md)：每批由一个具体的Meme钱包/资金/筹码/策略问题驱动，3–6份原有关键资料先被理解，再由原21位专家按需融合，审阅后回填现有知识单位和专家入口。**只同时保持一条主研究**，另一批最多做来源核查，前一批可完成小量入库。不要先把三库全量搬进Grok，也不同时让每个参考库各自写一套专家知识。
+
 ## 项目原点优先：现有Meme交易储备审计
 
 在任何新研究方向前，先查 [《五个参考仓库的Meme交易知识储备与阶段》](system/reference-projects-meme-knowledge-audit-20261030.md)。它明确原Hermes、meme-、qb-分别已有何种Meme专有知识和程序；外部Why-Solana仍是review_only；当前grok最大的断层是**关键钱包识别到后续真正可跟随的信息**。现行 [M01](domain/D04-D08-key-wallet-followability-research-brief.md) 已以旧项目关键钱包的业务问题为第一优先，先前通用AMM研究仅按需参与。
