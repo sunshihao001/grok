@@ -1,23 +1,23 @@
-# Grok Skills｜知识架构 V2.0 下的能力入口
+# Skills adapted for Grok Bots
 
-Skills 是可移植的任务规范，不等于实际 Grok 云端已安装。知识体系的层级和各轴定义以 [知识架构 V2.0](../docs/knowledge-architecture-v2.0.md) 为准；研究主线见 [V5](../docs/economic-mechanism-discovery-charter-v5.md)，运行组织见 [V4](../docs/dual-loop-research-runtime-architecture-v4.md)。
+本目录是可移植的技能契约与研究方法资产。**文件存在不代表 Grok 云端已经安装、加载或执行。** 当前总架构以 [知识体系架构 V2.0](../docs/knowledge-architecture-v2.md) 为准。
 
-| Skill | 所在能力 | 职责 | 不负责 |
-|---|---|---|---|
-| [solana-meme-system-intelligence](solana-meme-system-intelligence/SKILL.md) | 全局领域研究入口 | 理解市场问题、调度领域知识、提出竞争机制与反证，组织市场监控/研判 | 自行伪造链上事实或下单 |
-| [solana-meme-knowledge](solana-meme-knowledge/SKILL.md) | 知识检索与来源治理 | 根据问题查 24 张知识卡（15 初始 + 9 扩展）、30 条来源指针、原始历史快照与专题研究；保留未知 | 用关键词匹配代替深度理解 |
-| [solana-meme-expert-writing](solana-meme-expert-writing/SKILL.md) | 深度研究与知识转换 | 原文精读、概念拆解、跨领域机制推演、证伪设计、研究写作 | 把漂亮文章当作验证 |
-| [solana-meme-monitor](solana-meme-monitor/SKILL.md) | 只读监控操作 | 执行已有单 Mint 或规范事件输入程序、报告来源和状态 | 未经验证的异常/同控/交易结论 |
+| Skill | 职责 | 边界 |
+|---|---|---|
+| [solana-meme-system-intelligence](solana-meme-system-intelligence/SKILL.md) | 全市场事件、钱包群体、资金/库存网络、开发者、正常基准、经济机制和风险研判 | 顶层领域研究能力，不是实时采集器或交易机器人 |
+| [solana-meme-expert-writing](solana-meme-expert-writing/SKILL.md) | 深读原始知识、跨领域机制重构、竞争解释、反证和专业研究写作 | 不替代真实数据查询、回测或程序执行 |
+| [solana-meme-knowledge](solana-meme-knowledge/SKILL.md) | 按问题检索知识卡和固定版本来源，保留未知与证据边界 | 关键词路由是检索提示，不是语义推理 |
+| [solana-meme-monitor](solana-meme-monitor/SKILL.md) | 已批准输入的只读快照/规范事件监控与报告 | 只报告可观察事实和候选，不确认同控或交易信号 |
 
-## 专家能力不等于 Skills 或 Bot 数量
+## 正确的任务路由
 
-17 个专家能力、12 个领域、40 条类型化交接边由机器映射驱动；它们可在同一 Research Manager 中按事件和缺失证据动态调用，不要求 17 个独立云 Bot。初期物理架构以一个只读 Monitor + 一个按需 Research Manager 为目标。见 [专家交互 V2](../docs/knowledge-expert-interconnection-v2.md)。
+- 常规事实/知识问题：knowledge Skill 检索，再根据原始来源回答。
+- 市场现象/钱包群/资金流/机制研究：system-intelligence Skill；按需调度17类专家能力。
+- 需要深度原文精读、跨项目融合和可证伪论述：expert-writing Skill。
+- 已有规范输入的监控执行：monitor Skill；单Mint快照和多钱包事件输入是两个不同接口。
 
-## 使用方式
+## 当前知识资产
 
-- 新问题/市场现象：system-intelligence，确定对象、时间、竞争解释和证据缺口。
-- 已知知识问题：knowledge Skill 检索源与卡片，继续读取原文，不被当前目录限制。
-- 新机制/深度研究：expert-writing Skill 配合 V5，必须给出竞争解释、判别性证据和 reject_when。
-- 已有数据监控：monitor Skill 仅执行匹配输入契约的程序；真实来源未接通时必须标 UNKNOWN/NOT_CONNECTED。
+24 张知识卡、30 个文件级来源指针、17 个专家能力、12 个知识领域、9 个典型路由场景、40 条类型化交接。详情见 [knowledge/README](../knowledge/README.md) 和 [机器可读架构](../knowledge/architecture.v2.json)。
 
-旧跟单规范仍作为专题研究资产，不能覆盖全局知识层级。
+M2 事件观察器只消费外部已经规范化的事件；当前没有真实全市场 RPC 接入、正常基准模型或 Grok 云端持续执行。禁止真实交易、签名、广播和未经批准的规则/云端配置变更。
