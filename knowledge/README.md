@@ -1,110 +1,57 @@
-## V5: mechanism generation and decisive falsification from actual research evidence
+# Knowledge Base｜知识架构 V2.0
 
-The main research direction is now [Economic Mechanism Generation, Cross-domain Cognitive Synthesis and Active Falsification (V5)](../docs/economic-mechanism-discovery-charter-v5.md). The [R007 original source-derived cohort case](research/R007-capital-flow-composition-inversion-v1.md) found that 8/61 non-System `financement` rows represented 88.5076% of the labelled SOL amount, with 4 Meteora remove-liquidity rows dominating 86.1276%; separately, 15/19 wallets without genesis history coverage had no labelled financing entries, versus 0/21 with full genesis coverage. These statements are exact published-data cross-recomputations, not independent chain replay or causal attribution.
+**唯一结构规范**：[知识架构 V2.0](../docs/knowledge-architecture-v2.0.md)。本目录保存可复用领域知识、来源指针、专家映射、机制假说、案例和历史快照；它不是一个已被完整验证的市场真相数据库。
 
-The [read-only mechanism discovery code](../src/solana_meme_os/mechanism_discovery.py) and [synthetic tests](../tests/test_mechanism_discovery.py) define two reusable research tensions, not profitability signals. [Discovery-to-expert tests](../tests/test_mechanism_discovery_routing.py) connect them to two new scenario panels in [the expert mapping](expert-capability-map.v1.json), now 9 total scenarios. HX07/HX08 are appended to [the mechanism hypotheses registry](mechanism-synthesis-hypotheses.v1.json), now 8 candidates, with explicit falsifiers. There is no claim of Grok cloud agent execution or realtime RPC validation.
+## 1. 当前资产清单
 
-## V4: chosen dual-loop execution architecture (2026-10-31)
+| 资产 | 数量 | 解释 |
+|---|---:|---|
+| 历史种子卡 `catalog.v1.json` | 15 | 第一批迁移知识，不是全域目录 |
+| 历史快照 | 21 | Hermes 重要方法/合同片段，不是完整旧仓迁移 |
+| 按需来源索引 `source_index.v1.json` | 30 | 原始来源、代码、工具文档和方法的 pinned pointers |
+| 专家能力映射 | 17 | 专业能力，不是 17 个云 Bot |
+| 知识领域 | 12 | 当前领域导航分类，允许扩展 |
+| 专家交接图 | 40 | 类型化知识/证据交接设计，不是自动工作流 |
+| 机制假说 | 8 | 待检验或工程方法提案 |
+| 外部方法引用 | 12 | 架构/证据方法来源，不是市场策略证据 |
 
-[Runtime choice and phased engineering decision](../docs/dual-loop-research-runtime-architecture-v4.md): use a low-cost deterministic fast event loop and a bounded, source-linked slow research loop. [`research_dispatch.py`](../src/solana_meme_os/research_dispatch.py) accepts M2 output and emits a finite proposal to verify signatures, consult experts and revisit hypotheses. Each case retains event episode boundaries (mint+slot, funder+window, explicit cohort aggregate); it never auto-confirms controlling entities or merges unrelated event histories. Duplicate signatures are proposed for one source check, reusable by multiple cases. [Dispatch tests](../tests/test_research_dispatch.py) and [M2-to-dispatch integration tests](../tests/test_dual_loop_vertical_slice.py) are part of GitHub Actions CI.
+所有数字均为文件结构统计。是否掌握、是否真实复算、是否可用必须逐条 Claim 评估 K0–K4；参见 [成熟度核查](../docs/knowledge-maturity-and-gaps-v1.md)。
 
-**The dispatcher is a planning program only**, not a persistent cloud agent workflow, realtime collector, calibrated anomaly signal, or trading system. M1 read-only input verification and actual Grok runtime capabilities still require separate tests.
+## 2. 五类知识对象
 
-# Solana Meme knowledge is the core; Grok is the host
+- **领域知识卡**：`catalog.v1.json`。已有 15 张旧知识种子卡；逐步增加 `domain`、`claim_ids`、`maturity`、`failure_modes`、`source_ids`、`supersedes`。
+- **来源指针**：`source_index.v1.json`。仅用于按需定位特定仓库/提交/路径；不是实时 API，也不是所有条目已完整阅读。
+- **专家能力与交接**：`expert-capability-map.v1.json`（17 专家/12 域/9 场景）和 `expert-interaction-graph.v1.json`（40 条交接边）。
+- **机制假说**：`mechanism-synthesis-hypotheses.v1.json`（HX01–HX08），必须含预测、竞争解释、基准、判别证据和 reject_when。
+- **研究案例/报告**：`cases/`、`research/`、`../reports/`。必须区分原始 RPC、外部派生数据、合成 fixture、方法参考。
 
-**Purpose:** preserve the expert learning, domain research, adversarial perspectives and practical lessons from three earlier projects while discarding Hermes-specific *runtime* assumptions. A working Bot without validated external knowledge is only orchestration.
+## 3. 当前研究脉络
 
-## Project scope update (2026-10-31)
+- [V5 机制发现宪章](../docs/economic-mechanism-discovery-charter-v5.md)：从数据矛盾生成可证伪机制；R007 是派生表复算，不是独立 RPC 确认。
+- [V4 双循环架构](../docs/dual-loop-research-runtime-architecture-v4.md)：确定性快循环、预算化慢循环、独立反证回路。
+- [专家交互 V2](../docs/knowledge-expert-interconnection-v2.md)：五张图、六类交接、Claim 版本与回溯。
+- [专家知识协作 V1](../docs/solana-meme-expert-knowledge-orchestration-v1.md)：领域专家职责、S0–S7 研究阶段和动态路由的历史详细说明。
+- [成熟度与能力缺口](../docs/knowledge-maturity-and-gaps-v1.md)：各专业领域的证据成熟度及下一项有效验证。
 
-**This knowledge base serves market-wide Solana Meme event, wallet-cluster, funding-network, market-structure and risk research; copy trading is one specialist use case.**
+## 4. 如何调用知识
 
-Existing 15 resident concept cards and 21 historical snapshots are a bounded legacy baseline, not a full market ontology. The on-demand registry now has **30 curated source pointers** across legacy Hermes, meme-, qb-, Why-Solana and OKX read-only documentation.
+```bash
+PYTHONPATH=src python -m solana_meme_os.knowledge --question "同一批钱包资金同源吗？"
+PYTHONPATH=src python -m solana_meme_os.research --question "SOL 流入可能来自哪些程序和经济活动？"
+PYTHONPATH=src python -m solana_meme_os.expert_router --event FUNDING_FANOUT --event SAME_SLOT_MULTIWALLET_BUY
+PYTHONPATH=src python -m unittest discover -s tests -v
+```
 
-Primary knowledge pathway: observed events and time windows -> wallet/asset networks -> conditional normal baseline and competing mechanisms -> market structure and risk -> independently tested prediction/paper economics.
+这些程序是确定性检索、规划或离线分析入口，不是自动专家推理、RPC 取证或真实交易执行。关键词匹配仅作候选召回；新问题必须允许开放发现，不能被现有 15 张卡或 9 个场景限制。
 
-Start from [system integration](../docs/knowledge-system-integration-v1.md) and [system-intelligence Skill](../skills/solana-meme-system-intelligence/SKILL.md), then selectively read original source files. Monitor and event-observatory code do not establish abnormality or trader identity.
+## 5. 来源升级政策
 
-## Expert knowledge routing (2026-10-31)
+`reference-project-discovery.v1.json` 是筛选队列；`source_index.v1.json` 是固定版本的按需阅读入口；真实数据连接器是另一个工程对象。三者不得混称。
 
-The initial 15 cards and 30 source pointers are now mapped into [17 expert disciplines, 12 domains and five dynamic investigation scenarios](expert-capability-map.v1.json). The map is a **knowledge coordination contract**, not an implemented Grok multi-agent runtime. The optional deterministic `python -m solana_meme_os.expert_router --event FUNDING_FANOUT` suggests source-bound expert panels; it is not independent analysis or an automated strategy. For actual cross-disciplinary source and counterexample reasoning, read [expert orchestration](../docs/solana-meme-expert-knowledge-orchestration-v1.md) and [R002 cross-examination case](cases/R002-expert-cross-examination-v1.md). Experts can question or invalidate prior conclusions and introduce new ontology instead of forcing every question through the old eight-layer gate.
+新来源升级至少完成：仓库/作者/许可证核验 → README/论文 → 具体代码/方法 → 版本锁定 → 可迁移命题和局限 → 原始证据或独立复算计划 → 适当专家和测试映射。不能因 README 提及某能力就标记为已接通。
 
-## Evidence-connected knowledge architecture V2 (2026-10-31)
+## 6. 单个知识单元应达到的结构
 
-- [Cross-layer expert connections](../docs/knowledge-expert-interconnection-v2.md): open-world, evidence-driven expert collaboration rather than eight mandatory sequential gates.
-- [Typed interaction graph](expert-interaction-graph.v1.json): 32 directional handoffs across all 17 disciplines, with evidence artifacts, refutations and re-evaluation triggers.
-- [External method sources](external-method-sources.v1.json): 12 checked references from official chain/stream/provenance/agent specifications and relevant causal/drift research, linked to graph edges.
-- `src/solana_meme_os/expert_interaction.py`: deterministic read-only checking and transitive challenge impact planning. Neither expert routing nor claim dependency calculation is proof of real agent orchestration.
+`id, domain, question, claim_type, mechanism, scope, source_refs, raw_evidence_refs, observed_at, available_at, produced_at, required_fields, competing_explanations, baseline, discriminator, reject_when, maturity, validity_status, depends_on_claim_ids, supersedes, test_refs, owner_expert, next_action`
 
-## What has been migrated
-
-The initial catalog has 15 source-pinned cards in `knowledge/catalog.v1.json` covering:
-
-- **Market mechanics:** pump-style token/pool lifecycle, mint/freeze/security, reserve depth, liquidity withdrawal vs repricing, GMGN discovery streams.
-- **Actors and relations:** wallet role candidates, deployer history, early buyers/snipers, financing graphs, CEX infrastructure exclusions, Sybil/wash/coordination alternatives, holder concentration and entity-control differences.
-- **Interpretation discipline:** multi-source evidence chain, contradictory evidence, missingness, research-only gates and source/unit verification.
-- **Legacy hypotheses:** first-control-zone/POC/AVWAP reclaim. Useful for research but not validated as a Solana signal.
-- **Reliability:** Hermes Harness anti-fake-completion and calibration learning, independent of Hermes command/hook machinery.
-
-Each unit is a **portable knowledge candidate**, with a pinned original GitHub commit + path, `mechanism`, `required_evidence`, `alternative_explanations`, `inference_limit`, `next_check` and status. These are not a claim that sources are empirically validated; source traceability and truth are different things.
-
-## How knowledge changes runtime behavior
-
-- **Simple user request** → `python -m solana_meme_os.knowledge --question "这批钱包资金同源吗"` returns relevant knowledge and missing verification work.
-- **Monitoring snapshot** → `python -m solana_meme_os.monitor ...` now appends `knowledge.interpretation_candidates` to observed changes. The cases must be evaluated against real source data.
-- **Research/QA Bots** → read the same cards, scrutinize source evidence and develop independently testable alternatives.
-- **Monitor Bot** → cannot promote a hypothesis to a real trade/risk conclusion; it can only report observed changes, provenance, missing inputs and plausible mechanisms.
-
-Literal keyword routing is a reproducible **minimum interface**, not deep understanding. Grok's real language understanding needs an actual configured Bot that reads these cards and selectively retrieves primary evidence. It must be free to discover **new** mechanisms rather than being trapped by this list.
-
-## Three status labels
-
-- `source_contract`: known source's proposed input/output epistemic separation; not an externally certified standard.
-- `documented_legacy_method`: a method or proposed workflow documented in historical source, not yet evaluated on market outcomes.
-- `unverified_hypothesis`: a historical strategy or causal hypothesis requiring source data, representative positive and negative cases and independent review.
-
-Do not confuse any label with 'empirically proven'.
-
-## Beyond this first wave
-
-A complete repository-wide migration has **not** happened. The first wave now includes **21 exact historical Markdown snapshots** in `knowledge/legacy-snapshots/` with a source manifest, plus 15 curated and actively routed cards. These snapshots preserve domain explanations, proposed methods and historic design contracts without any Hermes executable runtime. Most original data, notebooks, historical case evidence, tags and the full Hermes project remain in their source repos. Missing real case replay, authoritative field mappings, blind evaluation and release-calibration loops are listed in `docs/next-steps.md`.
-
-Recommended future package structure: `knowledge/catalog.v1.json` (indexed), `knowledge/cases/` (original on-chain observations and labelled outcomes, without secrets), `knowledge/claims/` (tested and superseded claims), and `knowledge/evaluations/` (comparison against no-knowledge Bot). Do not create empty folders or call them implemented.
-
-## Entry-point commands
-
-    PYTHONPATH=src python -m solana_meme_os.knowledge --question "GMGN热门能证明这币安全吗？"
-    PYTHONPATH=src python -m unittest discover -s tests -v
-
-References: `docs/sources.md`, `knowledge/legacy-audit.md` and `skills/solana-meme-knowledge/SKILL.md`.
-
-## Second wave — do not bulk migrate
-
-New model: keep the resident 15 cards and 21 prior snapshots as a bounded historical baseline, but use `knowledge/source_index.v1.json` to consult external specialist sources **on demand**. The repo now indexes 30 curated source entries, including methodological references from `Why-Solana-Memecoins-Are-Over`, without importing its licensed analysis into Grok. Run `python -m solana_meme_os.research --question ...` to create an evidence intake packet; see `docs/on-demand-research-design.md`. The goal is better judgment, not maximizing token count or the number of copied files.
-
-## Expanded anomalous-wallet source research (2026-10-31)
-
-[Fourteen screened source projects / studies](reference-project-discovery.v1.json) are categorized by actual README/source-code/methods review depth, ability to transfer into Solana source or network evidence, and explicit false-positive risks. [Research report](../docs/anomaly-wallet-reference-expansion-v1.md) distinguishes forensic signature replays, developer funding monitors, holder graph methods, time-safe academic comparisons, source-label retractions, and marketing-only risk scores. Four typed relationships (L33–L36) were added to the [expert interaction graph](expert-interaction-graph.v1.json), now **36** entries, with no live monitoring rule or Bot deployment change.
-
-## Discovery to vetted knowledge: five source-file promotions
-
-The external [14-project discovery registry](reference-project-discovery.v1.json) remains a **screened research queue**. Only five particularly relevant, immutable code/method files were promoted to the on-demand `source_index.v1.json` (now 27 total), including CyberLeek raw System-Transfer verification, Degen-Scanner developer/collector tracing, and three files from solana-holder-clusters that expose RPC first-funder uncertainty and token-holder denominators. `research.py` explicitly allows these three repository origins without enabling code execution or package installation. Their source IDs are assigned to actual expert roles in `expert-capability-map.v1.json`.
-
-**Caution from cross-file review:** `solana-holder-clusters/src/funders.ts` returns null when the first funder cannot be established, whereas `src/clusters.ts` puts null rows in an `independent` group. That is a semantic loss across modules, not proof of independent economic actors; never ingest this `independent` output as a calibrated normal-wallet class. Source-linked discussion: [research report](../docs/anomaly-wallet-reference-expansion-v1.md).
-
-## R005: cross-repository forensic state conservation (2026-10-31)
-
-[Cross-source code audit](research/R005-crossproject-funder-semantics-v1.md) examines what first-funder data means **after** it travels from raw chain source to holder clustering to statistics. The confirmed code-level mismatch is `funders.ts` returns `null` for unresolved history while `clusters.ts` includes `null` in `independent[]`; Degen Scanner also preserves some rate-limited `sig_count=0` candidate holders. [Read-only funder semantics](../src/solana_meme_os/funder_evidence.py) and [11 synthetic tests](../tests/test_funder_evidence.py) preserve UNKNOWN, heuristic and hub ambiguity. Expert interaction graph now includes **38** links; L37/L38 bind source observability and wallet-role uncertainty to statistical denominators. Python tests are written but not yet executed on the repository.
-
-## R006: multi-program receipts and economic causality (2026-10-31)
-
-[Case R006](research/R006-sol-receipt-economic-semantics-v1.md) crosses official Solana Token CloseAccount semantics with Why-Solana's pinned 40-wallet/905-inflow derived table and generation script. System Transfer is **one** direct SOL-transfer mechanism; SPL token-account close/WSOL unwrap and LP withdrawal can change lamport balances without a matching direct System Transfer. It is not enough to count money; a capital graph must distinguish transfers, released token-account lamports, AMM withdrawal, economic sales, and unexplained residuals.
-
-[Cashflow label auditor](../src/solana_meme_os/cashflow_semantics.py) and [six synthetic Python tests](../tests/test_cashflow_semantics.py) were actually executed in an isolated local package layout with six successes; the committed source and test Git Blob SHAs match those exact tested files. However, the original historical source-derived table was cross-recomputed from GitHub data with JavaScript, not replayed independently through Solana RPC or run through the Python CLI in the complete Grok repository. Source index now has **30** entries. Expert handoff graph now has **40** links after L39/L40; earlier count mentions describe historical phases.
-## V3: falsifiable mechanism synthesis, not more expert headcount
-
-[Cross-domain economic mechanism discovery and decisive knowledge judgments](../docs/economic-mechanism-synthesis-and-judgment-v3.md) and its [six hypotheses with predicted observations, competing normal mechanisms and rejecting tests](mechanism-synthesis-hypotheses.v1.json) connect capital paths, temporal transaction motifs, changing address roles, market impact, active research queries, regime baselines and QA-triggered ontology discovery. Each hypothesis points only to existing source IDs and 17 existing expert roles. No model has been fit, no comparative accuracy/predictive lift proven, and no live trade permission has been introduced.
-
-
-## Dual-loop CI evidence and exact runtime boundary
-
-GitHub Actions [monitor-tests run 41186104343](https://github.com/sunshihao001/grok/actions/runs/41186104343) completed with **108 offline tests passing** after adding bounded source-check dispatch, stable case identity/evidence versioning, no accidental cross-window merge, six M2 candidate expert routing, and the existing fixture-to-dispatch pipeline. The planner does not connect to Solana RPC or call Grok expert Agents; its source check list is a deterministic proposal.
+缺失字段写 UNKNOWN 并说明缺口；不可将缺失当零、平台标签当链上事实、专家重复意见当独立证据。
