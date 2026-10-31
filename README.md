@@ -6,7 +6,7 @@
 
 ## 从这里开始
 
-1. **[知识体系架构 V2.0](docs/knowledge-architecture-v2.md)** — 唯一总入口：L0–L7 知识层、五张图、S0–S7 研究阶段、M0–M7 产品能力，以及当前知识资产盘点。
+1. **[知识体系架构 V2.0](docs/knowledge-architecture-v2.0.md)** — 唯一总入口：L0–L7 知识层、五张图、S0–S7 研究阶段、M0–M7 产品能力，以及当前知识资产盘点。
 2. **[机器可读架构索引](knowledge/architecture.v2.json)** — 机器可核对的层级、模块状态和资产数量。
 3. **[V5 经济机制研究宪章](docs/economic-mechanism-discovery-charter-v5.md)** — 从事实矛盾生成新机制、竞争解释和主动反证。
 4. **[V4 快慢双循环运行架构](docs/dual-loop-research-runtime-architecture-v4.md)** — 快速确定性监控、预算化深研与独立审计回路。
