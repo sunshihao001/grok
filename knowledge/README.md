@@ -68,3 +68,7 @@ References: `docs/sources.md`, `knowledge/legacy-audit.md` and `skills/solana-me
 ## Second wave — do not bulk migrate
 
 New model: keep the resident 15 cards and 21 prior snapshots as a bounded historical baseline, but use `knowledge/source_index.v1.json` to consult external specialist sources **on demand**. The repo now indexes 22 curated source entries, including methodological references from `Why-Solana-Memecoins-Are-Over`, without importing its licensed analysis into Grok. Run `python -m solana_meme_os.research --question ...` to create an evidence intake packet; see `docs/on-demand-research-design.md`. The goal is better judgment, not maximizing token count or the number of copied files.
+
+## Expanded anomalous-wallet source research (2026-10-31)
+
+[Fourteen screened source projects / studies](reference-project-discovery.v1.json) are categorized by actual README/source-code/methods review depth, ability to transfer into Solana source or network evidence, and explicit false-positive risks. [Research report](../docs/anomaly-wallet-reference-expansion-v1.md) distinguishes forensic signature replays, developer funding monitors, holder graph methods, time-safe academic comparisons, source-label retractions, and marketing-only risk scores. Four typed relationships (L33–L36) were added to the [expert interaction graph](expert-interaction-graph.v1.json), now **36** entries, with no live monitoring rule or Bot deployment change.
