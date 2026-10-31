@@ -37,3 +37,11 @@ Legacy source pins below remain valid **as previously observed versions**, not n
 Pin an exact source file and commit for each imported claim. Technical tool descriptions are *candidate adapters*, not evidence of live data coverage. Original Hermes, meme- and qb- domain knowledge remains in source, and 21 bounded historical snapshots are preserved in Grok without importing Hermes runtime.
 
 Current full source selection list: `knowledge/source_index.v1.json` (**30 pinned pointers**); program policy: `src/solana_meme_os/research.py`. See [knowledge architecture V2.0](knowledge-architecture-v2.0.md) for the distinction between source discovery, reviewed sources and live data connectors. For market-wide roles and per-source limitations see [integration](knowledge-system-integration-v1.md).
+
+
+## Current registry and discovery distinction
+
+- The source registry contains **30 exact file pointers across 8 repositories**, each pinned to a 40-character commit and path: see [source-index README](../knowledge/source-index-README.md).
+- The project-discovery register contains **14 project/paper references**. Several entries are README/metadata or public documentation only and are not equivalent to a pinned source file or runnable adapter.
+- External method registry contains 17 method/spec references. The expert graph currently has 40 edges (L01–L40); earlier 32 and 36 counts are historical expansion snapshots.
+- The 24 knowledge cards now include R005/R006/R007 and KX-01–KX-06; see [knowledge architecture V2](knowledge-architecture-v2.md).
