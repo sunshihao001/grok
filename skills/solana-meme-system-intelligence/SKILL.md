@@ -16,6 +16,14 @@ description: |
 >
 > **边界：** 本 Skill 是研究/系统规范和知识调用入口。仓库存在文件≠Grok 云端已安装；本阶段只读、纸面模拟，不下单、签名或广播。
 
+## R005｜真实跨项目源码分析如何反向修正专家推理（2026-10-31）
+
+先读 [R005 原始资金来源跨项目法证案例](../../knowledge/research/R005-crossproject-funder-semantics-v1.md)：`solana-holder-clusters` 的 `funders.ts` 遇历史不足返回 `null`，但 `clusters.ts` 把该 `null` 放入 `independent[]`；其另一处以“交易最大SOL余额减少者”猜测付款地址；`Degen-Scanner` 保留查询失败计数为零的候选持有人进入后续追查。**可观察性失败≠真实独立、低活跃或同控**。
+
+运行层研究修正：[只读首次资金状态合约](../../src/solana_meme_os/funder_evidence.py) 将 `FIRST_FUNDER_UNKNOWN`、`FUNDER_HEURISTIC_UNCONFIRMED`、`KNOWN_PUBLIC_INFRASTRUCTURE`、`HIGH_DEGREE_SOURCE_AMBIGUOUS`、`SHARED_PRIVATE_FUNDER_CANDIDATE` 等分开输出。此模块消费已归一化候选，未实现 RPC 解码和实时采集。[`tests/test_funder_evidence.py`](../../tests/test_funder_evidence.py) 为 11 项**已写入但尚未实际执行**的合成单元测试。
+
+新增专业交接 L37 `data→wallet` 要求保留完整历史查询状态；L38 `wallet→statistics` 要求未知/公共服务/高连接源在正常样本统计中单列。一次错误标签必须能够要求 QA 重新审核上游来源，而不是被综合异常评分掩盖。
+
 ## 同类异常钱包项目的新增知识入口（2026-10-31）
 
 以 [多项目异常钱包取证方法研究](../../docs/anomaly-wallet-reference-expansion-v1.md) 为入口，结合 [14 个来源分级与专家映射](../../knowledge/reference-project-discovery.v1.json) 阅读，不把搜索到的仓库全部并入生产能力。
