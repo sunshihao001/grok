@@ -16,6 +16,13 @@ Start from [system integration](../docs/knowledge-system-integration-v1.md) and 
 
 The initial 15 cards and 22 source pointers are now mapped into [17 expert disciplines, 12 domains and five dynamic investigation scenarios](expert-capability-map.v1.json). The map is a **knowledge coordination contract**, not an implemented Grok multi-agent runtime. The optional deterministic `python -m solana_meme_os.expert_router --event FUNDING_FANOUT` suggests source-bound expert panels; it is not independent analysis or an automated strategy. For actual cross-disciplinary source and counterexample reasoning, read [expert orchestration](../docs/solana-meme-expert-knowledge-orchestration-v1.md) and [R002 cross-examination case](cases/R002-expert-cross-examination-v1.md). Experts can question or invalidate prior conclusions and introduce new ontology instead of forcing every question through the old eight-layer gate.
 
+## Evidence-connected knowledge architecture V2 (2026-10-31)
+
+- [Cross-layer expert connections](../docs/knowledge-expert-interconnection-v2.md): open-world, evidence-driven expert collaboration rather than eight mandatory sequential gates.
+- [Typed interaction graph](expert-interaction-graph.v1.json): 32 directional handoffs across all 17 disciplines, with evidence artifacts, refutations and re-evaluation triggers.
+- [External method sources](external-method-sources.v1.json): 12 checked references from official chain/stream/provenance/agent specifications and relevant causal/drift research, linked to graph edges.
+- `src/solana_meme_os/expert_interaction.py`: deterministic read-only checking and transitive challenge impact planning. Neither expert routing nor claim dependency calculation is proof of real agent orchestration.
+
 ## What has been migrated
 
 The initial catalog has 15 source-pinned cards in `knowledge/catalog.v1.json` covering:
