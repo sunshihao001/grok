@@ -3,7 +3,7 @@
 > **当前架构数量以 [知识架构 V2.0](knowledge-architecture-v2.0.md) 与机器 JSON 为准：40 条交接边、30 条来源指针。本文早期章节中 32/36 条及 22 来源为历史版本记录，不能当作当前总数。
 
 > 2026-10-31 · 知识架构研究成果，不是已运行多智能体/实时全市场监控。  
-> 主体架构：[`expert-capability-map.v1.json`](../knowledge/expert-capability-map.v1.json) 的 17 类专家 × 12 个知识领域；本轮新增 [`expert-interaction-graph.v1.json`](../knowledge/expert-interaction-graph.v1.json) 的 **32 条有类型、可撤回的专家交接关系**。  
+> 主体架构：17类专家 × 12个知识领域；当前 [`expert-interaction-graph.v1.json`](../knowledge/expert-interaction-graph.v1.json) 有 **40条有类型、可撤回的专家交接关系**（32条是V2初版历史快照，后续R005/R006扩展至40）。  
 > 此文中的专业角色是知识能力，可在同一 Grok Bot 内动态调用，也可以由研发 Bot 分担；不要求 17 个独立云 Bot。  
 > 适用对象：Solana Meme **市场事件、钱包群、SOL/Token 资金、发行人、流动性、库存、协同行为、正常基准、风险及纸面经济实验**；跟单仅是下游分支。  
 > 证据：已核对 GitHub 历史知识的部分关键原始文件；本文的跨领域联接是我们的独立工程/研究设计，不是那些外部文献的直接结论。
@@ -40,7 +40,7 @@ Hernán 与 Robins 的 `Causal Inference: What If` 专门讨论混杂、选择�
 
 ### 第四轮：把三轮得到的方法逆向应用到项目知识
 
-将上述思路反向审阅 Grok 中 15 张卡、22 个来源、旧 Hermes 八层、meme- 的 FCZ/POC/AVWAP 和 Why-Solana 的协调 null 与下游库存研究。发现现有最重要的缺口是**知识之间缺交接契约**：能找到每个概念，却不明确哪一种真实证据会触发谁，何时改变哪一个下游结论。
+将上述思路反向审阅 Grok 中原15张卡、22个早期来源指针（现为24张卡、30个文件级来源指针）、旧 Hermes 八层、meme- 的 FCZ/POC/AVWAP 和 Why-Solana 的协调 null 与下游库存研究。发现现有最重要的缺口是**知识之间缺交接契约**：能找到每个概念，却不明确哪一种真实证据会触发谁，何时改变哪一个下游结论。
 
 因此 V2.0 不再增加抽象层级，而是把各层形成互相依赖的**研究对象网络**，同时保留新领域生长空间。
 
@@ -65,7 +65,7 @@ Hernán 与 Robins 的 `Causal Inference: What If` 专门讨论混杂、选择�
 **图四：专家交接与来源血缘图 `G_expert`**
 
 每条结论附原始 `evidence_refs`、处理步骤、专业角色、时点、版本与依赖的 claim。专家交换的是结构化对象，支持 `SUPPORT / CHALLENGE / REQUEST_EVIDENCE / REVISE / SUPERSEDE`，而不是一句“可信度高”。  
-32 条交接关系只定义**当前知识覆盖的常见连接**；遇到未知问题仍可由研究总师开放新路径。
+当前40条交接关系只定义**当前知识覆盖的常见连接**；遇到未知问题仍可由研究总师开放新路径。
 
 **图五：研究与交易效力图 `G_decision`**
 
@@ -252,18 +252,18 @@ T3  增量复算：
 
 ## 9｜运行和成熟度边界
 
-本轮确实完成：四轮外部资料搜索及原始文档分析、五图分离和六类知识连接方法、32 条正式专家交接关系、反证导致版本化撤回的合同，以及跨层真实来源/合成场景示范。
+V2初版确实完成：四轮外部资料搜索及原始文档分析、五图分离和六类知识连接方法、32条初版专家交接关系、反证导致版本化撤回的合同，以及跨层真实来源/合成场景示范。后续R005/R006已把交接图扩展为40条。
 
-本轮尚未完成：将 32 条交接关系接入实际推理调度、Solana RPC 多日采集、完整市场正常总体、实时 watermark、基于 claim 依赖的自动级联复算、Grok 云端专家协作或正净收益证明。
+当前尚未完成：将40条交接关系接入实际推理调度、Solana RPC多日采集、完整市场正常总体、实时watermark、基于claim依赖的自动级联复算、Grok云端专家协作或正净收益证明。
 
 **专业认知的真正迭代方式：先识别真实证据的生成过程，组织正确专家提出互斥解释，再通过真实反证改变知识和运行状态；市场事实永远有机会推翻现有架构。**
 
 ## 后续资料扩展注记｜异常钱包项目对本图的反向修正（2026-10-31）
 
-[同类项目研究](anomaly-wallet-reference-expansion-v1.md) 进一步核对 GitHub 取证脚本、资金聚类源码和 2026 新近学术论文，并把专业关系从 V2.0 的原始 32 条扩展到当前 **36 条**。新增 L33–L36：开发者手续费实际领取链、重复创建者资金网络、BUY/SELL 源分类正确性 Gate、公共 hub / giant component 反例的正常图基准。
+[同类项目研究](anomaly-wallet-reference-expansion-v1.md) 进一步核对 GitHub 取证脚本、资金聚类源码和 2026 新近学术论文，并把专业关系从V2.0初版32条先扩展到36条（L33–L36），再经R005/R006扩展到当前**40条**（L37–L40）。开发者手续费实际领取链、重复创建者资金网络、BUY/SELL 源分类正确性 Gate、公共 hub / giant component 反例的正常图基准。
 
 这是发现原有图不完整后主动修正专业连接的实例，而不是“所有原项目都已验证”。参见 [机器边定义](../knowledge/expert-interaction-graph.v1.json) 和 [分级来源目录](../knowledge/reference-project-discovery.v1.json)。之前记录的“32 条”是该文首版的历史快照，不表示当前实际连接数量仍为 32。
 
 ## R006 补充（2026-10-31）：两条关键的反证型专业连接
 
-[现金流语义案例 R006](../knowledge/research/R006-sol-receipt-economic-semantics-v1.md) 说明直连 System Transfer 不能覆盖 Token CloseAccount/WSOL 释放等资金进入方式；相反单笔 SOL 余额净变化不证明源头出资者。我们对公开 40 钱包的 905 条衍生流入重新核对：61 条原文归为 `financement`、844 条归 `produit_de_vente`；这两种都是源脚本业务标签，必须经 Token 余额、内/外指令和池语义独立确认。新增 L39 `chain→graph`（多程序收款与经济流量）和 L40 `data→statistics`（事件类型/历史覆盖误差），当前正式专家交接共 **40 条**；首版 32 条保留为历史设计，不应误作当前数量。
+[现金流语义案例 R006](../knowledge/research/R006-sol-receipt-economic-semantics-v1.md) 说明直连 System Transfer 不能覆盖 Token CloseAccount/WSOL 释放等资金进入方式；相反单笔 SOL 余额净变化不证明源头出资者。我们对公开 40 钱包的 905 条衍生流入重新核对：61 条原文归为 `financement`、844 条归 `produit_de_vente`；这两种都是源脚本业务标签，必须经 Token 余额、内/外指令和池语义独立确认。新增 L39 `chain→graph`（多程序收款与经济流量）和 L40 `data→statistics`（事件类型/历史覆盖误差），当前正式专家交接共 **40 条**；32条是初版，36条是第一轮扩展快照，不应误作当前数量。
