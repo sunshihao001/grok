@@ -1,6 +1,6 @@
 # Skills adapted for Grok Bots
 
-本目录是可移植的技能契约与研究方法资产。**文件存在不代表 Grok 云端已经安装、加载或执行。** 当前总架构以 [知识体系架构 V2.0](../docs/knowledge-architecture-v2.md) 为准。
+本目录是可移植的技能契约与研究方法资产。**文件存在不代表 Grok 云端已经安装、加载或执行。** 当前总架构以 [知识体系架构 V2.0](../docs/knowledge-architecture-v2.0.md) 为准。
 
 | Skill | 职责 | 边界 |
 |---|---|---|
