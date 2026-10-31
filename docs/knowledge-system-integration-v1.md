@@ -4,6 +4,12 @@
 > **目标**：以跨 Mint、跨钱包、跨市场阶段的**链上事件监控与机制研判**为主线。跟单、风险预警、开发者跟踪与纸面交易评估属于下游应用。  
 > **约束**：本阶段只读/模拟，不管理私钥、签名、广播或自动下单；不因研究文件存在而宣称策略已验证。
 
+## 多轮外部研究后的专家知识连接 V2.0
+
+以 [跨层知识与专家连接研究](knowledge-expert-interconnection-v2.md) 为新的纵深入口，衔接 [17 专家知识映射](../knowledge/expert-capability-map.v1.json)、[32 条类型化专家交接](../knowledge/expert-interaction-graph.v1.json) 与 [12 条外部方法原始出处](../knowledge/external-method-sources.v1.json)。这不是多个专家重复打分，而是事实来源、角色/资产图、正常基准、市场反馈、因果反证及纸面净值的动态交接：任何新证据都可以沿依赖关系撤回旧结论，未知机制允许开放新增专家与知识源。
+
+`src/solana_meme_os/expert_interaction.py` 增加了只读图检查和撤回影响清单，`expert_router.py` 会附带当前被选专家之间的 `typed_expert_handoffs` 建议；**未连接真实RPC或运行自动多智能体**。
+
 ## 专家知识体系 V1.0（新增纵深入口）
 
 此前六仓整合只是来源/模块层初步蓝图。针对“每一层谁来判断、实际读哪些知识、如何交叉分析到结果”，现在增加：
