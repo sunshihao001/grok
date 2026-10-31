@@ -46,7 +46,7 @@ GitHub Actions 在本轮暴露：`catalog.v1.json` 实际已经有 24 张卡、3
 
 ## 仍然存在的实质性缺口
 
-1. 24 张卡虽有触发类型，但并非全部具有统一的 domain/claim/maturity/supersedes 字段；需要下一轮逐卡 Schema 化。
+1. 24 张卡已统一主 domain、K0–K2 maturity、成熟度依据和 owner experts；仍需补齐 claim IDs、failure modes、source IDs、supersedes 和测试映射。
 2. 30 条来源并不等于 30 条都已全文审阅；需要记录逐来源阅读深度、许可证、独立复算和适用范围。
 3. 17 专家/40 交接边是研究协议，不等于自动调度和持久 Claim 数据库；需用盲测验证是否比简单单模型更有效。
 4. 真实 Solana 原始交易解码、资产守恒、多日数据覆盖和完整市场正常总体仍是最大知识瓶颈。
