@@ -1,21 +1,29 @@
-# Hermes → Grok Bot: explicit migration choices
+# 参考项目 → Grok｜统一迁移与选择性保留
 
-| Existing artifact | New role | Current decision |
+迁移原则：**继承专业知识与经核对的数据/方法，不复制已经被淘汰的旧运行时。** 新目标是全市场事件监控；跟单工作流变成 M6 专题。
+
+| 原项目与资产 | Grok 中的目的 | 当前状态与缺口 |
 |---|---|---|
-| Seven business Skills: candidate-entry, token-panel, wallet-roles, wallet-structure, evidence-chain, trade-gate, controller | Research and evidence contract | Reference and gradually port; **not deployed** |
-| Hermes /HER_START, runtime hooks, patched upstream CLI | Grok message, private Skill, Routine, GitHub handoffs | **Not binary/API compatible** |
-| Hermes gmgn_client.py and qb GMGN reporting script | Subprocess read-only raw GMGN adapter | Partial; mapping needs verified raw samples |
-| meme- first-control-zone reclaim theory | Candidate observable hypotheses | Never automatically convert into watch/trade rules |
-| Hermes fixture acceptance | Deterministic offline regressions | Tests do not establish live accuracy |
-| Hermes phase state | Snapshot, event de-dup and run history | Only minimal single-writer baseline implemented |
+| `sunshihao001/-`：七 Skill、钱包/Sybil/资金/证据 Gate | 按 M0–M7 拆解业务能力，保留领域术语、证据链、异常解释及失败记录 | 部分卡片与历史快照保留；无自动 Hermes runtime |
+| 原 Hermes CLI、启动钩子、绝对路径、状态存储 | **不迁移**；由 Grok 设计和 Python 可运行模块分别负责 | 不兼容，不应作为部署依赖 |
+| `sunshihao001/meme-`：周期、FCZ/POC/AVWAP、样本/回测 | M5 市场结构和 M6 事前可识别/事后回放研究 | 理论候选；无实盘 alpha 证据 |
+| `sunshihao001/qb-`：GMGN 报告/字段/错误经验 | M0/M1 候选数据源适配与质量审计 | 只读原型；单位、标签、完整性尚待验证 |
+| `Why-Solana-Memecoins-Are-Over`：协调检测、经济图、失败研究 | M2/M3/M4 的样本分母、null/基础设施反证、资金闭环验证 | 保留方法和引用；研究结论有选样边界，许可限制不拷贝正文 |
+| `okx/onchainos-skills`：Token/market/wallet/trade 等 | M0/M1 候选只读数据入口 | 接口文档可用；具体覆盖率与延迟未在本项目实测 |
+| Grok 原 `monitor.py`、`market_observatory.py`、研究索引 | M5 单 Mint、M2 事件窗口候选、K0/K1 知识入口 | 可复用基础，尚缺真实外部事件与正常校准 |
 
-## Iteration order
+## 从旧知识到真实监控能力的转换方式
 
-1. Recover real GMGN fields, units, event IDs and source timestamps; preserve raw samples privately.
-2. Select **one measurable problem** (wallet funding pattern, deployer history, or structure change), not a broad catalogue of bot functions.
-3. Map source data into verified normalized observations; compare replay against old contracts and direct on-chain evidence where feasible.
-4. Draft rules with failure cases, independent verifier, baseline comparisons and coverage/false-alert reporting.
-5. After human acceptance, supply a versioned observation Skill to a single Monitor Bot. Test a one-time real run, then create and test its Routine.
-6. End development sessions/Routines when the monitor is stable. Keep source references and rule change process available for later maintenance.
+原始知识命题 → 明确观察单位/市场阶段 → 正规化事件/来源时点 → 竞争解释与正常基准 → 可验证预警/风险 → 独立的纸面交易评估。
 
-**Not done now:** provisioning cloud Bots; live GMGN authentication; live monitoring, automatic order placement, trading/returns claims.
+**严格分开三个层次**：源码/文档描述、派生数据报告、独立链上事实。仓库提交可追溯只证明“当时存在此观点”，不证明它的市场有效性。GMGN/OKX 标注可能影响观察，不能将平台标签直接视为原始链上事实。
+
+## 不改变的工程纪律
+
+- 不自动在 `main` 发布尚未通过验证的规则；
+- 不运行旧 Hermes Harness 或需要支付/密钥的接口；
+- 以具体项目问题按需读取来源，而非一次性批量复制；
+- 在真实数据可用前保留 `UNKNOWN/UNVERIFIED`；
+- 开发 Bot 研究、QA 对照、最终 Monitor 只读冻结规则。
+
+更新版角色见 [BOTS.md](../BOTS.md)，市场模块见 [design/overview.md](../design/overview.md)，实施分期见 [docs/next-steps.md](next-steps.md)。
