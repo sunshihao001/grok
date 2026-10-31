@@ -6,7 +6,7 @@
 
 | 资产 | 数量 | 解释 |
 |---|---:|---|
-| 历史种子卡 `catalog.v1.json` | 15 | 第一批迁移知识，不是全域目录 |
+| 知识卡 `catalog.v1.json` | 24（15 初始 + 9 扩展） | 历史领域种子和新研究/语义契约卡，不是全域目录 |
 | 历史快照 | 21 | Hermes 重要方法/合同片段，不是完整旧仓迁移 |
 | 按需来源索引 `source_index.v1.json` | 30 | 原始来源、代码、工具文档和方法的 pinned pointers |
 | 专家能力映射 | 17 | 专业能力，不是 17 个云 Bot |
@@ -19,7 +19,7 @@
 
 ## 2. 五类知识对象
 
-- **领域知识卡**：`catalog.v1.json`。已有 15 张旧知识种子卡；逐步增加 `domain`、`claim_ids`、`maturity`、`failure_modes`、`source_ids`、`supersedes`。
+- **领域知识卡**：`catalog.v1.json`。已有 24 张知识卡（15 张初始卡 + 9 张扩展卡）；逐步增加 `domain`、`claim_ids`、`maturity`、`failure_modes`、`source_ids`、`supersedes`。
 - **来源指针**：`source_index.v1.json`。仅用于按需定位特定仓库/提交/路径；不是实时 API，也不是所有条目已完整阅读。
 - **专家能力与交接**：`expert-capability-map.v1.json`（17 专家/12 域/9 场景）和 `expert-interaction-graph.v1.json`（40 条交接边）。
 - **机制假说**：`mechanism-synthesis-hypotheses.v1.json`（HX01–HX08），必须含预测、竞争解释、基准、判别证据和 reject_when。
