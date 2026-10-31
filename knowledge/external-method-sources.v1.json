@@ -168,6 +168,60 @@
         "L05",
         "L35"
       ]
+    },
+    {
+      "id": "temporal-motif-ood-ijcai-2026",
+      "research_round": "mechanism_synthesis",
+      "url": "https://ijcai.org/proceedings/2026/802",
+      "source": "IJCAI 2026 temporal motif-aware graph test-time adaptation (TEMG-TTA)",
+      "supported_design_claim": "Time-ordered 3-node transaction motifs and adaptation to structural distribution shifts can improve modeling of evolving graph behavior.",
+      "does_not_verify": "Ethereum/AML anomaly model results are not calibrated for Solana Meme, manipulation identity or executable returns.",
+      "linked_expert_edges": [
+        "L04",
+        "L17",
+        "L27",
+        "L36"
+      ]
+    },
+    {
+      "id": "prediction-oriented-active-learning-pmlr",
+      "research_round": "mechanism_synthesis",
+      "url": "https://proceedings.mlr.press/v206/bickfordsmith23a.html",
+      "source": "AISTATS 2023 Prediction-Oriented Bayesian Active Learning",
+      "supported_design_claim": "Selecting evidence for relevance to downstream predictions can outperform indiscriminate parameter uncertainty reduction in studied settings.",
+      "does_not_verify": "No live Solana research dispatch, information gain probabilities, or cost reduction has been validated in this project.",
+      "linked_expert_edges": [
+        "L28",
+        "L29",
+        "L30"
+      ]
+    },
+    {
+      "id": "temporal-causal-discovery-acm",
+      "research_round": "mechanism_synthesis",
+      "url": "https://doi.org/10.1145/3705297",
+      "source": "ACM Computing Surveys: Causal Discovery from Temporal Data (2024)",
+      "supported_design_claim": "Sequence/event-time and time-series models have different assumptions; observing transaction order alone is insufficient for market causality.",
+      "does_not_verify": "Any particular funding network or meme price dynamics causally determined.",
+      "linked_expert_edges": [
+        "L12",
+        "L16",
+        "L18",
+        "L19"
+      ]
+    },
+    {
+      "id": "counterfactual-graphs-survey",
+      "research_round": "mechanism_synthesis",
+      "url": "https://link.springer.com/article/10.1007/s11633-024-1519-z",
+      "source": "Counterfactual Learning on Graphs: A Survey (2025)",
+      "supported_design_claim": "Graph explanations and predictive models need causal/counterfactual assumptions; structural correlations alone need not imply intervention effects.",
+      "does_not_verify": "Cross-token clusters are real economic common owners or supply profitable signals.",
+      "linked_expert_edges": [
+        "L12",
+        "L18",
+        "L19"
+      ]
     }
   ]
 }
