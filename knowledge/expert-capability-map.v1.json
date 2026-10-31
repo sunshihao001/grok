@@ -58,7 +58,9 @@
       "source_ids": [
         "okx-market-readonly",
         "okx-market-reference",
-        "reproducible-pipeline"
+        "reproducible-pipeline",
+        "forensic-raw-sol-replay",
+        "wallet-first-funder-unknown"
       ],
       "requires": [
         "raw_response",
@@ -86,7 +88,9 @@
       ],
       "source_ids": [
         "slot-sequence-case",
-        "historical-mechanism-vs-profit"
+        "historical-mechanism-vs-profit",
+        "forensic-raw-sol-replay",
+        "wallet-first-funder-unknown"
       ],
       "requires": [
         "signature",
@@ -115,7 +119,8 @@
       ],
       "source_ids": [
         "coordination-null-model",
-        "time-safe-features"
+        "time-safe-features",
+        "developer-funding-convergence"
       ],
       "requires": [
         "canonical_events",
@@ -142,7 +147,10 @@
       ],
       "source_ids": [
         "hermes-wallet-method",
-        "hermes-source-relations"
+        "hermes-source-relations",
+        "developer-funding-convergence",
+        "wallet-first-funder-unknown",
+        "wallet-clustering-cross-layer-unknown"
       ],
       "requires": [
         "wallet_transactions",
@@ -171,7 +179,10 @@
       "source_ids": [
         "funding-graph-control",
         "economic-cycle",
-        "downstream-exit-structure"
+        "downstream-exit-structure",
+        "forensic-raw-sol-replay",
+        "developer-funding-convergence",
+        "wallet-clustering-cross-layer-unknown"
       ],
       "requires": [
         "signed_edges",
@@ -201,7 +212,8 @@
       "source_ids": [
         "coordination-null-model",
         "economic-cycle",
-        "failure-modes"
+        "failure-modes",
+        "wallet-clustering-cross-layer-unknown"
       ],
       "requires": [
         "event_windows",
@@ -230,7 +242,9 @@
       "source_ids": [
         "coordination-null-model",
         "research-methodology",
-        "failure-modes"
+        "failure-modes",
+        "wallet-clustering-cross-layer-unknown",
+        "holder-supply-coverage-method"
       ],
       "requires": [
         "population",
@@ -260,7 +274,8 @@
       "source_ids": [
         "meme-sources",
         "hermes-wallet-method",
-        "okx-market-readonly"
+        "okx-market-readonly",
+        "developer-funding-convergence"
       ],
       "requires": [
         "mint_state",
@@ -317,7 +332,8 @@
       ],
       "source_ids": [
         "economic-cycle",
-        "downstream-exit-structure"
+        "downstream-exit-structure",
+        "holder-supply-coverage-method"
       ],
       "requires": [
         "supply",
@@ -465,7 +481,9 @@
       "source_ids": [
         "failure-modes",
         "temporal-leakage-audit",
-        "reproducible-pipeline"
+        "reproducible-pipeline",
+        "forensic-raw-sol-replay",
+        "wallet-clustering-cross-layer-unknown"
       ],
       "requires": [
         "all_claims",
@@ -495,7 +513,8 @@
       "source_ids": [
         "research-methodology",
         "reproducible-pipeline",
-        "meme-sources"
+        "meme-sources",
+        "wallet-clustering-cross-layer-unknown"
       ],
       "requires": [
         "reviewed_claims",
@@ -559,7 +578,8 @@
       ],
       "sources": [
         "hermes-wallet-method",
-        "hermes-source-relations"
+        "hermes-source-relations",
+        "wallet-first-funder-unknown"
       ],
       "expert_panel": [
         "wallet",
@@ -578,7 +598,9 @@
       "sources": [
         "funding-graph-control",
         "economic-cycle",
-        "downstream-exit-structure"
+        "downstream-exit-structure",
+        "forensic-raw-sol-replay",
+        "developer-funding-convergence"
       ],
       "expert_panel": [
         "graph",
@@ -596,7 +618,8 @@
       ],
       "sources": [
         "coordination-null-model",
-        "failure-modes"
+        "failure-modes",
+        "wallet-clustering-cross-layer-unknown"
       ],
       "expert_panel": [
         "event",
@@ -652,7 +675,8 @@
       ],
       "sources": [
         "economic-cycle",
-        "downstream-exit-structure"
+        "downstream-exit-structure",
+        "holder-supply-coverage-method"
       ],
       "expert_panel": [
         "inventory",
@@ -729,7 +753,8 @@
       ],
       "sources": [
         "reproducible-pipeline",
-        "temporal-leakage-audit"
+        "temporal-leakage-audit",
+        "wallet-clustering-cross-layer-unknown"
       ],
       "expert_panel": [
         "review",
@@ -1006,5 +1031,17 @@
     "5": "S4 regime defined as of decision time",
     "6": "S5 alternatives/refutation; do not generate uncalibrated intent probability",
     "7": "S6 independent evidence/risk and research-state Gates; NO live actions"
+  },
+  "source_expansion_wave": {
+    "date": "2026-10-31",
+    "registry": "knowledge/reference-project-discovery.v1.json",
+    "added_source_ids": [
+      "forensic-raw-sol-replay",
+      "wallet-first-funder-unknown",
+      "developer-funding-convergence",
+      "wallet-clustering-cross-layer-unknown",
+      "holder-supply-coverage-method"
+    ],
+    "why": "Pinned read-only original source paths, preserving unknown statuses, false-positive infrastructure and source accuracy."
   }
 }
