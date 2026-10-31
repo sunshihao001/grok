@@ -1,8 +1,10 @@
 # Solana Meme 全市场专家知识协作体系 V1.0｜从原始证据到机制、反证和结果
 
+> **架构层级已由 [知识架构 V2.0](knowledge-architecture-v2.0.md) 统一。本文件是专家职责与 S0–S7 研究阶段的专项详解，不是另一套知识层级。**
+
 > 状态：已核对核心原始来源并完成**知识层与专家职责的初步系统整合**；并非“逐仓库所有文件已经全部吃透”，也不是运行中的多 Bot 专家委员会。  
 > 日期：2026-10-31；部署：仅 `docs/cognition-knowledge-conversion-v1` 草案分支，不改生产交易规则。  
-> 可机器读取的配套知识矩阵：[`knowledge/expert-capability-map.v1.json`](../knowledge/expert-capability-map.v1.json)；包含 17 类专业能力、12 个知识领域、8 个阶段、5 个场景及 15 张卡/22 条来源的 ID 对齐。  
+> 可机器读取的配套知识矩阵：[`knowledge/expert-capability-map.v1.json`](../knowledge/expert-capability-map.v1.json)；包含 17 类专业能力、12 个知识领域、8 个研究阶段、9 个编码场景，并映射 15 张历史种子卡与当前 30 条来源指针。  
 > 原有总体草案：[`knowledge-system-integration-v1.md`](knowledge-system-integration-v1.md)；本稿**深入到知识专家如何配合解决真实问题**，而非再造一层名词体系。
 
 ## 0｜研究决断：旧系统已具结构，但知识尚未形成完整的判断能力
