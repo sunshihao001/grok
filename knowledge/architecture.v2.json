@@ -442,19 +442,6 @@
         "R007"
       ],
       "note": "No R004 document exists in this branch; no number is fabricated."
-    },
-    "cross_source_knowledge_units": {
-      "path": "knowledge/catalog.v1.json",
-      "count": 6,
-      "items": [
-        "KX-01",
-        "KX-02",
-        "KX-03",
-        "KX-04",
-        "KX-05",
-        "KX-06"
-      ],
-      "note": "Converted into source-linked cards in this revision."
     }
   },
   "canonical_documents": {
