@@ -5,7 +5,7 @@ description: Select and apply source-pinned Solana Meme domain knowledge to plai
 
 # Portable expertise, not Hermes runtime
 
-**Canonical hierarchy:** [Knowledge Architecture V2.0](../../docs/knowledge-architecture-v2.0.md). This Skill retrieves source-pinned material; the 15 catalog cards are legacy seed units, while the current on-demand source registry contains 30 pointers. Neither count is a completeness or validation score.
+**Canonical hierarchy:** [Knowledge Architecture V2.0](../../docs/knowledge-architecture-v2.0.md). This Skill retrieves source-pinned material; the 24 catalog cards comprise 15 initial and 9 expanded units, while the current on-demand source registry contains 30 pointers. Neither count is a completeness or validation score.
 
 Inputs: user's plain-language question, new source-linked observation data, knowledge/catalog.v1.json, optional original source refs and read-only research tools.
 
