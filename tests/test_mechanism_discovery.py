@@ -80,6 +80,37 @@ class TestMechanismDiscovery(unittest.TestCase):
             with self.assertRaises(ValueError):
                 discover_cashflow_mechanisms(d)
 
+    def test_history_coverage_asymmetry_generates_distinct_data_hypothesis(self):
+        x = cohort()
+        x["wallets"] = []
+        for i in range(21):
+            row = copy.deepcopy(cohort()["wallets"][0])
+            row["wallet"] = "complete-" + str(i)
+            # Only one financing event is necessary to distinguish observed
+            # presence; signature names remain synthetic.
+            row["inflows"] = [dict(row["inflows"][0],
+                                   signature="synthetic-" + str(i))]
+            x["wallets"].append(row)
+        for i in range(19):
+            row = copy.deepcopy(cohort()["wallets"][1])
+            row["wallet"] = "incomplete-" + str(i)
+            if i < 4:
+                row["inflows"] = [{
+                    "signature": "incomplete-sig-" + str(i),
+                    "nature": "financement", "tx_source": "SYSTEM_PROGRAM",
+                    "tx_type": "TRANSFER", "amount_sol": "1"}]
+            x["wallets"].append(row)
+        x["n_wallets"] = 40
+        x["n_genesis_reached"] = 21
+        x["n_prebuy_window_reached"] = 21
+        r = discover_cashflow_mechanisms(x)
+        self.assertTrue(r["history_coverage_receipt_silence_tension"])
+        self.assertEqual(r["genesis_coverage_receipt_presence"]["GENESIS_COVERED"]["without_label_receipt"], 0)
+        self.assertEqual(r["genesis_coverage_receipt_presence"]["GENESIS_UNCOVERED"]["without_label_receipt"], 15)
+        self.assertIn("HISTORY_COVERAGE_RECEIPT_SILENCE_TENSION",
+                      [c["id"] for c in r["candidate_mechanisms"]])
+        self.assertFalse(r["capital_injection_confirmed"])
+
     def test_nonfocal_trades_are_not_assumed_to_be_financing(self):
         r = discover_cashflow_mechanisms(cohort(), label="produit_de_vente")
         self.assertEqual(r["labelled_rows"], 1)
