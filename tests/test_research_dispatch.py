@@ -79,6 +79,21 @@ class ResearchDispatchTests(unittest.TestCase):
         self.assertEqual(len(flat), len(set(flat)))
         self.assertEqual(x["signature_checks_planned"], len(flat))
 
+    def test_late_signature_preserves_case_identity_but_revises_evidence(self):
+        early = sample()
+        first = make_plan(early, max_cases=10, max_source_checks=25,
+                          max_per_case=10)
+        updated = copy.deepcopy(early)
+        updated["group_candidates"][0]["signatures"].append("late-buy")
+        second = make_plan(updated, max_cases=10, max_source_checks=25,
+                           max_per_case=10)
+        one = next(c for c in first["cases"] if c["scope"] == "MINT:M1:BUY_SLOT:7")
+        two = next(c for c in second["cases"] if c["scope"] == "MINT:M1:BUY_SLOT:7")
+        self.assertEqual(one["case_id"], two["case_id"])
+        self.assertNotEqual(one["evidence_version"], two["evidence_version"])
+        self.assertEqual(two["unique_signatures_in_input"],
+                         one["unique_signatures_in_input"] + 1)
+
     def test_same_mint_different_slots_are_separate_events(self):
         x = sample()
         x["group_candidates"].append({
