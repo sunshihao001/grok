@@ -1,0 +1,1010 @@
+{
+  "schema_version": "1.0",
+  "as_of": "2026-10-31",
+  "status": "RESEARCH_CONTRACT_NOT_DEPLOYED",
+  "description": "Contextual expert collaboration and knowledge routing. Expert is a discipline, not necessarily a Bot. Catalog and source IDs are pointers, not verified market signals.",
+  "principles": [
+    "OBSERVATION_BEFORE_INFERENCE",
+    "FACT_GRAPH_DISTINCT_FROM_ENTITY_GRAPH",
+    "NO_MANDATORY_ENTITY_MERGE",
+    "NORMAL_BASELINE_CONTEXTUAL",
+    "MULTIPLE_CAUSAL_EXPLANATIONS",
+    "NO_FUTURE_INFORMATION",
+    "TRADING_EDGE_INDEPENDENT_OF_ANOMALY",
+    "UNKNOWN_IS_A_FIRST_CLASS_RESULT",
+    "NO_REAL_ORDERS"
+  ],
+  "experts": [
+    {
+      "id": "chief",
+      "name": "研究总师／市场机制架构",
+      "discipline": "研究设计、目标与证据等级",
+      "owns": "确定研究对象与可证伪问题、解冲突，不替其他专家下结论",
+      "source_cards": [
+        "evidence-synthesis",
+        "research-states",
+        "anti-false-completion"
+      ],
+      "source_ids": [
+        "research-methodology",
+        "failure-modes",
+        "reproducible-pipeline"
+      ],
+      "requires": [
+        "scope",
+        "cohort",
+        "question",
+        "decision_time"
+      ],
+      "produces": [
+        "study_contract",
+        "open_questions",
+        "decision_log"
+      ],
+      "challenge": [
+        "事后归因、数据缺口、样本选择"
+      ]
+    },
+    {
+      "id": "data",
+      "name": "数据工程／来源法证",
+      "discipline": "Solana RPC、OKX/GMGN 字段、时间与完整性",
+      "owns": "接入/源追溯、单位及冲突审核；不对未知造零",
+      "source_cards": [
+        "gmgn-raw-prototype",
+        "gmgn-field-combinations",
+        "anti-false-completion"
+      ],
+      "source_ids": [
+        "okx-market-readonly",
+        "okx-market-reference",
+        "reproducible-pipeline"
+      ],
+      "requires": [
+        "raw_response",
+        "provider_version",
+        "query_at",
+        "received_at"
+      ],
+      "produces": [
+        "coverage_report",
+        "source_evidence",
+        "canonical_fields"
+      ],
+      "challenge": [
+        "缺失值、同源多源伪独立、平台黑箱标签"
+      ]
+    },
+    {
+      "id": "chain",
+      "name": "Solana 执行语义与协议专家",
+      "discipline": "transaction/slot/instruction、Token Program 与资金对价",
+      "owns": "拆解多指令/内指令、真正 swap 与 transfer、同 slot 顺序；不凭同 slot 认 Bundle",
+      "source_cards": [
+        "market-lifecycle",
+        "token-security"
+      ],
+      "source_ids": [
+        "slot-sequence-case",
+        "historical-mechanism-vs-profit"
+      ],
+      "requires": [
+        "signature",
+        "slot",
+        "meta",
+        "raw_balances",
+        "instructions"
+      ],
+      "produces": [
+        "typed_events",
+        "transaction_order",
+        "unknown_semantics"
+      ],
+      "challenge": [
+        "同 slot 无执行序、币池地址当钱包、服务商付费"
+      ]
+    },
+    {
+      "id": "event",
+      "name": "流式时序／群体事件专家",
+      "discipline": "窗口聚合、事件去重、流量与缺失覆盖",
+      "owns": "回答几个人何时在多少交易中转多少资产，识别 burst 候选",
+      "source_cards": [
+        "candidate-entry",
+        "sybil-wash"
+      ],
+      "source_ids": [
+        "coordination-null-model",
+        "time-safe-features"
+      ],
+      "requires": [
+        "canonical_events",
+        "source_coverage",
+        "window_config"
+      ],
+      "produces": [
+        "event_windows",
+        "burst_candidates",
+        "observed_denominators"
+      ],
+      "challenge": [
+        "双计数、同交易多指令、热点引发自然同步"
+      ]
+    },
+    {
+      "id": "wallet",
+      "name": "钱包行为与角色法证专家",
+      "discipline": "生命周期、行为序列、地址多角色",
+      "owns": "按时段识别 funder/sniper/recipient/router/trader 等候选，不确定身份",
+      "source_cards": [
+        "wallet-roles",
+        "deployer-history"
+      ],
+      "source_ids": [
+        "hermes-wallet-method",
+        "hermes-source-relations"
+      ],
+      "requires": [
+        "wallet_transactions",
+        "role_history",
+        "token_accounts"
+      ],
+      "produces": [
+        "wallet_role_candidates",
+        "contradictions",
+        "role_history"
+      ],
+      "challenge": [
+        "CEX/托管、共享执行器、钱包角色时变"
+      ]
+    },
+    {
+      "id": "graph",
+      "name": "资金循环／经济仓位网络专家",
+      "discipline": "图论、资金同源、库存与受益归因",
+      "owns": "构造资产事实图与主体假设图；还原跨币与跨期资本循环",
+      "source_cards": [
+        "funding-graph",
+        "concentration",
+        "wallet-roles"
+      ],
+      "source_ids": [
+        "funding-graph-control",
+        "economic-cycle",
+        "downstream-exit-structure"
+      ],
+      "requires": [
+        "signed_edges",
+        "entity_hypotheses",
+        "hub_registry",
+        "decimals"
+      ],
+      "produces": [
+        "asset_graph",
+        "entity_hypotheses",
+        "closed_loop_coverage"
+      ],
+      "challenge": [
+        "公共 hub、地址转出≠卖出、未闭合现金流"
+      ]
+    },
+    {
+      "id": "adversarial",
+      "name": "Sybil／协调／操纵机制研究专家",
+      "discipline": "对抗性交易、刷量、同步及集群重用",
+      "owns": "将正常机器人、公共刺激和操作协同作为竞争模型",
+      "source_cards": [
+        "sybil-wash",
+        "funding-graph",
+        "concentration"
+      ],
+      "source_ids": [
+        "coordination-null-model",
+        "economic-cycle",
+        "failure-modes"
+      ],
+      "requires": [
+        "event_windows",
+        "cohort_graph",
+        "market_context"
+      ],
+      "produces": [
+        "coordination_hypotheses",
+        "signatures",
+        "negative_controls"
+      ],
+      "challenge": [
+        "同 slot 不是 Jito、操纵意图不可从链上证明"
+      ]
+    },
+    {
+      "id": "statistics",
+      "name": "正常基准／统计推断专家",
+      "discipline": "抽样、条件 null、图重连、误报率、多重检验",
+      "owns": "构建相同发行年龄/流动性/钱包活跃度对照，定量验证异常",
+      "source_cards": [
+        "candidate-entry",
+        "evidence-synthesis",
+        "anti-false-completion"
+      ],
+      "source_ids": [
+        "coordination-null-model",
+        "research-methodology",
+        "failure-modes"
+      ],
+      "requires": [
+        "population",
+        "denominator",
+        "observations",
+        "strata"
+      ],
+      "produces": [
+        "calibrated_deviation",
+        "uncertainty",
+        "false_alert_estimate"
+      ],
+      "challenge": [
+        "全样本预筛选择偏差、相关特征非独立、样本外失效"
+      ]
+    },
+    {
+      "id": "token",
+      "name": "Token 安全与开发者画像专家",
+      "discipline": "发行权限、开发者历史、LP 与资产生命周期",
+      "owns": "排查权限/历史发行/部署关联；分开安全事实和意图猜测",
+      "source_cards": [
+        "token-security",
+        "deployer-history",
+        "market-lifecycle"
+      ],
+      "source_ids": [
+        "meme-sources",
+        "hermes-wallet-method",
+        "okx-market-readonly"
+      ],
+      "requires": [
+        "mint_state",
+        "dev_events",
+        "programs",
+        "launch_history"
+      ],
+      "produces": [
+        "token_security_findings",
+        "developer_candidates"
+      ],
+      "challenge": [
+        "换部署地址、合法权限、平台风险标签误判"
+      ]
+    },
+    {
+      "id": "liquidity",
+      "name": "市场微观结构与池深专家",
+      "discipline": "AMM/曲线、流动性、价格形成、容量",
+      "owns": "解释交易顺序、冲击、真实需求与可退出流动性",
+      "source_cards": [
+        "liquidity-depth",
+        "market-lifecycle",
+        "gmgn-field-combinations"
+      ],
+      "source_ids": [
+        "slot-sequence-case",
+        "okx-market-reference"
+      ],
+      "requires": [
+        "pool_reserves",
+        "trades",
+        "route_quotes",
+        "phase"
+      ],
+      "produces": [
+        "market_state",
+        "liquidity_capacity",
+        "confounders"
+      ],
+      "challenge": [
+        "USD 估值变化≠撤池、涨价可能由自身买单形成"
+      ]
+    },
+    {
+      "id": "inventory",
+      "name": "筹码／供应控制研究专家",
+      "discipline": "余额守恒、持有人结构、库存转移",
+      "owns": "比较地址集中、可归属经济库存与可能卖出压力",
+      "source_cards": [
+        "concentration",
+        "funding-graph",
+        "evidence-synthesis"
+      ],
+      "source_ids": [
+        "economic-cycle",
+        "downstream-exit-structure"
+      ],
+      "requires": [
+        "supply",
+        "holder_snapshots",
+        "token_flows"
+      ],
+      "produces": [
+        "inventory_lineage",
+        "unattributed_supply",
+        "distribution_candidates"
+      ],
+      "challenge": [
+        "Top10 包含 LP/CEX、内部转移≠总库存减少"
+      ]
+    },
+    {
+      "id": "regime",
+      "name": "市场生命周期／价格结构专家",
+      "discipline": "迁移、POC/AVWAP、FCZ、回收与失败样本",
+      "owns": "提炼可当时定义的阶段和候选结构，不复用事后标签",
+      "source_cards": [
+        "market-lifecycle",
+        "reclaim-theory",
+        "liquidity-depth"
+      ],
+      "source_ids": [
+        "meme-first-control-zone",
+        "meme-sources",
+        "time-safe-features"
+      ],
+      "requires": [
+        "phase_events",
+        "price_liquidity_series",
+        "available_at"
+      ],
+      "produces": [
+        "phase_hypotheses",
+        "invalidations",
+        "baseline_signals"
+      ],
+      "challenge": [
+        "事后结构定义、单币回测过拟合、周期环境不同"
+      ]
+    },
+    {
+      "id": "causal",
+      "name": "机制与因果推演专家",
+      "discipline": "竞争机制、自然实验、反事实和增量信息",
+      "owns": "组织资金-执行-市场互动的多路径因果假设及反证",
+      "source_cards": [
+        "evidence-synthesis",
+        "sybil-wash",
+        "reclaim-theory"
+      ],
+      "source_ids": [
+        "research-methodology",
+        "coordination-null-model",
+        "failure-modes"
+      ],
+      "requires": [
+        "facts",
+        "alternatives",
+        "null_results",
+        "market_evolution"
+      ],
+      "produces": [
+        "mechanism_registry",
+        "discriminating_tests",
+        "unknowns"
+      ],
+      "challenge": [
+        "因果倒置、循环解释、把市场反馈当领先信号"
+      ]
+    },
+    {
+      "id": "risk",
+      "name": "安全／风险门禁专家",
+      "discipline": "流动性与权限风险、数据 Gate、研究状态",
+      "owns": "区分事实不足、已证风险和纸面研究资格；不以异常直接买卖",
+      "source_cards": [
+        "token-security",
+        "research-states",
+        "anti-false-completion"
+      ],
+      "source_ids": [
+        "failure-modes",
+        "time-safe-features",
+        "tradability-vs-structure"
+      ],
+      "requires": [
+        "evidence_quality",
+        "market_risks",
+        "execution_status"
+      ],
+      "produces": [
+        "risk_state",
+        "research_gate",
+        "non_execution_rationale"
+      ],
+      "challenge": [
+        "UNKNOWN≠确定危险、统计显著≠可交易"
+      ]
+    },
+    {
+      "id": "execution",
+      "name": "执行经济与收益验证专家",
+      "discipline": "决策时点、成交路由、冲击/费用、风险调整净值",
+      "owns": "仅在有样本和报价时评估事前增量与纸面可执行净价值",
+      "source_cards": [
+        "liquidity-depth",
+        "research-states",
+        "reclaim-theory"
+      ],
+      "source_ids": [
+        "tradability-vs-structure",
+        "pre-registered-failure",
+        "temporal-leakage-audit"
+      ],
+      "requires": [
+        "asof_signals",
+        "route_quotes",
+        "exit_policy",
+        "fees",
+        "failed_orders"
+      ],
+      "produces": [
+        "paper_eval",
+        "economic_edge_status",
+        "capacity_limits"
+      ],
+      "challenge": [
+        "原钱包成本≠我们成本、触及2x≠可兑现"
+      ]
+    },
+    {
+      "id": "review",
+      "name": "反证与质量审计专家",
+      "discipline": "再现性、源核验、对照、错误归因与规则版本",
+      "owns": "尝试推翻其他专家，检查缺失/泄漏/群簇和不合格对照",
+      "source_cards": [
+        "anti-false-completion",
+        "evidence-synthesis",
+        "gmgn-raw-prototype"
+      ],
+      "source_ids": [
+        "failure-modes",
+        "temporal-leakage-audit",
+        "reproducible-pipeline"
+      ],
+      "requires": [
+        "all_claims",
+        "source_links",
+        "feature_times",
+        "holdout"
+      ],
+      "produces": [
+        "review_verdict",
+        "refutation_findings",
+        "reproducible_case"
+      ],
+      "challenge": [
+        "自评≠测试、重复假说叠加、调用缺失/未部署"
+      ]
+    },
+    {
+      "id": "knowledge",
+      "name": "知识系统与可迁移能力专家",
+      "discipline": "本体映射、技能写作、来源许可与版本化",
+      "owns": "将被验证的机制映射专家技能/案例/反例，不复制外部库",
+      "source_cards": [
+        "evidence-synthesis",
+        "anti-false-completion",
+        "reclaim-theory"
+      ],
+      "source_ids": [
+        "research-methodology",
+        "reproducible-pipeline",
+        "meme-sources"
+      ],
+      "requires": [
+        "reviewed_claims",
+        "code_contract",
+        "case_outcomes"
+      ],
+      "produces": [
+        "knowledge_delta",
+        "skill_proposal",
+        "source_pins"
+      ],
+      "challenge": [
+        "新增概念过多、来源脱节、把研究写成生产能力"
+      ]
+    }
+  ],
+  "domains": [
+    {
+      "id": "market_event",
+      "name": "市场发现/发行与迁移",
+      "cards": [
+        "candidate-entry",
+        "market-lifecycle"
+      ],
+      "sources": [
+        "research-methodology",
+        "okx-market-readonly"
+      ],
+      "expert_panel": [
+        "data",
+        "chain",
+        "event",
+        "liquidity"
+      ],
+      "key_boundary": "新 Mint/迁移/热点来源及观察总体"
+    },
+    {
+      "id": "execution_semantics",
+      "name": "交易与执行语义",
+      "cards": [
+        "market-lifecycle",
+        "gmgn-raw-prototype"
+      ],
+      "sources": [
+        "slot-sequence-case",
+        "reproducible-pipeline"
+      ],
+      "expert_panel": [
+        "chain",
+        "data",
+        "event"
+      ],
+      "key_boundary": "Slot/Transaction/Instruction/余额，Jito 来源另需单独确认"
+    },
+    {
+      "id": "wallet_behavior",
+      "name": "钱包行为与角色",
+      "cards": [
+        "wallet-roles",
+        "deployer-history"
+      ],
+      "sources": [
+        "hermes-wallet-method",
+        "hermes-source-relations"
+      ],
+      "expert_panel": [
+        "wallet",
+        "graph",
+        "adversarial"
+      ],
+      "key_boundary": "角色随时间改变，vendor tag不是身份"
+    },
+    {
+      "id": "capital_graph",
+      "name": "资金来源/循环/经济仓位",
+      "cards": [
+        "funding-graph",
+        "concentration"
+      ],
+      "sources": [
+        "funding-graph-control",
+        "economic-cycle",
+        "downstream-exit-structure"
+      ],
+      "expert_panel": [
+        "graph",
+        "wallet",
+        "inventory"
+      ],
+      "key_boundary": "资产图与主体假说图分离"
+    },
+    {
+      "id": "coordination",
+      "name": "协同与捆绑候选",
+      "cards": [
+        "sybil-wash",
+        "funding-graph"
+      ],
+      "sources": [
+        "coordination-null-model",
+        "failure-modes"
+      ],
+      "expert_panel": [
+        "event",
+        "adversarial",
+        "statistics",
+        "chain"
+      ],
+      "key_boundary": "同步不等于同控；检验正常机器人/服务"
+    },
+    {
+      "id": "token_security",
+      "name": "Token/开发者/安全",
+      "cards": [
+        "token-security",
+        "deployer-history"
+      ],
+      "sources": [
+        "meme-sources",
+        "okx-market-readonly"
+      ],
+      "expert_panel": [
+        "token",
+        "chain",
+        "risk"
+      ],
+      "key_boundary": "安全与投资价值分开"
+    },
+    {
+      "id": "microstructure",
+      "name": "市场微观结构/流动性",
+      "cards": [
+        "liquidity-depth",
+        "gmgn-field-combinations"
+      ],
+      "sources": [
+        "slot-sequence-case",
+        "okx-market-reference"
+      ],
+      "expert_panel": [
+        "liquidity",
+        "chain",
+        "execution"
+      ],
+      "key_boundary": "真实报价/可承接与账面估值分开"
+    },
+    {
+      "id": "inventory_control",
+      "name": "筹码/库存/经济控制",
+      "cards": [
+        "concentration",
+        "funding-graph",
+        "reclaim-theory"
+      ],
+      "sources": [
+        "economic-cycle",
+        "downstream-exit-structure"
+      ],
+      "expert_panel": [
+        "inventory",
+        "graph",
+        "regime"
+      ],
+      "key_boundary": "控制权未知不阻止库存观测"
+    },
+    {
+      "id": "market_regime",
+      "name": "生命周期/成本区与结构",
+      "cards": [
+        "market-lifecycle",
+        "reclaim-theory"
+      ],
+      "sources": [
+        "meme-first-control-zone",
+        "meme-sources"
+      ],
+      "expert_panel": [
+        "regime",
+        "liquidity",
+        "inventory"
+      ],
+      "key_boundary": "FCZ candidate at t ≠ retrospective at T"
+    },
+    {
+      "id": "baseline",
+      "name": "正常与异常/因果",
+      "cards": [
+        "candidate-entry",
+        "sybil-wash",
+        "evidence-synthesis"
+      ],
+      "sources": [
+        "coordination-null-model",
+        "research-methodology",
+        "failure-modes"
+      ],
+      "expert_panel": [
+        "statistics",
+        "causal",
+        "adversarial"
+      ],
+      "key_boundary": "先定义总体和同类基准，再讨论异常"
+    },
+    {
+      "id": "risk_and_action",
+      "name": "风险与机会资格",
+      "cards": [
+        "research-states",
+        "token-security",
+        "anti-false-completion"
+      ],
+      "sources": [
+        "tradability-vs-structure",
+        "pre-registered-failure",
+        "time-safe-features"
+      ],
+      "expert_panel": [
+        "risk",
+        "execution",
+        "review"
+      ],
+      "key_boundary": "观察/解释/预测/净收益四个判据分离"
+    },
+    {
+      "id": "knowledge_engineering",
+      "name": "知识更新与验证",
+      "cards": [
+        "anti-false-completion",
+        "evidence-synthesis",
+        "gmgn-raw-prototype"
+      ],
+      "sources": [
+        "reproducible-pipeline",
+        "temporal-leakage-audit"
+      ],
+      "expert_panel": [
+        "review",
+        "knowledge",
+        "chief"
+      ],
+      "key_boundary": "验证产物与技能版本分开"
+    }
+  ],
+  "stages": [
+    {
+      "id": "S0",
+      "name": "问题/总体与证据合同",
+      "owners": [
+        "chief",
+        "statistics",
+        "data"
+      ],
+      "next": "选择事件与研究总体，明确当时可得、输出与禁止越级"
+    },
+    {
+      "id": "S1",
+      "name": "数据源/RPC与事件语义",
+      "owners": [
+        "data",
+        "chain",
+        "review"
+      ],
+      "next": "用签名与原始单位规范化事实；保留未知和指令级别"
+    },
+    {
+      "id": "S2",
+      "name": "群体时间窗与网络",
+      "owners": [
+        "event",
+        "wallet",
+        "graph"
+      ],
+      "next": "计算发生了什么、谁与谁连、重复群/资金流"
+    },
+    {
+      "id": "S3",
+      "name": "异常基线与对抗性解释",
+      "owners": [
+        "statistics",
+        "adversarial",
+        "causal"
+      ],
+      "next": "控制正常热度、同平台、公共hub，比较独立解释"
+    },
+    {
+      "id": "S4",
+      "name": "开发者/Token/筹码/流动性",
+      "owners": [
+        "token",
+        "inventory",
+        "liquidity",
+        "regime"
+      ],
+      "next": "识别市场状态、经济暴露、权限、真实需求与卖压"
+    },
+    {
+      "id": "S5",
+      "name": "竞争机制/反事实/因果",
+      "owners": [
+        "causal",
+        "graph",
+        "statistics",
+        "chief"
+      ],
+      "next": "保留多假说、失败预测与最有信息量的下一条签名"
+    },
+    {
+      "id": "S6",
+      "name": "风险/预测/经济与容量",
+      "owners": [
+        "risk",
+        "execution",
+        "liquidity",
+        "statistics"
+      ],
+      "next": "分离风险与预测力；仅做时间安全纸面净收益评估"
+    },
+    {
+      "id": "S7",
+      "name": "交叉审计/复盘/知识升级",
+      "owners": [
+        "review",
+        "knowledge",
+        "chief"
+      ],
+      "next": "反证和版本化修订，保留原始证据、失败与未知"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "funding_buy_burst",
+      "triggers": [
+        "FUNDING_FANOUT",
+        "SAME_SLOT_MULTIWALLET_BUY"
+      ],
+      "lead": "event",
+      "panel": [
+        "data",
+        "chain",
+        "graph",
+        "adversarial",
+        "statistics"
+      ],
+      "conditional": [
+        "wallet",
+        "liquidity",
+        "token",
+        "causal"
+      ],
+      "vetoReview": [
+        "review",
+        "risk"
+      ],
+      "questions": [
+        "多少独立owner、多少交易、何时注资、何时买入？",
+        "有无非hub同源与跨Mint复用？",
+        "是否超出同阶段机器人正常行为？"
+      ],
+      "outputs": [
+        "event_ledger",
+        "asset_graph",
+        "coordination_alternatives",
+        "baseline_status",
+        "next_signature_checks"
+      ]
+    },
+    {
+      "id": "liquidity_and_holder",
+      "triggers": [
+        "LIQUIDITY_DROP",
+        "TOP10_SHARE_RISE"
+      ],
+      "lead": "liquidity",
+      "panel": [
+        "data",
+        "chain",
+        "inventory",
+        "token"
+      ],
+      "conditional": [
+        "graph",
+        "regime",
+        "statistics"
+      ],
+      "vetoReview": [
+        "review",
+        "risk"
+      ],
+      "questions": [
+        "SOL/Token实际储备变化还是USD重新估值？",
+        "池/CEX与供应分母是否变化？",
+        "是否有明确撤池/市场卖出指令？"
+      ],
+      "outputs": [
+        "reserve_decomposition",
+        "holder_denominators",
+        "risk_state",
+        "disconfirming_events"
+      ]
+    },
+    {
+      "id": "cross_mint_operator",
+      "triggers": [
+        "CROSS_MINT_FUNDING_REUSE",
+        "CROSS_MINT_WALLET_ACTIVITY"
+      ],
+      "lead": "graph",
+      "panel": [
+        "wallet",
+        "adversarial",
+        "statistics",
+        "chain"
+      ],
+      "conditional": [
+        "token",
+        "causal",
+        "liquidity"
+      ],
+      "vetoReview": [
+        "review",
+        "risk"
+      ],
+      "questions": [
+        "可复用的是钱包、执行服务还是实际出资者？",
+        "是否排除公共hub并按操作簇做时序对照？",
+        "资产与资金循环闭合到哪里？"
+      ],
+      "outputs": [
+        "two_graphs",
+        "role_timeline",
+        "negative_controls",
+        "unclosed_paths"
+      ]
+    },
+    {
+      "id": "price_structure_reclaim",
+      "triggers": [
+        "RECLAIM",
+        "FCZ_CANDIDATE",
+        "MARKET_REGIME_SHIFT"
+      ],
+      "lead": "regime",
+      "panel": [
+        "liquidity",
+        "inventory",
+        "statistics",
+        "chain"
+      ],
+      "conditional": [
+        "graph",
+        "causal",
+        "execution"
+      ],
+      "vetoReview": [
+        "review",
+        "risk"
+      ],
+      "questions": [
+        "候选区是否只用当时数据定义？",
+        "需求改善是否独立于疑似控制钱包的自身买盘？",
+        "是否优于简化POC/AVWAP/价格基准？"
+      ],
+      "outputs": [
+        "asof_structure",
+        "market_baseline",
+        "paper_only_gate"
+      ]
+    },
+    {
+      "id": "trade_opportunity",
+      "triggers": [
+        "PAPER_EVALUATION_CANDIDATE"
+      ],
+      "lead": "execution",
+      "panel": [
+        "risk",
+        "statistics",
+        "liquidity",
+        "causal"
+      ],
+      "conditional": [
+        "graph",
+        "token",
+        "regime"
+      ],
+      "vetoReview": [
+        "review"
+      ],
+      "questions": [
+        "首次可见信息与真实可成交报价是什么？",
+        "规则是否预注册且有完整亏损样本？",
+        "扣费和尾部损失后能否样本外复现？"
+      ],
+      "outputs": [
+        "paper_protocol",
+        "costs_and_capacity",
+        "out_of_sample_review",
+        "no_live_trade"
+      ]
+    }
+  ],
+  "legacy_translation": {
+    "0": "governance_across_all",
+    "1": "S1 with provenance not GMGN-specific",
+    "2": "S2 and S5 entity hypotheses; no forced merge",
+    "3": "S3 coordination and null, not gated by entity identity",
+    "4": "S4 inventory with unassigned supply and uncertainty",
+    "5": "S4 regime defined as of decision time",
+    "6": "S5 alternatives/refutation; do not generate uncalibrated intent probability",
+    "7": "S6 independent evidence/risk and research-state Gates; NO live actions"
+  }
+}
