@@ -1,6 +1,6 @@
 # Solana Meme 全市场监控｜跨仓知识、研究方法与工程初步整合 V1.0
 
-> **历史版本说明（2026-10-31）**：本文是第一轮跨仓整合的 V1 历史记录，不再作为当前知识架构主入口。当前层级、知识资产数量、R005–R007/KX卡片和运行/研究边界以 [知识体系架构 V2.0](knowledge-architecture-v2.md) 与 [机器索引](../knowledge/architecture.v2.json) 为准。本文保留最初整合时的项目映射和工程事实，不应以其中早期 32/12/6 等数字代表当前状态。
+> **历史版本说明（2026-10-31）**：本文是第一轮跨仓整合的 V1 历史记录，不再作为当前知识架构主入口。当前层级、知识资产数量、R005–R007/KX卡片和运行/研究边界以 [知识体系架构 V2.0](knowledge-architecture-v2.0.md) 与 [机器索引](../knowledge/architecture.v2.json) 为准。本文保留最初整合时的项目映射和工程事实，不应以其中早期 32/12/6 等数字代表当前状态。
 
 
 > **历史整合蓝图说明**：本文记录六个来源项目如何映射到 Grok 的初步整合；知识层级和资产治理已升级为 [知识架构 V2.0](knowledge-architecture-v2.0.md)。本文中的旧 M0–M7 和旧数量不得覆盖 V2.0 的 L/S/M/V/K 多轴定义。
@@ -17,7 +17,7 @@
 
 ## 多轮外部研究后的专家知识连接 V2.0
 
-以 [跨层知识与专家连接研究](knowledge-expert-interconnection-v2.md) 为新的纵深入口，衔接 [17 专家知识映射](../knowledge/expert-capability-map.v1.json)、[40 条类型化专家交接](../knowledge/expert-interaction-graph.v1.json) 与 [12 条外部方法原始出处](../knowledge/external-method-sources.v1.json)。这不是多个专家重复打分，而是事实来源、角色/资产图、正常基准、市场反馈、因果反证及纸面净值的动态交接：任何新证据都可以沿依赖关系撤回旧结论，未知机制允许开放新增专家与知识源。
+以 [跨层知识与专家连接研究](knowledge-expert-interconnection-v2.md) 为新的纵深入口，衔接 [17 专家知识映射](../knowledge/expert-capability-map.v1.json)、[40 条类型化专家交接](../knowledge/expert-interaction-graph.v1.json) 与 [17 条外部方法原始出处（早期版本为12条）](../knowledge/external-method-sources.v1.json)。这不是多个专家重复打分，而是事实来源、角色/资产图、正常基准、市场反馈、因果反证及纸面净值的动态交接：任何新证据都可以沿依赖关系撤回旧结论，未知机制允许开放新增专家与知识源。
 
 `src/solana_meme_os/expert_interaction.py` 增加了只读图检查和撤回影响清单，`expert_router.py` 会附带当前被选专家之间的 `typed_expert_handoffs` 建议；**未连接真实RPC或运行自动多智能体**。
 
