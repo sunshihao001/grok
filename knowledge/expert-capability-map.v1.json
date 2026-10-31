@@ -23,7 +23,10 @@
       "source_cards": [
         "evidence-synthesis",
         "research-states",
-        "anti-false-completion"
+        "anti-false-completion",
+        "cashflow-count-value-inversion",
+        "market-utility-vs-tradability",
+        "normal-bot-ecology-baseline"
       ],
       "source_ids": [
         "research-methodology",
@@ -53,7 +56,11 @@
       "source_cards": [
         "gmgn-raw-prototype",
         "gmgn-field-combinations",
-        "anti-false-completion"
+        "anti-false-completion",
+        "first-funder-history-coverage",
+        "sol-receipt-economic-semantics",
+        "cashflow-count-value-inversion",
+        "trade-direction-source-gate"
       ],
       "source_ids": [
         "okx-market-readonly",
@@ -86,7 +93,10 @@
       "owns": "拆解多指令/内指令、真正 swap 与 transfer、同 slot 顺序；不凭同 slot 认 Bundle",
       "source_cards": [
         "market-lifecycle",
-        "token-security"
+        "token-security",
+        "sol-receipt-economic-semantics",
+        "cashflow-count-value-inversion",
+        "trade-direction-source-gate"
       ],
       "source_ids": [
         "slot-sequence-case",
@@ -119,7 +129,9 @@
       "owns": "回答几个人何时在多少交易中转多少资产，识别 burst 候选",
       "source_cards": [
         "candidate-entry",
-        "sybil-wash"
+        "sybil-wash",
+        "multichannel-wallet-evidence",
+        "normal-bot-ecology-baseline"
       ],
       "source_ids": [
         "coordination-null-model",
@@ -148,7 +160,10 @@
       "owns": "按时段识别 funder/sniper/recipient/router/trader 等候选，不确定身份",
       "source_cards": [
         "wallet-roles",
-        "deployer-history"
+        "deployer-history",
+        "first-funder-history-coverage",
+        "multichannel-wallet-evidence",
+        "capital-role-invariance"
       ],
       "source_ids": [
         "hermes-wallet-method",
@@ -180,7 +195,12 @@
       "source_cards": [
         "funding-graph",
         "concentration",
-        "wallet-roles"
+        "wallet-roles",
+        "first-funder-history-coverage",
+        "creator-fee-economic-path",
+        "multichannel-wallet-evidence",
+        "capital-role-invariance",
+        "cashflow-count-value-inversion"
       ],
       "source_ids": [
         "funding-graph-control",
@@ -215,7 +235,10 @@
       "source_cards": [
         "sybil-wash",
         "funding-graph",
-        "concentration"
+        "concentration",
+        "multichannel-wallet-evidence",
+        "normal-bot-ecology-baseline",
+        "trade-direction-source-gate"
       ],
       "source_ids": [
         "coordination-null-model",
@@ -245,7 +268,12 @@
       "source_cards": [
         "candidate-entry",
         "evidence-synthesis",
-        "anti-false-completion"
+        "anti-false-completion",
+        "first-funder-history-coverage",
+        "cashflow-count-value-inversion",
+        "multichannel-wallet-evidence",
+        "normal-bot-ecology-baseline",
+        "market-utility-vs-tradability"
       ],
       "source_ids": [
         "coordination-null-model",
@@ -279,7 +307,9 @@
       "source_cards": [
         "token-security",
         "deployer-history",
-        "market-lifecycle"
+        "market-lifecycle",
+        "creator-fee-economic-path",
+        "capital-role-invariance"
       ],
       "source_ids": [
         "meme-sources",
@@ -309,7 +339,11 @@
       "source_cards": [
         "liquidity-depth",
         "market-lifecycle",
-        "gmgn-field-combinations"
+        "gmgn-field-combinations",
+        "sol-receipt-economic-semantics",
+        "cashflow-count-value-inversion",
+        "creator-fee-economic-path",
+        "market-utility-vs-tradability"
       ],
       "source_ids": [
         "slot-sequence-case",
@@ -338,7 +372,10 @@
       "source_cards": [
         "concentration",
         "funding-graph",
-        "evidence-synthesis"
+        "evidence-synthesis",
+        "sol-receipt-economic-semantics",
+        "creator-fee-economic-path",
+        "capital-role-invariance"
       ],
       "source_ids": [
         "economic-cycle",
@@ -368,7 +405,9 @@
       "source_cards": [
         "market-lifecycle",
         "reclaim-theory",
-        "liquidity-depth"
+        "liquidity-depth",
+        "normal-bot-ecology-baseline",
+        "market-utility-vs-tradability"
       ],
       "source_ids": [
         "meme-first-control-zone",
@@ -397,7 +436,10 @@
       "source_cards": [
         "evidence-synthesis",
         "sybil-wash",
-        "reclaim-theory"
+        "reclaim-theory",
+        "capital-role-invariance",
+        "normal-bot-ecology-baseline",
+        "market-utility-vs-tradability"
       ],
       "source_ids": [
         "research-methodology",
@@ -428,7 +470,9 @@
       "source_cards": [
         "token-security",
         "research-states",
-        "anti-false-completion"
+        "anti-false-completion",
+        "market-utility-vs-tradability",
+        "normal-bot-ecology-baseline"
       ],
       "source_ids": [
         "failure-modes",
@@ -457,7 +501,8 @@
       "source_cards": [
         "liquidity-depth",
         "research-states",
-        "reclaim-theory"
+        "reclaim-theory",
+        "market-utility-vs-tradability"
       ],
       "source_ids": [
         "tradability-vs-structure",
@@ -488,7 +533,16 @@
       "source_cards": [
         "anti-false-completion",
         "evidence-synthesis",
-        "gmgn-raw-prototype"
+        "gmgn-raw-prototype",
+        "first-funder-history-coverage",
+        "sol-receipt-economic-semantics",
+        "cashflow-count-value-inversion",
+        "creator-fee-economic-path",
+        "multichannel-wallet-evidence",
+        "capital-role-invariance",
+        "normal-bot-ecology-baseline",
+        "trade-direction-source-gate",
+        "market-utility-vs-tradability"
       ],
       "source_ids": [
         "failure-modes",
@@ -522,7 +576,16 @@
       "source_cards": [
         "evidence-synthesis",
         "anti-false-completion",
-        "reclaim-theory"
+        "reclaim-theory",
+        "first-funder-history-coverage",
+        "sol-receipt-economic-semantics",
+        "cashflow-count-value-inversion",
+        "creator-fee-economic-path",
+        "multichannel-wallet-evidence",
+        "capital-role-invariance",
+        "normal-bot-ecology-baseline",
+        "trade-direction-source-gate",
+        "market-utility-vs-tradability"
       ],
       "source_ids": [
         "research-methodology",
