@@ -78,7 +78,7 @@ GitHub 知识源在 PR #14；实现和测试在 PR #16；GPT Library 的当前�
 ## 2026-11-01｜功能复用优先与真实项目审计（P3-M01方向复核）
 
 
-**新增持久资产**：[\`reference-capability-reuse-ledger.v1.md\`](reference-capability-reuse-ledger.v1.md)。实际读过 HoldTech 主要API路由和部分源码，核查 holder-overlap /deep-scan /funding /analyze /bundler-feed /smart-money /deployer-profile /extension 与架构规格；并比较FnZero Python/Rust SDK、pumpwatch发行者SQLite模块、GMGN Wallet Skills和MadeOnSol接口。阅读源码不等于已执行。
+**新增持久资产**：[`reference-capability-reuse-ledger.v1.md`](reference-capability-reuse-ledger.v1.md)。实际读过 HoldTech 主要API路由和部分源码，核查 holder-overlap /deep-scan /funding /analyze /bundler-feed /smart-money /deployer-profile /extension 与架构规格；并比较FnZero Python/Rust SDK、pumpwatch发行者SQLite模块、GMGN Wallet Skills和MadeOnSol接口。阅读源码不等于已执行。
 
 **方向结论：保持Meme经济监控目标，调整默认工程方法为 REUSE_FIRST。** M01目前仅fixture-only且未实现协议级DEX买卖；优先固定FnZero Python解析库并隔离对照现有M01测试与人工交易语义，必要时以Solana官方introspection补版本/CPI核查。不要直接把HoldTech运行代码移植：部分源码用fee payer猜买家和融资者、把钱包年龄当持仓时长、默认最大Holder为pool，且存在疑似硬编码API/Redis凭证、根目录无常规LICENSE文件。以后可将其Holdings、持有人交集、聚集可视化、Dev历史等**分模块**纳入本项目的只读分析。
 
