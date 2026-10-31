@@ -104,8 +104,8 @@ def _scope(kind: str, row: dict) -> str:
     return "UNMAPPED:" + (anchor or "GENERAL") + ":TYPE:" + kind
 
 
-def _candidate_id(scope: str, kinds: list[str], signatures: list[str]) -> str:
-    canonical = json.dumps([scope, kinds, signatures], ensure_ascii=False,
+def _stable_hash(*parts: object) -> str:
+    canonical = json.dumps(parts, ensure_ascii=False,
                            separators=(",", ":")).encode("utf-8")
     return hashlib.sha256(canonical).hexdigest()[:20]
 
@@ -187,7 +187,8 @@ def make_plan(report: dict, *, max_cases: int = 4,
         if not signatures:
             status = "MISSING_SIGNATURES_REQUIRE_SOURCE_REPAIR"
         tasks.append({
-            "case_id": _candidate_id(scope, kinds, signatures),
+            "case_id": _stable_hash("CASE", scope, kinds),
+            "evidence_version": _stable_hash("EVIDENCE", scope, kinds, signatures),
             "scope": scope,
             "research_priority": level,
             "priority_not_a_market_risk_score": True,
