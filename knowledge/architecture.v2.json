@@ -443,12 +443,25 @@
         "R006",
         "R007"
       ],
-      "note": "No R004 document exists in this branch; no number is fabricated."
+      "note": "No R004 document exists in this branch; no number is fabricated.",
+      "card_mapping": {
+        "R005": "first-funder-history-coverage",
+        "R006": "sol-receipt-economic-semantics",
+        "R007": "cashflow-count-value-inversion"
+      }
     },
     "cross_source_knowledge_units": {
       "path": "knowledge/catalog.v1.json",
       "count": 6,
       "items": [
+        "creator-fee-economic-path",
+        "multichannel-wallet-evidence",
+        "capital-role-invariance",
+        "normal-bot-ecology-baseline",
+        "trade-direction-source-gate",
+        "market-utility-vs-tradability"
+      ],
+      "knowledge_unit_ids": [
         "KX-01",
         "KX-02",
         "KX-03",
@@ -456,7 +469,15 @@
         "KX-05",
         "KX-06"
       ],
-      "note": "Six cross-project knowledge units are represented by source-linked catalog cards."
+      "mapping": {
+        "creator-fee-economic-path": "KX-01",
+        "multichannel-wallet-evidence": "KX-02",
+        "capital-role-invariance": "KX-03",
+        "normal-bot-ecology-baseline": "KX-04",
+        "trade-direction-source-gate": "KX-05",
+        "market-utility-vs-tradability": "KX-06"
+      },
+      "note": "KX-01..KX-06 are stable study identifiers mapped to retrievable catalog card IDs."
     }
   },
   "canonical_documents": {
