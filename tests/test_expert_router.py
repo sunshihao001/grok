@@ -17,7 +17,7 @@ class TestExpertKnowledgeRouting(unittest.TestCase):
         self.assertEqual(self.mapping["status"], "RESEARCH_CONTRACT_NOT_DEPLOYED")
         self.assertEqual(len(self.mapping["experts"]), 17)
         self.assertEqual(len(self.mapping["domains"]), 12)
-        self.assertEqual(len(self.mapping["scenarios"]), 5)
+        self.assertEqual(len(self.mapping["scenarios"]), 7)
 
     def test_every_expert_card_exists(self):
         # Catalog and source registry contract, not market truth.
@@ -74,6 +74,21 @@ class TestExpertKnowledgeRouting(unittest.TestCase):
         self.assertIn("liquidity", got["primary_experts"])
         self.assertIn("token", got["primary_experts"])
         self.assertFalse("actual_order" in got)
+
+    def test_native_funding_to_buy_is_a_known_research_panel(self):
+        x = route(["FUNDING_TO_BUY_CANDIDATE"], mapping=self.mapping)
+        self.assertEqual(x["status"], "MATCHED_RESEARCH_PANELS")
+        self.assertEqual(x["lead_expert"], "graph")
+        self.assertIn("chain", x["primary_experts"])
+        self.assertIn("review", x["independent_challengers"])
+        self.assertTrue(x["no_trading"])
+
+    def test_native_token_consolidation_is_not_unknown_protocol(self):
+        x = route(["TOKEN_CONSOLIDATION"], mapping=self.mapping)
+        self.assertEqual(x["status"], "MATCHED_RESEARCH_PANELS")
+        self.assertEqual(x["lead_expert"], "inventory")
+        self.assertIn("graph", x["primary_experts"])
+        self.assertIn("review", x["independent_challengers"])
 
     def test_reject_unknown_role_in_research_contract(self):
         bad = copy.deepcopy(self.mapping)
