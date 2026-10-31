@@ -54,6 +54,14 @@
 - [x] 认知纠偏：原M01“先全面研究一般AMM价格形成”太宽泛，没有围绕旧qb关键钱包矩阵/同源/筹码与meme-具体Meme结构。修改当前 [研究计划](../knowledge/system/mechanism-research-plan.v1.json)，使M01改为 [关键钱包→Mint阶段→剩余筹码→信号可见与可跟性](../knowledge/domain/D04-D08-key-wallet-followability-research-brief.md)；旧D03一般价格研究为按需辅助。
 - [ ] 按该新M01真正完成下一份专业纵深专题（目前只有研究任务，尚无实证/已证盈利）并对照旧项目逐机制检验认知是否增加。
 
+## GPT「跟单」项目全领域知识积累（不混同Grok运行交付）
+
+- [x] 建立 [《GPT Project知识主册》](../knowledge/system/gpt-meme-project-core.v1.md)，覆盖旧L0–L7、D01–D12、21位专家、152项单元及十条跨域Meme机制关系；这是**系统化知识入口和既有范围目录汇编**，不表示所有专业研究完成。
+- [x] 建立 [《知识层级累积与双向关联规范》](../knowledge/system/gpt-meme-knowledge-accumulation.v1.md)，含对“不同时间窗口批量异常钱包转账”这一具体监控灵感的多域研究示例、反证和回填方法。
+- [x] 建立 [《Project简短指令》](../knowledge/system/gpt-meme-project-instructions.v1.md) 与 [机器索引](../knowledge/system/gpt-meme-project-index.v1.json)，避免每轮对话散落知识与生成新本体。
+- [ ] **GPT Project知识附件实际更新**：需要操作者将可移植文件添加至「跟单」项目的文件区域，并确认内容版本；GitHub提交或个人Library保存不等于Project附件已同步。不得冒称已经跨Project自动同步。
+- [ ] **首轮专业知识实质深化**：B01关键钱包的跨项目经济机制与时间可复制性仍未完成；现有主册和汇编不能替代逐专题推演及审核。
+
 ## K-节奏｜小批次滚动的参考项目知识整合
 
 - [x] 固定 [《参考项目知识滚动融合方法》](../knowledge/system/rolling-reference-knowledge-integration.md)：**每批一个具体Meme业务问题，批内按“原资料理解→跨项目专家融合→Grok知识编译”依次完成，批次间允许只读资料核查/已审稿入库有限并行**。
