@@ -155,6 +155,19 @@
         "L03",
         "L27"
       ]
+    },
+    {
+      "id": "solana-token-close-account",
+      "research_round": "transaction_semantics",
+      "url": "https://solana.com/docs/tokens/basics/close-account",
+      "source": "Solana official SPL Token documentation",
+      "supported_design_claim": "Token CloseAccount transfers token-account lamports, including WSOL underlying SOL and account rent, to a designated destination; direct System Transfer alone misses valid lamport receipts.",
+      "does_not_verify": "Does not identify original economic source, beneficial owner or any particular historical transaction in R006.",
+      "linked_expert_edges": [
+        "L39",
+        "L05",
+        "L35"
+      ]
     }
   ]
 }
