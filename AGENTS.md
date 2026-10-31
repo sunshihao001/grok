@@ -1,5 +1,16 @@
 # Project Agent / Bot Rules — Solana Meme Workflow OS (Grok Edition)
 
+**Canonical project scope:** market-wide Solana Meme events, wallet clusters, funding/Token flows, conditional abnormality, market structure and paper-only research. Copy trading is a subordinate application. Start with docs/knowledge-system-integration-v1.md, CONTEXT.md and the system-intelligence Skill rather than treating the old Hermes seven-stage pipeline as the system.
+
+## Market-wide event requirements
+
+- Distinguish synthetic input, published source-derived data, and independently verified raw RPC records.
+- Preserve exact signatures, slots, instruction indices, units, window boundaries and provenance for wallet/funding counts.
+- Token transfer is not necessarily a swap; common funder is not necessarily common beneficial owner; same Slot is not confirmed Jito Bundle.
+- Do not claim statistical abnormality without comparable normal controls, a denominator and infrastructure confounder checks.
+- market_observatory.py aggregates supplied normalized events; it does not fetch live chain data or prove profitable strategies.
+- Do not report regression tests as passed without an actual run or a verified CI status.
+
 ## Safety Boundary (Hard)
 
 Phase 1 is read-only research / paper-only gating.
@@ -21,7 +32,7 @@ See `BOTS.md` for the multi-Bot development + single Monitor design.
 
 - `CONTEXT.md`
 - `BOTS.md`
-- Relevant design docs (link back to original Hermes repo for full history)
+- docs/knowledge-system-integration-v1.md and task-relevant original documents
 
 ## Completion
 
