@@ -119,5 +119,27 @@ class OfficialPublishedTransactionExamples(unittest.TestCase):
         self.assertFalse(result["coverage"]["complete"])
 
 
+    def test_missing_rpc_meta_err_is_unknown_not_successful_funding(self):
+        item = fixture_for(DOC["examples"][0])
+        del item["transactions"][0]["rpc"]["meta"]["err"]
+        r = normalize(item)
+        self.assertFalse(r["coverage"]["complete"])
+        self.assertEqual(r["events"], [])
+        self.assertEqual(r["adapter_audit"]["funding_events"], [])
+        self.assertIn("TRANSACTION_STATUS_UNKNOWN",
+                      [x["reason"] for x in r["adapter_audit"]["unresolved"]])
+
+    def test_evidence_after_as_of_is_not_emitted_even_as_funding(self):
+        item = fixture_for(DOC["examples"][0])
+        item["as_of"] = "2026-10-31T00:00:00Z"
+        item["transactions"][0]["available_at"] = "2026-10-31T00:00:10Z"
+        r = normalize(item)
+        self.assertFalse(r["coverage"]["complete"])
+        self.assertEqual(r["events"], [])
+        self.assertEqual(r["adapter_audit"]["funding_events"], [])
+        self.assertIn("EVIDENCE_ARRIVED_AFTER_AS_OF",
+                      [x["reason"] for x in r["adapter_audit"]["unresolved"]])
+
+
 if __name__ == "__main__":
     unittest.main()
