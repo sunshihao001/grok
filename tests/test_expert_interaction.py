@@ -31,12 +31,12 @@ class ExpertInteractionTests(unittest.TestCase):
         cls.graph = load_graph(expert_map=cls.mapping)
 
     def test_every_domain_expert_connected_and_links_typed(self):
-        self.assertEqual(len(self.graph["links"]), 38)
+        self.assertEqual(len(self.graph["links"]), 40)
         ids = {r["id"] for r in self.mapping["experts"]}
         linked = {x["from"] for x in self.graph["links"]} | {
             x["to"] for x in self.graph["links"]}
         self.assertEqual(ids, linked)
-        self.assertEqual(len({x["id"] for x in self.graph["links"]}), 38)
+        self.assertEqual(len({x["id"] for x in self.graph["links"]}), 40)
 
     def test_route_includes_active_and_optional_typed_handoffs(self):
         r = route(["FUNDING_FANOUT", "SAME_SLOT_MULTIWALLET_BUY"],
