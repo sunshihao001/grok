@@ -1,5 +1,9 @@
 # 外部成熟项目对标研究｜专家写作 Skill V1.0（四轮搜索）
 
+**应用范围补充**：该对标最初以跟单专家写作为示例，如今可用于全市场事件、异常协同、资金网络和市场结构研究的 Skill 评测。现行总入口是 [Solana Meme System Intelligence](../skills/solana-meme-system-intelligence/SKILL.md)，旧单钱包评测 E1–E5 只是一组专题，不代表完整系统能力。
+
+
+
 - 时间：2026-10-30
 - 范围：现有 `skills/solana-meme-expert-writing` 的方法与工程对标，不涉及真实交易或云端部署
 - 方式：多轮外部搜索 → 原始 GitHub 仓库/规范/源码读取 → 与现有 Skill 交叉比较 → 复用决策
