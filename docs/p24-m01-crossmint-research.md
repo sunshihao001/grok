@@ -95,3 +95,10 @@ PYTHONPATH=src python -m unittest discover -s tests -v
 6. `available_at` 必须记录采集系统实际收到证据的时间，不能借用区块时间充当可得时间；同Slot内同时间事件要保留交易签名与可复核指令位置，不制造秒级因果顺序。
 
 **优先实现次序**（仅设计交接）：先用少量已核查 Solana 原始签名和有标准答案的交易类型建设独立只读适配器及其 fixture；严格验证经济动作、归属与来源；再将已归一化事件送入 M01，随后推进 C02 和 C05。优先借鉴官方 `@solana/transaction-introspection` 解析账户索引/LUT/CPI，而非自行简化所有协议结构；其为 JS 工具包，现有 Python 原型尚未接入该包。官方说明：https://solana.com/docs/core/transactions/transaction-introspection 。
+## P3-M01 真实指令语义适配器：本轮实际增量
+
+**变更性质：AMEND 工程交接；代码位于 Draft PR #16，未改生产监控。** [独立适配器说明和 C02/C05 数据契约](p3-m01-raw-adapter-contract.md) 取代此前“适配器尚不存在”的旧工程状态。适配器已在合成 `getTransaction` 形状输入中解析直接 SPL Token/Token-2022 Token Transfer（并核对 source Token Account owner 与 fee payer/authority 不是同一概念）、System SOL 直接转账，以及 v0 编译格式的已加载地址；所有 DEX CPI Token/SOL 交易均不能直接视为独立 Swap 或用户充值。无协议级 BUY/SELL 解码、无真实 RPC 采集与覆盖核验。
+
+**新增的结构性限制**：现有 M01 输出只提供窗口钱包数量，没有预冻结的成员地址列表，不能直接作为 C02 相同钱包群跨 Mint 的成员依据。C02 必须从历史冻结群体定义与原始经济事件流开始；C05 必须独立获取合格机会全集及采集完整性，不能用零事件推断行为沉默。
+
+测试与模拟场景见 `tests/test_raw_tx_adapter.py`、`fixtures/raw-solana-transfers-demo.json` 和 `fixtures/c02-c05-contract-scenarios.json`。合成测试支持后续小样本**人工逐笔只读核查**，不代表链上真实例子已核验。
