@@ -17,7 +17,7 @@ class TestExpertKnowledgeRouting(unittest.TestCase):
         self.assertEqual(self.mapping["status"], "RESEARCH_CONTRACT_NOT_DEPLOYED")
         self.assertEqual(len(self.mapping["experts"]), 17)
         self.assertEqual(len(self.mapping["domains"]), 12)
-        self.assertEqual(len(self.mapping["scenarios"]), 7)
+        self.assertEqual(len(self.mapping["scenarios"]), 9)
 
     def test_every_expert_card_exists(self):
         # Catalog and source registry contract, not market truth.
@@ -88,6 +88,23 @@ class TestExpertKnowledgeRouting(unittest.TestCase):
         self.assertEqual(x["status"], "MATCHED_RESEARCH_PANELS")
         self.assertEqual(x["lead_expert"], "inventory")
         self.assertIn("graph", x["primary_experts"])
+        self.assertIn("review", x["independent_challengers"])
+
+    def test_value_inversion_triggers_capital_and_execution_experts(self):
+        x = route(["COUNT_VALUE_ECONOMIC_TYPE_INVERSION"], mapping=self.mapping)
+        self.assertEqual(x["status"], "MATCHED_RESEARCH_PANELS")
+        self.assertEqual(x["lead_expert"], "graph")
+        self.assertIn("chain", x["primary_experts"])
+        self.assertIn("liquidity", x["primary_experts"])
+        self.assertIn("review", x["independent_challengers"])
+        self.assertTrue(x["no_trading"])
+
+    def test_history_silence_triggers_coverage_and_statistics(self):
+        x = route(["HISTORY_COVERAGE_RECEIPT_SILENCE_TENSION"], mapping=self.mapping)
+        self.assertEqual(x["status"], "MATCHED_RESEARCH_PANELS")
+        self.assertEqual(x["lead_expert"], "data")
+        self.assertIn("wallet", x["primary_experts"])
+        self.assertIn("statistics", x["primary_experts"])
         self.assertIn("review", x["independent_challengers"])
 
     def test_reject_unknown_role_in_research_contract(self):
