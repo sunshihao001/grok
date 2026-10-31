@@ -34,6 +34,23 @@ class KnowledgeTests(unittest.TestCase):
             self.assertIn(c["status"], {"source_contract", "documented_legacy_method", "unverified_hypothesis"})
             self.assertTrue(all(len(s["commit"]) == 40 for s in c["sources"]))
 
+    def test_expanded_catalog_trigger_vocabulary_is_supported(self):
+        catalog = load_catalog()
+        self.assertEqual(len(catalog["cards"]), 24)
+        ids = {c["id"] for c in catalog["cards"]}
+        self.assertTrue({
+            "first-funder-history-coverage",
+            "sol-receipt-economic-semantics",
+            "cashflow-count-value-inversion",
+            "creator-fee-economic-path",
+            "normal-bot-ecology-baseline",
+            "trade-direction-source-gate",
+            "market-utility-vs-tradability",
+        }.issubset(ids))
+        for card in catalog["cards"]:
+            self.assertTrue(card["triggers"])
+            self.assertTrue(all(isinstance(t, str) and t for t in card["triggers"]))
+
     def test_question_routes_real_concepts_not_generic_summary(self):
         routed = for_question("这批钱包同源资金会不会只是交易所转账？")
         self.assertEqual(routed["route_status"], "MATCHED_REFERENCE")
