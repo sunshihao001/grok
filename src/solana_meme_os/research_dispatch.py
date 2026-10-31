@@ -57,28 +57,51 @@ def _positive_int(value: object, name: str, *, allow_zero: bool = False) -> int:
 
 
 def _scope(kind: str, row: dict) -> str:
-    """Never attach source-only fanout to a Mint without a proven edge."""
+    """Preserve each observed episode; do NOT coalesce a Mint's entire history.
+
+    M2's cross-mint and funding-to-buy candidates are already cohort-wide
+    aggregates, with no event window; label that explicitly rather than
+    inventing an episode time.
+    """
     if kind in {"SAME_SLOT_MULTIWALLET_BUY", "TOKEN_CONSOLIDATION",
                 "FUNDING_TO_BUY_CANDIDATE"}:
         mint = row.get("mint")
         if not isinstance(mint, str) or not mint:
             raise ValueError(f"{kind} requires explicit mint")
-        return "MINT:" + mint
+        if kind == "SAME_SLOT_MULTIWALLET_BUY":
+            slot = row.get("slot")
+            if type(slot) is not int or slot < 0:
+                raise ValueError("same-slot buy candidate requires slot")
+            return f"MINT:{mint}:BUY_SLOT:{slot}"
+        if kind == "TOKEN_CONSOLIDATION":
+            window, recipient = row.get("start"), row.get("recipient")
+            if not all(isinstance(v, str) and v for v in (window, recipient)):
+                raise ValueError("token consolidation requires window and recipient")
+            return f"MINT:{mint}:TOKEN_TO:{recipient}:WINDOW:{window}"
+        funder = row.get("candidate_funder")
+        if not isinstance(funder, str) or not funder:
+            raise ValueError("funding-to-buy requires candidate_funder")
+        return f"MINT:{mint}:SOURCE:{funder}:COHORT_AGGREGATE"
     if kind in {"FUNDING_FANOUT", "CROSS_MINT_FUNDING_REUSE"}:
         src = row.get("funder", row.get("candidate_funder"))
         if not isinstance(src, str) or not src:
             raise ValueError(f"{kind} requires source address")
-        return "SOURCE:" + src
+        if kind == "FUNDING_FANOUT":
+            window = row.get("start")
+            if not isinstance(window, str) or not window:
+                raise ValueError("funding fanout requires window start")
+            return f"SOURCE:{src}:FANOUT_WINDOW:{window}"
+        return f"SOURCE:{src}:CROSS_MINT_AGGREGATE"
     if kind == "CROSS_MINT_WALLET_ACTIVITY":
         wallet = row.get("wallet")
         if not isinstance(wallet, str) or not wallet:
             raise ValueError("cross-mint wallet activity requires wallet")
-        return "WALLET:" + wallet
-    # Unknown ontology is a first-class research input, not silently dropped.
+        return "WALLET:" + wallet + ":CROSS_MINT_AGGREGATE"
+    # Unrecognized events are NOT silently mapped to an existing schema.
     anchor = row.get("mint") or row.get("funder") or row.get("wallet")
     if anchor is not None and (not isinstance(anchor, str) or not anchor):
-        raise ValueError("unknown event candidate anchor must be a nonempty string")
-    return "UNMAPPED:" + (anchor or "GENERAL")
+        raise ValueError("unknown candidate anchor must be nonempty string")
+    return "UNMAPPED:" + (anchor or "GENERAL") + ":TYPE:" + kind
 
 
 def _candidate_id(scope: str, kinds: list[str], signatures: list[str]) -> str:
