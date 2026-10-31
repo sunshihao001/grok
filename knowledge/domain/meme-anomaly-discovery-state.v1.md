@@ -59,6 +59,12 @@
 - Solana 原始交易需要区分 Token Account owner、fee payer、program/router、CPI、Swap 与转仓；同Slot不是同一操作者的证明。
 - 含净资金/库存/交易盈利的判断必须明确观察集合边界、发生时间、可得时间和真实资产单位。
 
+### 外部知识补充：区别协议原语、研究标签与行业黑话（2026-10-31）
+
+**AMEND，非新增异常检测编号。** 本项目过去经常使用“捆绑钱包”“sniper”“同源融资”“bundle”等词，应查明每种词到底是协议对象、研究者自定的链上簇、还是供应商宣传标签。**Jito Bundle** 指 Block Engine 处理的最多5笔、顺序原子执行的交易组；同 slot 买入多笔、相似 tip 或相同资金来源并不单独证明真实 Jito Bundle。Jito 官方：https://docs.jito.wtf/lowlatencytxnsend/ 。外部研究的 sniper cohort/group snipe 应以其样本筛选和定义为准，参考 https://github.com/searadacunha/Why-Solana-Memecoins-Are-Over 。
+
+另须区别 Token Account owner、程序 owner、authority/delegate、fee payer；它们的共同出现不等于相同控制人。Solana 官方：https://solana.com/docs/tokens/basics/create-token-account 、https://solana.com/docs/core/transactions/transaction-introspection 。这项知识直接影响 M01 的钱包去重和原始交易适配器，以及 C02/C05 正常反例。未来按问题需要扩展真实术语和跨领域解释，只有改变数据定义或可证伪方法的新增认识才修订本专题；不要建立同义词词典或将行话当成证明。
+
 ## 6. 工程交付：P3-M01 与研究分开
 
 - **代码草案**：`https://github.com/sunshihao001/grok/pull/16`，包含 `src/solana_meme_os/wallet_batch_monitor.py`、14项新增离线测试、fixture、使用说明。
