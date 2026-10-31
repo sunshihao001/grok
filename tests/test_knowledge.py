@@ -51,6 +51,16 @@ class KnowledgeTests(unittest.TestCase):
             self.assertTrue(card["triggers"])
             self.assertTrue(all(isinstance(t, str) and t for t in card["triggers"]))
 
+        for card in catalog["cards"]:
+            self.assertIn(card["domain"], {
+                "market_event", "execution_semantics", "wallet_behavior", "capital_graph",
+                "coordination", "token_security", "microstructure", "inventory_control",
+                "market_regime", "baseline", "risk_and_action", "knowledge_engineering",
+            })
+            self.assertIn(card["maturity"], {"K0", "K1", "K2", "K3", "K4"})
+            self.assertTrue(card["maturity_basis"])
+            self.assertTrue(card["owner_experts"])
+
     def test_question_routes_real_concepts_not_generic_summary(self):
         routed = for_question("这批钱包同源资金会不会只是交易所转账？")
         self.assertEqual(routed["route_status"], "MATCHED_REFERENCE")
