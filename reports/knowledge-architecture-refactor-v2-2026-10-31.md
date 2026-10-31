@@ -20,7 +20,7 @@
 
 ## 已实施的层级与导航修改
 
-1. 新建 `docs/knowledge-architecture-v2.0.md` 作为唯一 L0–L7 知识层级规范，并增加机器可读 `knowledge/architecture.v2.json`；两者同步定义知识层级、五张图、S0–S7、M0–M7、专家、运行循环和知识资产登记。
+1. 新建 `docs/knowledge-architecture-v2.0.md` 作为唯一 L0–L7 知识层级规范，并增加机器可读 `knowledge/architecture.v2.json`；两者同步定义八层、五张图、S0–S7、M0–M7、专家、运行循环和知识资产登记。
 2. 将 L0–L7 与 S0–S7 研究阶段、M1/M2 软件模块、V4 快慢双循环、17 专家能力、K0–K4 成熟度分离。
 3. 明确五张图：事实图、经济关系图、机制知识图、专家/来源血缘图、决策效力图。
 4. 更新 README、CONTEXT、BOTS、Skills README、Knowledge README、专家写作/知识/系统智能 Skill、Next Steps。
@@ -35,14 +35,20 @@ GitHub Actions 在本轮暴露：`catalog.v1.json` 实际已经有 24 张卡、3
 - 新增测试确认 24 张卡和扩展触发词能通过契约校验；
 - 保留未知/非法触发类型拒绝机制，未放宽到任意字符串。
 
-修复后 GitHub Actions： [run 41188759779](https://github.com/sunshihao001/grok/actions/runs/41188759779) 为 `completed: success`。后续 Skill 导航和文档更新触发的运行仍需以最终分支最新记录为准。
+修复后最终 GitHub Actions： [run 41189340222](https://github.com/sunshihao001/grok/actions/runs/41189340222) 为 `completed: success`，实际运行 **134 tests, OK**。此前出现的触发器集合类型和外部方法边字段两次回归均已定位并修复。
 
 ## 结构一致性检查
 
-- 14 个核心入口文档内部相对链接检查：无断链。
+- 18 个核心入口文档内部相对链接检查：无断链。
 - 机器引用校验：24 张卡、17 专家、12 域、9 场景、40 交接边、30 来源、8 假说；专家映射引用的卡片和来源 ID 均有效。
 - 领域 Skill front matter 已调整到文件首部，避免前置正文破坏 Skill 元数据识别。
 - 当前仍在草案分支；没有修改 main，没有创建云端 Bot 或启用 Routine。
+
+## 机器可读架构与卡片治理补充
+
+- `knowledge/architecture.v2.json` 是程序可读取的架构合同，`docs/knowledge-architecture-v2.0.md` 是专家/维护者解释文档；知识层级 L0–L7 与 JSON 中的输入/输出保持一致，12 个领域标签横跨层级，不再被误称为 L2。
+- M0–M7 已单独登记为产品能力状态，和 S0–S7 研究阶段及 L0–L7 知识层级分离。
+- 24 张卡已逐条增加主 domain、保守成熟度、成熟度依据及责任专家；加载器现在严格验证这些字段，知识路由会一并输出，避免卡片只是标题/关键词。
 
 ## 仍然存在的实质性缺口
 
