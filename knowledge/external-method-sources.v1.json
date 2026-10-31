@@ -1,0 +1,160 @@
+{
+  "schema_version": "1.0",
+  "accessed_at_utc": "2026-10-31",
+  "scope": "external methods for expert handoffs, not crypto market price facts",
+  "note": "This is original analytical linkage to primary documentation and research; no external article corpus was copied; access dates are distinct from publication dates.",
+  "references": [
+    {
+      "id": "solana-introspection",
+      "research_round": "onchain",
+      "url": "https://solana.com/docs/core/transactions/transaction-introspection",
+      "source": "Solana 官方交易解析",
+      "supported_design_claim": "说明版本化地址查找和inner CPI需要正确解码",
+      "does_not_verify": "不能证明任意给定第三方平台事件分类已正确",
+      "linked_expert_edges": [
+        "L01",
+        "L02",
+        "L05"
+      ]
+    },
+    {
+      "id": "solana-gettransaction",
+      "research_round": "onchain",
+      "url": "https://solana.com/docs/rpc/http/gettransaction",
+      "source": "Solana 官方 RPC",
+      "supported_design_claim": "给出通过signature取meta、balance、innerInstructions等的原始入口",
+      "does_not_verify": "仅文档不等于本轮已经查询具体交易",
+      "linked_expert_edges": [
+        "L01",
+        "L02",
+        "L05"
+      ]
+    },
+    {
+      "id": "jito-bundles",
+      "research_round": "onchain",
+      "url": "https://docs.jito.wtf/lowlatencytxnsend/",
+      "source": "Jito 官方",
+      "supported_design_claim": "Bundle的顺序/原子性/同Slot与普通同Slot的区别",
+      "does_not_verify": "链上同Slot本身不是Bundle来源证明",
+      "linked_expert_edges": [
+        "L02",
+        "L11"
+      ]
+    },
+    {
+      "id": "flink-time",
+      "research_round": "stream",
+      "url": "https://nightlies.apache.org/flink/flink-docs-stable/docs/learn-flink/streaming_analytics/",
+      "source": "Apache Flink 官方文档",
+      "supported_design_claim": "event time与watermark/late event影响窗口版本",
+      "does_not_verify": "不表示当前Grok采用Flink或已经实现水位线",
+      "linked_expert_edges": [
+        "L03",
+        "L27"
+      ]
+    },
+    {
+      "id": "prov-o",
+      "research_round": "provenance",
+      "url": "https://www.w3.org/TR/prov-o/",
+      "source": "W3C Recommendation",
+      "supported_design_claim": "Entity、Activity、Agent及来源/派生关系构造血缘",
+      "does_not_verify": "不会自动证明内容正确或专业结论可信",
+      "linked_expert_edges": [
+        "L01",
+        "L25",
+        "L26"
+      ]
+    },
+    {
+      "id": "opentelemetry",
+      "research_round": "observability",
+      "url": "https://opentelemetry.io/docs/specs/otel/overview/",
+      "source": "OpenTelemetry 规范",
+      "supported_design_claim": "Trace/Span/Link用于跨组件或并行分析关联",
+      "does_not_verify": "不表示Grok云端实际有OTel追踪",
+      "linked_expert_edges": [
+        "L25",
+        "L28"
+      ]
+    },
+    {
+      "id": "ms-agent-patterns",
+      "research_round": "orchestration",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns/",
+      "source": "Microsoft Azure 架构文档",
+      "supported_design_claim": "按问题选确定性/交接/并行、可观测和评估，避免不必要Agent数量",
+      "does_not_verify": "不能断言现有Grok已经支持这些工作流原语",
+      "linked_expert_edges": [
+        "L28",
+        "L29",
+        "L30",
+        "L31"
+      ]
+    },
+    {
+      "id": "ms-handoff",
+      "research_round": "orchestration",
+      "url": "https://learn.microsoft.com/en-us/agent-framework/workflows/orchestrations/handoff/",
+      "source": "Microsoft Agent Framework 文档",
+      "supported_design_claim": "清晰区分动态专家交接与主Agent委派",
+      "does_not_verify": "不要求本项目使用微软Agent Framework",
+      "linked_expert_edges": [
+        "L26",
+        "L28",
+        "L31"
+      ]
+    },
+    {
+      "id": "causal-whatif",
+      "research_round": "causal",
+      "url": "https://miguelhernan.org/whatifbook",
+      "source": "Hernán/Robins 原著公开入口",
+      "supported_design_claim": "混杂、选择偏差、测量误差和时间变化对因果判断的约束",
+      "does_not_verify": "不能独立确定某Meme钱包的行为动机",
+      "linked_expert_edges": [
+        "L10",
+        "L12",
+        "L18",
+        "L19"
+      ]
+    },
+    {
+      "id": "drift-unsupervised",
+      "research_round": "statistics",
+      "url": "https://link.springer.com/article/10.1007/s41060-024-00620-y",
+      "source": "2024/25 论文",
+      "supported_design_claim": "无监督概念漂移检测与真实流数据基准",
+      "does_not_verify": "不提供Solana钱包已校准正常阈值",
+      "linked_expert_edges": [
+        "L17",
+        "L27"
+      ]
+    },
+    {
+      "id": "drift-partial-label",
+      "research_round": "statistics",
+      "url": "https://www.sciencedirect.com/science/article/pii/S1051200426004434",
+      "source": "2026 论文",
+      "supported_design_claim": "延迟/部分标注使漂移检测和评估更复杂",
+      "does_not_verify": "不自动建立Meme真实标签体系",
+      "linked_expert_edges": [
+        "L17",
+        "L27"
+      ]
+    },
+    {
+      "id": "beam-windowing",
+      "research_round": "stream",
+      "url": "https://docs.cloud.google.com/dataflow/docs/concepts/beam-programming-model",
+      "source": "Google Cloud/Apache Beam 文档",
+      "supported_design_claim": "window、trigger、watermark及晚到数据的分批更新概念",
+      "does_not_verify": "不代表M2已采用该框架或拥有真实采集",
+      "linked_expert_edges": [
+        "L03",
+        "L27"
+      ]
+    }
+  ]
+}
