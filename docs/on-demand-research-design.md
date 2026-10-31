@@ -28,7 +28,7 @@ Lessons from direct reading:
 
 **K0 — resident context (small):** the project's research goal, forbidden actions, epistemic levels, short process instructions and 15 local concept cards. No giant prompt.
 
-**K1 — source router (on demand):** `knowledge/source_index.v1.json` points to relevant original Hermes, meme-, qb- and external methodological documents at specific commits. `src/solana_meme_os/research.py` creates a source/evidence packet for a question. `--fetch-excerpts` can obtain short read-only previews in memory; it neither clones nor stores these sources. File cannot substitute for an external analytical model or live market data.
+**K1 — source router (on demand):** `knowledge/source_index.v1.json` now has 22 pinned pointers to original Hermes, meme-, qb-, external coordination/forensics methods and OKX read-only API documentation, without requiring old tools to run. `src/solana_meme_os/research.py` creates a source/evidence packet for a question. `--fetch-excerpts` can obtain short read-only previews in memory; it neither clones nor stores these sources. File cannot substitute for an external analytical model or live market data.
 
 **K2 — primary evidence (case-specific):** actual transaction signatures, pool data, raw GMGN outputs, temporal cutoffs, observed outcome and negative controls. These must be collected at investigation time. At present this project has **no verified live K2 market data**; fixture observations remain fixture-only.
 
