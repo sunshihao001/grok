@@ -98,7 +98,7 @@
       "url": "https://github.com/jayrabol/solana-holder-clusters",
       "commit": "a75a72965479a7b715b041148803d8004fe25079",
       "stage": "SOURCE_CODE_READ",
-      "evidence": "README+src/funders.ts+src/clusters.ts+docs/METHODOLOGY.md",
+      "evidence": "README+src/funders.ts+src/clusters.ts+docs/METHODOLOGY.md; cross-file null-state audit",
       "focus": [
         "first_funder_resolution",
         "top_holder_supply_denominator",
@@ -114,8 +114,8 @@
         "statistics"
       ],
       "grade": "A_DEFINITION_AND_GUARDS",
-      "adopt": "Unknown-first-funder-on-full-page, CEX infrastructure bucket, explicit supply coverage and risk score ingredients.",
-      "limits": "First-funder approximation from earliest fetched transaction can miss complex funding, RPC history and further hops; shared funder != same owner; library tests claimed not run here."
+      "adopt": "Owner/token-account aggregation and explicit supply coverage; preserve UNKNOWN funder as its own state; do not reuse existing independent[] as true independence.",
+      "limits": "First-funder approximation from earliest fetched transaction can miss complex funding, RPC history and further hops; shared funder != same owner; library tests claimed not run here. CRITICAL CROSS-LAYER ISSUE: src/funders.ts returns null for unresolved first-funder, but src/clusters.ts maps null into independent[]; reported independent is not confirmed economically independent."
     },
     {
       "id": "AML-001",
