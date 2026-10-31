@@ -452,6 +452,118 @@
       "kind": "tool_documentation",
       "availability": "remote_on_demand",
       "license_note": "Refer to upstream repository license; original docs not copied."
+    },
+    {
+      "id": "forensic-raw-sol-replay",
+      "repository": "xorextrace/cyberleek-onchain",
+      "commit": "283bec233a6c24849799da6e051e91689a0f187a",
+      "path": "scripts/verify.py",
+      "topics": [
+        "原始交易",
+        "交易复算",
+        "SOL资金",
+        "资金扇入",
+        "资金扇出",
+        "资金回流",
+        "费用",
+        "cashout",
+        "原始签名",
+        "RPC",
+        "forensic",
+        "source"
+      ],
+      "why": "Recompute actual System Transfers from raw outer/inner transaction instructions; distingish signature-backed flow from author attribution.",
+      "kind": "source_code_reference",
+      "availability": "remote_on_demand",
+      "license_note": "Code MIT per repository LICENSE-MIT; cross-check at pinned commit. Source does not prove unrelated market identities."
+    },
+    {
+      "id": "developer-funding-convergence",
+      "repository": "dnafund/Degen-Scanner",
+      "commit": "69a08d5589c47bdc33e9c6c2793cc0a69acdd85d",
+      "path": "dev_tracer.py",
+      "topics": [
+        "开发者",
+        "发币钱包",
+        "关联钱包",
+        "上游资金",
+        "资金同源",
+        "资金归集",
+        "资金循环",
+        "多跳",
+        "重复操作",
+        "dev",
+        "creator"
+      ],
+      "why": "Trace launch buyers upstream and collectors downstream across several hops with CEX/fee-vault exclusions, producing candidate networks rather than verified operators.",
+      "kind": "source_code_reference",
+      "availability": "remote_on_demand",
+      "license_note": "Review upstream license before copying; methodology reference only; no live Helius credentials provided."
+    },
+    {
+      "id": "wallet-first-funder-unknown",
+      "repository": "jayrabol/solana-holder-clusters",
+      "commit": "a75a72965479a7b715b041148803d8004fe25079",
+      "path": "src/funders.ts",
+      "topics": [
+        "最早资金",
+        "首次资金来源",
+        "钱包年龄",
+        "交易所",
+        "first funder",
+        "未知",
+        "RPC分页",
+        "首次注资",
+        "funding"
+      ],
+      "why": "Source returns null if earliest funder cannot be established from finite history. IMPORTANT: downstream clusters.ts later maps null to independent[], which must not be treated as real independence.",
+      "kind": "source_code_reference",
+      "availability": "remote_on_demand",
+      "license_note": "MIT repository; do not use as true economic-ownership classifier."
+    },
+    {
+      "id": "wallet-clustering-cross-layer-unknown",
+      "repository": "jayrabol/solana-holder-clusters",
+      "commit": "a75a72965479a7b715b041148803d8004fe25079",
+      "path": "src/clusters.ts",
+      "topics": [
+        "聚类",
+        "正常钱包",
+        "异常钱包",
+        "共同资金",
+        "公共hub",
+        "未知",
+        "独立钱包",
+        "cluster",
+        "source"
+      ],
+      "why": "Exposes downstream semantic loss: f===null (unresolved upstream) is placed in independent[]; explicit provenance states are required before treating it as a normal-wallet baseline.",
+      "kind": "source_code_reference",
+      "availability": "remote_on_demand",
+      "license_note": "MIT repository; describe as potential semantic hazard, not proven false wallet labels in any specific deployment."
+    },
+    {
+      "id": "holder-supply-coverage-method",
+      "repository": "jayrabol/solana-holder-clusters",
+      "commit": "a75a72965479a7b715b041148803d8004fe25079",
+      "path": "docs/METHODOLOGY.md",
+      "topics": [
+        "供应量",
+        "筹码集中",
+        "Top10",
+        "HHI",
+        "Gini",
+        "持仓",
+        "正常基准",
+        "覆盖率",
+        "holder",
+        "pool",
+        "denominator"
+      ],
+      "why": "Explicit owner-level token account aggregation, scanned/total/circulating denominator, public hub exclusions and disclosed heuristic limitations.",
+      "kind": "method_reference",
+      "availability": "remote_on_demand",
+      "license_note": "MIT repository. Quoted concepts only, not reusing prose wholesale; metrics are descriptive not price forecasts."
     }
   ]
 }
