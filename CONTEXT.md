@@ -14,7 +14,7 @@
 - **17 类专家能力 / 12 个知识领域**：专业方法和研究职责，不是 17 个 Bot。
 - **V4 快慢双循环**：确定性监控 + 按需深研 + 独立 QA/知识回流的运行组织。
 
-权威入口：[知识架构 V2.0](docs/knowledge-architecture-v2.md) 与 [机器可读架构索引](knowledge/architecture.v2.json)。
+权威入口：[知识架构 V2.0](docs/knowledge-architecture-v2.0.md) 与 [机器可读架构索引](knowledge/architecture.v2.json)。
 
 ## 研究主线与运行架构
 
