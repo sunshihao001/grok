@@ -75,6 +75,11 @@ def route(event_types: list[str], *, question: str = "",
     source_ids = sorted({s for role in selected for s in lookup[role]["source_ids"]})
     data_requirements = sorted({field for role in selected for field in lookup[role]["requires"]})
     challenges = [dict(role_id=role, challenge=lookup[role]["challenge"]) for role in selected]
+    # Contract suggestions come from a separate typed knowledge dependency graph.
+    # No expert is actually executed, and no LLM conclusion is inferred.
+    from .expert_interaction import handoffs_for_roles, load_graph
+    handoffs = handoffs_for_roles(
+        load_graph(expert_map=mapping), active=selected, conditional=conditional)
     return {
         "status": mode,
         "question": question,
@@ -88,6 +93,7 @@ def route(event_types: list[str], *, question: str = "",
         "source_index_ids_to_read": source_ids,
         "data_fields_to_check": data_requirements,
         "hypothesis_challenges": challenges,
+        "typed_expert_handoffs": handoffs,
         "scenario_research_questions": list(dict.fromkeys(
             q for item in scenarios for q in item["questions"])),
         "expected_research_outputs": list(dict.fromkeys(
