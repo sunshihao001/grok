@@ -458,7 +458,7 @@
     }
   },
   "canonical_documents": {
-    "architecture": "docs/knowledge-architecture-v2.md",
+    "architecture": "docs/knowledge-architecture-v2.0.md",
     "research_method": "docs/economic-mechanism-discovery-charter-v5.md",
     "runtime": "docs/dual-loop-research-runtime-architecture-v4.md",
     "expert_network": "docs/knowledge-expert-interconnection-v2.md",
