@@ -1,41 +1,58 @@
-# Release backlog
+# 全市场监控系统｜分阶段研发和验收待办 V1.0
 
-## Initialization (completed locally)
-- [x] Source pins, agent roles, migration map and Grok Bot setup instructions.
-- [x] Read-only source validation, per-mint state, observed deltas, event de-dup and JSONL log.
-- [x] Explicit fixture/live separation and rejection of stale live input.
-- [x] GMGN CLI raw-only read collector with no guessing of metric values.
-- [x] Six offline tests; CI workflow authored.
-- [ ] GitHub-hosted CI job result observed after push.
+状态：草案分支 `docs/cognition-knowledge-conversion-v1`；不声称已经达到真实运行/盈利。历史版本的六角色与三个独立代码入口保留，详细见 [总整合蓝图](knowledge-system-integration-v1.md)。
 
-## Real monitoring prerequisites
-- [ ] Capture real GMGN CLI JSON, field descriptions, timestamp semantics and units without committing secrets.
-- [ ] Test mappings for liquidity and holder share, add authoritative chain references for events, measure drift and missingness.
-- [ ] Add single-writer locking/recovery or SQLite before Grok scheduling/multiwriter workflows.
-- [ ] Port wallet and deployer intelligence one tested observation at a time.
-- [ ] Reproduce actual historical cases; measure false alerts, coverage, abstentions, and detect data leakage.
-- [ ] Human-review rule thresholds and release notes; current numbers are **unvalidated examples**.
-- [ ] Actually create Grok Bots, the shared Skill and a tested Routine within Grok app.
+## P0｜全项目基础整合（本轮）
 
-## Rule promotion packet
-Problem, version, owner, raw sources/commits/times, units, proposed mechanism, competitive explanation, tested baseline, counterexamples, false alerts, regression commands/results, rollback and explicit human approval.
+- [x] 将总目标从 GMGN 单币/跟单调整为多 Mint 事件、钱包群体、资产网络和市场机制。
+- [x] 原 Hermes、meme-、qb-、Why 项目、OKX 候选接口和 Grok 的职责矩阵。
+- [x] 统一 README/CONTEXT/BOTS/design、领域 Skill、原知识/专项的定位。
+- [ ] 用实际代码运行统一测试与本轮端到端合成案例；**只有真实执行并记录后才能勾选**。
+- [ ] 实际 Grok Bot 兼容性与 Skill 触发测试（当前尚未部署）。
 
-Rule Engineer passing local tests **does not** imply an economically valid or production-ready monitoring rule.
+## P1｜事件账与群体窗口（优先）
 
-## Knowledge migration (preserved, with explicit uncertainty)
-- [x] Import 15 source-pinned knowledge units covering Solana lifecycle, GMGN fields, wallet roles/funding, structure, risk, evidence and tool failure modes.
-- [x] Connect a deterministic knowledge selection function to monitor observations and plain-language research question routing.
-- [x] Add regression tests for relevant concept retrieval, source integrity, negative cases and missing-data behavior.
-- [ ] Verify original external theoretical references, look for corrected recent primary sources, and distinguish stale assumptions from currently valid mechanisms.
-- [ ] Import concrete real on-chain cases and source-linked failures, not only conceptual documents.
-- [ ] Test whether Grok Bot with knowledge improves judgment vs a no-knowledge baseline using blinded examples; measure false alerts and missed events.
-- [ ] Improve semantic applicability and source reading in an actual Grok Bot instead of claiming literal keyword routing is full expert reasoning.
+- [x] `market_observatory.py` 初步支持已规范化事件的时间窗汇总、同 Slot 买入、SOL fanout、Token 归集、funding-to-buy 关系候选。
+- [x] 合成 fixture 提供了跨 Mint、钱包、SOL 资助与归集的测试场景。
+- [ ] 逐事件的正负例和重复记录/时间戳/非法单位/边界窗口回归测试（先离线完成）。
+- [ ] 实际 Solana RPC/OKX 等只读输入适配器；原始 Token/SOL 指令与 Swap 分类独立核对。
+- [ ] 明确覆盖率、采集失败与丢失事件数；`source_derived` 与真实 RPC 必须区分。
+- [ ] 事件持续写入、幂等 checkpoint、限速和断线恢复（当前不建议长期自动调度）。
 
-## On-demand research architecture
-- [x] Read the pinned Why-Solana-Memecoins-Are-Over research methods, error audits, structural-mechanism tests, economic edge failures and source licenses.
-- [x] Add a small source index of 17 pinned documents instead of copying another entire research repository.
-- [x] Implement bounded optional source preview and structured research intake with a decision-time availability check.
-- [x] Add offline tests for source selection, authenticity/allowlist, time-of-knowledge rejection and no-edge claims.
-- [ ] Run genuine source retrieval in a configured Grok Bot and inspect live handoffs; not the same as unit tests.
-- [ ] Add real transaction datasets and delayed-outcome evaluation, including null baselines, execution costs and alerts not selected on winners.
-- [ ] Compare Grok with/without the on-demand source workflow under blinded case review to test reduction in unsupported assertions.
+**验收**：一个明确的真实事件集合能输出不同钱包数、交易/指令数、SOL/Token 总额、Slot/时间与来源；重复和缺失不改变真实计数，准确声明哪些数据没有校验。
+
+## P2｜钱包群体关系与正常基准
+
+- [ ] SOL 资助/回流与 Token 归集/卖出构成**资产图**，并另建可撤回的“同控/公共设施/独立触发”等主体假设图。
+- [ ] wallet 同一身份、Token Account Owner、Program、CEX/交易设施 hub 的区别。
+- [ ] 同发行阶段、流动性、热度、参与数及钱包活动基准；选择性抽样和 null/permutation 对照。
+- [ ] 多发行重复执行、批量注资、同步买入、卖出与库存再部署的区别力测试。
+- [ ] 显示样本分母、正常案例和误报数；不输出伪精度的“庄家概率”。
+
+**验收**：同 Slot 多笔独立交易、共享服务商和真正多地址行为候选能在报告中明确区分；没有 bundle 提交证据就不能给 Jito confirmed。
+
+## P3｜市场结构、风险与机会
+
+- [ ] 从 meme- / Hermes 研究连接发行、迁移、池深、筹码、开发者历史、成本区域与供需/价格反身性。
+- [ ] 初步建立事件→市场变化的时序验证，候选 FCZ 区分事前可观察和事后分类。
+- [ ] 风险预警与交易预测/净收益评估各自独立；真实“交易是否可能”须经延迟、成交、退出、手续费和失败路径检验。
+- [ ] 正常/风险/未知状态与纸面资格审查，不直接改生产规则或下单。
+- [ ] 样本外、簇级/跨 Mint 泄漏防护和失败案例复盘。
+
+## P4｜Grok 最终监控 Bot
+
+- [ ] 在 Grok 实测上述技能/原始数据读取和问答，而非凭文件存在推断安装完成。
+- [ ] 验证安全凭据、只读连接、存储、失败恢复、监控去重及通知权限。
+- [ ] 比较无知识、提示词版与多源知识版的真实误判率、来源准确度和分析增量。
+- [ ] 经过用户批准后再单独考虑创建 paused Routine 与测试；无自动启用。
+- [ ] 经人工批准并保留回滚计划后，才能冻结实际监控规则。
+
+## 不能用来证明完成度的指标
+
+- GitHub 文档或 Skill 数量；
+- 离线 fixture 被称为实时行情；
+- 42 个选定发行的结构差异被当全市场异常基准；
+- 钱包平台标签、Jito 同 Slot 候选被当已确认身份；
+- 研究假设、事后涨幅或回测最高价被当正净利润。
+
+**下一步最小落地**：验证事件聚合器的合成正反例，随后选一个真实来源时段（含正常窗口、未触发的事件和缺失）做只读交易指令复算；在此之前不升级“异常模型”和交易规则。
