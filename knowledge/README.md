@@ -98,3 +98,7 @@ The external [14-project discovery registry](reference-project-discovery.v1.json
 
 [Cross-domain economic mechanism discovery and decisive knowledge judgments](../docs/economic-mechanism-synthesis-and-judgment-v3.md) and its [six hypotheses with predicted observations, competing normal mechanisms and rejecting tests](mechanism-synthesis-hypotheses.v1.json) connect capital paths, temporal transaction motifs, changing address roles, market impact, active research queries, regime baselines and QA-triggered ontology discovery. Each hypothesis points only to existing source IDs and 17 existing expert roles. No model has been fit, no comparative accuracy/predictive lift proven, and no live trade permission has been introduced.
 
+
+## Dual-loop CI evidence and exact runtime boundary
+
+GitHub Actions [monitor-tests run 41186104343](https://github.com/sunshihao001/grok/actions/runs/41186104343) completed with **108 offline tests passing** after adding bounded source-check dispatch, stable case identity/evidence versioning, no accidental cross-window merge, six M2 candidate expert routing, and the existing fixture-to-dispatch pipeline. The planner does not connect to Solana RPC or call Grok expert Agents; its source check list is a deterministic proposal.
