@@ -2,7 +2,7 @@
 
 > 日期：2026-10-31。主体：Solana Meme **全市场事件、开发者、钱包群、资金网络、Token 库存、正常对照、市场反馈与潜在风险**，而非单纯跟单。  
 > 出发点：`sunshihao001/Why-Solana-Memecoins-Are-Over` 的资金、同 Slot、协调、退出路径与失败优势研究。  
-> 产物：14 个经过区分证据等级的项目/学术来源、四项新的专业连接 L33–L36、实际研究单元与反证条件，数据见 [`knowledge/reference-project-discovery.v1.json`](../knowledge/reference-project-discovery.v1.json)。  
+> 产物：14 个经过区分证据等级的项目/学术来源、四项首轮新增专业连接 L33–L36、实际研究单元与反证条件，数据见 [`knowledge/reference-project-discovery.v1.json`](../knowledge/reference-project-discovery.v1.json)。  
 > 重要边界：已通过 GitHub 接口读过部分 README、关键源码及原始论文 HTML，但**本轮没有复现外部项目运行、没有拿到实际市场实时数据，没有证明新的异常检测器或正收益**。所有作者自报的精度与运行状态仍待独立验证。
 
 ## 1｜研究起点不应局限于原项目主题
@@ -112,7 +112,7 @@
 
 把钱包图拆为 **SOL funding、Token transfer、joint signer、co-buy、co-sell、shared receiver、reused creator/fee account** 七种不同类型边。每条边有来源签名、发生时间、参与者、金额与可靠性，防止用同一个资金源生成三个“独立指标”。
 
-**区分实验：** 与保持资金节点活跃度、相同协议/发行年龄及钱包活跃度的随机基准比较；先移除公共 hub，再看群体是否稳定。若全图连接成巨型簇，停止把连通分量当实体。对应新增连接 **L36**。
+**区分实验：** 与保持资金节点活跃度、相同协议/发行年龄及钱包活跃度的随机基准比较；先移除公共 hub，再看群体是否稳定。若全图连接成巨型簇，停止把连通分量当实体。对应首轮新增连接 **L36**。
 
 ### KX-03 异常钱包可以表现为时间变化的“资本组织机制”
 
@@ -163,7 +163,7 @@
 
 前三项可独立产生系统成果，**不必把每种专业知识都转换成一条交易规则**。
 
-## 5｜新增来源如何嵌入现有 17 类专家和 36 条交接
+## 5｜新增来源如何嵌入现有17类专家和40条交接（本研究首轮仅新增L33–L36，R005/R006后续补入L37–L40）
 
 | 来源与研究对象 | 主责专家 | 必须有的异专业挑战者 | 验收时新增知识对象 |
 |---|---|---|---|
@@ -175,7 +175,7 @@
 | 平台风险分与图可视化 | Risk、Knowledge | Chain、Statistics | `unverified_vendor_claim`、`negative_control_case` |
 | 真正市场采集 | Data、Event、Chain | QA/覆盖审计 | `slot_coverage`、`late_source_revision` |
 
-拓展不是新增一个“万能庄家专家”；重点是让证据更真实、角色更细、图边更丰富、推断限制更明确。原知识图的 [L01–L32](../knowledge/expert-interaction-graph.v1.json) 保留，本轮 **L33–L36** 分别补充手续费经济路径、开发者跨币资金关联、交易方向标签 Gate 和公共 hub 正常基准。
+拓展不是新增一个“万能庄家专家”；重点是让证据更真实、角色更细、图边更丰富、推断限制更明确。原知识图的 [L01–L32](../knowledge/expert-interaction-graph.v1.json) 保留，本研究首轮 **L33–L36** 分别补充手续费经济路径、开发者跨币资金关联、交易方向标签 Gate 和公共 hub 正常基准。
 
 ## 6｜与实际 Grok 功能的距离、下一轮可证伪实验
 
