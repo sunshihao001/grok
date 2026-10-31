@@ -167,3 +167,27 @@ https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328
 **结论：** 本案例支持“早期进入的成本位置不同、代币存在快速跨地址流转、单地址经济结果未闭合”这三个相互分离的事实层；不能支持“已经确认真实控制者”或“已发现可跟单正期望”。
 
 **认知引导：** 穿透地址，核对资产；穿透交易时点，复原价格形成；穿透历史利润，检验观察者真正能捕获的经济价值。
+
+## 附录｜精确交易引用（便于下一次独立复算）
+
+以下是来源 `v03_onchain.json` 与 `v07_exit.json` 中记录的签名，不代表本轮已经重新向 RPC 查询：
+
+| 角色 | 钱包（前缀） | 交易签名 |
+| --- | --- | --- |
+| 创建 | `78wF7WAi...` | `4ziGdYrysFAXNkxgsjwPh9nhevDgoNZKm3T2q9j7D14YWZ1mbb7zCYGyBTkthrmKtLshxFgQ63MqpBxJ7Ecbj48x` |
+| 首批买入 | `2AqFJzcg...` | `Zspqx61MdabA2r5g78i1c1u66ofFBoU5Tz549A2NyACinC79oJ2NxFSgiEdcZZ4731Bpykcyyt2Bi4K7FhuJySS` |
+| 首批买入 | `9yxmCNwZ...` | `55ZLsiuEKNqNUqhi5mDaTkynAacPG5LwRs7YxG97SNYxSf6N3MCNW8LHm3T8CrAhjW76BUY996QdunvkuhoiP58Y` |
+| 首批买入 | `2wHHnAmd...` | `5sPKJDzbhAAzhmyeC7BkWGM1eJjezyUHBDcCvEwe4t8eaWGG37ksFqzEJn1jckq15jV3cAL4cC2dCLrHZ3SCsqMZ` |
+| 首批买入 | `22vL22Pc...` | `3tKPXxhiH4MDxXnQaXEsq8nJnh6R81bHPnNiQQFbndTTDgffDhkSbTMhh82ZpiQrh7LVFUNaZpV2LVqAJftC8CSk` |
+| 首次转移 | `2AqFJzcg...` | `6rByjVMZH8Ggy4Deh86cvDKtzHGqVayHKkFWrPcxZtHmp7S42vixbz1hWr9b13TrooURBu9sCnbf8C4u3rucyry` |
+| 首次转移 | `9yxmCNwZ...` | `51hwM1aiSkVVDisq7GYGMANjx5LyQG4zVH36j91j44t3Dqcv5HKAHMxV8DxhQt7obfnZm7vfVPmRcVc32ngKmgwm` |
+| 首次转移 | `2wHHnAmd...` | `4iRbhcbjxZiTcByXgnRpwZkM8W4t1nRn6L9WQCdBiPyeSzTk8C73Pg8fUyR1Tpwb9pf37VhYJs1DTwwXhUm92qZg` |
+| 首次转移 | `22vL22Pc...` | `LM6X8n4ZWaVuZk985Hr5AxrV288sUdPJHv83cXSvRkJrW4pZC1sqoB893SXmE5TWiQW4jDsSa86LNn6vATKdt1b` |
+| 外部首次记录的买入 | 脱敏记录，签名可用 | `6FGfTfSf9oYJ9CyWmVwCMNgqEentJUQjvuuzGmu4jsxLwWv1dHonGtXD2DUUyYd7ojcEvVdZjCJE2iXyYrZeYoQ` |
+
+三个 Token 接收 owner 地址：
+- `8uSfX74yDSvq2L8TjM6sj86mnYziqmJCGQsLMLzk4vTH`
+- `eUrS4Faom5MmRbaDK7y99yXADvUbUvxEd233T7jNMy9`
+- `5Xbhacwcttq3VwwNxbvPE5DC2vAFVPuvdZnedumE9qY7`
+
+注：以上收款 owner 与其 Token Account 的关联，仍以重新读取完整交易 `preTokenBalances`、`postTokenBalances` 及指令事实为最终验证门槛。
