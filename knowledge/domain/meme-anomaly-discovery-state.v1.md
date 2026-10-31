@@ -164,3 +164,18 @@
 5. **C05 最小契约修正**：`NO_OPPORTUNITY`、`COVERAGE_UNKNOWN`、`ELIGIBLE_BUT_INACTIVE` 的区分依赖**独立机会索引和经证明的完整性**，一个交易回包或用户传入的 `coverage.complete=true` 无法证明全链零交易。C02/C05 目前只有工程数据契约及对抗性模拟场景，不是已实现的两个运行监控器。
 
 **下轮能力交接**：在仍保持 fixture-only 的前提下，优先挑选少量官方原始交易或可核验公开签名，人工标注 Token owner、转账、复杂 CPI/Swap 的正确结果，然后与适配器逐条对账。复杂 DEX 优先参考 Solana 官方 `@solana/transaction-introspection` 及协议原始源码，避免自行推断链上复杂经济动作。尚不具备生产全链采集或 P4 大规模实证门槛。
+
+
+### 9.1 公开 Solana RPC 样本与新的工程错误反证（2026-10-31）
+
+**AMEND 原有 M01 条目；不是新的异常名称。** 见 [工程 PR #16 适配器契约](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/p3-m01-raw-adapter-contract.md)。
+
+- **外部原始样本**：官方 Solana [getTransaction 文档源码固定版本](https://github.com/solana-foundation/solana-com/blob/4cb392f61c2ab0f8953cc314378aaf8256b7699a/apps/docs/content/docs/en/rpc/http/gettransaction.mdx) 提供两笔 Devnet 公开交易响应：legacy 直接 System SOL 转账（签名 `4ReKprwf…`，Slot 423108383，1 SOL）及 v0 ATA 账户创建（签名 `56rgv1Fq…`，Slot 423118809，含4条 inner CPI，postTokenBalance 为零）。后一笔的 `json`/`jsonParsed` 是**同一笔签名**的两种编码。本项目在PR #16保存三份原始格式记录、7项回归测试；CI通过。**仅代表官方已发布的 RPC 回包格式，不是本项目实时从独立节点重拉**。
+- **支持与未知**：legacy 顶层 SOL Transfer 被正确列为单独的原生资金转移，未记目标 Mint BUY；ATA 创建暂不能完整分类，保守输出 `UNRESOLVED/INCOMPLETE`，无假买入。既不能把 CPI/租金记为Swap，也不能把“无解码事件”称为“没有市场活动”。官方文档没有 `available_at`，回归测试注入的该字段是**合成**，不能作为历史预警时点。
+- **实际修正一：交易执行状态**。原代码若 `meta.err` 完全缺失，将其与 `err:null` 混为成功；现在必须检查字段存在，否则 `TRANSACTION_STATUS_UNKNOWN` 并阻止所有经济事件输出。
+- **实际修正二：决策时点的数据泄漏**。原代码在生成 `funding_events` 后才检查 `available_at>as_of`，可能将未来才知道的融资事实输出给 C02。现在将时点判断提前到解析前，未来信息只记录 `EVIDENCE_ARRIVED_AFTER_AS_OF` 与 `INCOMPLETE`，不得进入资金事件/交易事件。
+- **Token-2022 精度/权限边界**：[Transfer Fee](https://solana.com/docs/tokens/extensions/transfer-fees) 的指令转账毛额不等于净到账；[Transfer Hook](https://solana.com/docs/tokens/extensions/transfer-hook) 触发额外 CPI；[Confidential Balance](https://solana.com/docs/tokens/extensions/confidential-transfer) 可使真实金额不可见。保留 `gross/fee/net/UNKNOWN` 的区分，不把未知填零，也不声称已完整支持这些扩展。
+- **交易格式与采集风险**：[v1](https://solana.com/docs/core/transactions/versioned-transactions) 若 RPC 调用没有 `maxSupportedTransactionVersion: 1`，可能导致 `getBlock` 整个响应失败；读取失败≠空区块。当前适配器仍只支持 legacy/v0，v1 输出明确不支持。C05 的“有机会未参与”需要独立的区块/机会覆盖水位，不能以两笔RPC样本或 fixture.complete 为证据。
+- **工程验收**：该 PR 的6个测试文件现共定义71个 `unittest.test_*` 方法，最新 [monitor-tests CI](https://github.com/sunshihao001/grok/actions/runs/41216119575) 成功；这些是离线合同和来源格式回归测试，不是71个真实市场样本。协议级 BUY/SELL 与独立重拉真实RPC仍未完成。
+
+**知识影响**：D01（指令、token、版本）、D05/D07（资金与群体）、D10（可得时间和缺失数据）、D11（误判和反证）。对 C02/C05 最重要的不是添加一个新钱包标签，而是确保状态未知、资金证据在当时可得和“整块数据缺失”不会伪装成零交易。下一步集中完成独立只读RPC签名对账和**一个**有官方IDL/源码支持的 Meme 协议Swap语义，不强行扩展全链。
