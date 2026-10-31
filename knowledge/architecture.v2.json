@@ -1,0 +1,470 @@
+{
+  "schema_version": "2.0",
+  "architecture_id": "SOLANA_MEME_KNOWLEDGE_ARCHITECTURE",
+  "as_of": "2026-10-31",
+  "status": "CANONICAL_REFERENCE_NOT_DEPLOYED",
+  "research_principle": "从全市场事件重构行为关系，从资金网络发现隐藏机制，以真实数据和竞争解释不断深化专业认知，将知识转化为可验证的监控与研判能力。",
+  "separation_contract": {
+    "knowledge_layers": "L0-L7 describe knowledge dependencies and epistemic boundaries; not a mandatory serial pipeline.",
+    "research_stages": "S0-S7 describe case research workflow; can branch, run in parallel, and revisit.",
+    "product_capabilities": "M0-M7 describe intended software/product capabilities; a stage is not evidence of implementation.",
+    "expert_disciplines": "17 expert IDs are reusable research capabilities, not 17 bots or votes.",
+    "runtime": "V4 fast/slow/audit loops are execution organization; target initial runtime is one read-only Monitor plus one on-demand Research Manager."
+  },
+  "knowledge_layers": [
+    {
+      "id": "L0",
+      "name": "治理宪法与认识论边界",
+      "purpose": "统一事实、推断、风险、收益、权限与发布纪律",
+      "inputs": [
+        "source_policy",
+        "claim_contract",
+        "safety_policy"
+      ],
+      "outputs": [
+        "epistemic_constraints",
+        "release_policy"
+      ],
+      "cross_cutting": true
+    },
+    {
+      "id": "L1",
+      "name": "市场本体与观察对象",
+      "purpose": "定义链、协议、交易、指令、账户、资产、市场、行为和分析对象",
+      "inputs": [
+        "chain_objects",
+        "account_objects",
+        "asset_objects",
+        "market_objects"
+      ],
+      "outputs": [
+        "canonical_ontology",
+        "typed_entity_definitions"
+      ]
+    },
+    {
+      "id": "L2",
+      "name": "数据、执行语义与证据来源",
+      "purpose": "建立来源、覆盖、时间、单位、原始指令与规范事件事实",
+      "inputs": [
+        "rpc_or_provider_records",
+        "source_versions",
+        "coverage_and_time"
+      ],
+      "outputs": [
+        "canonical_event_ledger",
+        "typed_events",
+        "source_provenance"
+      ]
+    },
+    {
+      "id": "L3",
+      "name": "行为结构、钱包角色与经济资产网络",
+      "purpose": "从事件形成时变角色、群体行为、资产流图与主体竞争假说",
+      "inputs": [
+        "typed_events",
+        "owner_mapping",
+        "asset_movements"
+      ],
+      "outputs": [
+        "event_motifs",
+        "asset_graph",
+        "entity_hypotheses",
+        "role_timeline"
+      ]
+    },
+    {
+      "id": "L4",
+      "name": "统计推断、正常基准与对抗性解释",
+      "purpose": "使用未选择总体、条件对照、null与漂移分析判断是否偏离正常生态",
+      "inputs": [
+        "cohort",
+        "baseline",
+        "coverage",
+        "candidate_graphs"
+      ],
+      "outputs": [
+        "conditional_deviation",
+        "false_alert_metrics",
+        "baseline_version"
+      ]
+    },
+    {
+      "id": "L5",
+      "name": "经济机制、市场因果与反事实",
+      "purpose": "生成竞争机制、独立预测和最小判别证据",
+      "inputs": [
+        "verified_facts",
+        "candidate_structures",
+        "baseline",
+        "market_state"
+      ],
+      "outputs": [
+        "mechanism_hypotheses",
+        "counterfactuals",
+        "discriminating_checks"
+      ]
+    },
+    {
+      "id": "L6",
+      "name": "按用途分开的市场能力与行动资格",
+      "purpose": "分别评价发现、监控、开发者、风险、预测和纸面经济价值",
+      "inputs": [
+        "mechanism_results",
+        "market_state",
+        "risk_facts",
+        "execution_quotes"
+      ],
+      "outputs": [
+        "monitor_utility",
+        "risk_state",
+        "prediction_result",
+        "paper_economic_result"
+      ]
+    },
+    {
+      "id": "L7",
+      "name": "知识沉淀、QA、版本与反证回流",
+      "purpose": "版本化 claims/cases/cards/rules，追踪撤回影响并经人工审核升级",
+      "inputs": [
+        "claims",
+        "counter_evidence",
+        "case_reviews",
+        "source_updates"
+      ],
+      "outputs": [
+        "versioned_knowledge",
+        "retraction_plan",
+        "reviewed_release_proposal"
+      ]
+    }
+  ],
+  "knowledge_graphs": [
+    {
+      "id": "G_event",
+      "name": "市场事实图",
+      "purpose": "描述交易、指令、账户、资产、池与事件之间可核实的事实关系",
+      "implemented": "PARTIAL_M2_INPUT_CONSUMER",
+      "storage": "not_yet_persistent"
+    },
+    {
+      "id": "G_economic",
+      "name": "经济关系图",
+      "purpose": "资产事实流与经济主体假说分开；允许公共服务、独立主体和未知",
+      "implemented": "PARTIAL_SOURCE_AND_FUNDER_CONTRACTS",
+      "storage": "not_yet_persistent"
+    },
+    {
+      "id": "G_knowledge",
+      "name": "机制知识图",
+      "purpose": "关联claims、HX、竞争解释、预测、反例和适用范围",
+      "implemented": "HYPOTHESIS_REGISTRY_AND_RESEARCH_DOCS",
+      "storage": "not_yet_persistent"
+    },
+    {
+      "id": "G_expert",
+      "name": "专家交接与来源血缘图",
+      "purpose": "17类能力、来源、40条类型化交接和claim依赖挑战",
+      "implemented": "40_TYPED_HANDOFFS_AND_DETERMINISTIC_CHECKER",
+      "storage": "static_json"
+    },
+    {
+      "id": "G_decision",
+      "name": "用途与决策效力图",
+      "purpose": "分离观察、统计偏离、机制、风险、预测、paper结果与用途价值",
+      "implemented": "DOCUMENTED_STATUS_CONTRACTS",
+      "storage": "not_yet_persistent"
+    }
+  ],
+  "research_stages": [
+    {
+      "id": "S0",
+      "name": "问题、总体与证据合同",
+      "output": "study_contract"
+    },
+    {
+      "id": "S1",
+      "name": "来源、原始交易与执行语义",
+      "output": "typed_events_and_coverage"
+    },
+    {
+      "id": "S2",
+      "name": "行为窗口、钱包角色与资产关系",
+      "output": "event_motifs_and_candidate_graphs"
+    },
+    {
+      "id": "S3",
+      "name": "正常基准、对抗解释与统计检验",
+      "output": "baseline_null_and_deviation_status"
+    },
+    {
+      "id": "S4",
+      "name": "Token、开发者、库存、流动性与生命周期",
+      "output": "market_state_and_risk_facts"
+    },
+    {
+      "id": "S5",
+      "name": "竞争机制、因果推演与主动反证",
+      "output": "versioned_hypotheses_and_discriminators"
+    },
+    {
+      "id": "S6",
+      "name": "用途评估与独立资格判断",
+      "output": "monitor_risk_prediction_or_paper_assessment"
+    },
+    {
+      "id": "S7",
+      "name": "QA、撤回/复算、知识沉淀与发布审核",
+      "output": "reviewed_case_claim_card_or_release_proposal"
+    }
+  ],
+  "product_capabilities": [
+    {
+      "id": "M0",
+      "name": "市场发现与覆盖",
+      "status": "PARTIAL_DISCOVERY_ONLY",
+      "code": [
+        "src/solana_meme_os/gmgn_collect.py"
+      ],
+      "gap": "无全市场完整发行/迁移持续采集与覆盖率报告"
+    },
+    {
+      "id": "M1",
+      "name": "原始数据接入与规范事件账",
+      "status": "NOT_IMPLEMENTED_END_TO_END",
+      "code": [],
+      "gap": "缺真实RPC/gRPC采集、完整指令解码、历史回放和watermark"
+    },
+    {
+      "id": "M2",
+      "name": "多时间窗群体事件聚合",
+      "status": "OFFLINE_NORMALIZED_INPUT_PROTOTYPE",
+      "code": [
+        "src/solana_meme_os/market_observatory.py"
+      ],
+      "gap": "外部规范化事件输入；非实时全市场采集，非异常统计"
+    },
+    {
+      "id": "M3",
+      "name": "钱包角色、资产图与主体假说图",
+      "status": "PARTIAL_CONTRACTS_ONLY",
+      "code": [
+        "src/solana_meme_os/funder_evidence.py"
+      ],
+      "gap": "无完整跨期资产图/经济主体图持久化"
+    },
+    {
+      "id": "M4",
+      "name": "正常基准、null与异常校准",
+      "status": "RESEARCH_DESIGN_ONLY",
+      "code": [],
+      "gap": "无代表性未选择总体、误报/漏报和漂移校准"
+    },
+    {
+      "id": "M5",
+      "name": "Token/开发者/LP/库存/市场状态",
+      "status": "SINGLE_MINT_SNAPSHOT_ONLY",
+      "code": [
+        "src/solana_meme_os/monitor.py",
+        "src/solana_meme_os/position_audit.py"
+      ],
+      "gap": "未贯通真实池状态、程序权限、库存和微观结构"
+    },
+    {
+      "id": "M6",
+      "name": "风险、预测与纸面经济资格",
+      "status": "GATE_DESIGN_ONLY",
+      "code": [],
+      "gap": "无经样本外验证的预测或净经济策略"
+    },
+    {
+      "id": "M7",
+      "name": "研究派发、审计与知识回流",
+      "status": "DETERMINISTIC_LOCAL_PLANNING_TOOLS",
+      "code": [
+        "src/solana_meme_os/knowledge.py",
+        "src/solana_meme_os/research.py",
+        "src/solana_meme_os/expert_router.py",
+        "src/solana_meme_os/expert_interaction.py",
+        "src/solana_meme_os/research_dispatch.py"
+      ],
+      "gap": "未部署Grok持续Bot、RPC调查执行、持久队列或自动claim回溯"
+    }
+  ],
+  "software_components": [
+    {
+      "id": "monitor",
+      "path": "src/solana_meme_os/monitor.py",
+      "purpose": "单Mint归一化快照差分与本地状态记录",
+      "status": "implemented_fixture_and_contract"
+    },
+    {
+      "id": "market_observatory",
+      "path": "src/solana_meme_os/market_observatory.py",
+      "purpose": "已归一化事件的窗口聚合与候选关系",
+      "status": "implemented_offline"
+    },
+    {
+      "id": "position_audit",
+      "path": "src/solana_meme_os/position_audit.py",
+      "purpose": "历史派生仓位表口径差额检查",
+      "status": "implemented_offline"
+    },
+    {
+      "id": "cashflow_semantics",
+      "path": "src/solana_meme_os/cashflow_semantics.py",
+      "purpose": "审计派生SOL流入标签与历史覆盖，不解析RPC",
+      "status": "implemented_offline"
+    },
+    {
+      "id": "funder_evidence",
+      "path": "src/solana_meme_os/funder_evidence.py",
+      "purpose": "对来源候选记录保留UNKNOWN/公共hub/启发式等状态",
+      "status": "implemented_contract"
+    },
+    {
+      "id": "mechanism_discovery",
+      "path": "src/solana_meme_os/mechanism_discovery.py",
+      "purpose": "从公开派生源表发现次数/价值反转和历史覆盖张力",
+      "status": "implemented_offline"
+    },
+    {
+      "id": "knowledge",
+      "path": "src/solana_meme_os/knowledge.py",
+      "purpose": "24张知识卡的确定性检索路由",
+      "status": "implemented_local"
+    },
+    {
+      "id": "research",
+      "path": "src/solana_meme_os/research.py",
+      "purpose": "30个固定来源指针的按需候选检索",
+      "status": "implemented_local"
+    },
+    {
+      "id": "expert_router",
+      "path": "src/solana_meme_os/expert_router.py",
+      "purpose": "17专家/9场景的确定性研究路由建议",
+      "status": "implemented_local"
+    },
+    {
+      "id": "expert_interaction",
+      "path": "src/solana_meme_os/expert_interaction.py",
+      "purpose": "40条handoff校验与claim撤回影响规划",
+      "status": "implemented_local"
+    },
+    {
+      "id": "research_dispatch",
+      "path": "src/solana_meme_os/research_dispatch.py",
+      "purpose": "对M2输出产生限预算的调查计划",
+      "status": "implemented_local_planner_only"
+    },
+    {
+      "id": "gmgn_collect",
+      "path": "src/solana_meme_os/gmgn_collect.py",
+      "purpose": "旧GMGN只读采样原型",
+      "status": "prototype_unverified"
+    }
+  ],
+  "research_philosophy": {
+    "document": "docs/economic-mechanism-discovery-charter-v5.md",
+    "version": "V5",
+    "status": "research_method_not_market_truth"
+  },
+  "runtime_architecture": {
+    "document": "docs/dual-loop-research-runtime-architecture-v4.md",
+    "version": "V4",
+    "status": "architecture_decision_not_deployed",
+    "loops": [
+      "fast_deterministic_monitoring",
+      "slow_bounded_research",
+      "audit_and_knowledge_feedback"
+    ]
+  },
+  "registries": {
+    "knowledge_cards": {
+      "path": "knowledge/catalog.v1.json",
+      "count": 24,
+      "baseline_legacy_count": 15
+    },
+    "legacy_snapshots": {
+      "path": "knowledge/legacy-snapshots/manifest.json",
+      "count": 21
+    },
+    "source_pointers": {
+      "path": "knowledge/source_index.v1.json",
+      "count": 30,
+      "repository_count": 8,
+      "meaning": "pinned file references, not validated live data feeds"
+    },
+    "reference_projects": {
+      "path": "knowledge/reference-project-discovery.v1.json",
+      "count": 14,
+      "meaning": "project-level maturity records; some are discovery-only or docs-only"
+    },
+    "external_method_sources": {
+      "path": "knowledge/external-method-sources.v1.json",
+      "count": 17
+    },
+    "expert_disciplines": {
+      "path": "knowledge/expert-capability-map.v1.json",
+      "count": 17
+    },
+    "knowledge_domains": {
+      "path": "knowledge/expert-capability-map.v1.json",
+      "count": 12
+    },
+    "research_stages": {
+      "path": "knowledge/expert-capability-map.v1.json",
+      "count": 8
+    },
+    "scenario_routes": {
+      "path": "knowledge/expert-capability-map.v1.json",
+      "count": 9
+    },
+    "expert_handoffs": {
+      "path": "knowledge/expert-interaction-graph.v1.json",
+      "count": 40
+    },
+    "mechanism_hypotheses": {
+      "path": "knowledge/mechanism-synthesis-hypotheses.v1.json",
+      "count": 8
+    },
+    "research_units": {
+      "path": "knowledge/research",
+      "count": 7,
+      "items": [
+        "R001",
+        "R001B",
+        "R002",
+        "R003",
+        "R005",
+        "R006",
+        "R007"
+      ],
+      "note": "No R004 document exists in this branch; no number is fabricated."
+    },
+    "cross_source_knowledge_units": {
+      "path": "knowledge/catalog.v1.json",
+      "count": 6,
+      "items": [
+        "KX-01",
+        "KX-02",
+        "KX-03",
+        "KX-04",
+        "KX-05",
+        "KX-06"
+      ],
+      "note": "Converted into source-linked cards in this revision."
+    }
+  },
+  "canonical_documents": {
+    "architecture": "docs/knowledge-architecture-v2.md",
+    "research_method": "docs/economic-mechanism-discovery-charter-v5.md",
+    "runtime": "docs/dual-loop-research-runtime-architecture-v4.md",
+    "expert_network": "docs/knowledge-expert-interconnection-v2.md",
+    "domain_experts": "docs/solana-meme-expert-knowledge-orchestration-v1.md",
+    "maturity": "docs/knowledge-maturity-and-gaps-v1.md",
+    "product_scope": "docs/solana-meme-marketwide-monitoring-scope-v1.md",
+    "migration_history": "docs/knowledge-system-integration-v1.md"
+  }
+}
