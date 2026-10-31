@@ -112,5 +112,38 @@ class MechanismFirstMethodTests(unittest.TestCase):
             self.assertIn("expert-mechanism-research-method.md", t, p)
 
 
+    def test_reference_knowledge_is_integrated_in_bounded_batches(self):
+        integration = self.plan["integration_mode"]
+        self.assertEqual(integration["approach"], "rolling_vertical_slices")
+        self.assertEqual(
+            integration["within_batch"],
+            ["source_understanding", "cross_project_expert_synthesis",
+             "reviewed_Grok_knowledge_compilation"],
+        )
+        self.assertEqual(integration["parallel_wip_limits"]["main_expert_research"], 1)
+        self.assertEqual(integration["parallel_wip_limits"]["next_batch_source_audit"], 1)
+        self.assertEqual(integration["parallel_wip_limits"]["previous_batch_reviewed_compilation"], 1)
+        self.assertTrue(integration["no_global_repository_bulk_migration"])
+        self.assertTrue(integration["not_a_new_ontology"])
+        self.assertEqual([b["id"] for b in integration["batches"]],
+                         ["B01", "B02", "B03", "B04", "B05"])
+        self.assertEqual(integration["batches"][0]["lead"], "E-L4-02")
+        self.assertEqual(integration["batches"][0]["related_track"], "M01")
+        self.assertNotEqual(integration["batches"][0]["status"], "completed")
+        for batch in integration["batches"]:
+            self.assertIn(batch["lead"], self.experts)
+            self.assertGreaterEqual(len(batch["connects"]), 2)
+            self.assertTrue(batch["topic"])
+            self.assertNotEqual(batch["status"], "completed")
+        playbook = ROOT / self.plan["integration_method"]
+        self.assertTrue(playbook.is_file())
+        text = playbook.read_text(encoding="utf-8")
+        for phrase in ["原资料理解", "专家融合", "Grok知识编译",
+                       "Why-Solana", "review_only", "B01", "B05"]:
+            self.assertIn(phrase, text)
+        self.assertIn("rolling-reference-knowledge-integration.md",
+                      (ROOT / "docs/next-steps.md").read_text(encoding="utf-8"))
+
+
 if __name__ == "__main__":
     unittest.main()
