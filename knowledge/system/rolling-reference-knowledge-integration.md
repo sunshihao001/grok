@@ -137,3 +137,11 @@
 读外部Why-Solana仅限原source-admission许可的专项审阅，独立统计仍需另行核查；不会因B05引用而默认授权给Grok。对旧 qb- 的文件路径与程序名称保留原始版本，不能声称旧GMGN付费CLI目前已在Grok中可运行。
 
 **一句话规则**：一批 = 一个具体Meme交易问题 + 少量原始资料 + 一个主专家的深入经济解释 + 竞争机制 + 原单元回填。主研究聚焦，资料核查和前批编译有限并行；内容成熟后才进入可调用专家知识。
+
+## 2026-10-31｜钱包标签与真实经济角色专项来源回访
+
+本轮源项目不应一次性使用即丢。已有 qb-/Hermes/meme-/Why-Solana继续作为钱包/资金/筹码专业判断原点；本轮新增常驻候选：GMGNAI/gmgn-skills（实际标签字段/工作流）、Birdeye Holder Profile和First Buyers（同类群持仓与买卖状态）、Cielo（Sniper/Flipper定义冲突）、Nansen（Smart Money收益窗口）、Bubblemaps（转账聚类）、Watchtower（公开标签规则/群体连续性）、MadeOnSol SDK（标签覆盖、atomic_tx与same_slot、库存转账差额）、co-numina/holdtech（源码反例）。
+
+**触发重访**：D04钱包角色、D05同源/服务排除、D06剩余筹码、D07跨Mint群体及KOL传播、新标签供应商迁移；只根据当前问题重读关键源码/资料。**重要反证**：HoldTech的某个公开实现把TRANSFER/UNKNOWN和feePayer作为买家用于slot聚集，且用feePayer近似最早资金提供者，不具备证明实际Bundler/同控的语义条件。Watchtower的数字阈值是供应商启发式而非本项目已经验证的规则。Cielo与GMGN Sniper同名定义不同，跨源映射必须保留原始定义。
+
+本轮最新专题真源：knowledge/domain/L3-wallet-actors.md「真实工具与源码的钱包角色判读增量」。**使用状态**：官方文档已核对、开源局部源码已阅读，未对真实钱包标签做独立链上验证、未安装商业API/启用生产分类器。
