@@ -2,6 +2,10 @@
 
 **状态：体系结构已定义；知识内容仅部分填充；不代表策略已验证。** 本目录是 Grok 项目领域知识的上层契约，不替代已有 `knowledge/catalog.v1.json`（15 张遗留知识候选卡）和 `knowledge/legacy-snapshots/`（21 份固定快照）。
 
+## 参考知识融合的实际节奏
+
+[《滚动式参考项目知识融合》](rolling-reference-knowledge-integration.md) 确定“**每批一个Meme业务矛盾；批内先准确理解、后跨专家融合、再转换成Grok专家知识；批次间轻量并行**”。从 B01 旧 qb- 关键钱包矩阵开始；B02 同源和筹码、B03 FCZ真假二阶段、B04 跨Mint批量异常钱包时序、B05 多策略可跟性作为暂定问题，不是按序搬文件的五个新框架。未审阅的研究假说不能升级为确定知识或运行规则。
+
 ## 先理解项目已有Meme交易知识，再确定下一条机制
 
 当前优先阅读 [《五个参考项目的知识阶段与缺口审计》](reference-projects-meme-knowledge-audit-20261030.md)：以Hermes钱包/同源/证据链、meme- FCZ/深洗/多策略、qb-单币关键钱包矩阵为**实在的研究起点**，并审阅Why-Solana的review_only外部反例和当前grok已有能力。审计发现此前 D03 通用AMM优先过于宏观；[当前M01](../domain/D04-D08-key-wallet-followability-research-brief.md) 已修订为“关键钱包→发币阶段→真实资金/筹码→后续可见信息→可跟与不可跟”，而AMM是按需解释具体池价格的底层支撑。
