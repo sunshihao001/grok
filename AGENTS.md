@@ -1,52 +1,47 @@
-# Project Agent / Bot Rules — Solana Meme Workflow OS (Grok Edition)
+# Project Agent / Bot Rules — Solana Meme Market Intelligence OS
 
-**Canonical project scope:** market-wide Solana Meme events, wallet clusters, funding/Token flows, conditional abnormality, market structure and paper-only research. Copy trading is a subordinate application. Start with docs/knowledge-system-integration-v1.md, CONTEXT.md and the system-intelligence Skill rather than treating the old Hermes seven-stage pipeline as the system.
+**Canonical architecture:** [Knowledge Architecture V2.0](docs/knowledge-architecture-v2.md), with machine-readable registry at knowledge/architecture.v2.json. V5 is the research method; V4 is the runtime organization. Do not use the historical V1 integration document as the current master.
 
-## Market-wide event requirements
+## Scope and epistemic rules
 
-- Distinguish synthetic input, published source-derived data, and independently verified raw RPC records.
-- Preserve exact signatures, slots, instruction indices, units, window boundaries and provenance for wallet/funding counts.
-- Token transfer is not necessarily a swap; common funder is not necessarily common beneficial owner; same Slot is not confirmed Jito Bundle.
-- Do not claim statistical abnormality without comparable normal controls, a denominator and infrastructure confounder checks.
-- market_observatory.py aggregates supplied normalized events; it does not fetch live chain data or prove profitable strategies.
-- Do not report regression tests as passed without an actual run or a verified CI status.
+- Primary scope: market-wide Solana Meme event, wallet-cluster, asset/capital flow, developer, market-structure, conditional-baseline and risk research. Copy trading is a subordinate use case.
+- Distinguish source assertion, source-derived table, raw RPC observation, normalized event, derived metric, behavior candidate, statistical deviation, mechanism hypothesis, risk, prediction and paper result.
+- UNKNOWN is a first-class state. Never turn missing history, RPC failure, incomplete paging or unresolved owner into zero, normal, independent or same-owner.
+- Preserve exact signatures, instruction paths, Slot, transaction index when known, units, window boundaries, source versions, observed/available/received/decision times.
+- Token transfer is not necessarily a swap; balance delta is not a unique sender; common funder is not a beneficial owner; same Slot is not a confirmed Jito Bundle.
+- Do not claim statistical abnormality without an appropriate unselected population, denominator, matched baseline and public-infrastructure controls.
+- The five graph models remain separate: market facts, economic assets/entity hypotheses, mechanism knowledge, expert/source provenance and purpose-specific decision utility.
 
-## Safety Boundary (Hard)
+## Safety boundary (hard)
 
-Phase 1 is read-only research / paper-only gating.
+Phase 1 is read-only research / paper-only.
 
-**Forbidden for all Bots**:
-- real orders
-- private key access
-- wallet signing
-- transaction broadcast
-- gmgn-cli swap / multi-swap / cooking create
-- auto deploy
-- claims like “确定庄家”, “确定内幕”, “一定会涨”
+Forbidden for all Bots:
+- real orders, wallet signing, transaction broadcast or private-key access;
+- GMGN swap/multi-swap/cooking create;
+- auto deployment, auto Routine activation or unapproved external notifications;
+- claims such as “confirmed operator”, “confirmed insider”, “guaranteed pump” without the exact supporting evidence.
 
-## Roles
+## Required reading
 
-See `BOTS.md` for the multi-Bot development + single Monitor design.
+1. docs/knowledge-architecture-v2.md
+2. CONTEXT.md and BOTS.md
+3. For research design: docs/economic-mechanism-discovery-charter-v5.md
+4. For runtime boundaries: docs/dual-loop-research-runtime-architecture-v4.md
+5. For domain/source details: knowledge/README.md, knowledge/catalog.v1.json, knowledge/source_index.v1.json, docs/sources.md
+6. For task-specific source documents and code; never bulk-load the whole corpus as a substitute for understanding.
 
-## Required Reading Before Work
+## Knowledge use and release
 
-- `CONTEXT.md`
-- `BOTS.md`
-- docs/knowledge-system-integration-v1.md and task-relevant original documents
-
-## Completion
-
-Every significant rule or skill change should produce a short result note under `reports/`.
-
-## Knowledge-preserving migration (mandatory)
-
-- **Do not import Hermes startup, CLI, control hooks, absolute paths, memory store or runtime behavior.** Prior Hermes and qb- repositories are evidence/source archives, not Grok OS dependencies.
-- Start with `knowledge/README.md` and `knowledge/catalog.v1.json`. Use `PYTHONPATH=src python -m solana_meme_os.knowledge --question "普通语言问题"` as a retrieval triage tool; this is not a substitute for reasoning or research.
-- For each claim, select knowledge **by relevance and mechanism**, then test whether required inputs exist. Never copy the rule's conclusion just because keywords match.
-- Label historical claims as documented_legacy_method / unverified_hypothesis / source_contract. Historical provenance does NOT validate financial effectiveness.
-- A rule release requires actual market/source data, counterexamples, error attribution and independent review. Revisions go to a reviewed PR, not automatic self-upgrade.
-- When retrieval has no match, explicitly expand research, add sources and a candidate card; never hallucinate missing knowledge.
+- Knowledge cards are retrieval aids, not authoritative truths. Read their exact source file/commit and check assumptions against the current event.
+- Experts are research disciplines, not independent votes or necessarily separate Agents. Multiple experts citing one source do not create independent evidence.
+- Research stages S0–S7 are not software modules M0–M7. Runtime V4 loops are a separate design.
+- Any material claim must retain evidence refs, source/version, times, counter-explanations and dependencies.
+- A source correction triggers claim impact review; never silently overwrite prior claims.
+- Significant rule/skill/knowledge changes require a concise report under reports/ and a regression check.
+- Do not claim tests passed unless GitHub Actions or a local environment actually ran the exact commit.
+- A release requires representative real data, counterexamples, error attribution, independent review and rollback notes.
 
 ## Demand-driven source reasoning
 
-For ambiguous research tasks run `PYTHONPATH=src python -m solana_meme_os.research --question "原始问题"` and review `docs/on-demand-research-design.md`. Never fill a prompt with the entire corpus or mistake keyword matching for understanding. Use sources selectively and challenge them using original primary data. Record decision_at, observed_at, available_at; no future-info features. Treat statistical pattern detection, causal explanation and positive net executable expectancy as three independent evidentiary claims.
+Use research.py for source discovery and expert_router.py for deterministic capability suggestions only. These tools do not perform semantic analysis, fetch RPC, run expert Agents or authorize trading. If the current index does not cover a mechanism, expand research rather than force-fit it into an existing card or expert.
