@@ -615,7 +615,7 @@
       "name": "市场发现/发行与迁移",
       "cards": [
         "candidate-entry",
-        "market-lifecycle"
+        "gmgn-field-combinations"
       ],
       "sources": [
         "research-methodology",
@@ -627,14 +627,22 @@
         "event",
         "liquidity"
       ],
-      "key_boundary": "新 Mint/迁移/热点来源及观察总体"
+      "key_boundary": "新 Mint/迁移/热点来源及观察总体",
+      "primary_layers": [
+        "L1",
+        "L2",
+        "L4",
+        "L6"
+      ],
+      "ontology_ref": "knowledge/domain-ontology.v1.json#market_event"
     },
     {
       "id": "execution_semantics",
       "name": "交易与执行语义",
       "cards": [
-        "market-lifecycle",
-        "gmgn-raw-prototype"
+        "gmgn-raw-prototype",
+        "sol-receipt-economic-semantics",
+        "trade-direction-source-gate"
       ],
       "sources": [
         "slot-sequence-case",
@@ -646,14 +654,19 @@
         "data",
         "event"
       ],
-      "key_boundary": "Slot/Transaction/Instruction/余额，Jito 来源另需单独确认"
+      "key_boundary": "Slot/Transaction/Instruction/余额，Jito 来源另需单独确认",
+      "primary_layers": [
+        "L1",
+        "L2"
+      ],
+      "ontology_ref": "knowledge/domain-ontology.v1.json#execution_semantics"
     },
     {
       "id": "wallet_behavior",
       "name": "钱包行为与角色",
       "cards": [
         "wallet-roles",
-        "deployer-history"
+        "first-funder-history-coverage"
       ],
       "sources": [
         "hermes-wallet-method",
@@ -665,14 +678,21 @@
         "graph",
         "adversarial"
       ],
-      "key_boundary": "角色随时间改变，vendor tag不是身份"
+      "key_boundary": "角色随时间改变，vendor tag不是身份",
+      "primary_layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "ontology_ref": "knowledge/domain-ontology.v1.json#wallet_behavior"
     },
     {
       "id": "capital_graph",
       "name": "资金来源/循环/经济仓位",
       "cards": [
         "funding-graph",
-        "concentration"
+        "cashflow-count-value-inversion",
+        "capital-role-invariance"
       ],
       "sources": [
         "funding-graph-control",
@@ -687,14 +707,20 @@
         "wallet",
         "inventory"
       ],
-      "key_boundary": "资产图与主体假说图分离"
+      "key_boundary": "资产图与主体假说图分离",
+      "primary_layers": [
+        "L2",
+        "L3",
+        "L5"
+      ],
+      "ontology_ref": "knowledge/domain-ontology.v1.json#capital_graph"
     },
     {
       "id": "coordination",
       "name": "协同与捆绑候选",
       "cards": [
         "sybil-wash",
-        "funding-graph"
+        "multichannel-wallet-evidence"
       ],
       "sources": [
         "coordination-null-model",
@@ -707,14 +733,21 @@
         "statistics",
         "chain"
       ],
-      "key_boundary": "同步不等于同控；检验正常机器人/服务"
+      "key_boundary": "同步不等于同控；检验正常机器人/服务",
+      "primary_layers": [
+        "L3",
+        "L4",
+        "L5"
+      ],
+      "ontology_ref": "knowledge/domain-ontology.v1.json#coordination"
     },
     {
       "id": "token_security",
       "name": "Token/开发者/安全",
       "cards": [
         "token-security",
-        "deployer-history"
+        "deployer-history",
+        "creator-fee-economic-path"
       ],
       "sources": [
         "meme-sources",
@@ -725,14 +758,21 @@
         "chain",
         "risk"
       ],
-      "key_boundary": "安全与投资价值分开"
+      "key_boundary": "安全与投资价值分开",
+      "primary_layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L5",
+        "L6"
+      ],
+      "ontology_ref": "knowledge/domain-ontology.v1.json#token_security"
     },
     {
       "id": "microstructure",
       "name": "市场微观结构/流动性",
       "cards": [
-        "liquidity-depth",
-        "gmgn-field-combinations"
+        "liquidity-depth"
       ],
       "sources": [
         "slot-sequence-case",
@@ -743,15 +783,20 @@
         "chain",
         "execution"
       ],
-      "key_boundary": "真实报价/可承接与账面估值分开"
+      "key_boundary": "真实报价/可承接与账面估值分开",
+      "primary_layers": [
+        "L2",
+        "L3",
+        "L5",
+        "L6"
+      ],
+      "ontology_ref": "knowledge/domain-ontology.v1.json#microstructure"
     },
     {
       "id": "inventory_control",
       "name": "筹码/库存/经济控制",
       "cards": [
-        "concentration",
-        "funding-graph",
-        "reclaim-theory"
+        "concentration"
       ],
       "sources": [
         "economic-cycle",
@@ -763,7 +808,15 @@
         "graph",
         "regime"
       ],
-      "key_boundary": "控制权未知不阻止库存观测"
+      "key_boundary": "控制权未知不阻止库存观测",
+      "primary_layers": [
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6"
+      ],
+      "ontology_ref": "knowledge/domain-ontology.v1.json#inventory_control"
     },
     {
       "id": "market_regime",
@@ -781,15 +834,20 @@
         "liquidity",
         "inventory"
       ],
-      "key_boundary": "FCZ candidate at t ≠ retrospective at T"
+      "key_boundary": "FCZ candidate at t ≠ retrospective at T",
+      "primary_layers": [
+        "L2",
+        "L4",
+        "L5",
+        "L6"
+      ],
+      "ontology_ref": "knowledge/domain-ontology.v1.json#market_regime"
     },
     {
       "id": "baseline",
       "name": "正常与异常/因果",
       "cards": [
-        "candidate-entry",
-        "sybil-wash",
-        "evidence-synthesis"
+        "normal-bot-ecology-baseline"
       ],
       "sources": [
         "coordination-null-model",
@@ -802,15 +860,21 @@
         "causal",
         "adversarial"
       ],
-      "key_boundary": "先定义总体和同类基准，再讨论异常"
+      "key_boundary": "先定义总体和同类基准，再讨论异常",
+      "primary_layers": [
+        "L2",
+        "L3",
+        "L4",
+        "L5"
+      ],
+      "ontology_ref": "knowledge/domain-ontology.v1.json#baseline"
     },
     {
       "id": "risk_and_action",
       "name": "风险与机会资格",
       "cards": [
         "research-states",
-        "token-security",
-        "anti-false-completion"
+        "market-utility-vs-tradability"
       ],
       "sources": [
         "tradability-vs-structure",
@@ -822,15 +886,20 @@
         "execution",
         "review"
       ],
-      "key_boundary": "观察/解释/预测/净收益四个判据分离"
+      "key_boundary": "观察/解释/预测/净收益四个判据分离",
+      "primary_layers": [
+        "L4",
+        "L5",
+        "L6"
+      ],
+      "ontology_ref": "knowledge/domain-ontology.v1.json#risk_and_action"
     },
     {
       "id": "knowledge_engineering",
       "name": "知识更新与验证",
       "cards": [
-        "anti-false-completion",
         "evidence-synthesis",
-        "gmgn-raw-prototype"
+        "anti-false-completion"
       ],
       "sources": [
         "reproducible-pipeline",
@@ -842,7 +911,12 @@
         "knowledge",
         "chief"
       ],
-      "key_boundary": "验证产物与技能版本分开"
+      "key_boundary": "验证产物与技能版本分开",
+      "primary_layers": [
+        "L0",
+        "L7"
+      ],
+      "ontology_ref": "knowledge/domain-ontology.v1.json#knowledge_engineering"
     }
   ],
   "stages": [
