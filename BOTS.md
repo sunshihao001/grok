@@ -1,70 +1,43 @@
-# Bot Architecture — Grok Bot Edition
+# Grok Bot 分工｜市场级监控系统（研发与最终运行）
 
-## Overview
+**目标**：多专业研发 Bot 负责知识与规则工程，最终只有一个获得批准的只读 Monitor Bot 使用冻结版本。文档并未在 Grok 云端创建任何 Bot。旧版六个角色保留名称以利兼容，但职责从“GMGN 单币跟单”升级为跨 Mint 群体与市场事件。
 
-Multiple specialized **Development Bots** iterate on rules, skills, and evidence logic.
-One **Monitoring Bot** is the finished product that consumes the frozen rules for ongoing Solana meme monitoring (paper-only / research).
+## 角色和边界
 
-All Bots share the same computer (user's) and can read this repo. State and artifacts go into `state/` or Bot memory / artifacts.
+| Bot（设计角色） | 新职责 | 与历史知识的连接 |
+|---|---|---|
+| **1 Rule & Knowledge Architect**（原 Rule Architect） | 统一研究本体、证据/异常/风险/机会的不同 Gate、可反驳机制和规则变更 | Hermes Gate 和业务 Skill；meme- 市场理论；新市场级 Skill |
+| **2 Data & Event Bot**（原 GMGN Data） | 研究 Solana RPC、OKX/GMGN 候选接口、Token/SOL 单位、事件指令与数据可得时间；输出已核对归一化事件 | qb- 原型和字段法证；真实来源说明 |
+| **3 Wallet & Network Bot**（原 Wallet Structure） | 钱包角色、批量资助与买入、资金/库存图、重复组合、公共 hub 排除及跨 Mint 活动 | Hermes 钱包/Sybil/资金理论；Why 项目取证 |
+| **4 Market Mechanism & Evidence Bot**（原 Evidence & Gate） | 市场阶段、流动性/库存变化、正常对照与竞争解释、风险研判、纸面经济验证；保持原来的证据否决职责 | meme- 周期/成本区；Why 反证、时间安全/净经济方法 |
+| **5 QA & Falsification Bot**（原 QA/Fixture） | 构造普通/异常/错源/公开服务商负例，审查钱包计数、重复事件、时间泄漏、同 Slot≠Bundle、样本分母和测试 | 历史失败/案例、反证研究 |
+| **6 Final Meme Monitor Bot**（最终只读） | 按批准的数据范围运行规范事件聚合、市场快照监控与告警，保留证据与运行状态；不自行写规则 | 已冻结并通过实际运行验证的 Skill/数据/规则 |
 
-## Recommended Bot Set
+角色重新分工不表示原来已经存在、部署或获得六个云 Bot。研发 Bot 之间只移交研究材料与版本化程序；最终 Monitor 不应该承担开发权限。
 
-### Development Phase (iterate rules)
+## 每个交接材料应具备的最小事实
 
-1. **Rule Architect Bot**
-   - Purpose: design and refine skill contracts, evidence schemas, gate logic.
-   - Iterates on `rules/`, `design/`, CONTEXT.md.
+`question, observed_event_refs, signature_and_slot, mint/pool/wallets, time_window, source/provenance, unit_and_decimals, evidence_status, candidate_mechanisms, alternative_explanations, unknowns, negative_controls, proposed_next_readonly_check, version`
 
-2. **GMGN Data Bot**
-   - Purpose: prototype and refine GMGN data ingestion, field mapping, byte-combination reasoning.
-   - References qb- and design/phase1-research/.
+如果涉及纸面交易价值，另加信息可用时点、实际可能报价、延迟、退出、手续费、样本外检验；不能因异常直接转换成买入/卖出。
 
-3. **Wallet Structure Bot**
-   - Purpose: iterate wallet-roles, wallet-structure, chip-control, same-source detection.
-   - Theory from meme- knowledge base.
+## 研究工作流与发布
 
-4. **Evidence & Gate Bot**
-   - Purpose: evidence-chain, trade-gate, negative-gate, paper validation.
-   - Ensures Safe Mode and auditability.
+1. 以事件/风险/新研究问题触发研究，不要求先提供一个 Mint。
+2. Data & Event 核实原始事件和观察覆盖，再交 Wallet & Network / Market Mechanism 做并行研究。
+3. QA 提交能推翻主要解释的正常案例与数据质量评审。
+4. Rule & Knowledge Architect 根据源证据批准将某项结论保留为知识/待测规则/已测规则；所有交易动作保持无效。
+5. Final Monitor 只读已冻结版本，记录实际数据覆盖、事件、时间与异常候选；告警不声称庄家、Jito Bundle 或收益已证实。
+6. 更改真实规则需要独立审查、回归、回滚说明和人工批准，不允许运行 Bot 自动自我升级。
 
-5. **QA / Fixture Bot**
-   - Purpose: maintain fixtures, test cases, acceptance criteria.
+## 当前代码与职责映射
 
-### Production
+- `src/solana_meme_os/monitor.py`：单 Mint 规范快照差分（存在）。
+- `src/solana_meme_os/market_observatory.py`：对**外部提供的**事件执行窗口统计和候选关系（存在，需真实数据验证）。
+- `src/solana_meme_os/position_audit.py`：历史仓位表差额审计（子课题）。
+- `src/solana_meme_os/knowledge.py`、`research.py`：知识卡匹配与按需来源索引（非独立推理模型）。
+- 全市场真实流式输入、正常/异常校准和 Grok Bot 自动调度：**未实现/未验证**。
 
-6. **Meme Monitor Bot** (final product)
-   - Purpose: run the frozen Phase 1 pipeline on candidate tokens or trending lists.
-   - Output: structured reports, gate decisions, Telegram-style summaries.
-   - No development rights; only executes approved rules.
+完整迁移关系见 [整合蓝图](docs/knowledge-system-integration-v1.md)，运行环境说明见 [docs/grok-setup.md](docs/grok-setup.md)。
 
-## Workflow
-
-- Dev Bots propose changes via PRs or direct commits to feature branches.
-- Human or Review Bot freezes versions (tag or `rules/frozen/`).
-- Monitor Bot pulls latest frozen rules.
-
-## Safety
-
-All Bots inherit the Solana Meme Safety Boundary from AGENTS.md / CONTEXT.md.
-No Bot may access private keys or broadcast transactions without explicit future human approval.
-
-## Knowledge responsibilities (Grok Edition)
-
-The above six roles remain unchanged. All six read `knowledge/README.md` and the source-pinned catalog before specialist work; **none treats the historical corpus as verified signal data**.
-
-- Rule Architect: choose the relevant knowledge mechanisms and formulate falsifiable hypotheses, including what evidence could disprove them. Do not freeze models solely because they exist in the source archive.
-- GMGN Data: own field-level raw source/units/time validity; produce a traceable normalized observation, not label-based identities.
-- Wallet Structure: compare financing, time behavior, role candidates and alternative benign explanations.
-- Evidence & Gate: preserve contradictory evidence, missing observations and stopping rules; distinguish report state from trades.
-- QA / Fixture: challenge legacy claims, build controls and real-case replay, track false alerts and sample leakage.
-- Meme Monitor: **read the knowledge lenses attached to observation output**, fetch relevant new evidence, avoid causal claims from a single metric. Remain non-developing and read-only.
-
-Each cross-Bot handoff should contain `knowledge_ids`, pinned source URLs, applicability conditions, actual observed evidence, alternative explanations, missing evidence and the outcome of independent checking.
-
-## On-demand research packet handoff
-
-- Rule Architect chooses hypothesis / population / refutation plan, without reusing published thresholds as trading rules.
-- GMGN Data Bot and Wallet Structure Bot retrieve only relevant source docs through the `research` intake packet and verify actual time-of-knowledge for source fields.
-- Evidence & Gate Bot requires a denominator, counter-example/null model and source-linked factual ledger, and never calls an observed cluster 'profitable alpha'.
-- QA / Fixture Bot tries selection bias, out-of-time features, shared infrastructure and sensor failures before promoting research claims.
-- Meme Monitor remains one read-only runtime Bot. It must not ingest third-party documents wholesale or update approved rules by itself.
+**项目安全边界**：不访问私钥、签名、广播、下单、自动部署或未经批准对外发送通知。
