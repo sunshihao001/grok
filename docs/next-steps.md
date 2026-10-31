@@ -7,7 +7,7 @@
 - [x] 将总目标从 GMGN 单币/跟单调整为多 Mint 事件、钱包群体、资产网络和市场机制。
 - [x] 原 Hermes、meme-、qb-、Why 项目、OKX 候选接口和 Grok 的职责矩阵。
 - [x] 统一 README/CONTEXT/BOTS/design、领域 Skill、原知识/专项的定位。
-- [ ] 用实际代码运行统一测试与本轮端到端合成案例；**只有真实执行并记录后才能勾选**。
+- [x] GitHub Actions 在草案提交 `f6f19062edd402ce17691abbcf049fa9d34c2169` 的完整离线测试返回 success（[run 41167185465](https://github.com/sunshihao001/grok/actions/runs/41167185465)）；包括已有合成 M2 测试。**还未运行真实 RPC 数据重放和云 Bot 集成测试**。
 - [ ] 实际 Grok Bot 兼容性与 Skill 触发测试（当前尚未部署）。
 
 ## P1｜事件账与群体窗口（优先）
