@@ -94,3 +94,30 @@ C05 的分母必须来自独立的**合格机会索引**，不能由“钱包曾
 - SPL Token 指令字段及编号以 [官方 `solana-program/token` 源码](https://github.com/solana-program/token/blob/main/interface/src/instruction.rs) 为依据。
 
 **阶段结论**：本适配器在合成事务中可证明**部分转账级语义**，但没有完成任何 DEX BUY/SELL 语义验证；下一阶段适合选少量公开交易签名进行逐条人工对账，仍只读。进入正式 P4 的条件不是原型测试数量，而是已对账的真实原始交易和可审计数据覆盖。
+
+## P3-M01 公开 RPC 示例逐笔对账与防泄漏修正（2026-10-31）
+
+**状态/来源**：本节是有公开原始 RPC 响应的**文档样本格式兼容性回归**，不是独立 RPC 节点重新抓取的 mainnet 真实市场实验，更不是全量 Mint 采集。响应来自 Solana Foundation 的官方 `getTransaction` 文档 [固定源码](https://github.com/solana-foundation/solana-com/blob/4cb392f61c2ab0f8953cc314378aaf8256b7699a/apps/docs/content/docs/en/rpc/http/gettransaction.mdx)，并保存了原始 JSON 响应（fixture：`fixtures/official-solana-gettransaction-samples.json`）。该文档没有提供第一次获得这些响应的时间，所以测试注入的 `available_at=2026-10-31T00:00:00Z` 是**合成时点**，绝不能在任何预警研究中当成当时可见证据。
+
+| 文档签名 | Slot / 版本 | 有来源的标准答案 | 适配器回归结果与限制 |
+|---|---|---|---|
+| `4ReKprwf3WdLHRrzp4ctPWNBsQDPL3VZz3zMmoZfcGJMJCHh5Vq937mPdyxhCbw54wNnA6hZ7KfNpQdpt13yY7A9` | `423108383` / legacy | 官方 JSON：顶层 System Program transfer，1,000,000,000 lamports，从 accountKeys[0] 到 [1]，手续费5,000 lamports | 记录1条 **SOL_TRANSFER** 资金事件，不生成目标 Mint 的 BUY/SELL/TRANSFER；此次格式在已支持范围。 |
+| `56rgv1Fqg7MHLoct3ESNx8DHeC2c5TFYyK1As35paWn2KYuRuXPFZK3XDEwkkZemVfmnKrkj17mMzz4N1d8kMYC4` | `423118809` / v0 | 官方 JSON 与 jsonParsed：Associated Token Account Create；4条inner CPI；新账户的postTokenBalance数量为0；租金及初始化不是Token Swap | 两个编码均不输出 BUY/SELL 或资金交易；目前解析器尚不支持完整 ATA/CPI 经济意义归类，因此结果 **INCOMPLETE/UNRESOLVED**。这种保守拒绝不是“已完整解析 ATA”。 |
+
+[官方RPC方法说明](https://solana.com/docs/rpc/http/gettransaction) / [官方示例快照](https://github.com/solana-foundation/solana-com/blob/4cb392f61c2ab0f8953cc314378aaf8256b7699a/apps/docs/content/docs/en/rpc/http/gettransaction.mdx)。以上两笔的链上签名来自官方样本，**本轮没有独立 live RPC re-fetch**，不可升级为独立签名对账实证。因为一笔 v0 样本同时提供 `json`/`jsonParsed`，总计为**2笔唯一交易、3份编码记录**，不是3笔链上交易。
+
+### 通过这些样本实际发现并修复的两个通用错误
+
+1. **`meta.err` 缺失并非成功**。旧代码以 `meta.get("err") is None` 判断执行成功，当 `err` 字段整个缺失时也成立。现在必须确认 `"err" in meta`；否则返回 `TRANSACTION_STATUS_UNKNOWN`、覆盖不完整、无资金/交易事件。`err: null` 才能表示执行成功。
+2. **决策时点的未来证据不得进入资金事件列表**。旧代码在输出 `funding_events` 与 `events` 后才判断 `available_at>as_of`，虽降级覆盖，却仍可能泄露未来已知资金。现在在经济动作解码**之前**拒绝该证据，标记 `EVIDENCE_ARRIVED_AFTER_AS_OF`，不输出未来资金/买卖记录。这关系到 C02 资金→执行延迟与 C05 机会窗口的可信度。
+
+新增 `tests/test_official_gettransaction_examples.py` 7项测试：文档签名/Slot来源、legacy资金转账、v0账户创建的json/jsonParsed、ATA零余额/inner CPI、缺失 `meta.err`、未来证据禁止输出。本项目现有六个测试文件共定义71项 `unittest` 测试方法（按 `def test_*` 计数），所有文件通过 GitHub `monitor-tests` 工作流；该数量不代表市场样本规模、协议覆盖率或预警准确率。
+
+### 本轮新增的协议证据关联（非已支持的解析能力）
+
+- [Solana v1版本文档](https://solana.com/docs/core/transactions/versioned-transactions)：读取 v1 要以数字1设置 `maxSupportedTransactionVersion`；旧配置可能令 `getBlock` **整块失败**或 `blockSubscribe` 返回null/无法推进。它必须变成采集完整性错误，不能生成“该区块无交易”。v1 的 `transactionConfig` 与旧式 ComputeBudget 的单位和位置不同。参考可运行代码：https://github.com/solana-foundation/transaction-v1-examples 。
+- [Token-2022 Transfer Fees](https://solana.com/docs/tokens/extensions/transfer-fees)：指令中转账金额与真实可用到账可能不同，不能将 gross transferred amount 当作 recipient net balance。
+- [Transfer Hook](https://solana.com/docs/tokens/extensions/transfer-hook)：普通Token转账可以额外执行 Hook CPI，并触发资产动作，不能把每个内层 transfer 重复标为独立Swap。
+- [Confidential Balances](https://solana.com/docs/tokens/extensions/confidential-transfer)：金额、余额可能加密，公开Token Account与mint/owner不等于可以公开计算真实金额、库存或资金循环。缺少解密/可审计证明时应标 `AMOUNT_UNKNOWN`（未来协议设计），不是强行估计为0。
+
+**当前未支持/必须保留未知**：实际 v1、Pump.fun/Raydium/Meteora/Jupiter 协议 Swap、Token-2022 扩展精确净到账、机密金额、多层CPI的统一经济动作归并、独立 Mint/slot 完整采集水位、全网事件可得时点。两笔文档样本无法代表这些覆盖。下一轮应优先取得**独立只读RPC**对相同签名的原始回包，记录 `fetched_at/source/commitment`，与官方例子逐字段比较；之后选一个Meme协议及一种Swap按官方源码/IDL增加解析，而不是扩张为“万能DEX交易解码器”。
