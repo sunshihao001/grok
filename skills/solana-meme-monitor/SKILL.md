@@ -1,19 +1,28 @@
 ---
 name: solana-meme-monitor
-description: Read-only, source-linked Solana Meme snapshot monitoring, with freshness checks and evidence-based uncertainty reporting.
+description: Read-only source-linked Solana Meme snapshot and normalized multi-wallet event monitoring, with provenance, freshness, deduplication and uncertainty reporting.
 ---
 
-# Skill — observe, compare, report
+# Solana Meme Monitor | Read-only runtime handoff
 
-**When:** one-time real observation with a verified source, or a human-approved Grok Routine. **Inputs:** token mint, reviewed repo/rules, normalized JSON source with schema_version, chain, token_address, observed_at, mode, source, metrics, optional events; Python 3.11+.
+**Role:** execute approved monitoring logic, not research by inventing market facts. The top-level domain reasoning belongs to [market intelligence](../solana-meme-system-intelligence/SKILL.md); deep original-source analysis belongs to the writing and knowledge Skills. This file describes two currently separate input contracts.
 
-1. Verify source, clock, schema and field units. If invoking GMGN, run only the read-only collector: PYTHONPATH=src python -m solana_meme_os.gmgn_collect --address MINT. It currently leaves metrics empty until validated mappings exist.
-2. Run PYTHONPATH=src python -m solana_meme_os.monitor --input OBSERVATION_PATH --state-dir .runtime. The --allow-fixture option is only for explicit demonstrations.
-3. Explain change relative to prior observation, rule version, underlying source link, raw value, missing fields, contradictory evidence and limitations. Preserve state and JSONL run evidence.
-4. On invalid, stale or missing inputs or unavailable login, stop and report error. Never fabricate numbers or classify hypotheses as confirmed identities.
+## A. Single-Mint snapshot (existing implementation)
 
-**Validation:** PYTHONPATH=src python -m unittest discover -s tests -v. All code here is read-only; the actual Grok Routine and any production deployment require separate human review and live-source testing. No trade or transaction actions.
+Inputs: approved token Mint, normalized observation JSON, rules/monitor.v0.json, state directory. Validate source, units, timestamp, freshness and fixture/live flag. Run `PYTHONPATH=src python -m solana_meme_os.monitor --input OBSERVATION.json --state-dir .runtime`. `--allow-fixture` is only for explicitly synthetic samples. It records liquidity/top10-holder deltas and source event IDs, not wallet clustering.
 
-## Expert knowledge is required, not optional
+## B. Multi-wallet event observatory (development implementation)
 
-After Step 2, read `knowledge.interpretation_candidates` from the monitor JSON. These are **candidate conceptual lenses**, not conclusions. For each alert, explain the actual measured change, what the proposed mechanism would imply, what other mechanisms could also produce it, and which missing source datum would best distinguish them. If an alert is unsupported by required evidence, say UNKNOWN and avoid upgrading risk status. See `skills/solana-meme-knowledge/SKILL.md`.
+Inputs: **already normalized source-linked events** with event kind, signature, instruction index, Slot, block time, applicable Mint/owner and raw asset units. Run `PYTHONPATH=src python -m solana_meme_os.market_observatory --input fixtures/market-observatory-synthetic.json --allow-fixture` for a strictly synthetic demonstration.
+
+Outputs: bounded time-window aggregates and candidate facts for same-Slot multiwallet buys, funding fanout, token consolidation, funding-to-buy and cross-Mint re-use when supported by supplied events. Aggregate wallet counts and total lamports cannot establish common control or statistical abnormality. Raw chain RPC retrieval, Jito bundle provenance, representative normal baseline, trade execution and cloud scheduling are **not provided by this code**.
+
+**Never pass normalized event output into the old monitor.py as if it used the same schema**. They are separate interfaces until an explicit, tested adapter exists.
+
+## Reporting and stopping
+
+Report: exact observation population, Mint(s), start/end and Slot, distinct wallets and transactions, Token/SOL amounts with units, source references, candidate mechanism, competing ordinary explanation and missing evidence. Keep `OBSERVED`, `COORDINATION_CANDIDATE`, `UNKNOWN`, `RISK_WARNING` and `PAPER_RESEARCH` conceptually separate; no live trading states are authorized.
+
+Reject: stale/ambiguous source, invalid raw unit, duplicated conflicting events, unavailable decision-time data, unsupported owner identity, unsupported Jito Bundle, forced profit claims. No private keys, signing, broadcast, swaps or routine activation.
+
+Offline regression command: `PYTHONPATH=src python -m unittest discover -s tests -v`. Test success does not prove live data or economic validity. Real Grok Skill availability and cloud runtime need independent confirmation.
