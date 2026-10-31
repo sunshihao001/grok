@@ -1,3 +1,9 @@
+## V4: chosen dual-loop execution architecture (2026-10-31)
+
+[Runtime choice and phased engineering decision](../docs/dual-loop-research-runtime-architecture-v4.md): use a low-cost deterministic fast event loop and a bounded, source-linked slow research loop. [`research_dispatch.py`](../src/solana_meme_os/research_dispatch.py) accepts M2 output and emits a finite proposal to verify signatures, consult experts and revisit hypotheses. Each case retains event episode boundaries (mint+slot, funder+window, explicit cohort aggregate); it never auto-confirms controlling entities or merges unrelated event histories. Duplicate signatures are proposed for one source check, reusable by multiple cases. [Dispatch tests](../tests/test_research_dispatch.py) and [M2-to-dispatch integration tests](../tests/test_dual_loop_vertical_slice.py) are part of GitHub Actions CI.
+
+**The dispatcher is a planning program only**, not a persistent cloud agent workflow, realtime collector, calibrated anomaly signal, or trading system. M1 read-only input verification and actual Grok runtime capabilities still require separate tests.
+
 # Solana Meme knowledge is the core; Grok is the host
 
 **Purpose:** preserve the expert learning, domain research, adversarial perspectives and practical lessons from three earlier projects while discarding Hermes-specific *runtime* assumptions. A working Bot without validated external knowledge is only orchestration.
