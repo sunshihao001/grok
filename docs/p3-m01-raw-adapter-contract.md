@@ -2,6 +2,14 @@
 
 **状态：fixture-only 实验代码；无 RPC 采集、钱包/交易、协议完整解码或真实市场验证。** 本文是现有 `docs/p24-m01-crossmint-research.md` 的局部工程补充，不是新知识本体。
 
+## 当前协议资料复核：v1交易格式已激活（2026-10-31，源审计）
+
+**AMEND / CHALLENGE：以前仅围绕 legacy/v0 交易设计的技术假设不足以覆盖最新版 Solana。** 官方 [Versioned Transactions](https://solana.com/docs/core/transactions/versioned-transactions) 说明 v1 已在 mainnet/devnet/testnet 激活：v1 交易不采用 ALT，账户内联，资源与优先费信息位于 transactionConfig；客户端读取时需 maxSupportedTransactionVersion: 1。官方 [Transaction Introspection](https://solana.com/docs/core/transactions/transaction-introspection) 当前支持解析 v1（需匹配支持的Kit版本），但 jsonParsed 不能直接传入该 JS 解码器。
+
+**本适配器当前处理方式**：raw_tx_adapter.py 只接受 legacy/v0，version=1 会输出 UNSUPPORTED_TX_VERSION 并将覆盖状态标为不完整。这是正确的 fail-closed，不是 v1 已支持；已增补对抗性模拟测试。未来不可为了“支持v1”直接放宽版本判断，必须先用官方或已审计的正确解码器验证真实 raw 交易、account indexes、transactionConfig 和 instruction trace，再测可用性。上游RPC/索引若遗漏版本1或将错误当作空区块，C05的“无交易”会发生假阳性。
+
+**来源为何重要**：这是按需跨领域来源检索所发现的真实工程差异；只有代码和真实语义核查通过后，才将新增协议支持升级为已实现能力。与 [知识闭环V2](../knowledge/system/gpt-meme-continuity-v2.md) 的“术语→协议→字段→程序测试/反证”一致。
+
 ## 1. 精确实现范围（支持 ≠ 协议交易识别完成）
 
 `src/solana_meme_os/raw_tx_adapter.py` 直接接收本地 `m01.raw.v1` JSON 文件，其中 `transactions[].rpc` 是 `getTransaction` 风格响应。仅允许 `chain=sol`、`mode=fixture`。输出符合现有下游 `m01.v1`，并另外返回 `adapter_audit`。
