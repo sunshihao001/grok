@@ -89,7 +89,7 @@ class ResearchDispatchTests(unittest.TestCase):
                              if c["scope"].startswith("SOURCE:F:FANOUT_WINDOW:")]), 2)
 
     def test_missing_signature_never_silently_becomes_verified(self):
-        x = make_plan(sample())
+        x = make_plan(sample(), max_cases=10)
         row = next(a for a in x["cases"]
                    if a["scope"] == "WALLET:W1:CROSS_MINT_AGGREGATE")
         self.assertEqual(row["verification_status"],
