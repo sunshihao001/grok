@@ -1,6 +1,6 @@
 # Project Agent / Bot Rules — Solana Meme Market Intelligence OS
 
-**Canonical architecture:** [Knowledge Architecture V2.0](docs/knowledge-architecture-v2.md), with machine-readable registry at knowledge/architecture.v2.json. V5 is the research method; V4 is the runtime organization. Do not use the historical V1 integration document as the current master.
+**Canonical architecture:** [Knowledge Architecture V2.0](docs/knowledge-architecture-v2.0.md), with machine-readable registry at knowledge/architecture.v2.json. V5 is the research method; V4 is the runtime organization. Do not use the historical V1 integration document as the current master.
 
 ## Scope and epistemic rules
 
@@ -24,7 +24,7 @@ Forbidden for all Bots:
 
 ## Required reading
 
-1. docs/knowledge-architecture-v2.md
+1. docs/knowledge-architecture-v2.0.md
 2. CONTEXT.md and BOTS.md
 3. For research design: docs/economic-mechanism-discovery-charter-v5.md
 4. For runtime boundaries: docs/dual-loop-research-runtime-architecture-v4.md
