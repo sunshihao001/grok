@@ -1,3 +1,11 @@
+## V4｜最佳运行方式：事件双循环、预算化调查、证据回流
+
+优先阅读 [双循环运行架构 V4](../../docs/dual-loop-research-runtime-architecture-v4.md)。选型结论：**确定性 M1/M2 快循环 + 按需专家慢循环 + 独立 QA/知识更新回路**；常态 Bot 不用逐笔启动 17 专家，也不允许一个模型凭摘要覆盖原始证据。初期一个只读 Monitor 与一个动态 Research Manager 即可承载大多数任务；实际云环境 Bot 并未创建。
+
+使用 `PYTHONPATH=src python -m solana_meme_os.research_dispatch --input .runtime/observatory-report.json --max-cases 4 --max-source-checks 12 --max-per-case 4` 对**已经生成的 M2 报告**提出预算化调查计划。Case 分别依据 Mint/Slot、资金源/窗口或明确的 cohort 聚合，不因 Mint 或资金源同名就制造一个巨大的时间外故事。多案例重复引用的签名可复用核查预算，未知 Kind 仍进入开放发现。命令不会调用 RPC、安装 Grok Bot、运行专家模型或执行交易。
+
+适用边界：当前 M2 接收外部已归一化的四类事件，非实际全链覆盖；研究规划、独立结论撤回和真实交易解析是不同运行层。**模型不能把检测候选称统计异常或经济同控**；要进入纸面机会研究，另需决策时点、独立对照、真实报价与成本的验证。
+
 ---
 name: solana-meme-system-intelligence
 description: |
