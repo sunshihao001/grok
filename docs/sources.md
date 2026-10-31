@@ -44,4 +44,4 @@ Current full source selection list: `knowledge/source_index.v1.json` (**30 pinne
 - The source registry contains **30 exact file pointers across 8 repositories**, each pinned to a 40-character commit and path: see [source-index README](../knowledge/source-index-README.md).
 - The project-discovery register contains **14 project/paper references**. Several entries are README/metadata or public documentation only and are not equivalent to a pinned source file or runnable adapter.
 - External method registry contains 17 method/spec references. The expert graph currently has 40 edges (L01–L40); earlier 32 and 36 counts are historical expansion snapshots.
-- The 24 knowledge cards now include R005/R006/R007 and KX-01–KX-06; see [knowledge architecture V2](knowledge-architecture-v2.md).
+- The 24 knowledge cards now include R005/R006/R007 and KX-01–KX-06; see [knowledge architecture V2](knowledge-architecture-v2.0.md).
