@@ -86,7 +86,7 @@ class KnowledgeArchitectureTests(unittest.TestCase):
             self.assertTrue(link["contract"])
             self.assertTrue(link["counter_signal"])
         for ref in self.external["references"]:
-            self.assertTrue(set(ref["linked_edges"]) <= edge_ids)
+            self.assertTrue(set(ref["linked_expert_edges"]) <= edge_ids)
 
     def test_mechanism_hypothesis_expert_references_resolve(self):
         expert_ids = {x["id"] for x in self.mapping["experts"]}
