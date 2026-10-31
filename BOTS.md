@@ -1,3 +1,11 @@
+## 运行架构决策 V4｜事件快循环 + 受预算约束的慢研究循环
+
+实际选型：[双循环研究运行架构 V4](docs/dual-loop-research-runtime-architecture-v4.md)。**正式拒绝**将 17 个专业能力等同 17 个持续在线的 Bot，也拒绝用固定八层解释每笔交易。当前建议只有一个只读市场监控入口和一个按需深入研究入口；17 专家是专家 Skill/方法/程序，不是同时启动的模型进程。
+
+**可执行的离线纵切片**：`market_observatory.py` 输出 M2 群体候选；`research_dispatch.py` 按 Mint+Slot、资金源+时间窗、跨 Mint 总体和钱包活动分别生成 Case，且不自动把不同来源/时间的行为归并；`expert_router.py` 返回相关知识与专家，`expert_interaction.py` 给出类型化交接。研究预算限制 Case 数/拟查签名数，并复用跨 Case 同签名以避免重复查询。**尚未部署真正 RPC 调用、云端任务队列或自动 Grok 专家执行；本阶段只产生只读调查计划**。
+
+规则：原始金额、来源归属、余额守恒、时间可得性必须由数据/指令审计确定；竞争机制由专家研究提出，独立 QA 对其提出反证；新规则必须单独审核与冻结，不因一个深研 Case 直接改变正在运行的监控。详细验收见 `tests/test_research_dispatch.py` 与 `tests/test_dual_loop_vertical_slice.py`。
+
 # Grok Bot 分工｜市场级监控系统（研发与最终运行）
 
 **目标**：多专业研发 Bot 负责知识与规则工程，最终只有一个获得批准的只读 Monitor Bot 使用冻结版本。文档并未在 Grok 云端创建任何 Bot。旧版六个角色保留名称以利兼容，但职责从“GMGN 单币跟单”升级为跨 Mint 群体与市场事件。
