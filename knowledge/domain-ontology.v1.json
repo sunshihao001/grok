@@ -1,0 +1,781 @@
+{
+  "schema_version": "1.0",
+  "status": "DOMAIN_ONTOLOGY_CONTRACT_NOT_FULLY_IMPLEMENTED",
+  "as_of": "2026-10-31",
+  "canonical_architecture": "docs/knowledge-architecture-v2.0.md",
+  "purpose": "Make the twelve domain labels operational: define questions, objects, evidence, outputs, expert panels, card membership and implementation gaps.",
+  "rules": [
+    "A domain may span multiple L0-L7 knowledge layers; domain is not a layer or Agent.",
+    "Each catalog card has exactly one primary domain but may be used by multiple domains through cross-domain links.",
+    "A domain card list must include every card whose catalog.primary domain matches that domain; additional cross-domain references must use related_cards, not primary_cards.",
+    "A source pointer is not proof of source review or live data access.",
+    "Unknown and missing evidence remain explicit; domain membership does not upgrade claim maturity."
+  ],
+  "domains": [
+    {
+      "id": "market_event",
+      "name": "市场发现/发行与迁移",
+      "primary_layers": [
+        "L1",
+        "L2",
+        "L4",
+        "L6"
+      ],
+      "subdomains": [
+        "Mint/发行发现与迁移",
+        "新币/池子/市场候选覆盖",
+        "发行总体与事件入口偏差"
+      ],
+      "primary_questions": [
+        "哪些Mint/发行/迁移在研究范围内？",
+        "发现入口对哪些市场活动有系统性遗漏？",
+        "观测总体的分母、窗口和数据覆盖是什么？"
+      ],
+      "core_objects": [
+        "Mint",
+        "Launch/Curve",
+        "Migration",
+        "Pool",
+        "Market event",
+        "Cohort"
+      ],
+      "required_evidence": [
+        "signature/事件来源与时间",
+        "发行/迁移协议和版本",
+        "候选筛选窗口与未入选样本",
+        "数据覆盖率、缺失和供应商延迟"
+      ],
+      "outputs": [
+        "带来源的Mint/迁移事件",
+        "研究总体和候选入口说明",
+        "发行覆盖与缺失报告"
+      ],
+      "inference_boundaries": [
+        "只看热门/已成功发行会产生选择偏差",
+        "供应商trending标签不等于质量或安全",
+        "Meme价格幸存者偏差会污染候选结论"
+      ],
+      "expert_panel": [
+        "data",
+        "chain",
+        "event",
+        "liquidity"
+      ],
+      "knowledge_cards": [
+        "candidate-entry",
+        "gmgn-field-combinations"
+      ],
+      "source_ids": [
+        "research-methodology",
+        "okx-market-readonly"
+      ],
+      "implementation_status": "DOMAIN_DEFINED_NOT_FULLY_IMPLEMENTED",
+      "known_gaps": [
+        "全市场发行/迁移总体和完整覆盖缺失"
+      ]
+    },
+    {
+      "id": "execution_semantics",
+      "name": "交易与执行语义",
+      "primary_layers": [
+        "L1",
+        "L2"
+      ],
+      "subdomains": [
+        "交易/指令解析",
+        "SOL/Token/WSOL余额语义",
+        "Swap/LP/CloseAccount/Fee分类"
+      ],
+      "primary_questions": [
+        "签名内外指令实际发生了什么？",
+        "Token/SOL净变化由哪些指令组成？",
+        "供应商BUY/SELL/FUNDING标签是否正确？"
+      ],
+      "core_objects": [
+        "Transaction/Signature",
+        "Outer/Inner Instruction",
+        "Account Meta/Owner",
+        "SOL/lamports",
+        "SPL/Token-2022",
+        "WSOL",
+        "LP Position"
+      ],
+      "required_evidence": [
+        "signature与transaction version",
+        "outer/inner instruction path与program id",
+        "pre/post SOL和Token raw balance",
+        "decimals、fee、rent与owner/authority",
+        "source time和decoder version"
+      ],
+      "outputs": [
+        "Canonical typed events",
+        "资产余额变化分解",
+        "BUY/SELL/LP/fee分类审计",
+        "未解释余额残差"
+      ],
+      "inference_boundaries": [
+        "余额差不唯一确定发送者/接收者",
+        "Token减少不等于SELL",
+        "SOL增加不等于外部注资",
+        "同Slot不等于Jito Bundle"
+      ],
+      "expert_panel": [
+        "chain",
+        "data",
+        "event",
+        "review"
+      ],
+      "knowledge_cards": [
+        "gmgn-raw-prototype",
+        "sol-receipt-economic-semantics",
+        "trade-direction-source-gate"
+      ],
+      "source_ids": [
+        "slot-sequence-case",
+        "reproducible-pipeline",
+        "h2w6-sol-balance-method"
+      ],
+      "implementation_status": "DOMAIN_DEFINED_NOT_FULLY_IMPLEMENTED",
+      "known_gaps": [
+        "真实RPC采集与多程序instruction decoder未完成"
+      ]
+    },
+    {
+      "id": "wallet_behavior",
+      "name": "钱包行为与角色",
+      "primary_layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "subdomains": [
+        "钱包生命周期和历史覆盖",
+        "时变行为角色",
+        "首注资/资金来源关系"
+      ],
+      "primary_questions": [
+        "地址在某一时点承担什么角色？",
+        "first-funder未知是无资金还是历史未覆盖？",
+        "同一地址/Token Account/Owner是否被正确区分？"
+      ],
+      "core_objects": [
+        "Wallet Address",
+        "Token Account",
+        "Owner/Authority",
+        "Funder/Recipient",
+        "Role Timeline"
+      ],
+      "required_evidence": [
+        "完整历史查询范围与分页状态",
+        "签名级资金边或明确启发式方法",
+        "Token Account owner mapping",
+        "地址年龄/活跃度和公共服务商对照"
+      ],
+      "outputs": [
+        "钱包角色时间线",
+        "首注资证据状态",
+        "未知/未覆盖/查询失败报告"
+      ],
+      "inference_boundaries": [
+        "单个funding来源不证明受益人",
+        "历史未覆盖不等于零融资",
+        "地址角色会随时间变化"
+      ],
+      "expert_panel": [
+        "wallet",
+        "data",
+        "graph",
+        "statistics"
+      ],
+      "knowledge_cards": [
+        "wallet-roles",
+        "first-funder-history-coverage"
+      ],
+      "source_ids": [
+        "hermes-wallet-method",
+        "hermes-source-relations",
+        "wallet-first-funder-unknown"
+      ],
+      "implementation_status": "DOMAIN_DEFINED_NOT_FULLY_IMPLEMENTED",
+      "known_gaps": [
+        "历史分页、owner映射与真实角色误判率待实测"
+      ]
+    },
+    {
+      "id": "capital_graph",
+      "name": "资金来源/循环/经济仓位",
+      "primary_layers": [
+        "L2",
+        "L3",
+        "L5"
+      ],
+      "subdomains": [
+        "SOL与Token资产流",
+        "资金构成/次数金额反转",
+        "库存迁移、资金回流与跨Mint角色"
+      ],
+      "primary_questions": [
+        "资产从哪里来、经过哪些账户和程序？",
+        "新外部资本与已有仓位释放如何区分？",
+        "资产路径是否闭合，哪些库存仍未知？"
+      ],
+      "core_objects": [
+        "Asset Flow",
+        "Funding Edge",
+        "Inventory",
+        "LP Position",
+        "Fee Accrual/Claim",
+        "Cross-Mint Motif"
+      ],
+      "required_evidence": [
+        "签名级资产边与raw units",
+        "SOL/Token/LP前后余额",
+        "费用/租金/WSOL和LP仓位变化",
+        "发送/接收账户角色与公共Hub",
+        "未解释资产残差"
+      ],
+      "outputs": [
+        "资产事实图",
+        "资本流量分解",
+        "经济仓位与未知库存状态",
+        "跨Mint经济角色候选"
+      ],
+      "inference_boundaries": [
+        "资产边不等于控制边",
+        "余额正向变化不等于外部注资",
+        "资金同源不等于同一受益人",
+        "金额反转不代表普遍操盘模式"
+      ],
+      "expert_panel": [
+        "graph",
+        "wallet",
+        "chain",
+        "inventory",
+        "causal"
+      ],
+      "knowledge_cards": [
+        "funding-graph",
+        "cashflow-count-value-inversion",
+        "capital-role-invariance"
+      ],
+      "source_ids": [
+        "funding-graph-control",
+        "economic-cycle",
+        "downstream-exit-structure",
+        "forensic-raw-sol-replay",
+        "developer-funding-convergence",
+        "h2w6-sol-balance-method"
+      ],
+      "implementation_status": "DOMAIN_DEFINED_NOT_FULLY_IMPLEMENTED",
+      "known_gaps": [
+        "完整资产守恒和跨Mint经济主体图未持久化"
+      ]
+    },
+    {
+      "id": "coordination",
+      "name": "协同与捆绑候选",
+      "primary_layers": [
+        "L3",
+        "L4",
+        "L5"
+      ],
+      "subdomains": [
+        "同步交易和多钱包事件",
+        "资金扇出/归集/共同路径",
+        "Sybil/wash/共享基础设施竞争解释"
+      ],
+      "primary_questions": [
+        "群体行为超出正常机器人生态多少？",
+        "同步是共同控制还是共同公开刺激？",
+        "多通道证据是否独立且有时间外增量？"
+      ],
+      "core_objects": [
+        "Wallet Cohort",
+        "Event Motif",
+        "Shared Funder",
+        "Joint Signer",
+        "Public Hub",
+        "Null Model"
+      ],
+      "required_evidence": [
+        "多通道签名/时间/资产边",
+        "owner去重与hub分类",
+        "未触发样本及匹配基准",
+        "同Slot与Jito来源证据分开",
+        "跨Mint时间留出"
+      ],
+      "outputs": [
+        "协同候选事件",
+        "多通道关系与证据依赖",
+        "条件偏离及误报预算"
+      ],
+      "inference_boundaries": [
+        "同Slot不等于Bundle",
+        "同一funder不等于同控",
+        "共同刺激会产生同步行为",
+        "大连通分量可能由公共Hub制造"
+      ],
+      "expert_panel": [
+        "event",
+        "wallet",
+        "graph",
+        "adversarial",
+        "statistics",
+        "chain"
+      ],
+      "knowledge_cards": [
+        "sybil-wash",
+        "multichannel-wallet-evidence"
+      ],
+      "source_ids": [
+        "coordination-null-model",
+        "failure-modes",
+        "wallet-clustering-cross-layer-unknown"
+      ],
+      "implementation_status": "DOMAIN_DEFINED_NOT_FULLY_IMPLEMENTED",
+      "known_gaps": [
+        "未选择正常总体与多通道时间外验证缺失"
+      ]
+    },
+    {
+      "id": "token_security",
+      "name": "Token/开发者/安全",
+      "primary_layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L5",
+        "L6"
+      ],
+      "subdomains": [
+        "Mint/Freeze/Token2022权限",
+        "开发者/部署者历史",
+        "Creator Fee配置与领取"
+      ],
+      "primary_questions": [
+        "Token权限如何变化？",
+        "部署者、资金来源、买家和费用受益人如何连接？",
+        "Creator Fee是否已实际领取并流向何处？"
+      ],
+      "core_objects": [
+        "Mint Authority",
+        "Freeze Authority",
+        "Program/Deployment",
+        "Creator Fee",
+        "Fee Recipient",
+        "Claim/Withdraw"
+      ],
+      "required_evidence": [
+        "创建和权限变更签名",
+        "Program版本/Token标准",
+        "fee config/accrual/claim/withdraw事件",
+        "recipient owner和下游资产路径"
+      ],
+      "outputs": [
+        "Token权限风险状态",
+        "开发者历史候选网络",
+        "费用配置/应计/领取分离账"
+      ],
+      "inference_boundaries": [
+        "平台开发者标签不是身份",
+        "配置费率不等于实际收入",
+        "领取地址不等于最终受益人",
+        "安全风险不等于交易价值"
+      ],
+      "expert_panel": [
+        "token",
+        "chain",
+        "graph",
+        "risk"
+      ],
+      "knowledge_cards": [
+        "token-security",
+        "deployer-history",
+        "creator-fee-economic-path"
+      ],
+      "source_ids": [
+        "meme-sources",
+        "okx-market-readonly"
+      ],
+      "implementation_status": "DOMAIN_DEFINED_NOT_FULLY_IMPLEMENTED",
+      "known_gaps": [
+        "跨协议权限/费用领取历史解码不完整"
+      ]
+    },
+    {
+      "id": "microstructure",
+      "name": "市场微观结构/流动性",
+      "primary_layers": [
+        "L2",
+        "L3",
+        "L5",
+        "L6"
+      ],
+      "subdomains": [
+        "AMM/曲线与池储备",
+        "流动性深度和价格冲击",
+        "报价、成交与退出容量"
+      ],
+      "primary_questions": [
+        "实际池储备和可成交深度是多少？",
+        "交易群体自身造成多少机械价格冲击？",
+        "后续需求是否独立于自身交易？"
+      ],
+      "core_objects": [
+        "Pool/Reserve",
+        "AMM Curve",
+        "Route/Quote",
+        "Price Impact",
+        "Slippage",
+        "Exit Capacity"
+      ],
+      "required_evidence": [
+        "交易前后池储备与真实Swap指令",
+        "多池路由/报价路径",
+        "成交失败、延迟和容量",
+        "LP add/remove和可用流动性"
+      ],
+      "outputs": [
+        "池状态快照",
+        "机械价格冲击分解",
+        "可退出深度和执行成本"
+      ],
+      "inference_boundaries": [
+        "账面FDV不等于可退出价值",
+        "自己的买入推价不等于预测外部需求",
+        "LP撤出与USD重估分开"
+      ],
+      "expert_panel": [
+        "liquidity",
+        "chain",
+        "execution",
+        "regime"
+      ],
+      "knowledge_cards": [
+        "liquidity-depth"
+      ],
+      "source_ids": [
+        "slot-sequence-case",
+        "okx-market-reference"
+      ],
+      "implementation_status": "DOMAIN_DEFINED_NOT_FULLY_IMPLEMENTED",
+      "known_gaps": [
+        "实时多池储备、报价和失败退出样本缺失"
+      ]
+    },
+    {
+      "id": "inventory_control",
+      "name": "筹码/库存/经济控制",
+      "primary_layers": [
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6"
+      ],
+      "subdomains": [
+        "Token Account与Owner持仓",
+        "供应、归集和未知库存",
+        "LP/CEX/托管/服务商排除"
+      ],
+      "primary_questions": [
+        "多少Token在什么账户/主体下？",
+        "可归属库存和未知库存分别是多少？",
+        "接收、归集、转移后是否真实卖出？"
+      ],
+      "core_objects": [
+        "Token Account",
+        "Owner",
+        "Mint Supply",
+        "LP/CEX/Custody",
+        "Inventory State"
+      ],
+      "required_evidence": [
+        "Token Account历史余额",
+        "owner/authority映射",
+        "供应量和mint/burn",
+        "池/CEX/托管/公共Hub分类",
+        "实际Swap与退出事件"
+      ],
+      "outputs": [
+        "分层库存表",
+        "已归属/未知库存比例",
+        "归集与实际出售区分"
+      ],
+      "inference_boundaries": [
+        "Token Transfer不等于出售",
+        "地址余额不等于经济控制权",
+        "未知库存不能按比例强行分配"
+      ],
+      "expert_panel": [
+        "inventory",
+        "graph",
+        "wallet",
+        "risk"
+      ],
+      "knowledge_cards": [
+        "concentration"
+      ],
+      "source_ids": [
+        "economic-cycle",
+        "downstream-exit-structure",
+        "holder-supply-coverage-method"
+      ],
+      "implementation_status": "DOMAIN_DEFINED_NOT_FULLY_IMPLEMENTED",
+      "known_gaps": [
+        "完整Token Account历史、LP/CEX分类和未知库存闭合缺失"
+      ]
+    },
+    {
+      "id": "market_regime",
+      "name": "生命周期/成本区与结构",
+      "primary_layers": [
+        "L2",
+        "L4",
+        "L5",
+        "L6"
+      ],
+      "subdomains": [
+        "发行生命周期/迁移",
+        "FCZ/POC/AVWAP等价格结构",
+        "不同市场阶段的流动性和行为"
+      ],
+      "primary_questions": [
+        "事件发生时市场处于什么阶段？",
+        "候选成本区是否在当时可知？",
+        "同一行为在不同阶段的正常分布是否不同？"
+      ],
+      "core_objects": [
+        "Launch Stage",
+        "Migration",
+        "Price/Volume",
+        "FCZ/POC/AVWAP",
+        "Regime"
+      ],
+      "required_evidence": [
+        "严格as-of价格/成交数据",
+        "池深和阶段状态",
+        "事前冻结锚点与参数",
+        "同阶段对照和失败案例"
+      ],
+      "outputs": [
+        "时点化市场阶段",
+        "候选价格结构区域",
+        "阶段条件特征"
+      ],
+      "inference_boundaries": [
+        "事后最低点不能定义事前区域",
+        "FCZ理论不是已验证策略",
+        "不同阶段不能共用未校准阈值"
+      ],
+      "expert_panel": [
+        "regime",
+        "liquidity",
+        "inventory",
+        "statistics"
+      ],
+      "knowledge_cards": [
+        "market-lifecycle",
+        "reclaim-theory"
+      ],
+      "source_ids": [
+        "meme-first-control-zone",
+        "meme-sources"
+      ],
+      "implementation_status": "DOMAIN_DEFINED_NOT_FULLY_IMPLEMENTED",
+      "known_gaps": [
+        "不同协议/阶段的时点化市场状态和样本外锚点验证缺失"
+      ]
+    },
+    {
+      "id": "baseline",
+      "name": "正常与异常/因果",
+      "primary_layers": [
+        "L2",
+        "L3",
+        "L4",
+        "L5"
+      ],
+      "subdomains": [
+        "正常总体与匹配样本",
+        "null/permutation和异常检测",
+        "选择偏差、误报、漂移和因果"
+      ],
+      "primary_questions": [
+        "相对哪个总体异常？",
+        "未触发样本在哪里？",
+        "共同刺激、公共Hub或自身价格冲击是否解释结果？"
+      ],
+      "core_objects": [
+        "Cohort/Denominator",
+        "Matched Control",
+        "Null Model",
+        "False Alert",
+        "Concept Drift",
+        "Causal Confounder"
+      ],
+      "required_evidence": [
+        "未被待测检测器筛选的总体",
+        "协议/阶段/热度/活跃度匹配",
+        "公共基础设施排除",
+        "时间留出和多重检验控制",
+        "漂移与采集覆盖监测"
+      ],
+      "outputs": [
+        "条件异常状态",
+        "误报/漏报和告警预算",
+        "基准适用范围与漂移状态"
+      ],
+      "inference_boundaries": [
+        "无分母不称异常",
+        "后验收益筛选会产生选择偏差",
+        "相关/同步不证明因果"
+      ],
+      "expert_panel": [
+        "statistics",
+        "causal",
+        "adversarial",
+        "review"
+      ],
+      "knowledge_cards": [
+        "normal-bot-ecology-baseline"
+      ],
+      "source_ids": [
+        "coordination-null-model",
+        "research-methodology",
+        "failure-modes",
+        "h2w6-funding-label-generator"
+      ],
+      "implementation_status": "DOMAIN_DEFINED_NOT_FULLY_IMPLEMENTED",
+      "known_gaps": [
+        "全市场未选择总体、匹配null、漂移校准未完成"
+      ]
+    },
+    {
+      "id": "risk_and_action",
+      "name": "风险与机会资格",
+      "primary_layers": [
+        "L4",
+        "L5",
+        "L6"
+      ],
+      "subdomains": [
+        "Token/权限/流动性风险",
+        "监控/研究优先级",
+        "预测和paper交易独立评估"
+      ],
+      "primary_questions": [
+        "发现能否产生风险预警？",
+        "是否有独立预测增量？",
+        "在决策时点是否真实可成交并有净经济价值？"
+      ],
+      "core_objects": [
+        "Risk State",
+        "Decision Time",
+        "Quote/Slippage",
+        "Execution Capacity",
+        "Paper PnL",
+        "Release Gate"
+      ],
+      "required_evidence": [
+        "决策时点可得信息",
+        "风险暴露和退出深度",
+        "真实报价/延迟/费用/MEV",
+        "失败成交和退出路径",
+        "样本外与独立基准"
+      ],
+      "outputs": [
+        "风险状态与解释",
+        "用途级效用评估",
+        "paper-only净经济结果"
+      ],
+      "inference_boundaries": [
+        "异常有效不等于预测有效",
+        "风险高不等于正向机会",
+        "纸面结果不授权实盘"
+      ],
+      "expert_panel": [
+        "risk",
+        "execution",
+        "statistics",
+        "causal",
+        "review"
+      ],
+      "knowledge_cards": [
+        "research-states",
+        "market-utility-vs-tradability"
+      ],
+      "source_ids": [
+        "tradability-vs-structure",
+        "pre-registered-failure",
+        "time-safe-features"
+      ],
+      "implementation_status": "DOMAIN_DEFINED_NOT_FULLY_IMPLEMENTED",
+      "known_gaps": [
+        "监控/风险/预测/paper用途尚无真实效用验证"
+      ]
+    },
+    {
+      "id": "knowledge_engineering",
+      "name": "知识更新与验证",
+      "primary_layers": [
+        "L0",
+        "L7"
+      ],
+      "subdomains": [
+        "来源/claim/card/case血缘",
+        "专家交接和研究调度",
+        "成熟度、反证、撤回与发布治理"
+      ],
+      "primary_questions": [
+        "研究成果怎样变成可检索知识？",
+        "哪些下游结论依赖错误来源？",
+        "何时升级、降级或撤回？"
+      ],
+      "core_objects": [
+        "Source Registry",
+        "Claim",
+        "Case",
+        "Knowledge Card",
+        "Expert Handoff",
+        "Skill/Rule Version"
+      ],
+      "required_evidence": [
+        "固定来源版本与许可",
+        "claim依赖和validity状态",
+        "case复现材料",
+        "测试映射和QA结果",
+        "变更/撤回影响范围"
+      ],
+      "outputs": [
+        "知识卡和来源索引",
+        "claim/撤回影响计划",
+        "reviewed release proposal"
+      ],
+      "inference_boundaries": [
+        "报告不自动成为知识卡",
+        "卡片不自动成为生产规则",
+        "多个专家引用同一来源不是独立证据"
+      ],
+      "expert_panel": [
+        "knowledge",
+        "review",
+        "chief",
+        "data"
+      ],
+      "knowledge_cards": [
+        "evidence-synthesis",
+        "anti-false-completion"
+      ],
+      "source_ids": [
+        "reproducible-pipeline",
+        "temporal-leakage-audit",
+        "wallet-clustering-cross-layer-unknown"
+      ],
+      "implementation_status": "DOMAIN_DEFINED_NOT_FULLY_IMPLEMENTED",
+      "known_gaps": [
+        "持久Claim数据库、自动依赖回溯和盲测评估未实现"
+      ]
+    }
+  ]
+}
