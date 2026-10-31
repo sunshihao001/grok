@@ -66,6 +66,48 @@ class TestMarketObservatory(unittest.TestCase):
         self.assertEqual(relation["unique_buyers"], 2)
         self.assertEqual(relation["relationship"], "TIME_BOUNDED_FLOW_HYPOTHESIS_NOT_OWNERSHIP")
 
+    def test_rolling_candidates_cross_fixed_bucket_boundaries(self):
+        data = copy.deepcopy(FIXTURE)
+        data["events"] = data["events"][:2]
+        data["events"][0]["block_time"] = "2026-10-29T07:00:29Z"
+        data["events"][0]["available_at"] = "2026-10-29T07:00:29Z"
+        data["events"][0]["received_at"] = "2026-10-29T07:00:29Z"
+        data["events"][1]["block_time"] = "2026-10-29T07:00:31Z"
+        data["events"][1]["available_at"] = "2026-10-29T07:00:31Z"
+        data["events"][1]["received_at"] = "2026-10-29T07:00:31Z"
+        out = analyze(data, allow_fixture=True, windows=(30,))
+        self.assertEqual(len([c for c in out["group_candidates"]
+                              if c["kind"] == "FUNDING_FANOUT"]), 1)
+        self.assertEqual(len([w for w in out["window_aggregates"]
+                              if w["scope"] == "MARKET_WIDE"]), 2)
+
+    def test_cross_mint_is_descriptive_not_entity_identity(self):
+        out = analyze(FIXTURE, allow_fixture=True)
+        recurring = [x for x in out["group_candidates"]
+                     if x["kind"] == "CROSS_MINT_FUNDING_REUSE"
+                     and x["candidate_funder"] == "Funder-F"]
+        self.assertEqual(len(recurring), 1)
+        self.assertEqual(recurring[0]["mints"], ["Mint-ONE", "Mint-TWO"])
+        self.assertEqual(recurring[0]["economic_owner_status"], "UNVERIFIED")
+        activity = [x for x in out["group_candidates"]
+                    if x["kind"] == "CROSS_MINT_WALLET_ACTIVITY"]
+        self.assertEqual(activity[0]["wallet"], "Wallet-A")
+        self.assertEqual(activity[0]["role_status"], "UNCLASSIFIED")
+
+    def test_distinct_instruction_events_same_tx_not_double_transaction(self):
+        data = copy.deepcopy(FIXTURE)
+        event = copy.deepcopy(data["events"][0])
+        event["instruction_index"] = 1
+        event["amount_raw"] = "1000000000"
+        data["events"].append(event)
+        out = analyze(data, allow_fixture=True, windows=(30,))
+        market = next(x for x in out["window_aggregates"]
+                      if x["scope"] == "MARKET_WIDE"
+                      and x["start"] == "2026-10-29T07:00:00Z")
+        self.assertEqual(market["event_count"], 9)
+        self.assertEqual(market["transaction_count"], 8)
+        self.assertEqual(market["sol_transferred"], "11")
+
     def test_idempotent_cross_provider_dedupe_with_source_refs(self):
         data = copy.deepcopy(FIXTURE)
         duplicate = copy.deepcopy(data["events"][0])
