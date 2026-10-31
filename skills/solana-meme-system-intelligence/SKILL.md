@@ -182,6 +182,15 @@ Grok 当前应读取 `AGENTS.md`、`CONTEXT.md`、`BOTS.md`、`knowledge/method.
 
 未经单独设计、测试和批准，不修改 `rules/`、真实 Bot 或运行时监控配置。
 
+## M2 源码研究入口：可运行聚合模块（尚未接入真实市场）
+
+- 实现：`src/solana_meme_os/market_observatory.py`；
+- 合成样例：`fixtures/market-observatory-synthetic.json`；
+- 测试：`tests/test_market_observatory.py`；
+- 字段与 CLI：[`docs/market-observatory-m2-v0.1.md`](../../docs/market-observatory-m2-v0.1.md)。
+
+调用 `PYTHONPATH=src python -m solana_meme_os.market_observatory --input fixtures/market-observatory-synthetic.json --allow-fixture`，可以针对输入记录输出时间窗口汇总、同 Slot 钱包买入、批量注资、代币归集、跨 Mint 重复活动等**事实与候选**。不具备真实 RPC 数据接入、统计正常基准、实体同控判断或交易盈利判定；不因代码存在就声明已在 Grok 云端监控运行。Python 测试已编写，仍待运行容器执行确认。
+
 ## 11｜真实案例研读入口\n\n参见 [钱包群体监控实例](references/wallet-cluster-monitoring-example.md)：以一条真实公开事件的四钱包创建 Slot 买入、Token 转移和另一条 funder 短时注资案例为例，具体展开“多少钱包、何时转多少、如何做竞争解释以及为什么不能直接判同控”。该案例是研究源记录的交叉读取，不是本项目新的实时预警。\n\n## 12｜专业质量与停止规则
 
 合格的领域研究至少能回答：**事件是什么、对象与分母是什么、何时可见、它与合理正常机制区别在哪、怎么证明自己可能错、下一步能复原什么真实行为。**
