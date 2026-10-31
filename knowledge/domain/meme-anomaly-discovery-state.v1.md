@@ -65,6 +65,10 @@
 
 另须区别 Token Account owner、程序 owner、authority/delegate、fee payer；它们的共同出现不等于相同控制人。Solana 官方：https://solana.com/docs/tokens/basics/create-token-account 、https://solana.com/docs/core/transactions/transaction-introspection 。这项知识直接影响 M01 的钱包去重和原始交易适配器，以及 C02/C05 正常反例。未来按问题需要扩展真实术语和跨领域解释，只有改变数据定义或可证伪方法的新增认识才修订本专题；不要建立同义词词典或将行话当成证明。
 
+### 最新协议边界：交易 v1 不能被当作不存在（2026-10-31）
+
+[Solana 官方版本文档](https://solana.com/docs/core/transactions/versioned-transactions) 表明 v1 交易格式已激活（与 v0 的 ALT/费用模型不同）。P3-M01 当前仅支持 legacy/v0 的离线标准化，**v1 的拒绝与 INCOMPLETE 才是正确输出**。若上游索引未处理 v1、或因版本不支持将整区块当空块，会污染 M01 成员数量和 C05 的行为沉默结论。工程边界与模拟测试见 PR #16 中的 [原始适配器契约](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/p3-m01-raw-adapter-contract.md)。当前无真实数据对账支持，不升级为已支持 v1。
+
 ## 6. 工程交付：P3-M01 与研究分开
 
 - **代码草案**：`https://github.com/sunshihao001/grok/pull/16`，包含 `src/solana_meme_os/wallet_batch_monitor.py`、14项新增离线测试、fixture、使用说明。
