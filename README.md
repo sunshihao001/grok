@@ -7,7 +7,8 @@
 ## 从这里开始
 
 1. **[知识体系架构 V2.0](docs/knowledge-architecture-v2.0.md)** — 唯一总入口：L0–L7 知识层、五张图、S0–S7 研究阶段、M0–M7 产品能力，以及当前知识资产盘点。
-2. **[12领域本体](knowledge/domain-ontology.v1.json)** — 每个领域的核心问题、证据、输出、专家和知识卡。\n3. **[机器可读架构索引](knowledge/architecture.v2.json)** — 机器可核对的层级、模块状态和资产数量。
+2. **[12领域本体](knowledge/domain-ontology.v1.json)** — 每个领域的核心问题、证据、输出、专家和知识卡。
+3. **[机器可读架构索引](knowledge/architecture.v2.json)** — 机器可核对的层级、模块状态和资产数量。
 4. **[V5 经济机制研究宪章](docs/economic-mechanism-discovery-charter-v5.md)** — 从事实矛盾生成新机制、竞争解释和主动反证。
 5. **[V4 快慢双循环运行架构](docs/dual-loop-research-runtime-architecture-v4.md)** — 快速确定性监控、预算化深研与独立审计回路。
 6. **[17 专家/12 领域映射](knowledge/expert-capability-map.v1.json)**、[40 条专家交接图](knowledge/expert-interaction-graph.v1.json)。
