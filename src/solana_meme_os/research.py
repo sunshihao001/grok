@@ -90,9 +90,13 @@ def select_sources(question: str, index: dict[str, Any] | None = None, limit: in
     found = []
     for item in index["items"]:
         hits = [tag for tag in item["topics"] if tag.casefold() in query]
-        if hits:
-            # Prefer specific matches but don't claim this is semantic understanding.
-            found.append((len(hits), item["id"], _ref(item, hits)))
+        # Broad labels (especially "未知") do not establish a relevant
+        # source for an unrelated, novel protocol. Require a specific match.
+        broad = {"未知", "协议", "钱包", "资金", "交易", "数据", "市场", "source"}
+        specific = [tag for tag in hits if tag.casefold() not in broad]
+        if specific:
+            # Do not mistake substring indexing for semantic understanding.
+            found.append((len(specific), item["id"], _ref(item, specific)))
     found.sort(key=lambda e: (-e[0], e[1]))
     return [r for _, _, r in found[:limit]]
 
