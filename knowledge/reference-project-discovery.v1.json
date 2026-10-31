@@ -1,0 +1,347 @@
+{
+  "schema_version": "1.0",
+  "as_of": "2026-10-31",
+  "status": "DISCOVERY_REVIEW_NOT_DEPLOYED",
+  "principle": "An open-source code sample, an article and a verified Solana claim are different evidence categories",
+  "anchor_project": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+  "review_steps": [
+    "DISCOVERY",
+    "REPO_METADATA",
+    "README_OR_PAPER",
+    "CODE_OR_METHODS",
+    "INDEPENDENT_REPLAY",
+    "BASELINE",
+    "LIVE_MONITOR_VALIDATION"
+  ],
+  "projects": [
+    {
+      "id": "ORIGIN-001",
+      "kind": "reference_investigation",
+      "name": "Why-Solana-Memecoins-Are-Over",
+      "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "stage": "ESTABLISHED_REFERENCE",
+      "evidence": "CASE_AND_METHODS_READ_PREVIOUSLY",
+      "focus": [
+        "launch_slot",
+        "funding_cycle",
+        "post_detection_edge",
+        "sample_selection"
+      ],
+      "roles": [
+        "chain",
+        "event",
+        "graph",
+        "statistics",
+        "execution",
+        "review"
+      ],
+      "grade": "A_METHOD_REFERENCE",
+      "adopt": "Sample scopes and historical non-profit findings, not direct trading rules",
+      "limits": "Selected event sample, cross-chapter cohorts differ; estimates must stay within exact sample."
+    },
+    {
+      "id": "FOR-001",
+      "kind": "forensic_case",
+      "name": "CyberLeek on-chain investigations",
+      "url": "https://github.com/xorextrace/cyberleek-onchain",
+      "commit": "283bec233a6c24849799da6e051e91689a0f187a",
+      "stage": "SOURCE_CODE_READ",
+      "evidence": "README+scripts/verify.py+scripts/analyze_flows.py",
+      "focus": [
+        "raw_transaction_replay",
+        "fan_in_fan_out",
+        "cashout_trace",
+        "creator_fee_flow",
+        "identity_boundary"
+      ],
+      "roles": [
+        "data",
+        "chain",
+        "graph",
+        "token",
+        "review"
+      ],
+      "grade": "A_FORENSIC_METHOD",
+      "adopt": "Independent RPC replay and signature-indexed claims; actual value/LP vs cashout separation.",
+      "limits": "Raw RPC dumps not stored in repo, independent local reproduction not run; one campaign does not give prevalence."
+    },
+    {
+      "id": "DEV-001",
+      "kind": "scanner",
+      "name": "Degen-Scanner",
+      "url": "https://github.com/dnafund/Degen-Scanner",
+      "commit": "69a08d5589c47bdc33e9c6c2793cc0a69acdd85d",
+      "stage": "SOURCE_CODE_READ",
+      "evidence": "README+pump_scanner.py",
+      "focus": [
+        "deployer_backward_funding",
+        "buyer_funder_convergence",
+        "known_cex_router_exclusions",
+        "launch_event_monitor"
+      ],
+      "roles": [
+        "event",
+        "wallet",
+        "graph",
+        "token",
+        "adversarial",
+        "data"
+      ],
+      "grade": "A_RESEARCH_PATTERN_B_QUALITY",
+      "adopt": "Deployer to upstream funding to buyers to shared collectors pipeline; multi-provider event discovery.",
+      "limits": "README live claims/cluster scores not independently validated; payment labels and operational ownership cannot be inferred."
+    },
+    {
+      "id": "CLU-001",
+      "kind": "wallet_cluster_library",
+      "name": "solana-holder-clusters",
+      "url": "https://github.com/jayrabol/solana-holder-clusters",
+      "commit": "a75a72965479a7b715b041148803d8004fe25079",
+      "stage": "SOURCE_CODE_READ",
+      "evidence": "README+src/funders.ts+src/clusters.ts+docs/METHODOLOGY.md",
+      "focus": [
+        "first_funder_resolution",
+        "top_holder_supply_denominator",
+        "token_account_owner_dedupe",
+        "public_hub_exclusion",
+        "cluster_coverage"
+      ],
+      "roles": [
+        "chain",
+        "wallet",
+        "graph",
+        "inventory",
+        "statistics"
+      ],
+      "grade": "A_DEFINITION_AND_GUARDS",
+      "adopt": "Unknown-first-funder-on-full-page, CEX infrastructure bucket, explicit supply coverage and risk score ingredients.",
+      "limits": "First-funder approximation from earliest fetched transaction can miss complex funding, RPC history and further hops; shared funder != same owner; library tests claimed not run here."
+    },
+    {
+      "id": "AML-001",
+      "kind": "hub_detector",
+      "name": "solana-scam-tracker",
+      "url": "https://github.com/Umer-Aziz/solana-scam-tracker",
+      "commit": "f33821daedd755012102c206081b9ee191691810",
+      "stage": "SOURCE_CODE_READ",
+      "evidence": "README+hub_watcher.py",
+      "focus": [
+        "hub_to_creator",
+        "exact_payment_fingerprint",
+        "known_funder_watcher",
+        "asset_recirculation"
+      ],
+      "roles": [
+        "event",
+        "wallet",
+        "graph",
+        "token"
+      ],
+      "grade": "B_CASE_HEURISTIC",
+      "adopt": "Repeated fixed amount and hub→creator→bot operational signature as hypothesis generator.",
+      "limits": "Monitors known hub with hardcoded amount, not broad normal/abnormal detector or proven common beneficial owner."
+    },
+    {
+      "id": "CLU-002",
+      "kind": "visual_cluster",
+      "name": "Find The Insiders",
+      "url": "https://github.com/karidasd/find-the-insiders",
+      "stage": "README_AND_METADATA_READ",
+      "focus": [
+        "first_block_buyers",
+        "shared_funder",
+        "fresh_wallet_age",
+        "visual_graph"
+      ],
+      "roles": [
+        "wallet",
+        "graph",
+        "event",
+        "risk"
+      ],
+      "grade": "B_IDEA_C_SCORE",
+      "adopt": "Explainable first-block wallet view and graph navigation, not certainty of control.",
+      "limits": "0–100 insider score not independently calibrated, dashboard may support simulation mode; no direct proof of insider identity."
+    },
+    {
+      "id": "CLS-003",
+      "kind": "graph_pipeline",
+      "name": "Crypto-Clusters",
+      "url": "https://github.com/Kushal-Chandani/Crypto-Clusters",
+      "stage": "README_AND_METADATA_READ",
+      "focus": [
+        "louvain",
+        "funding_graph",
+        "visual_component"
+      ],
+      "roles": [
+        "graph",
+        "statistics",
+        "knowledge"
+      ],
+      "grade": "B_VISUALIZATION_C_ENTITY_INFERENCE",
+      "adopt": "Candidate graph UI architecture and community visualization.",
+      "limits": "Louvain clusters are graph communities, not real-world owners. Sparse repository and limited independent validation."
+    },
+    {
+      "id": "SCORE-001",
+      "kind": "token_quality",
+      "name": "HoldTech",
+      "url": "https://github.com/co-numina/holdtech",
+      "stage": "README_AND_METADATA_READ",
+      "focus": [
+        "gini",
+        "hhi",
+        "fresh_wallets",
+        "same_slot"
+      ],
+      "roles": [
+        "inventory",
+        "event",
+        "statistics",
+        "review"
+      ],
+      "grade": "B_FEATURES_C_VERDICTS",
+      "adopt": "Gini/HHI, holder age distribution as descriptive hypotheses.",
+      "limits": "README equates same-slot/funded-by-same-source with bundle/manufactured users; requires independent Jito proof, denominator audit, and normal controls."
+    },
+    {
+      "id": "SCORE-002",
+      "kind": "wash_detector",
+      "name": "SentinelBag",
+      "url": "https://github.com/bytemaster333/SentinelBag",
+      "stage": "README_AND_METADATA_READ",
+      "focus": [
+        "token_transfer_cycles",
+        "recipient_diversity",
+        "first_hop_funders"
+      ],
+      "roles": [
+        "adversarial",
+        "statistics",
+        "graph",
+        "review"
+      ],
+      "grade": "B_NEGATIVE_CONTROL",
+      "adopt": "Enumerate temporal 2/3-hop token cycles and distinct recipient counts as candidates.",
+      "limits": "A-B-A transfer loop is not automatically executed wash trade; arbitrary 10/20 thresholds and 100 risk score not calibrated."
+    },
+    {
+      "id": "DATA-001",
+      "kind": "dataset",
+      "name": "solana-memecoin-dataset",
+      "url": "https://github.com/ian05012/solana-memecoin-dataset",
+      "commit": "7070d00e1e4492f8604d988549d91785cc5f43f7",
+      "stage": "README_AND_METADATA_READ",
+      "focus": [
+        "wallet_funding_table",
+        "price_snapshots",
+        "trades",
+        "future_return_labels",
+        "selection_bias"
+      ],
+      "roles": [
+        "statistics",
+        "data",
+        "liquidity",
+        "execution"
+      ],
+      "grade": "B_BIASED_RESEARCH_DATA",
+      "adopt": "Build time-correct cohort/wallet/funder joins and benchmark from available data after field audits.",
+      "limits": "GMGN just-graduated/trending sampling, ~20 days, survivorship bias, max-forward-return label not executable PnL. GMGN API may be cost restricted."
+    },
+    {
+      "id": "ACA-001",
+      "kind": "academic_preprint",
+      "name": "Early-Buyer Groups and Fast-Wallet Teams 2026-10-29",
+      "url": "https://arxiv.org/abs/2610.39458",
+      "stage": "HTML_METHODS_AND_RESULTS_READ",
+      "focus": [
+        "multi_channel_edges",
+        "hub_exclusion",
+        "prospective_graph",
+        "link_prediction_validation",
+        "naive_graph_giant_component",
+        "portfolio_counterfactual"
+      ],
+      "roles": [
+        "chain",
+        "graph",
+        "adversarial",
+        "statistics",
+        "causal",
+        "execution",
+        "review"
+      ],
+      "grade": "A_DESIGN_METHOD_B_EXTERNAL_REPLICATION",
+      "adopt": "Prospective co-buy/funding/joint-sign/transfer/consolidation, unseen links and equal-budget controls; exact reserves/self-impact in paper execution model.",
+      "limits": "Preprint 88.3h single market window; authors' reported results not independently reproduced here; groups not confirmed legal/identity manipulation. Replication package code availability unverified."
+    },
+    {
+      "id": "ACA-002",
+      "kind": "corrected_preprint",
+      "name": "RED-COHORT 2026 corrected/withdrawn numbers",
+      "url": "https://zenodo.org/records/22947247",
+      "stage": "CORRECTION_AND_ZENODO_READ",
+      "focus": [
+        "buyer_sell_event_mislabel",
+        "source_contamination",
+        "withdrawn_estimates",
+        "classification_gate"
+      ],
+      "roles": [
+        "data",
+        "chain",
+        "statistics",
+        "review",
+        "knowledge"
+      ],
+      "grade": "A_FAILURE_LESSON_NOT_NUMERICAL_EVIDENCE",
+      "adopt": "Build a source classification validation gate; retract all dependent claims upon sell-as-buy finding.",
+      "limits": "Earlier 1,012 cohort/PSM buyer-flow numerical findings withdrawn, cannot cite as validated effects; corrected versions also require careful independent validation."
+    },
+    {
+      "id": "INFRA-001",
+      "kind": "ingestion",
+      "name": "Yellowstone gRPC + Chainstack gRPC tutorial",
+      "url": "https://github.com/rpcpool/yellowstone-grpc",
+      "stage": "PUBLIC_DOCS_REVIEWED",
+      "focus": [
+        "slot_block_tx_account_stream",
+        "commitment",
+        "missing_slot_recovery",
+        "dedupe",
+        "processed_vs_finalized"
+      ],
+      "roles": [
+        "data",
+        "chain",
+        "event"
+      ],
+      "grade": "A_INTERFACE_B_DEPLOYMENT",
+      "adopt": "M1 ingestion contract with source metadata, replay/coverage, transaction position, decode boundary.",
+      "limits": "Docs/sample clients are not an already connected provider, backfill limitations and cost/latency unknown in Grok."
+    },
+    {
+      "id": "GEN-001",
+      "kind": "general_graph_methods",
+      "name": "GraphSense",
+      "url": "https://graphsense.org/",
+      "stage": "PUBLIC_DOCS_REVIEWED",
+      "focus": [
+        "path_finding",
+        "tag_provenance",
+        "graph_edge_exploration",
+        "cluster_metadata"
+      ],
+      "roles": [
+        "graph",
+        "knowledge",
+        "review"
+      ],
+      "grade": "B_ABSTRACT_METHOD_ONLY",
+      "adopt": "Graph investigation UX, entity attribution tags with provenance, path query semantics.",
+      "limits": "Current advertised supported chains not Solana; do not recommend as direct Solana backend or assume integration."
+    }
+  ]
+}
