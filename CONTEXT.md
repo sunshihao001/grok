@@ -1,49 +1,49 @@
-## V5｜项目正式研究主线
+# CONTEXT｜知识架构 V2.0 与项目研究上下文
 
-**「经济机制生成、跨领域认知合成与主动反证研究」**是整个 Solana Meme 市场监控与知识系统的研究主线，不能被收缩为跟单、已知异常钱包标签或已有 17 类专家的固定目录。研究从真实事实发现结构，从不同结构推导竞争机制，再用事实矛盾驱动新的签名/资产仓位/时间基准取证。核心文件：[V5 正式研究宪章](docs/economic-mechanism-discovery-charter-v5.md)及[R007 已复算的真实派生案例](knowledge/research/R007-capital-flow-composition-inversion-v1.md)。
+本项目当前的研究主线为 **V5 经济机制生成、跨领域认知合成与主动反证**；运行组织采用 **V4 事件驱动快慢双循环 + 独立反证回路**。知识层级、研究阶段、软件模块、专家能力和成熟度是不同坐标轴，统一定义见 [知识架构 V2.0](docs/knowledge-architecture-v2.0.md)。
 
-V4 快慢双循环为**运行组织方式**，V5 是**研究思维与新机制生成方向**，二者不冲突。V5 已有一个仅离线可用的源分类矛盾检测原型 `mechanism_discovery.py`，识别“事件数量/资金规模反转”和“历史覆盖/零值耦合”，再路由至不同专家；不是完成真实市场监控，不是证明幕后控制者。
+## 核心目标
 
-## V4｜确定性监控与动态研究的运行边界
+从真实 Solana 事件还原交易/指令/账户/资产变化，建立钱包群体与经济行为片段，比较公共基础设施、独立机器人、共同市场刺激、共享资金和疑似同控等竞争解释；以正常基准、反事实和高判别价值原始证据修正机制；只有独立验证后才评价风险、预测和纸面净经济价值。跟单仅是应用分支。
 
-采用 [双循环架构 V4](docs/dual-loop-research-runtime-architecture-v4.md)：快循环维护原始事件与监控事实（目前仅 M2 已归一化外部输入），慢循环按候选的**Mint+Slot / 来源+时间窗 / 跨 Mint 汇总 / 钱包级事件**生成限预算调查 Case，并由研究总师按需调用现有专家知识。新 `research_dispatch.py` 使用 `expert_router.py` 的专业角色与交接约束，但只输出调度**计划**，不运行真实专家、RPC、交易或对外告警。
+## 当前知识资产
 
-一个市场现象可以同时拥有不同案例与竞争假设；共享签名不等于同控，但后续研究可复用该签名的核查证据。规则升级、源错误撤回、正常基准变动在研发/QA/人工审核回路处理，不由 Monitor Bot 自己热改生产规则。
+- 12 个知识领域、17 个专家能力、40 条类型化交接边；
+- 15 张历史种子卡、21 个 Hermes 快照、30 条按需来源指针；
+- 8 个待验证/工程方法假说，R001–R007 专题研究；
+- V5 机制研究宪章、V4 快慢循环 ADR、V2 专家交互图。
 
-# CONTEXT｜Solana Meme 全市场监控与机制研判
+以上是可追溯的设计和研究资产，不等于所有领域 K3/K4，更不等于已部署的多 Agent。按单个命题标注 K0–K4，定义见 V2.0。
 
-## 目标和边界
+## 五张图必须分开
 
-这不是以 GMGN 候选 Token 或钱包跟单为中心的七段脚本。研究对象包括全市场多个 Mint、交易/指令、钱包、Token Account、资金网络、时间窗和价格/流动性结构。目标是从可观察事件发现**正常与异常行为的差异、可能的协调与经济机制、风险及经过验证的机会**。跟单、开发者跟踪、风险预警和纸面交易均为具体应用。
+1. `G_event`：链上事实与来源。
+2. `G_economic`：资产流与经济主体假说，未知可保留。
+3. `G_knowledge`：命题、机制、竞争解释和反证。
+4. `G_expert`：专家交接、来源血缘与 Claim 依赖。
+5. `G_decision`：异常、风险、预测与纸面经济价值的不同状态。
 
-只读/paper-only；不签名、不广播、不接管私钥或执行真实交易。当前 Grok 云端 Bot 未验证部署。
+## 五种结构轴不可混淆
 
-## 关键术语
+- L0–L7：知识资产层级；
+- S0–S7：每个研究 Case 的证据推进阶段，可跳转/回溯；
+- M1/M2 等：软件组件及其输入输出；
+- V4：快循环、慢循环、反证回路的运行组织；
+- K0–K4：单个 Claim/方法的证据成熟度。
 
-- **Event / 事件**：保留 signature、Slot、instruction、地址/资产、数量、时间与来源的不可混同观察；余额减少不自动叫 SELL。
-- **Window / 时间窗**：按 Mint/协议/全市场的明确范围聚合不同地址、交易和 SOL/Token 量，不以事后涨价选择观察起点。
-- **Wallet / 地址**：链上账户或 owner；不自动等于自然人或最终受益者。Token Account 与 owner 必须分开。
-- **Asset Graph / 资产图**：有签名支持的 SOL/Token 转移、Swap、LP 变化；资产边不自动等于控制关系。
-- **Entity Hypothesis Graph / 主体假设图**：同控、共享服务商、独立机器人、共同公开事件等可竞争推断。
-- **Coordinated Candidate / 协调候选**：基于时序、资金与重复性提出的机制假设；未经适当证据不能称确认的 Jito Bundle/庄家。
-- **Normal Baseline / 正常基准**：同市场阶段、发行年龄、流动性、热度、活动水平下的比较人群与分母，缺失不得标“异常”。
-- **Observed / Available / Received / Decision Time**：事件在链上发生、数据首次可得、系统实际收到、研究做出判断的时间；事后标签不能倒灌为实时特征。
-- **Risk vs Trade Value**：行为异常、风险信号、未来预测和净执行收益必须分开评价。
+17 个专家是专业能力，不是 17 个 Bot。初期物理运行建议一个只读 Monitor 和一个按需 Research Manager；目标 Grok 环境是否支持实际技能调用仍须实测。
 
-## 专家协作与层级的正确理解
+## 当前代码事实
 
-研究知识层、软件模块 M0–M7、Grok 开发 Bot 是三种不同对象。当前 [专家知识架构](docs/solana-meme-expert-knowledge-orchestration-v1.md) 以 17 类能力覆盖来源事实、经济主体、协同对照、市场状态、风险/执行和反证，并按实际事件动态召集；旧 Hermes 八层只作为历史职业分工参考，不应让未确认的实体归并阻断独立市场研究，也不能强迫将未知库存划归已知实体。
+`market_observatory.py` 对已规范化事件做窗口聚合；`research_dispatch.py` 输出有限调查计划；`expert_router.py` 和 `expert_interaction.py` 做确定性路由/交接合同检查；`mechanism_discovery.py` 对指定源表做矛盾筛查；`monitor.py` 是独立的单 Mint 快照流程；`position_audit.py` 是外部派生表差额审计。完整边界和缺口见 V2.0、V4、V5 文档。
 
-静态专家映射见 [`knowledge/expert-capability-map.v1.json`](knowledge/expert-capability-map.v1.json)；它尚不是 Grok 实际 Bot 调度代码。
+**安全边界**：只读/纸面；不读取私钥、不签名、不广播、不下单、不自行启用 Routine。未知不是零；同 Slot 不是 Jito Bundle；资产边不是受益人身份；离线测试不是外部效度。
 
-## 模块语义
+## 主要入口
 
-M0 市场采集 → M1 事件账 → M2 群体时间窗 → M3 资金/库存图 → M4 条件基准与反证 → M5 市场状态 → M6 风险/纸面机会 → M7 告警与复盘。
-
-以上是**建设目标**，不是所有模块已实现。现有 `monitor.py` 为单 Mint 快照；`market_observatory.py` 接受外部归一化事件做聚合与候选识别；`position_audit.py` 是仓位统计一致性工具。数据接入、完整异常识别、真实 Grok Bot 均尚未完成。
-
-## 历史兼容
-
-原 Hermes 七个业务 Skill：candidate-entry、token-panel、wallet-roles、wallet-structure、evidence-chain、trade-gate、workflow-controller，属于**可迁移的研究与证据领域能力**，不再作为必须按顺序运行的系统总管线。旧 GMGN 原型也只是候选数据源。历史 `BLOCK/WATCH/PAPER_ONLY/NEED_MORE_DATA` 属旧决策语言；当前全局监控需要分别报告观察、待查、风险和纸面评价资格，生产规则没有自动改变。
-
-请优先阅读 [总整合蓝图](docs/knowledge-system-integration-v1.md)、[Skill 入口](skills/README.md)、[Bot 职责](BOTS.md) 和 [来源](docs/sources.md)。
+- [知识架构 V2.0](docs/knowledge-architecture-v2.0.md)
+- [V5 机制发现宪章](docs/economic-mechanism-discovery-charter-v5.md)
+- [V4 双循环运行架构](docs/dual-loop-research-runtime-architecture-v4.md)
+- [专家交互 V2](docs/knowledge-expert-interconnection-v2.md)
+- [知识成熟度和能力缺口](docs/knowledge-maturity-and-gaps-v1.md)
+- [下一阶段工作](docs/next-steps.md)
