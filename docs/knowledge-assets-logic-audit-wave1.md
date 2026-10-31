@@ -1,5 +1,9 @@
 # Solana Meme 跟单｜知识资产与机制关系审计（第一轮）
 
+**历史审计定位**：保留原有仓位和钱包审计发现；它只覆盖初步选中的资料和部分案例，并未代表系统全领域审计完成。新系统整体以 [全市场整合蓝图](knowledge-system-integration-v1.md) 和 [钱包群体研究 Skill](../skills/solana-meme-system-intelligence/SKILL.md) 为优先入口。
+
+
+
 - 日期：2026-10-30
 - 状态：WAVE1 / SOURCE-READ AUDIT / 非完整逐文件审计、非交易效力验证
 - 上位规范：[Solana Meme 跟单专业认知与知识转换规范 V1.0](solana-meme-copytrade-cognition-conversion-v1.md)
