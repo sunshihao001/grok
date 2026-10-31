@@ -1,28 +1,20 @@
-## V5｜新的主目标：经济机制生成、跨领域认知合成与主动反证
-
-正式研究文档：[V5 机制研究宪章](../../docs/economic-mechanism-discovery-charter-v5.md)，具体源数据案例：[R007 资金类型价值反转与历史覆盖偏差](../../knowledge/research/R007-capital-flow-composition-inversion-v1.md)。
-
-**研究执行准则**：先将原始事实、数量统计、资产规模和交易指令的业务语义分开；当它们在同一研究对象上发生冲突，不应把结果笼统汇总为“需要验证”。对逻辑/协议已错的推断直接判错；对可能揭示新资本机制的差异，推导可复算预测、正常竞争机制、最小反证交易；把真实反证回流为新知识版本。专家调用的价值在于引入独立的来源或可区分证据，而不是同意票数。
-
-目前可运行的**离线源表矛盾研究器** `PYTHONPATH=src python -m solana_meme_os.mechanism_discovery --input <本地完整源表JSON>`：原型会输出 `COUNT_VALUE_ECONOMIC_TYPE_INVERSION`、`HISTORY_COVERAGE_RECEIPT_SILENCE_TENSION` 两类可选调查对象与源签名。两项已注册为 HX07/HX08 竞争机制，由 `expert_router.py` 分流给资金/流动性/链上专家或数据法证/钱包/统计专家；没有实际触发多 Bot/外部 RPC。R007 是公开**派生表**的复算，尚无独立 getTransaction 回放；不可直接升格为真实融资、同控或可交易盈利结论。
-
-## V4｜最佳运行方式：事件双循环、预算化调查、证据回流
-
-优先阅读 [双循环运行架构 V4](../../docs/dual-loop-research-runtime-architecture-v4.md)。选型结论：**确定性 M1/M2 快循环 + 按需专家慢循环 + 独立 QA/知识更新回路**；常态 Bot 不用逐笔启动 17 专家，也不允许一个模型凭摘要覆盖原始证据。初期一个只读 Monitor 与一个动态 Research Manager 即可承载大多数任务；实际云环境 Bot 并未创建。
-
-使用 `PYTHONPATH=src python -m solana_meme_os.research_dispatch --input .runtime/observatory-report.json --max-cases 4 --max-source-checks 12 --max-per-case 4` 对**已经生成的 M2 报告**提出预算化调查计划。Case 分别依据 Mint/Slot、资金源/窗口或明确的 cohort 聚合，不因 Mint 或资金源同名就制造一个巨大的时间外故事。多案例重复引用的签名可复用核查预算，未知 Kind 仍进入开放发现。命令不会调用 RPC、安装 Grok Bot、运行专家模型或执行交易。
-
-适用边界：当前 M2 接收外部已归一化的四类事件，非实际全链覆盖；研究规划、独立结论撤回和真实交易解析是不同运行层。**模型不能把检测候选称统计异常或经济同控**；要进入纸面机会研究，另需决策时点、独立对照、真实报价与成本的验证。
-
 ---
 name: solana-meme-system-intelligence
 description: |
-  Solana Meme 市场全局监控与链上行为专家研判技能。
-  当任务涉及多钱包批量转账、捆绑/协同买入、异常账户群、资金来源和回收、
-  疑似关联操盘、多币种重复地址、开发者历史、Sybil/刷量、筹码/流动性变化、
-  市场阶段、事件预警、交易条件及跨项目深度知识转化时使用。
-  跟单只是下游应用之一。本技能执行研究分析与监控设计，不执行真实交易。
+  Solana Meme 全市场事件、钱包群体、资金/库存网络、市场结构与经济机制研判。
+  用于跨领域研究、竞争机制生成、正常基准、反证设计、监控与风险研究。
+  跟单是下游应用之一；本 Skill 不执行真实交易。
 ---
+
+# Solana Meme System Intelligence｜全局研究与监控能力
+
+**知识层级与资产治理**：[知识架构 V2.0](../../docs/knowledge-architecture-v2.0.md)。
+**研究原则**：[V5 经济机制生成与主动反证](../../docs/economic-mechanism-discovery-charter-v5.md)。
+**运行组织**：[V4 快慢双循环与证据回溯](../../docs/dual-loop-research-runtime-architecture-v4.md)。
+
+本 Skill 是全局研究入口，不是固定顺序流水线。区分知识层级 L0–L7、研究阶段 S0–S7、软件组件 M1/M2、17 个专家能力、运行循环和 K0–K4 成熟度。专家能力不等于 17 个 Bot。
+
+
 
 # Solana Meme System Intelligence｜全局监控与机制研判 Skill V1.0
 
@@ -82,7 +74,7 @@ description: |
 ## 新增：从知识卡到专家交叉推理的实际路由
 
 面对复杂新问题，首先阅读：
-- [全市场专家知识协作体系](../../docs/solana-meme-expert-knowledge-orchestration-v1.md)：12 个知识领域、17 类能力、8 阶段与真实职责；
+- [全市场专家知识协作体系](../../docs/solana-meme-expert-knowledge-orchestration-v1.md)：12 个知识领域、17 类能力、9 个已编码触发场景与 S0–S7 研究阶段；
 - [专家知识与场景映射](../../knowledge/expert-capability-map.v1.json)：`source_cards`、`source_ids`、必需观察、交付产物、竞争机制和不同事件的协作组合；
 - [知识成熟度审计](../../docs/knowledge-maturity-and-gaps-v1.md)：区分原始方法已读、研究协议已成、真实复算和独立市场验证；
 - 只读专家路由：`PYTHONPATH=src python -m solana_meme_os.expert_router --event FUNDING_FANOUT --event SAME_SLOT_MULTIWALLET_BUY --question "这组钱包是否独立？"`。输出调用的知识/专家建议，不执行实际专家模型，也不判断操盘或交易机会。
@@ -252,7 +244,7 @@ Grok 当前应读取 `AGENTS.md`、`CONTEXT.md`、`BOTS.md`、`knowledge/method.
 
 **E. 报告能力**：对每个重要预警都提供事件清单、替代解释、最有鉴别力的下一条证据和研究状态。
 
-注意：当前 Grok `src/solana_meme_os/monitor.py` 仅以单 Mint 快照的 `liquidity_usd` 和 `top10_holder_pct` 做两类变动检测，`events[]` 被当作来源事件登记；**尚无**多钱包滚动窗口、经济图与跨发行扫描的真实实现。既有 R001–R004 与新增离线 `position_audit.py` 是专项研究资产，不能被称为完整监控引擎。
+注意：`monitor.py` 是单 Mint 快照差分程序；另有 `market_observatory.py` 对**外部已规范化事件**做 M2 时间窗/群体候选聚合。两者都没有真实全链 RPC 采集、完整经济图、正常基准或跨发行实时覆盖。R001–R007 是专项研究资产，不能被称为完整监控引擎。
 
 未经单独设计、测试和批准，不修改 `rules/`、真实 Bot 或运行时监控配置。
 
