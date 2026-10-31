@@ -93,6 +93,32 @@ def discover_cashflow_mechanisms(
             records.append({
                 "wallet": wallet["wallet"], "signature": inflow["signature"],
                 "tx_source": kind, "tx_type": tx_type, "amount": amount})
+    # Test whether the apparent absence of labelled receipts is associated
+    # with incomplete history. This is a measurement-warning, NOT evidence
+    # that the economic behavior differs or that the missing data is random.
+    observed_by_wallet = defaultdict(int)
+    for record in records:
+        observed_by_wallet[record["wallet"]] += 1
+    coverage_groups = {
+        "GENESIS_COVERED": {"wallet_count": 0, "with_label_receipt": 0,
+                            "without_label_receipt": 0},
+        "GENESIS_UNCOVERED": {"wallet_count": 0, "with_label_receipt": 0,
+                              "without_label_receipt": 0},
+    }
+    for wallet in document["wallets"]:
+        group = "GENESIS_COVERED" if wallet["genesis_reached"] else "GENESIS_UNCOVERED"
+        coverage_groups[group]["wallet_count"] += 1
+        key = "with_label_receipt" if observed_by_wallet[wallet["wallet"]] else "without_label_receipt"
+        coverage_groups[group][key] += 1
+    covered = coverage_groups["GENESIS_COVERED"]
+    uncovered = coverage_groups["GENESIS_UNCOVERED"]
+    covered_absence = (Decimal(covered["without_label_receipt"]) /
+                       covered["wallet_count"]) if covered["wallet_count"] else ZERO
+    uncovered_absence = (Decimal(uncovered["without_label_receipt"]) /
+                         uncovered["wallet_count"]) if uncovered["wallet_count"] else ZERO
+    coverage_tension = bool(
+        covered["wallet_count"] >= 10 and uncovered["wallet_count"] >= 10
+        and uncovered_absence - covered_absence >= Decimal("0.5"))
     sum_amount = sum((r["amount"] for r in records), ZERO)
     n = len(records)
     other = totals["OTHER_PROGRAM"]
@@ -146,6 +172,23 @@ def discover_cashflow_mechanisms(
             "rejection_rule": "If raw transaction replay shows these receipts are correctly attributable to fresh independent external transfers, retire the source-value interpretation for this cohort",
             "trade_implication": "NONE_UNTIL_INDEPENDENT_OUT_OF_SAMPLE_AND_EXECUTION_TESTS",
         })
+    if coverage_tension:
+        mechanisms.append({
+            "id": "HISTORY_COVERAGE_RECEIPT_SILENCE_TENSION",
+            "state": "OBSERVED_COHORT_COVERAGE_ASSOCIATION_NOT_CAUSAL",
+            "observed": "Wallets without verified genesis coverage disproportionately lack labelled receipts",
+            "logically_invalid_inference": "zero visible financing receipts => no historical funding",
+            "competing_hypotheses": [
+                "Earlier funding was not captured because the available transaction window is truncated",
+                "Real differences in wallet roles, ages or acquisition pathways affect both coverage and receipts",
+                "Supplier indexing/decoding variability changes apparent wallet histories"],
+            "discriminating_next_checks": [
+                "Re-query time-bounded histories with explicit pagination and first-available metadata",
+                "Compare wallet cohorts matched for wallet age, event volume, provider and relevant trading period",
+                "Recalculate funding graph and normal-wallet denominators only after coverage validation"],
+            "rejection_rule": "If complete RPC history shows true absence of funding, retain legitimate zero labels for the checked wallets",
+            "trade_implication": "NONE_DATA_QUALITY_RESEARCH_ONLY",
+        })
     return {
         "schema_version": "0.1",
         "result_type": "DERIVED_CASHFLOW_MECHANISM_DISCOVERY",
@@ -165,6 +208,8 @@ def discover_cashflow_mechanisms(
         "other_program_count_share": _ratio(other["rows"], n),
         "other_program_value_share": _ratio(other["amount"], sum_amount),
         "source_value_dominance_inversion": inversion,
+        "history_coverage_receipt_silence_tension": coverage_tension,
+        "genesis_coverage_receipt_presence": coverage_groups,
         "source_breakdown": breakdown,
         "largest_wallet_source_label_receipts": (
             {"wallet": largest_wallet[0], "source_amount_sol": _sol(largest_wallet[1]),
