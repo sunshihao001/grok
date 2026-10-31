@@ -84,6 +84,21 @@ class SourceBridgeTests(TestCase):
             with self.assertRaisesRegex(ValueError, "not allowed"):
                 load_index(path)
 
+    def test_marketwide_source_bridge_includes_coordination_and_tool_docs(self):
+        idx = load_index()
+        ids = {item["id"] for item in idx["items"]}
+        self.assertTrue({
+            "hermes-sybil-coordination",
+            "downstream-exit-structure",
+            "slot-sequence-case",
+            "okx-market-readonly",
+        }.issubset(ids))
+        okx = select_sources("OKX 行情 数据源 钱包交易", limit=12)
+        self.assertIn("okx-market-readonly", {r["id"] for r in okx})
+        self.assertTrue(all(r["availability"] == "remote_on_demand" for r in okx))
+        coordination = select_sources("同 Slot 捆绑 交易顺序", limit=12)
+        self.assertIn("slot-sequence-case", {r["id"] for r in coordination})
+
     def test_observation_without_source_is_rejected(self):
         p = build_packet("钱包资金同源", decision_time="2026-10-29T07:00:05Z",
           observations=[{"claim": "unknown", "observed_at": "2026-10-29T07:00:00Z", "available_at": "2026-10-29T07:00:00Z"}])
