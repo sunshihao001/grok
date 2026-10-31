@@ -68,3 +68,9 @@
 ## 同步状态声明
 
 GitHub 知识源在 PR #14；实现和测试在 PR #16；GPT Library 的当前便携版和原型目录已生成镜像，**Library 不等于 ChatGPT Project 文件/Instructions 已修改**。此处记录状态以经实际核查的提交、工作流和文档为准；当前没有链上实际测试、Grok Bot 正式部署或自动交易。
+
+## 2026-10-31｜D04钱包角色实务知识补充（并行于P3-M01）
+
+从 GMGN Skills、Birdeye、Cielo、Nansen、Bubblemaps、Watchtower、MadeOnSol SDK、HoldTech 部分公开源码补充不同钱包标签的来源语义与实际局限。核心新增认知：Sniper在GMGN和Cielo定义不一致；Bundler同笔原子交易/Jito Bundle/同Slot群体需要分开；KOL身份绑定与真正主动买入不是一回事；Smart Money盈利窗口与可复制交易分开；地址标签应按身份、执行、库存、历史表现/关系多维并存，并包含来源版本、覆盖、观察窗口及未知。
+
+已修订 knowledge/domain/L3-wallet-actors.md 的原专题与 rolling-reference-knowledge-integration.md 常驻参考池；只属于公开来源核查+源码局部审阅，尚无真实钱包样本独立标签验证，也不代表P3-M01已能解析DEX BUY/SELL。下一优先任务：按当前原始交易适配器能力，选择一个可核对的早期钱包标签使用场景，开展供应商定义→原交易→现持仓/转仓的只读语义对照；尤其先解决Swap经济动作和owner/funder分离，不急于编写万能自动标签分类器。
