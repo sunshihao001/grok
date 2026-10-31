@@ -384,7 +384,8 @@
     "knowledge_cards": {
       "path": "knowledge/catalog.v1.json",
       "count": 24,
-      "baseline_legacy_count": 15
+      "baseline_legacy_count": 15,
+      "expansion_count": 9
     },
     "legacy_snapshots": {
       "path": "knowledge/legacy-snapshots/manifest.json",
@@ -442,6 +443,19 @@
         "R007"
       ],
       "note": "No R004 document exists in this branch; no number is fabricated."
+    },
+    "cross_source_knowledge_units": {
+      "path": "knowledge/catalog.v1.json",
+      "count": 6,
+      "items": [
+        "KX-01",
+        "KX-02",
+        "KX-03",
+        "KX-04",
+        "KX-05",
+        "KX-06"
+      ],
+      "note": "Six cross-project knowledge units are represented by source-linked catalog cards."
     }
   },
   "canonical_documents": {
