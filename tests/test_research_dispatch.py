@@ -45,7 +45,9 @@ class ResearchDispatchTests(unittest.TestCase):
 
     def test_no_unproven_mint_funder_merge(self):
         x = make_plan(sample())
-        self.assertEqual(len({a["scope"] for a in x["cases"]}), 4)\n        self.assertTrue(any(c["scope"] == "MINT:M1:BUY_SLOT:7" for c in x["cases"]))\n        self.assertTrue(any(c["scope"].startswith("SOURCE:F:") for c in x["cases"]))
+        self.assertEqual(len({a["scope"] for a in x["cases"]}), 4)
+        self.assertTrue(any(c["scope"] == "MINT:M1:BUY_SLOT:7" for c in x["cases"]))
+        self.assertTrue(any(c["scope"].startswith("SOURCE:F:") for c in x["cases"]))
         self.assertTrue(all(a["no_economic_owner_or_anomaly_conclusion"]
                             for a in x["cases"]))
 
@@ -88,7 +90,8 @@ class ResearchDispatchTests(unittest.TestCase):
 
     def test_missing_signature_never_silently_becomes_verified(self):
         x = make_plan(sample())
-        row = next(a for a in x["cases"]\n                   if a["scope"] == "WALLET:W1:CROSS_MINT_AGGREGATE")
+        row = next(a for a in x["cases"]
+                   if a["scope"] == "WALLET:W1:CROSS_MINT_AGGREGATE")
         self.assertEqual(row["verification_status"],
                          "MISSING_SIGNATURES_REQUIRE_SOURCE_REPAIR")
         self.assertEqual(row["source_checks_proposed"], [])
