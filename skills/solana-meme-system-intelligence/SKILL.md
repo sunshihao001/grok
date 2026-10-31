@@ -16,6 +16,15 @@ description: |
 >
 > **边界：** 本 Skill 是研究/系统规范和知识调用入口。仓库存在文件≠Grok 云端已安装；本阶段只读、纸面模拟，不下单、签名或广播。
 
+## V2.0｜跨层专家连接与真实反证协议（2026-10-31）
+
+新增 [知识与专家连接结构 V2.0](../../docs/knowledge-expert-interconnection-v2.md)，正式把领域分析从“先后层级”升级为**带来源、时点、依赖及反证路径的专业交接网络**：
+- [32 条专家连接](../../knowledge/expert-interaction-graph.v1.json)：每条规定发送方/接收方、交接的证据对象、使用条件及何种反证触发回溯；
+- [12 条外部方法出处](../../knowledge/external-method-sources.v1.json)：Solana/Jito、Flink/Beam、W3C PROV、OpenTelemetry、微软专家协调、因果/漂移研究，均说明“可借鉴什么、不能证明什么”；
+- `src/solana_meme_os/expert_interaction.py`：研究型静态图校验、专家交接建议及 claim 撤回的依赖影响范围规划；`expert_router.py` 在路由结果中返回 `typed_expert_handoffs`。
+
+关键约束：专家说法必须带 `claim_id / evidence_refs / depends_on_claim_ids / decision-time availability` 等必要事实，**独立专家引用同一个供应商标签不会生成新的独立证据**。若一条原始事件被重新分类，应将依赖其结果的事件统计、资金网络、风险和纸面研究标记为争议或重新计算。经济资金图可以有真实回流环；用于证明某条结论的血缘不允许循环自证。以上是数据协议与局部只读代码，不是已经运行的多 Bot 自动回溯系统。
+
 ## 新增：从知识卡到专家交叉推理的实际路由
 
 面对复杂新问题，首先阅读：
