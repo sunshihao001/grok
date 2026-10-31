@@ -53,8 +53,11 @@ def route(event_types: list[str], *, question: str = "",
         # highest-scoring keyword match.
         scenarios = [entry for _, entry in matched]
         lead = scenarios[0]["lead"]
-        full = [lead]
+        full = []
         for item in scenarios:
+            # The lead of every matched scenario must participate, not only
+            # the first; otherwise a second independent evidence domain is lost.
+            full.append(item["lead"])
             full.extend(item["panel"])
         primary = list(dict.fromkeys(full))
         challenger = list(dict.fromkeys(
