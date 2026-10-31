@@ -481,6 +481,28 @@
       "contract": "输出每类状态的真实人数/观察范围/不可追溯比例；不把未找到funding关系当独立人，也不因公共hub相连就并为同控",
       "counter_signal": "independent_normal_cohort_contains_unresolved_or_high_degree_unknown",
       "on_counter_signal": "retract_normal_cohort_baseline_and_reestimate_false_alerts"
+    },
+    {
+      "id": "L39",
+      "from": "chain",
+      "to": "graph",
+      "link_type": "multi_program_lamport_receipt_to_capital_graph",
+      "purpose": "System Transfer, Token CloseAccount/WSOL unwrap, LP withdrawal, bridge and remaining balance changes require distinct asset and economic provenance types",
+      "artifact": "sol_lamport_receipt_causal_packet",
+      "contract": "Per signature/outer/inner instruction keep owner, token account, program, asset raw units, pre/post lamports, fees/rent, coverage and residual; System Transfer validates a direct edge only, Token CloseAccount receipt does not identify original economic funder",
+      "counter_signal": "non_system_lamport_receipt_or_unreconciled_balance_delta",
+      "on_counter_signal": "reopen_first_funder_and_asset_flow_graph_without_claiming_same_owner"
+    },
+    {
+      "id": "L40",
+      "from": "data",
+      "to": "statistics",
+      "link_type": "derived_cashflow_label_and_coverage_to_null",
+      "purpose": "Cross-source 'financement' and 'produit_de_vente' labels and incomplete wallet histories must not be silently treated as direct funding/swap or normal independent wallet",
+      "artifact": "source_label_confusion_and_coverage_packet",
+      "contract": "Preserve observed n/covered n, history pagination, token decrease, source tx_type/tx_source; unverified sale receipt, LP, WSOL close and ambiguous transactions remain stratified; do not inflate cohorts or apparent negatives",
+      "counter_signal": "unknown_genesis_or_non_system_receipt_assumed_absent_or_normal",
+      "on_counter_signal": "retract_funding_baseline_and_replay_normal_abnormal_estimates"
     }
   ],
   "escalation_rules": [
@@ -578,5 +600,14 @@
       "L38"
     ],
     "basis": "Cross-file null->independent and RPC count zero source ambiguity from pinned original implementations"
+  },
+  "expansion_wave_3": {
+    "date": "2026-10-31",
+    "case": "knowledge/research/R006-sol-receipt-economic-semantics-v1.md",
+    "new_links": [
+      "L39",
+      "L40"
+    ],
+    "rationale": "Official Token CloseAccount and historical 905-row derived inflow audit falsify direct-System-Transfer-only funding semantics."
   }
 }
