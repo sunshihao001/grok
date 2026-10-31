@@ -11,7 +11,7 @@
       "source": "Solana 官方交易解析",
       "supported_design_claim": "说明版本化地址查找和inner CPI需要正确解码",
       "does_not_verify": "不能证明任意给定第三方平台事件分类已正确",
-      "linked_expert_edges": [
+      "linked_edges": [
         "L01",
         "L02",
         "L05"
@@ -24,7 +24,7 @@
       "source": "Solana 官方 RPC",
       "supported_design_claim": "给出通过signature取meta、balance、innerInstructions等的原始入口",
       "does_not_verify": "仅文档不等于本轮已经查询具体交易",
-      "linked_expert_edges": [
+      "linked_edges": [
         "L01",
         "L02",
         "L05"
@@ -37,7 +37,7 @@
       "source": "Jito 官方",
       "supported_design_claim": "Bundle的顺序/原子性/同Slot与普通同Slot的区别",
       "does_not_verify": "链上同Slot本身不是Bundle来源证明",
-      "linked_expert_edges": [
+      "linked_edges": [
         "L02",
         "L11"
       ]
@@ -49,7 +49,7 @@
       "source": "Apache Flink 官方文档",
       "supported_design_claim": "event time与watermark/late event影响窗口版本",
       "does_not_verify": "不表示当前Grok采用Flink或已经实现水位线",
-      "linked_expert_edges": [
+      "linked_edges": [
         "L03",
         "L27"
       ]
@@ -61,7 +61,7 @@
       "source": "W3C Recommendation",
       "supported_design_claim": "Entity、Activity、Agent及来源/派生关系构造血缘",
       "does_not_verify": "不会自动证明内容正确或专业结论可信",
-      "linked_expert_edges": [
+      "linked_edges": [
         "L01",
         "L25",
         "L26"
@@ -74,7 +74,7 @@
       "source": "OpenTelemetry 规范",
       "supported_design_claim": "Trace/Span/Link用于跨组件或并行分析关联",
       "does_not_verify": "不表示Grok云端实际有OTel追踪",
-      "linked_expert_edges": [
+      "linked_edges": [
         "L25",
         "L28"
       ]
@@ -86,7 +86,7 @@
       "source": "Microsoft Azure 架构文档",
       "supported_design_claim": "按问题选确定性/交接/并行、可观测和评估，避免不必要Agent数量",
       "does_not_verify": "不能断言现有Grok已经支持这些工作流原语",
-      "linked_expert_edges": [
+      "linked_edges": [
         "L28",
         "L29",
         "L30",
@@ -100,7 +100,7 @@
       "source": "Microsoft Agent Framework 文档",
       "supported_design_claim": "清晰区分动态专家交接与主Agent委派",
       "does_not_verify": "不要求本项目使用微软Agent Framework",
-      "linked_expert_edges": [
+      "linked_edges": [
         "L26",
         "L28",
         "L31"
@@ -113,7 +113,7 @@
       "source": "Hernán/Robins 原著公开入口",
       "supported_design_claim": "混杂、选择偏差、测量误差和时间变化对因果判断的约束",
       "does_not_verify": "不能独立确定某Meme钱包的行为动机",
-      "linked_expert_edges": [
+      "linked_edges": [
         "L10",
         "L12",
         "L18",
@@ -127,7 +127,7 @@
       "source": "2024/25 论文",
       "supported_design_claim": "无监督概念漂移检测与真实流数据基准",
       "does_not_verify": "不提供Solana钱包已校准正常阈值",
-      "linked_expert_edges": [
+      "linked_edges": [
         "L17",
         "L27"
       ]
@@ -139,7 +139,7 @@
       "source": "2026 论文",
       "supported_design_claim": "延迟/部分标注使漂移检测和评估更复杂",
       "does_not_verify": "不自动建立Meme真实标签体系",
-      "linked_expert_edges": [
+      "linked_edges": [
         "L17",
         "L27"
       ]
@@ -151,7 +151,7 @@
       "source": "Google Cloud/Apache Beam 文档",
       "supported_design_claim": "window、trigger、watermark及晚到数据的分批更新概念",
       "does_not_verify": "不代表M2已采用该框架或拥有真实采集",
-      "linked_expert_edges": [
+      "linked_edges": [
         "L03",
         "L27"
       ]
@@ -163,7 +163,7 @@
       "source": "Solana official SPL Token documentation",
       "supported_design_claim": "Token CloseAccount transfers token-account lamports, including WSOL underlying SOL and account rent, to a designated destination; direct System Transfer alone misses valid lamport receipts.",
       "does_not_verify": "Does not identify original economic source, beneficial owner or any particular historical transaction in R006.",
-      "linked_expert_edges": [
+      "linked_edges": [
         "L39",
         "L05",
         "L35"
@@ -176,7 +176,7 @@
       "source": "IJCAI 2026 temporal motif-aware graph test-time adaptation (TEMG-TTA)",
       "supported_design_claim": "Time-ordered 3-node transaction motifs and adaptation to structural distribution shifts can improve modeling of evolving graph behavior.",
       "does_not_verify": "Ethereum/AML anomaly model results are not calibrated for Solana Meme, manipulation identity or executable returns.",
-      "linked_expert_edges": [
+      "linked_edges": [
         "L04",
         "L17",
         "L27",
@@ -190,7 +190,7 @@
       "source": "AISTATS 2023 Prediction-Oriented Bayesian Active Learning",
       "supported_design_claim": "Selecting evidence for relevance to downstream predictions can outperform indiscriminate parameter uncertainty reduction in studied settings.",
       "does_not_verify": "No live Solana research dispatch, information gain probabilities, or cost reduction has been validated in this project.",
-      "linked_expert_edges": [
+      "linked_edges": [
         "L28",
         "L29",
         "L30"
@@ -203,7 +203,7 @@
       "source": "ACM Computing Surveys: Causal Discovery from Temporal Data (2024)",
       "supported_design_claim": "Sequence/event-time and time-series models have different assumptions; observing transaction order alone is insufficient for market causality.",
       "does_not_verify": "Any particular funding network or meme price dynamics causally determined.",
-      "linked_expert_edges": [
+      "linked_edges": [
         "L12",
         "L16",
         "L18",
@@ -217,7 +217,7 @@
       "source": "Counterfactual Learning on Graphs: A Survey (2025)",
       "supported_design_claim": "Graph explanations and predictive models need causal/counterfactual assumptions; structural correlations alone need not imply intervention effects.",
       "does_not_verify": "Cross-token clusters are real economic common owners or supply profitable signals.",
-      "linked_expert_edges": [
+      "linked_edges": [
         "L12",
         "L18",
         "L19"
