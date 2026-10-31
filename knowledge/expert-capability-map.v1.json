@@ -1038,6 +1038,75 @@
         "out_of_sample_review",
         "no_live_trade"
       ]
+    },
+    {
+      "id": "funding_to_buy_flow",
+      "triggers": [
+        "FUNDING_TO_BUY_CANDIDATE"
+      ],
+      "lead": "graph",
+      "panel": [
+        "data",
+        "chain",
+        "event",
+        "wallet",
+        "adversarial",
+        "statistics"
+      ],
+      "conditional": [
+        "liquidity",
+        "token",
+        "causal"
+      ],
+      "vetoReview": [
+        "review",
+        "risk"
+      ],
+      "questions": [
+        "指令与余额能否证明每位买家的可用资金在买入前到达？",
+        "同Slot排序是否可证明，多个funder是否保留多重解释？",
+        "同一公共来源是否只是交易服务商或独立客户正常注资？"
+      ],
+      "outputs": [
+        "time_ordered_funding_paths",
+        "wallet_balance_reconciliation",
+        "hub_and_independent_bot_alternatives",
+        "next_discriminating_signatures"
+      ]
+    },
+    {
+      "id": "token_consolidation_cashflow",
+      "triggers": [
+        "TOKEN_CONSOLIDATION"
+      ],
+      "lead": "inventory",
+      "panel": [
+        "data",
+        "chain",
+        "graph",
+        "wallet"
+      ],
+      "conditional": [
+        "liquidity",
+        "token",
+        "statistics",
+        "causal"
+      ],
+      "vetoReview": [
+        "review",
+        "risk"
+      ],
+      "questions": [
+        "多个Token Account是否属于不同owner，来源余额是否守恒？",
+        "收款后是代币库存中转、真实Swap出售、LP操作还是后续继续持有？",
+        "是否来自正常路由/托管或大量无关独立钱包？"
+      ],
+      "outputs": [
+        "recipient_owner_and_account_map",
+        "token_inventory_lineage",
+        "real_sale_vs_transfer_status",
+        "economic_cashflow_open_questions"
+      ]
     }
   ],
   "legacy_translation": {
@@ -1075,5 +1144,21 @@
       "L40"
     ],
     "note": "Source-derived economic type labels, coverage flags, wrapped-SOL close semantics; no RPC truth claims."
+  },
+  "scenario_expansion": {
+    "date": "2026-10-31",
+    "why": "M2 native candidate kinds must have expert routes without inventing unknown-protocol status",
+    "new_scenarios": [
+      "funding_to_buy_flow",
+      "token_consolidation_cashflow"
+    ],
+    "candidate_type_coverage": [
+      "SAME_SLOT_MULTIWALLET_BUY",
+      "FUNDING_FANOUT",
+      "TOKEN_CONSOLIDATION",
+      "FUNDING_TO_BUY_CANDIDATE",
+      "CROSS_MINT_FUNDING_REUSE",
+      "CROSS_MINT_WALLET_ACTIVITY"
+    ]
   }
 }
