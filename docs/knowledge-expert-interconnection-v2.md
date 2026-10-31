@@ -1,5 +1,7 @@
 # Solana Meme 多层知识与专家连接系统 V2.0｜四轮外部研究后的结构重建
 
+> **当前架构数量以 [知识架构 V2.0](knowledge-architecture-v2.0.md) 与机器 JSON 为准：40 条交接边、30 条来源指针。本文早期章节中 32/36 条及 22 来源为历史版本记录，不能当作当前总数。
+
 > 2026-10-31 · 知识架构研究成果，不是已运行多智能体/实时全市场监控。  
 > 主体架构：[`expert-capability-map.v1.json`](../knowledge/expert-capability-map.v1.json) 的 17 类专家 × 12 个知识领域；本轮新增 [`expert-interaction-graph.v1.json`](../knowledge/expert-interaction-graph.v1.json) 的 **32 条有类型、可撤回的专家交接关系**。  
 > 此文中的专业角色是知识能力，可在同一 Grok Bot 内动态调用，也可以由研发 Bot 分担；不要求 17 个独立云 Bot。  
