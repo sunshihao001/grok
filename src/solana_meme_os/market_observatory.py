@@ -11,7 +11,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
-from collections import defaultdict
+from collections import Counter, defaultdict, deque
 from datetime import datetime, timezone, timedelta
 from decimal import Decimal
 import json
@@ -208,6 +208,33 @@ def summarize(rows: list[dict], window_seconds: int) -> list[dict]:
     return out
 
 
+def _sliding_windows(records: list[dict], seconds: int, participant: str) -> list[list[dict]]:
+    """Emit candidate windows on distinct-participant expansions, including bucket boundaries.
+
+    This is a descriptive rolling detector, not an anomaly threshold. In a
+    sustained burst each newly observed distinct participant can emit an
+    updated candidate; no market baseline has been fitted.
+    """
+    ordered = sorted(records, key=lambda e: (parse_time(e["block_time"], "block_time"),
+                                            e["signature"], e["instruction_index"]))
+    active: deque[dict] = deque()
+    counts: Counter[str] = Counter()
+    windows = []
+    for e in ordered:
+        now = parse_time(e["block_time"], "block_time")
+        while active and now - parse_time(active[0]["block_time"], "block_time") >= timedelta(seconds=seconds):
+            expired = active.popleft()
+            counts[expired[participant]] -= 1
+            if counts[expired[participant]] == 0:
+                del counts[expired[participant]]
+        previous = len(counts)
+        active.append(e)
+        counts[e[participant]] += 1
+        if len(counts) >= 2 and len(counts) > previous:
+            windows.append(list(active))
+    return windows
+
+
 def candidates(rows: list[dict], *, seconds: int = 60, funding_lookback: int = 300) -> list[dict]:
     """Candidates describe structures, NOT abnormality, same-owner, bundles or profit."""
     output = []
@@ -227,44 +254,44 @@ def candidates(rows: list[dict], *, seconds: int = 60, funding_lookback: int = 3
                        "signatures": sorted({x["signature"] for x in ev}),
                        "jito_bundle_status": "UNVERIFIED", "entity_link_status": "UNVERIFIED",
                        "anomaly_status": "UNASSESSED_NO_BASELINE"})
-    # Funding fanout: source and recipients within a fixed time bucket.
-    funding: dict[tuple, list[dict]] = defaultdict(list)
+    # Source fanout: rolling-window receiver expansion, not clock-aligned bins.
+    funding: dict[str, list[dict]] = defaultdict(list)
     for e in rows:
         if e["event_kind"] == "SOL_TRANSFER":
-            bucket = _window_start(parse_time(e["block_time"], "block_time"), seconds)
-            funding[(e["from_owner"], bucket)].append(e)
-    for (source, start), ev in sorted(funding.items()):
-        recipients = sorted({x["to_owner"] for x in ev})
-        if len(recipients) < 2:
-            continue
-        output.append({"kind": "FUNDING_FANOUT", "funder": source, "start": iso(start),
-                       "end_exclusive": iso(start + timedelta(seconds=seconds)),
-                       "recipient_wallets": recipients, "unique_recipients": len(recipients),
-                       "transfer_events": len(ev),
-                       "sol_transferred": sol(sum(raw_units(x, "amount_raw") for x in ev)),
-                       "signatures": sorted({x["signature"] for x in ev}),
-                       "shared_control_status": "UNVERIFIED",
-                       "anomaly_status": "UNASSESSED_NO_BASELINE"})
-    # Explicit token transfers to the same recipient within a time window.
+            funding[e["from_owner"]].append(e)
+    for source, ev in sorted(funding.items()):
+        for window in _sliding_windows(ev, seconds, "to_owner"):
+            recipients = sorted({x["to_owner"] for x in window})
+            start = parse_time(window[0]["block_time"], "block_time")
+            output.append({"kind": "FUNDING_FANOUT", "funder": source, "start": iso(start),
+                           "end_exclusive": iso(start + timedelta(seconds=seconds)),
+                           "window_seconds": seconds, "recipient_wallets": recipients,
+                           "unique_recipients": len(recipients),
+                           "transfer_events": len(window),
+                           "sol_transferred": sol(sum(raw_units(x, "amount_raw") for x in window)),
+                           "signatures": sorted({x["signature"] for x in window}),
+                           "shared_control_status": "UNVERIFIED",
+                           "anomaly_status": "UNASSESSED_NO_BASELINE"})
+    # Token routing: independently assess recipients per Mint, in rolling windows.
     consolidation: dict[tuple, list[dict]] = defaultdict(list)
     for e in rows:
         if e["event_kind"] == "TOKEN_TRANSFER":
-            start = _window_start(parse_time(e["block_time"], "block_time"), seconds)
-            consolidation[(e["mint"], e["to_owner"], start)].append(e)
-    for (mint, receiver, start), ev in sorted(consolidation.items()):
-        origins = sorted({x["from_owner"] for x in ev})
-        if len(origins) < 2:
-            continue
-        output.append({"kind": "TOKEN_CONSOLIDATION", "mint": mint,
-                       "recipient": receiver, "start": iso(start),
-                       "end_exclusive": iso(start + timedelta(seconds=seconds)),
-                       "origin_wallets": origins, "unique_origins": len(origins),
-                       "transfer_events": len(ev),
-                       "token_transferred": token(sum(raw_units(x, "amount_raw") for x in ev), ev[0]["decimals"]),
-                       "signatures": sorted({x["signature"] for x in ev}),
-                       "subsequent_sale_status": "NOT_CHECKED",
-                       "entity_link_status": "UNVERIFIED",
-                       "anomaly_status": "UNASSESSED_NO_BASELINE"})
+            consolidation[(e["mint"], e["to_owner"])].append(e)
+    for (mint, receiver), ev in sorted(consolidation.items()):
+        for window in _sliding_windows(ev, seconds, "from_owner"):
+            origins = sorted({x["from_owner"] for x in window})
+            start = parse_time(window[0]["block_time"], "block_time")
+            output.append({"kind": "TOKEN_CONSOLIDATION", "mint": mint,
+                           "recipient": receiver, "start": iso(start),
+                           "end_exclusive": iso(start + timedelta(seconds=seconds)),
+                           "window_seconds": seconds, "origin_wallets": origins,
+                           "unique_origins": len(origins), "transfer_events": len(window),
+                           "token_transferred": token(sum(raw_units(x, "amount_raw") for x in window),
+                                                      window[0]["decimals"]),
+                           "signatures": sorted({x["signature"] for x in window}),
+                           "subsequent_sale_status": "NOT_CHECKED",
+                           "entity_link_status": "UNVERIFIED",
+                           "anomaly_status": "UNASSESSED_NO_BASELINE"})
     # Look back from buy to funding of the buyer. More than one possible funder
     # is not silently collapsed into one presumed beneficial owner.
     credits: dict[str, list[dict]] = defaultdict(list)
@@ -297,6 +324,32 @@ def candidates(rows: list[dict], *, seconds: int = 60, funding_lookback: int = 3
                        "signatures": sorted(g["signatures"]),
                        "relationship": "TIME_BOUNDED_FLOW_HYPOTHESIS_NOT_OWNERSHIP",
                        "anomaly_status": "UNASSESSED_NO_BASELINE"})
+    # Cross-Mint recurrence is descriptive. Repeated service-provider use is a
+    # competing explanation, not automatic evidence of common beneficial owner.
+    reuse: dict[str, dict] = defaultdict(lambda: {"mints": set(), "buyers": set(), "signatures": set()})
+    for (funder, mint), group in groups.items():
+        reuse[funder]["mints"].add(mint)
+        reuse[funder]["buyers"].update(group["buyers"])
+        reuse[funder]["signatures"].update(group["signatures"])
+    for funder, group in sorted(reuse.items()):
+        if len(group["mints"]) < 2:
+            continue
+        output.append({"kind": "CROSS_MINT_FUNDING_REUSE", "candidate_funder": funder,
+                       "mints": sorted(group["mints"]), "unique_mints": len(group["mints"]),
+                       "buyer_wallets": sorted(group["buyers"]),
+                       "signatures": sorted(group["signatures"]),
+                       "economic_owner_status": "UNVERIFIED",
+                       "anomaly_status": "UNASSESSED_NO_BASELINE"})
+    by_buyer: dict[str, set[str]] = defaultdict(set)
+    for e in rows:
+        if e["event_kind"] in {"SWAP_BUY", "SWAP_SELL"}:
+            by_buyer[e["wallet"]].add(e["mint"])
+    for buyer, mints in sorted(by_buyer.items()):
+        if len(mints) > 1:
+            output.append({"kind": "CROSS_MINT_WALLET_ACTIVITY", "wallet": buyer,
+                           "mints": sorted(mints), "unique_mints": len(mints),
+                           "role_status": "UNCLASSIFIED",
+                           "anomaly_status": "UNASSESSED_NO_BASELINE"})
     return sorted(output, key=lambda c: (c["kind"], c.get("mint", ""), c.get("slot", -1),
                                          c.get("start", ""), c.get("funder", c.get("candidate_funder", ""))))
 
