@@ -84,9 +84,9 @@ PYTHONPATH=src python -m solana_meme_os.research_dispatch \
   --output .runtime/research-plan.json
 ```
 
-输出 `research-plan.json` 是计划，不是已执行结果。每个 Case 包含种类、真实签名引用、Mint 或资金源作用域、需要的专业知识、交接 ID、是否需开放发现、源确认状态、预算及调查问题。
+输出 `research-plan.json` 是计划，不是已执行结果。每个 Case 包含种类、真实签名引用、Mint/Slot 或来源/时间窗作用域、稳定 `case_id`、随晚到证据更新的 `evidence_version`、需要的专业知识、交接 ID、源确认状态、预算与调查问题。跨 Case 的重复签名核查只计一次预算。
 
-[单元测试](../tests/test_research_dispatch.py) 针对预算/idempotence/作用域隔离/未知事件/同一个签名去重/非全链覆盖/输出不执行交易与源错误等12种情况。**现阶段测试文件已写入但不应声称在目标完整仓库跑通，须在 Grok 云环境实际执行后才能升级运行等级。**
+[16 项调度测试](../tests/test_research_dispatch.py) 针对预算/idempotence/不同时间窗隔离/未知事件/同一交易签名跨 Case 去重/稳定 Case ID 与证据版本/非全链覆盖/输出不执行交易等16种情况。**截至本轮，GitHub Actions `monitor-tests` 已在固定草案分支 Python 3.12 环境实际运行**108 项离线测试全通过**，包括 [2 项现有 M2 fixture → 研究派发端到端用例](../tests/test_dual_loop_vertical_slice.py)。这仅证明离线研究管线的合同与回归，不代表真实 Grok 云电脑的生产部署或链上完整采集。**
 
 ## 5. 任务队列、调度权限与故障处理（目标设计，尚未实现）
 
@@ -160,3 +160,9 @@ Solana RPC/可靠读源接入；解析 System/Token/WSOL/交易池内外指令�
 - [W3C PROV-O](https://www.w3.org/TR/prov-o/)：数据血缘与专家活动的分离；可用自己的标准库/SQLite 最小实现，先验证正确性。
 
 **决策收束：** 让实时市场扫描维持简单快速，让专家专注少数真正需要解释的未知，让证据反向修正知识与规则。不是专家越多越专业，而是每一次专家调用都能增加可核查的信息或排除一个错误机制。
+
+## V4 代码验收证据（2026-10-31）
+
+GitHub Actions [`monitor-tests` run #41186104343](https://github.com/sunshihao001/grok/actions/runs/41186104343)：`108 tests / OK`。已包含 16 项 `test_research_dispatch.py`、2 项 `test_dual_loop_vertical_slice.py` 与原有测试。所有源码与测试位于 `docs/cognition-knowledge-conversion-v1`，未改 `main`。
+
+本轮动态研究专家路由现在覆盖 M2 的全部六种候选类型，新增 `funding_to_buy_flow`、`token_consolidation_cashflow` 场景，总计 **7 类专业研究场景**。这不是声称已经完成市场异常基准或真实智能体多工具执行。
