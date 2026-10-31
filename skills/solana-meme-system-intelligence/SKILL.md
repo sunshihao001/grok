@@ -26,7 +26,7 @@ description: |
 
 ## V3｜知识叠加产生新的经济机制：明确判错，不以“谨慎”压制研究
 
-开始任何开放式市场现象研究前，参阅 [经济机制合成与认知判真 V3](../../docs/economic-mechanism-synthesis-and-judgment-v3.md) 和 [6 个待验证跨领域机制假设](../../knowledge/mechanism-synthesis-hypotheses.v1.json)。V3 不是17名专家投票，而是让一个领域创造另一个领域原先没有的解释、预测或反例，包括**跨地址角色不变量、时序资金行为指纹、市场自身冲击剥离、主动选择高判别价值证据、动态正常基准和从专家矛盾发现漏掉的交易机制**。
+开始任何开放式市场现象研究前，参阅 [经济机制合成与认知判真 V3](../../docs/economic-mechanism-synthesis-and-judgment-v3.md) 和 [8 个待验证跨领域机制假设](../../knowledge/mechanism-synthesis-hypotheses.v1.json)。V3 不是17名专家投票，而是让一个领域创造另一个领域原先没有的解释、预测或反例，包括**跨地址角色不变量、时序资金行为指纹、市场自身冲击剥离、主动选择高判别价值证据、动态正常基准和从专家矛盾发现漏掉的交易机制**。
 
 **必须果断判断**：
 - **逻辑/协议被反例推翻**：直接指出规则错误。例如 `UNKNOWN_FIRST_FUNDER→ECONOMICALLY_INDEPENDENT`、`TOKEN_DECREASE→SWAP_SELL`、`NO_SYSTEM_TRANSFER→NO_SOL_RECEIPT`、`SAME_SLOT→JITO_CONFIRMED` 都不是有效的充分推断；不许包装成“有一点不确定但整体可用”。
@@ -34,7 +34,7 @@ description: |
 - **统计机制在明确样本被推翻**：撤销该范围结论，而非给出更复杂但无法复算的分数。
 - **结构机制有效但没有交易净优势**：可保留市场监控/风险用途，不能反过来说所有研究毫无价值。
 
-**研究优势验收**：在相同历史时点、数据覆盖、调用预算和样本外发行上，比较单钱包特征、资金图、复合时序图、上下游市场机制以及主动反证专家方法；复杂专家系统如不能提升事实准确率/机制反证效率/可用市场信息中的某个明确指标，就简化，而非把复杂度本身当结果。新机制允许超出 V3 六项候选，不受 15 张知识卡、17 类专家或 40 条静态连接限制。
+**研究优势验收**：在相同历史时点、数据覆盖、调用预算和样本外发行上，比较单钱包特征、资金图、复合时序图、上下游市场机制以及主动反证专家方法；复杂专家系统如不能提升事实准确率/机制反证效率/可用市场信息中的某个明确指标，就简化，而非把复杂度本身当结果。新机制允许超出 V3 六项候选，不受当前 24 张知识卡、17 类专家、9 个典型路由场景或 40 条静态连接限制。
 
 ## R006｜从 SOL 余额进入真实经济来源，不局限于 System Transfer
 
@@ -66,7 +66,7 @@ description: |
 
 新增 [知识与专家连接结构 V2.0](../../docs/knowledge-expert-interconnection-v2.md)，正式把领域分析从“先后层级”升级为**带来源、时点、依赖及反证路径的专业交接网络**：
 - [专家连接图（目前 40 条，首版为 32 条）](../../knowledge/expert-interaction-graph.v1.json)：每条规定发送方/接收方、交接的证据对象、使用条件及何种反证触发回溯；
-- [12 条外部方法出处](../../knowledge/external-method-sources.v1.json)：Solana/Jito、Flink/Beam、W3C PROV、OpenTelemetry、微软专家协调、因果/漂移研究，均说明“可借鉴什么、不能证明什么”；
+- [17 条外部方法出处](../../knowledge/external-method-sources.v1.json)：Solana/Jito、Flink/Beam、W3C PROV、OpenTelemetry、微软专家协调、因果/漂移研究，均说明“可借鉴什么、不能证明什么”；
 - `src/solana_meme_os/expert_interaction.py`：研究型静态图校验、专家交接建议及 claim 撤回的依赖影响范围规划；`expert_router.py` 在路由结果中返回 `typed_expert_handoffs`。
 
 关键约束：专家说法必须带 `claim_id / evidence_refs / depends_on_claim_ids / decision-time availability` 等必要事实，**独立专家引用同一个供应商标签不会生成新的独立证据**。若一条原始事件被重新分类，应将依赖其结果的事件统计、资金网络、风险和纸面研究标记为争议或重新计算。经济资金图可以有真实回流环；用于证明某条结论的血缘不允许循环自证。以上是数据协议与局部只读代码，不是已经运行的多 Bot 自动回溯系统。
