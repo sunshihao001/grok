@@ -35,7 +35,8 @@
 - [知识卡目录](catalog.v1.json)：每张卡有触发、机制、必需证据、竞争解释、推断边界、下一步和固定来源。
 - [来源索引](source_index.v1.json)：按需读取30个固定版本文件；只允许已审查仓库。
 - [来源索引说明](source-index-README.md)：来源类型、路由方法和覆盖边界。
-- [12领域本体](domain-ontology.v1.json)：定义各领域的层级归属、核心对象/问题、必需证据、输出、反推边界、专家面板和主知识卡。\n- [专家能力映射](expert-capability-map.v1.json)：17专家、12领域路由投影、8研究阶段、9场景路由。
+- [12领域本体](domain-ontology.v1.json)：定义各领域的层级归属、核心对象/问题、必需证据、输出、反推边界、专家面板和主知识卡。
+- [专家能力映射](expert-capability-map.v1.json)：17专家、12领域路由投影、8研究阶段、9场景路由。
 - [专家交接图](expert-interaction-graph.v1.json)：40条方向性关系、claim contract、反证/撤回约束。
 - [机制假说登记](mechanism-synthesis-hypotheses.v1.json)：HX01–HX08，含预测、竞争解释、判别证据和拒绝条件。
 - [参考项目发现](reference-project-discovery.v1.json)：14个来源项目/论文及成熟度分级。
