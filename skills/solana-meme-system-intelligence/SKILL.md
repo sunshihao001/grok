@@ -16,6 +16,12 @@ description: |
 >
 > **边界：** 本 Skill 是研究/系统规范和知识调用入口。仓库存在文件≠Grok 云端已安装；本阶段只读、纸面模拟，不下单、签名或广播。
 
+## R006｜从 SOL 余额进入真实经济来源，不局限于 System Transfer
+
+[R006 40 钱包 × 905 条派生 SOL 流入审计](../../knowledge/research/R006-sol-receipt-economic-semantics-v1.md) 实际核对了旧项目的数据表和分类脚本：40 钱包中仅 21 个覆盖钱包起点，原标签 61 条 `financement` 并不都是直接 System Transfer（其中 8 条涉及 LP 撤回、NFT/跨链业务）；844 条 `produit_de_vente` 含部分非 SWAP 主类型。这不是“平台数据一定错误”，而是说明**研究业务标签与链上实际资产变化必须分开**。SPL `CloseAccount`/WSOL 释放可使接收者 SOL 增加而无 System Transfer，必须沿外/内指令 + 余额差 + Token 账户状态联合核验。
+
+新增 [只读跨程序现金流标签审计器](../../src/solana_meme_os/cashflow_semantics.py) 和 [6 项本地实际运行通过的测试](../../tests/test_cashflow_semantics.py)。静态来源索引新增 `h2w6-original-inflow-table`、`h2w6-funding-label-generator`、`h2w6-sol-balance-method`；专家连接 L39 `chain→graph` 解决多程序收款机制，L40 `data→statistics` 解决分类与覆盖分母。**本轮尚无真实 Solana RPC 独立逐签名核验，不得用该 905 条派生表直接判同控或盈利。**
+
 ## R005｜真实跨项目源码分析如何反向修正专家推理（2026-10-31）
 
 先读 [R005 原始资金来源跨项目法证案例](../../knowledge/research/R005-crossproject-funder-semantics-v1.md)：`solana-holder-clusters` 的 `funders.ts` 遇历史不足返回 `null`，但 `clusters.ts` 把该 `null` 放入 `independent[]`；其另一处以“交易最大SOL余额减少者”猜测付款地址；`Degen-Scanner` 保留查询失败计数为零的候选持有人进入后续追查。**可观察性失败≠真实独立、低活跃或同控**。
@@ -39,7 +45,7 @@ description: |
 ## V2.0｜跨层专家连接与真实反证协议（2026-10-31）
 
 新增 [知识与专家连接结构 V2.0](../../docs/knowledge-expert-interconnection-v2.md)，正式把领域分析从“先后层级”升级为**带来源、时点、依赖及反证路径的专业交接网络**：
-- [32 条专家连接](../../knowledge/expert-interaction-graph.v1.json)：每条规定发送方/接收方、交接的证据对象、使用条件及何种反证触发回溯；
+- [专家连接图（目前 40 条，首版为 32 条）](../../knowledge/expert-interaction-graph.v1.json)：每条规定发送方/接收方、交接的证据对象、使用条件及何种反证触发回溯；
 - [12 条外部方法出处](../../knowledge/external-method-sources.v1.json)：Solana/Jito、Flink/Beam、W3C PROV、OpenTelemetry、微软专家协调、因果/漂移研究，均说明“可借鉴什么、不能证明什么”；
 - `src/solana_meme_os/expert_interaction.py`：研究型静态图校验、专家交接建议及 claim 撤回的依赖影响范围规划；`expert_router.py` 在路由结果中返回 `typed_expert_handoffs`。
 
