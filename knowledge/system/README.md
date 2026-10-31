@@ -2,6 +2,10 @@
 
 **状态：体系结构已定义；知识内容仅部分填充；不代表策略已验证。** 本目录是 Grok 项目领域知识的上层契约，不替代已有 `knowledge/catalog.v1.json`（15 张遗留知识候选卡）和 `knowledge/legacy-snapshots/`（21 份固定快照）。
 
+## GPT Project 持续积累的完整专业知识镜像
+
+[《GPT Meme 项目全领域知识主册》](gpt-meme-project-core.v1.md) 包含现有全部152项原子研究问题/机制/禁错、21专家及跨域经济机制导航。 [《累积与双向关联规范》](gpt-meme-knowledge-accumulation.v1.md) 把发现保存为**原问题—来源—资产/库存/价格/时点因果—竞争世界—关系边—单元回填—下一轮未知**；[《Project简短指令》](gpt-meme-project-instructions.v1.md) 和 [机器索引](gpt-meme-project-index.v1.json) 帮助不同GPT会话按需恢复已有专业知识，减少零散讨论。系统仍按原L0–L7/D01–D12组织，不新增一个平行本体。Project附件与GitHub版本更新为人工同步，**不能声称已直接改动ChatGPT项目附件**。
+
 ## 参考知识融合的实际节奏
 
 [《滚动式参考项目知识融合》](rolling-reference-knowledge-integration.md) 确定“**每批一个Meme业务矛盾；批内先准确理解、后跨专家融合、再转换成Grok专家知识；批次间轻量并行**”。从 B01 旧 qb- 关键钱包矩阵开始；B02 同源和筹码、B03 FCZ真假二阶段、B04 跨Mint批量异常钱包时序、B05 多策略可跟性作为暂定问题，不是按序搬文件的五个新框架。未审阅的研究假说不能升级为确定知识或运行规则。
