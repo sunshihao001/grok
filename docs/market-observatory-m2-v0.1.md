@@ -87,7 +87,7 @@ PYTHONPATH=src python -m solana_meme_os.market_observatory \
 
 ## 开发验收和限制
 
-`tests/test_market_observatory.py` 覆盖输入范围、精确金额、去重、签名冲突、同一交易多指令、同 Slot 缺顺序、跨窗口聚合、跨 Mint 描述、决策时间及禁止伪盈利结论。测试文件写入仓库并检查，但**当前执行环境无法获取 GitHub 文件到 Python 运行容器，因此尚未完成该模块在完整仓库中的 Python unittest 执行**。已对 fixture 做独立数值核对：前 30 秒 8 条事件，3 笔 SOL 转账合计 10 SOL，3 笔买入合计 7.8 SOL，两条 Token 转账共 42 Token（2 位 decimals），6 个参与地址 / 3 个买入地址。这个数值核对不替代 Python 单元测试。
+`tests/test_market_observatory.py` 覆盖输入范围、精确金额、去重、签名冲突、同一交易多指令、同 Slot 缺顺序、跨窗口聚合、跨 Mint 描述、决策时间及禁止伪盈利结论。测试文件已写入仓库；**GitHub Actions 在草案分支提交 `f6f19062edd402ce17691abbcf049fa9d34c2169` 上运行了完整离线 unittest，workflow [41167185465](https://github.com/sunshihao001/grok/actions/runs/41167185465) 返回 success**。本次对话的本地容器无法直接拉取 GitHub 原始文件，因此没有另做本地完整仓库复跑。已对 fixture 做独立数值核对：前 30 秒 8 条事件，3 笔 SOL 转账合计 10 SOL，3 笔买入合计 7.8 SOL，两条 Token 转账共 42 Token（2 位 decimals），6 个参与地址 / 3 个买入地址。这个数值核对不替代 Python 单元测试。
 
 下步工程顺序应为：**M1 真正的数据/解析适配器 → M2 有状态增量事件存储 → M3 钱包和资金图 → M4 条件基准**。在有足够真实数据之前不要建立“疑似庄家确定率”或固定盈利阈值。
 
