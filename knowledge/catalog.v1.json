@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "title": "Solana Meme knowledge migration, source-bound hypotheses and methods",
-  "note": "This catalog contains reviewed descriptions of historical documentation, NOT verified on-chain truths, calibrated financial signals or proof of profitable prediction.",
+  "note": "This catalog contains reviewed descriptions of historical documentation, NOT verified on-chain truths, calibrated financial signals or proof of profitable prediction. Updated 2026-10-31: the 15-card legacy baseline is extended with 9 source-linked research/knowledge cards from R005-R007 and KX-01..KX-06. This is a curated operational index, not an exhaustive ontology.",
   "cards": [
     {
       "id": "candidate-entry",
@@ -690,6 +690,523 @@
           "path": "hermes_harness/16_reliability_calibration/README.md",
           "url": "https://github.com/sunshihao001/qb-/blob/8377ad5611255df5cd4562666a826708575334f0/hermes_harness/16_reliability_calibration/README.md",
           "snapshot_path": "knowledge/legacy-snapshots/method/calibration.md"
+        }
+      ]
+    },
+    {
+      "id": "first-funder-history-coverage",
+      "title": "历史覆盖不足不能被解释为零融资或经济独立",
+      "status": "source_contract",
+      "triggers": [
+        "FIRST_FUNDER_UNKNOWN",
+        "HISTORY_COVERAGE_GAP",
+        "RPC_QUERY_FAILURE"
+      ],
+      "keywords": [
+        "首次资金来源",
+        "first funder",
+        "历史覆盖",
+        "分页",
+        "未知资金",
+        "独立钱包",
+        "RPC失败",
+        "rate limit"
+      ],
+      "mechanism": "首次资金查询未覆盖钱包起点、分页被截断或 RPC 失败时，未观察到资金边只是可观测性状态，不是链上没有资金，更不能被下游映射为真实独立。将查询状态与资金关系分离：COMPLETE_ENOUGH_FOR_QUESTION、TRUNCATED_HISTORY、RPC_ERROR_OR_RATE_LIMIT、NO_RECORDED_ACTIVITY、NOT_SCANNED。",
+      "required_evidence": [
+        "查询范围与历史起点/分页游标",
+        "RPC请求状态、错误和限速记录",
+        "真实签名与指令来源（如已取得）",
+        "Token Account owner与钱包地址映射",
+        "同类样本的历史覆盖率"
+      ],
+      "alternative_explanations": [
+        "钱包真实没有此前入账",
+        "钱包年龄和活动类型不同",
+        "数据源采样窗口或分页策略造成差异",
+        "资金来自无法识别的复合程序事件"
+      ],
+      "inference_limit": "历史未覆盖或查询失败时不得称零融资、全新钱包、独立主体或同控主体；单一已知 funder 也不证明受益人。",
+      "next_check": "补齐同一钱包的早期签名并比较余额差启发式与 instruction-level 来源；按钱包年龄和活动匹配覆盖完整的对照组。",
+      "sources": [
+        {
+          "source_id": "wallet-first-funder-unknown",
+          "repository": "jayrabol/solana-holder-clusters",
+          "commit": "a75a72965479a7b715b041148803d8004fe25079",
+          "path": "src/funders.ts",
+          "url": "https://github.com/jayrabol/solana-holder-clusters/blob/a75a72965479a7b715b041148803d8004fe25079/src/funders.ts"
+        },
+        {
+          "source_id": "wallet-clustering-cross-layer-unknown",
+          "repository": "jayrabol/solana-holder-clusters",
+          "commit": "a75a72965479a7b715b041148803d8004fe25079",
+          "path": "src/clusters.ts",
+          "url": "https://github.com/jayrabol/solana-holder-clusters/blob/a75a72965479a7b715b041148803d8004fe25079/src/clusters.ts"
+        },
+        {
+          "source_id": "developer-funding-convergence",
+          "repository": "dnafund/Degen-Scanner",
+          "commit": "69a08d5589c47bdc33e9c6c2793cc0a69acdd85d",
+          "path": "dev_tracer.py",
+          "url": "https://github.com/dnafund/Degen-Scanner/blob/69a08d5589c47bdc33e9c6c2793cc0a69acdd85d/dev_tracer.py"
+        }
+      ]
+    },
+    {
+      "id": "sol-receipt-economic-semantics",
+      "title": "SOL 正向余额变化不等于直接外部注资",
+      "status": "source_contract",
+      "triggers": [
+        "SOL_RECEIPT",
+        "TOKEN_CLOSE_ACCOUNT",
+        "LP_WITHDRAWAL",
+        "BALANCE_DELTA_TENSION"
+      ],
+      "keywords": [
+        "SOL流入",
+        "System Transfer",
+        "CloseAccount",
+        "WSOL",
+        "LP撤出",
+        "余额差",
+        "经济来源",
+        "现金流语义"
+      ],
+      "mechanism": "SOL账户余额增加可能来自直接System Transfer、Token Account关闭释放lamports、WSOL解包、LP退出、桥/程序结算或复合指令。指令证明动作类别，账户余额变化证明净变化，二者需结合Token/WSOL账户状态、费用租金和池头寸分解；最大负余额账户不能自动认定经济出资者。",
+      "required_evidence": [
+        "signature与外层/内层instruction路径",
+        "pre/post lamport余额和交易费用",
+        "Token Account/WSOL余额及CloseAccount authority",
+        "LP position与池储备变化",
+        "未解释余额残差及source coverage"
+      ],
+      "alternative_explanations": [
+        "直接外部转账",
+        "已有LP/WSOL仓位释放",
+        "复合程序调用的内部资产移动",
+        "交易费/租金返还",
+        "供应商对整笔交易的主标签不代表每条指令"
+      ],
+      "inference_limit": "余额增加不自动等于新外部资本；无System Transfer不等于无SOL收入；收款人、close authority、最大负余额账户均不自动等于最终出资人或受益人。",
+      "next_check": "对R006样本中LP撤出和CloseAccount候选逐签名重放，按资产类型分解并检查SOL/Token守恒。",
+      "sources": [
+        {
+          "source_id": "h2w6-funding-label-generator",
+          "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+          "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+          "path": "data/trace_h2w6/etape2_financement.py",
+          "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/data/trace_h2w6/etape2_financement.py"
+        },
+        {
+          "source_id": "h2w6-sol-balance-method",
+          "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+          "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+          "path": "data/trace_h2w6/lib_trace.py",
+          "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/data/trace_h2w6/lib_trace.py"
+        },
+        {
+          "source_id": "forensic-raw-sol-replay",
+          "repository": "xorextrace/cyberleek-onchain",
+          "commit": "283bec233a6c24849799da6e051e91689a0f187a",
+          "path": "scripts/verify.py",
+          "url": "https://github.com/xorextrace/cyberleek-onchain/blob/283bec233a6c24849799da6e051e91689a0f187a/scripts/verify.py"
+        }
+      ]
+    },
+    {
+      "id": "cashflow-count-value-inversion",
+      "title": "交易次数结构与资金规模结构必须分别分析",
+      "status": "documented_legacy_method",
+      "triggers": [
+        "COUNT_VALUE_ECONOMIC_TYPE_INVERSION",
+        "CAPITAL_SOURCE_MIX"
+      ],
+      "keywords": [
+        "次数与金额反转",
+        "资本规模",
+        "事件计数",
+        "资金来源构成",
+        "LP释放",
+        "资金分类"
+      ],
+      "mechanism": "同一业务标签中，按事件数占多数的类型可能只占很小金额；少数LP/桥/复合程序事件可能主导资本规模。分别统计事件数、SOL金额、业务类型、协议来源与钱包分布，才能发现类别频率和经济价值结构的反转。",
+      "required_evidence": [
+        "固定版本的派生源表及全量行数",
+        "nature/tx_source/tx_type的定义和生成代码",
+        "事件数量和金额的分开汇总",
+        "按钱包与签名拆解的极端值贡献",
+        "原始RPC逐签名复算计划"
+      ],
+      "alternative_explanations": [
+        "少数极端值主导总金额但不代表普遍机制",
+        "供应商主标签掩盖复合交易中的真实指令",
+        "LP释放是既有仓位而非新增资本",
+        "抽样选择使结构无法外推"
+      ],
+      "inference_limit": "R007的40钱包样本与858.582182029 SOL为来源派生数据复算，不是全市场比例、原始RPC确认、同控证据或盈利信号。",
+      "next_check": "复核金额贡献最大的Meteora remove-liquidity签名，并与直接System Transfer和正常LP退出对照。",
+      "sources": [
+        {
+          "source_id": "h2w6-original-inflow-table",
+          "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+          "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+          "path": "data/trace_h2w6/e2_funding_h2w6gm6jz.json",
+          "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/data/trace_h2w6/e2_funding_h2w6gm6jz.json"
+        },
+        {
+          "source_id": "h2w6-funding-label-generator",
+          "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+          "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+          "path": "data/trace_h2w6/etape2_financement.py",
+          "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/data/trace_h2w6/etape2_financement.py"
+        }
+      ]
+    },
+    {
+      "id": "creator-fee-economic-path",
+      "title": "Creator Fee配置、累计与实际领取是三个不同经济状态",
+      "status": "source_contract",
+      "triggers": [
+        "CREATOR_FEE",
+        "FEE_WITHDRAWAL",
+        "DEPLOYER_REVENUE"
+      ],
+      "keywords": [
+        "Creator Fee",
+        "开发者收益",
+        "手续费",
+        "fee accrual",
+        "领取",
+        "部署者资金"
+      ],
+      "mechanism": "发行者/Creator Fee的配置比例、交易产生的累计应计费用、可领取余额和实际提款是不同状态。只有追踪程序事件、权益归属、实际领取交易和后续资产路径，才能把费用收入纳入经济资本循环。",
+      "required_evidence": [
+        "协议和程序版本",
+        "fee config与recipient变化",
+        "fee accrual计算/账本来源",
+        "claim/withdraw指令及签名",
+        "recipient owner和后续资产流"
+      ],
+      "alternative_explanations": [
+        "费用由协议/平台而非部署者取得",
+        "费用仅累计但未领取",
+        "接收地址是共享服务商或托管账户",
+        "配置变更与实际可领取余额不一致"
+      ],
+      "inference_limit": "配置比例不等于已实现收入；提款地址不等于最终受益人；Creator Fee收益不自动证明买卖获利或操盘意图。",
+      "next_check": "选定协议和部署案例，分别复算配置、应计、可领取、实际领取四个状态并查下游归集。",
+      "sources": [
+        {
+          "source_id": "forensic-raw-sol-replay",
+          "repository": "xorextrace/cyberleek-onchain",
+          "commit": "283bec233a6c24849799da6e051e91689a0f187a",
+          "path": "scripts/verify.py",
+          "url": "https://github.com/xorextrace/cyberleek-onchain/blob/283bec233a6c24849799da6e051e91689a0f187a/scripts/verify.py"
+        },
+        {
+          "source_id": "developer-funding-convergence",
+          "repository": "dnafund/Degen-Scanner",
+          "commit": "69a08d5589c47bdc33e9c6c2793cc0a69acdd85d",
+          "path": "dev_tracer.py",
+          "url": "https://github.com/dnafund/Degen-Scanner/blob/69a08d5589c47bdc33e9c6c2793cc0a69acdd85d/dev_tracer.py"
+        },
+        {
+          "source_id": "economic-cycle",
+          "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+          "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+          "path": "economic_mechanics/results.md",
+          "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/economic_mechanics/results.md"
+        }
+      ]
+    },
+    {
+      "id": "multichannel-wallet-evidence",
+      "title": "钱包群体需要多通道独立证据，而不是共享资金源加分",
+      "status": "source_contract",
+      "triggers": [
+        "MULTICHANNEL_GROUP",
+        "COORDINATION_CANDIDATE",
+        "SHARED_FUNDER"
+      ],
+      "keywords": [
+        "多通道钱包群",
+        "协同",
+        "共同买入",
+        "共同卖出",
+        "共同签名",
+        "资金图",
+        "token transfer",
+        "群体"
+      ],
+      "mechanism": "将SOL funding、Token transfer、joint signer、co-buy、co-sell、shared receiver和跨Mint角色复用分成不同类型边，记录来源签名、时间、金额与来源依赖。先排除公共hub并检查巨型连通分量，再用保留钱包活跃度/资金度数的null或匹配对照验证群体结构。",
+      "required_evidence": [
+        "各通道原始事件和signature",
+        "Token Account owner去重",
+        "公共CEX/bridge/router/fee hub清单及覆盖",
+        "同类协议/发行阶段/活跃度的基准总体",
+        "跨Mint时间留出验证"
+      ],
+      "alternative_explanations": [
+        "独立机器人响应同一公开刺激",
+        "大量客户共用服务商/托管/交易所",
+        "单一hub制造巨型连通分量",
+        "同一程序模板被独立用户复用"
+      ],
+      "inference_limit": "共同funder、同Slot、Louvain社区或Token转账环均不单独证明共同受益人、Jito Bundle或wash trading。",
+      "next_check": "构造多通道资产事实图与独立主体假设图，先剔除hub，再用匹配null检验群体在跨Mint留出集的稳定性。",
+      "sources": [
+        {
+          "source_id": "wallet-clustering-cross-layer-unknown",
+          "repository": "jayrabol/solana-holder-clusters",
+          "commit": "a75a72965479a7b715b041148803d8004fe25079",
+          "path": "src/clusters.ts",
+          "url": "https://github.com/jayrabol/solana-holder-clusters/blob/a75a72965479a7b715b041148803d8004fe25079/src/clusters.ts"
+        },
+        {
+          "source_id": "slot-sequence-case",
+          "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+          "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+          "path": "code/v04_slot_order.py",
+          "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/code/v04_slot_order.py"
+        },
+        {
+          "source_id": "coordination-null-model",
+          "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+          "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+          "path": "coordination_detection/results.md",
+          "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/coordination_detection/results.md"
+        }
+      ]
+    },
+    {
+      "id": "capital-role-invariance",
+      "title": "地址轮换后仍可能保留经济角色序列，但必须排除公共工具模板",
+      "status": "unverified_hypothesis",
+      "triggers": [
+        "CROSS_MINT_ROLE_REUSE",
+        "CAMPAIGN_PATTERN",
+        "ADDRESS_ROTATION"
+      ],
+      "keywords": [
+        "地址轮换",
+        "跨Mint重复",
+        "角色不变量",
+        "资本循环",
+        "campaign",
+        "操作网络"
+      ],
+      "mechanism": "把跨Mint研究单位从静态地址名单扩展为带时间的经济职责序列，例如资助、执行、库存接收、费用领取和资金再部署。即使地址轮换，角色拓扑和非公共资产路径可能持续；但共享launch工具、路由器和服务商也会产生表面相似。",
+      "required_evidence": [
+        "历史时点冻结的角色和资金路径",
+        "多Mint签名级资产边",
+        "实际Swap/LP/fee领取事件",
+        "公共工具/服务商的负对照",
+        "时间留出和未见地址的复现测试"
+      ],
+      "alternative_explanations": [
+        "同一自动发币工具被大量独立用户复用",
+        "公共路由/交易所/托管账户连接",
+        "市场阶段相似造成重复时序",
+        "地址相似但经济路径不连续"
+      ],
+      "inference_limit": "角色模式相似不证明同一操作者；只有非公共资产路径和可区分证据支持时，才提高同一经济网络假说。",
+      "next_check": "冻结历史时点角色模板，在未见地址和未见Mint上测试拓扑复现，并与同平台独立发行对照。",
+      "sources": [
+        {
+          "source_id": "developer-funding-convergence",
+          "repository": "dnafund/Degen-Scanner",
+          "commit": "69a08d5589c47bdc33e9c6c2793cc0a69acdd85d",
+          "path": "dev_tracer.py",
+          "url": "https://github.com/dnafund/Degen-Scanner/blob/69a08d5589c47bdc33e9c6c2793cc0a69acdd85d/dev_tracer.py"
+        },
+        {
+          "source_id": "forensic-raw-sol-replay",
+          "repository": "xorextrace/cyberleek-onchain",
+          "commit": "283bec233a6c24849799da6e051e91689a0f187a",
+          "path": "scripts/verify.py",
+          "url": "https://github.com/xorextrace/cyberleek-onchain/blob/283bec233a6c24849799da6e051e91689a0f187a/scripts/verify.py"
+        },
+        {
+          "source_id": "economic-cycle",
+          "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+          "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+          "path": "economic_mechanics/results.md",
+          "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/economic_mechanics/results.md"
+        }
+      ]
+    },
+    {
+      "id": "normal-bot-ecology-baseline",
+      "title": "异常协同必须相对正常机器人生态和公共基础设施判断",
+      "status": "source_contract",
+      "triggers": [
+        "BASELINE",
+        "BOT_DENSITY_SHIFT",
+        "COORDINATION_FALSE_POSITIVE"
+      ],
+      "keywords": [
+        "正常基准",
+        "机器人生态",
+        "公共基础设施",
+        "null model",
+        "异常误报",
+        "样本分母",
+        "hub"
+      ],
+      "mechanism": "同步买卖、资金扇出和共同接收可能由正常机器人、公共服务商、协议模板和共同公开事件造成。按发行阶段、协议、流动性、热度、钱包活跃度、服务商度数和采集覆盖分层，比较检测组与未触发样本，并持续监控市场概念漂移。",
+      "required_evidence": [
+        "未经过待测检测器筛选的发行总体",
+        "同阶段/协议/活跃度/流动性匹配样本",
+        "公共hub及多源同一实体处理",
+        "null/permutation或时间留出",
+        "误报预算、覆盖率与漂移指标"
+      ],
+      "alternative_explanations": [
+        "真实协调网络",
+        "独立机器人对同一公开事件响应",
+        "服务商/交易所分发",
+        "解析器/历史覆盖变化导致伪异常"
+      ],
+      "inference_limit": "无合格分母和条件对照时只能报告行为候选，不能输出已校准异常概率；外部论文单一窗口不能当全市场基准。",
+      "next_check": "先建立未选择的发行/事件总体，再用固定告警预算比较静态阈值、图方法和条件null。",
+      "sources": [
+        {
+          "source_id": "coordination-null-model",
+          "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+          "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+          "path": "coordination_detection/results.md",
+          "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/coordination_detection/results.md"
+        },
+        {
+          "source_id": "failure-modes",
+          "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+          "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+          "path": "docs/PITFALLS.md",
+          "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/docs/PITFALLS.md"
+        },
+        {
+          "source_id": "holder-supply-coverage-method",
+          "repository": "jayrabol/solana-holder-clusters",
+          "commit": "a75a72965479a7b715b041148803d8004fe25079",
+          "path": "docs/METHODOLOGY.md",
+          "url": "https://github.com/jayrabol/solana-holder-clusters/blob/a75a72965479a7b715b041148803d8004fe25079/docs/METHODOLOGY.md"
+        }
+      ]
+    },
+    {
+      "id": "trade-direction-source-gate",
+      "title": "BUY/SELL方向必须由源指令与资产变化确认",
+      "status": "source_contract",
+      "triggers": [
+        "TRADE_DIRECTION_UNKNOWN",
+        "BUY_SELL_SOURCE_CONFLICT",
+        "SWAP_CLASSIFICATION"
+      ],
+      "keywords": [
+        "BUY SELL",
+        "买入卖出方向",
+        "交易分类",
+        "指令解码",
+        "余额变化",
+        "source gate"
+      ],
+      "mechanism": "供应商主标签、Token余额减少或SOL余额增加不能单独确定Swap方向。需要按程序/协议版本解析外内指令、交易账户、Token/SOL余额和池状态；无法分类时保留UNKNOWN，发现源标签污染则撤回依赖该标签的群体与收益统计。",
+      "required_evidence": [
+        "signature与instruction trace",
+        "program id及版本",
+        "Token/SOL pre/post balance",
+        "池储备与Swap事件语义",
+        "分层抽样复核与分类混淆矩阵"
+      ],
+      "alternative_explanations": [
+        "真实Swap",
+        "Token转移/销毁/LP操作",
+        "CloseAccount/WSOL释放",
+        "供应商把复合交易映射为主事件类型",
+        "解析器不支持新程序"
+      ],
+      "inference_limit": "Token decrease不等于SELL；SOL increase不等于BUY资金源；未解码的事件不得进入协同买卖统计或收益标签。",
+      "next_check": "按协议和场景分层抽样交易，人工RPC复算方向并估计错误传播范围。",
+      "sources": [
+        {
+          "source_id": "forensic-raw-sol-replay",
+          "repository": "xorextrace/cyberleek-onchain",
+          "commit": "283bec233a6c24849799da6e051e91689a0f187a",
+          "path": "scripts/verify.py",
+          "url": "https://github.com/xorextrace/cyberleek-onchain/blob/283bec233a6c24849799da6e051e91689a0f187a/scripts/verify.py"
+        },
+        {
+          "source_id": "h2w6-funding-label-generator",
+          "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+          "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+          "path": "data/trace_h2w6/etape2_financement.py",
+          "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/data/trace_h2w6/etape2_financement.py"
+        },
+        {
+          "source_id": "slot-sequence-case",
+          "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+          "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+          "path": "code/v04_slot_order.py",
+          "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/code/v04_slot_order.py"
+        }
+      ]
+    },
+    {
+      "id": "market-utility-vs-tradability",
+      "title": "市场结构发现、风险预警和可交易净收益是不同效用",
+      "status": "source_contract",
+      "triggers": [
+        "MARKET_UTILITY",
+        "RISK_WARNING",
+        "PAPER_EVALUATION_CANDIDATE"
+      ],
+      "keywords": [
+        "监控价值",
+        "风险预警",
+        "预测价值",
+        "可交易性",
+        "净收益",
+        "滑点",
+        "可执行"
+      ],
+      "mechanism": "同一结构发现可以有市场组织识别、开发者历史、风险预警、事件解释或交易预测等不同用途。每项用途需单独定义决策时点、评价指标、样本和失败条件；交易净收益还需报价、延迟、成交、滑点、费用、容量和退出路径。",
+      "required_evidence": [
+        "明确用途与决策时点",
+        "无选择偏差的样本及基准",
+        "真实数据可得延迟",
+        "双向成交报价和池深",
+        "手续费/优先费/MEV/失败订单",
+        "样本外与失败结果"
+      ],
+      "alternative_explanations": [
+        "异常存在但无预测力",
+        "风险预警有效但不可跟买",
+        "价格变化由群体自身交易造成",
+        "策略回测使用事后最高价或幸存样本"
+      ],
+      "inference_limit": "异常检测有效不代表因果解释正确；机制支持不代表预测增量；监控价值不等于正净收益。",
+      "next_check": "先分别评价事件发现和风险预警的增量，再独立设计paper-only的时间安全执行实验。",
+      "sources": [
+        {
+          "source_id": "tradability-vs-structure",
+          "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+          "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+          "path": "post_detection_edge/README.md",
+          "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/post_detection_edge/README.md"
+        },
+        {
+          "source_id": "economic-cycle",
+          "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+          "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+          "path": "economic_mechanics/results.md",
+          "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/economic_mechanics/results.md"
+        },
+        {
+          "source_id": "coordination-null-model",
+          "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+          "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+          "path": "coordination_detection/results.md",
+          "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/coordination_detection/results.md"
         }
       ]
     }
