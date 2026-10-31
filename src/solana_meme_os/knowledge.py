@@ -10,9 +10,11 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[2]
 CATALOG = ROOT / "knowledge" / "catalog.v1.json"
 
-REQUIRED = ("id", "title", "status", "triggers", "keywords", "mechanism",
+REQUIRED = ("id", "title", "status", "triggers", "keywords", "mechanism", "domain", "maturity", "maturity_basis", "owner_experts",
             "required_evidence", "alternative_explanations", "inference_limit", "next_check", "sources")
 VALID_STATUSES = {"source_contract", "documented_legacy_method", "unverified_hypothesis"}
+VALID_DOMAINS = {"market_event", "execution_semantics", "wallet_behavior", "capital_graph", "coordination", "token_security", "microstructure", "inventory_control", "market_regime", "baseline", "risk_and_action", "knowledge_engineering"}
+VALID_MATURITY = {"K0", "K1", "K2", "K3", "K4"}
 VALID_TRIGGERS = {"ADDRESS_ROTATION", "BALANCE_DELTA_TENSION", "BASELINE", "BOT_DENSITY_SHIFT", "BUY_SELL_SOURCE_CONFLICT", "CAMPAIGN_PATTERN", "CAPITAL_SOURCE_MIX", "COORDINATION_CANDIDATE", "COORDINATION_FALSE_POSITIVE", "COUNT_VALUE_ECONOMIC_TYPE_INVERSION", "CREATOR_FEE", "CROSS_MINT_ROLE_REUSE", "DEPLOYER_REVENUE", "FEE_WITHDRAWAL", "FIRST_FUNDER_UNKNOWN", "HISTORY_COVERAGE_GAP", "LIQUIDITY_DROP", "LP_WITHDRAWAL", "MARKET_UTILITY", "MISSING_FIELDS", "MULTICHANNEL_GROUP", "NEW_SOURCE_EVENT", "ON_DEMAND", "PAPER_EVALUATION_CANDIDATE", "RISK_WARNING", "RPC_QUERY_FAILURE", "SHARED_FUNDER", "SOL_RECEIPT", "SWAP_CLASSIFICATION", "TOKEN_CLOSE_ACCOUNT", "TOP10_SHARE_RISE", "TRADE_DIRECTION_UNKNOWN"}
 PRIORITIES = {"source_contract": 2, "documented_legacy_method": 1, "unverified_hypothesis": 0}
 
@@ -46,7 +48,7 @@ def load_catalog(path: Path = CATALOG) -> dict[str, Any]:
 
 
 def public_card(card: dict[str, Any]) -> dict[str, Any]:
-    return {key: card[key] for key in ("id", "title", "status", "mechanism",
+    return {key: card[key] for key in ("id", "title", "status", "domain", "maturity", "maturity_basis", "owner_experts", "mechanism",
           "required_evidence", "alternative_explanations", "inference_limit",
           "next_check", "sources")}
 
