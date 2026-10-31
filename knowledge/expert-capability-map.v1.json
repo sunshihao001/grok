@@ -60,7 +60,9 @@
         "okx-market-reference",
         "reproducible-pipeline",
         "forensic-raw-sol-replay",
-        "wallet-first-funder-unknown"
+        "wallet-first-funder-unknown",
+        "h2w6-original-inflow-table",
+        "h2w6-funding-label-generator"
       ],
       "requires": [
         "raw_response",
@@ -90,7 +92,9 @@
         "slot-sequence-case",
         "historical-mechanism-vs-profit",
         "forensic-raw-sol-replay",
-        "wallet-first-funder-unknown"
+        "wallet-first-funder-unknown",
+        "h2w6-funding-label-generator",
+        "h2w6-sol-balance-method"
       ],
       "requires": [
         "signature",
@@ -120,7 +124,8 @@
       "source_ids": [
         "coordination-null-model",
         "time-safe-features",
-        "developer-funding-convergence"
+        "developer-funding-convergence",
+        "h2w6-original-inflow-table"
       ],
       "requires": [
         "canonical_events",
@@ -150,7 +155,8 @@
         "hermes-source-relations",
         "developer-funding-convergence",
         "wallet-first-funder-unknown",
-        "wallet-clustering-cross-layer-unknown"
+        "wallet-clustering-cross-layer-unknown",
+        "h2w6-original-inflow-table"
       ],
       "requires": [
         "wallet_transactions",
@@ -182,7 +188,9 @@
         "downstream-exit-structure",
         "forensic-raw-sol-replay",
         "developer-funding-convergence",
-        "wallet-clustering-cross-layer-unknown"
+        "wallet-clustering-cross-layer-unknown",
+        "h2w6-sol-balance-method",
+        "h2w6-original-inflow-table"
       ],
       "requires": [
         "signed_edges",
@@ -244,7 +252,9 @@
         "research-methodology",
         "failure-modes",
         "wallet-clustering-cross-layer-unknown",
-        "holder-supply-coverage-method"
+        "holder-supply-coverage-method",
+        "h2w6-funding-label-generator",
+        "h2w6-original-inflow-table"
       ],
       "requires": [
         "population",
@@ -333,7 +343,8 @@
       "source_ids": [
         "economic-cycle",
         "downstream-exit-structure",
-        "holder-supply-coverage-method"
+        "holder-supply-coverage-method",
+        "h2w6-sol-balance-method"
       ],
       "requires": [
         "supply",
@@ -391,7 +402,8 @@
       "source_ids": [
         "research-methodology",
         "coordination-null-model",
-        "failure-modes"
+        "failure-modes",
+        "h2w6-funding-label-generator"
       ],
       "requires": [
         "facts",
@@ -483,7 +495,9 @@
         "temporal-leakage-audit",
         "reproducible-pipeline",
         "forensic-raw-sol-replay",
-        "wallet-clustering-cross-layer-unknown"
+        "wallet-clustering-cross-layer-unknown",
+        "h2w6-funding-label-generator",
+        "h2w6-sol-balance-method"
       ],
       "requires": [
         "all_claims",
@@ -514,7 +528,8 @@
         "research-methodology",
         "reproducible-pipeline",
         "meme-sources",
-        "wallet-clustering-cross-layer-unknown"
+        "wallet-clustering-cross-layer-unknown",
+        "h2w6-funding-label-generator"
       ],
       "requires": [
         "reviewed_claims",
@@ -560,7 +575,8 @@
       ],
       "sources": [
         "slot-sequence-case",
-        "reproducible-pipeline"
+        "reproducible-pipeline",
+        "h2w6-sol-balance-method"
       ],
       "expert_panel": [
         "chain",
@@ -600,7 +616,8 @@
         "economic-cycle",
         "downstream-exit-structure",
         "forensic-raw-sol-replay",
-        "developer-funding-convergence"
+        "developer-funding-convergence",
+        "h2w6-sol-balance-method"
       ],
       "expert_panel": [
         "graph",
@@ -714,7 +731,8 @@
       "sources": [
         "coordination-null-model",
         "research-methodology",
-        "failure-modes"
+        "failure-modes",
+        "h2w6-funding-label-generator"
       ],
       "expert_panel": [
         "statistics",
@@ -1043,5 +1061,19 @@
       "holder-supply-coverage-method"
     ],
     "why": "Pinned read-only original source paths, preserving unknown statuses, false-positive infrastructure and source accuracy."
+  },
+  "source_expansion_wave_2": {
+    "date": "2026-10-31",
+    "case": "knowledge/research/R006-sol-receipt-economic-semantics-v1.md",
+    "added_source_ids": [
+      "h2w6-original-inflow-table",
+      "h2w6-funding-label-generator",
+      "h2w6-sol-balance-method"
+    ],
+    "new_links": [
+      "L39",
+      "L40"
+    ],
+    "note": "Source-derived economic type labels, coverage flags, wrapped-SOL close semantics; no RPC truth claims."
   }
 }
