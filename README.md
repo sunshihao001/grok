@@ -53,3 +53,31 @@ A 17-source registry now indexes the specialist external study [Why-Solana-Memec
     PYTHONPATH=src python -m solana_meme_os.research --question "同源钱包可能是交易所公共基础设施吗？"
 
 See [on-demand design](docs/on-demand-research-design.md), [source registry](knowledge/source_index.v1.json), and [usage](knowledge/source-index-README.md). Source previews are opt-in and ephemeral; research packets **are not automated conclusions or validated strategies**. Offline tests do not prove actual Grok Bot expertise.
+
+
+## P2.4 × P3-M01：跨币行为研究与离线钱包批次原型（实验分支）
+
+[研究、数据契约与误判边界](docs/p24-m01-crossmint-research.md)；
+[只读原型使用说明](docs/m01-wallet-batches-skill.md)。
+
+```bash
+PYTHONPATH=src python -m solana_meme_os.wallet_batch_monitor --input fixtures/wallet-batches-demo.json --output /tmp/m01-report.json
+PYTHONPATH=src python -m unittest discover -s tests -v
+```
+
+M01 只接受已经归一化的 `mode=fixture` 事件；不连接RPC、不签名、不广播、不下单。
+输出 1/5/15 分钟钱包成员变化、买卖报价资产总量及带来源的描述性候选。
+Token Account 与 wallet owner 不可混计，缺失区间记 `INCOMPLETE` 而非零。
+这些测试仅覆盖合成事件，不代表真实链上解析或策略验证通过。
+
+## P3-M01 离线原始交易适配器
+
+**2026-10-31**：新增 [raw transaction adapter](src/solana_meme_os/raw_tx_adapter.py)、[对抗性测试](tests/test_raw_tx_adapter.py)、[执行与数据契约](docs/p3-m01-raw-adapter-contract.md)。只读/fixture-only；支持原始 `getTransaction` 形状的 System SOL 顶层转账和 SPL Token/Token-2022 顶层直接转账（含经元数据核对的 v0 已加载地址），**不支持 Pump.fun/Raydium/Jupiter 等 DEX Swap BUY/SELL 解析**。C02/C05 只有数据契约与模拟测试场景，尚未有监控器。
+
+```bash
+PYTHONPATH=src python -m solana_meme_os.raw_tx_adapter --input fixtures/raw-solana-transfers-demo.json --output /tmp/m01-normalized.json
+PYTHONPATH=src python -m solana_meme_os.wallet_batch_monitor --input /tmp/m01-normalized.json --output /tmp/m01-observed.json
+PYTHONPATH=src python -m unittest discover -s tests -v
+```
+
+Adapter 对未知或缺少证据的操作采取 fail-closed，Fixture 的完整性声明不等于已证实链上全量覆盖；禁止将合成输出误报为链上事实、真实交易信号或生产完成。
