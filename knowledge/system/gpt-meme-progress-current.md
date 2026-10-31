@@ -8,6 +8,16 @@
 
 已把此前有用的“AI先理解、行业真实语言/黑话恢复、跨学科知识发现、外部证据主动反证”融合到 [持续研究V2](gpt-meme-continuity-v2.md) 和 [研究写作Skill](gpt-meme-research-writing-skill.v2.md)。当当前知识不能解释现实事件、技术字段歧义或新反例可能改变设计时，主动选择官方文档、源码、论文、GitHub 实现、实际操作者反馈等来源，而不是强制搜索固定数量平台。所得术语须转为可观测数据和反例才入库。已将 Jito Bundle 与同 slot“bundled buyers”的区别修订进 [现有监控方法专题](../domain/meme-anomaly-discovery-state.v1.md)。此补充不改变既有 P3-M01 代码已完成的范围，也不提前宣布 P4。
 
+
+## 本轮 V2 机制修订：检索与参考项目长期复用（2026-10-31）
+
+**修订范畴：研究方法增强，不是 P3-M01 工程/真实链上能力升级。** V2 现加入：跨官方协议、开源源码/tests/issues、供应商字段、X/Reddit/Telegram实践与失败、必要论文/跨学科的递进检索；对每个重要研究方向比较项目适配、替代实现、数据可得性、正常解释与成本，输出 CONTINUE/PIVOT/PAUSE/REJECT；常驻参考池按实际业务问题反复重访 Hermes/qb-/meme-/Why-Solana/OKX 与外部新候选，记录继承/更正/不可采用与再次触发条件。**所有持续研究的最终输出必须落到下一步最有价值的执行任务，且最后一项是可复制提示词。**
+
+新增可复用竞争实现入口：Solana 官方 transaction-introspection + transaction-v1-examples、0xfnzero/sol-parser-sdk、Raydium CP-Swap、Yellowstone、Helius/Bitquery能力文档、实际开发者索引断流讨论。它们是本轮检索/阅读的源候选，不等于这些库已在当前 Python 适配器安装运行或其市场效果已实测。P3-M01 继续维持 fixture-only、legacy/v0部分转账、v1 fail-closed 和未知事件不当作零交易的真实边界。
+
+**主研究方向依然是**：对少量真实公开签名核验当前解码语义 → 比较官方/成熟解析器与自制适配器的可靠性/成本 → 选择一个协议的经济 BUY/SELL 解码；知识主线同时继续 qb/Hermes 关键钱包和库存/时点机制，不让通用协议课程挤占 Meme 业务目标。Grok S1 云电脑仍独立待验收。
+
+
 ## 当前研究/工程状态
 
 - **P2.1—P2.5**：概念探索、跨钱包/跨Mint方法比较和优先级筛选已经完成一轮；C02（同群体执行方式变化）和 C05（机会校正的沉默/迁移）获准进入局部 P3；C01（跨币资金再部署）保留候选，暂不做完整图。
