@@ -26,11 +26,12 @@ class TestMarketObservatory(unittest.TestCase):
     def test_window_exact_counts_and_distinct_meanings(self):
         result = analyze(FIXTURE, allow_fixture=True)
         market = next(x for x in result["window_aggregates"]
-                      if x["scope"] == "MARKET_WIDE" and x["window_seconds"] == 30
+                      if x["scope"] == "INPUT_COHORT_ALL_MINTS" and x["window_seconds"] == 30
                       and x["start"] == "2026-10-29T07:00:00Z")
         self.assertEqual(market["event_count"], 8)
         self.assertEqual(market["transaction_count"], 8)
-        self.assertEqual(market["unique_wallet_count"], 6)
+        self.assertEqual(market["unique_actor_addresses"], 6)
+        self.assertEqual(market["unique_trade_wallets"], 3)
         self.assertEqual(market["unique_senders"], 4)
         self.assertEqual(market["unique_receivers"], 4)
         self.assertEqual(market["sol_transferred"], "10")
@@ -79,7 +80,7 @@ class TestMarketObservatory(unittest.TestCase):
         self.assertEqual(len([c for c in out["group_candidates"]
                               if c["kind"] == "FUNDING_FANOUT"]), 1)
         self.assertEqual(len([w for w in out["window_aggregates"]
-                              if w["scope"] == "MARKET_WIDE"]), 2)
+                              if w["scope"] == "INPUT_COHORT_ALL_MINTS"]), 2)
 
     def test_cross_mint_is_descriptive_not_entity_identity(self):
         out = analyze(FIXTURE, allow_fixture=True)
@@ -102,11 +103,48 @@ class TestMarketObservatory(unittest.TestCase):
         data["events"].append(event)
         out = analyze(data, allow_fixture=True, windows=(30,))
         market = next(x for x in out["window_aggregates"]
-                      if x["scope"] == "MARKET_WIDE"
+                      if x["scope"] == "INPUT_COHORT_ALL_MINTS"
                       and x["start"] == "2026-10-29T07:00:00Z")
         self.assertEqual(market["event_count"], 9)
         self.assertEqual(market["transaction_count"], 8)
         self.assertEqual(market["sol_transferred"], "11")
+
+    def test_same_slot_funding_order_not_assumed(self):
+        data = copy.deepcopy(FIXTURE)
+        for e in data["events"]:
+            if e["signature"] in {"sol-fund-a", "sol-fund-b"}:
+                e["slot"] = 200
+                e["block_time"] = "2026-10-29T07:00:10Z"
+                e["available_at"] = "2026-10-29T07:00:10Z"
+                e["received_at"] = "2026-10-29T07:00:11Z"
+        result = analyze(data, allow_fixture=True)
+        found = [x for x in result["group_candidates"]
+                 if x["kind"] == "FUNDING_TO_BUY_CANDIDATE"
+                 and x["mint"] == "Mint-ONE"]
+        self.assertFalse(found, "same Slot without transaction indices is not proven funding-before-buy")
+
+    def test_same_slot_proven_execution_order_allows_candidate(self):
+        data = copy.deepcopy(FIXTURE)
+        for e in data["events"]:
+            if e["signature"] in {"sol-fund-a", "sol-fund-b"}:
+                e["slot"] = 200
+                e["block_time"] = "2026-10-29T07:00:10Z"
+                e["available_at"] = "2026-10-29T07:00:10Z"
+                e["received_at"] = "2026-10-29T07:00:11Z"
+                e["transaction_index"] = 2
+            if e["signature"].startswith("buy-m1"):
+                e["transaction_index"] = 3
+        result = analyze(data, allow_fixture=True)
+        found = [x for x in result["group_candidates"]
+                 if x["kind"] == "FUNDING_TO_BUY_CANDIDATE"
+                 and x["mint"] == "Mint-ONE"]
+        self.assertEqual(len(found), 1)
+
+    def test_receive_time_must_not_precede_source_availability(self):
+        data = copy.deepcopy(FIXTURE)
+        data["events"][0]["received_at"] = "2026-10-28T07:00:00Z"
+        with self.assertRaisesRegex(ValueError, "received_at"):
+            analyze(data, allow_fixture=True)
 
     def test_idempotent_cross_provider_dedupe_with_source_refs(self):
         data = copy.deepcopy(FIXTURE)
