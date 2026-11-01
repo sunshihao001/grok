@@ -73,6 +73,20 @@ class NavigationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             nav.open_knowledge("AGENTS.md", self.data)
 
+    def test_natural_language_route_regressions(self):
+        # Shortlist regression only; these examples do not validate expert reasoning.
+        cases = [
+            ("Top10持仓很多但里面可能是池子地址", "SUPPLY_CONTROL"),
+            ("多个地址反复在不同新币中一起出现，有什么隐藏关系", "FUNDING_ENTITY"),
+            ("我想知道链上交易原始指令能不能还原真实买卖", "DATA_SEMANTICS"),
+            ("这套系统的首页应该显示什么数据和入口", "PRODUCT_UI"),
+        ]
+        for question, expected in cases:
+            with self.subTest(question=question):
+                got = nav.shortlist(question, self.data, limit=3)["routes"]
+                self.assertTrue(got, question)
+                self.assertEqual(got[0]["intent"], expected)
+
     def test_out_of_scope_id_fails(self):
         with self.assertRaises(ValueError):
             nav.shortlist("", self.data, intent="AUTOTRADE")
