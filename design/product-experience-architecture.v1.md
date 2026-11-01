@@ -96,6 +96,8 @@
 机器导航 `knowledge/system/knowledge-navigation.v1.json` 中每个任务包含：
 `goal/cues/domains/experts/knowledge_files/engineering_ids/reference_ids/ui_views/expected_output`。
 
+AI可用`project_navigator.py --question`取得短名单，再以`--open-path`只读打开白名单内原有知识（带SHA256和截断标识）；并不是自动调用外部Bot或实时取数。
+
 AI 实际使用顺序：
 - 从用户目标辨识研究/产品/错误排查/解释任务，关键词只给候选，不做最终裁决。
 - 先读取最相关的 1–3 个原有专业文件，遇到疑问再沿本体关系扩展；不强制载入全部专家。
