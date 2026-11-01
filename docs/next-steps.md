@@ -1,3 +1,5 @@
+> **2026-11-01 集成状态更新（比下文旧S阶段优先）**：分支 `integration/knowledge-runtime-audit-20261101` 已将知识与工程源文件无损汇合，并通过含模拟数据的跨模块离线CI。新增 `src/solana_meme_os/project_workspace.py` 可读现有 `mint_v01.py` 的保存报告并给出原有专题章节/行号/哈希。**当前事实**：免费RugCheck+DEX V0.1供应商预览已在线验过；V0.2真实资金关系、连续监控、Grok云电脑尚未验收。下文早期“获取OKX完整报告为唯一硬前置”只适用增值完整报告，不能阻止免费主线。当前优先应以完整知识适用性评估、真实样本的报告引用核查和安全V0.2复用为准。**已有各期详细记录全部保留以便回溯，不当作必须按顺序执行的指令**。核实当前信息见 [总体集成图](../design/system-integration-map.v1.md) 和[产品交付计划](product-delivery-plan-v01.md)。
+
 # 当前唯一执行清单｜2026-10-30
 
 本文件取代旧的“不断追加式 backlog”作为**当前执行顺序**。完整认知、状态与依据见 [项目基线](project-baseline-2026-10-30.md)，结构化计划见 [delivery-roadmap.v1.json](../design/delivery-roadmap.v1.json)。[旧清单完整存档](archive/next-steps-pre-consolidation-2026-10-30.md) 不删除历史。
