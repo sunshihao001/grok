@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from solana_meme_os.mint_candidate_wallet_probe import run, shortlist, validate_sources
+from solana_meme_os.mint_candidate_wallet_probe import run, shortlist, validate_sources, target_mint_observation
 
 MINT="DezXAZ8z7PnrnRJjz3wXBoRgixCaZhdJ5Bv6PpPB263"
 CREATOR="9QTjLWyhfpJ8Hm1ZALMNv9L4K6w13BSuUxMWu976Pg1Y"
@@ -78,6 +78,8 @@ class MintCandidateIntegrationTests(unittest.TestCase):
             self.assertEqual(calls,["getSignaturesForAddress","getTransaction"]*2)
             self.assertEqual(result["selection"]["excluded_infrastructure_address_count"],2)
             self.assertEqual(result["discovery_coverage"],"NOT_MILLION_DISCOVERY_NO_HELIUS_KEY")
+            self.assertFalse(result["wallet_probe_results"][0]["target_mint_observation"]
+                             ["mint_in_reported_token_balances"])
             self.assertIsNone(result["actual_wallet_activity_count"])
             for row in result["wallet_probe_results"]:
                 self.assertEqual(row["rpc_status"],"RAW_TRANSACTION_AVAILABLE_NOT_ECONOMICALLY_DECODED")
@@ -158,6 +160,42 @@ class MintCandidateIntegrationTests(unittest.TestCase):
             report["status"]="FIXTURE_WITH_PUBLIC_SOURCES"
             with self.assertRaisesRegex(ValueError,"fixture"):
                 validate_sources(report,p)
+
+
+    def test_real_unrelated_usdc_transaction_is_not_a_meme_event(self):
+        tx = {"jsonrpc":"2.0", "result":{"meta":{
+                "preTokenBalances":[{"accountIndex":1,
+                  "mint":"EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+                  "owner":OWNER, "uiTokenAmount":{"amount":"49795913"}}],
+                "postTokenBalances":[{"accountIndex":1,
+                  "mint":"EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+                  "owner":OWNER, "uiTokenAmount":{"amount":"0"}}],
+                "err":None
+            }}}
+        observed=target_mint_observation(json.dumps(tx).encode(), MINT, OWNER)
+        self.assertFalse(observed["mint_in_reported_token_balances"])
+        self.assertEqual(observed["status"],
+            "TARGET_MINT_NOT_IN_REPORTED_TOKEN_BALANCES_OF_THIS_BOUNDED_TX")
+        self.assertFalse(observed["mint_trade_or_transfer_proven"])
+
+    def test_target_mint_appearing_in_failed_tx_does_not_prove_wallet_buy(self):
+        token={"mint":MINT, "accountIndex":6, "owner":POOL,
+               "uiTokenAmount":{"amount":"100"}}
+        tx={"jsonrpc":"2.0","result":{"meta":{
+            "err":{"InstructionError":[2,{"Custom":1}]},
+            "preTokenBalances":[token],"postTokenBalances":[token]}}}
+        got=target_mint_observation(json.dumps(tx).encode(),MINT,CREATOR)
+        self.assertTrue(got["mint_in_reported_token_balances"])
+        self.assertFalse(got["queried_wallet_is_reported_mint_token_owner"])
+        self.assertEqual(got["target_token_accounts_reported"],1)
+        self.assertFalse(got["mint_trade_or_transfer_proven"])
+
+    def test_missing_token_metadata_is_unknown_not_no_activity(self):
+        got=target_mint_observation(json.dumps({"result":{"meta":{}}}).encode(),MINT,OWNER)
+        self.assertIsNone(got["mint_in_reported_token_balances"])
+        self.assertFalse(got["mint_trade_or_transfer_proven"])
+        self.assertEqual(target_mint_observation(None,MINT,OWNER),
+                         target_mint_observation(b"{",MINT,OWNER))
 
 if __name__=="__main__":
     unittest.main()
