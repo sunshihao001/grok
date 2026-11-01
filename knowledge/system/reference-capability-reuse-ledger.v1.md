@@ -434,3 +434,11 @@
 **安全阻断更新（OKX自动支付）**：直接阅读[OKX cli/src/client.rs](https://github.com/okx/onchainos-skills/blob/main/cli/src/client.rs)，`get_with_headers/post_with_headers`含`ensure_payment_config`、`maybe_sign_payment`和HTTP 402重试签名付款流程。故`onchainos workflow token-research`虽然是*数据查询操作*，但客户端可能产生付款行为。当前`grok`只接受已有授权保存的OKX JSON，不自动执行外部CLI；必须先有安全隔离和付款隔离契约，再谈真实OKX完整工作流。没有授权时公开备用路径不应自动升级付费服务。
 
 **实际业务状态**：`V0.1 PUBLIC_PAIR_DATA_REAL_VERIFIED`✅；`V0.1 FULL_WALLET_DEV_FINANCIAL_REPORT`❌；`GROK_BOT_DEPLOYED`❌。后续必须先查现成完整OKX/替代来源的真实权限和原始钱包结构，再补最薄接入，不再自主发明整套Mint索引器。
+
+## 2026-11-01｜RugCheck真实Mint Holder和Creator数据已获，池库存归因负例
+
+- **已经真实执行**：工程PR #16在[GitHub Actions 41268982018](https://github.com/sunshihao001/grok/actions/runs/41268982018)只读查询RugCheck缓存完整报告与DEX Screener实时公开池数据，成功取得20条Holder候选和Creator候选。RugCheck原始SHA256 `9671b8edf008772892035b22eb952b205409bc2125cb0f8fa16db5dd1178de0c`；DEX原始SHA256 `a7f941d5f2caca8c9ebff9b908b4a58dfa1009150ed55e986cb222fcd81e4de9`，已独立下载核对。
+- **实际跨源反证**：RugCheck首位Token Account的Owner候选恰是DEX返回的PumpSwap池地址（供应商份额5.877731%）。这提示某些“Top Holder”是池相关账户候选，不能按单一私人鲸鱼归因；还需Solana RPC核验，当前公共RPC HTTP 429。工程PR #16已加入严格地址全等提醒及负例测试，正式CI120项通过。
+- **经济来源限制**：RugCheck`creatorTokens=null`，故不能声称Dev无发币史；供应商风险分及Copycat标签不是交易收益/同控证明；缓存`detectedAt`不是Mint创建时间，DEX报价时点也不是原子同slot。只有实际返回的供应商事实可用于报告。
+- **复用决策**：RugCheck是现有65项台账中已有的候选业务源，无需新的专家/解析器。以OKX现成完整`token-research`为目标，当前无已授权只读会话，且CLI具有x402付款相关逻辑，不应在未隔离时自动调用。RugCheck填补部分Holder/Creator**候选**，仍缺经过独立链上核实的Owner、资金图、完整Dev历史、已确认Swap及库存。
+- 原始数据、精确地址、时间与假设边界见[真实工程证据](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/evidence/v01-pool-vault-holder-cross-source-2026-11-01.md)。
