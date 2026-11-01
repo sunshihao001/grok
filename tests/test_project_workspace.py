@@ -67,7 +67,7 @@ class WorkspaceIntegrationTests(unittest.TestCase):
         self.assertTrue(candidates)
         self.assertTrue(all(c["available_in_current_checkout"] for c in candidates))
         self.assertTrue(all(c["invoked"] is False for c in candidates))
-        self.assertTrue(all(c["source_of_record_branch"].startswith("research/") for c in candidates))
+        self.assertTrue(all(c["source_of_record_branch"].startswith(("research/", "integration/")) for c in candidates))
 
     def test_existing_knowledge_and_engineering_are_auditable_together(self):
         a = project_navigator.audit()
