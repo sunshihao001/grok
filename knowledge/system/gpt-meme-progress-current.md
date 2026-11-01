@@ -181,3 +181,15 @@ FnZero Python源码审阅确认`sol_parser/rpc_parser.py`接受RPC JSON并输出
 **知识系统防碎片措施**：此原则的唯一主规范位置是`knowledge/system/expert-mechanism-research-method.md`、简短项目入口是`gpt-meme-project-instructions.v1.md`；所有具体外部功能仍复用`reference-capability-reuse-ledger.v1.md`，D04–D07专业知识保留在L3专题，其他现有领域按需回填。不再另起新专家注册表、产品方法框架或机器人编组。
 
 **待验**：将GitHub建议指令由操作者更新到ChatGPT Project Instructions并核对附件版本；GitHub/Library保存不等于账户Memory即时更新，也不表示已在Grok云电脑部署。下一轮核心是用“全域专家覆盖+冲突深入”的方式执行一个Mint成品只读报告验收，不再从零规划系统。
+
+## 2026-11-01｜首次21专家全项目联合审查：统一实施判断
+
+本轮已在现有注册表完整复核E-L0-01至E-L7-02共21位专家及D01–D12正式目录，且直接复查旧Hermes `CONTEXT.md`、qb- `sikk_gmgn_token_report.py`、meme- `SOURCE_OF_TRUTH.md`、现有工程Draft PR #16和OKX/Million/pumpwatch等原始业务源码。没有创建新专家、本体或Bot；审查专业冲突后已在[唯一外部复用台账](reference-capability-reuse-ledger.v1.md)记录21项逐一覆盖的技术/经济/实证检查。
+
+**统一产品/工程结论**：最终目标是Meme全市场可解释监控，但第一完整验收必须是**一枚Mint在明确时点的可审计只读报告**，第二步是同Mint后续钱包活动/持仓两时点与多钱包群体变化；两者不等同于全市场覆盖。优先运行现有OKX Rust `token-research`成品业务流（需用户授权只读Key/禁止自动x402支付），再评估Million发现/订阅/funding/flows是否能保留同一签名多钱包与完整余额演化，必要时只做小修补；FnZero仍是确认有DEX协议语义缺口时使用的成熟解码候选。原qb单币关键地址矩阵是第一报告输出的可复用业务模板，不再把用户推回手动产品设计。
+
+**新改变结论的事实**：pumpwatch `record_launch` 的`seen_at`取本地`time.time()`，历史回填时24h/7d统计不一定代表链上创建频率；Million`RosterPosition.qty Float`与递增账本不能自动保证任意Token原子数精度、Token-account Owner和源缺口一致性；Solana Foundation新增MIT开源`solana-microscope`（Program级监控、Carbon解码、Prometheus/Loki/Grafana、RPC/Yellowstone回补检查点）可作为D10长期可靠性资产，但它是一Program监控系统，依赖较重，**本阶段不部署**；Helius DAS/Parsed Events可作为真实数据独立对照，费用另算。五种关键冲突包括：供应商标签≠同控、同Tx多钱包漏记、持有人≠自由库存、异常≠可跟随优势、按需Mint研究≠全市场持续覆盖。
+
+**版本/执行边界**：本轮是源码/规范/外部公开文档审查和GitHub落库，不是外部SDK或OKX/Million/Grok Bot的实盘数据测试。PR #14的base是`research/actor-economic-mechanisms-20261030`，PR #16的base是`main`，两条均Draft，不能假设两路功能已合在main。PR #16之前GitHub `monitor-tests` CI success，只说明离线合同测试通过。既往38项Python成功属于**上轮**Library旧快照；本轮不冒充重新实跑。
+
+**下一项只做完整业务链的外部成品验收，而不是继续自研基础解析**：先在可联网、具备明确权限、无签名/自动支付的隔离环境对一枚固定Mint执行OKX `token-research`并保存真实response、slot/时间、失败、额度、标签定义；若当前环境不具Key，先基于OKX CLI现成`assemble()`测试对null/结构/业务缺口做离线审查，不要求用户选择技术实现。然后审查Million同签名A/B钱包关系、Token Account余额精度及历史恢复。合并/跨分支集成与Grok运行另行检查，不因为文件更新宣布成品部署。
