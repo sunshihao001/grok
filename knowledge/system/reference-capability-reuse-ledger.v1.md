@@ -31,6 +31,39 @@
 
 **本次证据级别**：已核仓库文件/源函数/明确工作流命令、许可证和限制，尚**没有安装/运行Million、OKX或pumpwatch，也没有证明Grok环境兼容或数据计费**。下一轮最有价值的交付是将**一个完整只读业务任务**（例如“一个Mint→发现前期参与钱包→追群体后续活动→解释群体买卖与不确定性”）用成品能力完成对照，明确哪一步根本无需我们再开发；而不是再单独安装一个交易解析器。
 
+## 2026-11-01｜单Mint到钱包群体：成品业务链路源码验收
+
+**本轮只审查，不开发、不开监控、无真实Mint或授权Helius额度。** 目标为“输入一个Solana Meme Mint→发现买家/持有人→追踪钱包活动→资金/群体关系→输出解释和未知”。代码存在不等于已部署、已实证。参考SHA：Million c89ad07caaf70773d40b45943e136eadc4f946a5；HoldTech a75e214bf1ee0a8803eb7d93336be98c481c2db9；pumpwatch 156a91ab63740ab0ce8700434ff33844d00de519；OKX 73904b636a0f022dcc13b6d7a0dd2ed3b3195f25；Why-Solana 9a7ad51d56328e91e67e3f531d6744307d0ee68b。
+
+### 现成业务功能分段检查（实际阅读对应程序）
+
+| 任务段 | 现成实现与路径 | 关键边界/可复用状态 |
+|---|---|---|
+| Mint→候选买家 | [Million discovery.service.ts](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/discovery/discovery.service.ts) 的 find/buyersOf；GET /discovery/token/:mint；crawler.service.ts 的钱包↔Token持续发现 | 有代码、候选上限30或深采60；buyersOf按Token接收+SOL/WSOL/USDC/USDT支出估计“买入”，不是完整协议级确认；历史采样和池子排除不是全量。不可将其当所有Mint的真实买家真值。 |
+| 持续钱包订阅 | Million wallets.controller.ts 的钱包导入、分析、订阅；live/live-feed.service.ts 的Helius WebSocket/Webhook及GET /live/status、GET /live/events | 现成服务与断线恢复；WebSocket默认最多25个订阅，Webhook另有依赖；原始LiveEvent默认15分钟或最多5000条便清除，不等于可做历史C02/C05完整窗口。分析/订阅会变更数据库、消耗API额度；本轮未调用。 |
+| 群体增减仓、分发 | Million live/flows.service.ts；GET /live/flows；analysis/ledger.ts | 已汇总钱包数、候选owner数、买卖方向和片段；但 ingestWebhookTxs 对一笔签名只处理**第一个命中的已订阅钱包**并退出，可能遗漏同一交易的其他钱包视角；processTx以Token及SOL/USD净变化推断BUY/SELL，不能直接当作DEX逐指令成交确认。 |
+| 资金与钱包候选关系 | Million funding/funding.service.ts（GET /funding/:address）、analysis/owners.service.ts（POST /owners/rebuild）；HoldTech deep-scan/holder-overlap | Million有真实SOL转账边、最多3页/50链接并报告截断，聚类带Hub排除，co-entry故意不用于直接连接候选控制组；ownerId重建后不稳定，funding和feePayer都不能证明同控。HoldTech把feePayer当买家、用同Slot推组；跨Mint holder-overlap每Mint只取前200个，不能宣称全量。 |
+| 发行人/新币观察 | pumpwatch code/pump_watch.py、creator_reputation.py、outcome_tracker.py；HoldTech deployer-profile；OKX workflows/new-token-screening.md | pumpwatch已有read-only订阅、429退避、SQLite发行历史与结果追踪，是真成品流程；其 getTransaction 的maxSupportedTransactionVersion=0，面对v1需明确覆盖风险。HoldTech内多处有疑似硬编码第三方访问凭证，禁止拷贝、运行原配置或使用其中密钥。OKX现成工作流需CLI/账号能力，未实测。 |
+| AI接口与可解释输出 | Million packages/million-mcp/index.mjs 有14个API工具，及 .claude/skills/* 自然语言使用流程；OKX workflows/INDEX.md、wallet-monitor-ws.md、smart-money-signals.md | 现成get_status/get_flows/get_decisions/find_token_buyers/analyze_wallet等，**也存在update_rules/import_wallets/set_wallet_subscription等写动作**，不能笼统叫只读MCP。Grok云电脑调用MCP/本地HTTP是否可行尚未验证。OKX钱包WS工作流的Input表默认max10、后文CLI备注max200，实际限额以真实服务验证为准。 |
+| 反证与旧业务知识 | Why-Solana code/a7_cross_token_links.py、06_hub_map.py、docs/PITFALLS.md；旧qb的sikk_gmgn_token_report.py；Hermes learning/10.md、11.md、12.md；meme多策略历史 | Why的跨Mint金额/钱包/融资时段和Hub检测已是现成研究代码，准入维持review_only；qb已有完整单Mint关键钱包矩阵和报告；Hermes强调角色是推断而非事实，meme强调跨市场状态的多视角。不可因换用Million丢弃这些专业判断。 |
+
+### 实际能力对照与安全状态
+
+- **最大完整产品候选是Million**：它已把Mint发现、钱包装载、持续交易流、资金与候选关系、群体资金流、决策记录、Agent MCP接在一起。先整体试验原生只读API，**不是直接fork/迁移**。附带Node24、NestJS/Prisma/SQLite与Helius配额依赖；含设置EXECUTOR=local即可使用真实密钥签名交易的分支，用户当前阶段绝不启用。项目自述API没有认证，网页可能在本地网络开放；隔离前禁止公网/不受信任网络暴露。
+- **HoldTech**：支持holder overlap与结构深扫，但feePayer买家误判、分页截断、硬编码凭证/版权边界是直接运行阻碍，只作为经过隔离审计后选择的业务模块候选。
+- **pumpwatch**：完整只读发行/creator历史监测成品支线，较Million更专一；必须先确认v1版本、数据可得时点、去重和链上完整性。
+- **OKX**：已有新币筛选、Smart Money、钱包分析、WebSocket监控的命令式工作流。先试只读CLI或经授权的数据API；不安装交易/钱包签名/支付能力，接口真实费用/权限未知。
+- **Why-Solana与原qb/Hermes/meme**：承担跨Mint关系、异常钱包反证、库存与可跟随性专业知识，研究脚本不能直接升级为生产监控真值。
+- **Grok现有程序**：工程PR#16的src/solana_meme_os仅有fixture-only wallet_batch_monitor（1/5/15分钟窗口）、冻结的raw_tx_adapter、单观察规则monitor、固定来源research与历史GMGN接口。不具备Million级别的发现→订阅→长期事件流→MCP业务系统。与现成系统重复的属于计划中的钱包发现/资金关系/群体统计/接口，**应先停止开发同类模块**。保留M01的事前时点、覆盖缺失、群体成员变化指标及C02/C05独立正常反例作为本项目专业差异。
+
+### 执行证据及不可伪称的运行结果
+
+**已实跑的只是本地已有旧项目离线样本**：容器内用户历史文件m01_proto_offline_20261031.zip在隔离目录解压，运行 PYTHONPATH=src python -m unittest discover -s tests -q，14 tests in 0.840s, OK。**不是第三方Million/OKX/pumpwatch运行，也不是当前GitHub全部71项测试本轮重跑。**
+
+第三方成品本轮均未实际启动：此环境Node v22.16.0，但Million明确要求Node24；curl GitHub显示DNS解析失败，无法下载/安装依赖；未提供Helius配额或指定Mint作为真实外部核查对象；HoldTech另有泄露密钥风险；OKX服务须先核验费用/授权。故当前证据级别仅为SOURCE_IMPLEMENTATION_READ/PRODUCT_RUNTIME_UNVERIFIED，不得把网页截图、README、自述胜率或仓库CI当本地完成。
+
+**下一项唯一有价值的工作**：在可联网、Node24、隔离且不暴露端口的环境，以Million成品为整体只读候选，不启用EXECUTOR=local、不提供签名密钥。先跑它自己的无交易健康检查，针对经允许的公开Mint调用GET /discovery/token/:mint、GET /live/status、GET /live/flows、GET /funding/:address及只读MCP get_flows，保存输入输出/错误/真实可得时点/费用。暂不自动调用钱包导入、订阅、重建owners或更改规则。重点测试**一签名两被观察钱包**、缺失历史、空区块/v1、公共Hub、CPI/转仓非成交与WS静默。这一项才能判定WHOLE_APP_RUN / WRAP_EXISTING / MODULE_ONLY / REJECT，不能先写新解析器或新Mint监控程序。
+
 ## 1. 本轮已审外部来源与固定版本
 
 | 参考项目与源码版本 | 核查范围 | 复用/许可边界 |
