@@ -59,6 +59,8 @@ def compile_report(raw: bytes, mint: str, *, retrieved_at: str | None = None) ->
         holder_status = "VENDOR_CACHED_SAMPLE_UNVERIFIED"
     else:
         raise ValueError("RugCheck topHolders response shape invalid or too large")
+    # Provider labels distinguish pool/vault/locker accounts from ordinary wallets.
+    known = data.get("knownAccounts") if isinstance(data.get("knownAccounts"), dict) else {}
     candidates = []
     for i, row in enumerate(holders):
         if not isinstance(row, dict):
@@ -67,12 +69,22 @@ def compile_report(raw: bytes, mint: str, *, retrieved_at: str | None = None) ->
         if not isinstance(account, str) or not ADDR.fullmatch(account):
             continue
         owner = row.get("owner")
+        tag = known.get(owner) if isinstance(owner, str) else None
+        if not isinstance(tag, dict):
+            tag = known.get(account)
+        kind = tag.get("type") if isinstance(tag, dict) else None
+        if not isinstance(kind, str):
+            kind = None
         candidates.append({
             "token_account_candidate": account,
             "owner_candidate": owner if isinstance(owner, str) and ADDR.fullmatch(owner) else None,
             "amount_raw_vendor": row.get("amount"), "pct_vendor": row.get("pct"),
             "insider_vendor": row.get("insider"),
             "source_path": f"root.topHolders[{i}]",
+            "vendor_known_account_type": kind,
+            "vendor_known_account_name": tag.get("name") if isinstance(tag, dict) else None,
+            "role_interpretation": ("VENDOR_KNOWN_INFRASTRUCTURE_CANDIDATE"
+                                    if kind in {"AMM", "LOCKER"} else "UNCLASSIFIED_TOKEN_ACCOUNT_OWNER"),
             "evidence": "CACHED_VENDOR_HOLDER_HINT_NOT_CHAIN_REPLAYED",
         })
     risks = data.get("risks")
@@ -96,6 +108,10 @@ def compile_report(raw: bytes, mint: str, *, retrieved_at: str | None = None) ->
         "vendor_detected_at": data.get("detectedAt"),
         "top_holders": candidates, "top_holders_status": holder_status,
         "top_holders_rows_returned": len(holders),
+        "vendor_infrastructure_candidate_count": sum(
+            r["role_interpretation"] == "VENDOR_KNOWN_INFRASTRUCTURE_CANDIDATE" for r in candidates),
+        "unclassified_account_count": sum(
+            r["role_interpretation"] == "UNCLASSIFIED_TOKEN_ACCOUNT_OWNER" for r in candidates),
         "creator_vendor_candidate": creator if isinstance(creator, str) and ADDR.fullmatch(creator) else None,
         "creator_tokens_vendor_count": len(creator_tokens) if isinstance(creator_tokens, list) else None,
         "creator_tokens_status": "VENDOR_SAMPLE_NOT_COMPLETE_HISTORY" if isinstance(creator_tokens, list)
@@ -123,7 +139,9 @@ def markdown(result: dict[str, Any]) -> str:
            f"状态：**{result['status']}**",
            f"数据读取时间：`{result['retrieved_at']}`；供应商最早发现时间：`{result['vendor_detected_at']}`",
            "**注意：免费报告可能缓存；所有钱包、Dev、持仓和风险均为供应商候选，未独立复核。**",
-           "", f"Holder状态：{result['top_holders_status']}；返回行数：{result['top_holders_rows_returned']}",
+           "", f"Holder状态：{result['top_holders_status']}；返回行数：{result['top_holders_rows_returned']}；"
+           f"已标记AMM/Locker基础设施候选：{result['vendor_infrastructure_candidate_count']}；"
+           f"其他未分类账户：{result['unclassified_account_count']}",
            f"Creator候选：`{result['creator_vendor_candidate'] or 'UNKNOWN'}`；历史同发币候选数：`{result['creator_tokens_vendor_count']}`",
            f"风险分（供应商模型，非概率）：`{result['risk_score_vendor']}`",
            f"Mint Authority：`{result['mint_authority_vendor'] or 'UNKNOWN_OR_NULL'}`；Freeze Authority：`{result['freeze_authority_vendor'] or 'UNKNOWN_OR_NULL'}`",
@@ -131,7 +149,9 @@ def markdown(result: dict[str, Any]) -> str:
     for row in result["top_holders"][:20]:
         out.append(f"- Token Account `{row['token_account_candidate']}`；"
                    f"Owner候选 `{row['owner_candidate'] or 'UNKNOWN'}`；"
-                   f"供应商份额 `{row['pct_vendor']}`；证据 `{row['source_path']}`")
+                   f"供应商份额 `{row['pct_vendor']}`；"
+                   f"角色 `{row['role_interpretation']}`（`{row['vendor_known_account_type']}`）；"
+                   f"证据 `{row['source_path']}`")
     out += ["", "## 风险标签（仅作为待核验信息）", ""]
     for r in result["risk_model_rows"][:15]:
         out.append(f"- `{r['name']}` / `{r['level_vendor']}` / `{r['score_vendor']}`：`{r['source_path']}`")
