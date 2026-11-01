@@ -37,6 +37,16 @@ class LayerExpertTests(unittest.TestCase):
         self.assertTrue(brief["source_admission_required"])
         self.assertFalse(brief["is_deployed_bot"])
 
+    def test_product_integration_expert_is_existing_role_grounded_not_a_new_bot(self):
+        x = expert_brief("E-L7-03")
+        e = x["specialist"]
+        self.assertEqual(e["workflow_owner"], "B01")
+        self.assertIn("D12", e["domain_ids"])
+        self.assertIn("成品", e["name"])
+        self.assertTrue(all(p.startswith("knowledge/domain/") for p in e["knowledge_files"]))
+        self.assertFalse(x["is_deployed_bot"])
+        self.assertTrue(x["no_alpha_or_monitor_approval"])
+
     def test_l3_specialists_open_with_expert_view_not_academic_chapter(self):
         from pathlib import Path
 
