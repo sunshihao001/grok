@@ -1179,5 +1179,20 @@
         "when_to_review": "需要第二条独立代币权限/安全指标时"
       }
     ]
+  },
+  "current_convergence_audit": "knowledge/system/whole-project-convergence-audit-2026-11-01.md",
+  "current_convergence_as_of": "2026-11-01",
+  "cross_branch_canonical_status": {
+    "knowledge_source": "draft_PR_14",
+    "engineering_source": "draft_PR_16",
+    "legacy_competing_atlas": "draft_PR_15_104_units_readonly_candidate_not_current",
+    "canonical_atomic_units": "knowledge/system/whole-domain-atlas.v1.json",
+    "actual_specialist_count_source": "knowledge/experts/registry.v1.json",
+    "reference_asset_count_source": "reference_assets.items",
+    "research_m01_namespace": "K-M01_B01_key_wallet_followability_not_completed",
+    "engineering_m01_namespace": "P3-M01_wallet_batch_fixture_partial_transfer_prototype",
+    "proven_runtime_level": "REAL_PUBLIC_POOL_SNAPSHOT_VERIFIED_two_mints_twelve_pools_vendor_snapshot",
+    "not_proven_runtime_level": "REAL_COMPLETE_MINT_REPORT_GROK_S1_CONTINUOUS_MONITOR_POSITIVE_NET_ALPHA",
+    "gpt_project_mirror": "not_automatically_attached_or_synced"
   }
 }
