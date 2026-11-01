@@ -116,6 +116,7 @@
 | sunshihao001/-（Hermes） | 已审核心项目 | learning/10.md、11.md、12.md、Skill4筹码控制与Raw→Feature→Structure | 同源、资金、筹码、Sybil/Wash、何时需要否定解释 | “同源就是同控”、历史权重、旧运行时 |
 | sunshihao001/meme- | 已审核心项目 | FCZ/深洗/死亡盘、二阶段、状态机与反证设计 | 筹码派发、真假承接、退出、二阶段的可解释性 | 价格形态即控盘证据、阈值收益 |
 | sunshihao001/Why-Solana-Memecoins-Are-Over | 专项 review_only | coordination_detection、funder_network、code/rpc_client.py、docs/PITFALLS.md、post_detection_edge | 资金组、创建slot、反证、分母、可见时点与盈利分离 | 作者样本结论、未公开缓存/检测器、直接生产规则 |
+| [Kelows/million](https://github.com/Kelows/million/tree/c89ad07caaf70773d40b45943e136eadc4f946a5) | **成品业务系统，优先整体验证**，源码已读、未安装 | `apps/api/src/{crawler,discovery,live,funding,copyability,backtest,analysis/owners.service.ts}`及 `packages/million-mcp`；钱包↔Token发现、实时钱包流、资金关系、跟随可复制性、纸面研究、Agent操作 | 整体持续钱包监控、命令中心Bot、C01/C02/C05、决定是否保留自写M01 | README功能列表不等于本机已部署；Helius费用、Node24、推断标签准确性和可启用实盘交易必须独立审计；仅只读/纸面模式 |
 | okx/onchainos-skills | 数据/工具候选 | 只读Skill字段、调用与费用/授权能力审查 | 替换GMGN、链上发现、报价源、未来实际数据接入 | 未审核接口等于免费、实时/完整、标签正确 |
 | solana-foundation/transaction-v1-examples 与 Solana transaction-introspection | 官方实现对照 | v1消费与解码、LUT/CPI、RPC/gRPC兼容、示例测试 | P3-M01交易解析、版本升级、误判为无活动 | 官方指令树自动等于Swap经济语义 |
 | 0xfnzero/sol-parser-sdk 与 raydium-io/raydium-cp-swap | 外部工程候选 | 多DEX解析实现与具体Raydium Token-2022 Swap程序 | 决定自建/复用解析器、DEX协议事件和CPI语义 | README声称的性能/全面覆盖=本地已验证 |
