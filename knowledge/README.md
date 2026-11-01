@@ -1,8 +1,11 @@
 # Solana Meme knowledge is the core; Grok is the host
 
+> **状态变更（2026-11-01）**：此文件中历史固定阶段、每轮必填进度、固定专家调用、每轮强制复制提示词或机械同步要求已停止作为默认指令。**当前应依照 [项目现行工作准则](system/current-operating-guidance.md) 与 [当前恢复点](system/gpt-meme-progress-current.md)**；本文件其余内容仅作为可选方法、知识索引与历史证据，不得让旧规则覆盖当前产品任务。历史信息未删除，便于追溯。
+
+
 **Purpose:** preserve the expert learning, domain research, adversarial perspectives and practical lessons from three earlier projects while discarding Hermes-specific *runtime* assumptions. A working Bot without validated external knowledge is only orchestration.
 
-## 2026-11-01｜当前唯一的全项目专家收束入口
+## 2026-11-01｜历史知识审计与证据查阅入口
 
 最新[《全项目专家收束审计：知识权威、17类污染/冲突、真实交付状态》](system/whole-project-convergence-audit-2026-11-01.md)对PR #14知识、PR #16工程和PR #15竞争104单元草稿进行分层裁决：**152单元、22位知识专家、65项参考资产**为现行目录与注册事实；“真实公开池快照已成功”与“完整Mint钱包/Dev报告仍未证实”严格分开。B01知识M01≠P3-M01工程。此审计不取代已有领域/来源真源，也不代表GPT Project附件自动更新。旧README早期21专家及P2.2等表述均以当时版本为准，后文如有冲突以本审计及最新注册表/恢复点为准。
 
