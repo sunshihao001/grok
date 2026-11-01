@@ -237,3 +237,11 @@ FnZero Python源码审阅确认`sol_parser/rpc_parser.py`接受RPC JSON并输出
 **业务等级严禁混淆**：已验证`REAL_PUBLIC_POOL_SNAPSHOT`（真实池/DEX/供应商24h交易/流动性）**不等于**`REAL_COMPLETE_MINT_REPORT`（钱包Owner、Holder、资金边、Dev历史、真Swap、库存和异常）。未获得OKX授权工作流真实JSON，不能声称OKX实时接口运行过；本地无公网DNS，网络执行来自GitHub托管CI环境，**更不等于Grok云电脑已上线**。早先对BONK样本公开接口返回`[]`被保存为`COVERAGE_UNKNOWN`，不是没有流动性；同Mint作为base和quote的不同池必须避免错误价格归属或池统计当钱包交易。
 
 **E-L7-03+E-L0/L1/L3/L6联合实施建议**：不再为了实时数据“接更多API”而扩大功能范围。下一最值步骤为用已授权、安全隔离、x402付款能力禁止的环境**真实运行现成OKX token-research→保存原始JSON→用现有mint_report消费→与本次公开池数据对照关键字段**。源码审查发现OKX `cli/src/client.rs`具有自动x402收款配置、402后签付款逻辑，**不能认为执行只读查询等于绝对不会支付**，在未确认无付款能力前不得让本项目自动执行OKX CLI。若授权确实无法获取，才研究65项台账中能真正提供Holder+Dev的成熟替代完整工作流。所有新能力在工程Draft检验并回写，无交易、无主分支合并。
+
+## 2026-11-01｜V0.1真实Holder/Creator候选与跨源池库存反证（当前恢复点）
+
+**实际完成**：在工程PR#16，已通过[真实GitHub Actions 41268982018](https://github.com/sunshihao001/grok/actions/runs/41268982018)取得同一Mint的DEX Screener公开交易池和RugCheck缓存报告：20条Holder候选、Creator候选，原始响应与SHA已从Artifact重新下载核实；独立[RPC运行41268871079](https://github.com/sunshihao001/grok/actions/runs/41268871079)收到HTTP 429，故没有链上Token Owner独立确认。OKX完整token-research的授权真实结果仍未获取，Grok云电脑仍未部署。
+
+**新增可执行的经济反证**：RugCheck首位Token Account供应商占比约5.88%，其报告的Owner候选与DEX返回的PumpSwap池地址`81jgrpTMsQWc1rGWXutyYWW27ruiAtehUZwLydcHHWDB`精确相同。这不是确定真实Vault或庄家身份，而是**不可直接统计为自由鲸鱼持仓**的结构性提醒。已修改工程`mint_v01.pool_related_holder_observations`，在真实来源齐备时报告地址全等及来源路径，保留`NOT_CHAIN_VERIFIED`和反例；离线CI运行120项通过。已回填原D01/D03与D04–D07知识，完整实际案例在[工程证据文件](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/evidence/v01-pool-vault-holder-cross-source-2026-11-01.md)。
+
+**下一项唯一高价值能力**：在授权且无自动签名/支付风险的环境取得OKX原始token-research完整JSON，或通过稳定的只读RPC/DAS独立核验该Token Account与Pool/Vault结构。先把真实账户经济角色验证正确，再实现历史Dev/资金网络，不扩建专家知识框架、不重复开发行情接口。
