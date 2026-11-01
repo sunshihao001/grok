@@ -7,6 +7,7 @@ the original knowledge sources and inspect their evidence before conclusions.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import sys
@@ -154,6 +155,33 @@ def shortlist(question: str, data: dict[str, Any] | None = None,
     }
 
 
+def open_knowledge(path: str, data: dict[str, Any] | None = None,
+                   root: Path = ROOT, max_chars: int = 2400) -> dict[str, Any]:
+    """Read a specifically indexed, local ORIGINAL source, never any arbitrary path."""
+    d = data if data is not None else load_navigation()
+    permitted = {x["path"] for x in d["canonical_assets"]}
+    permitted.update(path for route in d["routes"] for path in route["knowledge_files"])
+    if path not in permitted or not _safe_relative(path):
+        raise ValueError("path is not an allowlisted knowledge source")
+    resolved = (root / path).resolve()
+    if not resolved.is_relative_to(root.resolve()) or not resolved.is_file():
+        raise ValueError("knowledge source missing or outside repository")
+    raw = resolved.read_bytes()
+    if len(raw) > 2_000_000:
+        raise ValueError("knowledge source exceeds safe read limit")
+    content = raw.decode("utf-8")
+    cap = max(200, min(int(max_chars), 12000))
+    return {
+        "source_path": path,
+        "source_branch": d["branches"]["knowledge"],
+        "source_sha256": hashlib.sha256(raw).hexdigest(),
+        "characters_total": len(content),
+        "excerpt": content[:cap],
+        "truncated": len(content) > cap,
+        "note": "Original source excerpt read locally; interpretation and evidence validation are separate.",
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Read-only project knowledge navigator")
     group = parser.add_mutually_exclusive_group(required=True)
@@ -161,12 +189,15 @@ def main(argv: list[str] | None = None) -> int:
     group.add_argument("--list", action="store_true")
     group.add_argument("--question")
     group.add_argument("--intent")
+    group.add_argument("--open-path", help="Read a permitted original knowledge file excerpt")
     parser.add_argument("--limit", type=int, default=3)
     args = parser.parse_args(argv)
     try:
         data = load_navigation()
         if args.audit:
             output = audit(data)
+        elif args.open_path:
+            output = open_knowledge(args.open_path, data)
         elif args.list:
             output = {"intents": [{"id": x["id"], "goal": x["goal"]} for x in data["routes"]],
                       "status": data["status"]}
