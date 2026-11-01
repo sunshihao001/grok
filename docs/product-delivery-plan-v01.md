@@ -100,3 +100,12 @@ AI承担产品负责人和工程整合者的工作：根据用户的目标、当
 
 
 - **修复后第二次真实回放**：[GitHub Actions #41316172134](https://github.com/sunshihao001/grok/actions/runs/41316172134)，提交`13a05718511733001fc460d504a6db2cd2536d98`，`data_fetch_exit=0`、`triage_exit=0`、原始RugCheck/DEX SHA重新校验通过，任务文件的换行已核对正确。其时点 `2026-11-01T14:26:12Z` 有**2条**供应商待核查标签（`Copycat token`、`Low Liquidity`）及1条池基础设施大户降级候选。先前 `2026-11-01T14:22:00Z` 的同Mint样本为**1条**标签；两份RugCheck原始SHA分别为`3ceb24570b851e4bb26ac5e01afa5fea07ef01468cecc40cbf577c9cca718741`及`285d32ece63f7ab86521babad5951e4051f2c9c4a98b359aac959661221f1e23`。**仅能确认供应商快照有变化，不能单凭标签增加推断链上真实风险恶化或其变化原因。** 两次采样均非实时交易事件监控；Grok专家未调用。
+
+
+### 2026-11-01｜优先复用成熟交易解析器：真实失败交易纠偏
+
+- 复查公共RPC取证原始Artifact [Actions #41314447575](https://github.com/sunshihao001/grok/actions/runs/41314447575)：签名`4ZbrvjMtWEnaa9iPVLedJmbQrMnjDhVR9p2aV47pF81URq6Yuwn2Vfqsnp7QfyMJwZSPSyrvWWYr4rTwGWMZYUmj`，slot `464112229`，**v0 交易执行失败**，meta.err=`InstructionError[2,Custom(1)]`；曾尝试在CPI创建Token账户，但失败原子回滚。Meta显示手续费付款人`7Ej1sc9rwXZdxe9ZGcvCf8QrryFyjR6wj3emKnJXEdY9`的SOL余额净减少 **7000 lamports**，其余28个原始账户SOL余额未变，5个报告的Token账户余额未变；被查Creator候选`9QTjLWyhfpJ8Hm1ZALMNv9L4K6w13BSuUxMWu976Pg1Y`只是账户列表项，非该笔交易的签名者/fee payer。**此交易不可视为成功Swap、转账、资金图边或该候选地址发起动作。** Solana官方原子回滚规则与此吻合。
+- [FnZero Python](https://github.com/0xfnzero/sol-parser-sdk-python) 最新主分支pyproject版本`0.10.0`，`examples/parse_tx_by_signature.py`、`sol_parser/rpc_parser.py`可处理RPC交易与DEX协议，`tests/test_signed_transaction_replay.py`对真实失败事件有不生成DEX事件的回归；**以后只读适配其公开接口并实测，不扩展本仓库旧`raw_tx_adapter.py`自写协议解码**。
+- [Solana官方交易指令解析](https://solana.com/docs/core/transactions/transaction-introspection) 在JS客户端处理ALT/v0/v1/CPI指令树；成熟实现适合替代协议指令重写；但使用`jsonParsed`不能直接喂其`decodeTransactionFromRpcResponse`，要用base64/json RPC。无需因为该库存在就新增全Node后端。
+- [Million](https://github.com/Kelows/million)适合钱包发现和资金关系候选，不能把`FundingService`的`nativeTransfers`边当成经济实控；同时`live-feed.service.ts`的单签名事件持久化及webhook首个钱包break会漏掉其他钱包观察。[Cluster Tracker](https://github.com/garrett0524/cluster-tracker)同样使用单`signature`唯一冲突键；这两个现成系统的**事件存储必须经过同笔多钱包完整性测试**才可用于本项目。[Solana Microscope](https://github.com/solana-foundation/solana-microscope)适合借鉴签名回补/断线和历史记录免触发新告警。
+- 本轮只添加`public_wallet_rpc_sample.py`已有只读采样入口的**执行是否成功/fee payer/最终余额观测**，不添加自制DEX解析器、交易策略或Bot。该观察不证明经济主体或Swap路径。下一阶段以FnZero/官方工具真实解析多笔不同交易并对照实际RPC余额，而非扩建架构。

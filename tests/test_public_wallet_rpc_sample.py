@@ -104,5 +104,57 @@ class WalletProbeTests(unittest.TestCase):
                 self.assertEqual(probe.main(["--wallet",WALLET,"--out-dir",t]), 3)
             self.assertFalse((Path(t)/"report.json").exists())
 
+
+    def test_real_mainnet_failed_cpi_reconstructed_evidence_regression(self):
+        # Reconstructed minimal fields from GitHub Action 41314447575;
+        # full untouched RPC data stays in artifact #13086538862.
+        target = "9QTjLWyhfpJ8Hm1ZALMNv9L4K6w13BSuUxMWu976Pg1Y"
+        payer = "7Ej1sc9rwXZdxe9ZGcvCf8QrryFyjR6wj3emKnJXEdY9"
+        tx = {"slot": 464112229, "version": 0,
+              "transaction": {"message": {"accountKeys": [
+                  {"pubkey": payer, "signer": True},
+                  {"pubkey": target, "signer": False}
+              ]}},
+              "meta": {"err": {"InstructionError": [2, {"Custom": 1}]},
+                       "fee": 7000,
+                       "preBalances": [1242995, 22957220],
+                       "postBalances": [1235995, 22957220],
+                       "preTokenBalances": [],
+                       "postTokenBalances": []}}
+        observed = probe.execution_facts(tx, target)
+        self.assertEqual(observed["status"], "FAILED_ROLLED_BACK")
+        self.assertEqual(observed["fee_lamports"], 7000)
+        self.assertTrue(observed["wallet_in_transaction_accounts"])
+        self.assertFalse(observed["wallet_is_signer"])
+        self.assertFalse(observed["wallet_is_fee_payer"])
+        self.assertEqual(observed["sol_account_deltas_from_meta"],
+                         [{"account": payer, "delta_lamports": -7000}])
+        self.assertEqual(observed["token_balance_comparison"], "UNCHANGED_REPORTED_TOKEN_BALANCES")
+        self.assertIs(observed["successful_swap"], False)
+        self.assertIs(observed["transaction_committed_program_movements"], False)
+
+    def test_success_does_not_imply_buy_or_wallet_controller(self):
+        target = WALLET
+        tx = {"transaction": {"message": {"accountKeys": [
+                  {"pubkey": WALLET, "signer": True},
+                  {"pubkey": "11111111111111111111111111111111", "signer": False}]}},
+              "meta": {"err": None, "fee": 5000,
+                       "preBalances": [100000, 10000], "postBalances": [85000, 20000],
+                       "preTokenBalances": [], "postTokenBalances": []}}
+        observed = probe.execution_facts(tx, target)
+        self.assertEqual(observed["status"], "SUCCESSFUL_EXECUTION_UNCLASSIFIED")
+        self.assertEqual(observed["successful_swap"], "NOT_ASSESSED")
+        self.assertTrue(observed["wallet_is_fee_payer"])
+        self.assertEqual(len(observed["sol_account_deltas_from_meta"]), 2)
+
+    def test_incomplete_meta_never_invents_zero_movement(self):
+        self.assertEqual(probe.execution_facts({"meta": {"err": None}}, WALLET)
+                         ["status"], "UNKNOWN_INCOMPLETE_EXECUTION_META")
+        self.assertEqual(probe.execution_facts({
+            "transaction": {"message": {"accountKeys": [{"pubkey": WALLET, "signer": True}]}},
+            "meta": {"err": None, "fee": 5000,
+                     "preBalances": [1000], "postBalances": []}}, WALLET)
+                         ["status"], "UNKNOWN_INCONSISTENT_EXECUTION_BALANCES")
+
 if __name__ == "__main__":
     unittest.main()
