@@ -374,3 +374,12 @@
 
 **本次路线决策**：`CONTINUE_DOMAIN / PIVOT_IMPLEMENTATION_SEQUENCE / REUSE_FIRST / READ_ONLY_ONLY`。先用OKX成熟Token Research取得可核查单Mint事实报告，再决定Million成品的多钱包与持续性是否值得修补；只有发现明确协议语义缺口才拿FnZero/Carbon替代。全市场监控、AI规则自主更新、交易执行全部留到另有实际依据的后续阶段。相关D01–D12新认识只表示提出了可检验专业问题，不改变原有单元研究成熟度。
 
+## 2026-11-01｜从候选成品到第一块可运行拼装：OKX结果适配已实际落地
+
+**复用路线判断：WHOLE_WORKFLOW_FIRST + THIN_REPORT_ADAPTER**。重新阅读当前Grok`src/solana_meme_os/monitor.py`（只接受手动输入的标准化Observation JSON）、OKX`cli/src/commands/workflows/token_research.rs`与`cli/src/output.rs`，确认后者有Rust CLI真实业务函数`run/fetch_and_assemble/assemble`，输出壳层为`{ok:true,data:{workflow:'token-research',address,chain,core,structure,launchpad}}`；原Grok监控器**不能直接接收这一结构**。因此不是“装好两个项目就合成成品”，缺的是一段严格对齐语义的适配。
+
+**本轮完成的最小工程成果**：已在[工程Draft PR #16](https://github.com/sunshihao001/grok/pull/16)创建`src/solana_meme_os/mint_report.py`、6个单测、明确标记`SYNTHETIC_DEMO`的样例JSON。只读取已有OKX格式文件，不自主联网、签名、交易或支付；保存`report.md`和`report.json`，锁定Mint和Solana链、CLI成功状态、UNKNOWN/null、源JSON SHA256及独立处理时点；**不凭字段存在宣称同控/成交/覆盖完整**。本地新增6/6通过、与旧Library快照相加44/44通过，已回读GitHub文件内容；并未对OKX付费API/真实Mint/Grok云电脑做实际运行。README提供`--fixture`演示命令，运行文件仍在工程Draft，不在main。
+
+**为什么不先fork Million作成品母体**：核查`apps/api/src/app.module.ts`、`live/live.module.ts`、`opportunities/opportunities.module.ts`的模块导入显示TradingModule为多个服务的实际依赖，并非简单按一个“read-only开关”即可完全去掉交易路径；`LiveEvent.signature`唯一性会丢一签名多钱包。它仍是后续高价值的长期追踪/前端项目，但一期拆卸成本/安全性/业务归因的风险大于OKX现成单MintCLI。
+
+**下一次复用启动条件**：在无自动x402付费、无钱包签名且用户已授予相应权限的环境真正取得一次OKX `token-research` JSON，将源JSON完整保留、核对过错返回/字段类型/API用量，再用上述薄适配生成**一份真实Mint报告**。通过才称`V0.1 REAL-MINT REPORT RUNNING`；下一能力优先两次快照比较而非建多Bot或图形控制台。Million/Pumpwatch/FnZero继续按既有源码和重访条件保留，不删源不另建新框架。
