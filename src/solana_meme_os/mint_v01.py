@@ -13,11 +13,11 @@ from pathlib import Path
 import sys
 from typing import Any
 
-from . import mint_report, public_pair_report, public_token_accounts
+from . import mint_report, public_pair_report, public_token_accounts, public_rugcheck_report
 
 
 def combined(mint: str, out_dir: Path, *, okx_json: Path | None,
-             fixture: bool) -> int:
+             fixture: bool, rpc_holders: bool, rugcheck: bool) -> int:
     """Independent evidence sections, never merge third-party wallet labels with RPC accounts."""
     now = datetime.now(timezone.utc).isoformat()
     try:
@@ -40,11 +40,20 @@ def combined(mint: str, out_dir: Path, *, okx_json: Path | None,
             errors["public_pairs"] = str(exc)[:180]
         holders = None
         rpc_raw: dict[str, bytes] = {}
-        try:
-            holders, rpc_raw = public_token_accounts.collect(mint)
-        except (OSError, ValueError, TypeError) as exc:
-            errors["public_rpc_token_accounts"] = str(exc)[:180]
-        if okx is None and pool is None and holders is None:
+        if rpc_holders:
+            try:
+                holders, rpc_raw = public_token_accounts.collect(mint)
+            except (OSError, ValueError, TypeError) as exc:
+                errors["public_rpc_token_accounts"] = str(exc)[:180]
+        rug = None
+        rug_raw = None
+        if rugcheck:
+            try:
+                rug_raw = public_rugcheck_report.fetch_report(mint)
+                rug = public_rugcheck_report.compile_report(rug_raw, mint, retrieved_at=now)
+            except (OSError, ValueError, TypeError) as exc:
+                errors["rugcheck_public_report"] = str(exc)[:180]
+        if okx is None and pool is None and holders is None and rug is None:
             raise ValueError("all read-only sources unavailable: " + str(errors))
         # Coverage is evidence-specific, and a saved OKX file is not live verified.
         result: dict[str, Any] = {
@@ -56,10 +65,14 @@ def combined(mint: str, out_dir: Path, *, okx_json: Path | None,
             "source_status": {
                 "okx_saved_json": okx["status"] if okx else "NOT_SUPPLIED",
                 "dex_public_pairs": pool["status"] if pool else "UNAVAILABLE",
-                "solana_public_rpc_token_accounts": holders["status"] if holders else "UNAVAILABLE",
+                "solana_public_rpc_token_accounts": holders["status"] if holders else
+                    ("UNAVAILABLE" if rpc_holders else "NOT_REQUESTED"),
+                "rugcheck_public_report": rug["status"] if rug else
+                    ("UNAVAILABLE" if rugcheck else "NOT_REQUESTED"),
             },
             "source_errors": errors,
             "okx_saved": okx, "dex_public": pool, "rpc_token_accounts": holders,
+            "rugcheck_public": rug,
             "limitations": [
                 "RPC_TOP_TOKEN_ACCOUNTS_NOT_VERIFIED_UNIQUE_HOLDERS",
                 "DEX_PAIR_VOLUME_NOT_WALLET_TRADES",
@@ -81,6 +94,8 @@ def combined(mint: str, out_dir: Path, *, okx_json: Path | None,
             md += ["", "---", "", public_pair_report.render_markdown(pool)]
         if holders:
             md += ["", "---", "", public_token_accounts.markdown(holders)]
+        if rug:
+            md += ["", "---", "", public_rugcheck_report.markdown(rug)]
         if okx:
             md += ["", "---", "", mint_report.markdown(okx)]
         md += ["", "## 尚未完成的业务能力", "",
@@ -94,6 +109,8 @@ def combined(mint: str, out_dir: Path, *, okx_json: Path | None,
             (out_dir / ("rpc-" + filename)).write_bytes(blob)
         if okx_raw is not None:
             (out_dir / "okx-saved-input.json").write_bytes(okx_raw)
+        if rug_raw is not None and rug is not None:
+            (out_dir / "rugcheck-provider-raw.json").write_bytes(rug_raw)
         (out_dir / "report.json").write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         (out_dir / "report.md").write_text("\n".join(md), encoding="utf-8")
         print(json.dumps({"status": result["status"], "mint": mint,
@@ -114,12 +131,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--fixture", action="store_true", help="Explicitly mark synthetic saved OKX JSON")
     parser.add_argument("--rpc-holders", action="store_true",
                         help="Opt-in: public Solana RPC top 20 token accounts / parsed owner hints (rate-limited)")
+    parser.add_argument("--rugcheck", action="store_true",
+                        help="Opt-in: cached no-key RugCheck GET for vendor Holder, Creator and risk hints")
     args = parser.parse_args(argv)
     if args.fixture and not args.okx_json:
         parser.error("--fixture only applies to --okx-json")
     dest = args.out_dir or Path(".runtime") / "mint-v0.1" / args.mint
-    if args.rpc_holders:
-        return combined(args.mint, dest, okx_json=args.okx_json, fixture=args.fixture)
+    if args.rpc_holders or args.rugcheck:
+        return combined(args.mint, dest, okx_json=args.okx_json, fixture=args.fixture,
+                        rpc_holders=args.rpc_holders, rugcheck=args.rugcheck)
     if args.okx_json:
         flags = ["--mint", args.mint, "--okx-json", str(args.okx_json), "--out-dir", str(dest)]
         if args.fixture:
