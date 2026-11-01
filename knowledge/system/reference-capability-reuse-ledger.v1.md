@@ -391,3 +391,35 @@
 **真实工程改进**：[PR #16 `mint_report.py`](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/src/solana_meme_os/mint_report.py)增加纯读取`business_summary`：返回钱包候选+源路径、fundingSource提示、Dev/Bundle可用性、TopTrader样本行数、原始供应商requestTime/time字段与UNKNOWN覆盖状态；`report.md`展示可读首屏，`report.json`保留全部原始section。新合成fixture和扩展测试在相同工程分支；**12/12新增模块单测 + 本地旧Library版M01联合50/50通过**。该测试不是OKX SDK/外部API真实执行，也不是在PR #16远端Grok云电脑运行。
 
 **V0.1唯一剩余硬阻断**：已授权只读API、可联网/安装OKX CLI的隔离环境及真实Mint结果。目前本地外网DNS不可用，CLI不在PATH，未获取Key或Grok运行终端；若SDK存在x402自动付费特性，必须禁用/隔离支付与钱包凭证，不能为“真实验收”私自付款。后续验实际费用、requestTime、返回形状和覆盖样本后才升级业务状态。其余Million/HoldTech/pumpwatch/FnZero仍在原台账长期保留，当前不为了“完整”把它们全量合并。
+
+## 2026-11-01｜全量参考资产登记入口（已完成首轮去重，防止下轮遗忘）
+
+**唯一机器可检索真源**：[`knowledge/system/gpt-meme-project-index.v1.json`](gpt-meme-project-index.v1.json) → **`reference_assets.items`**。该字段已实际登记 **65项**（已去除Raydium重复别名）且每项包含稳定REF编号、名称、类别、原始URL（未验证不填）、核查等级、预期业务价值、集成优先级、主责专家及**下次何时重新调查**。之前的 `source_repos` 5项是历史研究固定源清单，不是全量参考资产目录；两者用途不同，旧5项原封保留。用户的要求是“**所有过去提过的来源都能找回来**”，不是让65个来源同时成为部署依赖。
+
+**首轮证据等级人数/数量**：65项中 `SOURCE_AUDITED=17`（至少读过某些真实源码/业务流程，**不等于整库全面审计、安装或真实运营**）；`REPO_VERIFIED=10`（仅GitHub库存在/元数据确认）；`PAGE_VERIFIED=11`（原始/官方网页已确认）；`HISTORICAL_NAMED_ONLY=26`（历史讨论提到，准确身份或链接尚未逐项核实）；`LINK_UNRESOLVED=1`（历史曾提到`solana-foundation/transaction-v1-examples`，本次未检索到有效仓库）。**明确区分源码已读、服务存在、真实运行、源码许可、市场数据验证和研究结论成立。**
+
+### 已登记资产分类与入口
+
+| 资产类型 | 数量 | 首轮完整登记名称（实际细节、复用条件与证据状态以JSON真源为准） |
+|---|---:|---|
+| 自己的项目/历史资产 | 5 | [grok (当前正式项目)](https://github.com/sunshihao001/grok)、[原Hermes Workflow OS](https://github.com/sunshihao001/-)、[qb- GMGN单Mint程序](https://github.com/sunshihao001/qb-)、[meme- 理论研究库](https://github.com/sunshihao001/meme-)、[Why-Solana-Memecoins-Are-Over (个人fork)](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over) |
+| 成熟业务成品 | 6 | [Kelows/million](https://github.com/Kelows/million)、[co-numina/holdtech](https://github.com/co-numina/holdtech)、[cinder-security/pumpwatch](https://github.com/cinder-security/pumpwatch)、[OKX OnchainOS Skills+CLI](https://github.com/okx/onchainos-skills)、[GMGNAI/gmgn-skills](https://github.com/GMGNAI/gmgn-skills)、[Solana Microscope](https://github.com/solana-foundation/solana-microscope) |
+| SDK / 解析组件 | 8 | [FnZero Solana Parser SDK Python](https://github.com/0xfnzero/sol-parser-sdk-python)、[FnZero Solana Parser SDK Rust](https://github.com/0xfnzero/sol-parser-sdk)、[Carbon Indexing Framework](https://github.com/sevenlabs-hq/carbon)、[solana-dex-parser-go](https://github.com/DefaultPerson/solana-dex-parser-go)、[solana-dex-parser TypeScript](https://github.com/cxcx-ai/solana-dex-parser)、[MadeOnSol SDK](https://github.com/MadeOnSol/madeonsol-sdk)、[Helius core-ai](https://github.com/helius-labs/core-ai)、[Yellowstone gRPC](https://github.com/rpcpool/yellowstone-grpc) |
+| 链上协议与官方工程 | 12 | [Raydium CP Swap](https://github.com/raydium-io/raydium-cp-swap)、[Pump public docs](https://github.com/pump-fun/pump-public-docs)、[Jito Solana Client](https://github.com/Jito-Foundation/jito-solana)、[Metaplex Token Metadata](https://github.com/metaplex-foundation/mpl-token-metadata)、[Solana Official Docs](https://solana.com/docs/core/transactions/transaction-introspection)、[Jito Docs](https://docs.jito.wtf/lowlatencytxnsend/)、solana-foundation/transaction-v1-examples、Meteora AMM、PumpSwap、Jupiter Aggregator、Clanker、Zora |
+| 数据服务与工具平台 | 11 | [Helius Enhanced/DAS/Parsed Events](https://www.helius.dev/solana-token-apis)、[QuantBloc methodology / Base / MCP](https://quantbloc.com/methodology)、[Triton / Fumarole / Old Faithful](https://triton.one/open-source)、[Bitquery Solana API/Token Holder](https://docs.bitquery.io/docs/blockchain/Solana/solana-token-holders/)、[DEX Screener](https://dexscreener.com/)、GMGN Terminal / CLI、Arkham、Nansen、BlockSec Phalcon、CoinGlass、RugCheck |
+| 学术/实证研究 | 6 | [Why-Solana-Memecoins-Are-Over (上游)](https://github.com/searadacunha/Why-Solana-Memecoins-Are-Over)、[Solana Sniper Reverse Engineering](https://github.com/Sorghobrayan-dotcom/solana-sniper-reverse-engineering)、[MELT Dataset / Code](https://github.com/git-disl/MELT)、[Meme Coin Factories (ACM CCS 2026)](https://www.sigsac.org/ccs/CCS2026/program/accepted-papers.html)、[A Midsummer Meme's Dream (USENIX 2026)](https://www.usenix.org/conference/usenixsecurity26/presentation/mongardini)、[RED-COHORT 2026 dataset](https://zenodo.org/records/21765387) |
+| 实务工具/资料渠道 | 16 | [Froggy V2 Scanner](https://froggy-v2-0-by-shit101.gitbook.io/frogy-v2-0-by-shit101)、Sputnik Parser / @sputniksol、OnchainRadar、Genesis Arbitrage、ArbitrageScanner、Synapse、Axiom、Photon、TradeWiz、Ray Bot、Stratos、Crypto GYM、Eclipse Trencher、taxiflip Axiom Dev Tracking教程、Ethtective、Resonance |
+| Grok运行经验 | 1 | [Grokbot Playbooks](https://github.com/sit-in/awesome-grokbot-playbooks) |
+
+### 由全部参考项目反过来审查21位专家的实际发现
+
+- **已覆盖的专业领域**：交易与归属E-L1-01/02；发行/池/权限E-L2；钱包/资金/Dev/库存E-L3；异常/可跟随优势E-L4；可卖性和实际执行E-L5；数据反证与盲评E-L0/E-L6；知识综合E-L7-01；持续运行与故障隔离E-L7-02。
+- **确实遗漏的职责**：谁统一比较**整套现成产品**、开源许可、版本依赖、交易/支付路径、接口相容性、改动范围、运行成本、MVP交付和可回退集成？旧E-L7-01负责知识综合，E-L7-02负责监控故障，**没有谁明确负责“从成熟代码形成真正可用成品”**。这个空缺已经导致过去把研究/解析器测试当成项目推进。
+- **最小、可解释的增补**：在原专家注册表添加 **`E-L7-03 开源成品集成与产品交付专家`**，现有数量由21→22；它是知识视角而不是Grok Bot，不新增L/D层级、Bot或独立流程。负责把E-L0、E-L1、E-L3、E-L6各自发现的事实与缺陷转成“采用哪项整套成熟程序/最薄适配/真实MVP验收”的**一个统一产品决定**。只有将来新项目产生无法被现有22位专家解释的真实机制，才申请新专家；避免人数膨胀。
+- **关键发现**：新登记的[QuantBloc方法文档](https://quantbloc.com/methodology)直接区分钱包本人成绩与跟单者在block+2之后的可得成绩，且明确限制Pump.fun/PumpSwap覆盖；这是**E-L4-02跟单信息差研究的现成外部方法基准**，比简单“胜率高的钱包值得跟”更符合项目知识目标，但仍须区分供应商公开方法与自己独立复算。另有[MELT](https://github.com/git-disl/MELT)已提供行为数据/风险标注及CC-BY-NC许可；[USENIX Meme's Dream](https://www.usenix.org/conference/usenixsecurity26/presentation/mongardini)、[ACM Meme Coin Factories](https://www.sigsac.org/ccs/CCS2026/program/accepted-papers.html)、[Zenodo RED-COHORT](https://zenodo.org/records/21765387)已登记为**研究证据/反例来源而非可直接运行监控器**。
+- **对产品路线的影响**：继续以`grok`为单一产品主体、OKX`token-research`为V0.1整套按需业务源；Million用于钱包持续监控但需修多钱包漏记/移除交易耦合；pumpwatch给Dev历史；FnZero/Carbon给明确DEX解析缺口；Solana Microscope给故障恢复经验。HoldTech只是有许可证/误归因限制的备选，不能随意直接复制。QuantBloc研究的是监控之后的可复制性，不阻碍V0.1先运行。**不因登记65项就一次性整合65项**。
+
+### 后续每轮统一使用方式
+
+从用户的自然语言问题反查`reference_assets.items`，根据`role/priority/when_to_review`选择最少必要来源，先判断能否复用完整程序；逐项实际执行/测试后回填**同一项**的验证等级、源码SHA、实际失败原因和下一次重访条件。具体设计与反证只记录在本台账与已有Dxx专题；资产存在与是否运行的事实字段由索引记录，避免另建重复的选型总表。**首次登记的历史线索并未全部独立核实，未核实的URL宁愿空缺也不能猜。**
+
