@@ -1,5 +1,15 @@
 # Release backlog
 
+## 第一优先：先让成品跑起来，再增强业务能力（2026-11-01）
+
+- [x] **首个薄报告入口已写入工程Draft PR #16**：`src/solana_meme_os/mint_report.py`直接消费现成OKX`token-research`标准JSON`{ok:true,data:{workflow,address,chain,core,structure,launchpad}}`；本地使用`fixtures/okx-token-research-demo.json`运行成功，生成`report.md`和`report.json`，新增6/6单测通过，**仅synthetic fixture**。
+- [ ] **最小真实成品验收**：在授权且无自动交易/签名/x402自动支付的联网环境中，运行OKX的单Mint现成workflow，保存准确原始JSON，核查输入Mint、null、字段意义、链上/收到/处理时点和每次Premium消耗；用本脚本输出实际可读报告。只有此步骤验收通过才称`V0.1 REAL-MINT REPORT RUNNING`。
+- [ ] **第二个真实结果**：同Mint相隔一段时间再次运行，用当前`monitor.py`仅比较经过字段定义确认的公开指标；缺失不得填0，基金/交易事件不可由余额差猜测，时间不能事后回填为实时可见。
+- [ ] **第三个业务能力**：需要长期钱包监控时，再评估Million可否以**独立只读子系统**提供发现/funding/live/flows，先确保不会执行交易、不会丢同签名多钱包观察且可恢复断线；没有通过不依赖它发布群体异常。对协议Swap缺口再择FnZero或其他成熟SDK。
+- [ ] **运行交付**：独立验收Node/Rust/Python实际依赖、API密钥隔离、保存目录/重启、故障日志/调用成本、Grok云电脑环境、单命令部署；所有步骤由AI负责专业实施和回读检查，用户只负责必要授权与是否接受结果。
+
+**重要区别**：本轮已交付**离线可运行的最薄产品拼装件**，还没有真实Mint数据自动采集或长期运行；不再把无休止研究、21专家文档或71项工程单测等同于用户已能使用的成品。
+
 ## Initialization (completed locally)
 - [x] Source pins, agent roles, migration map and Grok Bot setup instructions.
 - [x] Read-only source validation, per-mint state, observed deltas, event de-dup and JSONL log.
