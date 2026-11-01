@@ -186,6 +186,8 @@ FnZero Python源码审阅确认`sol_parser/rpc_parser.py`接受RPC JSON并输出
 
 本轮已在现有注册表完整复核E-L0-01至E-L7-02共21位专家及D01–D12正式目录，且直接复查旧Hermes `CONTEXT.md`、qb- `sikk_gmgn_token_report.py`、meme- `SOURCE_OF_TRUTH.md`、现有工程Draft PR #16和OKX/Million/pumpwatch等原始业务源码。没有创建新专家、本体或Bot；审查专业冲突后已在[唯一外部复用台账](reference-capability-reuse-ledger.v1.md)记录21项逐一覆盖的技术/经济/实证检查。
 
+**专家知识成熟度提醒**：实际读取`gpt-meme-project-index.v1.json`发现D01与D07仍标`declared_research_gap`，其他域主要是`legacy_seeded_unverified`；21专家覆盖审查只是专业问题检查，并不表示21位专家所述假说均经真实市场验证。应当以成熟外部源码和真实事件补齐D01交易真实性、D07群体时序的关键事实链，不把知识目录完整当能力完整。
+
 **统一产品/工程结论**：最终目标是Meme全市场可解释监控，但第一完整验收必须是**一枚Mint在明确时点的可审计只读报告**，第二步是同Mint后续钱包活动/持仓两时点与多钱包群体变化；两者不等同于全市场覆盖。优先运行现有OKX Rust `token-research`成品业务流（需用户授权只读Key/禁止自动x402支付），再评估Million发现/订阅/funding/flows是否能保留同一签名多钱包与完整余额演化，必要时只做小修补；FnZero仍是确认有DEX协议语义缺口时使用的成熟解码候选。原qb单币关键地址矩阵是第一报告输出的可复用业务模板，不再把用户推回手动产品设计。
 
 **新改变结论的事实**：pumpwatch `record_launch` 的`seen_at`取本地`time.time()`，历史回填时24h/7d统计不一定代表链上创建频率；Million`RosterPosition.qty Float`与递增账本不能自动保证任意Token原子数精度、Token-account Owner和源缺口一致性；Solana Foundation新增MIT开源`solana-microscope`（Program级监控、Carbon解码、Prometheus/Loki/Grafana、RPC/Yellowstone回补检查点）可作为D10长期可靠性资产，但它是一Program监控系统，依赖较重，**本阶段不部署**；Helius DAS/Parsed Events可作为真实数据独立对照，费用另算。五种关键冲突包括：供应商标签≠同控、同Tx多钱包漏记、持有人≠自由库存、异常≠可跟随优势、按需Mint研究≠全市场持续覆盖。
