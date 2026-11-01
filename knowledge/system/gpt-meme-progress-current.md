@@ -84,3 +84,15 @@ GitHub 知识源在 PR #14；实现和测试在 PR #16；GPT Library 的当前�
 
 **当前未完成**：没有调用第三方实时/付费API、没有导入第三方依赖、没有修改PR#16原始适配器与测试；完整许可证/安全审核、外部SDK fixture比较和真实链上语义仍待完成。下轮首选“FnZero Python解析器与M01现有官方fixture的离线对照 + 负例”，并回访HoldTech剩余功能的实际实现/已发布状态，结论写回功能台账。现有P3与S1阶段位置不因文档审计而升级。
 
+
+
+## 2026-11-01｜P3-M01 立即纠偏：现成解析器优先，冻结自写底层
+
+**用户指出**：继续扩展我们自己的Solana原始解析属于重复造轮子。查到本知识分支事实上已建立[功能复用台账](reference-capability-reuse-ledger.v1.md)，并事先把 `0xfnzero/sol-parser-sdk-python` 列为P0。这次改为落实既有决策，不再把手写 `raw_tx_adapter.py` 的71项旧离线测试当成扩展理由。
+
+- **已执行**：工程 PR#16 的 `raw_tx_adapter.py` docstring 标记 `LEGACY FIXTURE COMPARATOR ONLY`；停止新写Base58/CPI/Token-2022/DEX版本解析，保留旧回归和fail-closed行为作为第三方库对比基线。原工程数据契约已写明方案变化。**本轮未移除功能或改 M01 窗口算法，不代表第三方SDK已被接入/通过测试。**
+- **现成组件原始源码核查**：FnZero Python v0.10.0 固定SHA `cffb6c8` 提供 `parse_rpc_transaction`、RPC签名示例和 `parse_status` 语义；Carbon Rust固定SHA `134647d` 有 Pump.fun Buy/Sell/TradeEvent及其他DEX、离线回放/历史RPC示例，MIT许可证。Solana官方 `transaction-introspection` 可用于账户/指令树对照。完整逐项选择、风险和来源已写入唯一[功能复用台账](reference-capability-reuse-ledger.v1.md)；**都还未在本项目安装/运行/做同样数据对照**，FnZero Python仓库未找到根目录LICENSE文件，使用代码前核对许可。
+- **下一项工程动作（唯一优先）**：在隔离、无交易账号/私钥的环境固定 FnZero Python版本，用原有 `official-solana-gettransaction-samples.json`+FnZero发布的DEX正例+本项目负例，运行同输入比较；核验 owner、mint、实际成交额、费用、CPI、状态未知与证据时间。必要时以Carbon现成解码器对照；**比较之后只保留一个主要底层组件**，向 M01 做最薄字段转换，禁止再次自研Solana协议解码器。测试要保留失败样本及不支持声明。
+- **阶段**：继续P3局部工程，不进入P4。知识状态 `SOURCE_CODE_INSPECTED`、工程方案 `PIVOT_METHOD_KEEP_GOAL`，第三方复用状态 `NOT_INSTALLED_OR_TESTED`，Grok正式监控和实盘为 `NOT_DEPLOYED`。GitHub PR#14/#16尚未合并；GPT Library与Project文件附件须分别核实。
+
+**下一轮可复制输入**：继续P3-M01，不造轮子。先读取最新进度、功能复用台账、工程PR#16和FnZero Python固定源码。使用隔离本地只读环境按既有fixtures和外部项目的可公开核查DEX正例，对 FnZero `parse_rpc_transaction` 做实际安装运行、输入输出/状态及许可证检查；与现有手写解析器和必要时的Carbon做同输入对照。不得再添加自写协议/指令解码；只在明确事件字段和误判界限后考虑小型字段映射。报告真实测试/失败/成本，更新原PR与知识、GPT Library镜像，最后决定可直接复用还是需换现成方案；不下单不签名。
