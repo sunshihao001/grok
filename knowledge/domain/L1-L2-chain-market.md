@@ -122,3 +122,9 @@ Solana 的 `getTransaction` 可能涉及版本化消息、Address Lookup Table�
 ## 来源与证据地位
 
 内部早期参考：`sunshihao001/-/learning/05.md`、`06.md`、`07.md`、`08.md`、`09.md`；本仓库 `catalog.v1.json` 的 `market-lifecycle`、`token-security`、`liquidity-depth`、`candidate-entry`、`gmgn-raw-prototype`。外部操作接口参考：`okx/onchainos-skills/skills/okx-dex-market/SKILL.md`。上述内部早期文档为机制候选，不作为已验证的收益来源。
+
+## 2026-11-01｜D01/D03跨源地址与池库存的实务归属边界
+
+真实Mint `EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump` 的RugCheck缓存Holder第一名Token Account（供应商5.877731%）其Owner候选与DEX Screener的PumpSwap池`81jgrpTMsQWc1rGWXutyYWW27ruiAtehUZwLydcHHWDB`地址完全相同。该**供应商字段精确匹配**可标池相关候选，但不能证明单一资产受益人、池Vault及LP的真实权益归属。特别不能将这个持仓比例直接加进“个人鲸鱼持币/庄家控盘”指标。需要同slot的Token Account Owner、池Vault、LP状态核查，此次Solana公共RPC曾返回429而未取得数据。
+
+池级24小时买卖统计和价格不是钱包级Swap事实；`pairCreatedAt`不是Mint创建时间；RugCheck`detectedAt`不是区块事件时间。详细原始数据和交叉检验见[工程证据](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/evidence/v01-pool-vault-holder-cross-source-2026-11-01.md)。此条只升级“跨源身份误归因风险”的知识，不代表D01 Swap完整解析或经济控制已验证。
