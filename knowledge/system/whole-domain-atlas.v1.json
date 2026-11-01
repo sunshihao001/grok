@@ -1704,7 +1704,8 @@
       "lead_expert_id": "E-L7-01",
       "support_expert_ids": [
         "E-L7-02",
-        "E-L0-01"
+        "E-L0-01",
+        "E-L7-03"
       ],
       "existing_anchor": "knowledge/domain/L6-L7-investigation-cases.md",
       "source_research_lane": "Grok专家注册表/Bot知识/Source准入与部署文档",
