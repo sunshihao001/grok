@@ -87,6 +87,41 @@ def compile_report(raw: bytes, mint: str, *, retrieved_at: str | None = None) ->
                                     if kind in {"AMM", "LOCKER"} else "UNCLASSIFIED_TOKEN_ACCOUNT_OWNER"),
             "evidence": "CACHED_VENDOR_HOLDER_HINT_NOT_CHAIN_REPLAYED",
         })
+    # A reported top-holder token account can be a pool vault rather than a
+    # freely controlled wallet. Cross-check vendor's own markets before asking
+    # an analyst to infer a large holder or a common controller.
+    # This is INTERNAL VENDOR consistency, not an independent RPC check.
+    pool_vault_matches = []
+    markets = data.get("markets")
+    if isinstance(markets, list):
+        for mi, market in enumerate(markets[:100]):
+            if not isinstance(market, dict):
+                continue
+            for side in ("A", "B"):
+                vault = market.get(f"liquidity{side}")
+                vault_info = market.get(f"liquidity{side}Account")
+                if not isinstance(vault_info, dict) or vault_info.get("mint") != mint:
+                    continue
+                for holder in candidates:
+                    if (vault == holder["token_account_candidate"]
+                            and market.get("pubkey") == holder["owner_candidate"]
+                            and vault_info.get("owner") == holder["owner_candidate"]):
+                        pool_vault_matches.append({
+                            "token_account": vault,
+                            "market": market.get("pubkey"),
+                            "market_type_vendor": market.get("marketType"),
+                            "holder_path": holder["source_path"],
+                            "vault_path": f"root.markets[{mi}].liquidity{side}",
+                            "owner_path": f"root.markets[{mi}].liquidity{side}Account.owner",
+                            "status": "VENDOR_INTERNAL_POOL_VAULT_MATCH_NOT_CHAIN_VERIFIED",
+                        })
+    graph_count = data.get("graphInsidersDetected")
+    if type(graph_count) is not int or graph_count < 0:
+        graph_count = None
+    # '0 detected' and 'null network payload' NEVER prove no insider activity.
+    insider_network_state = ("VENDOR_NETWORKS_NOT_PROVIDED"
+                             if data.get("insiderNetworks") is None
+                             else "VENDOR_NETWORKS_RETURNED_NOT_INDEPENDENTLY_VERIFIED")
     risks = data.get("risks")
     risk_rows = []
     if isinstance(risks, list):
@@ -120,6 +155,10 @@ def compile_report(raw: bytes, mint: str, *, retrieved_at: str | None = None) ->
         "freeze_authority_vendor": token.get("freezeAuthority"),
         "risk_score_vendor": data.get("score_normalised"),
         "risk_model_rows": risk_rows,
+        "pool_vault_matches_vendor": pool_vault_matches,
+        "graph_insiders_detected_vendor": graph_count,
+        "insider_networks_status": insider_network_state,
+        "insider_evidence_interpretation": "NO_INSIDER_ABSENCE_PROOF_FROM_VENDOR_DETECTION",
         "markets_vendor_count": len(data["markets"]) if isinstance(data.get("markets"), list) else None,
         "no_trading": True,
         "limitations": [
@@ -129,6 +168,8 @@ def compile_report(raw: bytes, mint: str, *, retrieved_at: str | None = None) ->
             "VENDOR_RISK_SCORE_NOT_A_VALIDATED_SAFETY_PROBABILITY",
             "MARKETS_AND_HOLDER_METRICS_NOT_ATOMIC_WITH_DEX_OR_RPC",
             "NO_PROVEN_SWAP_HISTORY_FUNDING_CHAIN_OR_PROFIT",
+            "ZERO_GRAPH_DETECTIONS_NOT_PROOF_OF_ZERO_INSIDERS",
+            "VENDOR_INTERNAL_POOL_VAULT_MATCH_NOT_RPC_VERIFIED",
         ],
     }
     return result
@@ -145,6 +186,15 @@ def markdown(result: dict[str, Any]) -> str:
            f"Creator候选：`{result['creator_vendor_candidate'] or 'UNKNOWN'}`；历史同发币候选数：`{result['creator_tokens_vendor_count']}`",
            f"风险分（供应商模型，非概率）：`{result['risk_score_vendor']}`",
            f"Mint Authority：`{result['mint_authority_vendor'] or 'UNKNOWN_OR_NULL'}`；Freeze Authority：`{result['freeze_authority_vendor'] or 'UNKNOWN_OR_NULL'}`",
+           "", "## 供应商内幕网络字段与池Vault证据", "",
+           f"供应商图检测数：{result.get('graph_insiders_detected_vendor')}；"
+           f"网络返回状态：{result.get('insider_networks_status', 'UNKNOWN')}。"
+           " 0不等于已证明无内幕钱包，null也不等于无内幕关系。",
+           "以下池Vault是RugCheck同份报告内部字段一致，仍不是独立链上复核。", "",
+           *[f"- 持仓Token Account `{m['token_account']}` 与池 `{m['market']}` "
+             f"匹配；证据：`{m['holder_path']}`、`{m['vault_path']}`、"
+             f"`{m['owner_path']}`；`{m['status']}`"
+             for m in result.get("pool_vault_matches_vendor", [])],
            "", "## 返回的持有人候选（只列部分）", ""]
     for row in result["top_holders"][:20]:
         out.append(f"- Token Account `{row['token_account_candidate']}`；"
