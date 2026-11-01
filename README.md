@@ -101,3 +101,21 @@ PYTHONPATH=src python -m unittest discover -s tests -v
 ```
 
 Adapter 对未知或缺少证据的操作采取 fail-closed，Fixture 的完整性声明不等于已证实链上全量覆盖；禁止将合成输出误报为链上事实、真实交易信号或生产完成。
+
+### 2026-11-01｜Mint报告的可读钱包与资金摘要（源码演示已验）
+
+当前`mint_report.py`不再仅按原始JSON逐节打印；`business_summary`从OKX CLI输出中在**有明确字段时**提取`key_wallet_candidates`（钱包地址、供应商持仓量/占比及源JSON路径）、`funding_source_hints`（仅供应商资金来源提示）、`vendor_cluster_statistics`（仅作为异常研究候选）、Dev/Bundle可用性、TopTrader返回样本数量、各字段的`requestTime/time`原始证据及未知项。Markdown先展示可读摘要，完整供应商JSON仍保留于JSON结果的`sections`内。
+
+**必须注意的商业数据契约**：[OKX holder官方文档](https://web3.okx.com/zh-hans/onchainos/dev-docs/market/market-token-holder)最多返回100个地址及可选`cursor`，不是完整全链地址历史，默认顺序不保证按余额排名；`fundingSource`无法单独证明同控。独立[Cluster overview接口](https://web3.okx.com/zh-hans/onchainos/dev-docs/market/market-token-cluster-overview)的`holderSameFundSourcePercent`等字段是供应商定义的统计指标，**不能推断几笔真实交易或真实经济控制者**。`requestTime`与`time`只列为原始字段证据，不臆造统一的实时观测时点。
+
+额外**字段契约合成演示**：
+
+```bash
+PYTHONPATH=src python -m solana_meme_os.mint_report \
+  --mint 87QChghgFr2XBNumi2Tg1MJCWHLqoTTT5KThtnDspump \
+  --okx-json fixtures/okx-documented-field-shapes-synthetic.json \
+  --out-dir .runtime/mint-evidence-example --fixture
+PYTHONPATH=src python -m unittest discover -s tests -v
+```
+
+**本轮新增模块12项单测、本地与旧Library版M01联合50项均通过**；不是最新工程PR的完整本地回放，也不是一次真实OKX API调用。合成钱包、资金边、Dev等均只为验证数据管道，任何人都不能把`SYNTHETIC`示例作为实际Mint的链上事件。未在本项目启用API Key、自动支付、钱包、交易或Grok定时运行。
