@@ -169,3 +169,15 @@ FnZero Python源码审阅确认`sol_parser/rpc_parser.py`接受RPC JSON并输出
 **本轮实际本地复验**：基于之前Library版P3-M01，Python 38/38单测通过，并成功运行raw_tx_adapter→wallet_batch_monitor离线合成Token Transfer流；仍`FIXTURE_RESEARCH_ONLY`，既无真实链上数据也无Grok云电脑验收。当前不能执行OKX/Million在线成品（Node版本、授权服务密钥和环境限制）。功能台账[新增成品优先与成本/安全/多钱包约束](reference-capability-reuse-ledger.v1.md)，原S1阶段和PR #14/#16 Draft状态未升级。
 
 **下一轮唯一优先执行任务**：在有已授权且可审计的OKX只读Key、禁用自动支付的隔离环境，对固定Mint执行`onchainos workflow token-research`、保存逐接口原始响应/费用/时点/UNKNOWN；若无法验证权限，在离线环境检查工作流自身的Rust unit tests及假输入输出。再基于同Mint决定Million是安全部署整套、封装只读子系统还是仅作知识参考；只因实际经济事件缺口才转向FnZero/Carbon，禁止把问题退化成持续自研解析器。
+
+## 2026-11-01｜用户确认的人机分工与21专家统一项目审查
+
+**长期核心需求（来自用户直接指令）**：用户并非程序员或产品设计师，只能以自然语言描述目标、现象与期望，需要GPT作为专业“外挂大脑”自主利用已有专家知识完成跨领域项目分析、产品化任务定义、最优现成方案复用、工程与数据风险核查、整合与必要执行；不能让用户负责专业架构和技术路线选择。**这是一条关于AI责任和知识调用方式的指令，不是希望得到21段专家套话。**
+
+**实查现有体系**：`knowledge/experts/registry.v1.json`已有21位E-L0-01至E-L7-02，涉及D01–D12；`expert-mechanism-research-method.md`原来按单机制1–3名主/挑战者开展深研。这种设置适合单专题，但覆盖完整产品业务链时需**先21专家全覆盖检查→再挑有真实分歧的专家深化→一份统一的业务、技术、数据、证据、实施结论**；已经回写到建议Project Instructions与原专家方法中。仍然没有部署21个Bot。
+
+**针对当前任务的综合专业结论**：L0/1指出OKX字段/采集时间/交易Owner语义与Million同签名多钱包漏记；L2/3指出Mint阶段、LP/自由库存、资金服务Hub与真实控制和KOL/SM标签混淆；L4/5指出异常≠信息优势、监控阶段不应自动交易；L6指出需要分母、负例、独立数据验收；L7把这些归并到最少必要实施顺序：**首先直接用现有OKX Token Research做一个Mint的只读报告验收→其次安全验Million成品数据连续性与同签名多钱包修正需求→缺经济事件语义时才调用成熟FnZero/Carbon→用既有D04–D11知识给出带证据/未知的群体说明→Grok运行端在既有S1审批下交付**。未实际运行第三方整库、无已授权API、无生产监控；保持原PR Draft边界。
+
+**知识系统防碎片措施**：此原则的唯一主规范位置是`knowledge/system/expert-mechanism-research-method.md`、简短项目入口是`gpt-meme-project-instructions.v1.md`；所有具体外部功能仍复用`reference-capability-reuse-ledger.v1.md`，D04–D07专业知识保留在L3专题，其他现有领域按需回填。不再另起新专家注册表、产品方法框架或机器人编组。
+
+**待验**：将GitHub建议指令由操作者更新到ChatGPT Project Instructions并核对附件版本；GitHub/Library保存不等于账户Memory即时更新，也不表示已在Grok云电脑部署。下一轮核心是用“全域专家覆盖+冲突深入”的方式执行一个Mint成品只读报告验收，不再从零规划系统。
