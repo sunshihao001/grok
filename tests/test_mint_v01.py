@@ -109,4 +109,43 @@ class TestMintV01(unittest.TestCase):
             self.assertEqual(status,3)
             self.assertFalse(out.exists())
 
+    def test_rugcheck_cached_report_enriches_one_mint_without_rpc(self):
+        token_account="So11111111111111111111111111111111111111112"
+        raw=json.dumps({"mint":MINT,"creator":"11111111111111111111111111111111",
+                        "topHolders":[{"address":token_account,"owner":"11111111111111111111111111111111",
+                                        "pct":12.5}],
+                        "risks":[{"name":"Vendor Risk","level":"warn","score":5}]}).encode()
+        with tempfile.TemporaryDirectory() as temp:
+            out=Path(temp)/"out"
+            with patch("solana_meme_os.mint_v01.public_pair_report.fetch_pairs",
+                       return_value=(b"[]", "https://api.dexscreener.com/test")):
+                with patch("solana_meme_os.mint_v01.public_rugcheck_report.fetch_report",
+                           return_value=raw):
+                    with patch("solana_meme_os.mint_v01.public_token_accounts.collect",
+                               side_effect=AssertionError("must not contact limited RPC")):
+                        with contextlib.redirect_stdout(io.StringIO()):
+                            code=mint_v01.main([MINT,"--rugcheck","--out-dir",str(out)])
+            self.assertEqual(code,0)
+            result=json.loads((out/"report.json").read_text())
+            self.assertEqual(result["source_status"]["solana_public_rpc_token_accounts"],"NOT_REQUESTED")
+            self.assertEqual(len(result["rugcheck_public"]["top_holders"]),1)
+            self.assertEqual(result["rugcheck_public"]["creator_vendor_candidate"],"11111111111111111111111111111111")
+            self.assertEqual((out/"rugcheck-provider-raw.json").read_bytes(),raw)
+            self.assertIn("免费报告可能缓存",(out/"report.md").read_text())
+
+    def test_rugcheck_unavailable_is_unknown_not_fake_holder_count(self):
+        with tempfile.TemporaryDirectory() as temp:
+            out=Path(temp)/"out"
+            with patch("solana_meme_os.mint_v01.public_pair_report.fetch_pairs",
+                       return_value=(b"[]", "https://api.dexscreener.com/test")):
+                with patch("solana_meme_os.mint_v01.public_rugcheck_report.fetch_report",
+                           side_effect=OSError("no vendor")):
+                    with contextlib.redirect_stdout(io.StringIO()):
+                        self.assertEqual(mint_v01.main([MINT,"--rugcheck","--out-dir",str(out)]),0)
+            result=json.loads((out/"report.json").read_text())
+            self.assertEqual(result["source_status"]["rugcheck_public_report"],"UNAVAILABLE")
+            self.assertIsNone(result["rugcheck_public"])
+            self.assertIn("no vendor",result["source_errors"]["rugcheck_public_report"])
+
+
 if __name__ == '__main__': unittest.main()
