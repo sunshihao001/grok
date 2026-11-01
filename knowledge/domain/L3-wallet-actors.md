@@ -237,3 +237,6 @@ Million整套服务适合钱包发现→订阅→后续活动→资金关系，�
 **对D04/D05/D07的修订**：同一签名应保留所有可见Token Account及Owner提示、fee payer、signer、transfer source/destination等独立观察；可以在交易级去重、指令级区分多个leg、账户级比较净余额、钱包观察级保留多参与者，但不能将其重复计算为多笔真实买入。多个Owner提示同属一个`signature`也不等于一个控制人。资金关系边应从实际已成功的资金运动取得，并排除交易所/聚合器等公共服务反例。Degen-Scanner的共同出资规则与Million Funding链只能构建**候选关联**。失败CPI、费用支付、公共Hub、单交易多段路由四类情形，必须优先用真实负例检验。
 
 **新增研究未知**：当代币经多池、多路由和Token-2022收费或跨地址托管移动，哪一部分“协同行为”属于执行设施共享，哪一部分属于经济主体共同行动？必须保留交易级、账户级、控制权归因各自证据来源，让Grok提出竞争解释，而不是直接生成“庄家”标签。参见现有PR#17的FnZero只读签名回放和D01原文。
+
+
+**首次有独立执行记录的检验**：[FnZero SDK专项运行](https://github.com/sunshihao001/grok/actions/runs/41317955580) 证明三个真实签名缓存样本中，一笔成功RaydiumCPMM交易包含3段DEX路由、15条Token Account余额记录和5种Owner提示；另一笔成功跨RaydiumCLMM/Orca/Meteora交易同样3段路由、13条Token Account记录及6种Owner提示。相反失败的PumpSwap样本含1段意图，但已执行DEX事件为0。**Owner提示数量、DEX leg数、独立主体数、真实完成的交易数互不等价。** 多账户/多池同步出现在同一签名中，是优先排除“路由设施与交易原子性”解释的场景。签名加密验签不证明RPC execution meta的真实性，上述仍为上游缓存记录。将这项实证标为D04/D05/D07的反误归因知识，而非“新的庄家检测规则”。
