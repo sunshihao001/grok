@@ -85,6 +85,34 @@ class WorkspaceIntegrationTests(unittest.TestCase):
                     with self.assertRaises(ValueError):
                         project_workspace.build_brief(p, "钱包资金", intent="FUNDING_ENTITY")
 
+    def test_offline_cli_writes_readable_markdown_and_provenance_json(self):
+        with tempfile.TemporaryDirectory() as td:
+            base = Path(td)
+            saved = base / "report.json"
+            md = base / "brief.md"
+            structured = base / "brief.json"
+            saved.write_text(json.dumps({
+                "mint": MINT,
+                "no_trading": True,
+                "status": "SAVED_VENDOR_REPORT_FIXTURE",
+                "source_status": {
+                    "dex_public_pairs": "NO_PAIRS_RETURNED_COVERAGE_UNKNOWN",
+                    "rugcheck_public_report": "NOT_REQUESTED",
+                },
+            }, ensure_ascii=False), encoding="utf-8")
+            with contextlib.redirect_stdout(io.StringIO()):
+                status = project_workspace.main([
+                    "--report-json", str(saved), "--question", "钱包资金来源有什么关系",
+                    "--intent", "FUNDING_ENTITY", "--out-md", str(md),
+                    "--out-json", str(structured)])
+            self.assertEqual(status, 0)
+            self.assertIn("原知识文件", md.read_text(encoding="utf-8"))
+            self.assertIn("没有重新查询链上数据", md.read_text(encoding="utf-8"))
+            out = json.loads(structured.read_text(encoding="utf-8"))
+            self.assertEqual(out["saved_report_status"], "SAVED_VENDOR_REPORT_FIXTURE")
+            self.assertFalse(out["live_api_called"])
+            self.assertTrue(out["original_knowledge_sections"])
+
     def test_no_matching_context_does_not_fabricate_claims(self):
         with tempfile.TemporaryDirectory() as td:
             p = Path(td) / "report.json"
