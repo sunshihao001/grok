@@ -62,3 +62,11 @@ Rule Engineer passing local tests **does not** imply an economically valid or pr
 - [ ] **Grok与跨PR工程集成**：在形成真实只读样例和负例后，再讨论如何将既有专家知识/旧qb报告输出/成熟成品服务通过最薄接口调用交到Grok云电脑。S1仍需实际创建/运行/失败复测；若知识PR和工程PR需合并，应独立检查共同基线/冲突后再申请审阅，不在这里自动合并。
 
 **本轮新增竞品参考**：Solana Foundation MIT `solana-microscope`是单Program可恢复监控成品，重在D10可靠性，不替代任意Mint业务分析；Helius DAS/Parsed Events可做余额和事件独立对照，需授权和费用核实；详情和21专家冲突在[知识PR#14复用台账](https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/system/reference-capability-reuse-ledger.v1.md)。**此处只是实际工程待办，不表示已经执行任何在线成品或主网监控。**
+
+## 2026-11-01｜V0.1报告升级：从原样打印到业务候选摘要
+
+- [x] 把已有OKX`token-research`官方输出封装成业务候选摘要：Holder地址/holdAmount/holdPercent、`fundingSource`提示、Cluster统计、Dev/Bundle存在状态、供应商时间字段与JSON来源路径。对错误/缺失/新接口形状fail-closed，不把未知当0，也不把供应商统计当已证实异常。
+- [x] `fixtures/okx-documented-field-shapes-synthetic.json`合成数据演示与新模块12/12单测通过；加入旧Library快照P3-M01代码离线联合50/50通过。本轮本地未检出任何真实主网数据或已安装OKX CLI，GitHub CI独立查看。
+- [ ] **阻断真实V0.1**：当前执行机没有`onchainos`CLI/已授权会话，容器外网DNS无法解析；官方OKX调用需要可用授权，SDK可能遇到x402自动支付流程，**绝不可在无控制环境或加载钱包凭据的条件下试运行**。须在可联网、明确只读范围、没有付款和交易凭据的隔离环境先验单一Mint原始输出，保留失败/限速和真实费用记录，再测试本薄适配。
+- [ ] 对首份真实源报告检查`holderWalletAddress`/LP/vault、资金来源、供应商`requestTime`与观察时间；按需查询不等于连续订阅/全市场覆盖。
+- [ ] 持续监控仍在下阶段：同Mint两时点 → 钱包事件订阅/增量 → 独立余额核对 → 批量异动归因。若此流程不需要Million整库，不要为Web UI提前装交易模块。
