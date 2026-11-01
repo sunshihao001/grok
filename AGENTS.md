@@ -1,3 +1,5 @@
+> **现行入口｜2026-11-01 集成验证**：当前检出 `integration/knowledge-runtime-audit-20261101` 已将知识 PR #14 的专业研究与工程 PR #16 的31个只读代码/测试/证据文件放到同一树，并用 `project_workspace.py` 完成“保存的Mint报告→原有研究段落”离线集成。**项目目标与版本核查先读 [README](README.md) 和 [整体集成图](design/system-integration-map.v1.md)**。以下2026-10-30项目基线、S0–S5、七Bot建议仅作当时历史架构/专业职责参考；不会取代现有证据，也不要求AI每轮机械加载。专业研究原文继续全部有效并可主动深化。谨记同树CI通过≠Grok云端、实时资金关系或交易优势已验证。
+
 > **当前执行权威入口（2026-10-30）**：从 [项目基线](docs/project-baseline-2026-10-30.md)、[现行清单](docs/next-steps.md) 与 [机器可读路线图](design/delivery-roadmap.v1.json) 开始。GPT 是主要研发方、GitHub 是版本真源、Grok 初期是薄运行端。以下保留的传统 AGENTS 约束不得被解释为必须先创建六个 Grok 开发 Bot、批量灌输 C0–C4 或依赖 GMGN 充值。Phase 1 仍只读/Paper-Only。
 
 > **AI阅读与调用入口（2026-11-01）**：面对用户自然语言任务，优先参考 [知识调用指南](docs/ai-knowledge-navigation-guide.v1.md)、[机器索引](knowledge/system/knowledge-navigation.v1.json)及[整体集成关系](design/system-integration-map.v1.md)选择相关专业正文、真实代码与证据。**保留并积极使用**L0–L7/D01–D12/152研究问题、22专家、全部参考项目与跨域机制，不把它们降为旧档案。导航程序只是候选定位，不是已部署Bot或语义推理；工程PR#16需单独查验，不可误用本分支旧实现。任务可以是深度理论研究，不被强迫转向V0.2开发。
