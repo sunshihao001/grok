@@ -29,7 +29,7 @@ class GPTProjectKnowledgeCoreTests(unittest.TestCase):
     def test_no_new_ontology_and_complete_152_unit_coverage(self):
         self.assertEqual(len(self.ontology["layers"]), 8)
         self.assertEqual(len(self.ontology["domains"]), 12)
-        self.assertEqual(len(self.experts["specialists"]), 21)
+        self.assertEqual(len(self.experts["specialists"]), 22)
         self.assertEqual(self.index["counts"]["atomic_units"], 152)
         self.assertEqual(len(self.atlas["core_governance"]), 8)
         self.assertEqual(len(self.atlas["domains"]), 12)
@@ -48,7 +48,21 @@ class GPTProjectKnowledgeCoreTests(unittest.TestCase):
         for e in self.experts["specialists"]:
             self.assertIn(e["id"], self.core)
             self.assertIn(e["name"], self.core)
-        self.assertEqual(self.index["counts"]["specialists"], 21)
+        self.assertEqual(self.index["counts"]["specialists"], 22)
+
+    def test_reference_catalog_is_auditable_not_claimed_as_installed(self):
+        catalog = self.index["reference_assets"]
+        assets = catalog["items"]
+        self.assertEqual(len(assets), self.index["counts"]["reference_assets"])
+        self.assertGreaterEqual(len(assets), 65)
+        self.assertEqual(len({a["id"] for a in assets}), len(assets))
+        expert_ids = {e["id"] for e in self.experts["specialists"]}
+        for asset in assets:
+            self.assertIn(asset["lead_expert"], expert_ids)
+            self.assertIn(asset["verification"], catalog["verification_legend"])
+            self.assertTrue(asset["when_to_review"])
+        # Prior pinned source admissions remain distinct from catalog candidates.
+        self.assertEqual(len(self.index["source_repos"]), 5)
 
     def test_index_is_exact_existing_domain_expert_map(self):
         domains={x["id"]:x for x in self.ontology["domains"]}
