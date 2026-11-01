@@ -383,3 +383,11 @@
 **为什么不先fork Million作成品母体**：核查`apps/api/src/app.module.ts`、`live/live.module.ts`、`opportunities/opportunities.module.ts`的模块导入显示TradingModule为多个服务的实际依赖，并非简单按一个“read-only开关”即可完全去掉交易路径；`LiveEvent.signature`唯一性会丢一签名多钱包。它仍是后续高价值的长期追踪/前端项目，但一期拆卸成本/安全性/业务归因的风险大于OKX现成单MintCLI。
 
 **下一次复用启动条件**：在无自动x402付费、无钱包签名且用户已授予相应权限的环境真正取得一次OKX `token-research` JSON，将源JSON完整保留、核对过错返回/字段类型/API用量，再用上述薄适配生成**一份真实Mint报告**。通过才称`V0.1 REAL-MINT REPORT RUNNING`；下一能力优先两次快照比较而非建多Bot或图形控制台。Million/Pumpwatch/FnZero继续按既有源码和重访条件保留，不删源不另建新框架。
+
+## 2026-11-01｜OKX业务字段契约实测：薄报告已提取关键钱包与资金候选
+
+**源码证据**：OKX`cli/src/commands/token.rs::fetch_holders`调用`/api/v6/dex/market/token/holder`最多100，返回从HTTP API`data`拆出的`list`内容（也保留可能的`{list:...}`分页结果）。官方[持有人接口](https://web3.okx.com/zh-hans/onchainos/dev-docs/market/market-token-holder)定义`holderWalletAddress`、`holdAmount`、`holdPercent`、`fundingSource`和PnL指标；文档的默认顺序可能是收益维度，不能直接称为“按余额最大的前N位”。[Cluster概览接口](https://web3.okx.com/zh-hans/onchainos/dev-docs/market/market-token-cluster-overview)含`clusterConcentration`、`holderSameFundSourcePercent`、`holderSameCreationTimePercent`、`rugPullPercent`等厂商指标，字段名百分比不等于真实经济主体概率。**这改变了产品报告**：必须展示返回钱包候选、供应商资金线索、聚类统计各自证据和未知，不把统一标签生成为已验证庄家或交易信号。
+
+**真实工程改进**：[PR #16 `mint_report.py`](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/src/solana_meme_os/mint_report.py)增加纯读取`business_summary`：返回钱包候选+源路径、fundingSource提示、Dev/Bundle可用性、TopTrader样本行数、原始供应商requestTime/time字段与UNKNOWN覆盖状态；`report.md`展示可读首屏，`report.json`保留全部原始section。新合成fixture和扩展测试在相同工程分支；**12/12新增模块单测 + 本地旧Library版M01联合50/50通过**。该测试不是OKX SDK/外部API真实执行，也不是在PR #16远端Grok云电脑运行。
+
+**V0.1唯一剩余硬阻断**：已授权只读API、可联网/安装OKX CLI的隔离环境及真实Mint结果。目前本地外网DNS不可用，CLI不在PATH，未获取Key或Grok运行终端；若SDK存在x402自动付费特性，必须禁用/隔离支付与钱包凭证，不能为“真实验收”私自付款。后续验实际费用、requestTime、返回形状和覆盖样本后才升级业务状态。其余Million/HoldTech/pumpwatch/FnZero仍在原台账长期保留，当前不为了“完整”把它们全量合并。
