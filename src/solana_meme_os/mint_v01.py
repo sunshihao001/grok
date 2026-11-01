@@ -16,6 +16,45 @@ from typing import Any
 from . import mint_report, public_pair_report, public_token_accounts, public_rugcheck_report
 
 
+def pool_related_holder_observations(
+    pool: dict[str, Any] | None,
+    holder_report: dict[str, Any] | None,
+) -> list[dict[str, Any]]:
+    """Exact cross-vendor address equality, NOT validation of chain account control.
+
+    A holder token account or its reported owner might be a liquidity-pool
+    address. Such candidates must not be automatically counted as free whales.
+    This comparison is purely descriptive; no heuristic wallet clustering.
+    """
+    if not pool or not holder_report:
+        return []
+    pools = {p.get("pool"): p for p in pool.get("pairs", [])
+             if isinstance(p, dict) and public_token_accounts.valid_address(p.get("pool"))}
+    observations: list[dict[str, Any]] = []
+    for row in holder_report.get("top_holders", []):
+        if not isinstance(row, dict):
+            continue
+        for matched_field in ("owner_candidate", "token_account_candidate"):
+            addr = row.get(matched_field)
+            if addr not in pools:
+                continue
+            p = pools[addr]
+            observations.append({
+                "holder_token_account": row.get("token_account_candidate"),
+                "holder_owner_vendor": row.get("owner_candidate"),
+                "matched_as": matched_field,
+                "matching_pool_address": addr,
+                "dex_vendor": p.get("dex"),
+                "holder_pct_vendor": row.get("pct_vendor"),
+                "holder_source_path": row.get("source_path"),
+                "pool_source_path": p.get("source_path"),
+                "status": "CROSS_VENDOR_POOL_ADDRESS_MATCH_NOT_CHAIN_VERIFIED",
+                "economic_interpretation": "POOL_RELATED_CANDIDATE_NOT_FREE_WHALE_PROOF",
+                "next_check": "Verify token vault owner/program and pool vault accounting from one consistent finalized RPC slot",
+            })
+    return observations
+
+
 def combined(mint: str, out_dir: Path, *, okx_json: Path | None,
              fixture: bool, rpc_holders: bool, rugcheck: bool) -> int:
     """Independent evidence sections, never merge third-party wallet labels with RPC accounts."""
@@ -55,6 +94,7 @@ def combined(mint: str, out_dir: Path, *, okx_json: Path | None,
                 errors["rugcheck_public_report"] = str(exc)[:180]
         if okx is None and pool is None and holders is None and rug is None:
             raise ValueError("all read-only sources unavailable: " + str(errors))
+        pool_holder_links = pool_related_holder_observations(pool, rug)
         # Coverage is evidence-specific, and a saved OKX file is not live verified.
         result: dict[str, Any] = {
             "schema_version": "grok.mint_v01_combined.v0",
@@ -73,6 +113,7 @@ def combined(mint: str, out_dir: Path, *, okx_json: Path | None,
             "source_errors": errors,
             "okx_saved": okx, "dex_public": pool, "rpc_token_accounts": holders,
             "rugcheck_public": rug,
+            "pool_related_holder_candidates": pool_holder_links,
             "limitations": [
                 "RPC_TOP_TOKEN_ACCOUNTS_NOT_VERIFIED_UNIQUE_HOLDERS",
                 "DEX_PAIR_VOLUME_NOT_WALLET_TRADES",
@@ -98,6 +139,17 @@ def combined(mint: str, out_dir: Path, *, okx_json: Path | None,
             md += ["", "---", "", public_rugcheck_report.markdown(rug)]
         if okx:
             md += ["", "---", "", mint_report.markdown(okx)]
+        if pool_holder_links:
+            md += ["", "## 跨源地址核对：交易池相关持仓候选", "",
+                   "**以下仅为两个供应商返回的地址相同，不是链上已证明的经济控制关系。**", ""]
+            for link in pool_holder_links:
+                md.append(f"- RugCheck Token Account `{link['holder_token_account']}` "
+                          f"的 `{link['matched_as']}` 地址与 "
+                          f"DEX Screener `{link['dex_vendor']}` 池 "
+                          f"`{link['matching_pool_address']}` 完全一致；"
+                          f"RugCheck供应商持仓占比 `{link['holder_pct_vendor']}`。"
+                          "标记为流动性池相关候选，**禁止直接算作独立鲸鱼/庄家控制**；"
+                          "需要同slot链上Vault/Owner验证。")
         md += ["", "## 尚未完成的业务能力", "",
                "- Dev真实历史、资金闭环、协议级Swap、持续异常和可交易收益都需独立来源/验证。",
                "- RPC公共节点受限且没有生产SLA；任何一个来源失败时不得填0或宣称无事件。",
