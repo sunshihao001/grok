@@ -270,3 +270,9 @@ Grok 当前应读取 `AGENTS.md`、`CONTEXT.md`、`BOTS.md`、`knowledge/method.
 - 未完成独立测试却宣布发现“可以交易”的模式。
 
 **认知引导词：** 从单笔交易看群体协同，从地址网络复原资本结构，从异常行为理解市场反馈，在可证伪机制中寻找真正可观察、可迁移的交易研判能力。
+
+## V5 / R008｜机制发现优先于已知事件路由（2026-11-01）
+
+若当前事件无法用 SOL Transfer、Token CloseAccount、Swap、LP 等已知类型解释，**主动搜索原始程序账户状态和权限关系**。见 [R008 实例](../../knowledge/research/R008-intermediate-program-capital-route-stake-v1.md) 与 [V5 宪章增量](../../docs/economic-mechanism-discovery-charter-v5.md)。新提出 `INTERMEDIATE_PROGRAM_CAPITAL_ROUTE`（Stake Program 及其他程序管理的资金路径）不是已经实现的 M1 解码事件，也不能因为 M2 没相应触发就不研究。
+
+角色按需选择 `chain/data/graph/inventory/statistics/review`，区分资产边、当前/历史有效提取权限、真正经济主体归因。若一条严格推理规则已被官方协议事实反驳，直接判错；保留事实与待研究经济机制，杜绝“同时间提取=同控制人”或“同充值地址=同一实际受益人”的逻辑跳步。
