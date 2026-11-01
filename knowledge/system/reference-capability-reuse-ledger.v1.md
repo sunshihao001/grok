@@ -293,3 +293,78 @@
 4. **Grok交付**：Grok S1云电脑验收未完成；先拿**一个公开Mint+同一观察时点**的可信报告、再拿一个增量窗口，才讨论定时运行。验收标准：输出不编造真实买卖/同控/收益，费用有实际调用记录，相关钱包的多视角事件不丢，缺失索引输出UNKNOWN。
 
 **跨原知识单元落点**：D01/D02协议/发行阶段，D04钱包标签，D05真实资金来源，D06库存与LP，D07同签名群体时序，D08/D09信息与可跟性，D10实际观察/成本，D11/D12反证和解释。旧Hermes/qb-/meme-/Why-Solana审稿与FnZero/Carbon/GMGN/MadeOnSol参考仍常驻，不删除；不增加新D层或自造「内核」。
+
+## 2026-11-01｜首次21专家联合项目审查：统一产品判断与最小可交付路线
+
+**性质**：在现有V2/专家注册表基础上对实际源码、方法和公开供应商契约进行`PRODUCT_AND_SOURCE_REVIEW`；不是21个Bot运行、真实市场实证或外部成品已部署。按21专家全覆盖→关键分歧深入→唯一统一判断完成。研究对象仍为“输入Mint→关键钱包→资金与真实交易→库存/群体异常→可解释只读监控”。项目最终可扩展为全市场事件发现；**单Mint按需研究≠全市场覆盖**，是更低成本且可测的第一验收范围。
+
+### 结论与对先前实现计划的修正
+
+**PIVOT_IMPLEMENTATION_KEEP_DOMAIN**。当前不用再编另一套解析器或21专家框架，也不把OKX+Million+FnZero全部整合成单一大系统。正确顺序：
+1. **第一个完整交付：按需Mint报告**：优先审阅/在授权环境运行 OKX [现成token-research工作流Rust实现](https://github.com/okx/onchainos-skills/blob/73904b636a0f022dcc13b6d7a0dd2ed3b3195f25/cli/src/commands/workflows/token_research.rs)（token report→holder/cluster/topTrader/signal→条件性Dev/Bundle）；把原始供应商数据、null原因、时间、计费保留。旧[qb-单Mint关键地址矩阵程序](https://github.com/sunshihao001/qb-/blob/main/sikk_gmgn_token_report.py)已经定义了研究报告的业务栏目，可作为**结果验收模板而非照搬GMGN执行器或标签阈值**。
+2. **第二个交付：一个Mint的两时点与一段增量钱包观察**：评估 [Million](https://github.com/Kelows/million/tree/c89ad07caaf70773d40b45943e136eadc4f946a5) 原生发现/钱包订阅/funding/flows的整套可用性；其 `apps/api/prisma/schema.prisma` 有 `LiveEvent.signature @unique` 且 `live-feed.service.ts::ingestWebhookTxs` 首个命中钱包即break，**当前不具备同交易多监控钱包的完整群体证据**；`RosterPosition.qty Float`以及分析快照→live增量来源需要数量精度和漏帧对账。禁止把完整成品能启动当成可信产出。需看最小修复是否能在许可和安全边界内完成。
+3. **只补真实的差距**：现成pumpwatch创作者历史、HoldTech holder-overlap、已有Why-Solana资金图/旧Hermes业务分析继续作为候选。需要协议成交事实时才对照FnZero Python/Carbon/Go现成SDK；不增加手写DEX解码。数据覆盖若是主要缺口，优先从服务商/DAS索引和持久流获取而不是写解析器解决不了的问题。
+4. **全市场与Grok运行视为后续扩展阶段**：需额外有市场级Mint发现/采集范围、钱包集合随时间更新、每个源的覆盖水位、故障重放和资源预算。不能把一个Mint的按需报告宣称为“全市场监控”，也不能把GitHub Draft/fixture成功当Grok部署。
+
+### 21位专家完整覆盖（每位对应实际有意义的失效机制；不以投票决定结论）
+
+| 专家ID | 审查出的特有问题或未确认条件 | 对业务/工程方案的实际影响 |
+|---|---|---|
+| E-L0-01 | 需要固定数据源、版本、观测/回补时点；GitHub源码与旧报告不是当时链上事实 | 要求每个报告字段给来源与可追溯版本；不以旧K1当K2 |
+| E-L0-02 | OKX字段可能null且各接口分母不同；cluster/Smart Money/Bundler是供应商语义 | 按来源原义保留字段、null和采样范围，不统一翻译成同控 |
+| E-L1-01 | Million对交易BUY/SELL用余额净差启发式，签名唯一导致同Tx多钱包视角丢失 | 同签名每个观察钱包需有独立可见关系；与Swap真实指令事实分开 |
+| E-L1-02 | pumpwatch seen_at是本地record_launch时钟，非Mint创建时间；回补后统计会失真 | 发行时间与采集首次发现时间分别记录；可得时间不得由链上blockTime代替 |
+| E-L2-01 | 发行曲线、迁移和多池阶段会改变观察分母 | 单Mint报告必须标识阶段和池/协议，不能跨阶段直接比较数值 |
+| E-L2-02 | 价格/市值和池可卖深度不同；LP余额非自由持有库存 | 保留报价池及真实流动性/LP权限差异，避免Top10当可卖能力 |
+| E-L2-03 | Token-2022权限、转账费和交易失败可能误导安全/净到账 | 未知扩展或Token权限未核，报告降级而非默认安全 |
+| E-L3-01 | qb-单币关键地址矩阵可继承；高PnL与真实交易风格/可跟性不同 | 先保留真实钱包角色/样本覆盖，不让GMGN标签成为最终身份 |
+| E-L3-02 | Million funding/owners与HoldTech同Slot只是图关系，可能是公共Hub/代付交易费 | 将资金来源、手续费支付、同控主体、经济受益分开 |
+| E-L3-03 | Million RosterPosition用Float qty和来源分析→live滚动更新，未证明token原子单位精确或仓位连续 | 当前持仓快照与事件净变要独立对账，保留精度、缺口和托管/LP排除 |
+| E-L3-04 | pumpwatch SQLite creator历史按本地写入时间聚合；创始人/授权者可能不同 | 复用发行数据库模式，但显式分开发行时间、采集时间和creator/权限身份 |
+| E-L3-05 | 同Slot群体可由公共发行事件/热门榜触发 | 用相对于市场公开事件的时序及跨Mint复现判别，而非同秒就标协调 |
+| E-L4-01 | 只有已筛选钱包/热门币会产生幸存者偏差；M01样本complete仅fixture | 记录可观察总体、排除理由和未命中样本；不能当全市场覆盖 |
+| E-L4-02 | 系统检测到交易不等于外部观察者还能以原价参与 | 只读阶段不发出盈利承诺；若研究跟单保存alert可得时点 |
+| E-L4-03 | FCZ/二次启动机制仍属旧meme-研究假说，不能覆盖第一条Mint监控 | 保留反向陷阱和结构候选，不作为一期强制K线/策略规则 |
+| E-L5-01 | 观察到价格不是可执行进出报价，Jupiter多腿不能重复记独立交易 | 将双向quote/滑点留为未来可跟性验收，不放进一期只读前置 |
+| E-L5-02 | 高成本WS与数据服务、漏掉的机会和失败退出均有机会成本 | 先使用可授权的按需Mint查询；真实调用/事件成本再决定何时开启连续流 |
+| E-L6-01 | HoldTech同slot规则可误把纯Transfer与独立买家当Bundler候选 | 为每一条异常输出能区分竞争解释的负例查询 |
+| E-L6-02 | 历史回放与AI自评分不能证明监控及时有效 | 同Mint双时点、独立源复核、错报/漏报、非信号分母和覆盖日志必需 |
+| E-L7-01 | 旧Hermes/qb-/meme-/21专家已有体系，若另建架构会继续碎片化 | 只把统一判断回填原Dxx、参考池与现有进度/工程文件 |
+| E-L7-02 | Million默认paper且有EXECUTOR=local真实签名开关；Grok云电脑尚未验收 | 独立安全沙箱，不暴露API；只读运行、故障恢复/回补、状态一致才升级 |
+
+### 最具决定性的跨领域分歧（有不同经济机制与裁决条件）
+
+**A. 成品报告 vs 可审计经济事实（L0/L1/L3/L6）**：OKX Rust workflow确实实现完整Token数据聚合；但Cluster、SM、Dev、Bundle是按供应商定义取得的字段，不证明共同控制/已获利。Million `buyersOf`以收到Mint Token+资产净支出近似BUY，也不等于完整DEX成功执行。统一输出保留`source/field_definition/unit/sample_coverage/observed_at/unresolved`，真正Swap由明确签名、owner、quote和协议事件确证，缺则UNKNOWN。**需判别的反例**：同Slot独立机器人、公共Hub、普通Token转仓、聚合器CPI/路由。
+  
+**B. 成品长期流 vs 群体异常不可漏数（L1/L3/L4/L7）**：Million`LiveEvent.signature @unique`与Webhook`break`对同Tx多监控钱包导致结构漏记，且有限保留期无法支撑历史C02/C05；这比“新增10种钱包标签”更影响目标。最小反例：同签名A/B两钱包均发生Token动作，必须同时保留观察主体视角又仅将一笔链上经济成交计一次。记录slot/签名/指令路径/钱包角色和订阅时点；缺失/断线不得被当0成交。
+
+**C. 持有人快照 vs 可卖经济库存（L2/L3/L5）**：Solana官方[Token文档](https://solana.com/docs/tokens)区分Mint/Token Account/owner；Million`RosterPosition.qty Float`与live增量不是任意Token-2022原子单位或全部Token Account的真实钱包净持仓保证；LP/vault/托管/未成功转账应分离。需要至少两时点相同Mint与Owner的资产快照、供应量分母、Token账户映射、变化原因和缺失标记；不自动把Top10变化称为庄家减仓。
+
+**D. 发行历史与观察时间（L1/L3/L6）**：[pumpwatch `creator_reputation.py`](https://github.com/cinder-security/pumpwatch/blob/156a91ab63740ab0ce8700434ff33844d00de519/code/creator_reputation.py) `record_launch` 中 `seen_at=int(time.time())` 是**本地入库时间**，不必是Mint创建的链上时间；`creator_reputation` 用它计算24h/7d。实时无间断运行下可能接近；一旦RPC重试或历史回补则会偏移。复用SQLite历史结构时须区分发行事件的`blockTime`与首次观测/入库时间，不会把回补批次误判为Dev高频当下发币。
+
+**E. 完整基础设施 vs 最低实际维护量（L5/L7）**：新增审查[Solana Foundation `solana-microscope` @20a516b](https://github.com/solana-foundation/solana-microscope/tree/20a516b2066ec4f13e0b76926b11f666ffd0f49a)（MIT）：已实现Carbon+RPC/Yellowstone、检查点/重试、Prometheus/Loki/Grafana可审计告警、解码失败指标；但文档明确一次部署监控单个Program，不是给定Mint的跨协议钱包关系成品；全套部署需求约2vCPU/4GiB/40GiB，作者估算云主机约$50/月，外部RPC/Geyser费用另算。**PARK_RELIABILITY_PATTERN**，可复用其检查点/重放/观测设计；一期不为它迁移整套Rust和监控平台。发现数据丢帧或准备部署长期订阅时重新审查。
+
+**F. 实时吞吐 vs 研究增益（L4/L5/L6）**：供应商服务不能简单当无限免费基础设施。[OKX行情费](https://web3.okx.com/zh-hans/onchainos/dev-docs/market/market-api-fee)当前Free Basic/Premium各100K/月、**不含WS**，Starter $99/月支持WS；[Helius](https://www.helius.dev/pricing) Free 1M credits/月、10RPS，Developer $49/月、10M credits/月，但不同endpoint计费与请求限速不同；[Helius Token APIs](https://www.helius.dev/solana-token-apis) 已有DAS账户快照、历史与Parsed Events，这提示**不必为每个指标自己重建索引器**。应对按需与实时分别按`每Mint请求/时间/结果覆盖`计费、保存限速和失败，不以订阅功能存在认定可长期承受。
+
+### 新增可复用资产：按本项目需要定位，而非笼统“有用的开源仓库”
+
+| 资产 | 已实现的真实功能 | 必要条件/许可/风险 | 决定及重新启用 |
+|---|---|---|---|
+| [Solana Microscope](https://github.com/solana-foundation/solana-microscope) | 程序事件订阅、Carbon解码、RPC回补/持久检查点、观测/告警/仪表盘；MIT许可证文件 | Rust/Docker/Prometheus/Loki/Grafana；单Program非Mint钱包分析；主机/RPC费用；没有运行/测试 | **REFERENCE_FOR_D10**。当监控持续化且需要故障恢复/日志观测时比较其最小可靠性方案，优先复用其已实现思路或成品仅用于适合的单Program监控 |
+| [Helius DAS/Token APIs/Parsed Events](https://www.helius.dev/solana-token-apis) | 按owner查询Token余额、资产元数据、按地址/签名检索与结构化解析 | 商业服务具体调用积分/覆盖/限额必须读文档和得到授权；Parsed Events部分能解结构，不保证经济同控 | **ALT_DATA_ORACLE**。当OKX缺Token-2022/时间一致性/历史与账户细节，可选少量同Mint独立对照，绝不自动启用付费服务 |
+| [Triton Yellowstone Fumarole/Old Faithful](https://triton.one/open-source) | 有恢复游标/持久流/历史归档的实际供应商方案；项目公布可靠性与重放能力 | 管理版商业授权、条件/服务可用性/保留期限待逐项核；不能把广告中的服务水平当独立实测 | **RELIABILITY_ALT**。未来出现断流/历史回补实际缺口再调研，不作为当前按需报告的新增依赖 |
+
+### 按一套统一业务报告验收，不另造系统架构
+
+**第一个报告的最小具体输出**：`mint; source_version/observed_at/coverage; launchpad_and_phase; key_wallets(owner token accounts supplier labels); funding_edges(economic_role_unknown_when_unsupported); executed_trades(separate_transfer); holder_snapshots/denominator/LP exclusions; multiwallet_events_and_missing_spans; competing_explanations; evidence_links; cost_and_failure_log; no_trading`。这只是业务结果字段清单，实际接口契约应从成熟程序真实输出确定，不提前创造自制全新schema。
+
+**立即验收三例**：
+1. **普通Token转账**：钱包收到Mint Token，但无明确Swap；不得标为BUY/盈利。
+2. **同签名双钱包**：两个订阅钱包同一Tx发生不同动作；必须都保留观察视角，不得将该签名倍乘为两笔真实链上swap。
+3. **历史回补的发币记录**：同一天入库的多个旧Mint，Dev24小时“链上发币次数”不能等于入库次数；时间未知则不能出实时频率结论。
+随后扩充：池迁移/多池、Token-2022、断线缺口/回放、空响应/null/429、同Hub跨Mint以及两时点库存核对。必须有真实输入和来源才可升级为`READ_ONLY_DATA_VERIFIED`。
+
+**本轮证据等级及禁止声明**：已直接恢复全21位专家和D01–D12索引，重新审阅原Hermes `CONTEXT.md`、旧`qb-/sikk_gmgn_token_report.py`、`meme-/SOURCE_OF_TRUTH.md`、当前P3-M01 PR #16的代码/通过的GitHub CI与本轮外部源码；无第三方成品实际安装运行、无用户授权OKX/Helius密钥、无Grok云电脑部署。既往38/38离线Python通过仅为Library旧快照，不是本轮重新执行的实时测试。PR #14/#16仍Draft且**不同base**：#14基于`research/actor-economic-mechanisms-20261030`、#16基于`main`；不能因为分别成功就认为主分支已有合并后的能力。GitHub工程与知识联调验收仍待进行。
+
+**本次路线决策**：`CONTINUE_DOMAIN / PIVOT_IMPLEMENTATION_SEQUENCE / REUSE_FIRST / READ_ONLY_ONLY`。先用OKX成熟Token Research取得可核查单Mint事实报告，再决定Million成品的多钱包与持续性是否值得修补；只有发现明确协议语义缺口才拿FnZero/Carbon替代。全市场监控、AI规则自主更新、交易执行全部留到另有实际依据的后续阶段。相关D01–D12新认识只表示提出了可检验专业问题，不改变原有单元研究成熟度。
+
