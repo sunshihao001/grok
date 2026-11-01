@@ -110,6 +110,37 @@ class GPTProjectKnowledgeCoreTests(unittest.TestCase):
         self.assertIn("pending",self.index["current_research_status"])
         self.assertIn("not_verified",self.index["operational_status"])
 
+    def test_whole_project_convergence_recovers_canonical_counts_and_actual_evidence(self):
+        audit = ROOT / self.index["current_convergence_audit"]
+        self.assertTrue(audit.is_file())
+        text = audit.read_text(encoding="utf-8")
+        self.assertEqual(self.index["current_convergence_as_of"], "2026-11-01")
+        state = self.index["cross_branch_canonical_status"]
+        self.assertIn("draft_PR_15_104_units", state["legacy_competing_atlas"])
+        self.assertIn("P3-M01", state["engineering_m01_namespace"])
+        self.assertIn("K-M01", state["research_m01_namespace"])
+        self.assertIn("REAL_PUBLIC_POOL_SNAPSHOT_VERIFIED", state["proven_runtime_level"])
+        self.assertIn("REAL_COMPLETE_MINT_REPORT", state["not_proven_runtime_level"])
+        self.assertIn("not_automatically", state["gpt_project_mirror"])
+        self.assertEqual(self.index["counts"]["atomic_units"], 152)
+        self.assertEqual(self.index["counts"]["specialists"], 22)
+        self.assertEqual(self.index["counts"]["reference_assets"], 65)
+        self.assertEqual({u["research_state"] for d in self.atlas["domains"]
+                          for u in d["units"]}, {"mapped_unverified"})
+        for token in ["PR #14", "PR #16", "PR #15", "104", "152",
+                      "22位", "65项", "C01", "C17",
+                      "review_only", "Grok", "UNKNOWN",
+                      "REAL_PUBLIC_POOL_SNAPSHOT_VERIFIED",
+                      "REAL_COMPLETE_MINT_REPORT_NOT_VERIFIED"]:
+            self.assertIn(token, text)
+        for p in ["knowledge/README.md", "knowledge/system/README.md",
+                  "knowledge/system/gpt-meme-project-core.v1.md",
+                  "knowledge/system/gpt-meme-progress-current.md",
+                  "docs/next-steps.md"]:
+            self.assertIn("whole-project-convergence-audit-2026-11-01.md",
+                          (ROOT / p).read_text(encoding="utf-8"), p)
+
+
 
 if __name__=="__main__":
     unittest.main()
