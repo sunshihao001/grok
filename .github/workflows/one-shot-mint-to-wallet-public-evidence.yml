@@ -5,6 +5,7 @@ on:
       - integration/product-knowledge-v01-20261101
     paths:
       - .github/workflows/one-shot-mint-to-wallet-public-evidence.yml
+      - src/solana_meme_os/mint_candidate_wallet_probe.py
   workflow_dispatch:
 permissions:
   contents: read
