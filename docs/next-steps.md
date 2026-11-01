@@ -93,3 +93,10 @@ Rule Engineer passing local tests **does not** imply an economically valid or pr
 
 **专业观察**：同Mint可能同时作为base/quote出现在PumpSwap/Orca/Pump.fun多个池；价格字段仅可归属目标作为base时的quote，池买卖次数是池级统计而非钱包交易事件；聚合前要去重/明确分母。E-L7-03只负责交付、E-L1-01交易事实、E-L3-02资金关系、E-L0-02供应商语义、E-L6-01反证按现有知识参与，不新增专家/Bot。
 
+## V0.1实际Holder/Creator取得及跨源池库存归因修正（2026-11-01）
+
+- [x] **真实供应商候选已取得**：用原有`mint_v01 --rugcheck`只读获取RugCheck缓存完整报告并和DEX Screener池一起输出。GitHub Actions [41268982018](https://github.com/sunshihao001/grok/actions/runs/41268982018)对Mint`EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump`取得20条Holder、Creator候选与实际DEX池；原始响应与SHA已下载核对。[真实样本证据](evidence/v01-pool-vault-holder-cross-source-2026-11-01.md)。
+- [x] **钱包经济角色冲突被修复为可解释报告项**：该Mint首位Token Account的RugCheck Owner候选与DEX PumpSwap池地址精确相等，供应商占比约5.88%；本轮在`mint_v01.pool_related_holder_observations`引入严格地址全等的`POOL_RELATED_CANDIDATE`提示和缺源/非同地址反例，不能直接算独立鲸鱼。工程GitHub 120项离线测试通过；实际线上样本由独立脚本核证，代码的线上生产调用尚未测试。
+- [x] **真实RPC限流被记录**：官方Solana公共RPC对该Mint的`getTokenLargestAccounts`返回HTTP 429，必须记`UNAVAILABLE`，不得填0或假设Owner完整。长期使用需选择已授权稳定RPC/DAS，不自建索引器。
+- [ ] **完整V0.1关键缺口**：OKX现成`token-research`的授权只读运行、x402支付隔离、实际返回校验；独立核对该Pool/Vault与Token Account同slot归属、Creator历史、资金边与实际Swap。RugCheck`creatorTokens=null`仅代表未提供数据，不是没有Dev历史。
+- [ ] **Grok实际部署/运行**：当前GitHub Actions联网成功和离线CI成功均不等于Grok云电脑已经配置。不要升级整个成品状态或执行自动交易。标准CI已恢复为只跑离线测试。
