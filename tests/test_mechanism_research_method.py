@@ -37,7 +37,7 @@ class MechanismFirstMethodTests(unittest.TestCase):
         for p in sources.values():
             self.assertTrue((ROOT / p).is_file(), p)
         self.assertEqual(len(self.atlas["domains"]), len(self.ontology["domains"]))
-        self.assertEqual(len(self.experts), 21)
+        self.assertEqual(len(self.experts), 22)
         self.assertEqual(len(self.units), 152)
         self.assertEqual(self.plan["status"], "draft_knowledge_workplan_not_executed")
         self.assertEqual(self.plan["default_mode"],
