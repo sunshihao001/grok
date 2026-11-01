@@ -113,3 +113,40 @@ AI 实际使用顺序：
 4. **Grok入口验收**：经正式授权与固定SHA，只读命令能完整回传报告/状态/失败，再考虑看板；任何一步不达标都不能把设计稿标成部署完成。
 
 **产品设计的完成判断**：用户不知道技术栈也能理解、查证和追问；AI不会拿错知识版本、把参考代码当可用功能，或把知识目录当产品界面。
+
+## 9. 以现成同行产品实际代码重新收束UI：少页面、重闭环（2026-11-01）
+
+这部分是对本文件前面七种**信息视图**的改进，不是增加第八种或第九种页面。已直接核对 [Million现有Web路由](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/web/src/router.tsx) 与[实际产品使用手册](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/docs/GUIDE.md)、[HoldTech跨Mint对比实现](https://github.com/co-numina/holdtech/blob/a75e214bf1ee0a8803eb7d93336be98c481c2db9/app/api/holder-overlap/route.ts)：
+
+- **入口一：研究一个Mint**。借鉴HoldTech的单地址输入与Million的Token/Discover详情，但优先展示**真实来源、时间、池/AMM排除及未知项**，而非未经校准的“安全分”或K线。已有`mint_v01.py`和`project_workspace.py`可输出本入口所需的Markdown/JSON；网页不是前置。
+- **入口二：比较多个Mint/钱包**。借鉴HoldTech `holder-overlap` 和Million `funding/flows` 的跨资产调查习惯。现已有`cross_mint_holders.py`对2–5个已存Mint只读报告比较**供应商Owner候选地址重叠**；显示每Mint样本总量/排除数/时间/来源hash、每对重合地址及原路径，**不**默认展示“同一庄家”。
+- **入口三：观察与复查**。借鉴Million `Live/Flows` 的使用方式，但本项目当前真实持续流缺失，所以先展示“未启用/来源不可用/历史样例”及当次任务日志；不能做一个会自动刷新但底层并无数据的看板。
+- **每个入口共用“数据证明栏”**：当前是供应商缓存、RPC验证、模拟测试还是没有来源？最近采集时间？哪些字段不可信？任务从哪条代码/哪次提交产生？依据哪些原知识原文做解释？
+- **Grok自然语言**只作为这些已有业务命令的友好入口；不是另外一套重复的数据研究架构。未来如要Web，可复用Million的按任务分组的路由思路，暂不引入NestJS/Next/React构建复杂后台，更不引入自动下单。
+
+### 9.1 当前已具有实际代码的对照输出
+
+```bash
+# 前提：已经保存了两个真实或明确标成模拟的V0.1 report.json
+PYTHONPATH=src python -m solana_meme_os.cross_mint_holders \
+  /path/mintA/report.json /path/mintB/report.json \
+  --out-json /path/compare.json --out-md /path/compare.md
+
+# 单Mint保存的报告 + 原有研究原文（不重新请求第三方）
+PYTHONPATH=src python -m solana_meme_os.project_workspace \
+  --report-json /path/mintA/report.json \
+  --question "这些Holder和资金关系有哪些可能的解释" \
+  --intent FUNDING_ENTITY --out-md /path/context.md
+```
+
+第一条功能是本项目自主实现的**受限本地复用业务流程**，不是启动HoldTech接口；第二条是已有源码/研究桥接。两者离线测试不代表真实资金图已经存在。
+
+### 9.2 设计验证清单（避免再做漂亮空壳）
+
+- 每个Mint页必须能回溯它对应的 **报告SHA/原供应商哈希**，没有来源必须显示缺失。
+- 每个跨Mint重叠地址必须展示**哪两份样本的哪行供应商字段发生相同地址**，不能凭计数给“资金控制”结论。
+- 将Token账户、Owner、池Vault、其他公共基础设施分开；服务商来源未知时保留不确定性。
+- AI总结必须能打开原领域知识的**行号/哈希**，并明确“原文候选 ≠ 已证市场解释”。
+- 真实连续监控没有通过数据与断流验收前，“告警/Live”页**只能呈现状态或模拟演示**，不伪造动态更新。
+
+这组改进改变的是**现有视图怎样组织和实际填数据**；七个旧视图仍可以作为详情/子栏目，但不需要七个独立Bot或七套后台。
