@@ -1,5 +1,8 @@
 # GPT「跟单」× GitHub｜持续研究推进、知识编译与同步机制 V2.0
 
+> **状态变更（2026-11-01）**：此文件中历史固定阶段、每轮必填进度、固定专家调用、每轮强制复制提示词或机械同步要求已停止作为默认指令。**当前应依照 [项目现行工作准则](current-operating-guidance.md) 与 [当前恢复点](gpt-meme-progress-current.md)**；本文件其余内容仅作为可选方法、知识索引与历史证据，不得让旧规则覆盖当前产品任务。历史信息未删除，便于追溯。
+
+
 **2026-10-31 · 执行规范（Draft）**
 
 **继承**：`gpt-meme-continuous-progression.v1.md` 的阶段判断和下一轮输入；`gpt-meme-knowledge-accumulation.v1.md` 的证据、关系和原编号；原 L0–L7、D01–D12、152 个知识单元保持不变。
