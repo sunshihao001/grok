@@ -70,3 +70,9 @@ Rule Engineer passing local tests **does not** imply an economically valid or pr
 - [ ] **阻断真实V0.1**：当前执行机没有`onchainos`CLI/已授权会话，容器外网DNS无法解析；官方OKX调用需要可用授权，SDK可能遇到x402自动支付流程，**绝不可在无控制环境或加载钱包凭据的条件下试运行**。须在可联网、明确只读范围、没有付款和交易凭据的隔离环境先验单一Mint原始输出，保留失败/限速和真实费用记录，再测试本薄适配。
 - [ ] 对首份真实源报告检查`holderWalletAddress`/LP/vault、资金来源、供应商`requestTime`与观察时间；按需查询不等于连续订阅/全市场覆盖。
 - [ ] 持续监控仍在下阶段：同Mint两时点 → 钱包事件订阅/增量 → 独立余额核对 → 批量异动归因。若此流程不需要Million整库，不要为Web UI提前装交易模块。
+
+## 2026-11-01｜工程恢复前先恢复完整参考池与22位专家
+
+当前所有曾引用的成熟成品/SDK/数据源/研究/从业者资料，已在知识Draft PR #14的[`knowledge/system/gpt-meme-project-index.v1.json`](https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/system/gpt-meme-project-index.v1.json)登记为`reference_assets.items`共**65项**，核实程度各不相同；原5项`source_repos`是历史固定源，不应被误以为全部。原21专家经真实产品职责缺口审查新增`E-L7-03`（开源成品集成/交付，合计22位知识视角，**不是第8个Bot**）。工程启动V0.1时先由该视角对比`OKX token-research`与备选项目的安装、接口、支付/签名风险和最小修改成本；无需安装65项。
+
+**仍保持当前交付顺序**：V0.1运行真实Mint→现有报告；之后两时点观察→持续钱包监控；具体缺口才回访Million/pumpwatch/FnZero。工程PR #16不自动拥有知识PR #14内容，它们base不同；实际部署前需在同一可审阅候选分支做代码与知识版本对照。参考登记不会让fixture测试变成真实数据，也不等于Grok Bot已配置。
