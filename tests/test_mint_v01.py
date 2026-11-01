@@ -30,8 +30,9 @@ class TestMintV01(unittest.TestCase):
         sample = {"jsonrpc": "2.0", "id": 1,
                   "result": {"context": {"slot": 123}, "value": []}}
         raw = json.dumps(sample).encode()
+        original_collect = public_token_accounts.collect
         def local_rpc(mint):
-            return public_token_accounts.collect(mint, request_fn=lambda method, params: raw,
+            return original_collect(mint, request_fn=lambda method, params: raw,
                                                 retrieved_at="2026-11-01T00:00:00Z")
         with tempfile.TemporaryDirectory() as temp:
             out = Path(temp)/"out"
