@@ -193,3 +193,32 @@
 **历史FnZero-only实验方案（仅当成品级对照确实缺少协议解析时才启动）**：保持`wallet_batch_monitor.py`原逻辑与fixture不变，在隔离无密钥环境以同一组已知Solana文档RPC样本及FnZero自带经核查的DEX正例，对照锁定版本FnZero（必要时对比Carbon）输出的指令、BUY/SELL、mint、owner、实际quote成交、`parse_status`、CPI位置、UNKNOWN；审计包/许可证、开发依赖、执行开销。只有SDK已经能稳定输出所需字段时，才写最薄的“供应商事件→既有M01标准事件”映射；不准重写DEX解析、无需三套混合框架。
 
 **状态**：`SOURCE_CODE_INSPECTED` / `IMPLEMENTATION_FROZEN`；**不是** `ADAPTER_TESTED` 或 `READ_ONLY_DATA_VERIFIED`。已有单测仍属于本项目自写Legacy基线。方向改为`PIVOT_METHOD_KEEP_GOAL`，不更改P3研究目标与C02/C05优先级；后续该台账为唯一复用判定入口，不另建框架。
+
+## 2026-11-01｜源码级扩查与隔离对照结果（增补，不替代前文）
+
+### 本轮实际审查范围和执行证据
+
+- **外部成品**：FnZero Python `sol_parser/rpc_parser.py`、`examples/parse_tx_by_signature.py`、`tests/test_pump_execution.py`、`tests/test_pump_upgrade_mainnet.py` 与固定主网回归材料；HoldTech `deep-scan/analyze/holder-overlap/bundler-feed/smart-money/deployer-profile` 的关键源码；pumpwatch `creator_reputation.py`、`pump_watch.py`、`outcome_tracker.py`；此外核对 Carbon 官方主仓、Kelows/million discovery/copyability/funding 子模块、OKX read-only skill，以及 pumpkit/LICENSE。
+- **工程基线**：PR #16 最新提交 `3ee17255f4c849d6be4ede93e6ee7e516a068de1`；`raw_tx_adapter.py` 已在文件头声明 `LEGACY FIXTURE COMPARATOR ONLY`，源码继续无真实BUY/SELL；该 SHA 对应的远程 `monitor-tests` CI 为 `completed/success`，**CI并非本轮本地运行、也未包含FnZero对照**。
+- **受限**：当前隔离终端 `git ls-remote` 无法解析 github.com，`sol_parser`、`solders`、`solana` 均未安装；无法克隆依赖、执行真实FnZero解析或复跑整个M01。因此本轮仍**未完成FnZero↔M01实际输出一致性测试**，禁止将 `SOURCE_COMPATIBILITY_REVIEW` 写作 `ADAPTER_TESTED`。
+- **实际执行的局部负例**：在本地Node.js标准环境以HoldTech公开 `deep-scan/route.ts` 的两个关键算法逻辑为依据，手工独立复现`detectBundles`及`extractBuyTimeline`的条件和迭代；四项隔离断言**全部通过**（这是“源逻辑复现”，**不是运行HoldTech项目原始TS代码**）。场景：(1) 同Slot三个普通TRANSFER仍输出1个“bundle”；(2) 三个TRANSFER交互被归入“首买”时间线；(3) 三个真实买家共享一个fee payer时输出0个潜在bundle；(4) 三个普通同Slot SWAP会被输出bundle，不能因此认定有Jito原子Bundle。无RPC、密钥或交易。独立脚本和结果仅存于本轮交付文件，未接入监控。
+- **FnZero真实差异**：`examples/parse_tx_by_signature.py` 使用 `maxSupportedTransactionVersion:1`，`sol_parser/rpc_parser.py` 的 `parse_transaction_from_rpc()` 仍向客户端传 `max_supported_transaction_version=0`。其`rpc_get_transaction_result_dict_to_response`在 `meta` 缺失时构造默认空meta，而M01在关键状态未知时拒绝完整解释。需先选正确RPC入口并保留完整性/失败状态，不因SDK返回空事件就写“无交易”。
+- **许可证和风险更新**：FnZero **Python**仓库README声称MIT，但固定版本仓库根目录无 `LICENSE`，且 `pyproject.toml` 未列license；与有实际MIT `LICENSE`的FnZero Rust项目不可混为一谈，**暂不复制Python源码，接入前确认授权**。Carbon `sevenlabs-hq/carbon` 的主仓有MIT `LICENSE`，提供Pump.fun/PumpSwap/Raydium/Meteora等解码器，但Rust运行时需评估与当前Python的桥接。 `nirholas/pumpkit` 虽有已实现的Telegram/launch/tracker API与部署说明，其仓库 `LICENSE` 明确声明所有权利保留、未授权不得复制/修改：**KNOWLEDGE_ONLY，禁止移植其源码**。
+- **现有项目二次复用**：Kelows/million（MIT） `apps/api/src/discovery/discovery.service.ts` 有从币发现大额交易者、过滤公共基础设施的现成逻辑；`funding/funding.service.ts` 使用 `nativeTransfers.fromUserAccount/toUserAccount` 和截断标记（比HoldTech用feePayer猜资金来源更合理，但仍会遇公共账户）；`copyability/copyability.service.ts` 使用滞后一个分钟周期的纸面可跟随性比较，其K线/分钟价格代理不符合本项目当前不依赖K线的主体路线，只作为方法及缺陷知识。禁止从同仓`trading`引入签名/自动交易。
+- **pumpwatch**：`creator_reputation.py` 用SQLite维护mint/creator/24h/7d频次，`outcome_tracker.py` 分年龄区间随访，`pump_watch.py`包括限并发、RPC重试与WS失败恢复；已实现业务逻辑但未本轮实际运行，适合按需复用“已知功能+防故障方法”，不能直接将作者标签阈值转为真实操控结论。
+
+### 可复用决策（当前真实状态）
+
+| 候选功能 | 当前决策 | 转换所需的最小工作 | 转换阻碍 |
+|---|---|---|---|
+| FnZero Python RPC/DEX解析 | `EVALUATE_FIRST`，尚非`WRAP_READY` | 确定源码许可、选 `parse_rpc_transaction` 入口、与M01相同官方/真实交易逐项核对owner/mint/quote/side/fees/CPI/v1/UNKNOWN | 终端无法取包；Python库无根LICENSE；部分RPC helper版本参数不同 |
+| Carbon现成协议解码器 | `ALTERNATIVE_MIT` | 指定一个Rust decoder和read-only边界，离线基准对照；只在FnZero不可用或质量不足时投入桥接 | 语言栈和集成开销 |
+| HoldTech持有人交集/集中度 | `ADAPT_SMALL` | 在已知完整性与同一时点的holder集合上复用纯统计；公共池/托管排除 | 部分源码归因有误，许可未清晰落盘 |
+| HoldTech Bundler/首买/资金源 | `REFERENCE_ONLY_CORRECT` | 保留“同Slot候选/融资网络”功能意图；真正买卖需真实Swap，资金源需真实转账路径 | 已执行4个对抗负例，不能原样迁移 |
+| pumpwatch发行者/分龄随访 | `POTENTIAL_MODULE` | 只读SQLite历史记录和可靠状态恢复，复查mint/creator准确性后再接M01 | 数据源、签名时点、观测窗口 |
+| Kelows/million发现/资金模块 | `EXAMINE_AS_WHOLE_FLOW` | 比较已有qb关键钱包矩阵→million发现/筛选→资金trace→监测队列的一条完整链 | 依赖Helius/Nest/Prisma；执行交易代码必须彻底隔离 |
+| pumpkit监控/Telegram布局 | `KNOWLEDGE_ONLY_LICENSE_BLOCK` | 可研究事件流、提醒设计、健康检查等公开事实 | 许可证禁止未经许可复制/修改 |
+
+**P3-M01路线**：`CONTINUE_GOAL / PIVOT_IMPLEMENTATION_REUSE_FIRST`，先固定语义正确的只读事件契约和覆盖状态，再对现成SDK做公平对照，而非继续手写全部DEX解码。合适的现成库若经核验能用，优先包裹其接口；不能用的也保留在本账本。当前没有实际新接入的第三方功能。
+
+**下次触发**：隔离环境具备下载/依赖时，优先复跑FnZero固定版本自己公开的 `tests/test_pump_upgrade_mainnet.py`，再同一输入与M01比较输出；同时确认Python许可证，并用已核验买卖样本检查包含CPI、WSOL/Token-2022、v1和缺meta的负例。只有有同笔交易事实对照，才考虑PR #16新增最小可选SDK适配器。
