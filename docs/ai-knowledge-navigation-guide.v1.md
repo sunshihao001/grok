@@ -54,7 +54,7 @@
 - `src/solana_meme_os/knowledge_system.py`：字面领域匹配与知识本体静态审计。
 - `src/solana_meme_os/expert_brief.py`：专家简报选择；不会真的调用Grok Bot。
 - `src/solana_meme_os/research.py`：选21项K1来源与研究反证要求；不是实时交易采集。
-- **新增 `src/solana_meme_os/project_navigator.py`**：返回“当前任务可能需要哪些旧知识/源码/视图”的**只读导航短名单**，可对路径和ID做静态检查；它不复制内容、不调用第三方网络、不部署Grok Bot、不生成市场结论。
+- **新增 `src/solana_meme_os/project_navigator.py`**：返回“当前任务可能需要哪些旧知识/源码/视图”的**只读导航短名单**，并可使用`--open-path`按白名单读取**原有知识文件的有界片段、原路径和SHA256**；可对路径和ID做静态检查。它不调用第三方网络、不部署Grok Bot、不生成市场结论。
 
 在 **知识 PR #14 的检出目录**中：
 
@@ -62,6 +62,7 @@
 PYTHONPATH=src python -m solana_meme_os.project_navigator --audit
 PYTHONPATH=src python -m solana_meme_os.project_navigator --question "批量转账的钱包是不是同源"
 PYTHONPATH=src python -m solana_meme_os.project_navigator --intent MINT_OVERVIEW
+PYTHONPATH=src python -m solana_meme_os.project_navigator --open-path knowledge/domain/L3-wallet-actors.md
 PYTHONPATH=src python -m unittest tests.test_project_navigator -v
 ```
 
