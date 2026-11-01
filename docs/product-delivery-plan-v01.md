@@ -97,3 +97,6 @@ AI承担产品负责人和工程整合者的工作：根据用户的目标、当
 - [真实运行Artifact #13086832994](https://github.com/sunshihao001/grok/actions/runs/41315827203) 保存原始响应、报告、`evidence.json`、按现有导航实际读到原知识片段与SHA的 `review_context.json`、七类UX状态JSON及待执行Grok任务。离线CI [41315656644](https://github.com/sunshihao001/grok/actions/runs/41315656644) 288项测试通过。实际运行原始DEX与RugCheck文件哈希与证据包完全一致。
 - 已证明：**公开供应商读数→原有知识按需调用及定位→现有UI信息状态→任务文件输出**。未证明：供应商标签为真实欺诈、真实钱包交易异常、经济主体归因、持续数据源、Grok Bot-to-Bot执行、Token成本优势；相关视图保留`NOT_OBSERVED/NOT_EXECUTED`。
 - 交付原则：反证池/vault候选，不将“疑似大户”当人；供应商标签按不可信数据编码，不执行其携带的指令；旧任务输出目录复用一律拒绝。**下一必需的产品事实是交易级、钱包级事件同时完备的只读归因和历史覆盖**，而不是再添加一种知识层级或注册更多Bot。
+
+
+- **修复后第二次真实回放**：[GitHub Actions #41316172134](https://github.com/sunshihao001/grok/actions/runs/41316172134)，提交`13a05718511733001fc460d504a6db2cd2536d98`，`data_fetch_exit=0`、`triage_exit=0`、原始RugCheck/DEX SHA重新校验通过，任务文件的换行已核对正确。其时点 `2026-11-01T14:26:12Z` 有**2条**供应商待核查标签（`Copycat token`、`Low Liquidity`）及1条池基础设施大户降级候选。先前 `2026-11-01T14:22:00Z` 的同Mint样本为**1条**标签；两份RugCheck原始SHA分别为`3ceb24570b851e4bb26ac5e01afa5fea07ef01468cecc40cbf577c9cca718741`及`285d32ece63f7ab86521babad5951e4051f2c9c4a98b359aac959661221f1e23`。**仅能确认供应商快照有变化，不能单凭标签增加推断链上真实风险恶化或其变化原因。** 两次采样均非实时交易事件监控；Grok专家未调用。
