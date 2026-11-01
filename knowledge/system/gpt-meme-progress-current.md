@@ -144,3 +144,8 @@ GitHub 知识源在 PR #14；实现和测试在 PR #16；GPT Library 的当前�
 **下一步最有价值的任务（接管本恢复点）**：在有Node24、外部成品源码/依赖以及获授权只读Helius或OKX额度的**隔离环境**，先检查Million只读安全（无交易执行、无公网端口、MCP仅查询），用固定Mint原生API验证「发现→钱包活动→资金与候选关联→只读报告」每一步返回、失败、费用与覆盖；逐项用OKX现成命令及HoldTech/pumpwatch功能对照，决定**整套运行、封装已有API、局部复用还是维持知识参考**。严禁为了跑测试先行复制有硬编码密钥的HoldTech，或用合成数据伪装已验证成品。完整源码/风险/接口与再核触发见[唯一复用台账](reference-capability-reuse-ledger.v1.md)。PR#14/#16仍Draft未合并；Library镜像进度依最后实际同步操作为准。
 
 **✍️ 下一轮可复制输入**：继续现有Solana Meme项目V2，以已审的Million`c89ad07`、HoldTech`a75e214`、pumpwatch`156a91a`、OKX和Why-Solana及旧qb-/Hermes/meme-为基准，不重新设计架构。优先在隔离且只读的具备Node24和授权数据源的环境，对固定公开Mint做一次完整Million原生API业务验收：钱包发现/来源→订阅与交易事件→资金边与群体关系→证据完整性和可解释性；特别测试同笔多钱包丢失、ownerID不稳定、15分钟保留、未知是否被当零、默认自动Paper引擎隔离。比对现成OKX/Holder/Dev工作流，记录接口输入输出/真实费用/失败，只有成品确实不满足才写最少必要胶水。更新已有复用台账、参考池和本恢复点；如无法安全运行说明阻碍，不冒充生产效果。
+
+## 2026-11-01｜增量：FnZero/Carbon许可与源码入口审查、HoldTech四项离线反例
+- **源审**：FnZero Python已有按交易签名的RPC解析、mainnet fixture tests，`parse_transaction_from_rpc`以 `max_supported_transaction_version=0` 请求，但另一示例用 `maxSupportedTransactionVersion:1`；版本入口需逐一比较。Python仓库README标MIT但根目录无LICENSE、pyproject无license字段；Carbon源码有完整MIT许可。Pumpkit有Telegram成品监控，但根LICENSE为all rights reserved，不可直接复制。继续核查Million整体业务流程与OKX工作流的适用性，**整套成品优先于仅评估FnZero SDK**。
+- **本轮实际本地运行**：Node标准库环境按HoldTech `detectBundles` 和 `extractBuyTimeline` 的判定逻辑手工独立复现四个合成负例，四项断言通过；对应Transfer误称买入/同Slot误称Bundle/fee payer合并真实买方等语义风险。**未运行原HoldTech项目、没有真实RPC、未运行FnZero或当前PR#16最新全套源码**。
+- **限制与回填**：终端无法通过DNS访问GitHub，不能完成FnZero↔M01 SDK运行对比；实际审查与结果回填到 `reference-capability-reuse-ledger.v1.md`，生成GPT Library便携报告。P3-M01仍处于fixture-only，来源CI成功不能替代真实数据。下一项最高价值任务是Million严格只读整套业务流程验收，FnZero作为后续语义缺口补强，不能反过来。
