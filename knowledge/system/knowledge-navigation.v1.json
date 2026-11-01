@@ -143,6 +143,16 @@
       "id": "evidence",
       "path": "docs/evidence/v01-real-rugcheck-holder-2026-11-01.md",
       "role": "Specific V0.1 real vendor action evidence, not complete chain audit"
+    },
+    {
+      "id": "wallet_rpc_sample",
+      "path": "src/solana_meme_os/public_wallet_rpc_sample.py",
+      "role": "Public no-key bounded recent wallet signature and raw transaction sample; no full history, no decoding, no continuous monitoring."
+    },
+    {
+      "id": "vendor_handoff",
+      "path": "src/solana_meme_os/vendor_event_handoff.py",
+      "role": "Read-only vendor-label and pool-infrastructure evidence triage to pending Grok task; does NOT invoke a Bot."
     }
   ],
   "routes": [
@@ -231,7 +241,8 @@
         "mint",
         "holder",
         "pool",
-        "evidence"
+        "evidence",
+        "vendor_handoff"
       ],
       "reference_ids": [
         "REF-032",
@@ -273,7 +284,8 @@
       ],
       "engineering_ids": [
         "holder",
-        "event"
+        "event",
+        "wallet_rpc_sample"
       ],
       "reference_ids": [
         "REF-003",
@@ -635,7 +647,8 @@
       ],
       "engineering_ids": [
         "execution",
-        "product"
+        "product",
+        "vendor_handoff"
       ],
       "reference_ids": [
         "REF-001",

@@ -103,7 +103,9 @@ def _present(route: dict[str, Any], engineering: dict[str, Any], branch: str,
         "knowledge_paths_on_current_branch": route["knowledge_files"],
         "engineering_candidates_on_separate_branch": [
             {"path": engineering[id]["path"], "branch": branch,
-             "declared_role": engineering[id]["role"], "invoked": False}
+             "declared_role": engineering[id]["role"], "invoked": False,
+             "available_in_current_checkout": (ROOT / engineering[id]["path"]).is_file(),
+             "checkout_is_not_runtime_validation": True}
             for id in route["engineering_ids"]
         ],
         "reference_asset_ids": route["reference_ids"],

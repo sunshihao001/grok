@@ -16,7 +16,19 @@ class NavigationTests(unittest.TestCase):
         result = nav.audit(self.data)
         self.assertTrue(result["ok"], result["errors"])
         self.assertGreaterEqual(result["local_paths_checked"], 15)
-        self.assertEqual(result["remote_engineering_paths_unchecked"], 8)
+        self.assertEqual(result["remote_engineering_paths_unchecked"], 10)
+
+    def test_integrated_checkout_connects_existing_knowledge_to_real_code(self):
+        # Source file existence is NOT live API, financial validity or Grok execution.
+        for intent, fragment in [("WALLET_ACTORS", "public_wallet_rpc_sample.py"),
+                                 ("MINT_OVERVIEW", "vendor_event_handoff.py")]:
+            found = nav.shortlist("", self.data, intent=intent)["routes"][0]
+            matches = [x for x in found["engineering_candidates_on_separate_branch"]
+                       if fragment in x["path"]]
+            self.assertEqual(len(matches), 1)
+            self.assertTrue(matches[0]["available_in_current_checkout"])
+            self.assertFalse(matches[0]["invoked"])
+            self.assertTrue(matches[0]["checkout_is_not_runtime_validation"])
 
     def test_wallet_funding_and_batch_question(self):
         found = nav.shortlist("一批钱包同时转账，可能有同源资金吗", self.data, limit=5)
