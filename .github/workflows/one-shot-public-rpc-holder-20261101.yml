@@ -33,7 +33,8 @@ jobs:
               report=json.loads(p.read_text())
               print('REAL_SOURCE_STATUSES',json.dumps(report.get('source_status',{})))
               print('SOURCE_ERRORS',json.dumps(report.get('source_errors',{})))
-              print('RUGCHECK_HOLDER_COUNT',report.get('rugcheck_public',{}).get('top_holders_rows_returned') if report.get('rugcheck_public') else 'NOT_AVAILABLE')\n              print('RUGCHECK_CREATOR',report.get('rugcheck_public',{}).get('creator_vendor_candidate') if report.get('rugcheck_public') else 'NOT_AVAILABLE')
+              print('RUGCHECK_HOLDER_COUNT',report.get('rugcheck_public',{}).get('top_holders_rows_returned') if report.get('rugcheck_public') else 'NOT_AVAILABLE')
+              print('RUGCHECK_CREATOR',report.get('rugcheck_public',{}).get('creator_vendor_candidate') if report.get('rugcheck_public') else 'NOT_AVAILABLE')
           else:
               print('NO_REPORT; see stderr in artifact')
           PY
