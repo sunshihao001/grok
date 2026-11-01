@@ -166,3 +166,7 @@ Solana RPC/可靠读源接入；解析 System/Token/WSOL/交易池内外指令�
 GitHub Actions [`monitor-tests` run #41186104343](https://github.com/sunshihao001/grok/actions/runs/41186104343)：`108 tests / OK`。已包含 16 项 `test_research_dispatch.py`、2 项 `test_dual_loop_vertical_slice.py` 与原有测试。所有源码与测试位于 `docs/cognition-knowledge-conversion-v1`，未改 `main`。
 
 本轮动态研究专家路由现在覆盖 M2 的全部六种候选类型，新增 `funding_to_buy_flow`、`token_consolidation_cashflow` 场景，总计 **7 类专业研究场景**。这不是声称已经完成市场异常基准或真实智能体多工具执行。
+
+## V4 的研究入口边界：已知 M2 候选不是知识发现全集（2026-11-01）
+
+V4 既有 `research_dispatch.py` 只对六类 M2 **已知候选**制定有限源核查任务；该覆盖不等于经济机制研究已经完成。已存在的 [V5 研究宪章](economic-mechanism-discovery-charter-v5.md) 允许由原始程序事件、资产守恒矛盾、外部案例与专家分歧发起研究 Case，即使它不是 M2 目前识别的事件种类。R008 Stake Account 资产/权限路径显示这种开放机制发现为何必要。*不能因此把当前只读派发器写成已自动发现、解码 Stake Program 的系统。*
