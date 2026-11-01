@@ -1171,12 +1171,25 @@
         "id": "REF-066",
         "name": "RugCheck",
         "kind": "provider",
-        "url": null,
-        "verification": "HISTORICAL_NAMED_ONLY",
-        "role": "Million项目代币风险审核依赖/风险标签对照",
-        "priority": "P3",
+        "url": "https://api.rugcheck.xyz/swagger/index.html",
+        "verification": "PAGE_VERIFIED",
+        "role": "真实联网已复用的成熟公开Token Report：免Key单Mint风险/Top Holder Token Account候选、Creator/AMM knownAccounts与供应商缓存状态；不是独立链上归因或完整Dev历史",
+        "priority": "P1",
         "lead_expert": "E-L2-03",
-        "when_to_review": "需要第二条独立代币权限/安全指标时"
+        "when_to_review": "V0.2钱包群体/资金关系：检查RugCheck insider graph及缓存/公开API边界，并与Million funding/owners业务对照",
+        "real_readonly_execution": {
+          "state": "GITHUB_ACTIONS_REAL_VENDOR_RESPONSE",
+          "run_id": 41269179918,
+          "artifact_id": 13068576712,
+          "mint": "EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump",
+          "retrieved_at": "2026-11-01T03:26:30.595842+00:00",
+          "returned_top_holder_token_accounts": 20,
+          "provider_known_amm_candidates": 1,
+          "source_sha256": "d6baa59b89cbbfc8f4489253e35457415a2e53e8e2076da40179733ba6137054",
+          "evidence_path": "docs/evidence/v01-real-rugcheck-holder-2026-11-01.md",
+          "evidence_repo_branch": "research/p24-cross-mint-m01-batch-monitor-20261031",
+          "boundary": "CACHED_VENDOR_DATA_NOT_INDEPENDENT_CHAIN_REPLAY"
+        }
       }
     ]
   },
