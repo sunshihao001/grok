@@ -96,3 +96,18 @@ GitHub 知识源在 PR #14；实现和测试在 PR #16；GPT Library 的当前�
 - **阶段**：继续P3局部工程，不进入P4。知识状态 `SOURCE_CODE_INSPECTED`、工程方案 `PIVOT_METHOD_KEEP_GOAL`，第三方复用状态 `NOT_INSTALLED_OR_TESTED`，Grok正式监控和实盘为 `NOT_DEPLOYED`。GitHub PR#14/#16尚未合并；GPT Library与Project文件附件须分别核实。
 
 **下一轮可复制输入**：继续P3-M01，不造轮子。先读取最新进度、功能复用台账、工程PR#16和FnZero Python固定源码。使用隔离本地只读环境按既有fixtures和外部项目的可公开核查DEX正例，对 FnZero `parse_rpc_transaction` 做实际安装运行、输入输出/状态及许可证检查；与现有手写解析器和必要时的Carbon做同输入对照。不得再添加自写协议/指令解码；只在明确事件字段和误判界限后考虑小型字段映射。报告真实测试/失败/成本，更新原PR与知识、GPT Library镜像，最后决定可直接复用还是需换现成方案；不下单不签名。
+
+## 2026-11-01｜整套成品项目优先：修正把复用缩成 FnZero 解析器的错误
+
+**项目主线纠偏**：历史讨论中曾明确参考已完成的 **Kelows/million、HoldTech、pumpwatch、Why-Solana** 和 OKX 现成工作流；当前功能台账遗漏了 **Million 这个功能完整的相似产品**，先后把工作误导向自研底层交易解析器、再误导向只比较 FnZero/Carbon。修正后以现有 [《外部功能复用台账》](reference-capability-reuse-ledger.v1.md) 的**成品项目整体/业务级能力对照**为优先，仍保留原Hermes/qb-/meme-的专业知识和P3-M01历史有效测试。不新建项目框架，也不立即宣布全面迁移至Million。
+
+**已核实际代码（未本地运行）**：
+- [Million固定SHA](https://github.com/Kelows/million/tree/c89ad07caaf70773d40b45943e136eadc4f946a5) 已有 NestJS/SQLite+Prisma API、Helius数据入口、钱包↔Token发现crawler、funding/owners关系、live/flows实时观察、copyability/backtest、screener与paper执行，以及14工具MCP和Agent Skills；这比单SDK更接近目标成品。MIT许可已查，但代码含`EXECUTOR=local`实盘执行路径，禁止在本项目启用；Helius密钥/成本、持久性、Grok兼容与关系归因需后续审核。
+- [HoldTech固定SHA](https://github.com/co-numina/holdtech/tree/a75e214bf1ee0a8803eb7d93336be98c481c2db9) 包含holder-overlap、deep-scan、deployer-profile、bundler-feed等成品路由，已有许可证与硬编码凭证风险，禁止直接跑原样；[pumpwatch固定SHA](https://github.com/cinder-security/pumpwatch/tree/156a91ab63740ab0ce8700434ff33844d00de519) 可运行只读发行者检测、状态跟踪和SQLite历史；[OKX现成工作流](https://github.com/okx/onchainos-skills/tree/73904b636a0f022dcc13b6d7a0dd2ed3b3195f25) 有新币筛选、Smart Money信号、钱包分析、WS监控、Token研究；用户此前提到的Froggy/Sputnik多为工具功能与专业词汇来源，不能当作已获开源代码。Why-Solana维持review_only用于取证/证据反证。
+
+**现在的唯一优先任务**：不用先新写解析器，也不先单独做FnZero SDK对照。以一个完整**只读业务场景**核查 **Million 是否能直接从一个 Mint 发现关键钱包→持续跟踪这些钱包→展示群体资金/执行变化→输出机器可读取状态或MCP结果**，并与 OKX成套工作流、HoldTech关键分析、pumpwatch Dev监控的既有功能比对；要求记录已可直接运行/需连接数据/仅部分源码/误归因/危险权限。之后才决定 `WHOLE_APP_RUN`、`EXISTING_API_WRAP`、`MODULE_REUSE`、`COMPONENT_ONLY`、`KNOWLEDGE_ONLY`；**不要预先决定要 fork 还是重写，避免多个产品重复搭建。**
+
+**执行边界**：本轮已读关键源码、登记到现有台账和参考池，但未安装/部署外部成品、未验证Grok云电脑环境/付费API/实时正确性，状态是 `SOURCE_CODE_INSPECTED / PRODUCT_REUSE_AUDIT_PENDING`，不是已拥有这些功能。M01/C02/C05仍在局部P3，不触发自动交易、钱包密钥或生产部署。
+
+**下一轮输入（取代历史FnZero-only输入）**：先恢复Million、HoldTech、pumpwatch、OKX、Why-Solana及旧Hermes/qb-的现有项目映射，审阅一个完整只读Mint→关键钱包→持续观察→群体关系报告的现成实现和安全运行要求；若能在隔离环境运行则以原生API/MCP/CLI做最小业务验收，不开发同名功能。记录每一步是否已存在和缺失，比较Grok与成品可直接复用的程度；合适才决定是否封装、保留或替换模块。更新现有台账、知识和进度，下一轮才讨论需要写的极少量胶水。
+
