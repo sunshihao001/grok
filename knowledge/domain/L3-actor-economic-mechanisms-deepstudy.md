@@ -435,3 +435,52 @@ Jito 官方文档描述 bundle 可按固定顺序处理至多五笔交易，并�
 - 本仓库 `knowledge/domain/L3-wallet-actors.md`、`knowledge/domain/L4-L5-copytrade-edge.md` 与 `knowledge/experts/registry.v1.json`。
 
 **研究状态声明**：协议解释已与上列一手文档核对；本篇的新经济机制推论是可辩论的专业知识，不是基于真实候选总体估计的概率事实。未设置新价格、身份、盈利阈值；未运行钱包、资金链、交易或实盘策略。必要的下一步首先是深化 D03/D06/D07 与本篇的经济机制关系，而不是先把论文式标签落成固定评分表。
+
+
+## 15｜2026-11-02 跨项目源码—设计史—经济推断合成：关系图的证据类型会改变“独立买家数”
+
+> **知识地位：AMEND / D04、D05、D07（联动D06、D08），不新增本体。** 本节源于固定版本的实际源码、提交说明、旧项目方法以及一个按源码条件构造的最小反例。**未运行 Million 原程序、未重新抓取链上交易、未测真实市场错分率或收益。** \`Why-Solana\` 研究仍按既有 \`review_only\` 准入，文内数字只代表外部作者的报告。
+
+### 15.1 先恢复设计者的问题，而不只列出函数
+
+- **明确设计理由（Commit）**：Million 的 Owner v1 提交 [6ac078b](https://github.com/Kelows/million/commit/6ac078bb36a27f52512211647a92f252b65a0426) 说明，用已有交易历史产生 funding、fee-payer 和 co-entry 边，避免额外 API 成本，再以 union-find 推断 Owner；目的之一是让“一个操作者的五个钱包”在共识中只计一次。提交明确承认 \`ownerId\` 重建不稳定、早期证据未覆盖。
+- **错误反馈与修改（Commit）**：[d48b4f0](https://github.com/Kelows/million/commit/d48b4f0818238a7e349e2e24d410ee5d2e5723be) 记载出资枢纽把177个钱包聚成6个大组，因而把 hub-degree 阈值从20降到6。当前源码又记录182钱包错误聚类案例，\`coentry\` 不再直接作为合并桥梁。这里是代码作者记录的工程事故，不是本项目独立复现。
+- **旧项目要解决的同一经济问题**：Hermes \`learning/11.md\` 讨论共同出资和分发关系，不把 Top Holders 直接当经济主体；qb- \`sikk_gmgn_token_report.py\` 把钱包分类、公共基础设施和风险地址分开；HoldTech 的 Deep Scan 用同 slot 和 fee payer 近似交易者及出资者，存在不同概念误合并风险；OKX \`token-research\` 则在业务展示层提供 cluster 和 Smart Money 标签，却没有仅凭该工作流文本证明同一最终受益人。各项目不是同一个“钱包聚类算法”的不同实现，而是在**观测事实、服务关系、交易协调、经济同控、市场共识**的不同位置做了近似。
+- **竞争解释的外部研究**：Why-Solana 的 \`funder_network/results.md\` 在其作者自述样本中用非 hub 关系、共签收款和置换对照区分公共服务与群体关系；其 \`docs/PITFALLS.md\` 专门讨论 hub 引起的巨型连通分量和不当对照。报告的统计数字没有在本项目独立复算。Solana 官方[费支付代付](https://solana.com/docs/payments/send-payments/payment-processing/fee-abstraction)允许服务商为独立用户支付费用，提供了 fee payer ≠ 决策者/Token owner 的协议级反例。
+
+### 15.2 从源码识别的三个可复核缺陷候选
+
+1. **边类型干扰（源码确定）**：Million [\`owners.service.ts\`](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/analysis/owners.service.ts) 的 \`cluster()\` 先对数据库**全部** \`WalletEdge\` 计算节点 degree，之后才跳过 \`coentry\` 边、执行 \`degree > 6\` 的 hub 过滤。因此 co-entry 虽不能直接合并钱包，却可以使一条未变的 funding/feepayer 边不再参与聚类。**这是确定的代码逻辑，真实发生频率尚未知。**
+2. **关系方向与时间被压平（源码确定）**：\`extractEdges()\` 把某钱包收到和发出的 native SOL transfers 汇总到同一个 counterparty，\`norm()\` 将 funding/fee-payer 地址按字典序变成无向边；\`WalletEdge\` 只存 \`a,b,type,weight,createdAt\`，没有具体交易签名、真实资金方向或所引用的观察窗口。此数据适合“曾关联过”候选图，不足以从持久边直接证明“谁为谁出资、何时出资以及是否仍有关系”。
+3. **历史边对当前群组的影响（源码确定，结果为推论）**：\`extractEdges()\` 与 \`rebuild()\` 对关联边进行 upsert，当前可见路径没有按窗口移除已不满足条件的旧 \`coentry\` 或 fee-payer 边；\`cluster()\` 读取整张已存储表。若重新计算的数据不同，旧边仍可能改变 degree/合并结果。**不是声称历史转账应删除，而是要求“历史曾关联”和“当前满足关系阈值”分开解释。**
+
+### 15.3 最小反例及下游错误传播
+
+从当前 \`cluster()\` 的核心判断构造一组**合成图输入**（非链上样本、非 Million 原仓库运行）：
+
+- 原图只有 \`A—B (funding)\`：A 的 degree 为1，未超过6，A/B被聚为同一候选 Owner。
+- 保持 \`A—B\` 不变，另加入 \`A—C\` 至 \`A—H\` 六条 \`coentry\` 边：A 的 degree 变7，\`A—B\` 被 hub 判断跳过；A/B不再被合并。
+- 这证明 **“新增不能作为直接合并证据的关系，仍可改变已有合并结果”**。不证明实际市场中该例多常见，更不证明应简单删除全部 co-entry 关系。
+
+更重要的是，下游 [\`consensus.service.ts\`](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/analysis/consensus.service.ts) 使用 \`ownerId\` 去重，统计一个 Mint 获得多少“独立 Owner”参与。于是“图构建/聚类推断误差 → 独立确认人数 → 市场共识/信号”形成**推断级联**：原始钱包交易不变，统计却可能变化。假合并会压低估计，假拆分会抬高估计。若依赖该数判断需求或异常，不能把它称作未经限定的“独立聪明钱人数”。
+
+### 15.4 转化为本项目的专业判断，而非新架构
+
+**区分三种计数**：
+
+- \`observed_wallet_addresses\`：在声明的时间、协议和样本覆盖内实际观察到的地址；不是独立人。
+- \`candidate_relation_groups\`：注明 \`funding/fee sponsorship/coentry/transfer\` 等边类型及形成条件的可撤销关联候选；不是 \`verified_owner\`。
+- \`independent_economic_actors\`：如无独立可识别证据则报告 UNKNOWN；允许展示在明确极端归并假设下的敏感性范围，但不得把这个范围直接当作已校准概率或真实人数。
+
+**最小验证应检验结果稳定性而不是只检验代码可运行**：
+
+- A/B资金边固定，逐步增加非桥梁 \`coentry\`：候选群组和下游 consensus 计数是否改变？若改变，要把变化归因于算法阈值，而不是描述为链上资金主体改变。
+- 故意输入真实资金来源不同但共享 fee sponsor / 公共服务的两个地址，和资金来自同一非公共地址但后续交易完全独立的两个地址：模型能否分别输出**服务关系**、**行为关系**及“同控未知”？
+- 更新一个钱包的近期行为、保持历史交易不变：历史边与当前候选边是否仍可区分？在不同已观测钱包集合/时间范围下，边的纳入与独立共识数是否稳定？
+- 仅对本项目当前 V0.1/V0.2 只读报告先保留“事实地址数、关系候选、数据来源与时间”。RugCheck 的 \`holder\`/AMM 交叉匹配反例已经说明，Token Account 候选不等于独立巨鲸。**不因这项研究直接修改跟单决策阈值，也不自动引入 Million 的交易或写入接口。**
+
+**新认识（专业推论）**：关系图不是事实输入的“无损翻译”，而是一种会改变后续经济量测对象与分母的估计过程。尤其当输出叫作 \`owner\`，下游又以 \`ownerId\` 计算群体共识时，**实体识别的误差可能被误认为市场需求变化**。研究的下一项更有价值未知不是“怎样把钱包关联更多”，而是“哪些关系能支持独立经济决策主体的推断；哪些新增证据只说明共享服务；在群组归并存在不确定性时，异常/共识判断是否仍保持成立”。
+
+**外部理论交叉**：实体消歧误差会传导到网络统计的实证研究 [Diesner et al., ICWSM](https://ojs.aaai.org/index.php/ICWSM/article/view/14630)；[Lauren et al., 2026, probabilistic linkage with graphs](https://arxiv.org/abs/2610.00566) 研究了阈值成分传递闭包导致的错合并及替代聚类方法。这里仅借用其**测量/聚类敏感性研究问题**，不声称该论文的算法效果已在 Solana 钱包数据得到验证。
+
+**来源固定版本**：Million \`c89ad07caaf70773d40b45943e136eadc4f946a5\`（源码+历史提交）；HoldTech \`a75e214bf1ee0a8803eb7d93336be98c481c2db9\` 的 \`app/api/deep-scan/route.ts\`；Hermes \`2bf694b37cce25b4a3c9364298b784039f3ecc84\` 的 \`learning/11.md\`；qb- \`8377ad5611255df5cd4562666a826708575334f0\` 的 \`sikk_gmgn_token_report.py\`；Why-Solana 个人 fork \`9a7ad51d56328e91e67e3f531d6744307d0ee68b\` 的 \`funder_network/results.md\` / \`docs/PITFALLS.md\`（\`review_only\`）；OKX \`73904b636a0f022dcc13b6d7a0dd2ed3b3195f25\` 的 \`workflows/token-research.md\`。本轮未审查全部65项，也未验证实体归并真实检出率。
