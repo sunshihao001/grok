@@ -1,6 +1,6 @@
 # Solana Meme Workflow OS — Grok Bot Edition
 
-GMGN 入口 + 钱包情报 + 证据链 + 门控判断的 Solana Meme 研究工作流，适配 Grok Bots 多代理迭代。
+**当前产品定位**：从Solana Meme Mint及市场事件出发，以程序只读追踪关键钱包、交易/转账、资金/Token关系和群体异常，再按需通过Grok进行专业研判。AI承担产品与工程统筹；知识与多Bot是按需支撑，不是交付物本身。
 
 原 Hermes 版：https://github.com/sunshihao001/-
 理论库：https://github.com/sunshihao001/meme-
@@ -8,13 +8,13 @@ GMGN 工具原型：https://github.com/sunshihao001/qb-
 
 ## 目标
 
-用多个开发 Bot 迭代规则与技能，最终留一个成品监控 Bot。
+优先完成一个真实可重复运行的只读监控业务链；只有实测能改善质量时才增加开发Bot、专家或自动化。
 
 Phase 1：只读研究 / 纸面门控，禁止真实交易、私钥、签名、广播。
 
 ## 当前产品执行路线（不再扩建架构）
 
-[《四阶段成品交付计划》](docs/product-delivery-plan-v01.md) 为唯一用户功能推进清单：**V0.1真实Mint报告 → V0.2钱包与资金 → V0.3异常监控 → V1.0 Grok自然语言入口**。优先复用OKX/Million等成熟业务程序，只补实际上缺失的接口；当前已真实验证两个Mint的公开池快照，但尚未验证完整Holder/Dev资金报告、持续监控或Grok云端运行。
+[《四阶段成品交付计划》](docs/product-delivery-plan-v01.md) 为唯一用户功能推进清单：**V0.1真实Mint报告 → V0.2钱包与资金 → V0.3异常监控 → V1.0 Grok自然语言入口**。优先复用OKX/Million等成熟业务程序，只补实际上缺失的接口；当前已真实验证DEX公开池和RugCheck缓存Holder/Creator候选合并的V0.1基础预览；完整钱包资金关系、真实连续监控和Grok云端运行尚未验证。**下一优先能力：V0.2钱包/资金关系**；OKX未授权增强报告不阻断免费主线。
 
 
 
