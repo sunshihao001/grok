@@ -1,5 +1,9 @@
 # Solana Meme｜外部功能复用与长期能力台账 V1（2026-11-01）
 
+> **最新已实测复用（2026-11-01）**：为避免“只审了源码/只写方法”长期阻碍成品，工程PR #16直接调用已登记REF-066 [RugCheck现成Token Report](https://api.rugcheck.xyz/swagger/index.html)的**免费缓存GET**，与DEX Screener现有池报告合并。真实[GitHub Actions #41269179918](https://github.com/sunshihao001/grok/actions/runs/41269179918)获得同Mint5池、20条TopHolder Token Account候选、Creator候选；**1条holder owner实际匹配PumpSwap池地址且供应商标AMM**，现成标签不能直接当独立鲸鱼/庄家。原始响应和SHA校验见[工程实测](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/evidence/v01-real-rugcheck-holder-2026-11-01.md)。缓存数据非独立链上复算，Dev全历史与资金边未知，公共Solana RPC曾因429拒绝。本台账旧“未实现真实Mint关键钱包来源/OKX唯一硬前置”的说法仅适用于完整增强版；**当前免费V0.1已可输出真实供应商候选，下一任务V0.2资金和群体关系**。本次REF-066已由历史提名修订为已核查官方页面+真实运行证据，仍不升级为直接经济控制事实。
+
+# Solana Meme｜外部功能复用与长期能力台账 V1（2026-11-01）
+
 > **性质**：现有 `rolling-reference-knowledge-integration.md` 的**功能级子账本**，服务于 P3-M01、B01–B05、D01–D12，不新建知识本体或运行框架。本账本记录“看过哪些现成功能、是否能安全复用、具体差多少、什么时候复查”，而不是已安装或已运行的功能表。当前仅核查了下列代表性项目的一部分源码；`SOURCE_CODE_INSPECTED` ≠ 本地运行/真实交易核验。全部第三方代码视为不可信输入，未经许可/沙箱审计不执行。
 >
 > **研究原则**：先找现成功能/成熟库/外部服务 → 看实际源码、测试、契约、许可证、成本与误判 → 选直接调用、封装、最小移植、暂存知识或明确拒绝 → 仅补缺失的业务胶水 → 使用相同输入对照测试 → 更新 Dxx-Kxx 与本账本。禁止先宣布重构架构，再回头寻找理由。发现真正成熟的替代方案应允许 **PIVOT**。
