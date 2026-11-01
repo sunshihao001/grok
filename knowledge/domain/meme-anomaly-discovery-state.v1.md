@@ -185,3 +185,53 @@
 已见[功能台账](../system/reference-capability-reuse-ledger.v1.md)的新源码证据：Million的`LiveEvent.signature`为全表唯一键，其Webhook仅将一个签名归属到首个匹配订阅钱包，故`GET /api/live/flows`的独立钱包数不等于同笔交易真实多钱包参与数；用这种群体数据直接实施C02有结构性漏记。其`ownerId`为可重建启发式群体标识，非稳定经济身份。P3-M01现有旧Library快照38项回归实测通过，但没有真实Swap源、每Slot采集水位与独立机会分母，不能以合成complete判定C05沉默。
 
 全业务优先顺序调整为：**用OKX `token-research`取一个Mint只读快照作候选基线→审查Million发现/钱包订阅/群体事件的多视角缺陷→只在实际经济事件缺口才选现成SDK，而不是继续扩写自研解析器**。需要同Mint两时间点的实际可复核数据、断流/回补和按source留痕，才能升级为长期C02/C05监控。此处不新增候选算法或发出交易建议。
+
+## 2026-11-01｜Million 全业务链深入源码对照：事件保存口径、时间窗口与非随机缺失（研究增量）
+
+**状态：SOURCE_CODE_INSPECTED + CROSS_SOURCE_THEORY；未在本项目运行Million、未做生产数据回放。** 外部成品固定为 [Kelows/million@c89ad07caaf70773d40b45943e136eadc4f946a5](https://github.com/Kelows/million/tree/c89ad07caaf70773d40b45943e136eadc4f946a5)；对照 [HoldTech@a75e214b](https://github.com/co-numina/holdtech/tree/a75e214bf1ee0a8803eb7d93336be98c481c2db9)、[pumpwatch@156a91ab](https://github.com/cinder-security/pumpwatch/tree/156a91ab63740ab0ce8700434ff33844d00de519)、[OKX token-research@73904b63](https://github.com/okx/onchainos-skills/blob/73904b636a0f022dcc13b6d7a0dd2ed3b3195f25/workflows/token-research.md) 及旧Hermes钱包装/证据链。既有上节已确认\`LiveEvent.signature UNIQUE\`与Webhook首钱包归属，本节**只新增其他实际源码冲突与跨领域因果推论**。
+
+### 真实业务链与不同的观察分母
+
+\`crawler\`（先分析钱包、再筛币/发现候选）→ \`discovery\`（从Mint历史样本提取买家、排除已知Venue）→ \`wallets.analyze\`（截断历史、库存成本、标注）→ \`owners.rebuild\`（资金/fee payer边启发式聚类）→ \`live-feed\`（WebSocket/Webhook订阅和保存）→ \`flows\`（窗口内买卖、按ownerId去重、净额）→ UI/MCP。真实入口本身有状态变更（自动加入候选/改订阅、交易Paper/Local路径），不适合把整个程序未经隔离地作为我们的只读运行时。
+
+不同层的总体不同：\`链上所有经济动作\`≠\`供应商返回的交易\`≠\`被发现且纳入名册的钱包\`≠\`实际订阅覆盖的钱包\`≠\`落库LiveEvent\`≠\`UI显示的群体资金流\`。一个层级没观察到事件，不能下推为链上没发生。
+
+### A. 同一窗口的UI承诺与保留时长冲突：新增的确定性源码事实
+
+- [live-feed.service.ts](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/live/live-feed.service.ts)设\`EVENT_RETENTION_MINUTES=15\`、\`EVENT_MAX_ROWS=5000\`；每5分钟执行\`pruneEvents()\`，删除早于当前时间15分钟的\`LiveEvent\`。
+- [Flows.tsx](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/web/src/pages/Flows.tsx)允许\`[15,30,60,120]\`分钟；[flows.service.ts](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/live/flows.service.ts)只查询该短存活表\`ts >= since\`，**没有看到额外事件归档补源**。因此30/60/120分钟通常仅得到最后约15—20分钟存活事件的子集，而不应被描述为完整长窗口；更高事件量时5000行总量上限还可能提前截断。
+- \`live.status().eventsToday\`虽按过去24h过滤，却只统计同一张15分钟保留表，**名称与统计总体不一致**；不是可用来衡量全天完整采集量的独立计数器。
+
+**直接影响**：M01/C02/M05的“同一5/15/60分钟买入群体数量、净SOL、异常安静、群体分布”可能因观察窗口不同而产生假差异；长期热力图和日内事件统计受选择性丢弃影响。验证边界：源码逻辑足以说明不完整性风险，实际数据偏差大小尚无真实部署日志。
+
+### B. 时间抽样不等于全生命周期历史：源码展示的采样语义冲突
+
+- [discovery.service.ts](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/discovery/discovery.service.ts)的\`deepSample\`按时间生成bucket、为每个bucket取一个签名游标附近的交易页、按signature去重。该算法有**时间覆盖点**，但不保证覆盖时间点之间全部交易；名称“deep/whole life”不应解释为**全量完整买家历史**。
+- \`truncated\`被设为\`missedBuckets > buckets/2\`；即使某些bucket缺失，或bucket间有大量事件未采集，仍可出现\`truncated=false\`。**这个值不能被下游当“全量历史完整”的证明**。
+- 发现阶段最多取30/60个高额候选，并只对部分候选进行深度分析；其中70%优先头部、30%从尾部随机抽样。这是有用的**探索预算分配**，但不是无偏的钱包总体样本。
+- [metrics.ts](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/analysis/metrics.ts)明确将没有观察到买入成本的卖出收益记为\`unbackedSol\`而不是已实现PnL；[crawler.service.ts](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/crawler/crawler.service.ts)也承认截断历史PnL不能用于发现阶段高质量排名，应依赖后续观察的闭合往返。这是值得继承的**失败修正与取样纪律**。
+
+### C. 订阅和保存之外的系统健康不是市场无活动
+
+- WebSocket模式最多订阅25个钱包，按已有优先字段排列；Webhook只订阅被\`subscribed\`的地址。资金流是**观察名册**的流，不是全市场的净流。
+- Webhook主动限定\`transactionTypes=['SWAP','TRANSFER']\`以节省配额；其他交易类别未覆盖，不能把这些类别的缺失说成没有行为。
+- [live-feed.service.ts](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/live/live-feed.service.ts)的\`deadmanCheck\`在10分钟无成功事件后检查Webhook URL可达；URL通不等于消息必被送达或程序已完整解析；\`connected\`只是链路/配置层面的信号。
+- 因节省成本，遇到某钱包在15分钟内事件过多时，会\`subscribed=false\`自动静音（\`MAX_EVENTS_PER_WINDOW=150\`）。这意味着**越活跃/越异常的钱包可能越容易退出观察样本**（理论风险，不是对所有币已发生的统计）。
+- Solana官方 [logsSubscribe](https://solana.com/docs/rpc/websocket/logssubscribe)的\`mentions\`一次只支持一个Pubkey；Million为多个钱包建立独立订阅是符合接口限制的方案。但接收同一交易签名的多个通知后应在语义上区分交易身份与钱包观察身份；其既有\`signature UNIQUE\`把两个层级合并，是需要独立标记的源码级限制。
+
+### D. 跨项目交叉比较与专业推演
+
+- **HoldTech**：[holder-overlap](https://github.com/co-numina/holdtech/blob/a75e214bf1ee0a8803eb7d93336be98c481c2db9/app/api/holder-overlap/route.ts)虽在\`getHolders\`注释写“full holder base”，实际发起\`getHolders(m,200)\`、有分页/退出上限/异常break；展示的跨Mint重合是**有限持有人样本交集**，不是“真正没有共同钱包”的结论。和Million的deepSample属于两类不同的截断分母。
+- **pumpwatch**：发行订阅(\`pump_watch.py\`)、结果定期采样(\`outcome_tracker.py\`)分开，形成观察窗口不同的数据集；可借鉴采集时点/后续观测分工，但来源论文明确不能推出真实身份/利润，且本轮未实际跑其RPC与快照。
+- **OKX**：\`token-research\`按基础/持有人群/开发者及发行平台依次调用，提示cluster暂不可用时跳过；这类“报告可用”与“某个字段覆盖完整”是不同等级。WS工作流属于独立运行语义，本轮未使用授权账户实测。
+- **旧Hermes/qb-**：既有\`meme-wallet-structure\`保留池/交易所剔除门槛，\`meme-evidence-chain\`保留\`counter_evidence\`和\`missing_fields\`；qb原\`sikk_gmgn_token_report.py\`已经将不同角色和数据表分离。这些语义可以纠正外部产品的标签过度解释，但旧GMGN数据/评分缺验证，不能直接等同真实钱流。
+- **专业理论**：基于[Apache Flink Event Time](https://nightlies.apache.org/flink/flink-docs-master/docs/concepts/time/)区分市场事件发生时钟和系统收到/处理时钟；参照[缺失机制研究](https://pubsonline.informs.org/doi/10.1287/isre.2022.1104)，对于依活跃度、费用、排名和可用窗口选择性缺失的市场样本，不能不加证明地当作独立随机缺失。这种选择性**可能**扭曲C02/C05，并不证明它在任意币上的偏差方向与大小。
+- **设计思路的边界**：可参考[Event Sourcing](https://www.martinfowler.com/eaaDev/EventSourcing.html)的可回放事件事实与查询投影视图分离原则，但这不是必须引入完整事件溯源框架的实施决定。此阶段只研究业务必要的事件可审计性与观察覆盖，不扩建基础设施。
+
+### 本轮认知DIFF与反证条件
+
+**旧认识**：Million已有人群资金/群体实时流，已识别同signature只能记一个钱包。**新增认识**：同一系统还存在\`UI最长120min vs 原始事件15min保留\`、\`eventsToday与短存活数据不符\`、\`deepSample时间采样/false truncated\`、\`订阅选优+异常大流量自动退订\`等独立机制；因此**“某钱包/群体未出现活动”必须附事件总体、订阅覆盖、窗口真实存活、RPC到达状态、模型支持范围，而不能自动解释为市场沉默**。这不是新监控指标的设计方案，而是对现有M01/C02/C05否定性结论成立条件的收缩。
+
+需要能推翻/限定判断的来源：Million后续commit是否已修订保留窗口/事件键；是否存在我们尚未审读的外部持久事件流/数据库归档；真实部署下2钱包同signature与60min事件窗口的可重复执行；观察名册进入/退出与掉线审计记录。未经这些验证，不计算真实漏报率和Alpha，不指控作者恶意行为。
+
+**知识关联**：D01事件原语；D04角色与观察范围；D05资金边；D07时间群体；D10可观察性、数据时钟与截断；D11非随机缺失与反证。方法状态\`RESEARCH_SOURCE_INSPECTED_NOT_IMPLEMENTED\`；本文为现有候选研究的补充，不改变交易规则，也不要求立即编程。
