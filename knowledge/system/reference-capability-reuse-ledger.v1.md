@@ -446,3 +446,71 @@
 - **经济来源限制**：RugCheck`creatorTokens=null`，故不能声称Dev无发币史；供应商风险分及Copycat标签不是交易收益/同控证明；缓存`detectedAt`不是Mint创建时间，DEX报价时点也不是原子同slot。只有实际返回的供应商事实可用于报告。
 - **复用决策**：RugCheck是现有65项台账中已有的候选业务源，无需新的专家/解析器。以OKX现成完整`token-research`为目标，当前无已授权只读会话，且CLI具有x402付款相关逻辑，不应在未隔离时自动调用。RugCheck填补部分Holder/Creator**候选**，仍缺经过独立链上核实的Owner、资金图、完整Dev历史、已确认Swap及库存。
 - 原始数据、精确地址、时间与假设边界见[真实工程证据](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/evidence/v01-pool-vault-holder-cross-source-2026-11-01.md)。
+
+## 2026-11-01｜面向可运行产品的同行源码深审与实际复用修复（集成分支）
+
+> 此节是对已有功能台账的**具体补证、复用结论和真实交付**；不是新框架，也不取代前述历史记录。源码按本节固定SHA查阅，属于`SOURCE_INSPECTED`；只读业务功能需要独立运行验收。用户要求首先学习、复用成熟同行业务工作流，而不是按参数或单个SDK重新造轮子。
+
+### A. Kelows/million——最接近整个成品的业务和UI参照
+
+固定SHA：`c89ad07caaf70773d40b45943e136eadc4f946a5`（2026-11-01复查仍为main）。
+已直接读取 [discovery.controller](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/discovery/discovery.controller.ts)、[discovery.service](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/discovery/discovery.service.ts)、[funding.service](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/funding/funding.service.ts)、[flows.service](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/live/flows.service.ts)、[owners.service](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/analysis/owners.service.ts)、[trading.service](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/trading/trading.service.ts)、[router.tsx](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/web/src/router.tsx)、[find-first-whales Skill](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/.claude/skills/find-first-whales/SKILL.md)。
+
+**业务路径和现成功能**：单Mint `GET /discovery/token/:mint` → 筛选候选买家（排除已知池/路由等基础设施）→ 钱包分析；`GET /funding/:address` 从已有Enhanced Tx原始SOL转账聚合出入金对手、方向、时间与次数；`GET /live/flows` 聚合观察组买卖事件，以 `ownerId` 对群组去重。Web已有 `Dashboard/Discover/Wallets/WalletDetail/Funding/Flows/Live/Tokens/TokenDetail` 等实际路由；`AGENTS.md`和Skill用简短自然语言驱动HTTP已有业务程序。
+
+**最值得直接借鉴**：用户交互**不是**七个Bot界面；核心是「从Mint发现钱包→从钱包找资金/其他Token→从已观察事件发现流向→详情可回查原始决定」。UI优先首页/发现/钱包/资金/流向，其他作为详情；同一组数据同时服务UI/AI命令。
+
+**发现的代码级风险**：
+- `TradingService.onModuleInit()` 运行后初始化定时tick，Paper默认也可能更新数据库和模拟仓位；不能认为启动整套App等于纯只读。真实钱包密钥/下单与本项目禁止的行为隔离。
+- `FundingService.chains()` 仅提取SOL两方向的转账对手，`MAX_PAGES=3`、`MAX_LINKS=50`，且源码明确说“没有新鲜度验证、可能出现交易所充值地址”。转账对手≠真实原始出资者/受益人。
+- `OwnersService`以funding/fee payer/co-entry边做阈值union-find，`ownerId`会整体重建、不稳定；有hub排除防错，但群聚仍是启发式，不可声称法定/经济共同控制人。
+- 服务需要Helius key、Node和数据库；原Web本地API默认无鉴权，不得公开端口。未经隔离启动检查时状态为`WHOLE_APP_READONLY_UNVERIFIED`。
+
+**裁决**：`WHOLE_BUSINESS_REFERENCE_FIRST`；可优先复用确实独立且安全的只读API/前端交互，但先验代码副作用、部署依赖、费用、授权与每种原始事件。此前未运行整个Million，不能升级成已集成。
+
+### B. co-numina/holdtech——最直接可移植的是跨Mint持有人重叠的业务语义
+
+固定SHA：`a75e214bf1ee0a8803eb7d93336be98c481c2db9`。已直接读取 [analyze](https://github.com/co-numina/holdtech/blob/a75e214bf1ee0a8803eb7d93336be98c481c2db9/app/api/analyze/route.ts)、[deep-scan](https://github.com/co-numina/holdtech/blob/a75e214bf1ee0a8803eb7d93336be98c481c2db9/app/api/deep-scan/route.ts)、[holder-overlap](https://github.com/co-numina/holdtech/blob/a75e214bf1ee0a8803eb7d93336be98c481c2db9/app/api/holder-overlap/route.ts)、[deployer-profile](https://github.com/co-numina/holdtech/blob/a75e214bf1ee0a8803eb7d93336be98c481c2db9/app/api/deployer-profile/route.ts)、[ai-verdict](https://github.com/co-numina/holdtech/blob/a75e214bf1ee0a8803eb7d93336be98c481c2db9/app/api/ai-verdict/route.ts)。
+
+**成熟业务**：一个Mint扫描→Top holder/钱包活跃和持仓质量→DeepScan的时间窗/资金来源→多Mint重叠→开发者历史→结果页、列表、评分、可展开证据。现有`holder-overlap`接受2–5个Mint，将每币Owner集合求交并展示重叠；对本项目的**跨Mint重复钱包**恰好是已存在的产品形态，无需新造概念。
+
+**不能照搬的归因**：`deep-scan`中的“同slot的fee payer计为买家”“资金首次流入时fee payer当fundedBy”可能混淆执行与经济资金来源；A–F风险分和若干年龄阈值是作者启发式不是已校准概率；源码部分接口存在硬编码的Helius访问凭据回退，不能继承或公开部署；客户/服务端安全、付费权限及真实RPC响应另需检查。源代码未在本项目实际部署。
+
+**本次实际复用（已写代码并CI验收）**：不是复制不安全实现，而是借用其成熟**多Mint holder-overlap业务交互**，复用我们已实测的RugCheck `report.json`，加入 `src/solana_meme_os/cross_mint_holders.py`：
+- 2–5个已保存Mint，不发网络请求、不用API/私钥或自动交易。
+- 只比较`owner_candidate`（不是Token Account）；同Mint重复Token Account按Owner去重并保留供应商原字段路径、报告SHA和采集时间。
+- 依据RugCheck已标基础设施和跨源已匹配池地址，排除AMM/LOCKER/Pool候选；未分类账户**不能**升级为独立人或正常钱包。
+- 有效样本内重叠给出数字及地址；没有供应商样本显示`UNKNOWN_SOURCE_COVERAGE`而非0；未检测到重叠不代表无真实关系；均不推断同控或收益。
+- 生成可读Markdown和机器JSON，已有6项离线测试通过。**真实跨Mint样本对照待完成；目前不自称真实经济资金关系图**。
+
+### C. cinder-security/pumpwatch——发行者历史/运行可靠性与研究边界
+
+固定SHA：`156a91ab63740ab0ce8700434ff33844d00de519`。已读 [README](https://github.com/cinder-security/pumpwatch/blob/156a91ab63740ab0ce8700434ff33844d00de519/README.md)、[creator_reputation.py](https://github.com/cinder-security/pumpwatch/blob/156a91ab63740ab0ce8700434ff33844d00de519/code/creator_reputation.py)、[REPRODUCE](https://github.com/cinder-security/pumpwatch/blob/156a91ab63740ab0ce8700434ff33844d00de519/docs/REPRODUCE.md)。
+
+现成思路为launch监听→创建者记录/历史→结局观察→本地SQLite→冻结快照/可复现查询，不是完整的钱包操盘图或盈利模型。作者提供44MB冻结研究快照和SHA256（本次核对README所载值，**没有下载/独立校验该数据库**）。其研究方法明确避免将发行频率直接判为协调或利润。最值得保留的是`creator seen_at/数据覆盖时间/历史窗口`与“未观察到不等于没有发生”。推荐后续**只读复用发行监听/开发者历史输出契约**，但不将本项目的RugCheck`creator_tokens`缓存数冒充完整历史。
+
+### D. OKX onchainos-skills——成熟多步骤报告业务与调用/费用边界
+
+固定SHA：`73904b636a0f022dcc13b6d7a0dd2ed3b3195f25`。已读 [token-research原工作流](https://github.com/okx/onchainos-skills/blob/73904b636a0f022dcc13b6d7a0dd2ed3b3195f25/workflows/token-research.md)、[okx-dex-market SKILL](https://github.com/okx/onchainos-skills/blob/73904b636a0f022dcc13b6d7a0dd2ed3b3195f25/skills/okx-dex-market/SKILL.md)和[wallet-monitor-ws](https://github.com/okx/onchainos-skills/blob/73904b636a0f022dcc13b6d7a0dd2ed3b3195f25/workflows/wallet-monitor-ws.md)。
+
+最值得学习的是**先确定Mint→并行安全获取基础/结构/发行者字段→以报告栏目分层展示→按需展开cluster、Dev与观察**；其单Mint`token-research`是可参考的成熟业务顺序，本项目已有`mint_report.py`消费保存JSON；不必重新定义报告格式。工作流同时列`okx-agentic-wallet`作为依赖，`okx-dex-market`提示检查支付`notifications`，并有可能升级为收费请求；**只读意图不等于调用不会产生费用或账户交互**。暂保持`SAVED_JSON_CONSUMER_ONLY`，严禁无授权执行CLI、自动支付、钱包、广播。
+
+### E. 老Hermes/qb-/meme-——专业语义与业务栏目不能丢，但不移植旧运行环境
+
+- [Hermes技能设计与可执行模块](https://github.com/sunshihao001/-/tree/2bf694b37cce25b4a3c9364298b784039f3ecc84/skills)：钱包角色、结构、证据链、控制器和跨技能交接，比重新发明Bot提示词更适合成为当前Mint报告的**解释与来源校验**底稿；不继承Hermes启动Hook/路径和GMGN付费依赖。
+- [qb-单Mint原型](https://github.com/sunshihao001/qb-/tree/8377ad5611255df5cd4562666a826708575334f0)：历史字段/钱包矩阵和报告栏目仍是需求源；本次仅检查了仓库树，未逐条复盘4236文件，不能称完全吃透。旧来源变量与供应商费用需重新核验。
+- `meme-`原理论及经济机制记录继续由现有D01–D12原专题保存。**当前复用任务不会停止机制生成、跨领域研究或反证**。
+
+### 当前跨项目能力裁决（源码审读与集成测试，不是线上运营证明）
+
+| 目标业务 | 最接近的成熟参考 | 当前本仓真实可用 | 仍未解决 |
+|---|---|---|---|
+| Mint报告/来源覆盖 | OKX token-research、HoldTech analyze | 真实DEX+RugCheck V0.1，已存报告消费者 | 同Mint完整Owner/资金/Dev语义 |
+| 关键钱包发现 | Million discovery、qb钱包矩阵 | RugCheck候选与池基础设施排除 | 真实历史买卖/地址角色 |
+| 跨Mint持有人重叠 | HoldTech holder-overlap | **新增离线Owner候选重叠CLI，6项测试通过** | 供应商缓存、样本截断、链上Owner核查 |
+| 资金边/跨地址关系 | Million funding/owners | 原业务语义及模块源码已有审读 | 真正SOL转账/Token交换边、Hub反证与因果 |
+| 持续变化/告警 | Million live/flows、OKX WS、pumpwatch | 原钱包批量fixture算法 | 稳定连续采集、去重、断流、资源预算 |
+| UI+AI命令 | Million Web/AGENTS/Skills、OKX workflow | 保存的Markdown/JSON与知识可读引用 | 可运行Grok入口/实际交互端 |
+| 异常解释/可否跟单 | Hermes、qb-、meme-、Why-Solana | 专业研究正文和证据限制 | 可验证的跨域推理及执行净优势 |
+
+**本次结论**：不是“所有开源项目都已完全吃透”。已对重点源码的完整业务链和危险假设做针对性审读，并把一个成熟业务能力转成了本仓可复跑程序。后续继续研究Million的完整只读运行边界与样本时间错误、pumpwatch真实发行事件和OKX授权接口，但应以实际验收为先，不再只添加资料清单。
