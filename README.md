@@ -1,5 +1,7 @@
 # Solana Meme Workflow OS — Grok Bot Edition
 
+> **2026-11-01 当前执行入口**：以[产品交付计划](docs/product-delivery-plan-v01.md)、[当前工程恢复点](docs/next-steps.md)和[真实运行证据](docs/evidence/v01-real-rugcheck-holder-2026-11-01.md)为准。后文较早的GMGN/OKX/Bot实施段落保留作历史研发背景，不得覆盖已验证的免费V0.1或当前V0.2优先级。
+
 **当前产品定位**：从Solana Meme Mint及市场事件出发，以程序只读追踪关键钱包、交易/转账、资金/Token关系和群体异常，再按需通过Grok进行专业研判。AI承担产品与工程统筹；知识与多Bot是按需支撑，不是交付物本身。
 
 原 Hermes 版：https://github.com/sunshihao001/-
