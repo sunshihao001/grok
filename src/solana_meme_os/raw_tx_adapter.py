@@ -1,4 +1,10 @@
-"""Conservative, offline Solana getTransaction -> M01 event adapter.
+"""LEGACY FIXTURE COMPARATOR ONLY (P3-M01 reuse-first correction, 2026-11-01).
+
+This small, hand-written adapter is NOT the intended production decoder.
+Do NOT extend its custom Base58/account/CPI/Token instruction parsing to cover
+additional Solana versions or DEXs. Evaluate existing, pinned, licensed parsers
+(e.g. FnZero Python, Carbon, official Solana introspection) first; retain this
+module only to compare historical fixture behavior and fail-closed regressions.
 
 Never fetches RPC, signs, or trades. No DEX BUY/SELL inference from balance deltas.
 Only direct System Program funding transfers and top-level SPL Token Transfer / TransferChecked
