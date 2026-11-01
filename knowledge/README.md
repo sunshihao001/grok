@@ -1,5 +1,8 @@
 # Solana Meme knowledge is the core; Grok is the host
 
+> **知识可用性入口（2026-11-01）**：[AI知识导航与原有资产归位](../docs/ai-knowledge-navigation-guide.v1.md) | [机器可读任务→领域/专家/源码映射](system/knowledge-navigation.v1.json)。此导航不替代原有专业知识、跨领域关联或知识积累机制；应继续使用和深化原研究正文。所有“已实现”仍需工程分支证据，不因索引存在自动成立。
+
+
 > **2026-11-01 说明**：本目录的**研究知识、专家视角、专业机制、知识联系、参考源码及证据持续有效，继续支持主动深研与知识发现**。本次仅调整AI在任务中的思考、调用与执行方式：固定阶段和每轮强制模板不再默认执行；知识本身既不是废弃档案，也不要求所有研究都转向产品开发。当前工作方法参见[准则](system/current-operating-guidance.md)。
 
 **Purpose:** preserve the expert learning, domain research, adversarial perspectives and practical lessons from three earlier projects while discarding Hermes-specific *runtime* assumptions. A working Bot without validated external knowledge is only orchestration.
