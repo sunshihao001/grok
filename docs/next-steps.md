@@ -2,6 +2,14 @@
 
 本文件取代旧的“不断追加式 backlog”作为**当前执行顺序**。完整认知、状态与依据见 [项目基线](project-baseline-2026-10-30.md)，结构化计划见 [delivery-roadmap.v1.json](../design/delivery-roadmap.v1.json)。[旧清单完整存档](archive/next-steps-pre-consolidation-2026-10-30.md) 不删除历史。
 
+## 2026-11-01 全项目专家收束（最新补丁，保留旧S0–S5历史语境）
+
+- [x] 已建立[《全项目专家审计与知识去污染》](../knowledge/system/whole-project-convergence-audit-2026-11-01.md)，统一当前**152原子、22位专家、65参考**；对104原子旧PR #15和早期21专家/P2.2指令标记历史版本，不删除原资料或自动合并。
+- [x] 将PR #16两个真实公开Mint共12池的只读供应商数据**准确定位**为`REAL_PUBLIC_POOL_SNAPSHOT_VERIFIED`，不得写成完整钱包/Dev/资金/异常监控或已实现盈利。
+- [ ] **当前最高产品缺口**：在严格无签名/无自动x402付款的授权环境取得真实OKX `token-research` JSON，复用现有`mint_report.py`与公开池结果形成真实完整单Mint可读报告；若授权/费用阻碍，审成品级只读替代路线而不是自研通用解析器。
+- [ ] **知识并行B01**：从旧qb关键钱包矩阵×Hermes钱包/同源×meme-阶段研究主攻经济职责、库存、信号可见与可跟性；保持知识M01与工程P3-M01状态分开。
+- [ ] **Grok实际云端S1**：固定SHA环境/日志/恢复证据，不能从PR/CI自动宣称完成。
+
 ## S0｜认知与代码基线（已有，需审阅）
 
 - [x] 分清 GPT 主研发、GitHub 真源、Grok 运行端与用户审批。
