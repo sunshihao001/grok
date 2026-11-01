@@ -148,4 +148,59 @@ class TestMintV01(unittest.TestCase):
             self.assertIn("no vendor",result["source_errors"]["rugcheck_public_report"])
 
 
+    def test_cross_source_pool_owner_address_match_is_not_whale(self):
+        pool_addr = "81jgrpTMsQWc1rGWXutyYWW27ruiAtehUZwLydcHHWDB"
+        token_account = "BYonfuCMtQL9rLeYLhLar7Jon87Nwj7PyurLFj6sNx3i"
+        pool = {"pairs": [{"pool": pool_addr, "dex": "pumpswap", "source_path": "root[0]"}]}
+        holders = {"top_holders": [{
+            "token_account_candidate": token_account,
+            "owner_candidate": pool_addr,
+            "pct_vendor": 5.877731005322626,
+            "source_path": "root.topHolders[0]",
+        }]}
+        records = mint_v01.pool_related_holder_observations(pool, holders)
+        self.assertEqual(len(records), 1)
+        self.assertEqual(records[0]["matched_as"], "owner_candidate")
+        self.assertEqual(records[0]["matching_pool_address"], pool_addr)
+        self.assertEqual(records[0]["holder_token_account"], token_account)
+        self.assertIn("NOT_FREE_WHALE", records[0]["economic_interpretation"])
+        self.assertIn("NOT_CHAIN_VERIFIED", records[0]["status"])
+
+    def test_cross_source_requires_exact_match_and_both_sources(self):
+        pool_addr = "81jgrpTMsQWc1rGWXutyYWW27ruiAtehUZwLydcHHWDB"
+        pool = {"pairs": [{"pool": pool_addr, "dex": "pumpswap"}]}
+        holders = {"top_holders": [{"token_account_candidate": "BYonfuCMtQL9rLeYLhLar7Jon87Nwj7PyurLFj6sNx3i",
+                                    "owner_candidate": "11111111111111111111111111111111",
+                                    "pct_vendor": 99}]}
+        self.assertEqual(mint_v01.pool_related_holder_observations(pool, holders), [])
+        self.assertEqual(mint_v01.pool_related_holder_observations(None, holders), [])
+        self.assertEqual(mint_v01.pool_related_holder_observations(pool, None), [])
+
+    def test_cross_source_evidence_written_in_combined_report(self):
+        pool_addr = "81jgrpTMsQWc1rGWXutyYWW27ruiAtehUZwLydcHHWDB"
+        account = "BYonfuCMtQL9rLeYLhLar7Jon87Nwj7PyurLFj6sNx3i"
+        pool_raw = json.dumps([{"chainId": "solana", "pairAddress": pool_addr,
+                                "dexId": "pumpswap",
+                                "baseToken": {"address": MINT, "symbol": "TEST"},
+                                "quoteToken": {"address": "So11111111111111111111111111111111111111112", "symbol":"SOL"}}]).encode()
+        rug_raw = json.dumps({"mint": MINT, "topHolders": [{"address": account,
+                    "owner": pool_addr, "pct": 5.88}]}).encode()
+        with tempfile.TemporaryDirectory() as temp:
+            out = Path(temp)/"out"
+            with patch("solana_meme_os.mint_v01.public_pair_report.fetch_pairs",
+                       return_value=(pool_raw, "https://api.dexscreener.com/token-pairs/v1/solana/" + MINT)):
+                with patch("solana_meme_os.mint_v01.public_rugcheck_report.fetch_report",
+                           return_value=rug_raw):
+                    with contextlib.redirect_stdout(io.StringIO()):
+                        self.assertEqual(mint_v01.main([MINT,"--rugcheck","--out-dir",str(out)]),0)
+            report=json.loads((out/"report.json").read_text())
+            matches=report["pool_related_holder_candidates"]
+            self.assertEqual(len(matches),1)
+            self.assertEqual(matches[0]["holder_pct_vendor"],5.88)
+            md=(out/"report.md").read_text()
+            self.assertIn("禁止直接算作独立鲸鱼", md)
+            self.assertTrue(report["no_trading"])
+
+
+
 if __name__ == '__main__': unittest.main()
