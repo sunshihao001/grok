@@ -170,3 +170,7 @@
 **版本真源**：产品功能以工程 PR #16 的代码/真实运行证据为准；知识和研究资产以知识 PR #14 及其原文为准；本集成候选仅用于测试它们能否在同一环境共存。任何一次CI通过都不证明生产可靠、不证明经济身份、不证明Grok多Bot已部署。
 
 **免密钱包取证试验**：`src/solana_meme_os/public_wallet_rpc_sample.py`使用现有公共RPC传输，最多读3条历史签名和1条原始交易，不是全量钱包活动、不产生BUY/SELL，不绕过429或用于连续生产监控。对应测试`tests/test_public_wallet_rpc_sample.py`。真实供应商可用性仍须看在线运行证据。
+
+### 实际数据接口证据回填（本次集成）
+- [无密钥主网钱包一次查询](https://github.com/sunshihao001/grok/actions/runs/41314447575)：`getSignaturesForAddress` + `getTransaction`，签名`4ZbrvjMtWEnaa9iPVLedJmbQrMnjDhVR9p2aV47pF81URq6Yuwn2Vfqsnp7QfyMJwZSPSyrvWWYr4rTwGWMZYUmj`，slot `464112229`。原始Artifact #13086538862两份JSON已重算SHA与报告一致。**交易签名证据≠钱包角色/资金或Swap的可验证分析**。
+- [统一工作树测试](https://github.com/sunshihao001/grok/actions/runs/41314658703)：284项离线测试成功；导航定位`wallet_rpc_sample`和`vendor_handoff`，`invoked=false`；这不是Grok Bot真实部署。

@@ -81,3 +81,12 @@ AI承担产品负责人和工程整合者的工作：根据用户的目标、当
 - **工程真源**：本文件、工程Draft PR #16的`src/solana_meme_os/`、`tests/`、`docs/evidence/v01-real-public-pair-readonly-2026-11-01.md`；未合并`main`。
 - **知识/参考真源**：知识Draft PR #14的`knowledge/system/gpt-meme-project-index.v1.json`（65资产）、`reference-capability-reuse-ledger.v1.md`、`whole-project-convergence-audit-2026-11-01.md`。不把旧104/152目录冲突带入产品实施。
 - **正式“完成”**：产出与对应阶段的验收一致。数据供应商返回空/源断流属于覆盖未知；真实网络来自GitHub运行器不等于Grok已部署。
+
+### 2026-11-01｜联合集成PR #17与免密钱包原始交易证据（更新）
+
+- **统一工作树**：工程PR #16与知识PR #14原文件在[Draft集成PR #17](https://github.com/sunshihao001/grok/pull/17)联合验证；来源索引冲突（17旧指针/21新指针）已协调，研究程序和知识导航在该候选分支共存。**不代表原PR已合并main，也不代表Grok已安装**。
+- **真实新增数据证据**：使用`public_wallet_rpc_sample.py`在GitHub Actions[41314447575](https://github.com/sunshihao001/grok/actions/runs/41314447575)对RugCheck供应商Creator候选`9QTjLWyhfpJ8Hm1ZALMNv9L4K6w13BSuUxMWu976Pg1Y`调用Solana公共RPC `getSignaturesForAddress`+ `getTransaction`；**真实取回1条签名与1份交易响应**，slot `464112229`，退出码0；没有Key、签名、付款或交易。
+- **原始证据指纹**：`wallet-signatures-raw.json` SHA256 `6541d8d4aa25188f5784db2a06e107aff9cffdc4760a8cec893c749407c08fb3`；`wallet-first-transaction-raw.json` SHA256 `46017459e1b9d1673dd8d1f2f055b322c98451111ba7434615c4775a91bdbba2`；已独立下载GitHub Artifact #13086538862并重算哈希一致。
+- **安全与完整性边界**：这只证明有限度的真实主网原始数据获取，不是交易语义解码、真实资金网络、连续监控或原Creator身份独立核验；公开RPC是共享限流服务，不适合未经测试直接长期生产采集。是否使用Helius免费密钥/OKX授权需后续按费用和权限实际验证。
+- **联合验收**：[GitHub CI 41314658703](https://github.com/sunshihao001/grok/actions/runs/41314658703) 284项离线测试全通过；用户问法到专业领域和可用代码路径已能导航，但Grok Bot实际专家调用与线上运行仍未验证。
+- **唯一高价值后续缺口**：真实交易的多钱包/Token可观测事实重建与完整时间窗，复用可信解析/事件服务，随后向Grok发送有证据的异常任务；不自行制造BUY/SELL，也不让新代码重复实现已成熟的DEX解析器。
