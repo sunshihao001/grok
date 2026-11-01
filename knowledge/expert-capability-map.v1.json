@@ -695,7 +695,8 @@
       "cards": [
         "funding-graph",
         "cashflow-count-value-inversion",
-        "capital-role-invariance"
+        "capital-role-invariance",
+        "stake-program-capital-path"
       ],
       "sources": [
         "funding-graph-control",
