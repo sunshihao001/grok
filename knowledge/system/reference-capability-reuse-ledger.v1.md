@@ -257,3 +257,39 @@
 这一发现将D01交易解析、D04执行角色、D05资金/Owner归属、D06真实库存、D07时序覆盖和D10采集可靠性直接连接。**新的认知是功能复用必须跨越“第三方业务事件→本项目可审计经济事实”的语义桥，且数据采集完整性是独立于解析准确率的前提。** Yellowstone重放窗口可能有界，流断开后需要检查点和回补，不能依据单次SDK空输出推断某群钱包沉默（与C05一致）。
 
 本轮结论：**CONTINUE REUSE_FIRST**，但FnZero从“已可直接接入”降为“高优先候选、待独立运行+许可核查”；新增Go/TypeScript备选及Helius付费基准，保持不开发万能DEX解析器。
+
+## 2026-11-01｜第一条Mint业务链复用验收：OKX单次报告 vs Million长期监控（新增源码与成本审查）
+
+### 本轮决定：先验证完整业务流程，不让FnZero组件测试取代Mint交付验收
+
+**仍是SOURCE_AUDITED + LOCAL_FIXTURE_BASELINE_TESTED，不是外部成品已部署。** 当前外部源固定版本与历史审计保持：OKX `73904b636a0f022dcc13b6d7a0dd2ed3b3195f25`、Million `c89ad07caaf70773d40b45943e136eadc4f946a5`、HoldTech `a75e214bf1ee0a8803eb7d93336be98c481c2db9`、pumpwatch `156a91ab63740ab0ce8700434ff33844d00de519`、FnZero Python `cffb6c808c9b7975fc83428c0613fb4c3fa173b5`。本轮重访现有文件，没有创建新框架或替换工程代码。
+
+| 用途 | **确实读到的成品代码入口** | 边界与选择 |
+|---|---|---|
+| **第一版单Mint按需报告** | [OKX `cli/src/commands/workflows/token_research.rs`](https://github.com/okx/onchainos-skills/blob/73904b636a0f022dcc13b6d7a0dd2ed3b3195f25/cli/src/commands/workflows/token_research.rs)，有真正的 `fetch_and_assemble`、`run`、`assemble`，不只是prompt：token report、holder/cluster/topTrader/signals并行；`protocolId`非空才检索memepump Dev/Bundle/SimilarToken；个别失败保留`null`，核心全失败返回error；源码包含聚合单测。 | **首选 WHOLE_WORKFLOW_VALIDATE**：`onchainos workflow token-research --address <mint> --chain solana`，授权Key和实际响应尚未验收。null≠安全，不直接把标签升级为经济主体。workflow可能触发多条Premium接口而不是一次计费。 |
+| **持续追踪和发现** | [Million `discovery.service.ts`](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/discovery/discovery.service.ts)、`live-feed.service.ts`、`flows.service.ts`、`funding.service.ts`、`owners.service.ts`、`schema.prisma` | **SECOND WHOLE_APP_SAFETY_REVIEW**：真实API业务已存在，但Token收到+报价资产流出是买入代理指标；`LiveEvent.signature @unique`且Webhook首个命中后`break`，同签名多钱包观测信息丢失；owners是候选，重建ID可能变化；事件保留很短。**当前不能当完整群体真实证据。** |
+| **发行者完整子流程** | [pumpwatch `pump_watch.py`](https://github.com/cinder-security/pumpwatch/blob/156a91ab63740ab0ce8700434ff33844d00de519/code/pump_watch.py) + `outcome_tracker.py` + `creator_reputation.py` | **P1 WHOLE_READ_ONLY_SUBFLOW**：已实现日志订阅/重试/SQLite发行记录；`maxSupportedTransactionVersion=0`可能漏v1。不能把超窗/错版的空输出标成“没有发行”。 |
+| **持有人图与功能交互** | [HoldTech `app/api`](https://github.com/co-numina/holdtech/tree/a75e214bf1ee0a8803eb7d93336be98c481c2db9/app/api) 现有分析、holder-overlap、deep-scan、deployer-profile | **DESIGN_ONLY**：wrong fee payer/holder-age/pool归因，根无常规LICENSE、疑似硬编码服务凭证，阻断整库运行/直接复制。 |
+| **DEX成交语义兜底** | FnZero Python、MIT Go/TS与Carbon成熟解析器 | **P2 GAP_TRIGGER**：只有在OKX/Million外部业务事件具体缺少owner/Swap/multi-hop/版本等关键原始证据，才用固定测试选一个SDK封装，禁止重新手写通用DEX解析器。 |
+
+### 新的安全/实际成本事实（纠正旧「OKX免费就能实时WS」的隐含前提）
+
+- OKX当前官方[行情 API 费用](https://web3.okx.com/zh-hans/onchainos/dev-docs/market/market-api-fee)：有Key的Free订阅每月 Basic 100K、Premium 100K；Premium含token holder/topTrader、cluster、signal、memepump dev/bundle；**Free不支持WS订阅频道**，Starter约**99美元/月**。注意`token-research`会在一个工作流中调用多个Premium接口，成本=实际API调用次数（需读取真实日志），不是“一次工作流=1次Premium”。WS地址数量和数据权限须再验。
+- [Helius价格](https://www.helius.dev/pricing)：Free 1M credits/月、10 RPS；Developer 49美元/月、10M credits/月、50 RPS。归档/DAS/Webhook与增强服务计价不相同，真实钱包扫描的每Mint请求量尚未记录；不允许自动升级/支付。必须为每种方案分别记录`number of RPC/API calls, credits, 429, truncation, latency`，不能从“SDK开源”推断“数据零成本”。
+- Million[ trading.module.ts ](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/trading/trading.module.ts)中`EXECUTOR=local`可执行真实签名交易，默认paper会对满足条件的机会自动模拟下单；主入口`main.ts`没有完整认证层，仅按代理请求头限制隧道访问，不可认为公网安全。**只读审查前不得部署可访问交易端点**。
+- OKX [wallet-monitor-ws.md](https://github.com/okx/onchainos-skills/blob/73904b636a0f022dcc13b6d7a0dd2ed3b3195f25/workflows/wallet-monitor-ws.md)的输入表格写10钱包，实际CLI `cli/src/commands/ws.rs`最多200个地址；**文档值冲突**不证明服务配额可达200，实际以`ws channel-info`与订阅结果为准。
+
+### 新的独立测试（当前会话执行，不是第三方代码运行）
+
+- 本地现有`/mnt/data/solana_reuse_test/work` Library旧P3-M01快照：再跑 **38/38 Python unittest OK**，且实际串联`raw_tx_adapter → wallet_batch_monitor`：合成Mint中的一笔Token Transfer输出`FIXTURE_RESEARCH_ONLY`、`no_trading=true`、Buy/Sell均0。原fixture自己声明coverage.complete，**不是链上完整性证明**；不能称真实监控完成。日志`2026-11-01-baseline-recheck.txt`、输出`2026-11-01-monitor-out.json`。
+- SQLite内存独立结构复现 `Million Prisma LiveEvent.signature UNIQUE`：同签名sig_X向wallet_A与wallet_B各插入一条，第二条被UNIQUE约束拒绝，仅1条存活。测试文件 `million_contract_probe_2026-11-01.py` 与结果 `million_contract_probe_results.json`。**不是执行Million的Node服务**，但与源码的Webhook首命中退出共同证明其数据模式不保留每钱包参与视角。后续不能仅把`signature`改成复合键而忽略同笔多token多指令，应有`signature/observed_wallet/instruction_path`关系及经济事件唯一性定义。
+- 当前Node22、无Node24，且此前环境到GitHub的DNS不可用；未获得Helius/OKX已授权Key或Grok运行终端。**本轮未运行OKX、Million、HoldTech、pumpwatch、FnZero的完整实例**，未获取真实主网Mint报告或计费读数。PR#16已有GitHub CI不能代替这项验收。
+
+### 最短实施顺序（只读，无支付/签名/下单）
+
+1. **单Mint报告**：同一个旧研究候选Mint `87QChghgFr2XBNumi2Tg1MJCWHLqoTTT5KThtnDspump`，先在有经用户授权、禁用自动x402支付的环境运行OKX CLI `workflow token-research`。记录每个API的原始响应引用、获取时点、权限、计费调用次数、500/429/null、holder样本分母及截断；不从旧研究推断当前实时状态。
+2. **全成品只读安全验收**：仅在隔离Node24环境验证Million只读GET路径和无交易路径可达性，控制绑定地址/无交易密钥/禁止对外写入端点；重点复核同签名多钱包、历史断流/补齐、公共Hub、owner重建、CPI/转仓非成交。若不能确保仅只读，不能直接部署整库，考虑复用数据查询/发现模块。
+3. **差异补齐**：对单Mint快照与长期监控同一业务对象比较，需持久保留钱包Owner、TokenAccount、钱/Token净流量、明确交易类型、库存快照、同源关系和UNKNOWN/覆盖状态；有真实解析缺口才选FnZero或其他SDK做一个最小桥接。先复用pumpwatch Dev历史，不新建发行者探测器。
+4. **Grok交付**：Grok S1云电脑验收未完成；先拿**一个公开Mint+同一观察时点**的可信报告、再拿一个增量窗口，才讨论定时运行。验收标准：输出不编造真实买卖/同控/收益，费用有实际调用记录，相关钱包的多视角事件不丢，缺失索引输出UNKNOWN。
+
+**跨原知识单元落点**：D01/D02协议/发行阶段，D04钱包标签，D05真实资金来源，D06库存与LP，D07同签名群体时序，D08/D09信息与可跟性，D10实际观察/成本，D11/D12反证和解释。旧Hermes/qb-/meme-/Why-Solana审稿与FnZero/Carbon/GMGN/MadeOnSol参考仍常驻，不删除；不增加新D层或自造「内核」。
