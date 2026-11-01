@@ -1,4 +1,4 @@
-name: one-shot-public-rpc-holder-readonly
+name: one-shot-public-rugcheck-readonly
 on:
   push:
     branches:
@@ -16,13 +16,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Once - fixed public Mint, DEX GET and Solana JSON-RPC read-only
+      - name: Once - fixed public Mint, DEX Screener and RugCheck cached GET
         shell: bash
         run: |
           set +e
           mkdir -p .runtime/one-shot
           MINT=EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump
-          PYTHONPATH=src python -m solana_meme_os.mint_v01 "$MINT" --rpc-holders --out-dir .runtime/one-shot/mint >.runtime/one-shot/stdout.txt 2>.runtime/one-shot/stderr.txt
+          PYTHONPATH=src python -m solana_meme_os.mint_v01 "$MINT" --rugcheck --out-dir .runtime/one-shot/mint >.runtime/one-shot/stdout.txt 2>.runtime/one-shot/stderr.txt
           status=$?
           printf '{"program_exit_code": %s, "automatic_payment": false, "wallet_signing": false}\n' "$status" > .runtime/one-shot/exit.json
           python - <<'PY'
@@ -33,13 +33,13 @@ jobs:
               report=json.loads(p.read_text())
               print('REAL_SOURCE_STATUSES',json.dumps(report.get('source_status',{})))
               print('SOURCE_ERRORS',json.dumps(report.get('source_errors',{})))
-              print('TOKEN_ACCOUNT_COUNT',report.get('rpc_token_accounts',{}).get('returned_token_accounts') if report.get('rpc_token_accounts') else 'NOT_AVAILABLE')
+              print('RUGCHECK_HOLDER_COUNT',report.get('rugcheck_public',{}).get('top_holders_rows_returned') if report.get('rugcheck_public') else 'NOT_AVAILABLE')\n              print('RUGCHECK_CREATOR',report.get('rugcheck_public',{}).get('creator_vendor_candidate') if report.get('rugcheck_public') else 'NOT_AVAILABLE')
           else:
               print('NO_REPORT; see stderr in artifact')
           PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: one-shot-mint-rpc-readonly-20261101
+          name: one-shot-mint-rugcheck-readonly-20261101
           path: .runtime/one-shot/
           retention-days: 14
