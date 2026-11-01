@@ -123,5 +123,7 @@ GitHub 知识源在 PR #14；实现和测试在 PR #16；GPT Library 的当前�
 - **本地真实运行记录**：使用先前项目存档m01_proto_offline_20261031.zip，在隔离路径本地运行旧M01单元测试，14 tests in 0.840s OK。此为旧基线测试，**不是第三方成品的实际运行，也没有运行工程PR#16当前全量测试**。本容器Node22.16不满足Million要求的Node24，而且无GitHub DNS网络、未授权Helius额度及单Mint数据；第三方项目**没有安装、没有启动、没有连接实际市场/监控Grok**。
 - **安全与阶段**：当前结果为SOURCE_IMPL_AUDITED / PRODUCT_RUNTIME_PENDING，项目仍局部P3；Million的EXECUTOR=local真实签名能力不得启用，其local API无认证与Web可能LAN监听需隔离，Helius/OKX付费及持有人/钱包标签不能默认为可信。GitHub PR#14/#16仍是Draft、未合并。GPT个人Library摘要如实记录，项目Instructions/附件未被直接修改。
 
+**新识别的严格只读阻碍**：Million trading.service.ts 在 onModuleInit() 启动每5秒周期逻辑，默认PAPER模式遇到机会也会模拟开仓并写入状态；禁用EXECUTOR=local仅防止真实签名/下单，不等于进程纯只读。下一轮需先检查完整服务启动副作用及开放端口，而不是直接用带实时数据的npm start宣称安全运行。
+
 **下一步只做一件事**：在确有Node24、网络、私有回环隔离及经授权只读Helius配额后，运行Million原生成品的无密钥/不下单健康检查；用一个公开Mint小样本逐次验证GET /discovery/token/:mint、GET /live/status、GET /live/flows、GET /funding/:address、MCP get_flows等**现成读取接口**，记录真实结果、覆盖/截断/费用、同签名多钱包遗漏；暂不自动做钱包订阅/修改/重建/付费。对照OKX完整监控工作流和HoldTech/pumpwatch已存在接口，之后才选择直接使用整个成品还是选择小模块。不要继续自造钱包监控功能。
 
