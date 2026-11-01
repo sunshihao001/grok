@@ -1,0 +1,58 @@
+name: one-shot-real-mint-knowledge-ui
+on:
+  push:
+    branches:
+      - integration/product-knowledge-v01-20261101
+    paths:
+      - .github/workflows/one-shot-real-mint-knowledge-ui-20261101.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  readonly-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Re-acquire real public Mint data and generate evidence/knowledge/UI
+        shell: bash
+        run: |
+          set +e
+          mkdir -p .runtime/real-integration/mint
+          mint=EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump
+          PYTHONPATH=src python -m solana_meme_os.mint_v01 "$mint" --rugcheck \
+            --out-dir .runtime/real-integration/mint >.runtime/real-integration/mint-stdout.json \
+            2>.runtime/real-integration/mint-stderr.txt
+          fetch_exit=$?
+          task_exit=88
+          if [ "$fetch_exit" -eq 0 ] && [ -f .runtime/real-integration/mint/rugcheck-provider-raw.json ]; then
+            PYTHONPATH=src python -m solana_meme_os.vendor_event_handoff \
+              --report .runtime/real-integration/mint/report.json \
+              --rugcheck-raw .runtime/real-integration/mint/rugcheck-provider-raw.json \
+              --dex-raw .runtime/real-integration/mint/dex-provider-raw.json \
+              --out-dir .runtime/real-integration/outbox \
+              >.runtime/real-integration/triage-stdout.json 2>.runtime/real-integration/triage-stderr.txt
+            task_exit=$?
+          fi
+          printf '{"data_fetch_exit":%s,"triage_exit":%s,"source_live_public_vendor":true,"wallet_tx_live":false,"grok_invoked":false,"paid_calls":0,"trading":false}\n' \
+            "$fetch_exit" "$task_exit" >.runtime/real-integration/exits.json
+          echo "PUBLIC_SOURCE_EXIT=$fetch_exit TRIAGE_EXIT=$task_exit"
+          cat .runtime/real-integration/mint-stdout.json
+          if [ -f .runtime/real-integration/triage-stdout.json ]; then
+            cat .runtime/real-integration/triage-stdout.json
+          fi
+          if [ -f .runtime/real-integration/mint-stderr.txt ]; then
+            cat .runtime/real-integration/mint-stderr.txt
+          fi
+          if [ -f .runtime/real-integration/triage-stderr.txt ]; then
+            cat .runtime/real-integration/triage-stderr.txt
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: real-vendor-knowledge-ui-evidence-20261101
+          path: .runtime/real-integration
+          retention-days: 7
