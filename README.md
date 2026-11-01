@@ -1,5 +1,8 @@
 # Solana Meme Workflow OS — GPT 研发 / GitHub 真源 / Grok 云端运行
 
+> **2026-11-01｜产品/UI/知识调用总入口（当前设计）**：先看 [整体系统集成图](design/system-integration-map.v1.md)、[用户UI与信息架构](design/product-experience-architecture.v1.md)、[AI知识调用说明](docs/ai-knowledge-navigation-guide.v1.md) 及 [机器导航索引](knowledge/system/knowledge-navigation.v1.json)。现有领域/专家/参考研究正文全部保留，按需读取；新导航只是指路，不能替代原知识或工程PR #16实测。旧README的GMGN-first/多Bot设计是历史背景，不能自动当当前部署事实。
+
+
 **当前状态：P0 离线可运行原型；尚未验证真实 Grok 云电脑统一入口和实时链上监控。**
 
 > [**2026-10-30 项目基线与认知统一（权威入口）**](docs/project-baseline-2026-10-30.md) · [现行执行清单](docs/next-steps.md) · [机器可读里程碑](design/delivery-roadmap.v1.json) · [GPT→Grok 交付方式](docs/gpt-build-grok-run.md)
