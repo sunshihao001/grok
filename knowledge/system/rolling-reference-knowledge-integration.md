@@ -157,3 +157,11 @@
 
 
 **2026-11-01 成品整合源审更新**：回访原先没有真正用进项目的 [Million `c89ad07`](https://github.com/Kelows/million/tree/c89ad07caaf70773d40b45943e136eadc4f946a5)、[HoldTech `a75e214`](https://github.com/co-numina/holdtech/tree/a75e214bf1ee0a8803eb7d93336be98c481c2db9)、[pumpwatch `156a91a`](https://github.com/cinder-security/pumpwatch/tree/156a91ab63740ab0ce8700434ff33844d00de519)、OKX新币/钱包WS工作流和旧Why-Solana、qb-/Hermes/meme-原始研究。以一个公开Mint验证“发现钱包→持续观察→资金/群体→只读解释”的**源代码可达路径**，并已在[唯一功能复用台账](reference-capability-reuse-ledger.v1.md)补全源码、风险和实验状态。**新发现**：Million可直接复用完整自托管发现/监控/资金/看板/MCP工作流，但 `LiveEvent.signature @unique` 与 webhook“第一个匹配钱包认领”会漏报同笔多钱包；`ownerId`聚类是候选且重建不稳定，live feed只保留15分钟/5000条，缺独立全量覆盖水位。其默认Paper Executor仍自动模拟仓位，严格只读不能默认安全启动。HoldTech `holder-overlap` 实际每币采样最多200、部分指令把fee payer当买家并含硬编码第三方密钥风险；pumpwatch已有只读监控+SQLite发行者历史无需自研。既有研究文档的关键词和框架只用于解释这些源码的业务缺陷，**不再让SDK搜索或自己写解析器占据主线**。外部成品未安装，固定Mint与原生接口回包未复验；本地旧M01离线快照14项测试通过仅代表自有fixture。下次按这个源审成果继续真实只读业务验收，而不是重复检索基础能力。
+
+## 2026-11-01｜复用验证新发现与再次触发条件
+
+补充常驻候选：`0xfnzero/sol-parser-sdk-python@cffb6c8`（Python RPC getTransaction → DEX events；SDK执行因DNS与许可核查暂缓）、`DefaultPerson/solana-dex-parser-go`（MIT，多DEX/Jupiter路由/v1，但跨Go运行且有未知DEX启发式解析风险）、`cxcx-ai/solana-dex-parser`（MIT，TypeScript替代）、Helius Parsed Events/Streams（官方商业解析，付费）。它们组成“同一输入、多解析路径”的竞争实现队列；不要只看其中一个README就定胜负。
+
+HoldTech保留同slot候选/holder overlap/发币与钱包画像**功能知识**，但是源码fee payer近似buyer/funder、Transfer与UNKNOWN混入、LP与持币时长取值错误，无法直接继承归因或风险分数。pumpwatch的creator_reputation SQLite可优先少量复用，但getTransaction版本0的覆盖缺口需复审。具体源码、地址、决策和本轮38项离线测试的范围见[功能台账](reference-capability-reuse-ledger.v1.md)。
+
+**回访条件**：①网络可用、第三方许可可确认，可进行隔离无私钥SDK安装；②找到能验证原始Swap真实owner与多跳/费用/版本数据的公开样本；③P3-M01真实只读来源明确；④新候选性能/准确性胜出；⑤旧项目源码/协议更新。无法立即安装不会导致这些参考被删掉。
