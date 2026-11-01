@@ -30,6 +30,15 @@
 
 **停止新增开发条件**：只要上述主验收达成，即宣布V0.1，不再为“更全面”继续开发新API/图形页面。
 
+### 2026-11-01｜V0.1基础报告真实通过（阶段状态修订）
+
+- [x] **免密成熟成品来源已运行**：`mint_v01.py --rugcheck`使用RugCheck已存在的公开缓存报告，与DEX Screener真实交易池合并，真实Mint获得5池、20个Token Account/Holder供应商候选、Creator候选以及源JSON、哈希、时间。详见[实测证据](evidence/v01-real-rugcheck-holder-2026-11-01.md)和[Actions 运行](https://github.com/sunshihao001/grok/actions/runs/41269179918)。
+- [x] **一项重要误判已在程序修正**：Holder候选Owner与同Mint DEX池地址重合（且供应商knownAccounts标AMM）自动标明基础设施候选；返回20条中1条已标AMM，19条未分类，**不可当19个独立人类钱包**。
+- [x] **官方公共RPC替代路线已实际尝试**：受HTTP 429限制，保留可选只读适配，不用无结果反复重试。
+- [ ] **完整增强型Mint情报未验收**：没有独立链上Owner/历史、资金来源图、完整Dev系列、单笔Swap和Grok长期运行。OKX有安全授权时可以增强；**不让付费Key成为基础免费成品推进的硬前置**。
+
+**阶段裁决**：`V0.1 REAL_VENDOR_READONLY_MINT_PREVIEW_ACCEPTED`（真实供应商多源只读预览），**不是**`V0.1 COMPLETE_CHAIN_VERIFIED_INTELLIGENCE`。实际业务的下一阶段现在可以转向V0.2真实钱包与资金关系，复用成熟项目而不是继续写Mint概况适配器。
+
 ### V0.2｜钱包与资金关系（先单Mint，后跨Mint）
 - [ ] 从V0.1已拿到的Holder/钱包开始，先选**一个有来源的地址集合**，输出每地址可审计的Token持仓、交易/转账候选、历史窗口。
 - [ ] 优先整套审Million的发现/资金/owners服务和依赖；安全可运行就薄封装，不适合才从HoldTech/pumpwatch或已登记替代中取可许可的具体功能。
