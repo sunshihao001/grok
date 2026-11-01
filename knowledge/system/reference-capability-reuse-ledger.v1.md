@@ -62,6 +62,8 @@
 
 第三方成品本轮均未实际启动：此环境Node v22.16.0，但Million明确要求Node24；curl GitHub显示DNS解析失败，无法下载/安装依赖；未提供Helius配额或指定Mint作为真实外部核查对象；HoldTech另有泄露密钥风险；OKX服务须先核验费用/授权。故当前证据级别仅为SOURCE_IMPLEMENTATION_READ/PRODUCT_RUNTIME_UNVERIFIED，不得把网页截图、README、自述胜率或仓库CI当本地完成。
 
+**新增安全发现（源码级）**：Million apps/api/src/trading/trading.service.ts 的 onModuleInit() 在启动时设置每5秒tick；openFromOpportunity会在达标机会发生时按executor模式建立仓位，默认是PAPER。**不设置EXECUTOR=local只能防止真实密钥签名，不代表整个程序没有后台交易模拟/SQLite写入或行情API消耗**。下一轮严格只读验收必须先审计启动副作用，优先无外网、空白数据库和健康查询；在没有纯只读运行保障前，不得将“默认paper”当作“严格只读安全”。
+
 **下一项唯一有价值的工作**：在可联网、Node24、隔离且不暴露端口的环境，以Million成品为整体只读候选，不启用EXECUTOR=local、不提供签名密钥。先跑它自己的无交易健康检查，针对经允许的公开Mint调用GET /discovery/token/:mint、GET /live/status、GET /live/flows、GET /funding/:address及只读MCP get_flows，保存输入输出/错误/真实可得时点/费用。暂不自动调用钱包导入、订阅、重建owners或更改规则。重点测试**一签名两被观察钱包**、缺失历史、空区块/v1、公共Hub、CPI/转仓非成交与WS静默。这一项才能判定WHOLE_APP_RUN / WRAP_EXISTING / MODULE_ONLY / REJECT，不能先写新解析器或新Mint监控程序。
 
 ## 1. 本轮已审外部来源与固定版本
