@@ -977,9 +977,7 @@
         "D10"
       ],
       "knowledge_files": [
-        "knowledge/system/reference-capability-reuse-ledger.v1.md",
-        "knowledge/system/gpt-meme-project-index.v1.json",
-        "docs/next-steps.md"
+        "knowledge/domain/L6-L7-investigation-cases.md"
       ],
       "legacy_card_ids": [
         "anti-false-completion",
@@ -1013,8 +1011,7 @@
       ],
       "prior_research_competency_ids": [
         "B01-K01",
-        "B01-K04",
-        "B07-K01"
+        "B01-K04"
       ]
     }
   ],
