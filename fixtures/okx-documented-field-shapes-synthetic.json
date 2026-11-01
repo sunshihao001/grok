@@ -1,0 +1,22 @@
+{
+  "ok": true,
+  "data": {
+    "workflow": "token-research", "address": "87QChghgFr2XBNumi2Tg1MJCWHLqoTTT5KThtnDspump", "chain": "501",
+    "core": {
+      "info": [{"tokenSymbol": "SYNTHETIC_ONLY", "requestTime": 1790000000000}],
+      "price": [{"price": "0.00012", "time": "1790000000123"}],
+      "contract": {"protocolId": "SYNTHETIC"},
+      "security": null
+    },
+    "structure": {
+      "holders": [
+        {"holderWalletAddress": "So11111111111111111111111111111111111111112", "holdAmount": "100000000.000000001", "holdPercent": "10.000000000000001", "fundingSource": "11111111111111111111111111111111", "realizedPnlUsd": "3.20"},
+        {"holderWalletAddress": "11111111111111111111111111111111", "holdAmount": "20000000", "holdPercent": "2", "fundingSource": "So11111111111111111111111111111111111111112"}
+      ],
+      "cluster": {"clusterConcentration": "High", "holderSameFundSourcePercent": "0.47800", "holderSameCreationTimePercent": "0.09", "rugPullPercent": "1.00000"},
+      "topTraders": [{"walletAddress": "So11111111111111111111111111111111111111112"}],
+      "signals": []
+    },
+    "launchpad": {"devInfo": {"historicalLaunches": 4}, "bundleInfo": {"bundleRate": "5%"}, "similarTokens": []}
+  }
+}
