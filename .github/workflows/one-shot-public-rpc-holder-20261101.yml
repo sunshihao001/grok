@@ -1,0 +1,45 @@
+name: one-shot-public-rpc-holder-readonly
+on:
+  push:
+    branches:
+      - research/p24-cross-mint-m01-batch-monitor-20261031
+    paths:
+      - .github/workflows/one-shot-public-rpc-holder-20261101.yml
+permissions:
+  contents: read
+jobs:
+  one-read:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Once - fixed public Mint, DEX GET and Solana JSON-RPC read-only
+        shell: bash
+        run: |
+          set +e
+          mkdir -p .runtime/one-shot
+          MINT=EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump
+          PYTHONPATH=src python -m solana_meme_os.mint_v01 "$MINT" --rpc-holders --out-dir .runtime/one-shot/mint >.runtime/one-shot/stdout.txt 2>.runtime/one-shot/stderr.txt
+          status=$?
+          printf '{"program_exit_code": %s, "automatic_payment": false, "wallet_signing": false}\n' "$status" > .runtime/one-shot/exit.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('.runtime/one-shot/mint/report.json')
+          if p.exists():
+              report=json.loads(p.read_text())
+              print('REAL_SOURCE_STATUSES',json.dumps(report.get('source_status',{})))
+              print('SOURCE_ERRORS',json.dumps(report.get('source_errors',{})))
+              print('TOKEN_ACCOUNT_COUNT',report.get('rpc_token_accounts',{}).get('returned_token_accounts') if report.get('rpc_token_accounts') else 'NOT_AVAILABLE')
+          else:
+              print('NO_REPORT; see stderr in artifact')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: one-shot-mint-rpc-readonly-20261101
+          path: .runtime/one-shot/
+          retention-days: 14
