@@ -255,3 +255,12 @@ Million整套服务适合钱包发现→订阅→后续活动→资金关系，�
 **运行级实证**：在项目[集成PR#17的GitHub Actions #41322677288](https://github.com/sunshihao001/grok/actions/runs/41322677288) 中，使用固定源码、Node24、独立SQLite、空Helius Key、`EXECUTOR=paper`、无Webhook、无私钥、仅调用本地GET接口，真正构建启动Million全套NestJS API。原始Artifact #13090220633已下载、ZIP CRC验证。健康端点`heliusConfigured=false`，爬虫`enabled=false`，LiveFeed`connected=false`、`subscribedWallets=0`；`GET /api/discovery/token/EYq...?...pages=1`返回**503**（`HELIUS_API_KEY is not set`）。因此**未发现真实新钱包，未跑通业务闭环；不允许写成完成**。这也不证明带key的预算、真实候选质量、连续监控或Grok调用。
 
 **复用裁决**：暂不启动全部Million为项目核心；避免将原有交易模块和无鉴权本地API直接暴露给Grok Bot或公网。若后续获得单独的Helius只读数据额度，在完全隔离的本地进程中通过`/api/discovery/token/:mint?mode=recent&pages=1`做**有限、可计费的真实发现验收**，存原响应/时间/预算/截断状态，再用现有`grok`报告及知识导航解释；该GET除Mint历史可能对候选预览再请求最多15个地址，不能误认为一次HTTP请求只消耗一次数据额度。在没有钥匙和真实响应前，不应再造一个替代Million的发现算法。
+
+
+## 2026-11-01｜按Mint筛选钱包之后仍存在“目标相关性”误归因（D04/D05）
+
+[真实只读Mint→候选钱包查询](https://github.com/sunshihao001/grok/actions/runs/41323919648)把来源核对、候选选取和有限度链上交易接到了同一程序，得到两个清楚的反例。第一地址虽然被RugCheck列为Creator候选，最新交易在余额快照中出现目标Mint，但失败回滚，且候选本人不是这笔交易的签名者/手续费付款人、也不是目标Token Account在该交易中的Owner提示。第二地址是缓存报告的Holder Owner候选，最新交易执行成功且它本人是签名者/手续费付款人，但余额变化仅涉及USDC，没有目标Mint的报告余额条目。**Mint相关的钱包≠每笔活动与Mint相关；交易触及Mint≠该钱包买入Mint；有效手续费支出≠成功买卖/资金控制**。
+
+修正方法已成为原工程可执行数据字段`target_mint_observation`：对有限一笔交易比较报告的Token余额Mint、Owner提示、执行成功状态，保留`UNKNOWN`。它并不解码所有CPI指令，也不替代完整Token运动；未出现于余额快照，只能说这笔采样交易未报告目标Mint变化，不能证明地址从未交易该Mint。另一重要证据限制：本次官方公共RPC的Top Token Account查询因429失败，所以这两个身份都是供应商提示，**不是RPC已认证的Token持有人或经济实控人**。
+
+这项反例要求D04钱包角色、D05资金网络、D07跨时间窗观察都在“筛选候选地址”和“生成Mint专属事件”之间检查交易级相关性，并保持窗口、数据来源、观察时间及缺失情况；不能把钱包自身USDC转账误当作该Meme资金流，也不应从供应商Holder集中得出庄家协同结论。后续优先试Million已存在的Mint级Buyer Discovery，在受限Helius授权后才观察实际Mint的转账/对价事件，结合FnZero成熟解析器做必要的成功交易核对。

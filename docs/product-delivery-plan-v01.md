@@ -136,3 +136,12 @@ AI承担产品负责人和工程整合者的工作：根据用户的目标、当
 - **候选性质**：Creator来源为缓存供应商字段，Top Token Account的链上Owner提示也可能是池PDA、托管服务或程序；地址出现于交易不等于它进行了Meme买入。同一报告跨源非同slot、Top20不等于全部Holder。若公共RPC返回429，报告必须标\`RPC_UNAVAILABLE_NOT_ZERO_ACTIVITY\`，不是“无交易”。
 - **原始证据**：入口为本文件已有\`Mint\`命令输出目录，各供应商原始JSON必须与报告的SHA256匹配才允许生成钱包取证；每份RPC原始签名和交易响应带哈希、地址及获取时间。默认2地址；没有供应商候选时返回空候选和\`UNKNOWN\`，不能编造结果。无密钥、不授权付款或自动下单。
 - **专项验收**：[一次真实网络运行](https://github.com/sunshihao001/grok/actions/workflows/one-shot-mint-to-wallet-public-evidence.yml)，脚本仅调用上述源与公共RPC；成功状态还需检查结果里实际取得的候选和签名数量。测试发现允许缺口时必须继续记录UNKNOWN。**这不替代Million在有Helius授权条件下的原生Mint买家发现**，也不能直接交给M01作为买卖事件。
+
+
+### 2026-11-01｜真实Mint→两钱包候选→原始交易→目标Mint关系判读（V0.2薄集成）
+
+- **最新在线验收**：[GitHub Actions #41323919648](https://github.com/sunshihao001/grok/actions/runs/41323919648)，提交`dcc6b96c25af3cc450a6aaf3fa8d300ed8691bdc`。指定已验Mint `EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump`，原有`mint_v01 --rugcheck --rpc-holders`获取真实公开池和RugCheck供应商响应；`public_rpc_token_accounts`返回**HTTP429**，不能称链上持仓Owner已成功复核。新增最小连接`mint_candidate_wallet_probe.py`只读选两个地址，每个最多一条finalized签名及其原始交易。两个程序退出码0，未调用Helius、Grok、交易或付款。
+- **实测结果和有意义的反证**：`9QTjLWyhfpJ8Hm1ZALMNv9L4K6w13BSuUxMWu976Pg1Y`是**RugCheck Creator供应商候选**，其最新签名`4Zbrvj...mZYUmj`执行失败（`FAILED_ROLLED_BACK`，fee=7000 lamports）；虽然Token余额快照含目标Mint，但被查地址不是该Mint Token账户的报告Owner、不是签名者/fee payer，不得当成Creator买入。另一位`AHFJQVvmez4anwFQykWRB3dXhMf46sT594P7iqLt2wpR`是**RugCheck Holder Owner供应商候选**，最新签名`4rqWKZ...BAwgxFG`执行成功且为签名者和fee payer，但快照变化是USDC，目标Mint未出现在这笔交易报告的Token余额记录中；**不能当成该Meme买卖**。既非完整钱包历史，也不证明这两个地址之间存在资金或控制关系。
+- **证据完整性**：Actions Artifact #13090641223 ZIP经过回读CRC校验，报告SHA、RugCheck/DEX原始JSON、两地址签名与交易原始JSON SHA256逐个重算一致；程序专门输出`target_mint_observation`（`True`仅表示报告的Token余额包含Mint，`False`仅限这笔采样交易，不证明完全无活动）和失败边界。`source_errors.public_rpc_token_accounts`保留HTTP429，不用供应商地址冒称RPC确认。
+- **程序质量**：新增7项最小集成测试+3项Mint关联回归测试（哈希篡改、池排除、来源标记、429保持未知、非目标USDC活动、失败Mint CPI），[CI #41323924153](https://github.com/sunshihao001/grok/actions/runs/41323924153) **306项全部通过**。知识导航可从`MINT_OVERVIEW`和`WALLET_ACTORS`定位此薄集成；并没有复制Million发现算法或新增专家角色。
+- **下一真正阻碍**：仅1笔最新交易和缓存供应商Owner无法证明“这位钱包买了目标Mint”、全部早期买家、资金来源或同源组织；应优先对一个实际可靠、可控的RPC/Helius数据来源做**受限的按目标Mint历史查询**，复用Million发现业务并核对候选的原始Token/对价事实；没有数据权限时不以钱包其他资产交易填充Meme事件。也不把M01时间窗fixture验证等同实时告警。
