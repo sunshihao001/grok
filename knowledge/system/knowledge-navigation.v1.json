@@ -565,9 +565,7 @@
         "knowledge/system/expert-mechanism-research-method.md",
         "knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md"
       ],
-      "engineering_ids": [
-        "context"
-      ],
+      "engineering_ids": [],
       "reference_ids": [
         "REF-002",
         "REF-005",
