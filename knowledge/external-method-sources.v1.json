@@ -222,6 +222,33 @@
         "L18",
         "L19"
       ]
+    },
+    {
+      "id": "solana-stake-accounts",
+      "research_round": "R008_program_account_mechanism",
+      "url": "https://solana.com/docs/references/staking/stake-accounts",
+      "source": "Solana official stake account/authority documentation",
+      "supported_design_claim": "Stake authority and withdraw authority have distinct responsibilities; a stake account address is not by itself the key controlling stake funds; split, merge, withdraw and authority changes are separate operations.",
+      "does_not_verify": "No particular 2026 wallet sweep, beneficiary, common operator, or even original funding source.",
+      "linked_expert_edges": [
+        "L05",
+        "L08",
+        "L34",
+        "L39"
+      ]
+    },
+    {
+      "id": "solana-account-structure",
+      "research_round": "R008_program_account_mechanism",
+      "url": "https://solana.com/docs/core/accounts/account-structure",
+      "source": "Solana official account structure",
+      "supported_design_claim": "Account owner means the program allowed to debit its lamports/change data; balances and program ownership are distinct from stake authorities and real-world beneficial owners.",
+      "does_not_verify": "Any capital network, individual control, intention, or market opportunity.",
+      "linked_expert_edges": [
+        "L01",
+        "L05",
+        "L39"
+      ]
     }
   ]
 }
