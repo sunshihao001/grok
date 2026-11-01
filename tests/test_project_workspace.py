@@ -72,7 +72,18 @@ class WorkspaceIntegrationTests(unittest.TestCase):
     def test_existing_knowledge_and_engineering_are_auditable_together(self):
         a = project_navigator.audit()
         self.assertTrue(a["ok"])
-        self.assertEqual(a["engineering_paths_available_in_current_checkout"], 8)
+        self.assertEqual(a["engineering_paths_available_in_current_checkout"], 10)
+
+    def test_existing_funding_route_includes_invocable_offline_overlap(self):
+        lookup = project_navigator.shortlist("跨Mint资金网络比较", intent="FUNDING_ENTITY")
+        assets = lookup["routes"][0]["engineering_candidates_on_separate_branch"]
+        matches = [a for a in assets if a["path"].endswith("/cross_mint_holders.py")]
+        self.assertEqual(len(matches), 1)
+        asset = matches[0]
+        self.assertTrue(asset["available_in_current_checkout"])
+        self.assertTrue(asset["source_of_record_branch"].startswith("integration/"))
+        self.assertIn("cross_mint_holders", asset["invocation"])
+        self.assertFalse(asset["invoked"])
 
     def test_reject_non_readonly_or_broken_report(self):
         with tempfile.TemporaryDirectory() as td:
