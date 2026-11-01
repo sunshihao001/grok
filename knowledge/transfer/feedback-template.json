@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "kind": "example_not_actual_grok_response",
+  "knowledge_unit_id": "C1-001",
+  "learner_bot_id": "B01",
+  "source_repository": "sunshihao001/grok",
+  "source_commit": "REPLACE_WITH_ACTUAL_40_HEX_GIT_SHA",
+  "actual_read_paths": [],
+  "test_command_results": [],
+  "answers_and_reasoning": [],
+  "counterexample_review": [],
+  "knowledge_gaps": [],
+  "requested_followup": "Review C1-001 draft; do not advance without approval.",
+  "learner_self_assessment": "unreviewed",
+  "reviewer_decision": "NOT_REVIEWED",
+  "market_evidence_verified": false,
+  "monitor_rule_authorized": false
+}

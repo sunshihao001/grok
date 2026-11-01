@@ -1,0 +1,804 @@
+{
+  "schema_version": "1.0",
+  "purpose": "Navigation and UI-to-knowledge/implementation map, NOT a second ontology, knowledge claim, Grok skill or deployed router.",
+  "repository": "sunshihao001/grok",
+  "as_of": "2026-11-01",
+  "branches": {
+    "knowledge": "knowledge/whole-spectrum-20261030-v1",
+    "engineering": "research/p24-cross-mint-m01-batch-monitor-20261031"
+  },
+  "status": "DESIGN_AND_INDEX_ONLY",
+  "rules": [
+    "Select by user's actual goal and mechanisms, not only keywords; keyword matching is a shortlist not a conclusion.",
+    "Keep research knowledge active; do not equate scope inventory with completed evidence.",
+    "Use one canonical source per fact and link, never copy the 152 unit bodies into this index.",
+    "Read only relevant files first; source/validation specialists are called when the task needs them.",
+    "Cross-branch engineering paths are candidates requiring explicit checkout; a link is not runtime invocation.",
+    "No private keys, trading, signing, paid API or x402 payment without authorization."
+  ],
+  "canonical_assets": [
+    {
+      "id": "scope",
+      "path": "knowledge/system/ontology.v1.json",
+      "role": "L0-L7 and D01-D12 classification + cross-domain relation semantics"
+    },
+    {
+      "id": "questions",
+      "path": "knowledge/system/whole-domain-atlas.v1.json",
+      "role": "152 research questions and mechanisms; mapped not fully verified"
+    },
+    {
+      "id": "expert_lenses",
+      "path": "knowledge/experts/registry.v1.json",
+      "role": "22 specialist reasoning perspectives, NOT actual Bot processes"
+    },
+    {
+      "id": "reference_assets",
+      "path": "knowledge/system/gpt-meme-project-index.v1.json",
+      "role": "65 reference assets; review states and source pointers"
+    },
+    {
+      "id": "reuse",
+      "path": "knowledge/system/reference-capability-reuse-ledger.v1.md",
+      "role": "Audited concrete reuse options, constraints, failures"
+    },
+    {
+      "id": "source_lookup",
+      "path": "knowledge/source_index.v1.json",
+      "role": "21 selective K1 source references; not all reference assets"
+    },
+    {
+      "id": "pinned_sources",
+      "path": "knowledge/system/source-registry.v1.json",
+      "role": "4 pinned root-source records for research provenance"
+    },
+    {
+      "id": "research_findings",
+      "path": "knowledge/system/research-units.v1.json",
+      "role": "3 reviewed source-linked units, NOT the 152 question catalog"
+    },
+    {
+      "id": "legacy_cards",
+      "path": "knowledge/catalog.v1.json",
+      "role": "15 older evidence-bound knowledge cards"
+    },
+    {
+      "id": "bot_roles",
+      "path": "design/bot-roster.v1.json",
+      "role": "7 planned B01-B07 responsibilities; NOT 22 experts"
+    },
+    {
+      "id": "deep_explanation",
+      "path": "knowledge/system/gpt-meme-project-core.v1.md",
+      "role": "Domain content and cross-domain reasoning, not deployment truth"
+    },
+    {
+      "id": "research_state",
+      "path": "knowledge/system/gpt-meme-progress-current.md",
+      "role": "Historical and current research notes; not runtime authority"
+    },
+    {
+      "id": "current_guidance",
+      "path": "knowledge/system/current-operating-guidance.md",
+      "role": "User intent, research preservation and adaptive working method"
+    },
+    {
+      "id": "knowledge_router_code",
+      "path": "src/solana_meme_os/knowledge.py",
+      "role": "15-card literal lookup, not semantic knowledge understanding"
+    },
+    {
+      "id": "domain_router_code",
+      "path": "src/solana_meme_os/knowledge_system.py",
+      "role": "Literal D01-D12 routing and static validation, not Grok agent"
+    },
+    {
+      "id": "expert_router_code",
+      "path": "src/solana_meme_os/expert_brief.py",
+      "role": "Expert brief selection, NOT deployed specialist invocation"
+    },
+    {
+      "id": "external_source_router",
+      "path": "src/solana_meme_os/research.py",
+      "role": "Pinned source shortlist and falsification prep, NOT live chain data"
+    }
+  ],
+  "engineering_assets": [
+    {
+      "id": "product",
+      "path": "docs/product-delivery-plan-v01.md",
+      "role": "Feature acceptance, capabilities, incomplete milestones"
+    },
+    {
+      "id": "execution",
+      "path": "docs/next-steps.md",
+      "role": "Engineering status and historical testing"
+    },
+    {
+      "id": "mint",
+      "path": "src/solana_meme_os/mint_v01.py",
+      "role": "Verified vendor readonly Mint preview (vendor data may be cached)"
+    },
+    {
+      "id": "holder",
+      "path": "src/solana_meme_os/public_rugcheck_report.py",
+      "role": "Provider candidate holder/creator report, not owner proof"
+    },
+    {
+      "id": "pool",
+      "path": "src/solana_meme_os/public_pair_report.py",
+      "role": "Public pool snapshot, not wallet events"
+    },
+    {
+      "id": "batch",
+      "path": "src/solana_meme_os/wallet_batch_monitor.py",
+      "role": "Fixture-tested observation windows, not live monitoring"
+    },
+    {
+      "id": "event",
+      "path": "src/solana_meme_os/raw_tx_adapter.py",
+      "role": "Partial offline Solana event adapter, not complete DEX parser"
+    },
+    {
+      "id": "evidence",
+      "path": "docs/evidence/v01-real-rugcheck-holder-2026-11-01.md",
+      "role": "Specific V0.1 real vendor action evidence, not complete chain audit"
+    }
+  ],
+  "routes": [
+    {
+      "id": "PRODUCT_UI",
+      "goal": "product design / UI architecture / information design",
+      "cues": [
+        "界面",
+        "UI",
+        "UX",
+        "页面",
+        "交互",
+        "布局",
+        "产品",
+        "展示",
+        "可视化",
+        "看板",
+        "设计",
+        "首页",
+        "显示什么",
+        "用户入口"
+      ],
+      "domains": [
+        "D12",
+        "D10"
+      ],
+      "experts": [
+        "E-L7-03",
+        "E-L7-01"
+      ],
+      "knowledge_files": [
+        "knowledge/system/current-operating-guidance.md",
+        "docs/bot-knowledge-integration.md",
+        "design/overview.md"
+      ],
+      "engineering_ids": [
+        "product",
+        "execution"
+      ],
+      "reference_ids": [
+        "REF-001",
+        "REF-007"
+      ],
+      "ui_views": [
+        "HOME",
+        "MINT",
+        "WALLETS",
+        "NETWORK",
+        "ALERTS",
+        "INVESTIGATIONS",
+        "SYSTEM"
+      ],
+      "expected_output": "User journey, actual-vs-planned feature map, interaction and evidence states."
+    },
+    {
+      "id": "MINT_OVERVIEW",
+      "goal": "Mint/pool/holder/creator initial study",
+      "cues": [
+        "Mint",
+        "合约",
+        "代币",
+        "币种",
+        "池子",
+        "流动性",
+        "Holder",
+        "持有人",
+        "RugCheck",
+        "DEX"
+      ],
+      "domains": [
+        "D02",
+        "D03",
+        "D06",
+        "D10"
+      ],
+      "experts": [
+        "E-L2-01",
+        "E-L3-03",
+        "E-L0-02"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L1-L2-chain-market.md",
+        "knowledge/domain/L3-wallet-actors.md"
+      ],
+      "engineering_ids": [
+        "mint",
+        "holder",
+        "pool",
+        "evidence"
+      ],
+      "reference_ids": [
+        "REF-032",
+        "REF-066",
+        "REF-010"
+      ],
+      "ui_views": [
+        "MINT",
+        "WALLETS"
+      ],
+      "expected_output": "Time-stamped provider-qualified Mint summary, explicit unknown fields."
+    },
+    {
+      "id": "WALLET_ACTORS",
+      "goal": "Find and interpret wallet roles without personhood assumptions",
+      "cues": [
+        "聪明钱",
+        "钱包",
+        "地址",
+        "Smart Money",
+        "sniper",
+        "持仓",
+        "收益钱包",
+        "买家",
+        "角色"
+      ],
+      "domains": [
+        "D04",
+        "D06",
+        "D01"
+      ],
+      "experts": [
+        "E-L3-01",
+        "E-L1-01"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L3-wallet-actors.md",
+        "knowledge/domain/D04-D08-key-wallet-followability-research-brief.md"
+      ],
+      "engineering_ids": [
+        "holder",
+        "event"
+      ],
+      "reference_ids": [
+        "REF-003",
+        "REF-007",
+        "REF-039",
+        "REF-040"
+      ],
+      "ui_views": [
+        "WALLETS",
+        "INVESTIGATIONS"
+      ],
+      "expected_output": "Role candidates, evidence and limitations; distinguish ATA/owner/fee-payer."
+    },
+    {
+      "id": "FUNDING_ENTITY",
+      "goal": "Money flows, control hypotheses and community networks",
+      "cues": [
+        "资金",
+        "同源",
+        "转账",
+        "资金网络",
+        "钱包群",
+        "实体",
+        "关联",
+        "归集",
+        "回流",
+        "控制",
+        "不同新币",
+        "一起出现",
+        "反复出现"
+      ],
+      "domains": [
+        "D05",
+        "D04",
+        "D06",
+        "D11"
+      ],
+      "experts": [
+        "E-L3-02",
+        "E-L6-01"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md",
+        "knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md"
+      ],
+      "engineering_ids": [
+        "event",
+        "batch"
+      ],
+      "reference_ids": [
+        "REF-007",
+        "REF-008",
+        "REF-028"
+      ],
+      "ui_views": [
+        "NETWORK",
+        "WALLETS",
+        "INVESTIGATIONS"
+      ],
+      "expected_output": "Evidence-level graph edges with alternative interpretations; no asserted common controller."
+    },
+    {
+      "id": "SUPPLY_CONTROL",
+      "goal": "Circulating inventory, token concentration and sellability",
+      "cues": [
+        "筹码",
+        "控盘",
+        "库存",
+        "Top10",
+        "集中度",
+        "锁仓",
+        "LP",
+        "抛压",
+        "池子地址",
+        "大户持仓"
+      ],
+      "domains": [
+        "D06",
+        "D03",
+        "D09"
+      ],
+      "experts": [
+        "E-L3-03",
+        "E-L5-02"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L3-wallet-actors.md",
+        "knowledge/domain/L4-L5-copytrade-edge.md"
+      ],
+      "engineering_ids": [
+        "holder",
+        "mint"
+      ],
+      "reference_ids": [
+        "REF-003",
+        "REF-008",
+        "REF-066"
+      ],
+      "ui_views": [
+        "MINT",
+        "NETWORK"
+      ],
+      "expected_output": "Account balances vs economic inventory, liquidity and infrastructure counterexamples."
+    },
+    {
+      "id": "ANOMALY_TIME",
+      "goal": "Temporal clusters, wallet batches, alerts and watchlists",
+      "cues": [
+        "异动",
+        "异常",
+        "批量",
+        "监控",
+        "告警",
+        "预警",
+        "同步",
+        "时序",
+        "窗口",
+        "跨Mint",
+        "一批",
+        "同时",
+        "集中转账",
+        "短时间"
+      ],
+      "domains": [
+        "D07",
+        "D04",
+        "D05",
+        "D10",
+        "D11"
+      ],
+      "experts": [
+        "E-L3-05",
+        "E-L4-01",
+        "E-L6-01"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/meme-anomaly-discovery-state.v1.md",
+        "knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md"
+      ],
+      "engineering_ids": [
+        "batch",
+        "event",
+        "execution"
+      ],
+      "reference_ids": [
+        "REF-007",
+        "REF-009",
+        "REF-028"
+      ],
+      "ui_views": [
+        "ALERTS",
+        "NETWORK"
+      ],
+      "expected_output": "Observed events + baseline + coverage and unknowns; fixture vs continuous feed separated."
+    },
+    {
+      "id": "CREATOR_LIFECYCLE",
+      "goal": "Dev/deployer/issuance, launch phases and linked Mints",
+      "cues": [
+        "开发者",
+        "发币",
+        "Dev",
+        "创建",
+        "创建者",
+        "发行",
+        "pump.fun",
+        "迁移",
+        "系列币",
+        "deployer"
+      ],
+      "domains": [
+        "D02",
+        "D04",
+        "D07"
+      ],
+      "experts": [
+        "E-L2-01",
+        "E-L3-04"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L1-L2-chain-market.md",
+        "knowledge/domain/L3-wallet-actors.md"
+      ],
+      "engineering_ids": [
+        "mint",
+        "holder"
+      ],
+      "reference_ids": [
+        "REF-009",
+        "REF-008",
+        "REF-066"
+      ],
+      "ui_views": [
+        "MINT",
+        "NETWORK"
+      ],
+      "expected_output": "Creator candidate and independently delimited history; no 'missing=none'."
+    },
+    {
+      "id": "TRADING_ECONOMICS",
+      "goal": "Copy-trading, information delay, net execution economics",
+      "cues": [
+        "跟单",
+        "套利",
+        "交易",
+        "收益",
+        "alpha",
+        "Alpha",
+        "滑点",
+        "延迟",
+        "可跟",
+        "策略",
+        "退出"
+      ],
+      "domains": [
+        "D08",
+        "D09",
+        "D03",
+        "D11"
+      ],
+      "experts": [
+        "E-L4-02",
+        "E-L5-01",
+        "E-L6-02"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L4-L5-copytrade-edge.md",
+        "knowledge/domain/D04-D08-key-wallet-followability-research-brief.md"
+      ],
+      "engineering_ids": [
+        "event",
+        "execution"
+      ],
+      "reference_ids": [
+        "REF-002",
+        "REF-003",
+        "REF-005"
+      ],
+      "ui_views": [
+        "INVESTIGATIONS"
+      ],
+      "expected_output": "Mechanism and falsification, executable constraints; no profitability claim from labels."
+    },
+    {
+      "id": "MECHANISM_RESEARCH",
+      "goal": "Deep domain exploration, unknown-mechanism generation and falsification",
+      "cues": [
+        "机制",
+        "专业",
+        "研究",
+        "理论",
+        "原理",
+        "推演",
+        "新知识",
+        "反证",
+        "经济",
+        "学科"
+      ],
+      "domains": [
+        "D11",
+        "D12"
+      ],
+      "experts": [
+        "E-L7-01",
+        "E-L6-01"
+      ],
+      "knowledge_files": [
+        "knowledge/system/gpt-meme-project-core.v1.md",
+        "knowledge/system/expert-mechanism-research-method.md",
+        "knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md"
+      ],
+      "engineering_ids": [],
+      "reference_ids": [
+        "REF-002",
+        "REF-005",
+        "REF-006"
+      ],
+      "ui_views": [
+        "INVESTIGATIONS"
+      ],
+      "expected_output": "Precise mechanism, competing hypotheses, evidence map, new research questions; no forced product development."
+    },
+    {
+      "id": "SOURCE_REUSE",
+      "goal": "Evaluate third-party project/source/SDK/license/cost and implementation feasibility",
+      "cues": [
+        "开源",
+        "源码",
+        "GitHub",
+        "复用",
+        "项目",
+        "仓库",
+        "SDK",
+        "API",
+        "插件",
+        "依赖",
+        "成本",
+        "Million",
+        "Cluster Tracker",
+        "TradingAgents",
+        "Degen-Scanner"
+      ],
+      "domains": [
+        "D10",
+        "D12"
+      ],
+      "experts": [
+        "E-L7-03",
+        "E-L0-01",
+        "E-L0-02"
+      ],
+      "knowledge_files": [
+        "knowledge/system/reference-capability-reuse-ledger.v1.md",
+        "knowledge/system/reference-projects-meme-knowledge-audit-20261030.md"
+      ],
+      "engineering_ids": [
+        "product",
+        "execution"
+      ],
+      "reference_ids": [
+        "REF-007",
+        "REF-008",
+        "REF-009",
+        "REF-010"
+      ],
+      "ui_views": [
+        "SYSTEM",
+        "INVESTIGATIONS"
+      ],
+      "expected_output": "Verified function/inputs/outputs/rights/failure/cost; direct use vs thin wrapper vs reject."
+    },
+    {
+      "id": "GROK_OPERATION",
+      "goal": "Natural language command, Bot roles, handoff and cloud runtime",
+      "cues": [
+        "Grok",
+        "Bot",
+        "Skill",
+        "Routine",
+        "机器人",
+        "云电脑",
+        "部署",
+        "运行",
+        "交接",
+        "命令中心"
+      ],
+      "domains": [
+        "D12",
+        "D10"
+      ],
+      "experts": [
+        "E-L7-02",
+        "E-L7-03"
+      ],
+      "knowledge_files": [
+        "docs/bot-knowledge-integration.md",
+        "docs/gpt-build-grok-run.md",
+        "docs/grok-local-runbook.md"
+      ],
+      "engineering_ids": [
+        "execution",
+        "product"
+      ],
+      "reference_ids": [
+        "REF-001",
+        "REF-007"
+      ],
+      "ui_views": [
+        "HOME",
+        "SYSTEM"
+      ],
+      "expected_output": "Command and evidence/status contract; do not claim Bot/Skill is provisioned."
+    },
+    {
+      "id": "DATA_SEMANTICS",
+      "goal": "Source reliability, time correctness, owner identity, program accounting",
+      "cues": [
+        "RPC",
+        "字段",
+        "数据",
+        "来源",
+        "证据",
+        "误判",
+        "错误",
+        "时间",
+        "Token Account",
+        "owner",
+        "CPI",
+        "准确",
+        "原始指令",
+        "链上交易",
+        "还原买卖"
+      ],
+      "domains": [
+        "D01",
+        "D10",
+        "D11"
+      ],
+      "experts": [
+        "E-L0-02",
+        "E-L1-01",
+        "E-L6-01"
+      ],
+      "knowledge_files": [
+        "knowledge/domain/L1-L2-chain-market.md",
+        "knowledge/domain/L6-L7-investigation-cases.md"
+      ],
+      "engineering_ids": [
+        "event",
+        "evidence"
+      ],
+      "reference_ids": [
+        "REF-028",
+        "REF-032",
+        "REF-066"
+      ],
+      "ui_views": [
+        "SYSTEM",
+        "INVESTIGATIONS"
+      ],
+      "expected_output": "Field definitions, event/available time, coverage and falsification, no false upgrade."
+    },
+    {
+      "id": "KNOWLEDGE_MANAGEMENT",
+      "goal": "Knowledge acquisition, classification, cross-domain links and retrieval quality",
+      "cues": [
+        "知识",
+        "整理",
+        "归类",
+        "索引",
+        "调用",
+        "检索",
+        "记忆",
+        "污染",
+        "专家体系",
+        "知识关系",
+        "导航"
+      ],
+      "domains": [
+        "D12",
+        "D11"
+      ],
+      "experts": [
+        "E-L7-01",
+        "E-L0-01"
+      ],
+      "knowledge_files": [
+        "knowledge/system/gpt-meme-project-core.v1.md",
+        "knowledge/system/gpt-meme-knowledge-accumulation.v1.md",
+        "knowledge/system/whole-project-convergence-audit-2026-11-01.md"
+      ],
+      "engineering_ids": [],
+      "reference_ids": [
+        "REF-001",
+        "REF-002"
+      ],
+      "ui_views": [
+        "INVESTIGATIONS",
+        "SYSTEM"
+      ],
+      "expected_output": "Preserve source content, route by goal, detect stale conflicts; no bulk migration or deletion."
+    }
+  ],
+  "ui_views": [
+    {
+      "id": "HOME",
+      "label": "命令中心",
+      "status": "DESIGN_ONLY",
+      "default_intents": [
+        "PRODUCT_UI",
+        "GROK_OPERATION"
+      ]
+    },
+    {
+      "id": "MINT",
+      "label": "Mint总览",
+      "status": "CLI_AND_REPORT_VERIFIED_NOT_INTERACTIVE_UI",
+      "default_intents": [
+        "MINT_OVERVIEW",
+        "CREATOR_LIFECYCLE"
+      ]
+    },
+    {
+      "id": "WALLETS",
+      "label": "关键钱包",
+      "status": "DESIGN_WITH_VENDOR_CANDIDATES",
+      "default_intents": [
+        "WALLET_ACTORS"
+      ]
+    },
+    {
+      "id": "NETWORK",
+      "label": "资金/关联关系",
+      "status": "DESIGN_ONLY_NO_VERIFIED_LIVE_GRAPH",
+      "default_intents": [
+        "FUNDING_ENTITY",
+        "SUPPLY_CONTROL"
+      ]
+    },
+    {
+      "id": "ALERTS",
+      "label": "异动与观察",
+      "status": "OFFLINE_ALGORITHM_ONLY",
+      "default_intents": [
+        "ANOMALY_TIME"
+      ]
+    },
+    {
+      "id": "INVESTIGATIONS",
+      "label": "专业研判及知识证据",
+      "status": "KNOWLEDGE_AVAILABLE_GROK_RUNTIME_UNVERIFIED",
+      "default_intents": [
+        "MECHANISM_RESEARCH",
+        "DATA_SEMANTICS",
+        "TRADING_ECONOMICS"
+      ]
+    },
+    {
+      "id": "SYSTEM",
+      "label": "来源状态/成本/运行",
+      "status": "DESIGN_ONLY",
+      "default_intents": [
+        "SOURCE_REUSE",
+        "GROK_OPERATION"
+      ]
+    }
+  ]
+}

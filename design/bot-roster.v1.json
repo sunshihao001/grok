@@ -1,0 +1,196 @@
+{
+  "schema_version": "1.0",
+  "status": "PLANNED_NOT_PROVISIONED",
+  "architecture": "6_dev_on_demand_plus_1_monitor",
+  "bot_count": 7,
+  "development_count": 6,
+  "production_count": 1,
+  "shared_cloud_computer": true,
+  "role_separation_is_security_boundary": false,
+  "human_rule_approval_required": true,
+  "live_trading_allowed": false,
+  "bots": [
+    {
+      "id": "B01",
+      "name": "主控/知识架构",
+      "phase": "development",
+      "domain_ids": [
+        "D08",
+        "D12"
+      ],
+      "gate_ids": [
+        "F0",
+        "F1"
+      ],
+      "purpose": "Research intake, ontology/source routing, hypothesis briefs and handoffs; cannot verify its own conclusions.",
+      "can_approve_own_research": false,
+      "may_trade": false
+    },
+    {
+      "id": "B02",
+      "name": "链上数据",
+      "phase": "development",
+      "domain_ids": [
+        "D01",
+        "D02",
+        "D03",
+        "D10"
+      ],
+      "gate_ids": [
+        "F2"
+      ],
+      "purpose": "Real read-only GMGN/RPC/transaction provenance, units, available-at time, provider failure and coverage.",
+      "can_approve_own_research": false,
+      "may_trade": false
+    },
+    {
+      "id": "B03",
+      "name": "钱包与资金结构",
+      "phase": "development",
+      "domain_ids": [
+        "D04",
+        "D05",
+        "D06",
+        "D07"
+      ],
+      "gate_ids": [
+        "F3"
+      ],
+      "purpose": "Wallet roles, capital networks, holding structures, market sequences and non-identity confounders.",
+      "can_approve_own_research": false,
+      "may_trade": false
+    },
+    {
+      "id": "B04",
+      "name": "Alpha与交易经济学",
+      "phase": "development",
+      "domain_ids": [
+        "D03",
+        "D07",
+        "D08",
+        "D09"
+      ],
+      "gate_ids": [
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "purpose": "Discover and preregister hypotheses, OOS predictive increment, executable entry/exit/size/latency/net expectancy.",
+      "can_approve_own_research": false,
+      "may_trade": false
+    },
+    {
+      "id": "B05",
+      "name": "证据反证审查",
+      "phase": "development",
+      "domain_ids": [
+        "D10",
+        "D11"
+      ],
+      "gate_ids": [
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "purpose": "Independent evidence, causal alternative, confounder, leaked-feature, coverage and economic-assumption challenges.",
+      "can_approve_own_research": false,
+      "may_trade": false
+    },
+    {
+      "id": "B06",
+      "name": "独立QA与回测",
+      "phase": "development",
+      "domain_ids": [
+        "D09",
+        "D10",
+        "D11"
+      ],
+      "gate_ids": [
+        "F4",
+        "F5",
+        "F6"
+      ],
+      "purpose": "Blind case replay, temporal/group holdout, null controls, test regression and release recommendation.",
+      "can_approve_own_research": false,
+      "may_trade": false
+    },
+    {
+      "id": "B07",
+      "name": "最终监控",
+      "phase": "production",
+      "domain_ids": [
+        "D01",
+        "D03",
+        "D04",
+        "D05",
+        "D06",
+        "D07",
+        "D08",
+        "D09",
+        "D10",
+        "D11",
+        "D12"
+      ],
+      "gate_ids": [
+        "F6"
+      ],
+      "purpose": "Only reads human-approved frozen rules and writes source-linked paper-only alerts/abstentions; never authors rules.",
+      "can_approve_own_research": false,
+      "may_trade": false
+    }
+  ],
+  "handoff_fields": [
+    "task_id",
+    "objective",
+    "population",
+    "decision_cutoff_utc",
+    "domain_ids",
+    "knowledge_ids",
+    "source_refs",
+    "observations",
+    "available_at",
+    "alternatives",
+    "counterevidence",
+    "missing",
+    "economic_assumptions",
+    "gate_status",
+    "next_action"
+  ],
+  "rules": [
+    "Knowledge domains are not Bots and evidence gates are not Bots.",
+    "B01 dispatches minimum specialists; does not run all 7 for every task.",
+    "B04 cannot validate or release its own Alpha; B05/B06 independently review.",
+    "B07 is the only scheduled active monitor; F6 requires human-approved frozen rule.",
+    "Bots share one computer, its files, browser sessions and credentials: Bot separation is not a security boundary.",
+    "Use per-task directories, isolated branches, single writer/lock for mutable state.",
+    "No real trades, signatures, swaps, private keys or broadcast in Phase 1."
+  ],
+  "staged_rollout": [
+    {
+      "phase": 1,
+      "bots": [
+        "B01",
+        "B02",
+        "B05"
+      ],
+      "acceptance": "Verify original sources, availability, insufficient-data handling."
+    },
+    {
+      "phase": 2,
+      "bots": [
+        "B03",
+        "B04",
+        "B06"
+      ],
+      "acceptance": "Use real positive/negative cases, cost tests and independent OOS review."
+    },
+    {
+      "phase": 3,
+      "bots": [
+        "B07"
+      ],
+      "acceptance": "Deploy human-approved read-only monitor after single-writer/replay/routine tests."
+    }
+  ]
+}
