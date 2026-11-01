@@ -222,3 +222,38 @@
 **整体项目优先**：`WHOLE_APP_FIRST / COMPONENTS_IF_NEEDED`。先验收已有百万级成品结构的 Million 原生只读 Mint→钱包发现→监控→资金/群体→解释业务链与 OKX 可行性。只有业务链缺某项关键事实时才进入 P3-M01 组件选择；FnZero/Carbon 作为其交易语义的 **候选补强**，并非全局主选系统。现有 M01 保留严格时点和覆盖语义作为对照。当前没有实际新接入第三方功能。
 
 **下次触发**：首先在合法隔离条件满足后完成 Million 整套只读业务流程与 OKX 已成型工作流的同一Mint对照，重点考察一签名多钱包归属/签名副作用和持续覆盖。若其原生Swap与事件语义无法满足D04/D05/M01，再单独复跑FnZero固定版本的 `tests/test_pump_upgrade_mainnet.py` 与M01同一输入比对；先厘清Python许可和v1入口，才考虑最小可选适配器。
+
+## 7. 2026-11-01｜P3-M01现成DEX解析器第二轮审查与离线验证
+
+### 已执行记录与严格边界
+
+- 本轮从 GPT Library 中`/跟单/P3-M01_离线原型_2026-10-31/`恢复 `raw_tx_adapter.py`、`wallet_batch_monitor.py`、两份测试及两份fixture，在`src/solana_meme_os/`与`tests/`恢复原包结构；Python 3.13.5执行 `PYTHONPATH=src python -m unittest discover -s tests -v`，**本地实跑38项、38项通过**。随后实际执行`raw_tx_adapter → wallet_batch_monitor` CLI，输出`FIXTURE_RESEARCH_ONLY`报告，1笔合成Token TRANSFER不被误当BUY/SELL。
+- **此测试只证明此前Library快照的38项回归，而非GitHub PR#16当前71项或FnZero任何测试**。当前PR#16头 `3ee17255f4c849d6be4ede93e6ee7e516a068de1` 的远端 `monitor-tests` CI显示success，但未在本地恢复其全部最新文件运行。不能用此宣称SDK接入或真实交易验证。
+- 本地环境尝试`git ls-remote`和`pip index versions sol-parser-sdk-python`，DNS无法连接GitHub及包索引。**FnZero运行测试BLOCKED_BY_ENVIRONMENT**，没有安装SDK、没有调用主网RPC/商业API或签名；失败是本轮环境而非SDK功能不正确。
+- 独立用三组**合成规则反例**复现HoldTech公开`detectBundles`的筛选条件（同Slot+3个不同fee payer，SWAP/TRANSFER/UNKNOWN均进入），三组都能触发`same_slot`候选。此实验执行的是规则的独立重现，**不是运行HoldTech源码**；证明当前规则未区分真实BUY/普通TRANSFER和UNKNOWN，不能证明真实Jito Bundle或同控。
+- 无真实链上样本/同输入的第三方解析结果对照，本轮的最终状态仍是 **SOURCE_AUDITED + LOCAL_BASELINE_TESTED**，不是`SDK_ADAPTER_TESTED`。
+
+### 新增对照候选（保留真正已实现的功能及不能继承的部分）
+
+| 方案 | 固定来源 | 证据核查 | 选择 |
+|---|---|---|---|
+| FnZero Python `sol-parser-sdk-python` v0.10.0 | [repo@cffb6c8](https://github.com/0xfnzero/sol-parser-sdk-python/tree/cffb6c808c9b7975fc83428c0613fb4c3fa173b5)；`sol_parser/rpc_parser.py`、`examples/parse_tx_by_signature.py`、`tests/test_signed_transaction_replay.py` | `rpc_get_transaction_result_dict_to_response(result)`接收结构化getTransaction；`parse_rpc_transaction`输出`(events,error)`，失败交易返回空事件；示例`maxSupportedTransactionVersion=1`；tests存在签名/ALT/CPI回归。源码此转换路径中的pre/post token balances初始化为空数组，不能直接假定可使用它重建所有钱包余额。README MIT但Python库根目录没有独立`LICENSE`，许可归属/发行包待查。 | **P0 WRAP CANDIDATE / BLOCKED runtime+license**：与Python同语言、最小接口可能最好，但不宣称兼容或已安装 |
+| [Go DEX Parser](https://github.com/DefaultPerson/solana-dex-parser-go) | `DefaultPerson/solana-dex-parser-go`，源文件`dex_parser.go`、`example_test.go`、`tests/`、`LICENSE` | 可直接接受RPC JSON、明示v1、Jupiter多跳/汇总、流动性、Pump新币、Bot与tip；有MIT许可证。其默认`TryUnknownDEX`可能依据Transfer启发式解析未知交易，对M01严格UNKNOWN策略存在潜在冲突，复用时必须禁用或单独审计。Go→Python需进程/协议转换成本。 | **P0 ALT / WRAP SERVICE LATER**：更丰富事件和明确许可，但高跨语言成本、未知解析风险 |
+| [TypeScript DEX Parser](https://github.com/cxcx-ai/solana-dex-parser) | `cxcx-ai/solana-dex-parser`，源码与`LICENSE` | 已实现的DEX、Jupiter路由、交易/流动性解析候选，有MIT文件。需要JS运行时，与Python项目集成成本。 | **P1 ALT**：Go/Python均不满足时比较；不要三个SDK全接 |
+| [Helius Parsed Events/Streams](https://www.helius.dev/blog/parsed-events-and-streams) | 官方2026-09-03发布：解析多种协议的REST/WS接口 | 商业服务，公开说明在付费套餐开放；平台支持不代表我们有额度，字段/覆盖/时间/费用需独立审计。 | **PAID_BENCHMARK_ONLY**：将来有授权/预算时作为独立结果对照，不把它当免费前置 |
+| [Solana transaction-introspection](https://solana.com/docs/core/transactions/transaction-introspection) | 官方工具 | 版本/ALT/CPI的链上结构核查，不代替协议级Buy/Sell语义；JS运行时 | **STRUCTURAL_ORACLE**：作为结构事实对照，不重复造账户索引逻辑 |
+| [pumpwatch发行探测器](https://github.com/cinder-security/pumpwatch) | `code/pump_watch.py`与`creator_reputation.py`；MIT | 提供只读`logsSubscribe`、错误重试/并发限制/SQLite累积发行画像；但`getTransaction(maxSupportedTransactionVersion=0)`，在支持v1时有明显覆盖风险，需修订/检验；作者论文统计仍非本项目实证 | **P1 REUSE SUBSYSTEM**：只在版本检查后复用探测器/历史模块，不把“观察不见”当“无发行” |
+| [HoldTech](https://github.com/co-numina/holdtech) | 前一轮固定SHA`a75e214b`、`app/api/deep-scan/route.ts`与`holder-overlap/route.ts` | 可复用同Slot候选、跨Mint持有人交集、集中度、Dev发行历史的业务流程，但归因弱、采样不完整，含疑似硬编码访问凭证，根目录无常规LICENSE。 | **DESIGN_AND_ALGORITHM_ONLY**：不能整库clone运行或直接把其风险标签当事实 |
+
+### 对接合同与最小胜出标准
+
+- **输入**：同一份结构化`getTransaction`+真实/fixture证据；保留原签名、slot、协议、交易状态、`available_at`（由我们的独立采集器给出，不由blockTime替代）、账户owner及证据完整性。
+- **输出桥接（并非已实现）**：第三方`Trade`/DEX`Swap` → 仅在`success+目标Mint方向+真实owner/quote mint/amount+可信指令来源`全部明确时构造M01`BUY/SELL`；其余`UNRESOLVED`。路由多跳不能重复当作多个独立BUY；余额变化/Token Transfer不自动当成交，分离观察到的Token移动与经济成交。M01原始TRANSFER/SOL funding仍独立保留。
+- **对照样本**：一个普通转账、一个Pump.fun实际Buy、一个Sell、一个Jupiter多跳、一个CPI、一个失败tx、一个v0 ALT、一个v1、一笔Token-2022费用和一个缺失账户。先核查样本真实性/来源/许可及每类已知结果，不得用制造的预测答案给SDK打分。
+- **实际可执行胜出条件**：SDK在相同输入上覆盖高于当前适配器，且关键假阳性为0、真实账户/金额/版本正确、未知显式保留、无需私钥/交易API/不可控付费，依赖/许可与成本可接受。若不满足则停止接入，不因为品牌/README强行复用。
+
+### 与知识及长期方向的关系
+
+这一发现将D01交易解析、D04执行角色、D05资金/Owner归属、D06真实库存、D07时序覆盖和D10采集可靠性直接连接。**新的认知是功能复用必须跨越“第三方业务事件→本项目可审计经济事实”的语义桥，且数据采集完整性是独立于解析准确率的前提。** Yellowstone重放窗口可能有界，流断开后需要检查点和回补，不能依据单次SDK空输出推断某群钱包沉默（与C05一致）。
+
+本轮结论：**CONTINUE REUSE_FIRST**，但FnZero从“已可直接接入”降为“高优先候选、待独立运行+许可核查”；新增Go/TypeScript备选及Helius付费基准，保持不开发万能DEX解析器。
