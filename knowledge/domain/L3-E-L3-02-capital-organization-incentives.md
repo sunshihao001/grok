@@ -333,3 +333,50 @@ Jito bundles 可由最多五笔交易组成，按序原子执行，并按账户�
 - 旧 `2 秒/同源/固定置信度` 直接推庄家和内情的断言，在本篇保持**被挑战状态**；本篇没有提出未经数据标定的替代阈值。
 
 **当前研究产出是“更有深度的机制解释能力”，不是专家自动运行或市场交易策略。**
+
+## 2026-11-01｜同行成品源码纵深：交易执行归因、SOL/WSOL成本、资金边时效与经济主体不可识别性
+
+> **状态：SOURCE_CODE_INSPECTED + ECONOMIC_COMPETING_EXPLANATIONS；没有执行Million/OKX真实运行、没有独立链上交易回放、没有估计真实误报率。** 固定参考：[Million@c89ad07c](https://github.com/Kelows/million/tree/c89ad07caaf70773d40b45943e136eadc4f946a5)、[HoldTech@a75e214b](https://github.com/co-numina/holdtech/tree/a75e214bf1ee0a8803eb7d93336be98c481c2db9)、[pumpwatch@156a91ab](https://github.com/cinder-security/pumpwatch/tree/156a91ab63740ab0ce8700434ff33844d00de519)、[OKX工作流@73904b63](https://github.com/okx/onchainos-skills/tree/73904b636a0f022dcc13b6d7a0dd2ed3b3195f25)。以下假设情境均不是实际Mint案例。本节深化原E-L3-02/D05，不新增专家/本体。
+
+### 一、同交易中，手续费付款者为何会被记作资产买入者？
+
+[Million: apps/api/src/analysis/metrics.ts](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/analysis/metrics.ts) 的 orchestratedDeltas(wallet,tx)：若被研究钱包是 Fee Payer 且自身无Token变化，遍历它与其他地址的 nativeTransfers；遇到第一个有Token变化的关联地址，返回该地址的资产变化并用于 Fee Payer 的钱包指标。这是识别“费用赞助者+执行钱包群”的有效**候选发现启发式**，却未独立验证最终成本承担、策略决策、授权权利及收益归属。第一个匹配地址还可能取决于转账列表顺序。
+
+**竞争性经济世界（构造反例）**：P为多客户机器人服务商、代付手续费，客户E在同笔交易中买Mint X，双方存在服务费、租金退款或其他SOL转账；程序可能将E的Token净买入归给P。另一世界是P实际控制E、承担交易本金。二者可能产生相似的 Fee Payer/transfer/delta痕迹。**目前可见字段不足以唯一识别这两个世界**，尤其不能把“同交易赞助者”升级为“共同最终受益人”。
+
+原文已区分same_funder/same_executor/same_authority/same_beneficiary；本次增量是指出一个真实代码路径正好**跨越这些关系层级**，不是重复抽象禁令。
+
+### 二、同一个项目的两个“买入金额”函数却可能量度不同东西
+
+- [Million metrics.ts::txDeltas](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/analysis/metrics.ts)：若有accountData，使用钱包的native余额净变化 + 所属WSOL Token账户净变化；避免把同一次wrap/unwrap中SOL与WSOL传输重复统计。原作者在[tools/check-accounting.mjs](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/tools/check-accounting.mjs)记录手算回归，并声称曾用36笔真实Swap检查；**未在本轮独立复跑36笔**。
+- [Million discovery.service.ts::buyersOf](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/discovery/discovery.service.ts)：对于收到目标Mint的地址，叠加其负nativeBalanceChange和向外的WSOL/USDC/USDT tokenTransfers以推算报价SOL。它未复用txDeltas的去重方法。若同一经济支出同时出现在native净减与WSOL向外转账中，有**条件性双计风险**；即便没有双计，native净减还可能包含手续费、ATA租金和其他支出。
+- 目标Token接收与账户SOL支付同时发生，也不必然证明这两条腿是有因果关联的Mint买卖；源码buyersOf()不针对每个买家解码关联的Swap指令。它更适合发现**候选买入账户**，不宜直接给真实成交价/成本背书。
+- 已读会计检查脚本覆盖txDeltas及成本账本，没有直接检查buyersOf与orchestratedDeltas。**在一个模块中验证准确，不等于同仓另一个同名指标已验证**。
+
+**专业意义**：同叫“买入金额”的界面指标，实际可能是现金流净额、Token流出报价、带费用的Native净变化或基于某个地址的代理推断。必须保存指标的生成方式、观测钱包、计费/租金处理及同交易资产腿。Solana RPC官方 [getTransaction](https://solana.com/docs/rpc/http/gettransaction) 与 [JSON结构](https://solana.com/docs/rpc/json-structures)提供pre/post余额、fee、innerInstructions、TokenBalance和Account owner作独立对照。
+
+### 三、资金图如何把有向历史事实变成永久无向群体？
+
+- [Million funding.service.ts](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/funding/funding.service.ts)保留转账方向in/out、firstAt/lastAt、双方金额，是值得学习的资金调查业务视图；目前只有有限页的SOL历史，不等于原始本金全历史。
+- [Million owners.service.ts](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/analysis/owners.service.ts)的extractEdges将与研究钱包两方向的native transfer累积为同一种funding边，并用norm(a,b)把A→B和B→A归为同一无向关系；随后cluster()以某类边做Union-Find。这里的funding边并不保证“谁给谁融资”，更不能证明共同最终控制。
+- [Million Prisma WalletEdge](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/prisma/schema.prisma)仅有a、b、type、weight、createdAt，无原始签名、资金方向、最后观察时点或证据有效期。extractEdges仅upsert、rebuild直接读取已有边；**在已查实现路径中没有过期撤销旧边的逻辑**。旧公共服务转账可能持续被用于当前主体聚类。Hub度数排除值得保留，但阈值及所见边数量会改变排除结果，实际误归因率仍未知。
+- 这揭示一个时间性难题：**钱包关系在某个时点成立 ≠ 当前仍存在共同出资/控制关系**。关系群是证据时间区间内的候选网络，不是一个稳定自然人ID；失效边、时间反向、资产类型及Hub都可能改变答案。
+
+### 四、Token轮换中的库存守恒 ≠ 单币成本或利润被真实观测
+
+[Million ledger.ts](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/analysis/ledger.ts)的isRotation / rotationSteps识别少量报价变化下的Token-to-Token轮转，避免把账户租金退款误计为卖出所得，并将原Token成本基础移至新Token。这是源于真实会计失败的有价值修正。但当收到多个Mint时，当前实现把转出的成本**平均分给每个收到的Mint**；这个分摊是项目账本约定，未由各Mint成交价值唯一决定。由此生成的单币PnL不能自动称为链上独立确定的经济利润；Token-to-Token交易在市场执行层仍可能有滑点、费用、换仓损益和机会成本。先保留每资产净数量与实际对价，再讨论成本分摊规则和适用边界。
+
+### 五、与已有参考的竞争性解释
+
+- [HoldTech deep-scan](https://github.com/co-numina/holdtech/blob/a75e214bf1ee0a8803eb7d93336be98c481c2db9/app/api/deep-scan/route.ts)把同Slot的feePayer当buyer；在目标钱包SOL净增加时将交易message.accountKeys[0]（Fee Payer）当fundedBy。这是与Million不同但同样跨越费用付款和资产资金来源的代理假设，不能作为相互独立的身份确认。共享Slot也不足以确认Jito Bundle。
+- [OKX token-research](https://github.com/okx/onchainos-skills/blob/73904b636a0f022dcc13b6d7a0dd2ed3b3195f25/workflows/token-research.md)将holders、cluster、top-trader、Dev和发行信息分成不同报告步骤；标签出现在同一报告并不证明源数据和身份归因相互独立。暂无本项目的授权在线运行。
+- [pumpwatch creator_reputation.py](https://github.com/cinder-security/pumpwatch/blob/156a91ab63740ab0ce8700434ff33844d00de519/code/creator_reputation.py)的seen_at来自本地首次记录时间而非实际Mint创立时点，已在旧D04/D07说明，继续作为发行时序反例。
+- [原Hermes证据链](https://github.com/sunshihao001/-/blob/main/skills/meme-evidence-chain/SKILL.md)的source_field、missing_fields、counter_evidence及[旧qb单Mint报告](https://github.com/sunshihao001/qb-/blob/main/sikk_gmgn_token_report.py)的基础设施/钱包角色分离应保留。旧GMGN标签属于历史供应商候选，不能自动恢复为事实。
+
+### 本轮DIFF、状态与下一项值得研究的未知
+
+**旧认识**：费用、授权、控制和经济受益要区分。**新增可检查源码机制**：Million在orchestratedDeltas中实际将另一钱包交易归给Fee Payer；discovery与metrics的SOL/WSOL计数语义不同；owners把双向资金事实折叠为长期无向关系；轮转时多Mint成本平均分摊。它们分别影响**谁在买、实际花了多少、谁与谁关联、谁赚了多少**，不能简单拼成“庄家得分”。
+
+此轮只建立机制性证据与竞争解释，未做任何链上样本的独立归因或商业接口复跑。后续值得对照本项目已保存的官方RPC交易示例与Million作者测试，研究原始balance/fee/Token owner/CPI在何种条件下足以重建**资产层事实**、何种经济受益信息根本不可链上唯一识别；不要先开发归因算法。
+
+知识关联：D01/D04/D05/D06/D07/D09/D10/D11；本节未改生产规则或自动交易，也不新增本体。
