@@ -64,6 +64,15 @@ class NavigationTests(unittest.TestCase):
         bad["branches"]["engineering"] = bad["branches"]["knowledge"]
         self.assertTrue(any("conflated" in x for x in nav.audit(bad)["errors"]))
 
+    def test_original_research_can_be_read_with_hash(self):
+        result = nav.open_knowledge("knowledge/system/current-operating-guidance.md", self.data)
+        self.assertIn("AI思维", result["excerpt"])
+        self.assertEqual(len(result["source_sha256"]), 64)
+
+    def test_unregistered_file_cannot_be_opened(self):
+        with self.assertRaises(ValueError):
+            nav.open_knowledge("AGENTS.md", self.data)
+
     def test_out_of_scope_id_fails(self):
         with self.assertRaises(ValueError):
             nav.shortlist("", self.data, intent="AUTOTRADE")
