@@ -73,5 +73,16 @@ class RugCheckTests(unittest.TestCase):
         self.assertIn("缓存", markdown(r))
 
 
+    def test_known_amm_holder_is_flagged_as_infrastructure_not_whale(self):
+        payload=sample()
+        payload["knownAccounts"]={OWNER: {"name":"Pump Fun AMM","type":"AMM"}}
+        report=compile_report(json.dumps(payload).encode(), MINT)
+        self.assertEqual(report["vendor_infrastructure_candidate_count"],1)
+        self.assertEqual(report["unclassified_account_count"],0)
+        self.assertEqual(report["top_holders"][0]["role_interpretation"],
+                         "VENDOR_KNOWN_INFRASTRUCTURE_CANDIDATE")
+        self.assertIn("AMM/Locker",markdown(report))
+
+
 if __name__ == "__main__":
     unittest.main()
