@@ -2,6 +2,10 @@
 
 > **现行唯一产品实施次序**：[《四阶段成品交付计划 V0.1》](product-delivery-plan-v01.md)。优先按 V0.1 Mint报告 → V0.2钱包/资金 → V0.3持续异常 → V1.0 Grok入口逐项真实验收；各旧节的历史研究待办只作参考，不再启动平行规划。当前公开池真实可读，钱包/Dev完整报告未验收。
 
+## 最新实际运行恢复（2026-11-01）
+
+V0.1真实免费多来源Mint预览已通过：[DEX Screener + RugCheck 5池/20条Holder候选/Creator](evidence/v01-real-rugcheck-holder-2026-11-01.md)。最新已完成一条跨源反例：某Holder候选Owner恰为已知PumpSwap池，不能列为独立聪明钱。**现阶段下一产品主任务转向V0.2真实钱包/资金关系的成熟成品能力验收**，优先RugCheck insider graph、Million funding/owners，按来源/许可/只读安全/实际行为审查。未授权OKX真实完整报告、独立链上钱包归因与Grok云电脑仍未通过；旧下文“OKX唯一剩余硬阻断”的描述仅指完整增强版，不再阻断已可用的免费V0.1基本报告。
+
 ## 第一优先：先让成品跑起来，再增强业务能力（2026-11-01）
 
 - [x] **首个薄报告入口已写入工程Draft PR #16**：`src/solana_meme_os/mint_report.py`直接消费现成OKX`token-research`标准JSON`{ok:true,data:{workflow,address,chain,core,structure,launchpad}}`；本地使用`fixtures/okx-token-research-demo.json`运行成功，生成`report.md`和`report.json`，新增6/6单测通过，**仅synthetic fixture**。
