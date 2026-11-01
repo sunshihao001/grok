@@ -76,3 +76,14 @@ Rule Engineer passing local tests **does not** imply an economically valid or pr
 当前所有曾引用的成熟成品/SDK/数据源/研究/从业者资料，已在知识Draft PR #14的[`knowledge/system/gpt-meme-project-index.v1.json`](https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/system/gpt-meme-project-index.v1.json)登记为`reference_assets.items`共**65项**，核实程度各不相同；原5项`source_repos`是历史固定源，不应被误以为全部。原21专家经真实产品职责缺口审查新增`E-L7-03`（开源成品集成/交付，合计22位知识视角，**不是第8个Bot**）。工程启动V0.1时先由该视角对比`OKX token-research`与备选项目的安装、接口、支付/签名风险和最小修改成本；无需安装65项。
 
 **仍保持当前交付顺序**：V0.1运行真实Mint→现有报告；之后两时点观察→持续钱包监控；具体缺口才回访Million/pumpwatch/FnZero。工程PR #16不自动拥有知识PR #14内容，它们base不同；实际部署前需在同一可审阅候选分支做代码与知识版本对照。参考登记不会让fixture测试变成真实数据，也不等于Grok Bot已配置。
+
+## 2026-11-01｜V0.1确实取得真实Mint公开池数据，但完整钱包/Dev报告未交付
+
+**已交付**：工程新增`src/solana_meme_os/public_pair_report.py`、`mint_v01.py`（统一入口）、对应13项独立单测，加上原`mint_report.py`已可“直接输入Mint→免费公开池快照”，或“输入Mint+已获授权的OKX结果→有关键钱包/资金线索的报告”；没有自动签名/支付/交易/执行OKX客户端。现有OKX整套业务仍保留为优先完整来源。
+
+**真实在线验收**：[GitHub Actions 41266389009](https://github.com/sunshihao001/grok/actions/runs/41266389009) 在公共DEX Screener API对两枚真实Mint取到5池和7池数据，含源响应SHA、获取时点与原始JSON；[证据记录](evidence/v01-real-public-pair-readonly-2026-11-01.md)附实值、哈希和GitHub Artifact，另有一次BONK返回`[]`并标`COVERAGE_UNKNOWN`，不认定“无池”。本地容器DNS失败，但已通过GitHub runner真实取数且实际下载回本地验证SHA与Mint池配对。**这仅通过`REAL_PUBLIC_POOL_SNAPSHOT`，未通过`FULL_REAL_MINT_WALLET_DEV_REPORT`**。
+
+**当前最短剩余任务**：只有一件必须补齐：在有明确授权且没有x402自动付款能力的隔离环境安全获取真实OKX `token-research` 结果；使用现有`mint_report.py`报告与这次真实池数据同Mint核对日期、池/账户/owner/资金来源/Dev覆盖。不再新增交易执行、全市场订阅或Dex专用适配器。若OKX权限无法取得，再从65项已登记源中比较实际能提供Holder、Dev历史的其他成熟成品/公开只读数据服务，而不是把DEX Screener不足当成一套完整情报产品。
+
+**专业观察**：同Mint可能同时作为base/quote出现在PumpSwap/Orca/Pump.fun多个池；价格字段仅可归属目标作为base时的quote，池买卖次数是池级统计而非钱包交易事件；聚合前要去重/明确分母。E-L7-03只负责交付、E-L1-01交易事实、E-L3-02资金关系、E-L0-02供应商语义、E-L6-01反证按现有知识参与，不新增专家/Bot。
+
