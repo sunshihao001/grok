@@ -157,3 +157,15 @@ PYTHONPATH=src python -m unittest discover -s tests -v
 ```
 
 **本轮新增模块12项单测、本地与旧Library版M01联合50项均通过**；不是最新工程PR的完整本地回放，也不是一次真实OKX API调用。合成钱包、资金边、Dev等均只为验证数据管道，任何人都不能把`SYNTHETIC`示例作为实际Mint的链上事件。未在本项目启用API Key、自动支付、钱包、交易或Grok定时运行。
+
+## V0.1 真实Mint持有人候选与跨源池地址核对
+
+已用实际在线数据验证只读的DEX Screener + RugCheck缓存报告，现有`mint_v01.py`可选`--rugcheck`以在单一报告并列显示交易池、Holder候选、Creator候选和风险标签。**所有Wallet身份仍是供应商候选，不是独立链上确定的操盘地址**：
+
+```bash
+PYTHONPATH=src python -m solana_meme_os.mint_v01 EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump --rugcheck
+```
+
+**第一条真实可核查的经济错误反例**：该Mint的RugCheck缓存持有人中一条占比约5.88%的Token Account，其Owner候选与DEX Screener某PumpSwap交易池地址相同。程序现在使用`pool_related_holder_observations`严格精确地址相等检查，并将其标成**池相关持仓候选（待链上验证）**，而不是直接归入鲸鱼/庄家个人库存。真实原始SHA和测试见[证据文件](docs/evidence/v01-pool-vault-holder-cross-source-2026-11-01.md)。
+
+限制：RPC官方公共节点对此Mint的请求实测限流429；RugCheck免费返回是供应商缓存，不证明Owner实际受益人或Dev完整历史；OKX完整`token-research`仍需安全授权和支付隔离；Grok云电脑尚未运行。不会自动签名、交易或付款。
