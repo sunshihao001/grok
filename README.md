@@ -1,5 +1,13 @@
 # Solana Meme Workflow OS — GPT 研发 / GitHub 真源 / Grok 云端运行
 
+> **2026-11-01｜同行成品研究与可运行复用更新**：已逐项审读Million的发现/资金/owners/flows/UI、HoldTech的holder-overlap/deep-scan、pumpwatch的发行者观测，以及OKX token-research工作流，证据和不能照搬的风险见[原有复用台账新增源码审计](knowledge/system/reference-capability-reuse-ledger.v1.md)。借用HoldTech已成熟的多Mint持有人重叠**业务流程**，新增本仓独立的`cross_mint_holders.py`：**2–5个已经保存的V0.1报告→样本内Owner候选重叠→保留池/基础设施排除、来源、时间和UNKNOWN→Markdown/JSON**。不需要付费API、不部署外部交易程序、不证明同一庄家。现有知识本体、专家、经济机制全部保留。对照UI见[产品体验设计](design/product-experience-architecture.v1.md)。
+
+```bash
+# 前提：已有不同Mint的report.json，无外网操作
+PYTHONPATH=src python -m solana_meme_os.cross_mint_holders /path/A/report.json /path/B/report.json --out-json overlap.json --out-md overlap.md
+PYTHONPATH=src python -m unittest tests.test_cross_mint_holders -v
+```
+
 > **集成验证入口（2026-11-01）**：本检出分支 `integration/knowledge-runtime-audit-20261101` 直接保留知识 PR #14 的研究与专家体系，同时原样引入工程 PR #16 的31项只读程序、测试、样例与证据（不导入会触发远程RPC的GitHub Actions工作流）。这是**集成候选，不是main、正式发布或Grok已部署**。可使用 `project_workspace.py` 将已有 `mint_v01.py` 输出的 `report.json` 与原专业知识段落关联；不调用网络或交易。请先看[系统设计与验收](design/system-integration-map.v1.md)。
 
 ```bash
