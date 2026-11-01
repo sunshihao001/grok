@@ -1,0 +1,39 @@
+name: one-shot-public-wallet-rpc-readonly
+on:
+  push:
+    branches:
+      - integration/product-knowledge-v01-20261101
+    paths:
+      - .github/workflows/one-shot-public-wallet-rpc-readonly.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  one-wallet:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: One bounded public RPC wallet sample, no key or payment
+        shell: bash
+        run: |
+          set +e
+          mkdir -p .runtime/wallet-probe
+          PYTHONPATH=src python -m solana_meme_os.public_wallet_rpc_sample \
+            --wallet 9QTjLWyhfpJ8Hm1ZALMNv9L4K6w13BSuUxMWu976Pg1Y \
+            --limit 1 --out-dir .runtime/wallet-probe/evidence \
+            >.runtime/wallet-probe/stdout.txt 2>.runtime/wallet-probe/stderr.txt
+          status=$?
+          printf '{"program_exit_code":%s,"automatic_payment":false,"wallet_signing":false,"requests_bounded":true}\n' "$status" >.runtime/wallet-probe/exit.json
+          echo "PROBE_EXIT_CODE=$status"
+          cat .runtime/wallet-probe/stdout.txt
+          cat .runtime/wallet-probe/stderr.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: one-shot-wallet-public-rpc-20261101
+          path: .runtime/wallet-probe
+          retention-days: 7
