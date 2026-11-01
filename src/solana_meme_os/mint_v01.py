@@ -95,6 +95,21 @@ def combined(mint: str, out_dir: Path, *, okx_json: Path | None,
         if okx is None and pool is None and holders is None and rug is None:
             raise ValueError("all read-only sources unavailable: " + str(errors))
         pool_holder_links = pool_related_holder_observations(pool, rug)
+        # Same-address match across vendors can expose pool/vault entries hidden in
+        # "top holders" lists; it does NOT establish human control or intent.
+        pool_lookup = {r["pool"]: r for r in pool["pairs"]} if pool else {}
+        overlaps = []
+        if rug:
+            for r in rug["top_holders"]:
+                addr = r["owner_candidate"]
+                if addr in pool_lookup:
+                    p = pool_lookup[addr]
+                    overlaps.append({
+                        "address": addr, "rugcheck_path": r["source_path"] + ".owner",
+                        "dex_pair_path": p["source_path"] + ".pairAddress",
+                        "interpretation": "CROSS_SOURCE_POOL_ADDRESS_MATCH_INFRASTRUCTURE_CANDIDATE",
+                        "not_proven": "NOT_HUMAN_WALLET_OR_COMMON_CONTROLLER_PROOF",
+                    })
         # Coverage is evidence-specific, and a saved OKX file is not live verified.
         result: dict[str, Any] = {
             "schema_version": "grok.mint_v01_combined.v0",
@@ -112,7 +127,7 @@ def combined(mint: str, out_dir: Path, *, okx_json: Path | None,
             },
             "source_errors": errors,
             "okx_saved": okx, "dex_public": pool, "rpc_token_accounts": holders,
-            "rugcheck_public": rug,
+            "rugcheck_public": rug, "cross_source_pool_owner_matches": overlaps,
             "pool_related_holder_candidates": pool_holder_links,
             "limitations": [
                 "RPC_TOP_TOKEN_ACCOUNTS_NOT_VERIFIED_UNIQUE_HOLDERS",
@@ -131,6 +146,12 @@ def combined(mint: str, out_dir: Path, *, okx_json: Path | None,
         for key, state in result["source_status"].items():
             md.append(f"- {key}: **{state}**" +
                       (f"（{errors[key]}）" if key in errors else ""))
+        if overlaps:
+            md += ["", "## 供应商交叉核查：Holder候选与已知DEX池地址重合", "",
+                   "**以下地址与DEX池匹配，应优先作为池/基础设施候选，不列为已确认独立交易钱包。**"]
+            for row in overlaps:
+                md.append(f"- \u0060{row['address']}\u0060：\u0060{row['rugcheck_path']}\u0060 ↔ "
+                          f"\u0060{row['dex_pair_path']}\u0060；\u0060{row['interpretation']}\u0060")
         if pool:
             md += ["", "---", "", public_pair_report.render_markdown(pool)]
         if holders:
