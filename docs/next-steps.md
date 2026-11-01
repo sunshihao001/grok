@@ -110,3 +110,5 @@ Rule Engineer passing local tests **does not** imply an economically valid or pr
 - Existing full domain and expert body: [gpt-meme-project-core.v1.md](../knowledge/system/gpt-meme-project-core.v1.md).
 - Source of truth for deliverable status remains [product-delivery-plan-v01.md](product-delivery-plan-v01.md).
 These are references to existing research files, not additional development obligations.
+
+- 完整历史收束审计：[whole-project-convergence-audit-2026-11-01.md](../knowledge/system/whole-project-convergence-audit-2026-11-01.md)；用于知识归因复查，不替代本文件的产品进度验收。
