@@ -1,5 +1,15 @@
 # Solana Meme Workflow OS — GPT 研发 / GitHub 真源 / Grok 云端运行
 
+> **集成验证入口（2026-11-01）**：本检出分支 `integration/knowledge-runtime-audit-20261101` 直接保留知识 PR #14 的研究与专家体系，同时原样引入工程 PR #16 的31项只读程序、测试、样例与证据（不导入会触发远程RPC的GitHub Actions工作流）。这是**集成候选，不是main、正式发布或Grok已部署**。可使用 `project_workspace.py` 将已有 `mint_v01.py` 输出的 `report.json` 与原专业知识段落关联；不调用网络或交易。请先看[系统设计与验收](design/system-integration-map.v1.md)。
+
+```bash
+PYTHONPATH=src python -m solana_meme_os.project_navigator --audit
+# 第一条是现存Mint程序，真实供应商API请求需在允许联网环境中自行执行：
+# PYTHONPATH=src python -m solana_meme_os.mint_v01 MINT_ADDRESS --rugcheck --out-dir .runtime/report
+# 以下只读取已保存报告，不调用外网/Grok/钱包：
+PYTHONPATH=src python -m solana_meme_os.project_workspace --report-json .runtime/report/report.json --question "这个Mint的钱包资金来源怎么看" --intent FUNDING_ENTITY --out-md .runtime/research-context.md
+```
+
 > **2026-11-01｜产品/UI/知识调用总入口（当前设计）**：先看 [整体系统集成图](design/system-integration-map.v1.md)、[用户UI与信息架构](design/product-experience-architecture.v1.md)、[AI知识调用说明](docs/ai-knowledge-navigation-guide.v1.md) 及 [机器导航索引](knowledge/system/knowledge-navigation.v1.json)。现有领域/专家/参考研究正文全部保留，按需读取；新导航只是指路，不能替代原知识或工程PR #16实测。旧README的GMGN-first/多Bot设计是历史背景，不能自动当当前部署事实。
 
 
