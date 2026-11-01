@@ -7,7 +7,7 @@
   "expert_is_not_bot": true,
   "release_policy": "Each expert proposes evidence-bound hypotheses; B07 only frozen human-reviewed rules. No trades, installation, autonomous promotion.",
   "source_priority": "Original chain observations (K2) > independently replayed case > historically pinned domain methods > external reported research; pin does not imply truth.",
-  "activation": "For a cross-domain project/product/whole-workflow review: scan the registered 21 specialist lenses for discriminating omissions, then engage only the relevant 2–5 in substantive conflict analysis; synthesize one coherent evidence-bound decision with actual code/data/tests and Dxx-Kxx mapping. For a single domain mechanism: normally select 1–3 relevant specialists. Never perform empty 21-role speeches, majority voting, or treat expert lenses as deployed Bots.",
+  "activation": "Whole-project review: scan every currently registered specialist lens (now 22) and the canonical reference_assets catalog; deepen only material expert collisions, prioritize a single safe runnable business result. For isolated mechanisms select 1–3 experts. E-L7-03 owns build-vs-reuse, licensing, deployment safety, real acceptance; it is a knowledge lens and NOT an installed Bot.",
   "specialists": [
     {
       "id": "E-L0-01",
@@ -965,8 +965,59 @@
         "B07-K01",
         "B07-K06"
       ]
+    },
+    {
+      "id": "E-L7-03",
+      "layer": "L7",
+      "name": "开源成品集成与产品交付专家",
+      "kind": "internal_specialist_lens_not_installed_bot",
+      "workflow_owner": "B01",
+      "domain_ids": [
+        "D12",
+        "D10"
+      ],
+      "knowledge_files": [
+        "knowledge/system/reference-capability-reuse-ledger.v1.md",
+        "knowledge/system/gpt-meme-project-index.v1.json",
+        "docs/next-steps.md"
+      ],
+      "legacy_card_ids": [
+        "anti-false-completion",
+        "evidence-synthesis"
+      ],
+      "cognitive_model": "把用户自然语言目标转化为最小可用的完整业务结果，从成熟成品真实代码和运行契约中选择最低额外开发路径；完整业务可运行优先于模块/提示词堆积。",
+      "reasoning_sequence": [
+        "从用户可见结果逆向列出输入、外部数据、实际运行依赖、已实现业务能力和验收条件，不要求用户挑技术栈",
+        "对完整成品、成熟SDK、商业API按功能覆盖、许可证/密钥/交易安全、修改面积、费用和维护成本作竞品对照；优先整套只读流程，其次最薄适配",
+        "实际执行安全离线/真实授权测试，区分SOURCE_REVIEWED、RUNNABLE_FIXTURE、REAL_DATA_VERIFIED、GROK_DEPLOYED；把错误与成本写回现有工程/知识入口"
+      ],
+      "competing_mechanisms": [
+        "研究专家发现一个高价值钱包模型，却需要重构三套依赖，首版反而无法运行",
+        "多个成熟项目存在重复标签却有不同时间、金额、授权或许可证契约；拼接导致假整合",
+        "整套开源成品含自动交易服务或付款密钥，关闭前端按钮并不等于后端只读"
+      ],
+      "decisive_next_check": "在不启用签名/自动付款的隔离环境证明：给定Mint→调用已授权成熟工作流→产生来源明确的可读报告，记录一项真实失败或不足；随后在GitHub Draft PR回读全部代码/测试结果",
+      "abstain_or_downgrade_when": "无法确认许可证/交易能力隔离/实际权限、缺真实输入或只有README营销承诺，禁止认定成品可部署",
+      "handoff_to_expert_ids": [
+        "E-L0-02",
+        "E-L1-01",
+        "E-L6-01",
+        "E-L7-02"
+      ],
+      "authority": "hypotheses_and_readonly_evidence_only",
+      "evidence_status": "proposed_not_live_validated",
+      "specialist_knowledge_primitives": [
+        "功能复用台账登记所有历史候选并维护真源、重访条件",
+        "产品输入→成品业务流程→薄适配→报告验收，先整套跑通后按真实差距补功能",
+        "依赖树、许可证、供应链、API计费、自动付费/交易危险路径、版本锁定与分支CI不能代替实际部署"
+      ],
+      "prior_research_competency_ids": [
+        "B01-K01",
+        "B01-K04",
+        "B07-K01"
+      ]
     }
   ],
   "policy_note": "Old 00c 5 questions and three-tier conditions are epistemic investigation guides; old numeric age windows, correlation thresholds, HHI cutoffs and fixed confidence 0.8 are NOT calibrated rules. Old 00e combinatorial discoveries are hypothesis generators only.",
-  "knowledge_lineage": "Each specialist must map to the already existing 52 B01-B07 competencies and to reviewed L/D specialist domain files. These are knowledge roles, not new Bot instances or approved market beliefs."
+  "knowledge_lineage": "Each specialist must map to the already existing 52 B01-B07 competencies and to reviewed L/D specialist domain files. These are knowledge roles, not new Bot instances or approved market beliefs. 2026-11-01: E-L7-03 added to cover missing cross-repository product integration and delivery, mapped to existing B01/B07 competencies; no new Bot, no new L/D layer, no promotion to live authority."
 }
