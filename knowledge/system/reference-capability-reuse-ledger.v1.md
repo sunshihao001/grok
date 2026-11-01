@@ -86,3 +86,20 @@
 每个模块用 **`capability_id` + `source_repo@sha/path` + `source_status` + `inputs/outputs` + `data_cost/permissions` + `license/security` + `known_misread` + `grok_gap` + `reuse_decision` + `next_trigger`** 来检索。当前文本表即这份合同的人类可读版本；需要让Grok按字段调用时再做JSON索引，不提前制造框架或Bot。
 
 研究阶段结束时若实际新发现可改变某模块的复用结论，修订该行，并同步当前唯一恢复点；若暂时不能用，保留理由、来源与触发条件，不能丢掉已经发现的项目。**源码/数据/测试是不同资产**：仓库可访问不表示许可证允许复制全部内容；MIT代码复制仍需保留原版权许可；云服务可能单独收费、API许可与原仓库代码许可也可能不同。
+
+
+## 2026-11-01｜P3-M01 按已有台账纠偏：禁止继续自研底层解析（AMEND）
+
+**修正的错误**：PR #16 `raw_tx_adapter.py` 在此前已确认成熟解析器候选之后，仍持续自写Base58、账户索引、v0/v1检查、CPI与部分SPL/Token-2022解码，并以增加离线单测证明方向。它的fail-closed测试有价值，但这不能证明值得继续建设另一套协议解析器。当前项目本来就有 **FnZero Python为P0候选**的审核结论，应先落实该方案，而不是重新做同样的检索和实现。模块现标为 **LEGACY_FIXTURE_COMPARATOR**，冻结底层功能扩写；不得删失原单测或声称已迁移。
+
+**本轮新增的实源码核查（固定源码版本）**：
+
+| 现成实现 | 实际读到的代码/组件 | 跟本项目的具体映射 | 限制与下一步 |
+|---|---|---|---|
+| [FnZero Python v0.10.0](https://github.com/0xfnzero/sol-parser-sdk-python/tree/cffb6c808c9b7975fc83428c0613fb4c3fa173b5)（维持台账P0） | `sol_parser/rpc_parser.py` 已有 `parse_rpc_transaction`；`examples/parse_tx_by_signature.py` 使用结构化RPC并设置 `maxSupportedTransactionVersion=1`；`docs/cross-language-sync.md` 按 `parse_status` 分开 `ExecutionConfirmed` / `InstructionDecoded` / `Unresolved`；区分指令限额与成交事实 | Python最少改动，可取成熟的Pump.fun/多DEX事件输入并做现有M01 m01.v1映射（须验证原始事件字段和可靠性） | 本轮**源码审阅，未安装/运行**，README宣称MIT但仓库根目录未查到LICENSE文件，直接复用前核对分发许可；不引入同作者交易SDK |
+| [Carbon（Rust）](https://github.com/sevenlabs-hq/carbon/tree/134647d8071675bb316f55c18511e961d4d0361b)（P0对照候选） | `decoders/pumpfun-decoder/src/instructions/buy.rs`/`sell.rs`、`events/trade_event.rs`，以及PumpSwap、Raydium、Meteora、Token-2022等现成解码器；`datasources/stream-message-datasource` 可接历史回放；`examples/transaction-crawler-rpc`/ `versioned-decoders` 有成熟管线和版本切换示例 | 可代替未来自己维护多DEX解码；特别适合已有索引/流式需求；官方代码生成并有实例 | MIT许可证已读；**未安装/跑测试**；Rust与Python M01的连接有成本，先以同样输入对比FnZero，不能因解码器数量多就迁移整栈 |
+| [Solana官方transaction-introspection](https://solana.com/docs/core/transactions/transaction-introspection) | `decodeTransactionFromRpcResponse`+`walkInstructions` 已解决账户/ALT、outer+inner CPI、legacy/v0/v1；生成的Program client再解析Token语义 | 结构级权威、用于第三方库失败原因核验 | 不能自动推导已执行买卖经济结果；JS调用是否必要待FnZero/Carbon同样样本比较 |
+
+**下一轮唯一有价值的实验**：保持`wallet_batch_monitor.py`原逻辑与fixture不变，在隔离无密钥环境以同一组已知Solana文档RPC样本及FnZero自带经核查的DEX正例，对照锁定版本FnZero（必要时对比Carbon）输出的指令、BUY/SELL、mint、owner、实际quote成交、`parse_status`、CPI位置、UNKNOWN；审计包/许可证、开发依赖、执行开销。只有SDK已经能稳定输出所需字段时，才写最薄的“供应商事件→既有M01标准事件”映射；不准重写DEX解析、无需三套混合框架。
+
+**状态**：`SOURCE_CODE_INSPECTED` / `IMPLEMENTATION_FROZEN`；**不是** `ADAPTER_TESTED` 或 `READ_ONLY_DATA_VERIFIED`。已有单测仍属于本项目自写Legacy基线。方向改为`PIVOT_METHOD_KEEP_GOAL`，不更改P3研究目标与C02/C05优先级；后续该台账为唯一复用判定入口，不另建框架。
