@@ -120,3 +120,12 @@ AI承担产品负责人和工程整合者的工作：根据用户的目标、当
 
 - **FnZero 已真实运行通过**：[专项GitHub Actions #41317955580](https://github.com/sunshihao001/grok/actions/runs/41317955580)，固定`sol-parser-sdk-python==0.10.0`和上游源提交`cffb6c808c9b7975fc83428c0613fb4c3fa173b5`。Artifact #13088032337 真实下载回读、ZIP CRC=OK，原样签名Corpus SHA256 `b1c61a81470ffb37f4acf0f116c2d5dfc7e4adc2dd35a247b2c48956814aa073`与报告相符；所有3笔交易的Ed25519已验证。SDK从两笔**成功**交易解析共6个DEX事件（各3个route legs）；一笔**失败**PumpSwap交易保留1个route intent，但执行DEX事件=0，Token Account报告净变化=0，fee=18144 lamports。对应的账户观察分别为15/13/7条、owner提示5/6/5个；**这些绝不等于5/6/5个独立买家**。工具不做网络RPC追验或Grok调用。项目[全量离线CI #41317955519](https://github.com/sunshihao001/grok/actions/runs/41317955519) **296项通过**。
 - **判定变更**：区分(1)签名交易、(2)多个DEX CPI route legs、(3)实际成功的DEX执行事件、(4)Token Account逐户净余额、(5)有证据的经济主体和协同机制。这五个观察层次绝不可用一个通用“买入事件”计数替代。下一次实务验证应使用**两笔来源独立的成功Swap及多钱包活动样本**和FnZero API复核，比较钱包级观察的完整性及事件时间、RPC可见时间，不应再次自研低级解码器。
+
+
+### 2026-11-01｜Million整体只读运行验收（真实阻断，不再凭README推断）
+
+- **固定源及可回查运行**：`Kelows/million@c89ad07caaf70773d40b45943e136eadc4f946a5`，完整API依赖隔离构建并启动：[GitHub Actions #41322677288](https://github.com/sunshihao001/grok/actions/runs/41322677288)。严格空`HELIUS_API_KEY`、`EXECUTOR=paper`、爬虫默认禁用，无钱包私钥、Webhook、转账或自动付款；先`npm ci --ignore-scripts`避免上游安装脚本副作用，再显式完成Prisma/SQLite编译启动。API在本次试验中仅绑定回环并只执行GET。
+- **真实原始结果**：Artifact #13090220633（`pinned-million-no-key-readonly-smoke`，ZIP CRC和文件已核验）含`health.json`、`crawler.json`、`live-status.json`、`discovery-body.json`、`probe-result.json`及源提交SHA。健康接口正常但`heliusConfigured=false`；爬虫`enabled=false`；实时订阅`connected=false`；在已验Mint `EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump` 上执行原生`GET /api/discovery/token/:mint?pages=1&mode=recent&minSol=1`得到HTTP **503**，明确缺`HELIUS_API_KEY`。**零真实买家/钱包候选被验证**；运行时HTTP接口可用 ≠ 业务数据可用。
+- **源码与业务取舍**：Million有原生Mint→接收Token且付出报价资产的买家候选→预览质量→扩展钱包→持续状态反馈闭环，但整个API还依赖Paper/Live交易模块，无认证的本地API与`EXECUTOR=local`切换风险使其不适合直接暴露给Grok。优先作为可选、隔离的只读发现服务，不复制它的大量交易业务代码。LiveFeed按签名唯一事件和webhook第一匹配钱包处理，有漏记同交易多钱包视角风险；不能把整个LiveFeed账本当成完整经济事实。
+- **数据费用**：源码`crawler.service.ts`记载Enhanced调用按10积分计、历史发生预算计算失准；Discovery一个GET可能触发多个钱包预览请求。实际Helius 2026现行计价、免费额度及个人账户授权仍未核查，未经额度确认不得自动开爬虫、深度扫描或启用持续订阅。
+- **下一验收门槛**：有隔离的数据凭据和限额后，先用Million现成`GET /discovery/token`按一个真实Mint限量获取原始买家候选，独立排除池/路由并标注历史截断；再仅选一个候选检查Funding/时间窗，记录所有网络请求及实际费用。若仍无Key，继续从已有公开链上记录验证地址语义，但**不要声称Million发现已接通**。

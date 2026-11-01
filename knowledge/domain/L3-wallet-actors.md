@@ -240,3 +240,18 @@ Million整套服务适合钱包发现→订阅→后续活动→资金关系，�
 
 
 **首次有独立执行记录的检验**：[FnZero SDK专项运行](https://github.com/sunshihao001/grok/actions/runs/41317955580) 证明三个真实签名缓存样本中，一笔成功RaydiumCPMM交易包含3段DEX路由、15条Token Account余额记录和5种Owner提示；另一笔成功跨RaydiumCLMM/Orca/Meteora交易同样3段路由、13条Token Account记录及6种Owner提示。相反失败的PumpSwap样本含1段意图，但已执行DEX事件为0。**Owner提示数量、DEX leg数、独立主体数、真实完成的交易数互不等价。** 多账户/多池同步出现在同一签名中，是优先排除“路由设施与交易原子性”解释的场景。签名加密验签不证明RPC execution meta的真实性，上述仍为上游缓存记录。将这项实证标为D04/D05/D07的反误归因知识，而非“新的庄家检测规则”。
+
+
+## 2026-11-01｜Million完整业务源码与无密钥运行：从“跟单筛选”还原观察对象发现、身份误判和数据覆盖
+
+**实际研究对象**：固定上游`Kelows/million@c89ad07caaf70773d40b45943e136eadc4f946a5`（2026-09-14源码）；关键路径`apps/api/src/discovery/discovery.service.ts`、`crawler/crawler.service.ts`、`analysis/owners.service.ts`、`funding/funding.service.ts`、`live/live-feed.service.ts`、`trading/trading.module.ts`以及`AGENTS.md`。README明确的钱包→代币→钱包发现闭环是其产品目标；以下具体动机仅在作者**源码注释明确指出**时才归作者，其他部分是对实现约束的专业解释。
+
+**发现路径的概念纠偏**：Million并非简单把大额Token接收地址视为买家：`buyersOf`寻找接收Mint且自身支付SOL/WSOL/稳定币的地址，排除Router/池及查询到的vault，随后对大买家与尾部随机候选做预览（最近扫描默认最多30候选，预览上限15；约70%大买家、30%尾部）。这使“候选覆盖”不同于只选最大买单，但该方法受Helius增强交易解析、报价路径、历史截断及资金代理关系约束，仍不证明经济付款人和实际控制人。深度采样通过时间检查点跨token生命周期取交易，不是每一笔历史交易的穷尽审计；未知区间保留。
+
+**源码记录的失败修复**：`crawler.service.ts`明确记载此前“6,000 credits”误算成约60,000的供应商费用；还记录截断历史将未找到买入的卖出误认利润，现阶段只用初筛判**是否值得观察**，实际质量等未来观察完成的交易检验。`owners.service.ts`记录曾把182钱包靠共同进场聚为同一owner；现在`coentry`边不参与union-find，degree > 6的高连接点不用于合并，但`funding`/fee payer关系仍仅是候选。ownerId每次重算且不稳定，**绝不能作为长期稳定的主体ID**。`live-feed.service.ts`源码记载Webhook登记成功仍可能无实际送达，故增加探测与WS回退；但单`signature`去重与首个触达钱包`break`依然遗漏同交易其他钱包观察。这些是**作者注释及受检版本代码事实**，不等于我们独立复现了其历史损失数字。
+
+**产品级冲突**：Million的`BOT_INFRA`过滤、token`safetyFail`排除用于找适合交易/跟踪的对象，却可能移除本产品需要监测的资金服务、制造交易量的地址或风险发行者。应保留“可交易性/跟单筛选”和“市场机制研究样本”两个不同的选择目标；异常并不意味着应被删除。共进场不是同控，服务节点不是独立巨鲸，地址数量不是资本主体数量；候选资金边需保留竞争解释。项目不必新建专家角色或另一套关系图数据库。
+
+**运行级实证**：在项目[集成PR#17的GitHub Actions #41322677288](https://github.com/sunshihao001/grok/actions/runs/41322677288) 中，使用固定源码、Node24、独立SQLite、空Helius Key、`EXECUTOR=paper`、无Webhook、无私钥、仅调用本地GET接口，真正构建启动Million全套NestJS API。原始Artifact #13090220633已下载、ZIP CRC验证。健康端点`heliusConfigured=false`，爬虫`enabled=false`，LiveFeed`connected=false`、`subscribedWallets=0`；`GET /api/discovery/token/EYq...?...pages=1`返回**503**（`HELIUS_API_KEY is not set`）。因此**未发现真实新钱包，未跑通业务闭环；不允许写成完成**。这也不证明带key的预算、真实候选质量、连续监控或Grok调用。
+
+**复用裁决**：暂不启动全部Million为项目核心；避免将原有交易模块和无鉴权本地API直接暴露给Grok Bot或公网。若后续获得单独的Helius只读数据额度，在完全隔离的本地进程中通过`/api/discovery/token/:mint?mode=recent&pages=1`做**有限、可计费的真实发现验收**，存原响应/时间/预算/截断状态，再用现有`grok`报告及知识导航解释；该GET除Mint历史可能对候选预览再请求最多15个地址，不能误认为一次HTTP请求只消耗一次数据额度。在没有钥匙和真实响应前，不应再造一个替代Million的发现算法。
