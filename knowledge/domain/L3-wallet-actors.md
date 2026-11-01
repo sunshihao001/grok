@@ -200,3 +200,11 @@ KOL 提及、社群消息、热门榜排名、推文传播、交易量、持币�
 历史机制来源：`sunshihao001/-/learning/10.md`、`11.md`、`12.md`、`design/phase1-skill-03-wallet-roles.md`、`design/phase1-skill-04-wallet-structure.md`；`sunshihao001/meme-/07_样本标注/` 的正反例设计；本仓库 `wallet-roles`、`funding-graph`、`concentration`、`sybil-wash`、`deployer-history` 旧卡。
 
 旧文档中“共享 Binance 出金地址 = 同一庄家”“同步阈值证明内部人”等只能列为**被挑战的历史断言**。本篇保留其值得调查的行为问题，不恢复这种归因。后期 `Why-Solana` 结论不参与本篇的事实基础。
+
+## 2026-11-01｜从钱包标签转向完整Mint报告的实际可用数据（D04–D07）
+
+本轮对照[外部成品功能台账](../system/reference-capability-reuse-ledger.v1.md)确认：OKX `token-research`的**实际Rust CLI**能获取Mint的Holder、Cluster、Top Trader、Smart Money及条件性的Dev/Bundle供应商字段（需授权、接口限额和取数时点）；这些只能是**标签与供应商观测**，不能把`bundle rate`、`dev rug count`、`SM`直接当作链上真相或同一资金实际控制权。数据失败时CLI保留null，不能转成“风险为0”。
+
+Million整套服务适合钱包发现→订阅→后续活动→资金关系，但源码当前`LiveEvent.signature @unique`与首个命中钱包即退出，使一笔多人参与的交易只留一个被订阅钱包视角；D07群体时间序列需要**同一签名按不同实际钱包角色/指令位置保留多行证据**，而不是只计唯一签名。此语义对D04 Sniper、D05资金关系、D06库存和D07异常均是共同前提；应先在只读成品验收中修复或隔离该问题，不能用单次统计补成“庄家群体”。D06库存必须和当前Holder余额、已确证买卖、Token普通Transfer、LP/Pool资产拆开；两次快照差额不等于已确证卖盘。
+
+来自[OKX官方费用](https://web3.okx.com/zh-hans/onchainos/dev-docs/market/market-api-fee)的现实限制：免费订阅档不含WS，按需Premium报告与24小时持续监控属于不同成本路径；这也是为什么应先验收**单Mint按需报告**，随后才评估持续订阅。此段为功能与专业认识连接，不表示我们的D04–D07已有真实链上分类器或Mint库存重建。
