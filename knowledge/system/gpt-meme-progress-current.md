@@ -4,6 +4,8 @@
 
 > **2026-11-01 产品实施路线收束（最新）**：根据用户要求，停止继续扩展方案，**以[工程PR #16《四阶段成品交付计划》](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/product-delivery-plan-v01.md)为产品优先级真源**：V0.1真实Mint报告→V0.2钱包/资金→V0.3异常监控→V1.0 Grok入口。当前已完成真实公开池数据，但**完整钱包/Dev报告尚未真实验收**。GPT知识分支仍按既有D01–D12/152单元/22专家持续回填，只有对当期成品功能有实质帮助才深入；不要求先学完所有单元，也不重起规划。旧文件里“继续研究P2.2/先开发FnZero解析器/扩大架构”只能按历史研究口径读取，不应覆盖此产品交付顺序。用户只负责必要账户/授权，不选择技术栈。
 
+> **2026-11-01｜V0.1实际运行升级与持续推进（最新状态）**：工程[PR #16](https://github.com/sunshihao001/grok/pull/16)已将现成免费[RugCheck Token Report](https://api.rugcheck.xyz/swagger/index.html)与DEX Screener真实公开池整合为一条`mint_v01.py --rugcheck`只读命令。真实[GitHub Actions #41269179918](https://github.com/sunshihao001/grok/actions/runs/41269179918)读取同一Mint**5池、20条供应商Holder Token Account候选、Creator候选**，保存报告/原始响应和SHA，并发现**1条Holder候选owner与PumpSwap池地址重合**，结合供应商knownAccounts=AMM将其降为基础设施候选；其余19条只是未分类账户，不是19个人。官方公共RPC另一次实际尝试因HTTP 429限流，真实Owner解析未成功，已不作为默认路线。**V0.1基础真实只读多来源报告可验收，不等于完整Dev历史/资金同源图、独立链上钱包控制验证、Grok云电脑或盈利**。按[四阶段产品计划](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/product-delivery-plan-v01.md)，下一产品主任务**V0.2真实钱包与资金关系**：先复用RugCheck insider graph或Million funding/owners，核实一条来源明确的实际关系、误归因及数据更新；OKX增强仍待安全授权，无需阻塞免费基础能力。知识库REF-066 RugCheck来源状态已提升为PAGE_VERIFIED并挂真实运行证据；先前65参考登记等级统计是**当时快照**，不能视为修改后的实时分布。
+
 **当前权威**：GitHub `sunshihao001/grok`，知识分支 `knowledge/whole-spectrum-20261030-v1`（Draft PR #14）中的本文件；工程分支 `research/p24-cross-mint-m01-batch-monitor-20261031`（Draft PR #16）。PR 均未合并，主分支没有这些草案增量。
 
 **持续研究与写作方式**：继续使用 [《持续研究与知识同步 V2》](gpt-meme-continuity-v2.md) 与 [《专业研究写作 Skill V2》](gpt-meme-research-writing-skill.v2.md)，新结果先对照已有 [唯一监控方法专题](../domain/meme-anomaly-discovery-state.v1.md)，用 `AMEND` 修订，不把每个回答复制为新专题。
