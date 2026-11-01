@@ -423,3 +423,14 @@
 
 从用户的自然语言问题反查`reference_assets.items`，根据`role/priority/when_to_review`选择最少必要来源，先判断能否复用完整程序；逐项实际执行/测试后回填**同一项**的验证等级、源码SHA、实际失败原因和下一次重访条件。具体设计与反证只记录在本台账与已有Dxx专题；资产存在与是否运行的事实字段由索引记录，避免另建重复的选型总表。**首次登记的历史线索并未全部独立核实，未核实的URL宁愿空缺也不能猜。**
 
+## 2026-11-01｜V0.1真正运行的第一个真实外部数据成品：DEX Screener（范围严格受限）
+
+**审查启动条件**：此前OKX CLI没有安装/已授权会话，本地容器DNS失败；为避免把SDK或fixture称为真实交付，只从已注册65项资产中的REF-032（DEX Screener，`PAGE_VERIFIED`）使用官方[公开GET Token Pools API](https://docs.dexscreener.com/api/reference)。没有改变OKX完整Mint研究优先级、没有付费或自动执行外部钱包程序。
+
+**具体运行路径**：`grok`工程PR #16新增`src/solana_meme_os/public_pair_report.py`及`mint_v01.py`，优先吃已有OKX `token-research` JSON，缺OKX授权才走公共数据池快照（**不是伪造OKX的Holder JSON**）。在[GitHub Actions实际运行41266389009](https://github.com/sunshihao001/grok/actions/runs/41266389009)及最终[raw数据Artifact运行41266389009](https://github.com/sunshihao001/grok/actions/runs/41266389009)中，一枚Mint`EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump`实际返回5池；另一`FdKdpz11GsTofLaNiddrhxrsE4APZYSSfLFqQ9YKpump`返回7池，供应商`DEX Screener`时间是抓取时间2026-11-01T02:44:23Z附近。实际原始JSON已下载，并与报告内SHA256逐字节一致、每条池的目标Mint base/quote匹配；完整真实证据为[工程实测文档](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/evidence/v01-real-public-pair-readonly-2026-11-01.md)。初期BONK样本公开API返回空列表，清楚标`COVERAGE_UNKNOWN`而不是断言无市场。
+
+**跨专家发现**：E-L7-03强调真正调用与代码存在是两种状态；E-L1-01/E-L0-02指出同一Mint在PumpSwap、Orca、Pump.fun同时存在base和quote两种方向，`priceUsd`通常是base价格，而不是用户输入Mint保证的价格；`pairCreatedAt`是池创建不是Mint创建；`txns.h24.buys`是**供应商每池聚合笔数**，不是钱包交易/真实信号；E-L3-02说明池流动性不能代替钱包筹码与经济同控；E-L6-01要求将BONK空响应作为负例覆盖缺失，而非真实无流动性。公共池来源**不含Holder、Owner、fundingSource、Dev/Bundle，也不提供单笔Swap确定证据**。
+
+**安全阻断更新（OKX自动支付）**：直接阅读[OKX cli/src/client.rs](https://github.com/okx/onchainos-skills/blob/main/cli/src/client.rs)，`get_with_headers/post_with_headers`含`ensure_payment_config`、`maybe_sign_payment`和HTTP 402重试签名付款流程。故`onchainos workflow token-research`虽然是*数据查询操作*，但客户端可能产生付款行为。当前`grok`只接受已有授权保存的OKX JSON，不自动执行外部CLI；必须先有安全隔离和付款隔离契约，再谈真实OKX完整工作流。没有授权时公开备用路径不应自动升级付费服务。
+
+**实际业务状态**：`V0.1 PUBLIC_PAIR_DATA_REAL_VERIFIED`✅；`V0.1 FULL_WALLET_DEV_FINANCIAL_REPORT`❌；`GROK_BOT_DEPLOYED`❌。后续必须先查现成完整OKX/替代来源的真实权限和原始钱包结构，再补最薄接入，不再自主发明整套Mint索引器。
