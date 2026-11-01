@@ -23,6 +23,7 @@ jobs:
         if: always()
         with:
           name: v01-public-mint-snapshots-20261101
-          path: .runtime/v01-*
+          path: .runtime/
+          include-hidden-files: true
           if-no-files-found: error
           retention-days: 30
