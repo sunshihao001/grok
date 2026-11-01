@@ -282,6 +282,48 @@
       "reject_when": "补全真实可验证历史后仍未找到被遗漏的相关融资，且条件分层后零融资比例差异不再存在",
       "utility": "历史覆盖审计、钱包角色标签修复、正常基准分母校准",
       "not_conclusion": "已证明缺失由RPC故障引起、所有无记录钱包实为同控"
+    },
+    {
+      "id": "HX09",
+      "name": "跨程序账户与权限的资本归集路径不变量",
+      "status": "TESTABLE_NEW_HYPOTHESIS",
+      "core": "钱包或创建者可利用 Stake Program 控制的资产账户以及多重 authority 进行中间资金转移；可在不同 Mint 复制的资本角色-权限-资产路径可能比普通 System Transfer 地址图更有鉴别力",
+      "specialists": [
+        "chain",
+        "data",
+        "wallet",
+        "graph",
+        "inventory",
+        "adversarial",
+        "statistics",
+        "review",
+        "knowledge"
+      ],
+      "uses": [
+        "h2w6-sol-balance-method",
+        "forensic-raw-sol-replay",
+        "wallet-clustering-cross-layer-unknown",
+        "developer-funding-convergence"
+      ],
+      "source_case": "knowledge/research/R008-intermediate-program-capital-route-stake-v1.md",
+      "origin_public_report": "https://bitquery.io/investigations/solstice-memecoin-bundling",
+      "protocol_primary": "https://solana.com/docs/references/staking/stake-accounts",
+      "source_derived_observation": "Bitquery's 2026-10-27 report alleges hundreds of wallets swept SOL using stake accounts. These transactions have NOT been independently replayed by the Grok research project; stake authority and withdrawal semantics are officially documented.",
+      "predicts": [
+        "直接 System Transfer-only 图会遗漏某些可由原始 Stake Program 交易和余额证实的资产流路径",
+        "排除公共质押服务和普通机器人后，部分不同 Mint 中相近的资金权限-角色组合仍可能复现"
+      ],
+      "alternatives": [
+        "合法独立用户共用托管/质押服务或相同自动化软件",
+        "交易所/公共结算产生非专属收款或权限关系",
+        "研究者错误把同时间提现等价为共同经济受益人"
+      ],
+      "discriminator": "固定当时有效的 stake authority/withdraw authority 与交易指令，重新分解 stake-account SOL 路径；对照普通质押客户和独立发行，测假源归因与未解释净余额是否改善",
+      "baseline": "同 staking 服务/活动水平/时间段/发行平台的普通账户和事件；System-only、System+TokenClose、System+TokenClose+Stake 原始重放消融",
+      "reject_when": "Stake 资金路径独立重放失败，或非公共权限-资金 motif 的跨发行复现完全被公共服务/协议及正常行为解释，或时间安全样本外增量为零",
+      "utility": "原始资金覆盖恢复、账户权限法证、跨协议资本组织监控",
+      "not_conclusion": "已经证实所有被提及地址由一个操盘者控制、某公众人物意图或参与、已确认资本利润或可跟买优势",
+      "epistemic_status": "STUDY_PROPOSAL_CONSTRAINED_BY_OFFICIAL_PROTOCOL_AND_THIRD_PARTY_CASE"
     }
   ],
   "expansion_wave": {
@@ -293,5 +335,8 @@
     ],
     "evidence_class": "PINNED_SOURCE_DERIVED_NOT_INDEPENDENT_RPC",
     "why": "The first concrete count-vs-value and history-coverage research tensions discovered by re-aggregating 40-wallet historical data"
-  }
+  },
+  "as_of": "2026-11-01",
+  "latest_case": "R008",
+  "hypotheses_count": 9
 }
