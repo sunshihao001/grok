@@ -1,6 +1,47 @@
 # Solana Meme knowledge is the core; Grok is the host
 
+> **知识可用性入口（2026-11-01）**：[AI知识导航与原有资产归位](../docs/ai-knowledge-navigation-guide.v1.md) | [机器可读任务→领域/专家/源码映射](system/knowledge-navigation.v1.json)。此导航不替代原有专业知识、跨领域关联或知识积累机制；应继续使用和深化原研究正文。所有“已实现”仍需工程分支证据，不因索引存在自动成立。
+
+
+> **2026-11-01 说明**：本目录的**研究知识、专家视角、专业机制、知识联系、参考源码及证据持续有效，继续支持主动深研与知识发现**。本次仅调整AI在任务中的思考、调用与执行方式：固定阶段和每轮强制模板不再默认执行；知识本身既不是废弃档案，也不要求所有研究都转向产品开发。当前工作方法参见[准则](system/current-operating-guidance.md)。
+
 **Purpose:** preserve the expert learning, domain research, adversarial perspectives and practical lessons from three earlier projects while discarding Hermes-specific *runtime* assumptions. A working Bot without validated external knowledge is only orchestration.
+
+## 2026-11-01｜当前唯一的全项目专家收束入口
+
+最新[《全项目专家收束审计：知识权威、17类污染/冲突、真实交付状态》](system/whole-project-convergence-audit-2026-11-01.md)对PR #14知识、PR #16工程和PR #15竞争104单元草稿进行分层裁决：**152单元、22位知识专家、65项参考资产**为现行目录与注册事实；“真实公开池快照已成功”与“完整Mint钱包/Dev报告仍未证实”严格分开。B01知识M01≠P3-M01工程。此审计不取代已有领域/来源真源，也不代表GPT Project附件自动更新。旧README早期21专家及P2.2等表述均以当时版本为准，后文如有冲突以本审计及最新注册表/恢复点为准。
+
+## 最新成品进度（2026-11-01）
+
+工程[PR #16《四阶段交付计划》](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/product-delivery-plan-v01.md)已完成**真实Mint免费多来源报告**一次验收：公开DEX 5池、RugCheck缓存20个Token Account候选与Creator候选；发现并自动标记一条Holder owner与AMM池的地址重合，避免将池账户误认聪明钱。真实运行记录[GitHub Action](https://github.com/sunshihao001/grok/actions/runs/41269179918)，来源与SHA见[工程证据](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/evidence/v01-real-rugcheck-holder-2026-11-01.md)。本知识分支的REF-066已链接此来源；**下一产品任务为V0.2钱包与资金关系**，不是再规划。供应商缓存不是链上独立复算，Grok云电脑与真实Alpha仍未验证。
+
+## ChatGPT「跟单」Project 与 GitHub 的全领域知识主册
+
+为避免知识散落在历史对话，新增可移植 [《GPT Meme 项目知识主册》](system/gpt-meme-project-core.v1.md)：统一收纳8层、12域、22位专家、152单元的具体问题/机制/错误捷径、十条重点跨域知识链与当前B01进展。 [《知识逐层累积与双向关系规范》](system/gpt-meme-knowledge-accumulation.v1.md) 规定把每轮机制、竞争解释、原业务来源和新发现回填到旧单元；[《GPT Project 建议指令》](system/gpt-meme-project-instructions.v1.md) 用于项目设置，[机器索引](system/gpt-meme-project-index.v1.json) 保持原分类ID不变。**当前 GPT Project 附件未被工具自动更新**；需要用户将同版本文件添加到 Project 知识区，GitHub 是审阅真源，Library副本/当前聊天与项目附件不能混称。此处只是专业知识镜像与方法，非Grok部署或Alpha实证完成。
+
+## 如何逐批将已有知识真正连到Grok？
+
+当前执行方式见 [《小批次滚动融合与B01试点》](system/rolling-reference-knowledge-integration.md)：每批由一个具体的Meme钱包/资金/筹码/策略问题驱动，3–6份原有关键资料先被理解，再由现22位专家按需融合，审阅后回填现有知识单位和专家入口。**只同时保持一条主研究**，另一批最多做来源核查，前一批可完成小量入库。不要先把三库全量搬进Grok，也不同时让每个参考库各自写一套专家知识。
+
+## 项目原点优先：现有Meme交易储备审计
+
+在任何新研究方向前，先查 [《五个参考仓库的Meme交易知识储备与阶段》](system/reference-projects-meme-knowledge-audit-20261030.md)。它明确原Hermes、meme-、qb-分别已有何种Meme专有知识和程序；外部Why-Solana仍是review_only；当前grok最大的断层是**关键钱包识别到后续真正可跟随的信息**。现行 [M01](domain/D04-D08-key-wallet-followability-research-brief.md) 已以旧项目关键钱包的业务问题为第一优先，先前通用AMM研究仅按需参与。
+
+## 当前知识研究的思维逻辑
+
+先读 [《专家主导的核心机制纵深研究法》](system/expert-mechanism-research-method.md)，再按 [核心机制研究进度](system/mechanism-research-plan.v1.json) 选择有真实解释价值的问题。**全域知识目录保证不遗漏；一个主专家和必要的跨域挑战负责钻深；新认知最终按原152项ID回填。** 当前下一轮聚焦 [从qb/Hermes关键钱包识别到实际可跟的后续信息](domain/D04-D08-key-wallet-followability-research-brief.md)，[D03 池价/储备](domain/D03-market-price-mechanism-research-brief.md) 仅按具体Mint业务需要补足。这条知识研究线与 `docs/next-steps.md` 中待完成的 Grok S1 云电脑验收并行、互不冒充完成状态。
+
+## 全领域系统知识建设（草稿，非实证完成）
+
+以 [全领域专家手册](system/whole-domain-expert-handbook.md) 为项目知识整体阅读入口；[152 项原子知识图谱](system/whole-domain-atlas.v1.json) 对现有 L0–L7 / D01–D12 从小到大逐项编号，关联21位专家、市场问题、经济机制、错误捷径和既有知识入口；[覆盖审计](system/whole-domain-coverage-audit.md) 独立列出每个领域尚未研究透的技术与市场问题。范围已系统化不等于专业知识全部完成，更不等于市场真实数据、可赚钱结论或 Grok 已上线。
+
+## L0–L7 专属专家视角（Draft，非已安装 Bot）
+
+[21 位内部专业专家与完整分析程序](experts/README.md) 分布在全部八个知识层：从原始来源/交易/市场/钱包资金，到策略机会、执行、独立反证与监控治理。每位专家都有自己的知识、观察顺序、相反机制、关键查询、停止条件，并映射现有 B01–B07 工作责任；**不创建 21 个 Grok Bot**。机器注册表为 [registry.v1.json](experts/registry.v1.json)，离线专家方法查询：`PYTHONPATH=src python -m solana_meme_os.expert_brief --question "同源钱包能跟单吗？" --objective ECONOMIC`。仅提供研究材料与调查计划，不是大模型专家自动执行器或市场验证结果。
+
+## Project-internal specialist knowledge expansion (Draft)
+
+The existing D01–D12 ontology now has a **practical domain content entry point**: [domain/README.md](domain/README.md). Four targeted knowledge files explain actual Solana transaction/market mechanisms, wallet/funding/holder behavior, copy-trading executability, and evidence-safe cases. These are **review candidates**, not independently validated Alpha, live data integrations, or a replacement for the 15 archived source cards. Do not bulk load them into the monitor; choose only relevant domain content per question, observe the K1 source-admission restrictions, and require K2 original evidence for factual claims.
 
 ## What has been migrated
 
@@ -47,3 +88,15 @@ References: `docs/sources.md`, `knowledge/legacy-audit.md` and `skills/solana-me
 ## Second wave — do not bulk migrate
 
 New model: keep the resident 15 cards and 21 prior snapshots as a bounded historical baseline, but use `knowledge/source_index.v1.json` to consult external specialist sources **on demand**. The repo now indexes 17 documents, including methodological references from `Why-Solana-Memecoins-Are-Over`, without importing its licensed analysis into Grok. Run `python -m solana_meme_os.research --question ...` to create an evidence intake packet; see `docs/on-demand-research-design.md`. The goal is better judgment, not maximizing token count or the number of copied files.
+
+## 完整结构与逐批填充
+
+请优先阅读 [`system/README.md`](system/README.md) 的 8 层、12 专业领域架构，以及 [领域关系图](system/ontology.v1.json)、[来源注册](system/source-registry.v1.json)、[研究对象](system/research-units.v1.json)。现有 15 张概念卡、21 个历史快照不复制、不删除；D01/D07 的缺口保持明示。新增外部研究只是 `external_reported`，未做本地独立复算，也不改变 Monitor 规则。
+
+```bash
+PYTHONPATH=src python -m solana_meme_os.knowledge_system --audit
+PYTHONPATH=src python -m solana_meme_os.knowledge_system --question "跟单资金网络滑点退出成本"
+PYTHONPATH=src python -m unittest discover -s tests -v
+```
+
+领域导航为确定性关键词与依赖预选，不能替代真实 Grok Bot 的语义推理或经济性检验。

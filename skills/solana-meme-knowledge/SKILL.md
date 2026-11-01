@@ -21,3 +21,14 @@ Prohibitions: No automatic trades, private keys, swap, signing, broadcast or fak
 Begin a novel question with `PYTHONPATH=src python -m solana_meme_os.research --question "原始问题"`. Inspect the returned `sources`, then obtain **only** the needed pinned source documents; `--fetch-excerpts` is optional read-only GitHub preview and may be unavailable. Study `docs/on-demand-research-design.md` and `knowledge/source-index-README.md`. Cite original authors and source revisions.
 
 A research packet without `observations.accepted` is NOT a verified market answer. When decision timing matters, pass `--decision-at` and evidence entries containing observed_at and available_at; reject later or missing data. Do not turn the Why-Solana study's detected structural patterns into copy-trading alpha: its own research showed that some detectable patterns were not economically tradable. New findings require negative controls, a frozen evaluation plan and evidence of costs/latency.
+
+## Existing whole-domain source paths (selective, not indiscriminately load)
+
+Original topic files to inspect only when applicable:
+- `knowledge/domain/L1-L2-chain-market.md`
+- `knowledge/domain/L3-wallet-actors.md`
+- `knowledge/domain/L4-L5-copytrade-edge.md`
+- `knowledge/domain/L6-L7-investigation-cases.md`
+- `knowledge/system/gpt-meme-project-core.v1.md`
+- `knowledge/system/knowledge-navigation.v1.json`
+This is knowledge retrieval, not authorization to install bots, run a paid API or infer a trade.
