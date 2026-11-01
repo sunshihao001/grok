@@ -165,3 +165,11 @@
 HoldTech保留同slot候选/holder overlap/发币与钱包画像**功能知识**，但是源码fee payer近似buyer/funder、Transfer与UNKNOWN混入、LP与持币时长取值错误，无法直接继承归因或风险分数。pumpwatch的creator_reputation SQLite可优先少量复用，但getTransaction版本0的覆盖缺口需复审。具体源码、地址、决策和本轮38项离线测试的范围见[功能台账](reference-capability-reuse-ledger.v1.md)。
 
 **回访条件**：①网络可用、第三方许可可确认，可进行隔离无私钥SDK安装；②找到能验证原始Swap真实owner与多跳/费用/版本数据的公开样本；③P3-M01真实只读来源明确；④新候选性能/准确性胜出；⑤旧项目源码/协议更新。无法立即安装不会导致这些参考被删掉。
+
+## 2026-11-01｜整套Mint报告与长期监控分工：本次实务验收更新
+
+本轮进一步读到 **OKX CLI已经有真实 `cli/src/commands/workflows/token_research.rs`**，不是只有介绍式Skill：一条 `onchainos workflow token-research --address <mint> --chain solana` 会联动Token报告、Holder/Cluster/TopTrader/SM和条件性Dev/Bundle接口，并为不可用的子数据保留null。官方当前Free订阅有Basic与Premium各100K/月额度但**不支持WS**，WS订阅档从99美元/月起；关键Premium接口不是永久完全免费，也不应认为“一次workflow=一次付费请求”。因此先验证它作为**单Mint快照成品**，再考虑Million的持续监控成品，FnZero延后为具体失败的协议解析缺口。
+
+Million完整应用的确有发现/钱包订阅/资金/群体流/AI-MCP，但`LiveEvent.signature @unique`加上Webhook首钱包退出会丢同交易多钱包视角；其默认paper交易并非纯只读，`EXECUTOR=local`会签交易，当前Grok运行须硬隔离而非直接开服务。本轮用独立SQLite证明该唯一键无法存两钱包的同签名行；这不是Million服务测试。P3-M01原Library快照38项在本轮重新通过，仍仅fixture。已把具体结果、费率、源码、后续触发加入[原能力台账](reference-capability-reuse-ledger.v1.md)，不新建整套系统、Bot或参考名词。
+
+**优先回访条件**：①可授权的OKX只读Key、禁自动支付→单Mint`token-research`真回包；②安全隔离Node24和数据额度→Million整套只读GET/不得触发真实/纸面交易；③同Mint双时点样本且两个被观察地址共用一签名→核对事件表保留覆盖；④协议金额/owner有具体缺口才启动FnZero/Carbon对照。旧qb-/Hermes/meme-/Why-Solana仍作为业务认知与反证参照，HoldTech/pumpwatch保留现有待复用判断。
