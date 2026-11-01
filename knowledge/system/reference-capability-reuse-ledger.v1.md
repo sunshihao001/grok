@@ -4,6 +4,33 @@
 >
 > **研究原则**：先找现成功能/成熟库/外部服务 → 看实际源码、测试、契约、许可证、成本与误判 → 选直接调用、封装、最小移植、暂存知识或明确拒绝 → 仅补缺失的业务胶水 → 使用相同输入对照测试 → 更新 Dxx-Kxx 与本账本。禁止先宣布重构架构，再回头寻找理由。发现真正成熟的替代方案应允许 **PIVOT**。
 
+## 2026-11-01｜成品项目整体能力复用：纠正仅评估解析SDK的偏移
+
+**纠偏动作：AMEND 本功能台账，非新架构。** 用户此前已将 Kelows/million、HoldTech、pumpwatch、Why-Solana、OKX 等作为完整项目或完整工作流参考。此前本台账虽已列HoldTech多项业务能力，但没有登记 **Kelows/million** 这个高度相似的自托管成品；随后错误地把“FnZero Python交易解析”当作唯一下一项实验，遗漏了“已有整套钱包监控/发现/跟单/AI命令入口可否直接复用”的上层问题。**本节取代下文旧句“下轮唯一主实验为FnZero SDK”所表达的优先级；FnZero仍是组件候选，不再代表全系统技术选型。**
+
+### 按整个成品/业务功能检查，不按SDK或论文先拆碎
+
+| 既有参考及已核验源码 | 已有成品能力（项目自己实现，非本项目已部署） | 与我们的能力交接 | 实际限制和先验证什么 |
+|---|---|---|---|
+| **[Kelows/million](https://github.com/Kelows/million/tree/c89ad07caaf70773d40b45943e136eadc4f946a5)**，MIT | **完整自托管应用**：`apps/api/src/crawler/` Token↔钱包持续发现；`discovery/`大买家；`funding/`资金来去；`analysis/owners.service.ts`关系图/候选群组；`live/live-feed.service.ts`/`flows.service.ts`钱包WS及群体进出资金；`copyability/`跟随延迟；`backtest/`、`screener/`、`opportunities/`、`trading/paper.executor.ts`纸面研究；`packages/million-mcp`现成14个Agent工具及`.claude/skills`口语化操作。均已核查实际文件/业务服务实现。 | **最高优先：先作为整体参考运行基线**，与现有grok的发现→观察→关系→监控→解释功能逐项对照。能用完整流程时不要独立重建；可以选择保留其原服务/API或按许可证复用合适模块。M01/C02/C05只扩展它缺失的专业判断。 | Node24/NestJS/Prisma/Helius依赖，是否适合Grok云电脑待核；Hub排除和co-entry阈值是启发式，`ownerId` rebuild不稳定，不能定论同控；有`EXECUTOR=local`真实交易开关，本项目只读要求**明确禁用**，不能安装后自动启动交易。**未本地部署**。 |
+| **[co-numina/holdtech](https://github.com/co-numina/holdtech/tree/a75e214bf1ee0a8803eb7d93336be98c481c2db9)**（此前审过） | Next.js成品：`app/api/{analyze,deep-scan,holder-overlap,deployer-profile,bundler-feed,smart-money,holder-count}`等已实现业务路由；可追踪持有人/跨币交集、资金候选、Slot群体和发行者历史，附UI/扩展。 | **与Million形成能力对照/补充**，尤其群体持有比例、交集和代币结构；不再为这些功能先造新模块。 | 旧台账记录过fee payer误判买家/融资、holder和时间口径问题、疑似硬编码服务凭证及根目录LICENSE边界。**不直接运行不拷配置**；按具体路由安全审计后再挑选。 |
+| **[okx/onchainos-skills](https://github.com/okx/onchainos-skills/tree/73904b636a0f022dcc13b6d7a0dd2ed3b3195f25)**，MIT | `workflows/{new-token-screening,smart-money-signals,wallet-analysis,wallet-monitor-ws,token-research}.md` 加对应`onchainos` CLI：新币、Dev、bundle、Smart Money、地址WS事件与筛选等成套现成业务命令；非仅接口名称。 | **优先验证现成只读工作流是否已满足某项监控目标**，不写额外采集循环；可能作为Grok运行时只读数据能力。 | 文档/命令存在≠当前账户接口可用、免费、低延迟或覆盖完整；某些workflow标注`okx-agentic-wallet`依赖，**只审查/执行read-only命令**，不授权交易、签名或支付。尚未调用实测。 |
+| **[cinder-security/pumpwatch](https://github.com/cinder-security/pumpwatch/tree/156a91ab63740ab0ce8700434ff33844d00de519)**，代码MIT | 已有`code/pump_watch.py`（只读pump.fun日志订阅、429重试与并发限制）、`outcome_tracker.py`、`creator_reputation.py`（SQLite发行历史）、`run_watchdog.sh`、可复算SQLite数据与脚本。 | **现成发行者/新币监控支线**；可复用它的整条检测→状态→发行者累计工作流，先评估而非另造。 | RPC依赖与历史/覆盖限制；发行者身份及作者样本统计未在本项目复算；尚未本地部署。 |
+| **[sunshihao001/Why-Solana-Memecoins-Are-Over](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/tree/9a7ad51d56328e91e67e3f531d6744307d0ee68b)**（review_only） | `code/{03_split_detector,04_early_buyers_funding,06_hub_map,07_harvest_creations,09_bundle_snipe,a7_cross_token_links,r1_burst_window,rpc_client}.py`等完整研究脚本、反例、回测和可复核历史资料。 | **专业取证/异常发现模块与反证基线**；对照资金图/新币同步/跨币，保持研究代码与生产监控不同身份。 | 历史样本和作者假说不能原样当实时信号或已复制净优势；固定来源准入`review_only`、复算和许可证均须遵守。 |
+| **旧[qb-](https://github.com/sunshihao001/qb-) / [Hermes](https://github.com/sunshihao001/-) / [meme-](https://github.com/sunshihao001/meme-) + Froggy、Sputnik** | 前三者已有单Mint关键钱包报告、资金/库存分析流程、阶段/反证知识；Froggy/Sputnik是实际功能/字段研究来源，不等于已开放全部程序代码。 | **复用以前已经形成的专业认知和字段需求，作为评估外部成品的标准**；不能因拿Million做基线就丢弃业务研究。 | 旧GMGN有费用限制；Froggy/Sputnik API/源码与运行授权未核；历史代码不等于当前可运行。 |
+
+### 相同问题先找成品，而不是继续拆底层
+
+- **发现/长期看钱包**：Million crawler+discovery+live + 自带MCP；OKX wallet-monitor-ws。先比较实际部署、覆盖与成本，再决定用哪一种；M01原型只保留其特有的成员窗口行为价值。
+- **钱从哪里来/群体怎样变**：Million funding+owners+flows、HoldTech deep-scan/holder-overlap、Why-Solana资金图/跨Mint脚本。重用已有图/交集/事件流，项目只需对含混归因、时序与反例做专业增量。
+- **监控新币/开发者**：pumpwatch整条发行者工作流、HoldTech deployer-profile、OKX memepump新币/Dev/bundle命令。先对比同一Mint的输入输出和真实时效。
+- **判断是否值得跟**：Million copyability+backtest+decision log、旧qb/Hermes库存与执行时点知识。纸面测量与真实可执行报价/净收益分离，不依赖K线作为研究主线。
+- **AI简单命令操作**：Million的14个现成MCP工具和Skills可提供操作模型。先确认Grok云电脑是否实际能调用现成API/MCP，再考虑最薄命令封装；不必先设计新多Bot结构。
+
+**执行优先改为**：先同目标对比并尝试**完整成品只读功能**（优先Million的功能闭环、OKX现成工作流），如果不适合运行，再选其**可单独复用业务模块**（HoldTech/pumpwatch/Why-Solana），之后才评估**底层SDK**（FnZero/Carbon）；只要仍满足用户的独立专业知识和风险边界，允许保留现有grok薄运行包装。不得未经对照就推断“应全面迁移至Million”。
+
+**本次证据级别**：已核仓库文件/源函数/明确工作流命令、许可证和限制，尚**没有安装/运行Million、OKX或pumpwatch，也没有证明Grok环境兼容或数据计费**。下一轮最有价值的交付是将**一个完整只读业务任务**（例如“一个Mint→发现前期参与钱包→追群体后续活动→解释群体买卖与不确定性”）用成品能力完成对照，明确哪一步根本无需我们再开发；而不是再单独安装一个交易解析器。
+
 ## 1. 本轮已审外部来源与固定版本
 
 | 参考项目与源码版本 | 核查范围 | 复用/许可边界 |
