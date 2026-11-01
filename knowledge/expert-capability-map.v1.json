@@ -96,7 +96,8 @@
         "token-security",
         "sol-receipt-economic-semantics",
         "cashflow-count-value-inversion",
-        "trade-direction-source-gate"
+        "trade-direction-source-gate",
+        "stake-program-capital-path"
       ],
       "source_ids": [
         "slot-sequence-case",
@@ -200,7 +201,8 @@
         "creator-fee-economic-path",
         "multichannel-wallet-evidence",
         "capital-role-invariance",
-        "cashflow-count-value-inversion"
+        "cashflow-count-value-inversion",
+        "stake-program-capital-path"
       ],
       "source_ids": [
         "funding-graph-control",
@@ -542,7 +544,8 @@
         "capital-role-invariance",
         "normal-bot-ecology-baseline",
         "trade-direction-source-gate",
-        "market-utility-vs-tradability"
+        "market-utility-vs-tradability",
+        "stake-program-capital-path"
       ],
       "source_ids": [
         "failure-modes",
