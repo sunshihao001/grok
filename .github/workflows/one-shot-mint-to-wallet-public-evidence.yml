@@ -1,0 +1,57 @@
+name: one-shot-mint-to-wallet-public-evidence
+on:
+  push:
+    branches:
+      - integration/product-knowledge-v01-20261101
+    paths:
+      - .github/workflows/one-shot-mint-to-wallet-public-evidence.yml
+      - src/solana_meme_os/mint_candidate_wallet_probe.py
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  bounded-mainnet-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Real Mint public vendor snapshot and limited finalized RPC holder hints
+        shell: bash
+        run: |
+          set +e
+          mkdir -p .runtime/mint-to-wallet
+          mint=EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump
+          PYTHONPATH=src python -m solana_meme_os.mint_v01 "$mint" \
+            --rugcheck --rpc-holders \
+            --out-dir .runtime/mint-to-wallet/mint \
+            >.runtime/mint-to-wallet/mint-stdout.txt \
+            2>.runtime/mint-to-wallet/mint-stderr.txt
+          mint_exit=$?
+          probe_exit=88
+          if [ "$mint_exit" -eq 0 ] && [ -f .runtime/mint-to-wallet/mint/report.json ]; then
+            PYTHONPATH=src python -m solana_meme_os.mint_candidate_wallet_probe \
+              --mint-report-dir .runtime/mint-to-wallet/mint \
+              --out-dir .runtime/mint-to-wallet/wallet-observations \
+              --max-wallets 2 \
+              >.runtime/mint-to-wallet/probe-stdout.txt \
+              2>.runtime/mint-to-wallet/probe-stderr.txt
+            probe_exit=$?
+          fi
+          printf '{"mint_exit":%s,"probe_exit":%s,"max_candidate_wallets":2,"max_signatures_each":1,"max_raw_transaction_each":1,"helius_key":false,"grok_invoked":false,"payments":false,"trading":false}\n' \
+            "$mint_exit" "$probe_exit" >.runtime/mint-to-wallet/exits.json
+          git rev-parse HEAD >.runtime/mint-to-wallet/project-sha.txt
+          echo "MINT_EXIT=$mint_exit PROBE_EXIT=$probe_exit"
+          cat .runtime/mint-to-wallet/mint-stdout.txt
+          cat .runtime/mint-to-wallet/probe-stdout.txt
+          cat .runtime/mint-to-wallet/mint-stderr.txt
+          cat .runtime/mint-to-wallet/probe-stderr.txt
+          test "$mint_exit" -eq 0 && test "$probe_exit" -eq 0
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mint-to-wallet-public-readonly-evidence
+          path: .runtime/mint-to-wallet
+          retention-days: 7

@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "packet_id": "FIXTURE-B01-001",
+  "task_id": "EXAMPLE-RESEARCH-0001",
+  "packet_type": "research_brief",
+  "mode": "fixture",
+  "producer_bot_id": "B01",
+  "recipient_bot_ids": [
+    "B02",
+    "B03",
+    "B05"
+  ],
+  "created_at_utc": "2026-10-29T09:00:00Z",
+  "objective": "EXPLAIN",
+  "population": "synthetic role-test, no sampled market tokens",
+  "decision_cutoff_utc": "2026-10-29T09:00:00Z",
+  "domain_ids": [
+    "D04",
+    "D05",
+    "D11"
+  ],
+  "knowledge_ids": [
+    "funding-graph"
+  ],
+  "source_refs": [
+    {
+      "ref_id": "hermes-source-relations",
+      "kind": "pinned_document",
+      "repository": "sunshihao001/-",
+      "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+      "path": "learning/11.md"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "H-01",
+      "statement": "Shared-funder wallet behavior could be due to a common exchange or funding service; no real chain evidence has been loaded.",
+      "epistemic_status": "hypothesis",
+      "source_ref_ids": [
+        "hermes-source-relations"
+      ],
+      "event_at_utc": null,
+      "available_at_utc": null,
+      "predictive_feature": false
+    }
+  ],
+  "alternatives": [
+    "CEX common withdrawal node",
+    "public service infrastructure",
+    "distinct economic actors"
+  ],
+  "counterevidence": [
+    "No source-linked primary transactions are present in this fixture"
+  ],
+  "missing": [
+    "No real transaction signatures or Solana chain reads",
+    "No as-of wallet history",
+    "No matched negative control"
+  ],
+  "gate_results": [
+    {
+      "gate_id": "F0",
+      "status": "NOT_EVALUATED",
+      "source_ref_ids": [],
+      "reviewer_bot_id": null
+    },
+    {
+      "gate_id": "F2",
+      "status": "INSUFFICIENT",
+      "source_ref_ids": [],
+      "reviewer_bot_id": null
+    }
+  ],
+  "next_action": "B02 collect read-only primary chain signatures, then B03 construct hypotheses for independent B05 challenge."
+}

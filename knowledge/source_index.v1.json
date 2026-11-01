@@ -345,6 +345,83 @@
       "why": "Raw collection and heuristic classifications; verify actual current field semantics.",
       "kind": "historical_tool_example",
       "availability": "remote_on_demand"
+    },
+    {
+      "id": "meme-falsification-experiment",
+      "repository": "sunshihao001/meme-",
+      "path": "09_规则与回测/反证实验设计_v0.1.md",
+      "topics": [
+        "反证",
+        "反例",
+        "实验设计",
+        "FCZ",
+        "成本区",
+        "样本",
+        "回测",
+        "falsification"
+      ],
+      "why": "Owner's earlier precommitted counterexample-first research design; inspect assumptions, not a validation outcome.",
+      "kind": "historical_method",
+      "availability": "remote_on_demand",
+      "commit": "5ab2b01f08e4e512fa4fcd1aed88953ff534bd0a"
+    },
+    {
+      "id": "meme-multistrategy-direction",
+      "repository": "sunshihao001/meme-",
+      "path": "docs/project_ai_context/12_DIRECTION_SHIFT_MULTI_AGENT.md",
+      "topics": [
+        "多Agent",
+        "多策略",
+        "策略组合",
+        "市场状态",
+        "动态切换",
+        "方向转变",
+        "strategy"
+      ],
+      "why": "Owner-approved shift away from a single FCZ and fixed trade rules to a multi-strategy research system.",
+      "kind": "historical_governance",
+      "availability": "remote_on_demand",
+      "commit": "5ab2b01f08e4e512fa4fcd1aed88953ff534bd0a"
+    },
+    {
+      "id": "external-post-detection-results",
+      "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "path": "post_detection_edge/results.md",
+      "topics": [
+        "跟单",
+        "净收益",
+        "延迟",
+        "滑点",
+        "退出",
+        "预测",
+        "snipe",
+        "盈亏"
+      ],
+      "why": "Reported sample definitions, signal-test boundary and loss after modelled execution costs.",
+      "kind": "external_empirical_report",
+      "availability": "remote_on_demand",
+      "license_note": "Author Benjamin Da Cunha; narrative CC BY-NC-ND 4.0: reference/cite, do not redistribute modified narrative.",
+      "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b"
+    },
+    {
+      "id": "external-reentry-negative",
+      "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "path": "known_group_reentry/results.md",
+      "topics": [
+        "重复团伙",
+        "重复钱包",
+        "再入场",
+        "复发",
+        "同源",
+        "再现",
+        "negative",
+        "reentry"
+      ],
+      "why": "Tests incremental explanatory/predictive lift of known-group recurrence, including matched baselines and negative after-cost outcomes.",
+      "kind": "external_empirical_report",
+      "availability": "remote_on_demand",
+      "license_note": "Author Benjamin Da Cunha; narrative CC BY-NC-ND 4.0: reference/cite, do not redistribute modified narrative.",
+      "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b"
     }
   ]
 }

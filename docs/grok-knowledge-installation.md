@@ -1,0 +1,52 @@
+# Grok cloud Bot knowledge installation checklist — v0.1 (not executed)
+
+## What is actually installable?
+
+This repository provides **configuration artifacts**: `bots/profiles/B0*.md` role startup instructions, `knowledge/bot-knowledge-profiles.v1.json` curated expertise syllabus, `knowledge/source_index.v1.json` for retrieval and `knowledge/bot-handoff.schema.json` for reproducible work.
+
+These files do not by themselves create Bots on Grok's cloud computer, activate app connections, install private Skills, grant access to RPC, or schedule a Routine. The owner must carry out those steps in their Grok Bot account. Do not confuse ChatGPT's connector connection with Grok Bot's app permissions.
+
+## Ordered manual activation
+
+1. In Grok Bot, create B01, B02 and B05 using the [official Bot creation path](https://docs.x.ai/grok-bot/bots). Copy each `bots/profiles/B0*.md` *role instructions* into the corresponding Bot's first setup task or configured files/context. Use its instructions to load the minimal K0 files and specific source links from the repository.
+2. Prepare one shared repo workspace and **separate task directories/branches**, no wallet keys. Ensure every Bot that can see the computer is allowed to see every file and signed-in session; do not use Bots as credential isolation.
+3. Register reusable private skills in the Grok Bot Skill library, explicitly enable them for roles as required, and test one manual invocation. The repository `skills/` files are **instructions/templates**, not proof they are installed. See https://docs.x.ai/grok-bot/skills-routines-and-automations .
+4. Have B01 assign a simple source discovery question to B02/B05 with an explicit `decision_cutoff_utc`; compare the produced handoff JSON to the schema and verify its cited commits/transactions are accessible.
+5. Verify B02 real read-only GMGN/RPC data and the unit/time conversion; if no legitimate raw access is granted, stop at K0/K1 research and record `K2_UNAVAILABLE`.
+6. Only after early contracts pass, configure B03, B04 and B06. Ask B04 to work from a preregistered hypothesis, B05 to challenge it independently, and B06 to replay untouched cases. Do not elevate old FCZ research, GMGN hints, uncalibrated confidence or external negative papers into automatic rules.
+7. Create B07 last. Configure a read-only Skill, a human-approved frozen rule version and a **paused** Routine; test input source, time zone, output, duplicate suppression, error handling and single-writer behavior before enabling.
+8. Record exact bot IDs, skill library names/versions, configured source connections, test evidence, observed failures and next review in a private deployment ledger **without secrets**.
+
+## Expected limits
+
+- Shared cloud computer means all Bots in the account can access its files, browser sessions and terminal credentials.
+- The cloud Bot may have no RPC/GMGN access until separately connected; no fake response or “success” status should be generated.
+- Excerpts from external written studies with CC BY-NC-ND terms must be referenced rather than redistributed as rewritten text.
+- A readable source and a passing unit test do **not** imply positive Alpha, live monitoring, data integrity or safe trade execution.
+- Phase 1 remains research-only / paper-only.
+
+## Enforced publication boundary
+
+Before enabling B07, ensure no development Bot writes to B07's runtime state, normalized live input buffer or frozen rules. B02's field/schema evolution is delivered via reviewed PR and explicit release, not via a live B02-to-B07 Bot chat.
+
+## Which skill to activate for each Bot
+
+| Bot | Private skill templates to configure |
+|---|---|
+| B01 | `solana-meme-knowledge`, `research-intake` |
+| B02 | `research-intake`, `gmgn-readonly-source` |
+| B03 | `research-intake`, `wallet-funding-forensics` |
+| B04 | `research-intake`, `alpha-economic-experiment` |
+| B05 | `research-intake`, `evidence-falsification` |
+| B06 | `independent-case-replay`, `evidence-falsification` |
+| B07 | `solana-meme-monitor`, `solana-meme-knowledge` |
+
+Enable the configured private skills in the Grok Bot app and run one dry task per skill. The local `skills/` path is a repository template library and does not automatically register private Grok Bot skills.
+
+## First executable environment check
+
+On the actual Grok cloud terminal at a pinned checkout, run python3 scripts/grok_cloud_doctor.py --repo . --audits --self-test; next use runtime_store.py with the fixture B01 packet. A passing GitHub CI job or a Skill document in the repository does not install or authenticate a Grok Bot. OKX DEX market remains candidate only, with no installer, paid feature, wallet or trading authorization. See docs/local-runtime-framework.md.
+
+## One-shot local execution acceptance
+
+Use docs/grok-local-runbook.md for a minimal Grok cloud test before any Skill or Routine installation. It covers actual checkout, doctor, SQLite B01/B02/B05 packet handling and wholly offline OKX synthetic JSON parsing. The ONCHAINOS market CLI may incur x402 automatic payments once a tier has been confirmed: **do not install or run it without separate human approval**.

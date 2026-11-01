@@ -102,3 +102,13 @@ Rule Engineer passing local tests **does not** imply an economically valid or pr
 - [x] **真实RPC限流被记录**：官方Solana公共RPC对该Mint的`getTokenLargestAccounts`返回HTTP 429，必须记`UNAVAILABLE`，不得填0或假设Owner完整。长期使用需选择已授权稳定RPC/DAS，不自建索引器。
 - [ ] **完整V0.1关键缺口**：OKX现成`token-research`的授权只读运行、x402支付隔离、实际返回校验；独立核对该Pool/Vault与Token Account同slot归属、Creator历史、资金边与实际Swap。RugCheck`creatorTokens=null`仅代表未提供数据，不是没有Dev历史。
 - [ ] **Grok实际部署/运行**：当前GitHub Actions联网成功和离线CI成功均不等于Grok云电脑已经配置。不要升级整个成品状态或执行自动交易。标准CI已恢复为只跑离线测试。
+
+### Existing expert research pointers
+
+- Primary research method: [expert-mechanism-research-method.md](../knowledge/system/expert-mechanism-research-method.md).
+- Existing rolling source integration: [rolling-reference-knowledge-integration.md](../knowledge/system/rolling-reference-knowledge-integration.md).
+- Existing full domain and expert body: [gpt-meme-project-core.v1.md](../knowledge/system/gpt-meme-project-core.v1.md).
+- Source of truth for deliverable status remains [product-delivery-plan-v01.md](product-delivery-plan-v01.md).
+These are references to existing research files, not additional development obligations.
+
+- 完整历史收束审计：[whole-project-convergence-audit-2026-11-01.md](../knowledge/system/whole-project-convergence-audit-2026-11-01.md)；用于知识归因复查，不替代本文件的产品进度验收。

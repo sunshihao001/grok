@@ -25,14 +25,19 @@ class SourceBridgeTests(TestCase):
     def test_real_problem_fetches_precise_source_topics(self):
         packet = build_packet("同源资金是不是交易所hub，如何排除共同基础设施？")
         ids = {r["id"] for r in packet["sources"]}
-        self.assertIn("funding-graph-control", ids)
+        self.assertIn("hermes-source-relations", ids)
+        self.assertNotIn("funding-graph-control", ids)
+        self.assertGreater(packet["review_only_source_matches_withheld"], 0)
         self.assertEqual(packet["research_status"], "EVIDENCE_REQUIRED")
         self.assertEqual(packet["observations"]["state"], "DECISION_TIME_MISSING")
         self.assertFalse(packet["observations"]["accepted"])
 
     def test_profit_question_does_not_claim_an_edge(self):
         packet = build_packet("发现钱包协调以后，跟单能赚钱吗？利润和成本如何判断")
-        self.assertIn("tradability-vs-structure", [r["id"] for r in packet["sources"]])
+        self.assertNotIn("tradability-vs-structure", [r["id"] for r in packet["sources"]])
+        reviewed = build_packet("发现钱包协调以后，跟单能赚钱吗？利润和成本如何判断", include_review_only=True)
+        self.assertIn("tradability-vs-structure", [r["id"] for r in reviewed["sources"]])
+        self.assertTrue(all(r["admission_state"] == "review_only" for r in reviewed["sources"] if r["repository"].endswith("Why-Solana-Memecoins-Are-Over")))
         self.assertIn("No evidence", packet["note"])
 
     def test_unknown_problem_calls_for_new_research(self):
@@ -59,7 +64,7 @@ class SourceBridgeTests(TestCase):
 
     def test_remote_preview_only_approved_pinned_source(self):
         q = "同源资金是不是交易所hub"
-        ref = next(x for x in select_sources(q) if x["id"] == "funding-graph-control")
+        ref = next(x for x in select_sources(q) if x["id"] == "hermes-source-relations")
         class Response:
             def __enter__(self): return self
             def __exit__(self, *args): pass
@@ -73,6 +78,23 @@ class SourceBridgeTests(TestCase):
         forged["commit"] = "0"*40
         with self.assertRaisesRegex(ValueError, "not selected"):
             ephemeral_excerpt(forged, q)
+
+
+    def test_review_only_source_cannot_be_previewed_by_default(self):
+        q = "同源资金交易所hub"
+        review = next(x for x in select_sources(q, include_review_only=True)
+                      if x["id"] == "funding-graph-control")
+        with self.assertRaisesRegex(ValueError, "not selected"):
+            ephemeral_excerpt(review, q)
+
+    def test_review_only_research_units_are_withheld(self):
+        q = "钱包协调以后，跟单能赚钱吗？"
+        packet = build_packet(q)
+        self.assertEqual(packet["research_unit_candidates"], [])
+        explicit = build_packet(q, include_review_only=True)
+        self.assertTrue(explicit["research_unit_candidates"])
+        self.assertTrue(all(r["status"] == "external_reported"
+                            for r in explicit["research_unit_candidates"]))
 
     def test_source_registry_rejects_non_allowlisted_repository(self):
         original = load_index()

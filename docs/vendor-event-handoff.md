@@ -26,3 +26,19 @@ Check offline tests: PYTHONPATH=src python -m unittest discover -s tests -v
 Connect one independently verified Solana transaction signature with *all* wallet observations to the existing fixture-only wallet_batch_monitor. Verify replay, missingness, and provider cost. Only after this succeeds should a configured Grok Bot consume an evidence package and return an independently logged specialist response.
 
 Source: engineering PR #16; evidence from GitHub Actions #41269179918; related domain knowledge PR #14 remains a separate, unmerged branch.
+
+## Existing specialist knowledge + UI bridge (integration PR #17)
+
+After validated triage, an **empty** output directory receives evidence.json,
+investigation_preview.json, provisional_monitor_opinion.md, plus a review_context.json
+and one or more grok_task_*.md only if a real vendor-label review is warranted.
+
+Review context selects 2-3 existing navigator intents and at most four bounded
+original domain-file excerpts with SHA256; expert IDs are **knowledge lenses**,
+not installed Bots. This is actual local source reading, not empirical mechanism
+verification or Grok invocation. Existing HOME/MINT/WALLETS/NETWORK/ALERTS/
+INVESTIGATIONS/SYSTEM product UI view IDs are projected to JSON with missingness.
+
+Provider labels are untrusted data and are serialized as JSON strings rather
+than inserted as Markdown instructions. Reusing an output directory is refused
+before overwriting any prior investigation.

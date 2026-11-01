@@ -1,0 +1,12 @@
+{
+  "ok": true,
+  "requestTime": "1790000000000",
+  "notifications": [],
+  "data": {
+    "tokenContractAddress": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+    "price": "0.0000123",
+    "marketCap": "123000",
+    "liquidity": "9000",
+    "tokenSymbol": "SYNTHETIC_TEST_ONLY"
+  }
+}

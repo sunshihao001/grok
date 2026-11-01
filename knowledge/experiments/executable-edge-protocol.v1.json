@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "research_id": "R-2026-10-30-01",
+  "date_utc": "2026-10-30",
+  "status": "proposed_not_executed",
+  "market_evidence_status": "not_evaluated",
+  "human_review_required": true,
+  "read_only_paper_only": true,
+  "primary_objective": "Distinguish observable wallet coordination from incremental predictive and net-executable copytrade edge using live as-of records.",
+  "source_pointers": [
+    "external-post-detection-results",
+    "external-reentry-negative",
+    "time-safe-features",
+    "meme-falsification-experiment",
+    "meme-multistrategy-direction"
+  ],
+  "proposed_universe": "All eligible launch events on a specified platform in an uninterrupted preregistered UTC window, including non-alerts, gaps, no quotes and censored outcomes.",
+  "analysis_unit": "first_preregistered_decision_per_mint_event_type_time_bucket",
+  "cutoff_policy": "feature.available_at_utc <= decision_cutoff_utc and evidence from contemporaneous capture; blockTime is not availability proof.",
+  "population_states": [
+    "IN_SCOPE_AND_OBSERVED",
+    "IN_SCOPE_NO_SIGNAL",
+    "OUT_OF_SCOPE_PREDEFINED",
+    "SOURCE_UNAVAILABLE",
+    "CENSORED_OUTCOME",
+    "ROUTE_UNAVAILABLE"
+  ],
+  "candidate_hypotheses": [
+    {
+      "id": "H-A",
+      "question": "How much of coordinated flow edge is absorbed between event and decision/quote?",
+      "initial_rank": "P0",
+      "falsification": "After recorded availability and realistic execution the incremental OOS net edge remains positive across independent groups and markets."
+    },
+    {
+      "id": "H-B",
+      "question": "Does genuine non-group capital absorption after coordinated exits offer an independent second-phase signal?",
+      "initial_rank": "P1",
+      "falsification": "As-of independent absorption is not distinguishable from related wallets, market baseline or nontradeable exit depth."
+    },
+    {
+      "id": "H-C",
+      "question": "Does capital re-deployment predict an actionable future mint rather than merely operator activity?",
+      "initial_rank": "P1",
+      "falsification": "Mint unknown until after value capture, or incremental prediction disappears after CEX/hub and market-regime matching."
+    },
+    {
+      "id": "H-D",
+      "question": "Can cost-aware risk rejection improve tail outcomes conditional on equal opportunity coverage and risk budget?",
+      "initial_rank": "P1",
+      "falsification": "No incremental effect over simple baseline, or opportunity cost offsets removed losses."
+    }
+  ],
+  "unfilled_decisions": [
+    "platform_and_sampling_window",
+    "primary_target_definition",
+    "simple_baseline",
+    "comparison_groups",
+    "entry_exit_paper_quote_sources",
+    "risk_budget",
+    "latency_sensitivity_grid",
+    "OOS_period_and_operator_groups"
+  ],
+  "required_next_evidence": [
+    "contemporaneous_readonly_provider_logs",
+    "raw_signatures_slots_and_error_coverage",
+    "time-accurate_two_sided_quotes",
+    "matched_non-alert_cases",
+    "negative_control_hubs",
+    "independent_replay"
+  ],
+  "success_rule": "No metric is accepted without explicit denominator, live observed/available times, baseline, source provenance, costs and independent OOS review.",
+  "trade_authorized": false
+}

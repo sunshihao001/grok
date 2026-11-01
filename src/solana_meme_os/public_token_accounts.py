@@ -36,8 +36,8 @@ def valid_address(value: Any) -> bool:
 
 
 def rpc_request(method: str, params: list[Any], *, opener: Callable[..., Any] | None = None) -> bytes:
-    """Exactly two allowlisted, read-only JSON-RPC methods to one fixed HTTPS host."""
-    if method not in {"getTokenLargestAccounts", "getMultipleAccounts"}:
+    """Only four allowlisted, read-only JSON-RPC methods to one fixed HTTPS host."""
+    if method not in {"getTokenLargestAccounts", "getMultipleAccounts", "getSignaturesForAddress", "getTransaction"}:
         raise ValueError("unsupported read-only RPC method")
     request_bytes = json.dumps({"jsonrpc": "2.0", "id": 1, "method": method,
                                 "params": params}, separators=(",", ":")).encode("utf-8")
