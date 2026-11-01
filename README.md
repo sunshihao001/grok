@@ -12,7 +12,11 @@ GMGN 工具原型：https://github.com/sunshihao001/qb-
 
 Phase 1：只读研究 / 纸面门控，禁止真实交易、私钥、签名、广播。
 
-## 快速开始
+## 当前产品执行路线（不再扩建架构）
+
+[《四阶段成品交付计划》](docs/product-delivery-plan-v01.md) 为唯一用户功能推进清单：**V0.1真实Mint报告 → V0.2钱包与资金 → V0.3异常监控 → V1.0 Grok自然语言入口**。优先复用OKX/Million等成熟业务程序，只补实际上缺失的接口；当前已真实验证两个Mint的公开池快照，但尚未验证完整Holder/Dev资金报告、持续监控或Grok云端运行。
+
+
 
 见 `docs/bot-architecture.md` 与 `BOTS.md`。
 
