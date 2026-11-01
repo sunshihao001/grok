@@ -89,6 +89,9 @@ def audit(data: dict[str, Any] | None = None, root: Path = ROOT) -> dict[str, An
         "errors": sorted(errors),
         "local_paths_checked": paths_checked,
         "remote_engineering_paths_unchecked": len(d.get("engineering_assets", [])),
+        "engineering_paths_available_in_current_checkout":
+            sum((root / a["path"]).is_file() for a in d.get("engineering_assets", [])
+                if _safe_relative(a.get("path"))),
         "scope": "static navigation only; no remote code, runtime, source accuracy or Grok deployment verified",
     }
 
@@ -102,8 +105,10 @@ def _present(route: dict[str, Any], engineering: dict[str, Any], branch: str,
         "expert_lens_ids": route["experts"],
         "knowledge_paths_on_current_branch": route["knowledge_files"],
         "engineering_candidates_on_separate_branch": [
-            {"path": engineering[id]["path"], "branch": branch,
-             "declared_role": engineering[id]["role"], "invoked": False}
+            {"path": engineering[id]["path"], "source_of_record_branch": branch,
+             "declared_role": engineering[id]["role"],
+             "available_in_current_checkout": (ROOT / engineering[id]["path"]).is_file(),
+             "invoked": False}
             for id in route["engineering_ids"]
         ],
         "reference_asset_ids": route["reference_ids"],
