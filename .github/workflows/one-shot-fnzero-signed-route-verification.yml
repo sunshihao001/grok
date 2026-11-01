@@ -1,0 +1,43 @@
+name: one-shot-fnzero-signed-route-verification
+on:
+  push:
+    branches:
+      - integration/product-knowledge-v01-20261101
+    paths:
+      - .github/workflows/one-shot-fnzero-signed-route-verification.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  read-only-sdk-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned parser only (no trading SDK)
+        run: python -m pip install --disable-pip-version-check "sol-parser-sdk-python==0.10.0" "cryptography>=44.0,<47"
+      - name: Fetch pinned upstream original signed corpus
+        shell: bash
+        run: |
+          mkdir -p .runtime/fnzero-replay
+          curl --fail --silent --show-error --location --max-time 30 \
+            https://raw.githubusercontent.com/0xfnzero/sol-parser-sdk-python/cffb6c808c9b7975fc83428c0613fb4c3fa173b5/tests/fixtures/signed_dex_replay_20261009.json \
+            --output .runtime/fnzero-replay/upstream-signed-corpus.json
+          sha256sum .runtime/fnzero-replay/upstream-signed-corpus.json > .runtime/fnzero-replay/upstream.sha256
+          python -m pip show sol-parser-sdk-python > .runtime/fnzero-replay/pip-metadata.txt
+          git rev-parse HEAD > .runtime/fnzero-replay/project-sha.txt
+      - name: Run genuine SDK, Ed25519 and RPC balance replay
+        shell: bash
+        run: |
+          PYTHONPATH=src python -m solana_meme_os.sdk_upstream_replay \
+            --fixture .runtime/fnzero-replay/upstream-signed-corpus.json \
+            --output .runtime/fnzero-replay/sdk-analysis.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fnzero-real-signed-corpus-readonly
+          path: .runtime/fnzero-replay
+          retention-days: 7

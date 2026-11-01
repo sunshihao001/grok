@@ -228,3 +228,12 @@ Million整套服务适合钱包发现→订阅→后续活动→资金关系，�
 **D07与旧资料的改进**：Hermes `learning/10-12.md`认为角色必须由行为支持，其`phase1-skill-04-wallet-structure.md`的同Funder、5分钟阈值只能作为筛选启发式，不是本样本的协同交易证据。旧qb的关键地址矩阵与基础设施注册表本就分开；现有报告应继续保留此区别。RugCheck的缓存detectedAt与实际拉取时间也不同，不能当同一slot交易时钟。
 
 **工程闭环**：PR#16的`mint_v01.pool_related_holder_observations`添加严格地址全等的报告提示及缺源/不匹配负例，不启用交易或自动经济归因，GitHub离线CI本轮120项通过。
+
+
+## 2026-11-01｜跨项目源码的同一失真：交易唯一性 ≠ 钱包观察唯一性
+
+**重建业务问题**：Million需要做可操作的钱包监控，Cluster Tracker需要快速捕获“同步买入”并避免重复通知。Million的`live-feed.service.ts`按`signature`查找已有`liveEvent`，Webhook处理多订阅钱包时遇到首个触达后`break`；Cluster Tracker的`pipeline.ts`虽先找出每笔交易涉及的跟踪钱包，最终`swaps`却按单`signature`唯一键写入。两者有利于减少告警重复，却**不能保证同一交易的所有钱包角色均被保留**。我们由实际代码推断出这一取舍的适用边界；不能反过来断言作者忽视该问题或项目所有功能失效。
+
+**对D04/D05/D07的修订**：同一签名应保留所有可见Token Account及Owner提示、fee payer、signer、transfer source/destination等独立观察；可以在交易级去重、指令级区分多个leg、账户级比较净余额、钱包观察级保留多参与者，但不能将其重复计算为多笔真实买入。多个Owner提示同属一个`signature`也不等于一个控制人。资金关系边应从实际已成功的资金运动取得，并排除交易所/聚合器等公共服务反例。Degen-Scanner的共同出资规则与Million Funding链只能构建**候选关联**。失败CPI、费用支付、公共Hub、单交易多段路由四类情形，必须优先用真实负例检验。
+
+**新增研究未知**：当代币经多池、多路由和Token-2022收费或跨地址托管移动，哪一部分“协同行为”属于执行设施共享，哪一部分属于经济主体共同行动？必须保留交易级、账户级、控制权归因各自证据来源，让Grok提出竞争解释，而不是直接生成“庄家”标签。参见现有PR#17的FnZero只读签名回放和D01原文。

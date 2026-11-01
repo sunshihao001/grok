@@ -109,3 +109,10 @@ AI承担产品负责人和工程整合者的工作：根据用户的目标、当
 - [Solana官方交易指令解析](https://solana.com/docs/core/transactions/transaction-introspection) 在JS客户端处理ALT/v0/v1/CPI指令树；成熟实现适合替代协议指令重写；但使用`jsonParsed`不能直接喂其`decodeTransactionFromRpcResponse`，要用base64/json RPC。无需因为该库存在就新增全Node后端。
 - [Million](https://github.com/Kelows/million)适合钱包发现和资金关系候选，不能把`FundingService`的`nativeTransfers`边当成经济实控；同时`live-feed.service.ts`的单签名事件持久化及webhook首个钱包break会漏掉其他钱包观察。[Cluster Tracker](https://github.com/garrett0524/cluster-tracker)同样使用单`signature`唯一冲突键；这两个现成系统的**事件存储必须经过同笔多钱包完整性测试**才可用于本项目。[Solana Microscope](https://github.com/solana-foundation/solana-microscope)适合借鉴签名回补/断线和历史记录免触发新告警。
 - 本轮只添加`public_wallet_rpc_sample.py`已有只读采样入口的**执行是否成功/fee payer/最终余额观测**，不添加自制DEX解析器、交易策略或Bot。该观察不证明经济主体或Swap路径。下一阶段以FnZero/官方工具真实解析多笔不同交易并对照实际RPC余额，而非扩建架构。
+
+
+### 2026-11-01｜复用研究转化为可执行的外部SDK对照
+
+- 原参考：`0xfnzero/sol-parser-sdk-python` v0.10.0，固定仓库SHA `cffb6c808c9b7975fc83428c0613fb4c3fa173b5`，上游真实签名保存素材`tests/fixtures/signed_dex_replay_20261009.json`（Raydium CPMM多腿、Raydium CLMM/Orca/Meteora跨协议、失败PumpSwap路由）；[原上游测试](https://github.com/0xfnzero/sol-parser-sdk-python/blob/cffb6c808c9b7975fc83428c0613fb4c3fa173b5/tests/test_signed_transaction_replay.py)。FnZero README声称MIT，尚需在正式分发前单独确认许可文件和依赖合规。
+- 现有`raw_tx_adapter.py`继续只作历史fixture对照，不新增DEX协议解析；新增`src/solana_meme_os/sdk_upstream_replay.py`仅在隔离运行中依赖现成SDK并验签，比较RPC元数据执行成功状态、DEX leg、已提交DEX事件、所有报告的Token Account前后余额。**Token账户Owner提示不是经济控制者；保存消息签名不证明RPC执行metadata可信。**
+- 专项GitHub workflow：`.github/workflows/one-shot-fnzero-signed-route-verification.yml`独立安装固定PyPI版本并从固定GitHub SHA取原样样本，无交易、无付款、无模型调用。**未取得成功的Actions证据前，这项只能标待实测**。若SDK复用通过，再选真实主网RPC当前取证样本测同交易多钱包观察及修复时间窗输入；不要将“通过上游fixture”误称长期在线监控。

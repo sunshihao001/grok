@@ -128,3 +128,12 @@ Solana 的 `getTransaction` 可能涉及版本化消息、Address Lookup Table�
 真实Mint `EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump` 的RugCheck缓存Holder第一名Token Account（供应商5.877731%）其Owner候选与DEX Screener的PumpSwap池`81jgrpTMsQWc1rGWXutyYWW27ruiAtehUZwLydcHHWDB`地址完全相同。该**供应商字段精确匹配**可标池相关候选，但不能证明单一资产受益人、池Vault及LP的真实权益归属。特别不能将这个持仓比例直接加进“个人鲸鱼持币/庄家控盘”指标。需要同slot的Token Account Owner、池Vault、LP状态核查，此次Solana公共RPC曾返回429而未取得数据。
 
 池级24小时买卖统计和价格不是钱包级Swap事实；`pairCreatedAt`不是Mint创建时间；RugCheck`detectedAt`不是区块事件时间。详细原始数据和交叉检验见[工程证据](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/evidence/v01-pool-vault-holder-cross-source-2026-11-01.md)。此条只升级“跨源身份误归因风险”的知识，不代表D01 Swap完整解析或经济控制已验证。
+
+
+## 2026-11-01｜从参考解析器设计演变反推D01/D03的核心问题
+
+**原有误区**：把一次交易解析成一条“BUY/SELL”；但一笔交易可能先创建账户、通过ALT加载地址、再经多个CPI组合多个DEX路由。程序日志能看见**尝试**，不能据此假定已结算。FnZero Python v0.10.0的`transaction_route.py`显式区分路由意图、CPI位置、`actual_input_amount`与`actual_output_amount`；`rpc_parser.py`在`meta.err != None`时抑制已回滚的DEX事件。其签名多跳回放与失败交易测试（`tests/test_signed_transaction_replay.py`）反映的设计动机是：**不要把可解析的指令当实际成交，更不能用事件数量代替经济行为数量**。版本演变可参见[FnZero Changelog](https://github.com/0xfnzero/sol-parser-sdk-python/blob/cffb6c808c9b7975fc83428c0613fb4c3fa173b5/CHANGELOG.md)：从失败回滚、包装交易/ALT地址、原始日志与实际金额的拆分，逐渐覆盖复杂路由与缺源情形。这是根据演变和代码**重建的问题意识**，不是作者逐条明确宣布的全部设计理由。
+
+**与本产品的认知改变**：每个签名保存一次原始交易，多个DEX leg保持`instruction_path`和各自池/报价资产，最终成交状态及余额另行保存；每个Token Account余额与账户Owner提示分别记录，不能由两条余额变动推断两个独立买家。已保存的签名经Ed25519验签只保证**交易message**未改，不证明上游缓存的`meta`／执行结果来自可信RPC；后者仍须独立跨源核验。成功Swap的多段路由可能属于一次经济交换；失败Swap的路径存在不产生已执行资金边。SOL手续费与Rent、WSOL、Token-2022 transfer fee仍需单独核对，不能拿Token净变化硬解推断盈亏。
+
+**实际验收入口**：在集成PR#17使用固定SDK`0.10.0`与签名Corpus回放，参见`src/solana_meme_os/sdk_upstream_replay.py`和专项GitHub Actions。其目的不是自研DEX解码器，而是验证成熟项目的适用边界并将发现写回D01/D03。
