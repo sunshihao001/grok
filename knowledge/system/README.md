@@ -2,6 +2,10 @@
 
 **状态：体系结构已定义；知识内容仅部分填充；不代表策略已验证。** 本目录是 Grok 项目领域知识的上层契约，不替代已有 `knowledge/catalog.v1.json`（15 张遗留知识候选卡）和 `knowledge/legacy-snapshots/`（21 份固定快照）。
 
+## 全项目专家审查与去污染裁决（2026-11-01）
+
+**先读[《全项目收束审计》](whole-project-convergence-audit-2026-11-01.md)，再读[《当前恢复点》](gpt-meme-progress-current.md)**：已核查12域、152单元、22专家、65参考、PR #14/#16和PR #15的104项竞争知识草案，整理17类认识/证据/状态污染。**现以原152单元作为统一ID**；PR #15只读候选而非第二套现行本体。两枚Mint的真实DEX公开池快照不等于完整钱包/Dev报告或Grok云端通过。历史早期提到“21位专家”属当时状态，现以registry.v1.json的22位为准。理论与工程各有独立进度，不能相互借用完成状态。
+
 ## GPT Project 持续积累的完整专业知识镜像
 
 [《GPT Meme 项目全领域知识主册》](gpt-meme-project-core.v1.md) 包含现有全部152项原子研究问题/机制/禁错、21专家及跨域经济机制导航。 [《累积与双向关联规范》](gpt-meme-knowledge-accumulation.v1.md) 把发现保存为**原问题—来源—资产/库存/价格/时点因果—竞争世界—关系边—单元回填—下一轮未知**；[《Project简短指令》](gpt-meme-project-instructions.v1.md) 和 [机器索引](gpt-meme-project-index.v1.json) 帮助不同GPT会话按需恢复已有专业知识，减少零散讨论。系统仍按原L0–L7/D01–D12组织，不新增一个平行本体。Project附件与GitHub版本更新为人工同步，**不能声称已直接改动ChatGPT项目附件**。
