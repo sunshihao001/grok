@@ -1,5 +1,8 @@
 # GPT「跟单」Project｜持续研究推进、阶段判断与下一轮输入规范 V1.0
 
+> **状态变更（2026-11-01）**：此文件中历史固定阶段、每轮必填进度、固定专家调用、每轮强制复制提示词或机械同步要求已停止作为默认指令。**当前应依照 [项目现行工作准则](current-operating-guidance.md) 与 [当前恢复点](gpt-meme-progress-current.md)**；本文件其余内容仅作为可选方法、知识索引与历史证据，不得让旧规则覆盖当前产品任务。历史信息未删除，便于追溯。
+
+
 > **V2继承声明（2026-10-31）**：本 V1 的P1–P6阶段推进思路继续保留；其未覆盖的**研究成果写回、噪音过滤、专业写作、GitHub/GPT镜像和实际读回核验**由 [V2 知识闭环](gpt-meme-continuity-v2.md) 与 [专业写作 Skill V2](gpt-meme-research-writing-skill.v2.md) 负责。当前恢复点以 [唯一进度文件](gpt-meme-progress-current.md) 为准，勿依旧P2.2历史快照重新起步。
 
 - **范围**：Solana Meme 市场异动发现、资金/钱包网络、发行者、机制研究、监控方法、交易研判及其 GPT—GitHub—Grok 协作。
