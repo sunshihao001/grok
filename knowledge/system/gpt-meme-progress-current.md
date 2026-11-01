@@ -127,3 +127,20 @@ GitHub 知识源在 PR #14；实现和测试在 PR #16；GPT Library 的当前�
 
 **下一步只做一件事**：在确有Node24、网络、私有回环隔离及经授权只读Helius配额后，运行Million原生成品的无密钥/不下单健康检查；用一个公开Mint小样本逐次验证GET /discovery/token/:mint、GET /live/status、GET /live/flows、GET /funding/:address、MCP get_flows等**现成读取接口**，记录真实结果、覆盖/截断/费用、同签名多钱包遗漏；暂不自动做钱包订阅/修改/重建/付费。对照OKX完整监控工作流和HoldTech/pumpwatch已存在接口，之后才选择直接使用整个成品还是选择小模块。不要继续自造钱包监控功能。
 
+
+## 2026-11-01｜成品级功能复用审计：固定 Mint 的五步只读业务链
+
+**本轮按V2实际执行**：重新读取 [完整功能复用台账](reference-capability-reuse-ledger.v1.md)、[滚动参考池](rolling-reference-knowledge-integration.md)、PR#16现有M01和旧qb-/Hermes/meme-/Why-Solana知识；**未重新规划项目、未开发新功能**。审核目标固定为 Why-Solana[公开资料](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/docs/RESULTATS.md)列出的Mint `87QChghgFr2XBNumi2Tg1MJCWHLqoTTT5KThtnDspump`；它只是未来对照用的真实链上地址引用，**本轮没有外部独立RPC/Helius返回的Mint数据**。
+
+**成品级结论（源审已读，不代表运行）**：
+- [Million](https://github.com/Kelows/million/tree/c89ad07caaf70773d40b45943e136eadc4f946a5) 具备完整API链：`GET /api/discovery/token/:mint`→`POST /api/wallets/import`→`PUT /api/wallets/:address/subscribe`→`GET /api/live/events/status/flows`→`GET /api/funding/:address`及`POST /api/owners/rebuild`，另有Agent/MCP与策略决策日志，**比只开发FnZero解析器更贴近目标。** 不过其`LiveEvent.signature @unique`和webhook「首个匹配钱包认领」丢失同交易多钱包参与视角；`ownerId`聚类不是证实的经济同控且重新聚类ID不稳定；live窗口仅15分钟/5000行，不具备按slot完整机会数据。其默认Paper执行器会自动模拟成交、`EXECUTOR=local`切换真实交易；本项目严格只读不能照搬运行。无认证API和Web可被局域网访问，不能暴露公网。
+- HoldTech现有`deep-scan`、`holder-overlap`、`deployer-profile`是可考虑的现成补充，但`holder-overlap`的POST层实际每Mint只取至多200持有人；feePayer代替买家的交易分类不满足本项目；源码有疑似硬编码第三方密钥，**禁止原样运行**。pumpwatch已实现只读Pump.fun发行监控、结果跟踪和SQLite creator统计，属于可复用**发行者支线**，无需另造。OKX `onchainos`已提供直接WS钱包监控和新币/聪明钱等工作流但服务权限/费用未测试；Why-Solana仍`review_only`用以反证，旧qb-/Hermes/meme-作为业务质量标准。
+- [本地执行记录] 现有`/mnt/data/m01_proto_offline_20261031.zip`独立解压到`/tmp`后，**14项unittest全部通过**，运行`wallet_batch_monitor`自带fixture，结果`FIXTURE_RESEARCH_ONLY/no_trading=true`、1m有3类行为候选，5m/15m无候选。这**不是PR#16当前71项CI的重新本地运行**，也不是任何外部成品已跑通。
+
+**为什么本轮没有运行Million或连接Helius**：本地仅Node22，Million需要Node24；容器不能解析Github的Git远端，且没有经授权的Helius密钥/免费额度，代码带自动Paper/Local执行与开放API边界，未构造安全隔离运行态。没有为测试擅自安装依赖、启用付费API、密钥或云端监控。当前状态严格为`SOURCE_CODE_AUDITED / EXTERNAL_RUNTIME_UNVERIFIED`。官方[Helius定价](https://www.helius.dev/pricing)与项目内部credit常量也可能不是同一计费口径，不能臆断成本。
+
+**对grok真正缺少的能力判断**：不再优先自研发现、订阅、funding、holder overlap或MCP——源码中已有可复用实现。需要补的是**确保上游成品能保留多钱包同笔经济动作、时间版本、机会覆盖及证据来源**的正确性核验；C02/C05作为本项目专业分析合同继续保留，未启动数据实证。没有完成严格只读完整Mint任务，也不进入P4。
+
+**下一步最有价值的任务（接管本恢复点）**：在有Node24、外部成品源码/依赖以及获授权只读Helius或OKX额度的**隔离环境**，先检查Million只读安全（无交易执行、无公网端口、MCP仅查询），用固定Mint原生API验证「发现→钱包活动→资金与候选关联→只读报告」每一步返回、失败、费用与覆盖；逐项用OKX现成命令及HoldTech/pumpwatch功能对照，决定**整套运行、封装已有API、局部复用还是维持知识参考**。严禁为了跑测试先行复制有硬编码密钥的HoldTech，或用合成数据伪装已验证成品。完整源码/风险/接口与再核触发见[唯一复用台账](reference-capability-reuse-ledger.v1.md)。PR#14/#16仍Draft未合并；Library镜像进度依最后实际同步操作为准。
+
+**✍️ 下一轮可复制输入**：继续现有Solana Meme项目V2，以已审的Million`c89ad07`、HoldTech`a75e214`、pumpwatch`156a91a`、OKX和Why-Solana及旧qb-/Hermes/meme-为基准，不重新设计架构。优先在隔离且只读的具备Node24和授权数据源的环境，对固定公开Mint做一次完整Million原生API业务验收：钱包发现/来源→订阅与交易事件→资金边与群体关系→证据完整性和可解释性；特别测试同笔多钱包丢失、ownerID不稳定、15分钟保留、未知是否被当零、默认自动Paper引擎隔离。比对现成OKX/Holder/Dev工作流，记录接口输入输出/真实费用/失败，只有成品确实不满足才写最少必要胶水。更新已有复用台账、参考池和本恢复点；如无法安全运行说明阻碍，不冒充生产效果。
