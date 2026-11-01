@@ -181,3 +181,9 @@ Million完整应用的确有发现/钱包订阅/资金/群体流/AI-MCP，但`Li
 另有[Helius Token APIs](https://www.helius.dev/solana-token-apis)的DAS钱包资产/Token账户视图与Parsed Events，说明某些Token余额和解析能力可直接购买/借用成熟API而非自写索引，状态`ALT_DATA_ORACLE`，需授权、成本/字段及独立语义核对。结合既有FnZero/OKX/Million/pumpwatch，完整专家审查见[复用台账](reference-capability-reuse-ledger.v1.md)最新节，**勿再维护第二套重复的项目选型表**。
 
 原qb-的`sikk_gmgn_token_report.py`已定义八张单币分析CSV及Markdown报告，适合作为一期完整Mint产品输出的业务参照；GMGN调用和标签阈值不应原样照搬。pumpwatch `creator_reputation.py`的`seen_at`是观测入库时间，不等于Mint创建链上时间，复用前必须标明。现有D01–D12/21专家的成熟度不因“已覆盖审查”改变。
+
+## 2026-11-01｜长期参考项目恢复入口统一到65项真源
+
+原本零散的项目、官网、论文、实务工具及历史无法核实的名称，已统一登记在**[`gpt-meme-project-index.v1.json`](gpt-meme-project-index.v1.json) 的 `reference_assets.items`**，现在共65项。详细功能、许可证、安全和真实代码审计仍查看本项目已有[完整复用台账](reference-capability-reuse-ledger.v1.md)，不再在这里维护第二套名单。该总索引中原`source_repos`固定5个，是历史证据准入清单，不是参考项目的全部集合。
+
+读项目时先看REF资产ID、`verification`、`priority`、`role`、`when_to_review`，再决定应该读取哪段真实源码或原始专业资料。把`SOURCE_AUDITED`仅理解为“过去看过部分源码/业务逻辑”，`HISTORICAL_NAMED_ONLY`仅表示不能遗忘的线索；真正要以外部现成程序构成第一条Mint业务链，必须另有授权、安装、安全与独立测试。**E-L7-03 新增的产品成品复用视角负责把这些信息整合成一份产品决策，而不是增设一个Bot**。QuantBloc/MELT/RED-COHORT等研究源登记是为未来专家反证，不要求本轮部署。
