@@ -19,12 +19,12 @@ class WholeDomainKnowledgeAtlasTests(unittest.TestCase):
         cls.experts = json.loads(EXPERTS_PATH.read_text(encoding="utf-8"))["specialists"]
         cls.handbook = HANDBOOK_PATH.read_text(encoding="utf-8")
 
-    def test_existing_ontology_and_21_specialists_unchanged(self):
+    def test_existing_ontology_and_registered_specialists_unchanged(self):
         self.assertEqual({x["id"] for x in self.atlas["domains"]},
                          {x["id"] for x in self.ontology["domains"]})
         self.assertEqual({x["id"] for x in self.ontology["layers"]},
                          {f"L{i}" for i in range(8)})
-        self.assertEqual(len(self.experts), 21)
+        self.assertEqual(len(self.experts), 22)
         self.assertTrue(all(e["kind"] == "internal_specialist_lens_not_installed_bot"
                             for e in self.experts))
 
@@ -51,7 +51,7 @@ class WholeDomainKnowledgeAtlasTests(unittest.TestCase):
         self.assertEqual(self.atlas["status"],
                          "exhaustive_scope_inventory_not_complete_research")
 
-    def test_all_21_experts_are_covered_by_an_existing_domain(self):
+    def test_all_registered_experts_are_covered_by_an_existing_domain(self):
         names = {e["id"] for e in self.experts}
         referred = set()
         for domain in self.atlas["domains"]:
@@ -72,7 +72,7 @@ class WholeDomainKnowledgeAtlasTests(unittest.TestCase):
             self.assertIn("### " + domain["id"], self.handbook)
         self.assertIn("结构目录完整", self.atlas["definition_of_done"])
         self.assertIn("尚未完成", self.handbook)
-        self.assertIn("不是 21 个已安装 Bot", self.handbook)
+        self.assertIn("不是 22 个已安装 Bot", self.handbook)
         self.assertIn("全域定位与缺口暴露", self.handbook)
         self.assertIn("K0", self.handbook)
         self.assertIn("K1", self.handbook)
