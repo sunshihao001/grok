@@ -16,6 +16,30 @@ Phase 1：只读研究 / 纸面门控，禁止真实交易、私钥、签名、�
 
 见 `docs/bot-architecture.md` 与 `BOTS.md`。
 
+## V0.1 单命令读取Mint：优先使用已有OKX结果，免密时可取得公开交易池快照
+
+本次没有重新开发OKX Holder/Dev/Cluster工作流；原`src/solana_meme_os/mint_report.py`继续消费已保存的OKX `token-research` JSON。为解决“只有离线fixture才能运行”的硬缺口，新增**严格独立**的`public_pair_report.py`，只访问DEX Screener官方公开GET`/token-pairs/v1/solana/{mint}`；并新增一条统一命令`mint_v01.py`：
+
+```bash
+# 没有OKX已授权结果时：只获取公开、可核查的交易池数据（不提供钱包/Dev结论）
+PYTHONPATH=src python -m solana_meme_os.mint_v01 EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump
+
+# 已有授权取得的OKX token-research完整JSON时：优先使用更丰富的原工作流报告
+PYTHONPATH=src python -m solana_meme_os.mint_v01 <Mint> --okx-json /path/to/saved_okx_token_research.json
+
+# 合成演示必须显式标记，不能冒充真实市场事实
+PYTHONPATH=src python -m solana_meme_os.mint_v01 87QChghgFr2XBNumi2Tg1MJCWHLqoTTT5KThtnDspump \
+  --okx-json fixtures/okx-documented-field-shapes-synthetic.json --fixture
+```
+
+输出默认在`.runtime/mint-v0.1/<Mint>/`下。公开路径保存`provider-raw.json`、`report.md`、`report.json`，保留原始响应SHA256与本地查询时点。只使用固定HTTPS公开GET、无JWT/钱包/私钥/交易/签名/自动付款能力、拒绝HTTP重定向与错误链/地址、请求限时/体积上限。**不调用OKX CLI**，因为其`client.rs`可根据x402支付配置在HTTP 402后生成付款签名；必须单独确认只读授权和支付隔离后才由操作者执行OKX原工具。
+
+### 真实验证与现阶段范围
+
+GitHub CI[公开单Mint对照记录](https://github.com/sunshihao001/grok/actions/runs/41266278500)在2026-11-01于托管运行器真正查询DEX Screener：`EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump`成功返回5个池，`FdKdpz11GsTofLaNiddrhxrsE4APZYSSfLFqQ9YKpump`成功返回7个池；更早对`DezXAZ8z7PnrnRJjz3wXBoRgixCaZhdJ5Bv6PpPB263`返回空列表，程序明确`NO_PAIRS_RETURNED_COVERAGE_UNKNOWN`，**不宣称没有流动性或该Mint不存在**。这些都是**供应商当前数据**，不是Solana RPC独立核验，不能用返回池的`pairCreatedAt`替代Mint创建时点，也不能把报价资产的`priceUsd`当目标Mint价格。
+
+[DEX Screener官方API](https://docs.dexscreener.com/api/reference)声明交易对/Token类接口300请求/分钟；这个额度不是保障持续可用的生产SLA。**公开数据入口只能完成“真实Mint→实际池流动性/成交量/交易次数→带来源的有限报告”**，不能提供Holder/Owner、资金来源、Dev历史、Bundler、已证实Swap/Token库存或盈利信号；这些字段保持`UNKNOWN_NOT_PROVIDED`。**V0.1完整经济分析报告仍未验收**；不能因为增加公开数据接口就将系统升级为持续监控。
+
 ## 第一个可运行成品的最短路线｜Mint研究报告（2026-11-01）
 
 **先跑一个Mint，之后才做钱包持续订阅/全市场扫描。** 优先复用OKX OnchainOS现成`token-research`结果，而不是重写它的Token/Holder/Cluster/TopTrader/Dev接口。新增`mint_report.py`是本仓库**无网络、无私钥的最薄JSON报告适配层**，输出Markdown和带原始供应商字段的JSON；源码不调用OKX或支付接口，未知字段保持UNKNOWN、不擅自算控盘/盈利。
