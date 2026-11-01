@@ -12,3 +12,8 @@ jobs:
           python-version: '3.12'
       - name: Run offline tests
         run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: One-time read-only public Mint API smoke (non-blocking; no secrets)
+        continue-on-error: true
+        run: |
+          PYTHONPATH=src python -m solana_meme_os.public_pair_report --mint DezXAZ8z7PnrnRJjz3wXBoRgixCaZhdJ5Bv6PpPB263 --out-dir .runtime/v01-public-bonk
+          test ! -f .runtime/v01-public-bonk/report.md || head -75 .runtime/v01-public-bonk/report.md
