@@ -39,6 +39,7 @@ jobs:
           fi
           printf '{"data_fetch_exit":%s,"triage_exit":%s,"source_live_public_vendor":true,"wallet_tx_live":false,"grok_invoked":false,"paid_calls":0,"trading":false}\n' \
             "$fetch_exit" "$task_exit" >.runtime/real-integration/exits.json
+          git rev-parse HEAD >.runtime/real-integration/commit-sha.txt
           echo "PUBLIC_SOURCE_EXIT=$fetch_exit TRIAGE_EXIT=$task_exit"
           cat .runtime/real-integration/mint-stdout.json
           if [ -f .runtime/real-integration/triage-stdout.json ]; then
