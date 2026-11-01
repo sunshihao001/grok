@@ -50,10 +50,10 @@ jobs:
           cd upstream/apps/api
           # Bind this test environment only to loopback, not a user-facing service.
           sed -i "s/app.listen(process.env.PORT ?? 3001)/app.listen(process.env.PORT ?? 3001, '127.0.0.1')/" dist/main.js
-          node dist/main.js >../api.log 2>&1 &
+          node dist/main.js >"$GITHUB_WORKSPACE/.runtime/million-probe/api.log" 2>&1 &
           pid=$!
           trap 'kill "$pid" 2>/dev/null || true' EXIT
-          cd ..
+          cd "$GITHUB_WORKSPACE/.runtime/million-probe"
           for i in {1..50}; do
             if curl --max-time 2 --silent --fail http://127.0.0.1:4033/api/health > health.json; then
               break
