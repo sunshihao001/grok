@@ -106,7 +106,7 @@
 - **已完成（本轮）**：对HoldTech根目录、API路由列表、部分实际函数和扩展声明完成源审；与现有P3-M01字段契约比较；检索并阅读FnZero Python/Rust、pumpwatch、GMGN Skills、MadeOnSol的部分具体实现与来源边界；形成可回访、可判定的功能台账。
 - **未完成**：未逐行审查HoldTech所有路由、未跑HoldTech或FnZero/GMGN的代码、未确认HoldTech README许可声明的完整法律适用性、未联网调用任何收费接口、未生成真实市场标签/盈利结果、未修改生产监控。
 - **当前方向判断**：`PIVOT_METHOD_KEEP_GOAL`：保留P3-M01的保守归一化输出与监控需求，但把“自行支持所有DEX协议”从默认路线改为“先比较/封装成熟SDK”；并行以HoldTech、pumpwatch等已有工具启发行为分析，先保留知识和可运行依赖证据。
-- **下轮唯一主实验**：在隔离、无签名/无API付费的条件下，固定FnZero Python解析器版本和现有M01官方fixture，核对是否能够正确产生目标Mint/owner/交易类型/报价量/指令来源以及UNKNOWN，记录差异；只在审查和对照通过后考虑新增可选适配器。可并行只读检查HoldTech剩余路由、测试与源许可证，不等其全部读完才做上述实验。
+- **历史组件级实验候选（已被2026-11-01上方成品复用审计取代，不再是当前唯一主任务）**：在隔离、无签名/无API付费的条件下，固定FnZero Python解析器版本和现有M01官方fixture，核对是否能够正确产生目标Mint/owner/交易类型/报价量/指令来源以及UNKNOWN，记录差异；只在审查和对照通过后考虑新增可选适配器。可并行只读检查HoldTech剩余路由、测试与源许可证，不等其全部读完才做上述实验。
 
 ## 6. 参考资产长期保留合同
 
@@ -127,6 +127,6 @@
 | [Carbon（Rust）](https://github.com/sevenlabs-hq/carbon/tree/134647d8071675bb316f55c18511e961d4d0361b)（P0对照候选） | `decoders/pumpfun-decoder/src/instructions/buy.rs`/`sell.rs`、`events/trade_event.rs`，以及PumpSwap、Raydium、Meteora、Token-2022等现成解码器；`datasources/stream-message-datasource` 可接历史回放；`examples/transaction-crawler-rpc`/ `versioned-decoders` 有成熟管线和版本切换示例 | 可代替未来自己维护多DEX解码；特别适合已有索引/流式需求；官方代码生成并有实例 | MIT许可证已读；**未安装/跑测试**；Rust与Python M01的连接有成本，先以同样输入对比FnZero，不能因解码器数量多就迁移整栈 |
 | [Solana官方transaction-introspection](https://solana.com/docs/core/transactions/transaction-introspection) | `decodeTransactionFromRpcResponse`+`walkInstructions` 已解决账户/ALT、outer+inner CPI、legacy/v0/v1；生成的Program client再解析Token语义 | 结构级权威、用于第三方库失败原因核验 | 不能自动推导已执行买卖经济结果；JS调用是否必要待FnZero/Carbon同样样本比较 |
 
-**下一轮唯一有价值的实验**：保持`wallet_batch_monitor.py`原逻辑与fixture不变，在隔离无密钥环境以同一组已知Solana文档RPC样本及FnZero自带经核查的DEX正例，对照锁定版本FnZero（必要时对比Carbon）输出的指令、BUY/SELL、mint、owner、实际quote成交、`parse_status`、CPI位置、UNKNOWN；审计包/许可证、开发依赖、执行开销。只有SDK已经能稳定输出所需字段时，才写最薄的“供应商事件→既有M01标准事件”映射；不准重写DEX解析、无需三套混合框架。
+**历史FnZero-only实验方案（仅当成品级对照确实缺少协议解析时才启动）**：保持`wallet_batch_monitor.py`原逻辑与fixture不变，在隔离无密钥环境以同一组已知Solana文档RPC样本及FnZero自带经核查的DEX正例，对照锁定版本FnZero（必要时对比Carbon）输出的指令、BUY/SELL、mint、owner、实际quote成交、`parse_status`、CPI位置、UNKNOWN；审计包/许可证、开发依赖、执行开销。只有SDK已经能稳定输出所需字段时，才写最薄的“供应商事件→既有M01标准事件”映射；不准重写DEX解析、无需三套混合框架。
 
 **状态**：`SOURCE_CODE_INSPECTED` / `IMPLEMENTATION_FROZEN`；**不是** `ADAPTER_TESTED` 或 `READ_ONLY_DATA_VERIFIED`。已有单测仍属于本项目自写Legacy基线。方向改为`PIVOT_METHOD_KEEP_GOAL`，不更改P3研究目标与C02/C05优先级；后续该台账为唯一复用判定入口，不另建框架。
