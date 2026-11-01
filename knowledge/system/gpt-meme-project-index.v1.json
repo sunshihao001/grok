@@ -18,8 +18,8 @@
     "domains": 12,
     "core_governance": 8,
     "atomic_units": 152,
-    "specialists": 21,
-    "reference_assets": 60
+    "specialists": 22,
+    "reference_assets": 65
   },
   "domain_index": [
     {
@@ -408,7 +408,8 @@
     "E-L6-01",
     "E-L6-02",
     "E-L7-01",
-    "E-L7-02"
+    "E-L7-02",
+    "E-L7-03"
   ],
   "source_repos": [
     {
@@ -452,7 +453,7 @@
   ],
   "reference_assets": {
     "schema_version": "1.0",
-    "truth": "Canonical inventory of all previously named and currently verified project/source candidates; source_repos remains the original pinned research admission set, not an exhaustive inventory.",
+    "truth": "Full historical/source candidate catalog; no inference of code executability from being listed. Original 5 pinned source_repos remain separate. Alias/duplicate rows are not independently counted.",
     "reviewed_on": "2026-11-01",
     "verification_legend": {
       "SOURCE_AUDITED": "Some original files/workflows inspected, NOT full installation or mainnet validation",
@@ -837,17 +838,6 @@
         "when_to_review": "判断所谓Bundler是否真实Bundle"
       },
       {
-        "id": "REF-035",
-        "name": "Raydium CP Swap Official Repository",
-        "kind": "protocol",
-        "url": "https://github.com/raydium-io/raydium-cp-swap",
-        "verification": "REPO_VERIFIED",
-        "role": "同REF-021实体，收敛为一个正式资产ID",
-        "priority": "P3",
-        "lead_expert": "E-L7-03",
-        "when_to_review": "去重时仅保留REF-021，不作为独立项目"
-      },
-      {
         "id": "REF-036",
         "name": "Meme Coin Factories (ACM CCS 2026)",
         "kind": "research",
@@ -1049,7 +1039,7 @@
         "id": "REF-054",
         "name": "Arkham",
         "kind": "provider",
-        "url": "https://arkm.com/",
+        "url": null,
         "verification": "HISTORICAL_NAMED_ONLY",
         "role": "链上主体关联业务参考，非Solana Meme首版依赖",
         "priority": "P3",
@@ -1121,6 +1111,72 @@
         "priority": "P3",
         "lead_expert": "E-L0-01",
         "when_to_review": "找到实际有效仓库或官方v1 RPC例子"
+      },
+      {
+        "id": "REF-061",
+        "name": "Meteora AMM",
+        "kind": "protocol",
+        "url": null,
+        "verification": "HISTORICAL_NAMED_ONLY",
+        "role": "Solana/多池与DAMM流动性机制参考，当前未独立源码审查",
+        "priority": "P3",
+        "lead_expert": "E-L2-02",
+        "when_to_review": "某Mint实际迁移或资金在Meteora多池分流"
+      },
+      {
+        "id": "REF-062",
+        "name": "PumpSwap",
+        "kind": "protocol",
+        "url": null,
+        "verification": "HISTORICAL_NAMED_ONLY",
+        "role": "Pump.fun迁移后交易场所，需区分bonding curve与池事件",
+        "priority": "P3",
+        "lead_expert": "E-L2-01",
+        "when_to_review": "Mint已迁移，交易/持仓语义需精确分阶段"
+      },
+      {
+        "id": "REF-063",
+        "name": "Jupiter Aggregator",
+        "kind": "protocol",
+        "url": null,
+        "verification": "HISTORICAL_NAMED_ONLY",
+        "role": "Solana路由聚合成交多腿归因参照",
+        "priority": "P3",
+        "lead_expert": "E-L1-01",
+        "when_to_review": "拆解aggregator swap和多钱包费支付"
+      },
+      {
+        "id": "REF-064",
+        "name": "Clanker",
+        "kind": "protocol",
+        "url": null,
+        "verification": "HISTORICAL_NAMED_ONLY",
+        "role": "跨链/发行自动化的历史对照入口，非当前Solana Mint直接数据源",
+        "priority": "P3",
+        "lead_expert": "E-L2-01",
+        "when_to_review": "研究跨市场发币工厂机制"
+      },
+      {
+        "id": "REF-065",
+        "name": "Zora",
+        "kind": "protocol",
+        "url": null,
+        "verification": "HISTORICAL_NAMED_ONLY",
+        "role": "跨链发行/Token产品机制历史对照入口",
+        "priority": "P3",
+        "lead_expert": "E-L2-01",
+        "when_to_review": "需跨链对照发行机制时"
+      },
+      {
+        "id": "REF-066",
+        "name": "RugCheck",
+        "kind": "provider",
+        "url": null,
+        "verification": "HISTORICAL_NAMED_ONLY",
+        "role": "Million项目代币风险审核依赖/风险标签对照",
+        "priority": "P3",
+        "lead_expert": "E-L2-03",
+        "when_to_review": "需要第二条独立代币权限/安全指标时"
       }
     ]
   }
