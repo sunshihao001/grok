@@ -149,3 +149,13 @@ GitHub 知识源在 PR #14；实现和测试在 PR #16；GPT Library 的当前�
 - **源审**：FnZero Python已有按交易签名的RPC解析、mainnet fixture tests，`parse_transaction_from_rpc`以 `max_supported_transaction_version=0` 请求，但另一示例用 `maxSupportedTransactionVersion:1`；版本入口需逐一比较。Python仓库README标MIT但根目录无LICENSE、pyproject无license字段；Carbon源码有完整MIT许可。Pumpkit有Telegram成品监控，但根LICENSE为all rights reserved，不可直接复制。继续核查Million整体业务流程与OKX工作流的适用性，**整套成品优先于仅评估FnZero SDK**。
 - **本轮实际本地运行**：Node标准库环境按HoldTech `detectBundles` 和 `extractBuyTimeline` 的判定逻辑手工独立复现四个合成负例，四项断言通过；对应Transfer误称买入/同Slot误称Bundle/fee payer合并真实买方等语义风险。**未运行原HoldTech项目、没有真实RPC、未运行FnZero或当前PR#16最新全套源码**。
 - **限制与回填**：终端无法通过DNS访问GitHub，不能完成FnZero↔M01 SDK运行对比；实际审查与结果回填到 `reference-capability-reuse-ledger.v1.md`，生成GPT Library便携报告。P3-M01仍处于fixture-only，来源CI成功不能替代真实数据。下一项最高价值任务是Million严格只读整套业务流程验收，FnZero作为后续语义缺口补强，不能反过来。
+
+## 2026-11-01｜外部复用方案离线验证（本轮）
+
+本轮已执行的能力核查：从GPT Library的P3-M01便携快照恢复Python包、2份测试与fixture，实际在隔离目录运行**38项离线单元测试全部通过**，且`raw_tx_adapter → wallet_batch_monitor` CLI成功；此结果**只代表Library快照**。核查当前PR#16工程head `3ee17255f4c849d6be4ede93e6ee7e516a068de1` 的GitHub `monitor-tests` CI为success，未独立在本地运行其全部最新测试。
+
+FnZero Python源码审阅确认`sol_parser/rpc_parser.py`接受RPC JSON并输出事件与解析状态、示例支持`maxSupportedTransactionVersion=1`。但尝试在隔离环境拉取仓库/查询PyPI遇DNS不可达，**FnZero SDK未安装，和M01的真SDK对照仍BLOCKED**。其Python仓库根目录缺常规LICENSE文件，尚待进一步许可审核。读取Go `DefaultPerson/solana-dex-parser-go`（MIT、v1/Jupiter、Go集成成本、默认未知DEX启发式需审）与TypeScript `cxcx-ai/solana-dex-parser`（MIT）为竞争候选；Helius Parsed Events/Streams 为付费对照选项。pumpwatch提供可复用SQLite发行历史和重试逻辑，但原源码getTransaction固定maxSupportedTransactionVersion=0，不宜认为覆盖v1。
+
+独立三组合成规则反例说明HoldTech现有same-slot + fee payer条件可能在纯TRANSFER/UNKNOWN或独立买家场景产生Bundler候选；**只运行规则重现而非HoldTech本身**。更新持久功能台账`knowledge/system/reference-capability-reuse-ledger.v1.md`，现在不改变P3-M01业务能力/工程代码，不引入私钥、收费源或签名。
+
+**方向**：REUSE_FIRST继续，核心是找到对真实交易负例可靠的成熟DEX解析实现，制定最小 M01 可选桥接，而不是扩大自制解析器。下一首选：在具备SDK依赖与授权许可的可联网隔离环境执行FnZero Python与M01同输入对照；若其准确性/许可不达标，转向MIT Go/TypeScript项目。并行仅做pumpwatch/HoldTech不依赖私钥的具体功能审查，避免项目失焦。
