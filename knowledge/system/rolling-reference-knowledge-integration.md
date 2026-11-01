@@ -173,3 +173,11 @@ HoldTech保留同slot候选/holder overlap/发币与钱包画像**功能知识**
 Million完整应用的确有发现/钱包订阅/资金/群体流/AI-MCP，但`LiveEvent.signature @unique`加上Webhook首钱包退出会丢同交易多钱包视角；其默认paper交易并非纯只读，`EXECUTOR=local`会签交易，当前Grok运行须硬隔离而非直接开服务。本轮用独立SQLite证明该唯一键无法存两钱包的同签名行；这不是Million服务测试。P3-M01原Library快照38项在本轮重新通过，仍仅fixture。已把具体结果、费率、源码、后续触发加入[原能力台账](reference-capability-reuse-ledger.v1.md)，不新建整套系统、Bot或参考名词。
 
 **优先回访条件**：①可授权的OKX只读Key、禁自动支付→单Mint`token-research`真回包；②安全隔离Node24和数据额度→Million整套只读GET/不得触发真实/纸面交易；③同Mint双时点样本且两个被观察地址共用一签名→核对事件表保留覆盖；④协议金额/owner有具体缺口才启动FnZero/Carbon对照。旧qb-/Hermes/meme-/Why-Solana仍作为业务认知与反证参照，HoldTech/pumpwatch保留现有待复用判断。
+
+## 2026-11-01｜21专家项目评审发现的非Meme专用现成可靠性能力
+
+本轮跨领域扩展不是再找“聪明钱标签”，而是从D10持续运行和L7故障隔离角度找到[Solana Foundation solana-microscope](https://github.com/solana-foundation/solana-microscope/tree/20a516b2066ec4f13e0b76926b11f666ffd0f49a)（MIT）的现成程序监控流程：RPC/Yellowstone → Carbon → 结构日志与失败记录 → Prometheus/Loki/Grafana告警、可恢复采集检查点，部署一套主要监控一个Program，不是任意Mint全市场钱包关系成品，且维护/机器成本显著。定位`REFERENCE_FOR_D10`，当确有断流/历史回补/连续告警需求时复查其源码与运行契约，不直接把整个监控平台塞进Grok。
+
+另有[Helius Token APIs](https://www.helius.dev/solana-token-apis)的DAS钱包资产/Token账户视图与Parsed Events，说明某些Token余额和解析能力可直接购买/借用成熟API而非自写索引，状态`ALT_DATA_ORACLE`，需授权、成本/字段及独立语义核对。结合既有FnZero/OKX/Million/pumpwatch，完整专家审查见[复用台账](reference-capability-reuse-ledger.v1.md)最新节，**勿再维护第二套重复的项目选型表**。
+
+原qb-的`sikk_gmgn_token_report.py`已定义八张单币分析CSV及Markdown报告，适合作为一期完整Mint产品输出的业务参照；GMGN调用和标签阈值不应原样照搬。pumpwatch `creator_reputation.py`的`seen_at`是观测入库时间，不等于Mint创建链上时间，复用前必须标明。现有D01–D12/21专家的成熟度不因“已覆盖审查”改变。
