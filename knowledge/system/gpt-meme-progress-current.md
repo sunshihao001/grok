@@ -2,6 +2,8 @@
 
 > **最新收束（2026-11-01）**：先读[《全项目专家去污染与收束审计》](whole-project-convergence-audit-2026-11-01.md)，涵盖最新22专家、65参考、152项与历史104项的裁决、知识M01/P3-M01命名冲突及真实公开DEX池快照的严格边界。本文标题仍保留2026-10-31的历史创建日期；本文内各段有先后版本，**以最新实际PR #14/#16源码和2026-11-01验收证据为权威**。当前优先是安全获得完整只读Mint报告所需数据，而非重回过时P2.2研究任务；知识侧B01仍可并行深化。不得将GitHub CI或厂商池统计提升为真实钱包经济或收益验证。
 
+> **2026-11-01 产品实施路线收束（最新）**：根据用户要求，停止继续扩展方案，**以[工程PR #16《四阶段成品交付计划》](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/product-delivery-plan-v01.md)为产品优先级真源**：V0.1真实Mint报告→V0.2钱包/资金→V0.3异常监控→V1.0 Grok入口。当前已完成真实公开池数据，但**完整钱包/Dev报告尚未真实验收**。GPT知识分支仍按既有D01–D12/152单元/22专家持续回填，只有对当期成品功能有实质帮助才深入；不要求先学完所有单元，也不重起规划。旧文件里“继续研究P2.2/先开发FnZero解析器/扩大架构”只能按历史研究口径读取，不应覆盖此产品交付顺序。用户只负责必要账户/授权，不选择技术栈。
+
 **当前权威**：GitHub `sunshihao001/grok`，知识分支 `knowledge/whole-spectrum-20261030-v1`（Draft PR #14）中的本文件；工程分支 `research/p24-cross-mint-m01-batch-monitor-20261031`（Draft PR #16）。PR 均未合并，主分支没有这些草案增量。
 
 **持续研究与写作方式**：继续使用 [《持续研究与知识同步 V2》](gpt-meme-continuity-v2.md) 与 [《专业研究写作 Skill V2》](gpt-meme-research-writing-skill.v2.md)，新结果先对照已有 [唯一监控方法专题](../domain/meme-anomaly-discovery-state.v1.md)，用 `AMEND` 修订，不把每个回答复制为新专题。
