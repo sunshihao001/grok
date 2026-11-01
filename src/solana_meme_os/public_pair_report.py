@@ -123,7 +123,7 @@ def compile_pairs(raw: bytes, mint: str, *, retrieved_at: str, source: str) -> d
 
 
 def render_markdown(report: dict[str, Any]) -> str:
-    out = ["# Solana Meme｜真实公开数据池快照（限功能版）", "",
+    out = ["# Solana Meme｜公开数据交易池快照（请核对运行状态）", "",
            f"Mint：`{report['mint']}`", f"状态：**{report['status']}**",
            f"数据源：{report['provider']}", f"请求地址：`{report['source_url']}`",
            f"取得时间：{report['retrieved_at']}（不是链上事件时间）",
