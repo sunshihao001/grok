@@ -174,3 +174,6 @@
 ### 实际数据接口证据回填（本次集成）
 - [无密钥主网钱包一次查询](https://github.com/sunshihao001/grok/actions/runs/41314447575)：`getSignaturesForAddress` + `getTransaction`，签名`4ZbrvjMtWEnaa9iPVLedJmbQrMnjDhVR9p2aV47pF81URq6Yuwn2Vfqsnp7QfyMJwZSPSyrvWWYr4rTwGWMZYUmj`，slot `464112229`。原始Artifact #13086538862两份JSON已重算SHA与报告一致。**交易签名证据≠钱包角色/资金或Swap的可验证分析**。
 - [统一工作树测试](https://github.com/sunshihao001/grok/actions/runs/41314658703)：284项离线测试成功；导航定位`wallet_rpc_sample`和`vendor_handoff`，`invoked=false`；这不是Grok Bot真实部署。
+
+#### 最新同Mint在线知识/产品贯通证明
+参见 [产品交付状态与真实源回查](../docs/product-delivery-plan-v01.md)及[GitHub运行 41315827203](https://github.com/sunshihao001/grok/actions/runs/41315827203)。本次两段代码返回0；真实供应商原始字节和证据源SHA相符，知识文件由原有导航读取并保留SHA，七类UI视图输出保持缺失与未部署状态。**不是连续钱包监控/Grok部署。**

@@ -90,3 +90,10 @@ AI承担产品负责人和工程整合者的工作：根据用户的目标、当
 - **安全与完整性边界**：这只证明有限度的真实主网原始数据获取，不是交易语义解码、真实资金网络、连续监控或原Creator身份独立核验；公开RPC是共享限流服务，不适合未经测试直接长期生产采集。是否使用Helius免费密钥/OKX授权需后续按费用和权限实际验证。
 - **联合验收**：[GitHub CI 41314658703](https://github.com/sunshihao001/grok/actions/runs/41314658703) 284项离线测试全通过；用户问法到专业领域和可用代码路径已能导航，但Grok Bot实际专家调用与线上运行仍未验证。
 - **唯一高价值后续缺口**：真实交易的多钱包/Token可观测事实重建与完整时间窗，复用可信解析/事件服务，随后向Grok发送有证据的异常任务；不自行制造BUY/SELL，也不让新代码重复实现已成熟的DEX解析器。
+
+### 2026-11-01｜真实源→原专业知识→UI状态→Grok任务：同一运行证据
+
+- [在线读数与任务生成](https://github.com/sunshihao001/grok/actions/runs/41315827203) 使用现有Mint `EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump` 重新调用公开DEX Screener/RugCheck后，依次运行既有 `mint_v01.py` 和 `vendor_event_handoff.py`，两条程序均退出码0。取得**本次2条DEX池记录、1条RugCheck供应商待核查标签、1条大额Holder池Vault降级候选**；不同获取时点的池数不能当作同一快照相加。
+- [真实运行Artifact #13086832994](https://github.com/sunshihao001/grok/actions/runs/41315827203) 保存原始响应、报告、`evidence.json`、按现有导航实际读到原知识片段与SHA的 `review_context.json`、七类UX状态JSON及待执行Grok任务。离线CI [41315656644](https://github.com/sunshihao001/grok/actions/runs/41315656644) 288项测试通过。实际运行原始DEX与RugCheck文件哈希与证据包完全一致。
+- 已证明：**公开供应商读数→原有知识按需调用及定位→现有UI信息状态→任务文件输出**。未证明：供应商标签为真实欺诈、真实钱包交易异常、经济主体归因、持续数据源、Grok Bot-to-Bot执行、Token成本优势；相关视图保留`NOT_OBSERVED/NOT_EXECUTED`。
+- 交付原则：反证池/vault候选，不将“疑似大户”当人；供应商标签按不可信数据编码，不执行其携带的指令；旧任务输出目录复用一律拒绝。**下一必需的产品事实是交易级、钱包级事件同时完备的只读归因和历史覆盖**，而不是再添加一种知识层级或注册更多Bot。
