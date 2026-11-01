@@ -1,0 +1,94 @@
+name: one-shot-million-no-key-readonly-smoke
+on:
+  push:
+    branches:
+      - integration/product-knowledge-v01-20261101
+    paths:
+      - .github/workflows/one-shot-million-no-key-readonly-smoke.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pinned-million-local-readonly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    env:
+      HELIUS_API_KEY: ""
+      WEBHOOK_URL: ""
+      EXECUTOR: "paper"
+      DATABASE_URL: "file:./million-probe.db"
+      PORT: "4033"
+      CI: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Checkout exact audited Million source
+        run: |
+          mkdir -p .runtime/million-probe
+          git clone --quiet https://github.com/Kelows/million.git .runtime/million-probe/upstream
+          cd .runtime/million-probe/upstream
+          git checkout --quiet c89ad07caaf70773d40b45943e136eadc4f946a5
+          test "$(git rev-parse HEAD)" = "c89ad07caaf70773d40b45943e136eadc4f946a5"
+          git rev-parse HEAD > ../upstream-sha.txt
+      - name: Build pinned sources without upstream install scripts or API credentials
+        shell: bash
+        working-directory: .runtime/million-probe/upstream
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run build -w packages/shared
+          cd apps/api
+          npx prisma generate
+          npx prisma db push
+          npm run build
+      - name: Start isolated paper-only API and read GET endpoints (no mutation)
+        shell: bash
+        working-directory: .runtime/million-probe
+        run: |
+          set -euo pipefail
+          cd upstream/apps/api
+          # Bind this test environment only to loopback, not a user-facing service.
+          sed -i "s/app.listen(process.env.PORT ?? 3001)/app.listen(process.env.PORT ?? 3001, '127.0.0.1')/" dist/main.js
+          node dist/main.js >../api.log 2>&1 &
+          pid=$!
+          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          cd ..
+          for i in {1..50}; do
+            if curl --max-time 2 --silent --fail http://127.0.0.1:4033/api/health > health.json; then
+              break
+            fi
+            sleep 1
+          done
+          test -s health.json
+          curl --max-time 4 --silent --fail http://127.0.0.1:4033/api/crawler > crawler.json
+          curl --max-time 4 --silent --fail http://127.0.0.1:4033/api/live/status > live-status.json
+          curl --max-time 15 --silent -o discovery-body.json -w "%{http_code}" \
+            "http://127.0.0.1:4033/api/discovery/token/EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump?pages=1&mode=recent&minSol=1" > discovery-status.txt
+          node -e '
+            const fs=require("fs");
+            const h=JSON.parse(fs.readFileSync("health.json"));
+            const c=JSON.parse(fs.readFileSync("crawler.json"));
+            const status=fs.readFileSync("discovery-status.txt","utf8").trim();
+            const body=JSON.parse(fs.readFileSync("discovery-body.json"));
+            if(h.heliusConfigured!==false) throw Error("key must remain unset");
+            if(c.config.enabled!==false) throw Error("crawler must stay off");
+            if(status==="200") throw Error("no-key discovery unexpectedly claimed success");
+            if(![400,401,403,500,503].includes(Number(status))) throw Error("unexpected no-key error status "+status);
+            const summary={api_started:true,helius_key:false,paper_executor:true,crawler_enabled:false,
+              discovery_http_status:Number(status), discovery_error:body.message??body.error??null,
+              meaningful_wallet_discovery_verified:false,paid_calls:0,external_bot_calls:0,
+              note:"GET-only source API probe; cannot infer actual Helius behavior without a key"};
+            fs.writeFileSync("probe-result.json",JSON.stringify(summary,null,2)+"\n");
+            console.log(JSON.stringify(summary));
+          '
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pinned-million-no-key-readonly-smoke
+          path: |
+            .runtime/million-probe/upstream-sha.txt
+            .runtime/million-probe/api.log
+            .runtime/million-probe/*.json
+            .runtime/million-probe/*.txt
+          retention-days: 7
