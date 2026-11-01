@@ -1,5 +1,7 @@
 # GPT × GitHub｜Solana Meme 知识层级累积、双向关联与持续修订规范 V1.0
 
+> **当前状态（2026-11-01）**：本文件的知识对象、来源与反证方法仍可复用；“每轮必须累积、归档、同步”不再默认执行。按[现行工作准则](current-operating-guidance.md)选择任务，只有值得复用的实质差异才进入GitHub；不要将账户Memory、Project、Library与GitHub混为一谈。
+
 > **后续执行入口**：现有知识单元、关系边和事实边界继续有效；新增的**每轮研究差异提取、写作去噪、GitHub真实提交、Library镜像与进度恢复**请按 [持续研究知识闭环 V2](gpt-meme-continuity-v2.md) 与 [专业写作 Skill V2](gpt-meme-research-writing-skill.v2.md) 运行。P2.1—P2.4研究产物目前集中在 [异动方法融合目录](../domain/meme-anomaly-discovery-state.v1.md)，不再根据聊天输出重复新建平行知识目录。
 
 > 目的：解决“研究分散在多轮聊天、每次只知道某一点、忘掉其他领域、无证据自我升级、GitHub与GPT项目观点不一致”的问题。本规范是现有 `gpt-meme-project-core.v1.md` 的增量机制，不是另一个知识本体，也不改变F0–F6、K0/K1/K2或Grok运行授权。
