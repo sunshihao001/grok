@@ -20,6 +20,16 @@ Phase 1：只读研究 / 纸面门控，禁止真实交易、私钥、签名、�
 
 见 `docs/bot-architecture.md` 与 `BOTS.md`。
 
+## 2026-11-01｜真实V0.1免费多来源Mint报告（已联网验收）
+
+当前首选的**无需Key的只读成品模式**：复用成熟RugCheck的免费缓存Holder/Creator/风险报告，与现有DEX Screener池信息汇总。无钱包签名、交易或自动付款，无须先获得OKX授权。
+
+```bash
+PYTHONPATH=src python -m solana_meme_os.mint_v01 EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump --rugcheck
+```
+
+2026-11-01在GitHub Actions [真实运行 #41269179918](https://github.com/sunshihao001/grok/actions/runs/41269179918)：返回**5个池、20条RugCheck Top Holder候选、1个Creator候选**，并识别其中**1个Owner与PumpSwap池地址重合**（供应商亦将其标为AMM），不将其当独立聪明钱；19个其他账户仍未独立归类。保存源JSON/SHA/时间与`report.md`/`report.json`；详见[真实验收证据](docs/evidence/v01-real-rugcheck-holder-2026-11-01.md)。此为**公开供应商可能缓存的数据和交叉地址匹配**，不等于已验证完整钱包资金/Dev历史、主网持续监控或Alpha。`--rpc-holders`可单独实验官方公共RPC，但实测遇429，不应作为常态来源。此前`--okx-json`消费已授权数据的功能保持不变，`--rugcheck --okx-json`可将来源隔离并列显示。
+
 ## V0.1 单命令读取Mint：优先使用已有OKX结果，免密时可取得公开交易池快照
 
 本次没有重新开发OKX Holder/Dev/Cluster工作流；原`src/solana_meme_os/mint_report.py`继续消费已保存的OKX `token-research` JSON。为解决“只有离线fixture才能运行”的硬缺口，新增**严格独立**的`public_pair_report.py`，只访问DEX Screener官方公开GET`/token-pairs/v1/solana/{mint}`；并新增一条统一命令`mint_v01.py`：
