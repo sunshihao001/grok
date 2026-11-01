@@ -182,6 +182,62 @@ def open_knowledge(path: str, data: dict[str, Any] | None = None,
     }
 
 
+
+def relevant_knowledge_section(path: str, question: str, data: dict[str, Any] | None = None,
+                               root: Path = ROOT, max_chars: int = 1400) -> dict[str, Any]:
+    """Read the best matching ORIGINAL Markdown section with line numbers and hash.
+
+    Overlap is intentionally lexical, not a claim of semantic relevance. Fail
+    closed on non-indexed paths and omit quotes if no meaningful match exists.
+    """
+    if not isinstance(question, str) or not question.strip():
+        raise ValueError("question required for section selection")
+    original = open_knowledge(path, data, root, max_chars=12000)
+    source = (root / path).resolve()
+    content = source.read_text(encoding="utf-8")
+    lines = content.splitlines()
+    chunks: list[tuple[int, int, str]] = []
+    start = 0
+    for index, line in enumerate(lines):
+        if index > start and line.lstrip().startswith("#") and line.lstrip("# ").strip():
+            chunks.append((start, index, "\n".join(lines[start:index])))
+            start = index
+    if lines:
+        chunks.append((start, len(lines), "\n".join(lines[start:])))
+    q = question.casefold()
+    # Distinct Chinese bigrams and English words; no model self-scoring.
+    import re
+    units = set(re.findall(r"[a-z0-9_]{3,}|[\u4e00-\u9fff]{2,}", q))
+    grams = {unit[i:i+2] for unit in units for i in range(len(unit)-1)
+             if "\u4e00" <= unit[i] <= "\u9fff" and "\u4e00" <= unit[i+1] <= "\u9fff"}
+    terms = (units | grams) - {"我们", "这个", "什么", "怎么", "那些", "是否", "进行", "现在", "可以", "应该"}
+    ranked: list[tuple[int, int, int, str]] = []
+    for a, z, text in chunks:
+        if not text.strip():
+            continue
+        title = text.splitlines()[0].casefold()
+        body = text.casefold()
+        score = sum((4 if t in title else 1) * (2 if len(t) >= 3 else 1)
+                    for t in terms if t in body)
+        if score:
+            ranked.append((score, a, z, text))
+    if not ranked:
+        return {**{k: original[k] for k in ("source_path", "source_branch", "source_sha256")},
+                "match_status": "NO_LEXICAL_SECTION_MATCH",
+                "section": None, "line_start": None, "line_end": None,
+                "excerpt": "", "interpretation_validated": False}
+    ranked.sort(key=lambda t: (-t[0], t[1]))
+    _, a, z, text = ranked[0]
+    cap = max(200, min(int(max_chars), 4000))
+    return {**{k: original[k] for k in ("source_path", "source_branch", "source_sha256")},
+            "match_status": "ORIGINAL_SECTION_LEXICAL_CANDIDATE",
+            "section": text.splitlines()[0][:140],
+            "line_start": a + 1, "line_end": z,
+            "excerpt": text[:cap], "truncated": len(text) > cap,
+            "selection_method": "original_text_lexical_overlap_not_expert_reasoning",
+            "interpretation_validated": False}
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Read-only project knowledge navigator")
     group = parser.add_mutually_exclusive_group(required=True)
@@ -190,12 +246,16 @@ def main(argv: list[str] | None = None) -> int:
     group.add_argument("--question")
     group.add_argument("--intent")
     group.add_argument("--open-path", help="Read a permitted original knowledge file excerpt")
+    group.add_argument("--section-path", help="Read a question-relevant original Markdown section")
     parser.add_argument("--limit", type=int, default=3)
+    parser.add_argument("--for-question", help="Question to locate an original section")
     args = parser.parse_args(argv)
     try:
         data = load_navigation()
         if args.audit:
             output = audit(data)
+        elif args.section_path:
+            output = relevant_knowledge_section(args.section_path, args.for_question or "", data)
         elif args.open_path:
             output = open_knowledge(args.open_path, data)
         elif args.list:
