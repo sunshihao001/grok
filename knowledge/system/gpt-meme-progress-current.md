@@ -195,3 +195,15 @@ FnZero Python源码审阅确认`sol_parser/rpc_parser.py`接受RPC JSON并输出
 **版本/执行边界**：本轮是源码/规范/外部公开文档审查和GitHub落库，不是外部SDK或OKX/Million/Grok Bot的实盘数据测试。PR #14的base是`research/actor-economic-mechanisms-20261030`，PR #16的base是`main`，两条均Draft，不能假设两路功能已合在main。PR #16之前GitHub `monitor-tests` CI success，只说明离线合同测试通过。既往38项Python成功属于**上轮**Library旧快照；本轮不冒充重新实跑。
 
 **下一项只做完整业务链的外部成品验收，而不是继续自研基础解析**：先在可联网、具备明确权限、无签名/自动支付的隔离环境对一枚固定Mint执行OKX `token-research`并保存真实response、slot/时间、失败、额度、标签定义；若当前环境不具Key，先基于OKX CLI现成`assemble()`测试对null/结构/业务缺口做离线审查，不要求用户选择技术实现。然后审查Million同签名A/B钱包关系、Token Account余额精度及历史恢复。合并/跨分支集成与Grok运行另行检查，不因为文件更新宣布成品部署。
+
+## 2026-11-01｜优先交付能跑的成品：最薄OKX Mint报告已写代码（最新）
+
+**用户目标纠偏**：成熟项目不可能一轮完成，当前最重要的是先用成熟业务流程搓出**真实可运行的第一版**，之后逐步增强，而非先完善全市场、21专家框架或整合所有开源仓库。正式产品主体仍为`sunshihao001/grok`，外部项目是可替换的业务能力来源。全项目21专家检查继续服务于成品交付和证据缺口，不成为阻断首版的额外会议。
+
+**本轮真正做的工程代码**：工程Draft PR #16 `research/p24-cross-mint-m01-batch-monitor-20261031` 新增`src/solana_meme_os/mint_report.py`、`tests/test_mint_report.py`和`fixtures/okx-token-research-demo.json`，无需调用RPC/OKX服务器、无钱包权限、只接受用户提供的**现成OKX Rust CLI `token-research` JSON结构**`{ok:true,data:{workflow,address,chain,core,structure,launchpad}}`，验证Mint/链/成功状态，保存不擅自编译标签的Markdown和JSON，`null`表示未知，快照处理时点不冒充链上事件时点。提供`--fixture`防止将演示当真实。**本地真实运行6/6新增离线测试；把新增文件覆盖进此前Library P3-M01离线快照后联合跑44/44通过**（不是重拉当前PR#16所有最新测试）。源文件经GitHub create_file+fetch_file逐项回读一致，README和`docs/next-steps.md`已添加运行方式和明确验收。无实时数据实测。
+
+**现在的产品路径**：先实现`Mint→OKX完整按需查询→可读报告`的第一份**真实**报告，这一步需用户已授权的只读API及安全环境，禁用自动支付/交易，记录API失败/null、来源时间和用量。再用两个不同时点报告接入当前Grok observation监控的**经验证指标**，随后才按目标需求评估Million钱包持续订阅、pumpwatch Dev历史、FnZero DEX解析。拒绝把多套成品整库拼起来或为产出“专业感”先开发UI和多Bot。第一版尚不是全市场实时运行平台。
+
+**暂不采用Million作为首版母体的技术事实**：其`AppModule`、`LiveModule`、`OpportunitiesModule`直接/间接依赖`TradingModule`；`EXECUTOR=local`签名交易且default paper有自动仓位逻辑，不能简单删去交易按钮视为安全；`LiveEvent.signature @unique`和Webhook首钱包`break`还造成群体观察漏记。全量fork只读化的实际修改面比调用OKX现成Token Research宽。此结论仍可被未来安全运行试验推翻。
+
+**下轮最值行动**：直接在可用联网隔离环境以**真实Mint**运行已安装且获授权的OKX CLI，将其原始`{ok,data}`保留，调用新`mint_report.py`生成可追溯的Markdown/JSON，实测实际API成本/字段/失败并判断是否进入`V0.1 REAL-MINT REPORT`。若无法运行则继续完善离线契约验证、暂不启动新功能开发；21专家只针对输出中数据/经济语义的关键差异介入。
