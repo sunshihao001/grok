@@ -60,6 +60,20 @@ class WorkspaceIntegrationTests(unittest.TestCase):
             self.assertTrue(any(x["source_sha256"] for x in result["original_knowledge_sections"]))
             self.assertIn("原知识文件", project_workspace.render_markdown(result))
 
+    def test_cross_branch_engineering_modules_are_present_but_not_invoked(self):
+        navigation = project_navigator.shortlist(
+            "分析这个Mint的Holder候选和流动性池", intent="MINT_OVERVIEW")
+        candidates = navigation["routes"][0]["engineering_candidates_on_separate_branch"]
+        self.assertTrue(candidates)
+        self.assertTrue(all(c["available_in_current_checkout"] for c in candidates))
+        self.assertTrue(all(c["invoked"] is False for c in candidates))
+        self.assertTrue(all(c["source_of_record_branch"].startswith("research/") for c in candidates))
+
+    def test_existing_knowledge_and_engineering_are_auditable_together(self):
+        a = project_navigator.audit()
+        self.assertTrue(a["ok"])
+        self.assertEqual(a["engineering_paths_available_in_current_checkout"], 8)
+
     def test_reject_non_readonly_or_broken_report(self):
         with tempfile.TemporaryDirectory() as td:
             p = Path(td) / "report.json"
