@@ -19,3 +19,10 @@ jobs:
             PYTHONPATH=src python -m solana_meme_os.public_pair_report --mint "$mint" --out-dir ".runtime/v01-$mint" || true
             test ! -f ".runtime/v01-$mint/report.md" || head -55 ".runtime/v01-$mint/report.md"
           done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v01-public-mint-snapshots-20261101
+          path: .runtime/v01-*
+          if-no-files-found: error
+          retention-days: 30
