@@ -219,6 +219,6 @@
 | Kelows/million发现/资金模块 | `EXAMINE_AS_WHOLE_FLOW` | 比较已有qb关键钱包矩阵→million发现/筛选→资金trace→监测队列的一条完整链 | 依赖Helius/Nest/Prisma；执行交易代码必须彻底隔离 |
 | pumpkit监控/Telegram布局 | `KNOWLEDGE_ONLY_LICENSE_BLOCK` | 可研究事件流、提醒设计、健康检查等公开事实 | 许可证禁止未经许可复制/修改 |
 
-**P3-M01路线**：`CONTINUE_GOAL / PIVOT_IMPLEMENTATION_REUSE_FIRST`，先固定语义正确的只读事件契约和覆盖状态，再对现成SDK做公平对照，而非继续手写全部DEX解码。合适的现成库若经核验能用，优先包裹其接口；不能用的也保留在本账本。当前没有实际新接入的第三方功能。
+**整体项目优先**：`WHOLE_APP_FIRST / COMPONENTS_IF_NEEDED`。先验收已有百万级成品结构的 Million 原生只读 Mint→钱包发现→监控→资金/群体→解释业务链与 OKX 可行性。只有业务链缺某项关键事实时才进入 P3-M01 组件选择；FnZero/Carbon 作为其交易语义的 **候选补强**，并非全局主选系统。现有 M01 保留严格时点和覆盖语义作为对照。当前没有实际新接入第三方功能。
 
-**下次触发**：隔离环境具备下载/依赖时，优先复跑FnZero固定版本自己公开的 `tests/test_pump_upgrade_mainnet.py`，再同一输入与M01比较输出；同时确认Python许可证，并用已核验买卖样本检查包含CPI、WSOL/Token-2022、v1和缺meta的负例。只有有同笔交易事实对照，才考虑PR #16新增最小可选SDK适配器。
+**下次触发**：首先在合法隔离条件满足后完成 Million 整套只读业务流程与 OKX 已成型工作流的同一Mint对照，重点考察一签名多钱包归属/签名副作用和持续覆盖。若其原生Swap与事件语义无法满足D04/D05/M01，再单独复跑FnZero固定版本的 `tests/test_pump_upgrade_mainnet.py` 与M01同一输入比对；先厘清Python许可和v1入口，才考虑最小可选适配器。
