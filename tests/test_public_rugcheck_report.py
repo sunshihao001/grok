@@ -73,6 +73,42 @@ class RugCheckTests(unittest.TestCase):
         self.assertIn("缓存", markdown(r))
 
 
+    def test_vendor_market_vault_link_is_not_an_independent_chain_fact(self):
+        payload = sample()
+        payload["graphInsidersDetected"] = 0
+        payload["insiderNetworks"] = None
+        payload["markets"] = [{
+            "pubkey": OWNER, "marketType": "pump_fun_amm",
+            "liquidityA": TOKEN_ACCOUNT,
+            "liquidityAAccount": {"mint": MINT, "owner": OWNER},
+        }]
+        report = compile_report(json.dumps(payload).encode(), MINT)
+        links = report["pool_vault_matches_vendor"]
+        self.assertEqual(len(links), 1)
+        self.assertEqual(links[0]["token_account"], TOKEN_ACCOUNT)
+        self.assertEqual(links[0]["market"], OWNER)
+        self.assertIn("NOT_CHAIN_VERIFIED", links[0]["status"])
+        self.assertEqual(report["graph_insiders_detected_vendor"], 0)
+        self.assertEqual(report["insider_networks_status"], "VENDOR_NETWORKS_NOT_PROVIDED")
+        self.assertIn("0不等于", markdown(report))
+
+        # One inconsistent vendor field is enough to prevent a vault link.
+        payload["markets"][0]["liquidityAAccount"]["mint"] = OWNER
+        wrong = compile_report(json.dumps(payload).encode(), MINT)
+        self.assertEqual(wrong["pool_vault_matches_vendor"], [])
+
+    def test_missing_or_malformed_insider_graph_is_unknown(self):
+        report = compile_report(json.dumps(sample()).encode(), MINT)
+        self.assertIsNone(report["graph_insiders_detected_vendor"])
+        self.assertEqual(report["insider_networks_status"], "VENDOR_NETWORKS_NOT_PROVIDED")
+        payload = sample()
+        payload["graphInsidersDetected"] = True
+        payload["insiderNetworks"] = []
+        report = compile_report(json.dumps(payload).encode(), MINT)
+        self.assertIsNone(report["graph_insiders_detected_vendor"])
+        self.assertEqual(report["insider_networks_status"],
+                         "VENDOR_NETWORKS_RETURNED_NOT_INDEPENDENTLY_VERIFIED")
+
     def test_known_amm_holder_is_flagged_as_infrastructure_not_whale(self):
         payload=sample()
         payload["knownAccounts"]={OWNER: {"name":"Pump Fun AMM","type":"AMM"}}
