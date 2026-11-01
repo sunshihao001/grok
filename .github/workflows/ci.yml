@@ -12,3 +12,16 @@ jobs:
           python-version: '3.12'
       - name: Run offline tests
         run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: One-off V0.1 read-only actual Mint holder RPC check
+        continue-on-error: true
+        run: |
+          PYTHONPATH=src python -m solana_meme_os.mint_v01 EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump --rpc-holders --out-dir .runtime/rpc-verification/EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump
+          test ! -f .runtime/rpc-verification/EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump/report.json || python -c "import json; x=json.load(open('.runtime/rpc-verification/EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump/report.json')); print('source_status',x['source_status']); h=x.get('rpc_token_accounts') or {}; print('count',h.get('returned_token_accounts'), 'slot',h.get('rpc_slot_largest'), 'owner_slot',h.get('rpc_slot_owner_lookup'));print('rpc_err',x['source_errors'].get('public_rpc_token_accounts'))"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v01-real-solana-rpc-holders-once
+          path: .runtime/rpc-verification/
+          if-no-files-found: warn
+          include-hidden-files: true
+          retention-days: 14
