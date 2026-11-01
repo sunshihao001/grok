@@ -1,3 +1,5 @@
+> **2026-11-01 术语适用性更正**：本文件的GMGN-first、K线摘要、Hermes Skill顺序和七Bot假定是历史业务知识词汇，仍可用于追溯旧项目，但**不是当前Grok产品依赖或默认研究方法**。现有目标是链上资金/行为/经济机制的只读解释与监控，不以K线决定判断。结合最新[集成状态](design/system-integration-map.v1.md)和[AI知识导航](docs/ai-knowledge-navigation-guide.v1.md)按实际目标调用专题及程序，不能按旧术语误把程序当已上线。
+
 > **历史术语提示**：本文件保留 Hermes/GMGN-first 时代的工作流词汇作为检索索引，不构成目前程序部署或数据来源的强制要求。当前执行模式以 [项目基线](docs/project-baseline-2026-10-30.md) 为准；GMGN 暂缓为必需来源，OKX/RPC 仍是未验证候选。
 
 # CONTEXT — Solana Meme Workflow OS (Grok Bot Edition)
