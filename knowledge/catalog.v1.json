@@ -1391,6 +1391,72 @@
       ],
       "maturity_basis": "市场发现、风险和净可交易价值的独立评估合同已建立；真实净收益未验证。",
       "knowledge_unit_id": "KX-06"
+    },
+    {
+      "id": "stake-program-capital-path",
+      "title": "Stake程序账户的资产路径、提取权限与经济归因分离",
+      "status": "source_contract",
+      "triggers": [
+        "STAKE_WITHDRAW",
+        "INTERMEDIATE_PROGRAM_CAPITAL_ROUTE",
+        "ACCOUNT_AUTHORITY_CHANGE",
+        "UNEXPLAINED_SOL_RECEIPT",
+        "CROSS_PROGRAM_FLOW"
+      ],
+      "keywords": [
+        "stake account",
+        "stake program",
+        "质押账户",
+        "质押资金",
+        "批量归集",
+        "stake withdraw",
+        "withdraw authority",
+        "提取权限",
+        "账户权限",
+        "资金路径",
+        "程序账户"
+      ],
+      "mechanism": "Solana Stake Program账户的资产转移与委托/提取权限分别存在；同一SOL的历史资金路径可能跨Program Account，不能由普通System Transfer单独复原，更不能以同步提取/共同authority证明同一实际受益人。新时序资本路径需区分资产变动、有效权限与经济控制假说。",
+      "required_evidence": [
+        "原始Stake Program创建/委托/拆分/合并/提取指令及签名Slot",
+        "stake/withdraw authority的历史有效区间与权限变更",
+        "账户前后lamports、租金储备、委托状态及实际收款地址",
+        "同窗口正常质押服务/独立机器人负对照",
+        "跨Mint的非公共资产回路与来源覆盖"
+      ],
+      "alternative_explanations": [
+        "普通质押或托管服务批量操作",
+        "相同API脚本或共享执行/fee payer",
+        "交易所和公共结算地址归集",
+        "一笔特定发行的同步行为并非跨期持续经济网络"
+      ],
+      "inference_limit": "可以确认限定的程序指令/资产路径，但同步操作、共享authority或充值地址并非现实同控的充分证明；第三方2026-10-27报告未由项目逐笔RPC复核。总转出SOL不等于交易利润。",
+      "next_check": "从R008指定的Stake归集案例选原始签名，联合重放stake账户权限/历史与lamport净变，再同System-only及公共质押服务对照，比跨Mint可重复经济角色是否增量存在。",
+      "sources": [
+        {
+          "source_id": "forensic-raw-sol-replay",
+          "repository": "xorextrace/cyberleek-onchain",
+          "commit": "283bec233a6c24849799da6e051e91689a0f187a",
+          "path": "scripts/verify.py",
+          "url": "https://github.com/xorextrace/cyberleek-onchain/blob/283bec233a6c24849799da6e051e91689a0f187a/scripts/verify.py"
+        },
+        {
+          "source_id": "h2w6-sol-balance-method",
+          "repository": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+          "commit": "9a7ad51d56328e91e67e3f531d6744307d0ee68b",
+          "path": "data/trace_h2w6/lib_trace.py",
+          "url": "https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/data/trace_h2w6/lib_trace.py"
+        }
+      ],
+      "domain": "capital_graph",
+      "maturity": "K1",
+      "owner_experts": [
+        "chain",
+        "graph",
+        "review"
+      ],
+      "maturity_basis": "官方Stake Account语义已核对，公开Bitquery案例作为待复核线索；未获得签名级独立原始回放、正常样本或反证验收。",
+      "knowledge_unit_id": "R008"
     }
   ]
 }
