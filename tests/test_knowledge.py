@@ -68,7 +68,7 @@ class KnowledgeTests(unittest.TestCase):
         self.assertEqual(card["maturity"], "K1")
         self.assertIn("STAKE_WITHDRAW", card["triggers"])
         self.assertTrue(card["alternative_explanations"])
-        self.assertIn("实际", card["inference_limit"])
+        self.assertIn("现实同控", card["inference_limit"])
         matched = for_question("Stake Account 提取权限 与质押账户资金路径")
         self.assertIn("stake-program-capital-path", [x["id"] for x in matched["references"]])
 
