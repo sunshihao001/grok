@@ -215,3 +215,13 @@ FnZero Python源码审阅确认`sol_parser/rpc_parser.py`接受RPC JSON并输出
 **真实验收阻断**：本轮本地容器DNS外网连接失败，`onchainos`CLI未安装，无OKX授权会话；项目无需在未授权条件下尝试安装全部OKX交易/支付工具。GitHub连接可审代码而不等于在Grok云电脑运行。官方OKX[holder文档](https://web3.okx.com/zh-hans/onchainos/dev-docs/market/market-token-holder)最多返回100个候选，样本不代表全链持有人，fundingSource只是供应商提示；[cluster文档](https://web3.okx.com/zh-hans/onchainos/dev-docs/market/market-token-cluster-overview)的相同资金来源比率/新地址比率等是统计口径，不是真实控制证据。当前不能宣布V0.1真实Mint成品，也不能拿费用免费额度当已验成本。
 
 **产品路线不变**：先从用户已授权的只读OKX工作流取得真实JSON并跑完报告；若失败才考虑替代成熟数据源，明示费用与覆盖；完成后再做同Mint两时点与Million钱包连续事件。D01（真实交易/owner）和D07（时序观察）是未来需要优先补足的专业知识，不迫使首份快照报告提前拥有完整全市场情报。
+
+## 2026-11-01｜全量65参考资产登记 + 专家集成职责增补（最新）
+
+**本次用户要求**：不能只围绕OKX/Million，也不能让历史的重要程序/论文/实务工具在新会话消失。已从GitHub现有台账、原索引及之前确有记录的材料线索重新恢复项目参考池，**在原`gpt-meme-project-index.v1.json`增加`reference_assets.items`共65项**。5项原先固定`source_repos`保持不变；65项涵盖旧grok/Hermes/meme-/qb-/Why-Solana、OKX/Million/HoldTech/pumpwatch、DEX parser/Carbon/Yellowstone/Raydium/Jito、MadeOnSol、MELT/RED-COHORT/CCS/USENIX、QuantBloc、Froggy/Sputnik和早期工具名称等。每项有REF编号、准确项目身份或未核实标记、URL（证据不足不猜）、主要可复用功能、优先级、主责专家和重访触发条件。精确审查统计为：`SOURCE_AUDITED=17 / REPO_VERIFIED=10 / PAGE_VERIFIED=11 / HISTORICAL_NAMED_ONLY=26 / LINK_UNRESOLVED=1`；**登记不能推出65项已安装、可复用或者市场主张成立**。完整清单和示例见[现有功能复用台账](reference-capability-reuse-ledger.v1.md)最后一节。
+
+**专家职责审查结果**：原21位覆盖Solana技术、经济身份、库存、异常、反证、知识综合和持续故障，但**跨成熟产品整合/许可证/第三方支付安全/依赖/最小可交付验收**没有明确负责人，属于当前V0.1进度无法继续的重要缺口；已在原注册表**最少新增E-L7-03「开源成品集成与产品交付专家」**并与B01/B07既有能力关联，索引`expert_ids`与`counts.specialists`同步为**22**。它不是新Bot、没有新增L/D门类或生产授权；现有专家机制研究方法和项目指令也已同步修订。其他新专家暂不加，未来必须有可证实的专业失败场景再考虑。
+
+**对成品路线的影响**：由E-L7-03主导先审查每个候选的真实可运行端到端价值，E-L0/L1/L3/L6针对来源、钱包/库存、因果和反证独立挑错。**仍以grok为唯一项目、OKX按需Mint完整工作流为V0.1真实数据优先来源、现有`mint_report.py`为最薄可读报告适配**，不是要一口气部署全部参考资产或重新设计系统。新增QuantBloc可用于未来跟单信息差研究，但不能因新资料中途改变首份真实Mint报告的硬阻断：目前本地只做合成演示，OKX授权/真实数据/费用/连续Grok运行尚未验收。
+
+**当前分支状态**：仅在知识Draft PR #14更新索引/专家/台账/方法，在工程PR #16记补充任务；未合并main、不触碰交易、不声称上线。后续每次发现新项目先查`reference_assets`是否已有同一实体，若有就增量更新证据/版本/重访触发；找不到才登记新REF；**历史只有名字的线索不自动提高验证等级**。
