@@ -121,3 +121,25 @@ C05 的分母必须来自独立的**合格机会索引**，不能由“钱包曾
 - [Confidential Balances](https://solana.com/docs/tokens/extensions/confidential-transfer)：金额、余额可能加密，公开Token Account与mint/owner不等于可以公开计算真实金额、库存或资金循环。缺少解密/可审计证明时应标 `AMOUNT_UNKNOWN`（未来协议设计），不是强行估计为0。
 
 **当前未支持/必须保留未知**：实际 v1、Pump.fun/Raydium/Meteora/Jupiter 协议 Swap、Token-2022 扩展精确净到账、机密金额、多层CPI的统一经济动作归并、独立 Mint/slot 完整采集水位、全网事件可得时点。两笔文档样本无法代表这些覆盖。下一轮应优先取得**独立只读RPC**对相同签名的原始回包，记录 `fetched_at/source/commitment`，与官方例子逐字段比较；之后选一个Meme协议及一种Swap按官方源码/IDL增加解析，而不是扩张为“万能DEX交易解码器”。
+
+
+## 2026-11-01｜工程纠偏：复用现成解析器，停止继续手写Solana解码
+
+**决策：PIVOT_METHOD_KEEP_GOAL；不修改现有M01钱包窗口统计，也不删除已跑通的fixture回归。**
+
+前面的 Python `raw_tx_adapter.py` 亲自实现Base58、交易账户下标、v0 ALT、CPI和部分Token指令解码。这属于已有开源组件广泛支持的基础能力，维护成本高；其71项离线测试与少数官方响应回归，并不足以证明应继续把它扩展为Pump.fun/Raydium通用解析器。**从本次开始冻结它为LEGACY_FIXTURE_COMPARATOR；禁止新增v1、DEX、Token-2022手写解码。** 保留现有错误状态、历史fixture和test作为候选库评测的负例/基线。
+
+### 已逐个核查的可复用实现（非已安装）
+
+- **P0/现有知识台账已选首候选：FnZero Python** `0xfnzero/sol-parser-sdk-python@cffb6c808c9b7975fc83428c0613fb4c3fa173b5`，`sol_parser/rpc_parser.py` 与 `examples/parse_tx_by_signature.py` 已有 `parse_rpc_transaction` 的完整调用范例；`docs/cross-language-sync.md` 明确区分 `parse_status` 中执行确认/仅指令解码/无法解析的语义，并解释买单限制价不是实际成交金额。Python v0.10.0；**未在本仓库安装、未对真实签名或本仓库fixtures实跑**。固定源码：https://github.com/0xfnzero/sol-parser-sdk-python/tree/cffb6c808c9b7975fc83428c0613fb4c3fa173b5 。该仓库本次查未见根目录LICENSE文件，README自述MIT，**在直接复制源码/分发前需复核授权边界**；研究其API不表示自动授权复制。
+- **P0对照/替代：Carbon (Rust)** `sevenlabs-hq/carbon@134647d8071675bb316f55c18511e961d4d0361b`，MIT许可证。源码存在 `decoders/pumpfun-decoder/src/instructions/buy.rs`、`sell.rs`、`events/trade_event.rs`、`pump-swap`、Raydium/Meteora及Token-2022解码器；`datasources/stream-message-datasource` 提供有界历史回放，`examples/transaction-crawler-rpc` 已实现按协议地址RPC历史查取，`examples/versioned-decoders` 示范Slot/交易序号切换IDL版本。**仅源码审阅；不应为了使用它立即迁移M01成Rust系统。** 固定源码：https://github.com/sevenlabs-hq/carbon/tree/134647d8071675bb316f55c18511e961d4d0361b 。
+- **结构级权威：Solana官方 `@solana/transaction-introspection`**。官方示例用 `decodeTransactionFromRpcResponse` + `walkInstructions` 处理账户下标、v0/1、outer/inner CPI，再配合Codama生成的 `@solana-program/*` 解析器。它并不直接生成所有DEX的经济BUY/SELL；JS工具的加入应有明确必要，不能同时再维护一份Python自写指令树。文档：https://solana.com/docs/core/transactions/transaction-introspection 。
+
+### 下一步只做一项同数据对照，不造新解析器
+
+1. 用**现有** `fixtures/official-solana-gettransaction-samples.json`、合成未支持Swap/未知版本/Token2022用例和FnZero项目自己的正例（固定原始签名及可得时点），在**隔离无密钥、不接付费服务**的环境试运行锁定版本FnZero，检查是否能读取离线官方RPC数据；不能读取则标实现边界，不偷偷把测试数据改造得“全部通过”。
+2. 保留FnZero原始事件的 `parse_status`、协议、owner、mint、quote、amount、来源、timestamp、instruction位置；比对 `actual executed` 与 `instruction limit`、未解析与失败。**只考虑一层很薄的现成事件→M01 `m01.v1` 字段映射**，不要重复实现指令/DEX解码；精确输入输出要以运行结果为依据，不能先猜。
+3. 与Carbon现成Pump.fun Buy/Sell/TradeEvent相同输入对照，评价FnZero Python的解析覆盖、错误状态、依赖和许可证；**先有比较结论再选一个主要实现**，不把Rust/TS/Python三套编进生产监控。未来若FnZero缺少必要语义且Carbon更可靠，可以改选Carbon。
+4. 输出复用结论 `DIRECT_USE`、`WRAP_EXISTING`、`KNOWLEDGE_ONLY` 或 `REJECT`，保留可追溯源码SHA、授权/费用/安全限制。**不得声称本轮已安装或运行上述第三方SDK。**
+
+本项目真正需要开发的是M01成员演化、C02/C05跨群体条件比较、资金路径分析、审计报告和数据覆盖核对；底层程序的指令解码、版本跟踪、DEX事件识别优先交给持续维护的成熟组件。相关复用状态同步在 `knowledge/system/reference-capability-reuse-ledger.v1.md`（知识Draft PR #14）。
