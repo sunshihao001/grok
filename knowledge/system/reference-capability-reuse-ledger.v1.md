@@ -366,5 +366,11 @@
 
 **本轮证据等级及禁止声明**：已直接恢复全21位专家和D01–D12索引，重新审阅原Hermes `CONTEXT.md`、旧`qb-/sikk_gmgn_token_report.py`、`meme-/SOURCE_OF_TRUTH.md`、当前P3-M01 PR #16的代码/通过的GitHub CI与本轮外部源码；无第三方成品实际安装运行、无用户授权OKX/Helius密钥、无Grok云电脑部署。既往38/38离线Python通过仅为Library旧快照，不是本轮重新执行的实时测试。PR #14/#16仍Draft且**不同base**：#14基于`research/actor-economic-mechanisms-20261030`、#16基于`main`；不能因为分别成功就认为主分支已有合并后的能力。GitHub工程与知识联调验收仍待进行。
 
+### 对现有D01–D12的成熟度审计（不因专家参与自动升级）
+
+已实际读取`gpt-meme-project-index.v1.json`、`whole-domain-atlas.v1.json`和`knowledge/experts/registry.v1.json`：现有**21位专家均为知识型视角而不是已部署Bot**；全域知识图标为`exhaustive_scope_inventory_not_complete_research`；其中**D01（Solana链上基础）和D07（市场行为与时序）在索引仍是`declared_research_gap`**，其余领域目前为`legacy_seeded_unverified`。这说明全领域目录完整，并不意味着能力都已完成或真实市场规律已被证实。因D01交易归属与D07群体时序恰好是当前成品完整性最依赖的两域，必须优先用外部成熟源码/真实数据增强，不能让假“知识完备”降低研究深度。
+
+**业务与D域在原体系内对齐**：Mint的协议/曲线和真实Swap对应D01–D03；关键钱包/资本来源/库存/跨Mint群体对应D04–D07；异常有用性/跟随者可执行优势对应D08–D09；源覆盖、反证和AI专业知识转换对应D10–D12。各域只存**对既有机制的新证据与反证**，本台账负责成品代码/许可/接口/重访条件，`gpt-meme-progress-current.md`只存唯一当前决策与未完成状态。禁止三处复制同一篇评估，确保只有一个产品判断真源。
+
 **本次路线决策**：`CONTINUE_DOMAIN / PIVOT_IMPLEMENTATION_SEQUENCE / REUSE_FIRST / READ_ONLY_ONLY`。先用OKX成熟Token Research取得可核查单Mint事实报告，再决定Million成品的多钱包与持续性是否值得修补；只有发现明确协议语义缺口才拿FnZero/Carbon替代。全市场监控、AI规则自主更新、交易执行全部留到另有实际依据的后续阶段。相关D01–D12新认识只表示提出了可检验专业问题，不改变原有单元研究成熟度。
 
