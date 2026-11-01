@@ -145,6 +145,55 @@ def shortlist(report: dict[str, Any], *, max_wallets: int = 2) -> dict[str, Any]
     }
 
 
+
+def target_mint_observation(raw_tx: bytes | None, mint: str, wallet: str) -> dict[str, Any]:
+    """Token balance presence ≠ swap or buyer proof; never treat latest tx as Mint trade."""
+    unknown = {
+        "status": "UNKNOWN_TARGET_MINT_COVERAGE_NO_COMPLETE_TRANSACTION_META",
+        "mint_in_reported_token_balances": None,
+        "queried_wallet_is_reported_mint_token_owner": None,
+        "target_token_accounts_reported": None,
+        "mint_trade_or_transfer_proven": False,
+    }
+    if raw_tx is None:
+        return unknown
+    try:
+        envelope = json.loads(raw_tx)
+        tx = envelope.get("result")
+        meta = tx.get("meta") if isinstance(tx, dict) else None
+        if not isinstance(meta, dict):
+            return unknown
+        pre, post = meta.get("preTokenBalances"), meta.get("postTokenBalances")
+        if not isinstance(pre, list) or not isinstance(post, list):
+            return unknown
+        matching = []
+        for entry in pre + post:
+            if not isinstance(entry, dict):
+                return unknown
+            if entry.get("mint") == mint:
+                matching.append(entry)
+        if not matching:
+            return {
+                **unknown,
+                "status": "TARGET_MINT_NOT_IN_REPORTED_TOKEN_BALANCES_OF_THIS_BOUNDED_TX",
+                "mint_in_reported_token_balances": False,
+                "queried_wallet_is_reported_mint_token_owner": False,
+                "target_token_accounts_reported": 0,
+            }
+        return {
+            **unknown,
+            "status": "TARGET_MINT_IN_REPORTED_BALANCES_NOT_BUY_OR_CONTROL_PROOF",
+            "mint_in_reported_token_balances": True,
+            "queried_wallet_is_reported_mint_token_owner":
+                any(e.get("owner") == wallet for e in matching),
+            "target_token_accounts_reported": len({
+                e.get("accountIndex") for e in matching if type(e.get("accountIndex")) is int
+            }),
+        }
+    except (ValueError, TypeError, AttributeError):
+        return unknown
+
+
 def run(report_dir: Path, out_dir: Path, *,
         max_wallets: int = 2,
         request_fn: Callable[..., Any] | None = None) -> dict[str, Any]:
@@ -174,6 +223,8 @@ def run(report_dir: Path, out_dir: Path, *,
                 "first_signature": proof["rows"][0]["signature"] if proof["rows"] else None,
                 "raw_sha256": proof["raw_input_sha256"],
                 "observation": proof["transaction"]["execution_observation"],
+                "target_mint_observation": target_mint_observation(
+                    raw.get("wallet-first-transaction-raw.json"), report["mint"], wallet),
                 "signature_page_not_full_history": True,
                 "error": proof["transaction"]["error"],
             })
@@ -181,6 +232,7 @@ def run(report_dir: Path, out_dir: Path, *,
             outcome.append({**candidate, "rpc_status": "RPC_UNAVAILABLE_NOT_ZERO_ACTIVITY",
                             "signatures_returned": None, "first_signature": None,
                             "raw_sha256": {}, "observation": None,
+                            "target_mint_observation": target_mint_observation(None, report["mint"], wallet),
                             "error": str(exc)[:180]})
     payload = {
         "schema_version": "grok.mint_candidate_wallet_probe.v0",
