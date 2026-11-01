@@ -32,3 +32,5 @@ Original topic files to inspect only when applicable:
 - `knowledge/system/gpt-meme-project-core.v1.md`
 - `knowledge/system/knowledge-navigation.v1.json`
 This is knowledge retrieval, not authorization to install bots, run a paid API or infer a trade.
+
+- 机制研究与反证的原方法：[expert-mechanism-research-method.md](../../knowledge/system/expert-mechanism-research-method.md)；按问题选择阅读，不随每次调用全部预加载。
