@@ -12,18 +12,3 @@ jobs:
           python-version: '3.12'
       - name: Run offline tests
         run: PYTHONPATH=src python -m unittest discover -s tests -v
-      - name: One-time cross-Mint public API contrast (no keys/trading)
-        run: |
-          for mint in EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump FdKdpz11GsTofLaNiddrhxrsE4APZYSSfLFqQ9YKpump; do
-            echo "=== read-only Mint public snapshot: $mint ==="
-            PYTHONPATH=src python -m solana_meme_os.public_pair_report --mint "$mint" --out-dir ".runtime/v01-$mint" || true
-            test ! -f ".runtime/v01-$mint/report.md" || head -55 ".runtime/v01-$mint/report.md"
-          done
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: v01-public-mint-snapshots-20261101
-          path: .runtime/
-          include-hidden-files: true
-          if-no-files-found: error
-          retention-days: 30
