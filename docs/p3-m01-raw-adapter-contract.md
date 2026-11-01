@@ -143,3 +143,13 @@ C05 的分母必须来自独立的**合格机会索引**，不能由“钱包曾
 4. 输出复用结论 `DIRECT_USE`、`WRAP_EXISTING`、`KNOWLEDGE_ONLY` 或 `REJECT`，保留可追溯源码SHA、授权/费用/安全限制。**不得声称本轮已安装或运行上述第三方SDK。**
 
 本项目真正需要开发的是M01成员演化、C02/C05跨群体条件比较、资金路径分析、审计报告和数据覆盖核对；底层程序的指令解码、版本跟踪、DEX事件识别优先交给持续维护的成熟组件。相关复用状态同步在 `knowledge/system/reference-capability-reuse-ledger.v1.md`（知识Draft PR #14）。
+
+## 2026-11-01｜外部DEX解析器复用对照（研究审计，未改代码）
+
+本轮从GPT Library历史P3-M01快照重组Python环境，本地实际跑通38项离线测试和`raw_tx_adapter → wallet_batch_monitor` CLI。**该结果并不是本分支最新71项全部本地复测**；本PR当前head的`monitor-tests`在GitHub CI中成功，仍与SDK第三方测试无关。
+
+从公开源码审阅FnZero Python v0.10.0：`sol_parser/rpc_parser.py`的`rpc_get_transaction_result_dict_to_response`接受结构化RPC JSON，`parse_rpc_transaction`返回`(events,error)`，失败tx不发成功事件；多协议回归案例包括ALT/签名与CPI。对照路径适合包成**可选只读解析适配器**，但其转换函数此路径将pre/post token balances置空，不能假定钱包owner、实际结算余额和完整报价都可自动获得；需保留原始RPC证据。SDK源码没在本机安装：联网包拉取DNS失败，许可证仍需核查。
+
+同类备选有MIT Go `DefaultPerson/solana-dex-parser-go`（Jupiter路由聚合、v1、Bot标签、交易/费用，注意默认TryUnknownDEX启发式）和MIT TS `cxcx-ai/solana-dex-parser`；Helius Parsed Events为付费可选基准，不在无授权时调用。对比内容持久记录在知识分支`knowledge/system/reference-capability-reuse-ledger.v1.md`（知识Draft PR #14）。
+
+**未来最小兼容合同**：输入同一getTransaction＋外部采集`available_at`；成功Swap只有目标Mint、明确owner、quote mint/raw amount、签名/指令证据齐全才写入M01 BUY/SELL；失败/未知、多跳与CPI不得伪装成多笔真实成交；原M01的独立TRANSFER和funding保留。明确记录解析器版本、许可证、依赖、数据覆盖及与当前baseline差异，再决定接入。**本轮没有修改适配器运行代码，也没有声称FnZero已集成。**
