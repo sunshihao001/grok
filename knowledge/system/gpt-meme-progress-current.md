@@ -207,3 +207,11 @@ FnZero Python源码审阅确认`sol_parser/rpc_parser.py`接受RPC JSON并输出
 **暂不采用Million作为首版母体的技术事实**：其`AppModule`、`LiveModule`、`OpportunitiesModule`直接/间接依赖`TradingModule`；`EXECUTOR=local`签名交易且default paper有自动仓位逻辑，不能简单删去交易按钮视为安全；`LiveEvent.signature @unique`和Webhook首钱包`break`还造成群体观察漏记。全量fork只读化的实际修改面比调用OKX现成Token Research宽。此结论仍可被未来安全运行试验推翻。
 
 **下轮最值行动**：直接在可用联网隔离环境以**真实Mint**运行已安装且获授权的OKX CLI，将其原始`{ok,data}`保留，调用新`mint_report.py`生成可追溯的Markdown/JSON，实测实际API成本/字段/失败并判断是否进入`V0.1 REAL-MINT REPORT`。若无法运行则继续完善离线契约验证、暂不启动新功能开发；21专家只针对输出中数据/经济语义的关键差异介入。
+
+## 2026-11-01｜V0.1业务摘要升级：12项测试通过，真实数据接入仍待授权
+
+**运行成果（新增）**：在工程Draft PR #16继续复用原`mint_report.py`薄适配层，不新建系统。现在能从符合OKX官方字段契约的`token-research`JSON中生成首屏业务摘要：返回样本内关键钱包、持仓原始字符串、fundingSource关系候选、Cluster异常研究指标、TopTrader样本行数、Dev/Bundle是否有供应商数据、请求/行情时间的来源路径；原数据完整保留，任何资金边或聚类均不认定同控。使用新合成字段样例实际生成Markdown和JSON，新增12/12单测通过；与本地已保留的**旧Library版**P3-M01联合50/50单测通过（不是对最新GitHub整仓完整重跑）；源码/测试/fixture已在PR #16落库并逐个读回相等。**仍为合成演示，没有任何真实Mint的OKX API返回**。
+
+**真实验收阻断**：本轮本地容器DNS外网连接失败，`onchainos`CLI未安装，无OKX授权会话；项目无需在未授权条件下尝试安装全部OKX交易/支付工具。GitHub连接可审代码而不等于在Grok云电脑运行。官方OKX[holder文档](https://web3.okx.com/zh-hans/onchainos/dev-docs/market/market-token-holder)最多返回100个候选，样本不代表全链持有人，fundingSource只是供应商提示；[cluster文档](https://web3.okx.com/zh-hans/onchainos/dev-docs/market/market-token-cluster-overview)的相同资金来源比率/新地址比率等是统计口径，不是真实控制证据。当前不能宣布V0.1真实Mint成品，也不能拿费用免费额度当已验成本。
+
+**产品路线不变**：先从用户已授权的只读OKX工作流取得真实JSON并跑完报告；若失败才考虑替代成熟数据源，明示费用与覆盖；完成后再做同Mint两时点与Million钱包连续事件。D01（真实交易/owner）和D07（时序观察）是未来需要优先补足的专业知识，不迫使首份快照报告提前拥有完整全市场情报。
