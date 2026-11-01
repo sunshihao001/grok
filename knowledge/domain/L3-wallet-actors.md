@@ -208,3 +208,13 @@ KOL 提及、社群消息、热门榜排名、推文传播、交易量、持币�
 Million整套服务适合钱包发现→订阅→后续活动→资金关系，但源码当前`LiveEvent.signature @unique`与首个命中钱包即退出，使一笔多人参与的交易只留一个被订阅钱包视角；D07群体时间序列需要**同一签名按不同实际钱包角色/指令位置保留多行证据**，而不是只计唯一签名。此语义对D04 Sniper、D05资金关系、D06库存和D07异常均是共同前提；应先在只读成品验收中修复或隔离该问题，不能用单次统计补成“庄家群体”。D06库存必须和当前Holder余额、已确证买卖、Token普通Transfer、LP/Pool资产拆开；两次快照差额不等于已确证卖盘。
 
 来自[OKX官方费用](https://web3.okx.com/zh-hans/onchainos/dev-docs/market/market-api-fee)的现实限制：免费订阅档不含WS，按需Premium报告与24小时持续监控属于不同成本路径；这也是为什么应先验收**单Mint按需报告**，随后才评估持续订阅。此段为功能与专业认识连接，不表示我们的D04–D07已有真实链上分类器或Mint库存重建。
+
+## 2026-11-01｜联合专家对外部成品库存与发行时间语义的修正
+
+本轮完整项目审查（21位专家全覆盖，具体发现见[统一复用台账](../system/reference-capability-reuse-ledger.v1.md)）提炼出两条会直接改变D04–D07判断的实际源码机制：
+
+**D06库存口径**：Million `apps/api/prisma/schema.prisma::RosterPosition` 使用`qty Float`和`source=analysis|live`，意图按分析快照+实时增量记录钱包库存。这是可复用的**持续账本思路**，但单靠浮点数和可能不完整的实时事件无法保证任意Token的原子金额/Token账户owner关系与漏帧修复。对一个Mint的两时点，应分别展示TokenAccount总余额、owner归并、池LP/托管排除、已确认Swap净增减、普通Transfer和未知差额；不能把报告的群体库存当成经济主体真实可卖库存。**必须保留原始整数数量及decimals语义，并在资产净变化无法解释时输出UNKNOWN**，具体实现仍优先调用成熟余额索引而非自建通用索引器。
+
+**D04/D07发行人历史**：pumpwatch `code/creator_reputation.py::record_launch` 的`seen_at=int(time.time())`写的是监控本地首次入库时间，24h/7d统计以它聚合。实时记录可以是有效观察频率的代理，但RPC断线后的补录不能被宣称为当时链上创建频率。需把`chain_event_time`与`first_seen_at`在数据解释中分开；creator标签仍需识别代理发币/公共程序/权限所有者。
+
+这两条是对外部已实现成品的源码语义审查，不是本项目有了真实链上库存对账、开发者行为分类或历史回放结果。保持原D04–D07知识结构和实证等级，禁止从第一报告中的供应商Cluster标签直接生成同控身份。
