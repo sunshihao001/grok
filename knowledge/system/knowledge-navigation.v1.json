@@ -153,6 +153,11 @@
       "id": "vendor_handoff",
       "path": "src/solana_meme_os/vendor_event_handoff.py",
       "role": "Read-only vendor-label and pool-infrastructure evidence triage to pending Grok task; does NOT invoke a Bot."
+    },
+    {
+      "id": "mint_wallet_probe",
+      "path": "src/solana_meme_os/mint_candidate_wallet_probe.py",
+      "role": "Verified vendor and RPC token-account owner hints to at most two bounded public wallet signature/raw-tx probes; never economic identity or full buyer discovery."
     }
   ],
   "routes": [
@@ -242,7 +247,8 @@
         "holder",
         "pool",
         "evidence",
-        "vendor_handoff"
+        "vendor_handoff",
+        "mint_wallet_probe"
       ],
       "reference_ids": [
         "REF-032",
@@ -285,7 +291,8 @@
       "engineering_ids": [
         "holder",
         "event",
-        "wallet_rpc_sample"
+        "wallet_rpc_sample",
+        "mint_wallet_probe"
       ],
       "reference_ids": [
         "REF-003",

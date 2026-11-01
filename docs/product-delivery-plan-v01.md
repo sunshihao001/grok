@@ -129,3 +129,10 @@ AI承担产品负责人和工程整合者的工作：根据用户的目标、当
 - **源码与业务取舍**：Million有原生Mint→接收Token且付出报价资产的买家候选→预览质量→扩展钱包→持续状态反馈闭环，但整个API还依赖Paper/Live交易模块，无认证的本地API与`EXECUTOR=local`切换风险使其不适合直接暴露给Grok。优先作为可选、隔离的只读发现服务，不复制它的大量交易业务代码。LiveFeed按签名唯一事件和webhook第一匹配钱包处理，有漏记同交易多钱包视角风险；不能把整个LiveFeed账本当成完整经济事实。
 - **数据费用**：源码`crawler.service.ts`记载Enhanced调用按10积分计、历史发生预算计算失准；Discovery一个GET可能触发多个钱包预览请求。实际Helius 2026现行计价、免费额度及个人账户授权仍未核查，未经额度确认不得自动开爬虫、深度扫描或启用持续订阅。
 - **下一验收门槛**：有隔离的数据凭据和限额后，先用Million现成`GET /discovery/token`按一个真实Mint限量获取原始买家候选，独立排除池/路由并标注历史截断；再仅选一个候选检查Funding/时间窗，记录所有网络请求及实际费用。若仍无Key，继续从已有公开链上记录验证地址语义，但**不要声称Million发现已接通**。
+
+### 2026-11-01｜从已验Mint到钱包候选的薄集成（不能称完整Million发现）
+
+- **现成能力复用**：连接已存在的\`mint_v01.py\`、\`public_token_accounts.collect\`、\`public_rugcheck_report.compile_report\`与\`public_wallet_rpc_sample.sample\`；新\`mint_candidate_wallet_probe.py\`只负责原始供应商SHA校验、排除已知Pool/Vault、从Creator/RPC Owner/供应商Holder中最多选2个不重复地址、每地址读取最多1个finalized签名和对应原始交易，并生成缺失与费用边界明确的JSON。**不新增DEX解析算法、钱包发现算法或新知识框架**。
+- **候选性质**：Creator来源为缓存供应商字段，Top Token Account的链上Owner提示也可能是池PDA、托管服务或程序；地址出现于交易不等于它进行了Meme买入。同一报告跨源非同slot、Top20不等于全部Holder。若公共RPC返回429，报告必须标\`RPC_UNAVAILABLE_NOT_ZERO_ACTIVITY\`，不是“无交易”。
+- **原始证据**：入口为本文件已有\`Mint\`命令输出目录，各供应商原始JSON必须与报告的SHA256匹配才允许生成钱包取证；每份RPC原始签名和交易响应带哈希、地址及获取时间。默认2地址；没有供应商候选时返回空候选和\`UNKNOWN\`，不能编造结果。无密钥、不授权付款或自动下单。
+- **专项验收**：[一次真实网络运行](https://github.com/sunshihao001/grok/actions/workflows/one-shot-mint-to-wallet-public-evidence.yml)，脚本仅调用上述源与公共RPC；成功状态还需检查结果里实际取得的候选和签名数量。测试发现允许缺口时必须继续记录UNKNOWN。**这不替代Million在有Helius授权条件下的原生Mint买家发现**，也不能直接交给M01作为买卖事件。

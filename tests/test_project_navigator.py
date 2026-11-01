@@ -16,7 +16,7 @@ class NavigationTests(unittest.TestCase):
         result = nav.audit(self.data)
         self.assertTrue(result["ok"], result["errors"])
         self.assertGreaterEqual(result["local_paths_checked"], 15)
-        self.assertEqual(result["remote_engineering_paths_unchecked"], 10)
+        self.assertEqual(result["remote_engineering_paths_unchecked"], 11)
 
     def test_integrated_checkout_connects_existing_knowledge_to_real_code(self):
         # Source file existence is NOT live API, financial validity or Grok execution.
