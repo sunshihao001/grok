@@ -218,3 +218,13 @@ Million整套服务适合钱包发现→订阅→后续活动→资金关系，�
 **D04/D07发行人历史**：pumpwatch `code/creator_reputation.py::record_launch` 的`seen_at=int(time.time())`写的是监控本地首次入库时间，24h/7d统计以它聚合。实时记录可以是有效观察频率的代理，但RPC断线后的补录不能被宣称为当时链上创建频率。需把`chain_event_time`与`first_seen_at`在数据解释中分开；creator标签仍需识别代理发币/公共程序/权限所有者。
 
 这两条是对外部已实现成品的源码语义审查，不是本项目有了真实链上库存对账、开发者行为分类或历史回放结果。保持原D04–D07知识结构和实证等级，禁止从第一报告中的供应商Cluster标签直接生成同控身份。
+
+## 2026-11-01｜真实Mint跨源反证：持仓Owner与PumpSwap池地址匹配
+
+**实际供应商数据与精确地址相等（非链上RPC独立确认）**：Mint `EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump` 的RugCheck缓存报告中，第1条Token Account为`BYonfuCMtQL9rLeYLhLar7Jon87Nwj7PyurLFj6sNx3i`，供应商占比约5.877731%。其报告的Owner候选`81jgrpTMsQWc1rGWXutyYWW27ruiAtehUZwLydcHHWDB`与DEX Screener返回的PumpSwap池地址**完全一致**。真实在线记录及原始响应SHA见[工程证据文件](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/evidence/v01-pool-vault-holder-cross-source-2026-11-01.md)。
+
+**D04/D05/D06机制**：Token Account、Token Owner、池/Vault、LP经济权利、资金出资人和最终受益人不能画等号。跨源相等只支持`POOL_RELATED_CANDIDATE`，不支持“单一鲸鱼持有5.88%”或“庄家控制5.88%”。普通自由持仓集中度应暂时单列该候选，不自动扣减供应量或推断控制权，需Solana RPC及池状态核对；此次公共RPC请求遭遇429。
+
+**D07与旧资料的改进**：Hermes `learning/10-12.md`认为角色必须由行为支持，其`phase1-skill-04-wallet-structure.md`的同Funder、5分钟阈值只能作为筛选启发式，不是本样本的协同交易证据。旧qb的关键地址矩阵与基础设施注册表本就分开；现有报告应继续保留此区别。RugCheck的缓存detectedAt与实际拉取时间也不同，不能当同一slot交易时钟。
+
+**工程闭环**：PR#16的`mint_v01.pool_related_holder_observations`添加严格地址全等的报告提示及缺源/不匹配负例，不启用交易或自动经济归因，GitHub离线CI本轮120项通过。
