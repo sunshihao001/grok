@@ -16,7 +16,7 @@ class NavigationTests(unittest.TestCase):
         result = nav.audit(self.data)
         self.assertTrue(result["ok"], result["errors"])
         self.assertGreaterEqual(result["local_paths_checked"], 15)
-        self.assertEqual(result["remote_engineering_paths_unchecked"], 8)
+        self.assertEqual(result["remote_engineering_paths_unchecked"], 10)
 
     def test_wallet_funding_and_batch_question(self):
         found = nav.shortlist("一批钱包同时转账，可能有同源资金吗", self.data, limit=5)
