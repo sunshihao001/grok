@@ -66,6 +66,34 @@
 
 **下一项唯一有价值的工作**：在可联网、Node24、隔离且不暴露端口的环境，以Million成品为整体只读候选，不启用EXECUTOR=local、不提供签名密钥。先跑它自己的无交易健康检查，针对经允许的公开Mint调用GET /discovery/token/:mint、GET /live/status、GET /live/flows、GET /funding/:address及只读MCP get_flows，保存输入输出/错误/真实可得时点/费用。暂不自动调用钱包导入、订阅、重建owners或更改规则。重点测试**一签名两被观察钱包**、缺失历史、空区块/v1、公共Hub、CPI/转仓非成交与WS静默。这一项才能判定WHOLE_APP_RUN / WRAP_EXISTING / MODULE_ONLY / REJECT，不能先写新解析器或新Mint监控程序。
 
+### 2026-11-01｜固定 Mint 业务链代码审计：现成功能与不可直接信任的结果
+
+**本轮验收问题**：以一个真实公开 Meme Mint 作为只读请求对象，沿“Mint→关键钱包→追踪交易→资金/群体→不确定性解释”核查现有系统源代码。示例目标选自 Why-Solana [`docs/RESULTATS.md`](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/9a7ad51d56328e91e67e3f531d6744307d0ee68b/docs/RESULTATS.md) 列出的 Mint `87QChghgFr2XBNumi2Tg1MJCWHLqoTTT5KThtnDspump`，**仅为未来同输入对照锚点**；当前没有通过RPC/Helius独立重新读取该Mint，也不能使用作者研究结论当我们的真实观测。
+
+| 业务步骤 | **具体已有代码和可调用接口**（不是自造） | 复用审计结果 / 风险 |
+|---|---|---|
+| ① Mint 找关键钱包 | Million `GET /api/discovery/token/:mint?minSol=...&mode=recent\|deep` → `discovery.service.ts::find/buyersOf` → Helius `fetchHistory`，排除已知AMM地址、按买入SOL排序、限制候选和预览；OKX `workflow token-research/new-tokens` 可直接提供安全/Holder/SM字段。 | **WHOLE_APP_SOURCE_PRESENT**，但Million的`buyersOf`由Token入账和SOL/稳定币支出近似构造买入，不是对每一笔Swap的协议级执行确证；`fetchHistory`按页截断，不能说找到“全部首买”。需要Helius密钥和实际账单，未调用。 |
+| ② 纳入观察与持续交易 | Million `POST /api/wallets/import`、`PUT /api/wallets/:address/subscribe` → `live-feed.service.ts` WebSocket/Webhook→`GET /api/live/events`/`status`。OKX `workflows/wallet-monitor-ws.md` 已有 `onchainos ws start/poll/list`。 | **WORKFLOW_SOURCE_PRESENT**：Million常规WS只关注一组订阅钱包；`HELIUS_API_KEY`缺失则不连接。Webhook遍历命中钱包，但因`LiveEvent.signature @unique`、`if(existing)break`和`break // first touching wallet claims it`，**同一签名涉及多个被追踪钱包时只保留一个钱包视角**。对C02同Tx参与人数/同步执行是**关键阻断**；不可把它的event计数当成真实多钱包数。 |
+| ③ 群体活动流/候选关联 | Million `GET /api/live/flows?minutes=15` → `flows.service.ts` 汇总已保存的 buy/sell、wallet、ownerId、SOL；`GET /api/funding/:address` → 真实SOL转账对手；`POST /api/owners/rebuild` → 资金/fee-payer候选边+coentry参考边+hub排除。HoldTech `/api/deep-scan`、`/api/holder-overlap` 提供同Slot和持有者交集。 | **BUSINESS_ANALYSIS_SOURCE_PRESENT**：Million已主动禁止`coentry`作为union-find桥；但`funding/feepayer`边仍是启发式，`ownerId`重建不稳定，不能叫verified same controller。Million `orchestratedDeltas`还会在fee payer下关联外部executor资产变动，需核验真实Token Account owner。 |
+| ④ 连续窗口/真正“没有活动” | Million `live-feed.service.ts` 保留`LiveEvent`最多**15分钟**或**5000行**，每5分钟清理；`flows`聚合最近窗口。Grok现有`wallet_batch_monitor.py`产生1/5/15分钟换人、增减、暂停候选并保留`source_refs`、`data_status`。 | Million的feed是**展示窗口，不是历史审计记录**；没有当前可核实的按slot完整采集水位，无法对C05证明“有机会但未交易”。C02应保留原始逐钱包事件与历史as-of cohort。现有M01对此有独有的研究合同，但只支持离线标准化fixture，不能宣称已接Million。 |
+| ⑤ 可解释只读输出/AI接口 | Million `GET /api/opportunities/decisions`、`/api/live/flows`、`/api/wallets/cohorts`和`packages/million-mcp`14个工具；`.claude/skills`有命令式说明。pumpwatch `code/{pump_watch,outcome_tracker,creator_reputation}.py` 提供发行事件+SQLite持续记录，Why-Solana研究脚本提供资金图与反例。 | **PRESENT_WITH_SCOPE_GAPS**：Million决策日志解释的是**交易规则/纸面决策**，不自动具备本项目要求的资金控制、正常反例、来源可得时间的完整专家解释。MCP中混有`update_rules/import_wallets/set_wallet_subscription`等状态修改工具，不能宣称默认是只读接口；应使用只读方法白名单。 |
+
+**特定竞品问题与部署边界，已核实源码**：
+
+- **Million安全/运行**：[AGENTS.md](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/AGENTS.md)和[部署指南](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/docs/GUIDE.md)要求Node24、Helius Key；本审计容器仅Node22且没有Github下载网络/Helius密钥，无法运行完整成品或测试Grok云电脑。其HTTP API**无身份认证**、Web前端对局域网开放；绝不直接公网暴露。真实交易仅在`EXECUTOR=local`选择，但默认Paper Executor仍会自动产生**模拟交易/资金状态**，所以默认paper≠严格只读；本项目目标为严格只读，不能未经隔离直接启动Agent或MCP。未经批准不得支出API额度。
+- **Million事件内容**：`apps/api/prisma/schema.prisma::LiveEvent`只保存`wallet,signature,ts,kind,mint,sol,usd,createdAt`，缺少完整Token Account owner/authority、instruction path、抓取覆盖证明，`createdAt`也不能自动等同可交易者当时真实取得时点；`private processTx`以净Token变动、SOL变动近似买卖。能复用**持续数据流和看板**，但原始事件并不能原样作为C02/C05真值。
+- **HoldTech**：[holder-overlap/route.ts](https://github.com/co-numina/holdtech/blob/a75e214bf1ee0a8803eb7d93336be98c481c2db9/app/api/holder-overlap/route.ts)底层`getHolders`虽能分页，上层实际调用`getHolders(m, 200)`——**每币至多200个Token账户持有人**、最多展示50个重合钱包；交集百分比不能冒充所有持有者。deep-scan将`SWAP/TRANSFER/UNKNOWN`合并为买方群候选、用`feePayer`识别买家；`getTransaction`还限制v0。源码含疑似硬编码第三方密钥，**不复制/使用/复述密钥值**，严禁直接运行原样或导出其配置。
+- **OKX**：[wallet-monitor-ws.md](https://github.com/okx/onchainos-skills/blob/73904b636a0f022dcc13b6d7a0dd2ed3b3195f25/workflows/wallet-monitor-ws.md)已有WS会话操作命令；CLI字段`--wallet-addresses`可接受较多地址，但该业务workflow表中另列默认Max10，实际服务配额/计费/功能要用账户环境另核。不安装全套钱包、支付或交易技能，不用“read-only wallet monitor”暗中启动有付款授权的操作。
+- **pumpwatch**：[pump_watch.py](https://github.com/cinder-security/pumpwatch/blob/156a91ab63740ab0ce8700434ff33844d00de519/code/pump_watch.py)内有429退避/重试与并发控制；`outcome_tracker.py`按币龄分级检查后续状态；`creator_reputation.py`将发行历史保存在SQLite。它是**单独的新币/发行者监控成品**，不等于跨钱包群体系统；需要RPC HTTP/WS才能运行真实监测。
+- **Helius实际成本**：Million `crawler.service.ts`按内部常量给Enhanced调用记账，但官方[费用/积分页](https://www.helius.dev/pricing)说明积分规则按API种类和产品更新；另有[Helius开源文档](https://github.com/helius-labs/core-ai/blob/main/helius-plugin/skills/build/references/enhanced-transactions.md)给出更高的Enhanced调用示例积分。**内部预估与现行供应商计费须独立对账，不能据README宣称免费持续监控**。本轮未调用付费接口。
+
+**本轮实际执行的隔离测试（本仓库旧原型，不是外部成品）**：从原已生成`/mnt/data/m01_proto_offline_20261031.zip`释放到随机`/tmp`目录，不联网执行`PYTHONPATH=src python3 -m unittest discover -s tests`：**14项通过**；另用自带`fixtures/wallet-batches-demo.json`执行M01 CLI，输出`FIXTURE_RESEARCH_ONLY`、`no_trading=true`；1分钟窗口产生3个示例（买家增/量减、全换员、短时停顿）候选，5/15分钟无该类型候选。**它是旧归档快照的14项测试，不是当前PR#16包含的71项最新测试，也不是任何真实Mint或Million的运行证明。**没有执行外部应用或调用RPC。
+
+**成品复用决定（本轮）**：**`MILLION=WHOLE_APP_REFERENCE_FIRST; READ_ONLY_RUN_BLOCKED`**（有完整源码和端点、尚未可安全运行；严格只读与多钱包同Tx归属未满足）；**`HOLDTECH=SELECTIVE_BUSINESS_REUSE_WITH_SECURITY_HOLD`**；**`PUMPWATCH=READY_TO_EVALUATE_STANDALONE_READONLY_WORKFLOW`**；**`OKX=EXISTING_READONLY_WORKFLOW_UNVERIFIED`**；**`WHY-SOLANA=REVIEW_ONLY`**。不要将这些标签解读为已安装/取得最新数据或验证统计正确。
+
+**只需做的下一项真实交付**：在可联网、可隔离且有明确可用只读数据额度的运行环境，**先做Million原生能力端到端只读验收**，输入上述固定Mint，返回原生`discovery`、钱包`funding`、`live/status`、`live/flows`、候选关系与来源/截断状态；事先确保交易模块不能签名、外部API不对公网开放且模拟执行副作用隔离。对照OKX现成WS及HoldTech同Mint接口。**如果缺乏这些前提，停止在源码审查结果处，不构建另一个模拟的完整系统来冒充验收。** 先判断已有功能能否按需组合，再考虑薄接口或必要业务增量。
+ 
+
 ## 1. 本轮已审外部来源与固定版本
 
 | 参考项目与源码版本 | 核查范围 | 复用/许可边界 |
