@@ -159,3 +159,13 @@ FnZero Python源码审阅确认`sol_parser/rpc_parser.py`接受RPC JSON并输出
 独立三组合成规则反例说明HoldTech现有same-slot + fee payer条件可能在纯TRANSFER/UNKNOWN或独立买家场景产生Bundler候选；**只运行规则重现而非HoldTech本身**。更新持久功能台账`knowledge/system/reference-capability-reuse-ledger.v1.md`，现在不改变P3-M01业务能力/工程代码，不引入私钥、收费源或签名。
 
 **方向**：REUSE_FIRST继续，核心是找到对真实交易负例可靠的成熟DEX解析实现，制定最小 M01 可选桥接，而不是扩大自制解析器。下一首选：在具备SDK依赖与授权许可的可联网隔离环境执行FnZero Python与M01同输入对照；若其准确性/许可不达标，转向MIT Go/TypeScript项目。并行仅做pumpwatch/HoldTech不依赖私钥的具体功能审查，避免项目失焦。
+
+## 2026-11-01｜当前优先任务更正：先验收成品Mint报告，再做长期只读监控
+
+**纠正上段仍以FnZero优先的时间顺序**：经本轮实际重新读取OKX `cli/src/commands/workflows/token_research.rs`，`onchainos workflow token-research --address <mint> --chain solana`有已经写成的Rust CLI整套Token Report→Holder/Cluster/TopTrader/SM→条件性Dev/Bundle链路；失败保持null。**第一项完整业务最短路径应先验证OKX整套单Mint只读报告，而不是先安装第三方DEX解析器。** FnZero保持待触发的交易解码候选。
+
+**成本新增关键约束**：OKX官方当前Free订阅 Basic/Premium各100K/月、**不含WS**；Starter $99/月支持WS。Helius Free 1M credits/月/10 RPS；实时运行和API计费需实际授权确认，不自动支付。Million全成品（Node24）有自动Paper及可切至`EXECUTOR=local`的真实交易执行，不能将普通安装等同严格只读。源码`LiveEvent.signature @unique`+webhook首命中退出会丢同签名多钱包视角；本轮用内存SQLite独立复现UNIQUE第二条插入失败（**不是Million本体测试**）。
+
+**本轮实际本地复验**：基于之前Library版P3-M01，Python 38/38单测通过，并成功运行raw_tx_adapter→wallet_batch_monitor离线合成Token Transfer流；仍`FIXTURE_RESEARCH_ONLY`，既无真实链上数据也无Grok云电脑验收。当前不能执行OKX/Million在线成品（Node版本、授权服务密钥和环境限制）。功能台账[新增成品优先与成本/安全/多钱包约束](reference-capability-reuse-ledger.v1.md)，原S1阶段和PR #14/#16 Draft状态未升级。
+
+**下一轮唯一优先执行任务**：在有已授权且可审计的OKX只读Key、禁用自动支付的隔离环境，对固定Mint执行`onchainos workflow token-research`、保存逐接口原始响应/费用/时点/UNKNOWN；若无法验证权限，在离线环境检查工作流自身的Rust unit tests及假输入输出。再基于同Mint决定Million是安全部署整套、封装只读子系统还是仅作知识参考；只因实际经济事件缺口才转向FnZero/Carbon，禁止把问题退化成持续自研解析器。
