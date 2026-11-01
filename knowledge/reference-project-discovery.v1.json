@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "as_of": "2026-10-31",
+  "as_of": "2026-11-01",
   "status": "DISCOVERY_REVIEW_NOT_DEPLOYED",
   "principle": "An open-source code sample, an article and a verified Solana claim are different evidence categories",
   "anchor_project": "sunshihao001/Why-Solana-Memecoins-Are-Over",
@@ -342,6 +342,35 @@
       "grade": "B_ABSTRACT_METHOD_ONLY",
       "adopt": "Graph investigation UX, entity attribution tags with provenance, path query semantics.",
       "limits": "Current advertised supported chains not Solana; do not recommend as direct Solana backend or assume integration."
+    },
+    {
+      "id": "CASE-STAKE-001",
+      "kind": "third_party_onchain_investigation",
+      "name": "Bitquery stake-account SOL sweep case (2026-10-27)",
+      "url": "https://bitquery.io/investigations/solstice-memecoin-bundling",
+      "stage": "PUBLIC_REPORT_AND_PROTOCOL_READ",
+      "evidence": "Source author's case report (no original case transaction replay); Solana official stake-account docs verified",
+      "focus": [
+        "Stake Account Withdrawal",
+        "non-System SOL flows",
+        "historical withdrawal authority",
+        "synchronized collection",
+        "service-hub alternatives",
+        "risk of overstated common-owner inference"
+      ],
+      "roles": [
+        "chain",
+        "data",
+        "graph",
+        "wallet",
+        "inventory",
+        "statistics",
+        "review"
+      ],
+      "grade": "B_MECHANISM_DISCOVERY_C_ACTOR_ATTRIBUTION",
+      "adopt": "Treat Stake Program capital path and historical authority as a new verification surface, not a pre-labeled manipulation group.",
+      "limits": "Bitquery source-provider is commercially involved; raw transaction records were not independently replayed; synchronized sweep and exchange deposit-address overlap are not sufficient proof of common beneficial owner; swept SOL total includes principal; no claim about real people's conduct.",
+      "research_case": "knowledge/research/R008-intermediate-program-capital-route-stake-v1.md"
     }
   ]
 }
