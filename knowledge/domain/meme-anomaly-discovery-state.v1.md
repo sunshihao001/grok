@@ -236,3 +236,49 @@
 需要能推翻/限定判断的来源：Million后续commit是否已修订保留窗口/事件键；是否存在我们尚未审读的外部持久事件流/数据库归档；真实部署下2钱包同signature与60min事件窗口的可重复执行；观察名册进入/退出与掉线审计记录。未经这些验证，不计算真实漏报率和Alpha，不指控作者恶意行为。
 
 **知识关联**：D01事件原语；D04角色与观察范围；D05资金边；D07时间群体；D10可观察性、数据时钟与截断；D11非随机缺失与反证。方法状态`RESEARCH_SOURCE_INSPECTED_NOT_IMPLEMENTED`；本文为现有候选研究的补充，不改变交易规则，也不要求立即编程。
+
+## 2026-11-01｜真实RPC文档样本 × FnZero多腿交易：执行事实、链上结果与经济归因
+
+**研究状态：PUBLIC_OFFICIAL_RPC_DOCUMENT_FIXTURE + THIRD_PARTY_SIGNED_OFFLINE_REPLAY + SOURCE_CODE_INSPECTED。** 本轮不曾从独立节点重新请求两笔交易，也未安装/运行FnZero SDK，更没有部署、真实监控或下单。真实文档交易=公开官方响应，不等于本项目当前的实时交易数据；第三方保存的mainnet回放=源码来源自述和离线测试，不是本项目独立核验。研究归属沿用D01原始交易、D05资金角色、D07群体行为、D10覆盖与数据来源、D11反证；不建新领域。
+
+### A｜官方实际交易样本：SOL余额下降并不代表买入Mint
+
+来源：[Solana官方getTransaction](https://solana.com/docs/rpc/http/gettransaction)；本项目已有[官方样本快照](https://github.com/sunshihao001/grok/blob/integration/knowledge-runtime-audit-20261101/fixtures/official-solana-gettransaction-samples.json)的 official_v0_ata_create_json / jsonParsed，固定Solana Foundation文档commit 4cb392f61c2ab0f8953cc314378aaf8256b7699a。
+
+- 签名 56rgv1Fqg7MHLoct3ESNx8DHeC2c5TFYyK1As35paWn2KYuRuXPFZK3XDEwkkZemVfmnKrkj17mMzz4N1d8kMYC4，devnet Slot 423118809。meta.err=null；fee=5000 lamports。
+- payer的preBalance=998528400、postBalance=996484120，净减少2044280 lamports；新ATA从0到2039280 lamports（rent），另有5000 lamports手续费；精确守恒 2044280 = 2039280 + 5000。
+- 新Token Account的postTokenBalances显示Mint余额为0，innerInstructions包含System createAccount和Token initializeAccount3等；该交易的**可见经济事实是账户创建/租金/手续费，不是Mint Swap买入**。这是对“同Tx涉及Mint+SOL减少→买入”的直接反例。
+- 同文件legacy SOL transfer，签名 4ReKprwf3WdLHRrzp4ctPWNBsQDPL3VZz3zMmoZfcGJMJCHh5Vq937mPdyxhCbw54wNnA6hZ7KfNpQdpt13yY7A9，净付款1000005000 lamports、收款1000000000 lamports、手续费5000，验证了费用与资金转移的会计分解，而非购买任何Mint。
+- 这两条真实**公开文档示例**已经在项目既有fixture里，旧raw_tx_adapter仍是legacy/v0有限转账的fixture comparator，不能声称具备DEX Swap解码或已独立主网重拉。
+
+### B｜第三方真实签名离线回放：单一交易可包含三条不同Swap经济腿
+
+来源：[FnZero tests/test_signed_transaction_replay.py](https://github.com/0xfnzero/sol-parser-sdk-python/blob/cffb6c8/tests/test_signed_transaction_replay.py)与[历史主网签名交易缓存](https://github.com/0xfnzero/sol-parser-sdk-python/blob/cffb6c8/tests/fixtures/signed_dex_replay_20261009.json)，固定cffb6c8。
+
+- raydium_cpmm案例的RPC slot=438881024、meta.err=null、fee=5001 lamports，原始meta包含15条preTokenBalances与15条postTokenBalances。离线测试断言SDK把**同一签名**下的3条Raydium CPMM交换分别解析：WSOL→Mint X、WSOL→Mint Y、Mint Y→Mint X（具体Mint和原子金额保存于第三方fixture）。它不是三笔不同交易，也不表示Jito Bundle。
+- meteora_dlmm_orca案例slot=438873646，同一签名的3条内层交换跨Raydium CLMM、Orca Whirlpool、Meteora DLMM，说明单笔交易中的执行链可跨协议，单一Mint/买卖标签丢失中间行为和不同池的价差、流动性过程。
+- failed_route案例slot=453479647，meta.err明确为InstructionError，仍可解码**计划/请求的Swap指令**，但失败时实际Token交易腿不得作为已结算成功交易。测试明确区分route.legs（计划）与route.succeeded/settlement（结果）。
+- 因而需区分三种不同粒度：交易ID/签名、指令或程序执行发生次数、每个地址×Token的最终净余额。这三者之间既不一一对应，也不具有相同信息量。**只有起终余额，不能必然恢复同交易先得后失的中间Token路径**。这项知识修正了既有M01“一个签名一个交易事件”在群体/多Mint研究中的适用边界，尚未指定实际数据库方案。
+
+### C｜FnZero成熟解析器的重要优点与未覆盖的经济事实
+
+- [FnZero rpc_parser.py](https://github.com/0xfnzero/sol-parser-sdk-python/blob/cffb6c8/sol_parser/rpc_parser.py)能读取顶层和inner指令、维护outer_index/inner_idx/stack_height，将日志与指令解析事件合并去重；[trade_source.py](https://github.com/0xfnzero/sol-parser-sdk-python/blob/cffb6c8/sol_parser/trade_source.py)使用准确编译指令索引标记事件来源，区分InstructionDecoded和ExecutionConfirmed。成熟点是**每个Swap事件自己的执行位置及协议来源**，而非统一按signature折叠成一个Mint买卖。
+- 但rpc_get_transaction_result_dict_to_response()在此固定版本的转换代码中，**无论输入RPC的preTokenBalances/postTokenBalances有哪些项，构建RpcTransactionMeta时都设为[]**；即使该SDK可从指令/日志填充某些交易额，不能把这个转换输出当作包含原始完整Token余额和Owner的审计证据。上面raydium案例的15+15原始余额不会通过这一转换层完整传递。
+- 当meta缺失时，转换器会合成零fee、空前后余额、空指令/日志等Meta；当meta对象存在但缺err时，用get('err')默认None。下游parse_rpc_transaction()仅在meta.err非None时作为失败返回，缺失meta/err的情形可能继续解析指令事件。**因此“指令能解码”与“RPC明确证实已成功执行”必须分开；不能在输入状态未知时输出肯定成交**。这属于所审路径的语义风险，不代表所有SDK入口都有相同缺陷或已量化用户损失。
+- 对已有的真实签名字节做Ed25519验签证明授权消息的真实性；SDK测试也刻意对同一签名字节所附的meta.err做模拟修改以检查结算分支。**验签不能证明外部提供的meta/余额/确认状态本身真实**；链上状态事实仍取决于可信节点和可核查返回。这个区别是加密授权、链上执行结果、经济解释三级不同证明责任。
+- [Solana RPC JSON Structures](https://solana.com/docs/rpc/json-structures)显示json与jsonParsed返回字段结构不同；meta.innerInstructions可能null、Token balance的owner可能缺失、jsonParsed通常不提供loadedAddresses。对应的原始账户索引/程序解析须清楚记录编码方式与字段缺失，UNKNOWN不能等同于0。
+- [Token-2022 transfer fees](https://solana.com/docs/tokens/extensions/transfer-fees)下的Token原始转移金额、净到账与withheld费用不同；FnZero自己的signed replay测试对于无法从普通TransferChecked CPI恢复的withheld fee会将某些实际净到账设为None。不能为求结果完整而填一个猜测的净额。
+
+### D｜跨项目语义对照（复用成熟业务，而不是照抄假设）
+
+- Million的LiveEvent只容纳一signature的一wallet一mint一kind，无法表达FnZero缓存真实三腿Swap的完整执行图；其Discovery又可能从ATA等非Swap付款推测候选买入SOL。Million仍具有完整发现/观察业务、费用控制和账户账本经验，不能因为局部缺陷否定整产品。
+- HoldTech的同Slot Fee Payer分组不能从同Slot推导为同一签名、Jito Bundle、同钱包决策或三腿Swap；代码的资金来源与fee payer代理也未证实最终控制。
+- OKX token-research、wallet-monitor-ws工作流的报告标签来自组合服务，未审到其内部原始RPC重建链，**不能假定其提供可复算逐指令的资产事实**；该工作流本轮没有运行。
+- pumpwatch的Create监听和本地seen_at可提供发行行为的来源线索，不能自动解释同Tx内普通ATA创建为发行者买入，也不能将观察时间当实际创建时间。
+- 原Hermes的source_field、missing_fields和counter_evidence、qb的资金来源与Token来源分栏应保留；旧meme-强调不预设单一FCZ/策略解释。真正升级之处在于把来源进一步定位到**签名→outer/inner指令路径→资产腿→余额差→可见时点→经济解释**，但无需现在重写这些旧结构。
+
+### 本轮DIFF及深入研究方向
+
+**旧认识**：余额变化不是经济主体归属，signature唯一键会漏记多钱包与多Mint，SDK应优先复用。**新增有证据的具体认识**：(1)官方ATA交易在余额上精确表现为租金+fee而非买入；(2)第三方保存主网签名回放证明一个交易可包含3个真实DEX Swap腿，甚至跨三个DEX协议；(3)FnZero当前RPC适配层舍弃原始pre/postTokenBalances并对缺失meta.err采用成功同形默认，解析能力≠完整经济结算证据；(4)真实签名验签≠外部RPC元数据真实性证明。
+
+**下一项**：针对第三方FnZero多腿样本及官方ATA样本建立**理论层面的事实可还原性矩阵**，逐个区分“签名能证”“执行结果能证”“资产账户能证”“DEX协议能证”“最终权益不可识别”，再审查Token-2022、PDA、delegate、池的LP经济权利怎样影响库存与资金关系。优先研究同一交易多协议复杂路径的经济机制与可复制专业知识，不要求用户提供钱包、不自动导向实盘；若未授权RPC，只读现有原始案例即可。无新功能、新Bot、新本体、交易或部署。
