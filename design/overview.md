@@ -1,5 +1,8 @@
 # Design Overview — Grok Bot Edition
 
+> **现行信息架构优先阅读（2026-11-01）**：[整体系统集成图](system-integration-map.v1.md) / [用户UI与交互规范](product-experience-architecture.v1.md) / [知识调用说明](../docs/ai-knowledge-navigation-guide.v1.md)。本文件下面是原Hermes/GMGN-first早期设计原貌，仍保留为历史技术参考，但不能用它覆盖当前的只读Mint产品进度及专业研究目标。
+
+
 ## One-sentence system
 
 GMGN data → specialized Grok Bots (dev iteration) → evidence-grade wallet research → gated judgment → paper validation → (future) semi-auto.
