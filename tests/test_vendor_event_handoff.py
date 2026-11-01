@@ -91,6 +91,7 @@ class VendorTriageContract(unittest.TestCase):
         a["mint"] = OWNER
         with self.assertRaisesRegex(ValueError, "mint mismatch"):
             evaluate(report=a)
+        a, b, c = fixture()  # isolate the next malformed-input scenario
         c[0]["chainId"] = "ethereum"
         a["dex_public"]["raw_input_sha256"] = hashlib.sha256(raw(c)).hexdigest()
         with self.assertRaisesRegex(ValueError, "wrong chain"):
