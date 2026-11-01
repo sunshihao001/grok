@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
   "architecture_id": "SOLANA_MEME_KNOWLEDGE_ARCHITECTURE",
-  "as_of": "2026-10-31",
+  "as_of": "2026-11-01",
   "status": "CANONICAL_REFERENCE_NOT_DEPLOYED",
   "research_principle": "从全市场事件重构行为关系，从资金网络发现隐藏机制，以真实数据和竞争解释不断深化专业认知，将知识转化为可验证的监控与研判能力。",
   "separation_contract": {
@@ -368,7 +368,8 @@
   "research_philosophy": {
     "document": "docs/economic-mechanism-discovery-charter-v5.md",
     "version": "V5",
-    "status": "research_method_not_market_truth"
+    "status": "research_method_not_market_truth",
+    "note": "V5 mechanism discovery is broader than M2 known-event detection. R008 studies program-account asset and authority paths, triggered by a cross-program evidence gap; no RPC case attribution validated."
   },
   "runtime_architecture": {
     "document": "docs/dual-loop-research-runtime-architecture-v4.md",
@@ -383,9 +384,9 @@
   "registries": {
     "knowledge_cards": {
       "path": "knowledge/catalog.v1.json",
-      "count": 24,
+      "count": 25,
       "baseline_legacy_count": 15,
-      "expansion_count": 9
+      "expansion_count": 10
     },
     "legacy_snapshots": {
       "path": "knowledge/legacy-snapshots/manifest.json",
@@ -399,12 +400,12 @@
     },
     "reference_projects": {
       "path": "knowledge/reference-project-discovery.v1.json",
-      "count": 14,
+      "count": 15,
       "meaning": "project-level maturity records; some are discovery-only or docs-only"
     },
     "external_method_sources": {
       "path": "knowledge/external-method-sources.v1.json",
-      "count": 17
+      "count": 19
     },
     "expert_disciplines": {
       "path": "knowledge/expert-capability-map.v1.json",
@@ -429,11 +430,11 @@
     },
     "mechanism_hypotheses": {
       "path": "knowledge/mechanism-synthesis-hypotheses.v1.json",
-      "count": 8
+      "count": 9
     },
     "research_units": {
       "path": "knowledge/research",
-      "count": 7,
+      "count": 8,
       "items": [
         "R001",
         "R001B",
@@ -441,13 +442,15 @@
         "R003",
         "R005",
         "R006",
-        "R007"
+        "R007",
+        "R008"
       ],
       "note": "No R004 document exists in this branch; no number is fabricated.",
       "card_mapping": {
         "R005": "first-funder-history-coverage",
         "R006": "sol-receipt-economic-semantics",
-        "R007": "cashflow-count-value-inversion"
+        "R007": "cashflow-count-value-inversion",
+        "R008": "stake-program-capital-path"
       }
     },
     "cross_source_knowledge_units": {
