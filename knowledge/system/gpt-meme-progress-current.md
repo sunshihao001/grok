@@ -111,3 +111,17 @@ GitHub 知识源在 PR #14；实现和测试在 PR #16；GPT Library 的当前�
 
 **下一轮输入（取代历史FnZero-only输入）**：先恢复Million、HoldTech、pumpwatch、OKX、Why-Solana及旧Hermes/qb-的现有项目映射，审阅一个完整只读Mint→关键钱包→持续观察→群体关系报告的现成实现和安全运行要求；若能在隔离环境运行则以原生API/MCP/CLI做最小业务验收，不开发同名功能。记录每一步是否已存在和缺失，比较Grok与成品可直接复用的程度；合适才决定是否封装、保留或替换模块。更新现有台账、知识和进度，下一轮才讨论需要写的极少量胶水。
 
+
+## 2026-11-01｜Mint→钱包群体监控：完整成品源码验收完成，运行待验证
+
+**本条为当前最高优先级，取代上文历史FnZero-only SDK和“直接开发M01原始解析器”的下一轮建议。** 实际完成的是同一个Mint→候选钱包→持续观察→群体关系→只读解释的**跨项目现有业务源码审计**，并非运行了一个真实Mint。
+
+- **唯一完整产品优先候选：Million** [固定提交](https://github.com/Kelows/million/tree/c89ad07caaf70773d40b45943e136eadc4f946a5)。已经核其discovery、crawler、wallets、live、flows、funding、owners、copyability、backtest、API Controllers、14个MCP工具；这是自托管已连成体系的Solana钱包监控与研究系统，比孤立FnZero解码器符合本轮目标。**不自动fork、不预先迁移**。
+- **明确的代码质量差异**：Million的discovery.buyersOf以接收Token和SOL/WSOL/稳定币支出猜BUY，非协议级肯定；live.ingestWebhookTxs按签名仅将同一交易分给第一个订阅钱包，C02群体视角会漏同笔其他钱包；实时原始事件默认15分钟/最多5000条；funding限制3页/50条链接，Owner节点关系存在feePayer/共同融资启发式，coentry被正确避免作union桥，ownerId不是永久经济身份。**这些是直接源码可复查的限制，不是实盘测得误报率。**
+- **其他成品不丢**：HoldTech的holder-overlap、深扫、Deployer API需处理疑似凭证暴露和错误feePayer买家归因（原样运行阻断）；pumpwatch的read-only发行者检测/SQLite跟踪已是真实代码，但其getTransaction maxSupportedTransactionVersion=0对v1存覆盖风险；OKX已提供新币/Smart Money/钱包监控WS完整工作流，需服务权限、费用和配额核实。Why-Solana继续review_only作跨币/Hub反证与代码来源，qb/Hermes/meme旧业务知识继续作为入选/归因标准。细节证据与按功能状态见[唯一外部复用台账](reference-capability-reuse-ledger.v1.md)对应日期条目。
+- **与grok现实比较**：工程PR#16仅有fixture-only M01单币窗口、保守旧交易适配器和确定性观察器；没有持续钱包↔Mint发现/实时事件/Agent整套应用，故不能再新增同类模块。原项目保留历史窗口/时点/证据覆盖/C02和C05问题，而不是替代Million已做好的工程功能。
+- **本地真实运行记录**：使用先前项目存档m01_proto_offline_20261031.zip，在隔离路径本地运行旧M01单元测试，14 tests in 0.840s OK。此为旧基线测试，**不是第三方成品的实际运行，也没有运行工程PR#16当前全量测试**。本容器Node22.16不满足Million要求的Node24，而且无GitHub DNS网络、未授权Helius额度及单Mint数据；第三方项目**没有安装、没有启动、没有连接实际市场/监控Grok**。
+- **安全与阶段**：当前结果为SOURCE_IMPL_AUDITED / PRODUCT_RUNTIME_PENDING，项目仍局部P3；Million的EXECUTOR=local真实签名能力不得启用，其local API无认证与Web可能LAN监听需隔离，Helius/OKX付费及持有人/钱包标签不能默认为可信。GitHub PR#14/#16仍是Draft、未合并。GPT个人Library摘要如实记录，项目Instructions/附件未被直接修改。
+
+**下一步只做一件事**：在确有Node24、网络、私有回环隔离及经授权只读Helius配额后，运行Million原生成品的无密钥/不下单健康检查；用一个公开Mint小样本逐次验证GET /discovery/token/:mint、GET /live/status、GET /live/flows、GET /funding/:address、MCP get_flows等**现成读取接口**，记录真实结果、覆盖/截断/费用、同签名多钱包遗漏；暂不自动做钱包订阅/修改/重建/付费。对照OKX完整监控工作流和HoldTech/pumpwatch已存在接口，之后才选择直接使用整个成品还是选择小模块。不要继续自造钱包监控功能。
+
