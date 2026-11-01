@@ -203,4 +203,30 @@ class TestMintV01(unittest.TestCase):
 
 
 
+    def test_cross_vendor_pool_owner_overlap_is_flagged_not_called_a_whale(self):
+        pool="So11111111111111111111111111111111111111112"
+        token_account="11111111111111111111111111111111"
+        vendor=json.dumps({"mint":MINT,"topHolders":[{"address":token_account,"owner":pool,
+                             "pct":5.8}],
+                          "knownAccounts":{pool:{"name":"Pool AMM","type":"AMM"}}}).encode()
+        pair=json.dumps([{"chainId":"solana","dexId":"pumpswap","pairAddress":pool,
+                           "baseToken":{"address":MINT,"symbol":"TEST"},
+                           "quoteToken":{"address":"11111111111111111111111111111111","symbol":"SOL"}}]).encode()
+        with tempfile.TemporaryDirectory() as temp:
+            dest=Path(temp)/"out"
+            with patch("solana_meme_os.mint_v01.public_pair_report.fetch_pairs",
+                       return_value=(pair,"https://api.dexscreener.com/test")):
+                with patch("solana_meme_os.mint_v01.public_rugcheck_report.fetch_report",
+                           return_value=vendor):
+                    with contextlib.redirect_stdout(io.StringIO()):
+                        status=mint_v01.main([MINT,"--rugcheck","--out-dir",str(dest)])
+            self.assertEqual(status,0)
+            report=json.loads((dest/"report.json").read_text())
+            overlap=report["cross_source_pool_owner_matches"]
+            self.assertEqual(len(overlap),1)
+            self.assertEqual(overlap[0]["address"],pool)
+            self.assertEqual(report["rugcheck_public"]["vendor_infrastructure_candidate_count"],1)
+            self.assertIn("不列为已确认独立交易钱包",(dest/"report.md").read_text())
+
+
 if __name__ == '__main__': unittest.main()
