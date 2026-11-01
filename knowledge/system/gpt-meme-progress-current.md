@@ -225,3 +225,11 @@ FnZero Python源码审阅确认`sol_parser/rpc_parser.py`接受RPC JSON并输出
 **对成品路线的影响**：由E-L7-03主导先审查每个候选的真实可运行端到端价值，E-L0/L1/L3/L6针对来源、钱包/库存、因果和反证独立挑错。**仍以grok为唯一项目、OKX按需Mint完整工作流为V0.1真实数据优先来源、现有`mint_report.py`为最薄可读报告适配**，不是要一口气部署全部参考资产或重新设计系统。新增QuantBloc可用于未来跟单信息差研究，但不能因新资料中途改变首份真实Mint报告的硬阻断：目前本地只做合成演示，OKX授权/真实数据/费用/连续Grok运行尚未验收。
 
 **当前分支状态**：仅在知识Draft PR #14更新索引/专家/台账/方法，在工程PR #16记补充任务；未合并main、不触碰交易、不声称上线。后续每次发现新项目先查`reference_assets`是否已有同一实体，若有就增量更新证据/版本/重访触发；找不到才登记新REF；**历史只有名字的线索不自动提高验证等级**。
+
+## 2026-11-01｜V0.1首批真实Mint交易池报告交付：两个Mint、12池，完整钱包/Dev仍未验收
+
+**这一轮真正新增的实务进展**：工程Draft PR #16已经有`src/solana_meme_os/public_pair_report.py`，它**仅使用无需密钥的DEX Screener公开只读GET**，固定域名、拒绝重定向、最大2MiB、12秒超时、校验chain/Mint、出错/空返回不下结论，并通过`mint_v01.py`提供单Mint统一入口：无预存OKX JSON→真实公开交易池数据，有已获授权的OKX `token-research` JSON→原有`mint_report.py`的完整候选分析展示。没有任何交易/签名/付款或自动运行OKX客户端。GitHub Actions[真实联网运行41266389009](https://github.com/sunshihao001/grok/actions/runs/41266389009) 成功读取两枚公开Mint的**5个+7个实际交易池**，保存原始供应商JSON、Markdown/JSON报告和SHA256；Action Artifact已下载并在当前执行容器独立比对哈希和池内Mint匹配。长期证据见[工程实测记录](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/evidence/v01-real-public-pair-readonly-2026-11-01.md)，Action提供临时ZIP下载30天，临时联网CI步骤已移除，常规CI恢复离线。
+
+**业务等级严禁混淆**：已验证`REAL_PUBLIC_POOL_SNAPSHOT`（真实池/DEX/供应商24h交易/流动性）**不等于**`REAL_COMPLETE_MINT_REPORT`（钱包Owner、Holder、资金边、Dev历史、真Swap、库存和异常）。未获得OKX授权工作流真实JSON，不能声称OKX实时接口运行过；本地无公网DNS，网络执行来自GitHub托管CI环境，**更不等于Grok云电脑已上线**。早先对BONK样本公开接口返回`[]`被保存为`COVERAGE_UNKNOWN`，不是没有流动性；同Mint作为base和quote的不同池必须避免错误价格归属或池统计当钱包交易。
+
+**E-L7-03+E-L0/L1/L3/L6联合实施建议**：不再为了实时数据“接更多API”而扩大功能范围。下一最值步骤为用已授权、安全隔离、x402付款能力禁止的环境**真实运行现成OKX token-research→保存原始JSON→用现有mint_report消费→与本次公开池数据对照关键字段**。源码审查发现OKX `cli/src/client.rs`具有自动x402收款配置、402后签付款逻辑，**不能认为执行只读查询等于绝对不会支付**，在未确认无付款能力前不得让本项目自动执行OKX CLI。若授权确实无法获取，才研究65项台账中能真正提供Holder+Dev的成熟替代完整工作流。所有新能力在工程Draft检验并回写，无交易、无主分支合并。
