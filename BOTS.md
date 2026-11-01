@@ -1,3 +1,5 @@
+> **2026-11-01 集成分支说明**：7个B01–B07是既有职责设计；22个专家是知识视角，均不可直接当作已创建Grok实例。本分支已真实集成知识导航和Mint报告代码；暂无已验的Grok云端Bot。专业研究/产品开发需按实际问题选择职责，不要求先建七个Bot或复现下列所有阶段。见[整体集成现状](design/system-integration-map.v1.md)。
+
 # Bot architecture V1.1 — 7 roles, 1 final monitor
 
 **当前部署默认：一个 Grok 运行操作 Bot，而不是先创建七个 Grok 实例。** B01–B07 保留为研发能力、专业职责和独立审核设计，具体开发由 GPT/GitHub 主导。早期“Practical staged creation”属于可选多 Bot 扩展顺序，不是近期 S1 离线部署前置。以 docs/project-baseline-2026-10-30.md 为当前规划权威。
