@@ -143,6 +143,22 @@
       "id": "evidence",
       "path": "docs/evidence/v01-real-rugcheck-holder-2026-11-01.md",
       "role": "Specific V0.1 real vendor action evidence, not complete chain audit"
+    },
+    {
+      "id": "crossmint",
+      "path": "src/solana_meme_os/cross_mint_holders.py",
+      "branch": "integration/knowledge-runtime-audit-20261101",
+      "role": "Already implemented OFFLINE comparison of 2–5 saved RugCheck holder/owner vendor samples. No funding proof or live ingestion.",
+      "invocation": "PYTHONPATH=src python -m solana_meme_os.cross_mint_holders PATH_TO_MINT_A_REPORT_JSON PATH_TO_MINT_B_REPORT_JSON --out-md overlap.md --out-json overlap.json",
+      "status": "OFFLINE_TESTED_VENDOR_SAMPLE_ONLY"
+    },
+    {
+      "id": "context",
+      "path": "src/solana_meme_os/project_workspace.py",
+      "branch": "integration/knowledge-runtime-audit-20261101",
+      "role": "Already implemented OFFLINE saved Mint report → original research sections and source audit.",
+      "invocation": "PYTHONPATH=src python -m solana_meme_os.project_workspace --report-json PATH_TO_REPORT_JSON --question YOUR_QUESTION --out-md brief.md",
+      "status": "OFFLINE_TESTED_SAVED_REPORT_ONLY"
     }
   ],
   "routes": [
@@ -231,7 +247,8 @@
         "mint",
         "holder",
         "pool",
-        "evidence"
+        "evidence",
+        "context"
       ],
       "reference_ids": [
         "REF-032",
@@ -273,7 +290,8 @@
       ],
       "engineering_ids": [
         "holder",
-        "event"
+        "event",
+        "crossmint"
       ],
       "reference_ids": [
         "REF-003",
@@ -321,7 +339,8 @@
       ],
       "engineering_ids": [
         "event",
-        "batch"
+        "batch",
+        "crossmint"
       ],
       "reference_ids": [
         "REF-007",
@@ -365,7 +384,8 @@
       ],
       "engineering_ids": [
         "holder",
-        "mint"
+        "mint",
+        "crossmint"
       ],
       "reference_ids": [
         "REF-003",
@@ -545,7 +565,9 @@
         "knowledge/system/expert-mechanism-research-method.md",
         "knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md"
       ],
-      "engineering_ids": [],
+      "engineering_ids": [
+        "context"
+      ],
       "reference_ids": [
         "REF-002",
         "REF-005",
@@ -591,7 +613,8 @@
       ],
       "engineering_ids": [
         "product",
-        "execution"
+        "execution",
+        "crossmint"
       ],
       "reference_ids": [
         "REF-007",
@@ -683,7 +706,8 @@
       ],
       "engineering_ids": [
         "event",
-        "evidence"
+        "evidence",
+        "context"
       ],
       "reference_ids": [
         "REF-028",
@@ -725,7 +749,9 @@
         "knowledge/system/gpt-meme-knowledge-accumulation.v1.md",
         "knowledge/system/whole-project-convergence-audit-2026-11-01.md"
       ],
-      "engineering_ids": [],
+      "engineering_ids": [
+        "context"
+      ],
       "reference_ids": [
         "REF-001",
         "REF-002"
