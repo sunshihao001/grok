@@ -16,6 +16,26 @@ Phase 1：只读研究 / 纸面门控，禁止真实交易、私钥、签名、�
 
 见 `docs/bot-architecture.md` 与 `BOTS.md`。
 
+## 第一个可运行成品的最短路线｜Mint研究报告（2026-11-01）
+
+**先跑一个Mint，之后才做钱包持续订阅/全市场扫描。** 优先复用OKX OnchainOS现成`token-research`结果，而不是重写它的Token/Holder/Cluster/TopTrader/Dev接口。新增`mint_report.py`是本仓库**无网络、无私钥的最薄JSON报告适配层**，输出Markdown和带原始供应商字段的JSON；源码不调用OKX或支付接口，未知字段保持UNKNOWN、不擅自算控盘/盈利。
+
+先运行可复现**合成演示**（不是链上实测）：
+
+```bash
+PYTHONPATH=src python -m solana_meme_os.mint_report \
+  --mint 87QChghgFr2XBNumi2Tg1MJCWHLqoTTT5KThtnDspump \
+  --okx-json fixtures/okx-token-research-demo.json \
+  --out-dir .runtime/mint-first-product \
+  --fixture
+```
+
+查看 `.runtime/mint-first-product/report.md` 和 `report.json`。离线6项单测在当前研究环境通过；GitHub CI运行状态需独立查看。
+
+**真实Mint所需的下一项条件**：在自己授权、禁用自动支付/钱包交易的环境中安装并单独运行官方`onchainos workflow token-research --address <Mint> --chain solana`，将其`{ok:true,data:{workflow:'token-research',...}}`输出保存成JSON，再让上面的脚本改用真实文件并去掉`--fixture`。需记录真实数据获取时点、权限、API扣费和失败；脚本`processed_at`只是文件处理时点，不能当链上或供应商观测时点。**此步骤尚未实测，不能把本地合成演示称为真实成品上线。**
+
+正式目标仍是逐步让这个报告复用现有`monitor.py`与M01获取增量事件；在真实接口字段语义核验前，不将OKX业务字段硬映射进钱包交易/库存计算。Million整套有交易模块耦合及同签名多钱包视角问题，暂不作为第一版运行依赖。
+
 ## 安全边界
 
 - 仅 BLOCK / WATCH / PAPER_ONLY / NEED_MORE_DATA
