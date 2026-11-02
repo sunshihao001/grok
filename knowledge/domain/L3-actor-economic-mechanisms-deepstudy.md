@@ -893,3 +893,50 @@ Why-Solana 的操作群体是按早期研究冻结的“operator cluster”**研
 
 **判定标准**：若大量无关客户在不同Mint、不同时间段使用同样共同签名/结算程序，共享执行服务解释获得支持；若关系主要限于一个资金闭环、共同资本再部署并有反证排除广泛服务对象，则资本组织假设获得更多支持。两种情况仍不能在无私下账本/外部信息时确定最终受益所有权。此测试本轮只完成**方法与文档可得性核查**，尚无授权API真实响应、未从RPC获取新签名、无历史外部客户真实比例、无交易或付费调用。
 
+
+## 24｜2026-11-02 从“签名的接收地址”重新检查“是否真的存在该资金边”：Why-Solana原始解析、Solana CloseAccount 与可复核合成反例
+
+> **增量定位**：§18已指出多源付款情况下“最大余额损失方”可能不是唯一真正付款方，§19–23已厘清部分签名、Hub、时序和服务商归属。本节并非重复“共同签名≠同控”，而是再往**证据生成的前一层**审查：如果资金去向先由整笔交易的**最大净余额增加方**代替实际指令来源/目标配对，随后取该地址是否Signer，可能同时形成**假的资金边和看似强化它的共同签名证据**。此结论已在只读合成算例核验原源码的选择谓词，未重新运行第三方原仓或宣称历史408条中实际存在错误。
+
+### 24.1 为什么要检查两份源码之间的关系
+
+1. [Why-Solana `exit_destination/code/ed_trace.py::txflow`](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/exit_destination/code/ed_trace.py)在`not dtok`且`-(dsol+dws)>=0.01`时，以`gain[k] = (postBalances-preBalances + fee_payer_fee_adjustment)/lamports`构造整笔交易各账户的净SOL收益；排除目标主体、已知Token账户与Jito tip后，取`gain`**最大正值账户**为`best`。最终输出`out=[[best, loss]]`，其中`loss`为观察钱包的SOL+WSOL净损失，而不必等于`best`实际从该钱包收到的金额。这是**多主体交易中一种配对近似**，不是已经独立解码的逐笔`SystemProgram.transfer`/CPI/WSOL关闭的真实支付对。
+2. [`funder_network/code/fn_30_analysis.py`](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/funder_network/code/fn_30_analysis.py)对下游首跳按`(sig,primary,dst)`去重1条（原409→408），随后网络分析继续使用该首跳钱包与金额。**去重保证在该键下不重复，并不验证首跳的经济方向、金额对应或实际指令来源**。
+3. [`funder_network/code/fn_40_posthoc.py`第7部分](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/funder_network/code/fn_40_posthoc.py)对每条下游首跳`dst = path[1].wallet`取缓存交易`message.accountKeys[].signer`，若`dst==accountKeys[0]`归“destination signs (fee payer)”，若包含于Signer列表则归“destination signs”；**该部分没有解码特定System Transfer与CloseAccount指令**，没有核对哪个Signer授权了何项经济操作。作者在`funder_network/results.md`据此报告408/408候选接收方Signer，并解释为四签名WSOL sweep工具收款方必须签名关闭自己WSOL账户；这些是**外部作者的业务解释**，并非从第7部分的签名集合检验直接得到的通用协议结论。
+
+### 24.2 独立可重算的最小反例：两条合法方向并存，形成虚假首跳与签名加强
+
+构造一个**成功执行的多指令交易的余额算例**，余额前后相差仅交易手续费5000 lamports，非真实主网数据：
+
+| 地址 | 本交易的真实动作 | 交易前SOL | 交易后SOL（手续费计入） | 是否在交易Signer集合 |
+|---|---|---:|---:|---|
+| A | 向R转9 SOL | 100 | 91 | 是 |
+| U | 向D转10 SOL | 100 | 90 | 是 |
+| R | 接收A的9 SOL | 0 | 9 | 否 |
+| D | 接收U的10 SOL；作为本交易的Fee Payer | 1 | 11−0.000005 | 是（Fee Payer） |
+
+应用同一段`txflow`选择规则，以A为被观察钱包：
+- A 的`loss=9 SOL`；其他地址正增量：R=9、D在加回手续费后=10。
+- `best=D`，于是候选资金边成为**A→D，9 SOL**。
+- `fn_40_posthoc`看到D出现在交易Signer且为`accountKeys[0]`，会将它分入**“destination signs (fee payer)”**。
+- 但**真实指令中没有A→D转账**；D收到的是U的10 SOL。这个签名事实不能挽救错误配对。
+
+在本项目知识分支新增 [`tests/test_economic_transfer_edge_heuristic.py`](../../tests/test_economic_transfer_edge_heuristic.py)，一个正常单转账对照＋一个多指令反例，都用与第三方源码同型的净余额选择谓词复现；两例验证账本守恒、预测接收方及与真实指令集合不一致。**这证明的仅是代码选择机制可产生该类假阳性；不能估算Why-Solana历史样本中的具体错误数、不能声称原408条资金边已经错配，亦不能作为上线经济解析器的合规性测试。**
+
+### 24.3 Solana官方协议给出的更精确授权语义
+
+- [Solana Close Token Account](https://solana.com/docs/tokens/basics/close-account)：`CloseAccount`时需要**被关闭Token Account的Owner或Close Authority**提供授权，接收已回收lamports的`destination`并非通用必签账户。WSOL账户可以在仍有WSOL余额时关闭以取回SOL，且回收接收方可以不同于源Token Account的授权者。具体交易中若“接收方也是该Token Account的Owner/Close Authority”，它需要以**该授权角色**签字；不能说所有收款行为本身都要求接收者签名。
+- [Solana Partial Signing](https://solana.com/docs/core/transactions/partial-signing)：每个Signer签署整条序列化交易消息，双方可在不同设备、不同时间分别签名；签名证明交易消息的密码学授权，**不指明由谁托管其密钥、谁拥有经济受益权**，且只读`accountKeys.signer`本身无法恢复Signer是为哪条指令提供必须授权。
+- [Solana Transaction Structure](https://solana.com/docs/core/transactions/transaction-structure)：Fee Payer必须在交易静态账户列表首位并为Signer。D在合成算例中是Fee Payer，因此D签名无需归因于“它自己收到了A的资金”。
+
+**对作者原结果的审慎裁决**：如果原缓存中的408条确实都是该四Signer sweep路径，后续逐笔解析可进一步证实其特殊交易模式；但`fn_40_posthoc.py`第7部分的**聚合Signer检查本身不证明指令级“收款方为关闭自己WSOL账户而签名”，更不证明同控**。普通被动CEX充值地址通常不需要签名来收款，但不能从本次统计排除全部交易所服务、托管、多方授权或按业务流程主动参与的设施。
+
+### 24.4 下一项调查的信息价值应如何排序
+
+1. **优先补资金边证据**：对Why-Solana固定样本中有代表性的首跳签名，检查原始`SystemProgram.transfer`、Token Program`CloseAccount`、`SyncNative`、CPI、Token Account owner/close authority、Fee Payer、原生及WSOL净变化、指令索引。能够证明`A→D`的是**实际同资产支付/关闭/调用路径及正确的参与角色**，不是“最大奖励账户同在一个交易中”。无法判定则保留`NET_DELTA_CORRELATION_ONLY`候选边，不能让它合并独立资本网络。
+2. **再检查签名职能**：对已确认的收款/结算事实，确认接收者的Signer是Fee Payer、Close Authority、Token Account Owner、System Transfer源还是其他指令授权；“Signer是收款人”和“Signer授权收款转移”不是同一命题。
+3. **最后研究主体与服务**：对上述已经按指令核实的边，再抽查非本群体客户的业务活动、时间窗口、不同Mint与签名职能，区分专用资本账户与共享执行/托管服务。若底层资金边并未成立，扩充到十跳或提高同控分数只会扩大错误传播。
+4. **数据现实限制**：公开fork提交了`fn_table.json.gz`、研究报告及Posthoc统计，但本轮核查的`funder_network`树中没有逐笔原始RPC交易缓存。未获得原始408笔指令，也未授权/执行RPC重拉，因此现阶段不能对这408条逐笔确认或否定，不应靠供应商Token Cluster标签填补证据缺口。
+
+**总结：共签证据不能修复由“整笔余额最大收益者”生成的错误资金边。经济主体调查应在`有无真实边→发生了哪类授权→与谁共享执行/资本风险`三个不同层次分别取证。这是对原D01/D05/D10/D11知识的深入纠偏，不新增专家、本体或交易规则。**
+
