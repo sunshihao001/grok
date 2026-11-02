@@ -115,6 +115,15 @@
 
 完整专业证据与反例见 [L3 §18](L3-actor-economic-mechanisms-deepstudy.md)。对本轮 C01 的影响是**从“连通/不连通”进入“多边守恒、可能贡献范围、身份竞争解释、观察时间覆盖”**；不是新增 P3 工程功能，也不授权交易。
 
+
+**2026-11-02｜C01/C03 共用执行设施与跨群体接力关系复核**：直接核对 Why-Solana 的 [funder_network/results.md](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/funder_network/results.md) 与 [作者事后明细表 K §2、§5](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/funder_network/tables/K_posthoc.md)。同一批24个**作者研究标签意义上的操作群体**，排除高活跃枢纽时最大连通组7个、次大5个；允许“作为收款者共同签名”的枢纽时最大14个；任何高活跃枢纽都可连通则18个。这是**关系定义敏感性**，不是新发现18个共同受益人，也不能因此否定确有少数跨组资金桥梁。
+
+程序化核对 [K §5](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/funder_network/tables/K_posthoc.md) 的13条有序资金入/出**配对行**，其中4行后续支出超过该行所选先前入账，如10→180.5 SOL；13行仅对应9种「桥梁地址＋来源组＋入金额」和11种「桥梁地址＋去向钱包＋出金额」组合。组合不是交易签名，不能称9/11笔独立交易；13配对也不等于13次已确认的独立资本贡献。新收益在于**将已知“SOL可替代”真正应用到具体原表的逐行归因**。需检查桥梁账户历史余额、期间其它入账和完整签名，不得把先后次序直接写成“来自A的10 SOL支付了B的180.5 SOL”。
+
+**C03含义**：跨币重复“同一四签名交易模板/相同执行费用收款方/高活跃共同归集地址”更可能先证明共享的**执行或结算工作流**，而非经济同控。官方 [Partial Signing](https://solana.com/docs/core/transactions/partial-signing) 说明多个参与者可以分别签名，[Jito 官方 Tip Accounts](https://docs.jito.wtf/lowlatencytxnsend/) 说明公开共享收款节点可被大量无关交易者使用；Jito Tip 与作者样本的共同签名归集钱包语义不同，不可混为一谈。若原研究的高活跃 co-signing 节点为大量无关客户提供服务，则共享基础设施解释增强；若其行为只在独立资本回收闭环内复现，则资本组织解释增强。但最终受益身份未必可识别。
+
+**研究来源状态**：原作者提出过对16个跨组 co-signing 节点抽样其它无关交易的下一步调查；本轮只核实作者计划和报告，未进行 RPC 全历史抽样，也不创建新检测规则。专业依据及细化的证据边界见 [L3 §19](L3-actor-economic-mechanisms-deepstudy.md)。
+
 ### 8.3 C02 从“同组重复出现”转成“环境匹配的行为变化”
 
 **时间截断**：在比较 Mint B 前，固定钱包群体的定义和所掌握的地址关系；不能事后用 B 的买入倒推“当时已知是同一群”。若需要探索性事后分组，明确标 `RETROSPECTIVE_CLUSTER`，不得作为提前可发现信号。
