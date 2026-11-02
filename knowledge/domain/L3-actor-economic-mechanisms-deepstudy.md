@@ -719,3 +719,45 @@ Why-Solana 的操作群体是按早期研究冻结的“operator cluster”**研
 - **本轮停止条件**：对已有 24组的真实市场归属尚无额外独立证据，也无可验证的全量交易；因此只修订本项目研究语义、保留上述参考来源提出的高价值测试，不修改 PR #16 的只读程序或伪称跑完 RPC 验证。
 
 **研究状态**：源码、官方协议及作者已发布的表格核查；本轮自行解析了13条已发表记录，确认4条出账金额超过所匹配入账、9/11种非唯一配对组合；这是**公开研究表的次级核验**，不是原始交易级复算，也不是任何已验证的交易优势。
+
+
+
+## 20｜2026-11-02 跨群体「共享少于随机」的对照可能没有保留活动机会：时间网络反例
+
+> **从实际疑问逆向研究，不另建分析框架**：为什么 Why-Solana 的资金网络报告说24个“operator”之间共享非hub的钱包**少于**按连接度随机的基线？是各群体真的有独立资金组织的意愿，还是研究时期、节点活跃机会和服务设施变化影响了随机基线？本轮直接审查原作者的 [`funder_network/code/fn_30_analysis.py`](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/6f24bb10a7823d7bdd38c6fec5eb5de760b69e95/funder_network/code/fn_30_analysis.py) 中 `incidence` / `null_swaps` / `null_labels` / `section_h` 和 [`economic_mechanics/code/em_lib.py` 的 `perm_test`](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/a02536e11df62e6a911cc14042ad9ded487992d4/economic_mechanics/code/em_lib.py)，与其预注册 [funder_network/analysis_plan.md §6–7](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/624dcda6ee2fa3b4272169c949d11d2857e832cc/funder_network/analysis_plan.md) 及 [FN_results.json](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/b69854bd6fcae359f554a4aed60a96a4f1926b8d/funder_network/derived/FN_results.json) 核对。这是**方法适用性审查和独立合成反例**，没有独立重算原作者真实 RPC 数据。
+
+### 20.1 证据中的「显著少」和代码实际检验的方向不能混淆
+
+- 作者的**真实研究样本结果**：`full` 样本跨 operator 共享非hub钱包 `obs=16`，Null A（degree-preserving rewiring）`mean=24.715`, 95%经验区间约 `[22,27]`；Null B（标签随机置换）平均 `28.23`；Null C（只在不同operator间重连）平均 `24.77`。最大连通操作组真实7，Null A均值约16.704。这些是作者已公开的派生结果，**不是本轮新实测**。
+- [`null_swaps()`](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/6f24bb10a7823d7bdd38c6fec5eb5de760b69e95/funder_network/code/fn_30_analysis.py) 通过无时间字段的 `(primary, destination)` 对交换，保持静态连接度；没有检查关联交易时间、节点实际在场时间、同期币龄/交易机会、服务类型或是否存在历史同时活跃窗口。`null_labels()` 跨整个子样本交换 operator 标签，也没有强制按时间/活跃市场机会匹配。后续 `section_h()` 虽然报告共享节点的ISO周分布，并分别分析TRAIN/VALIDATION，但**不等于置换时保留每条关系的时间机会**。
+- [`em_lib.perm_test(obs, null, higher=True)`](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/a02536e11df62e6a911cc14042ad9ded487992d4/economic_mechanics/code/em_lib.py) 默认计算 `p=(1+#(null>=obs))/(1+n)` 的**更高共享**单侧尾部；作者全样本 Null A/B/C 的 `p=1.0`，**不是“显著更低”的下尾检验p值**。既不能将此p当作支持隔离的显著性，也不能仅因为上尾p=1就推断没有差异；若要正式检验“更少”，须预先明确下尾目标、合理机会保持的null及相应误差控制。
+- 对照：同项目的 `null_recycle()` 在另一问题上明确按**ISO week**抽取随机资本再部署对象；这显示该项目已有时间匹配意识，但网络共享的 Null A/B/C 仍是**静态**投影的重连基线。该差异不等于作者操作错误；它说明不同统计问题所选择的保留条件不同，跨用途解释时必须说明。
+
+### 20.2 可复算的合成反例：连接度完全相同，结论仍由时间机会决定
+
+**独立脚本实际运行环境**：Python 3，`seed=20261001`，1000次置换，直接移植原 `null_swaps` 的“每次3×边数次尝试交换、不重复边、保持度数”的核心行为；并对照增加`same_week`限制。测试文件和JSON由本轮会话本地产出，**没有写成第三方原仓测试或上传 GitHub 的脚本**。
+
+**合成构造**：8个primary各连1个destination；4个destination各连2个primary。W34只有A组的4个primary及其两个destination实际出现；W40只有B组的4个primary及其两个destination实际出现；故在各自活动周，两个operator没有同期可比较的共享服务机会。全程保持节点连接度不变。
+
+| 统计 | 原始观测 | 不限周的degree-preserving交换 | 只允许同周交换 |
+|---|---:|---:|---:|
+| 具有≥2个operator的共享destination个数（均值） | 0 | **2.31** | **0** |
+| 1000次置换中至少出现一个跨组共享的比例 | — | **92.4%** | **0%** |
+| 每primary度数 / 每destination度数 | 1 / 2 | 完全保持 | 完全保持 |
+
+结论：当不同组仅在**不重叠的时期**活跃时，静态保度随机交换可以制造“本来没有共同活动机会的跨期共享”；真实值比这个随机值低，**并不自动证明各群体主动隔离资金**。反例刻意采用极简两期样本；现实服务地址可能跨周持续活跃，需要从原始交易验证实际在场和可比机会，不能机械强制每个资金节点只属于其首次观察周。尤其**不能把合成均值2.31应用到外部研究的16/24.715真实差异**。
+
+### 20.3 这为什么改变市场经济机制的认识？
+
+- 以前把“群体之间共享较少”直接读成不同资金组织的**隔离偏好**，可能混淆了三种原因：**主动经济隔离、交易设施/平台历史更替、样本期和市场阶段不同导致的活动机会差异**。这些解释对 Solana Meme 持续监控完全不同。
+- 这与先前 §19 的“是否加入高活跃hub导致7→14→18的投影变化”是独立问题：**即使固定边类型，随机模型也需要对边形成的时间机会作匹配**。一张静态图能表述历史上曾关联，却不能证明同一时间段存在共享策略、共享资本或同期协调。
+- 外部**独立专业理论佐证**：[Ren et al., *Randomizing growing networks with a time-respecting null model*, Physical Review E 97, 052311 (2018)](https://doi.org/10.1103/PhysRevE.97.052311) 的原始论文摘要提出在保留度数之外，进一步保留节点度数随时间演化以处理时间结构对网络显著性评价的影响；[Holme & Saramäki, *Temporal Networks*, Physics Reports 519 (2012)](https://www.sciencedirect.com/science/article/pii/S0370157312000841) 说明静态有路径不保证时间上有可传播的路径。上述理论是**方法依据**，不是这些论文分析了本项目的 Solana 钱包。
+
+### 20.4 对本项目的具体修正（原位复用 D05/D07/D10/D11、C01/C02/C05）
+
+- 当系统称“A与B群体共享明显更少/更多的资金连接”时，先把**同一时段、同一机会集、相近市场阶段和服务节点活跃度**定义清楚；注意历史信息可得时点，并保留共享服务、真实资本合并与正常业务变化的竞争解释。
+- 要比较不同时间的“群体替换/退出/结构融合”，不应只合并全部历史交易然后看静态连通图；分清服务节点在当前窗口是否仍活跃、旧关系是否过期、采集是否完整，必要时采用事件时间、窗口可比和右删失。
+- **更有信息价值的下一项实证**：若授权和预算允许，复用 Why-Solana 已冻结的原始 `fn_table`（交易时间与每条实际资金边），对 Null A/B/C 做**保留时间/机会的对照**，比较真实16个共享节点与新的null均值；同时检查同一高活跃 co-signing 设施是否服务大量**无关钱包**。这是两个可互相纠错的研究候选，不能假装已经做过。第三方原项目的时间条件、hub定义和完整交易覆盖须先核对；不需要先建新架构、部署交易或额外增加专家。
+- **当前停止边界**：本轮通过源码确认时间约束缺失于 Null A/B/C，并以独立合成反例证明该类null可以制造无机会的跨期连接；尚不能量化真实作者数据受到多大影响，也不能据此否定其观察到的有向路径、签名事实或同operator内再融资现象。
+
+**本轮认知增量**：不只“识别共享工具vs共同资本”，还要识别**这些关系在什么时候有发生机会**。如果参考项目的随机对照放宽了市场实际上不具备的活动机会，所谓异常与隔离都可能是对照假设的产物。
