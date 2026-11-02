@@ -310,9 +310,11 @@ class TestMintV01(unittest.TestCase):
         raw = json.dumps({"mint": MINT,
                           "topHolders": [{"address": acct, "owner": owner, "amount": "1"}]}).encode()
         rpc = {"mint": MINT, "status": "RPC_TOKEN_ACCOUNTS_AND_OWNER_HINTS",
+               "retrieved_at": "2026-11-02T00:00:00Z", "owner_lookup_error": None,
                "rpc_slot_largest": 120, "rpc_slot_owner_lookup": 123,
                "rows": [{"token_account": acct, "owner_candidate": owner,
                          "owner_status": "RPC_PARSED_TOKEN_OWNER_NOT_BENEFICIAL_OWNER",
+                         "amount_raw_at_first_slot": "1",
                          "source_path": "getTokenLargestAccounts.result.value[0]",
                          "owner_source_path": "getMultipleAccounts.result.value[0].data.parsed.info.owner"}],
                "no_trading": True}
