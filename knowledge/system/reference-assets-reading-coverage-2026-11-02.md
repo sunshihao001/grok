@@ -18,16 +18,16 @@
 | ID | 参考资产 | 原登记验证层级 | 本轮阅读状态 | 具体覆盖/未覆盖说明 |
 |---|---|---|---|---|
 | REF-001 | grok (当前正式项目) | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮读取知识PR、项目索引与运行指导（部分文件） |
-| REF-002 | 原 Solana Meme / GMGN 交易研究与 Hermes Workflow OS（跨域历史知识源） | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮精读learning/05–16、00c–00e要点、筹码控制设计与部分程序；远未覆盖全部264文件 |
-| REF-003 | qb- GMGN单Mint程序 | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮重读sikk_gmgn_token_report.py并核对主目录；4,236文件中大量为数据/备份，尚未逐项去重归并 |
+| REF-002 | 原 Solana Meme / GMGN 交易研究与 Hermes Workflow OS（跨域历史知识源） | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮精读learning/05–16、00c–00e要点、筹码控制设计与部分程序；远未覆盖全部264文件; 续读Skill04设计与实际执行谓词，确认similar_sell_ratio与设计差异、confidence_score非校准、池排除测试范围 |
+| REF-003 | qb- GMGN单Mint程序 | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮重读sikk_gmgn_token_report.py并核对主目录；4,236文件中大量为数据/备份，尚未逐项去重归并; 续核qb-对rat_trader、native_transfer资金来源及Token转入的实际分类谓词，待真实数据对照 |
 | REF-004 | meme- 理论研究库 | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮审读SOURCE_OF_TRUTH、FCZ/深洗/死亡盘、策略状态机、反证/基准/消融；其余未深审 |
 | REF-005 | Why-Solana-Memecoins-Are-Over (个人fork) | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 已连续审读coordination_detection、economic_mechanics、exit_destination、funder_network、known_group_reentry五专题各自的README/analysis_plan/results，按函数核查其主要分析/追踪/特征代码，及CD/EM/ED/FN/KG部分冻结和完整性文件；发现409→408分析层去重、G4语义边界、预注册matched检查修复；尚未逐行穷尽、全量复算或读取全部原始数据 |
 | REF-006 | Why-Solana-Memecoins-Are-Over (上游) | REPO_VERIFIED | 局部审读 / 有明确证据范围 | 本轮核查上游FN_INTEGRITY、FN_FREEZE与README；上游全部实验未核 |
-| REF-007 | Kelows/million | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮核读owners/funding/live相关源码，非安装运行 |
+| REF-007 | Kelows/million | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮核读owners/funding/live相关源码，非安装运行; 续核owners.service.ts的182-wallet共入场事故、Hub阈值与Union-Find低度数服务节点误并边界 |
 | REF-008 | co-numina/holdtech | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮核读deep-scan与holder-overlap源码；检测到公开明文API Key风险，未执行 |
 | REF-009 | cinder-security/pumpwatch | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮核读pump_watch与creator_reputation源码，未执行 |
-| REF-010 | OKX OnchainOS Skills+CLI | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮核验OKX Holder、Cluster List/Overview/Top Holders官方数据契约；未授权请求 |
-| REF-011 | GMGNAI/gmgn-skills | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮核读GMGN token/holder-analysis/portfolio/track官方Skills与字段；未授权请求 |
+| REF-010 | OKX OnchainOS Skills+CLI | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮核验OKX Holder、Cluster List/Overview/Top Holders官方数据契约；未授权请求; 续核Token Cluster Top300/100限制与Wallet History六个月、单链每页20及示例契约不一致；未授权实测 |
+| REF-011 | GMGNAI/gmgn-skills | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮核读GMGN token/holder-analysis/portfolio/track官方Skills与字段；未授权请求; 续核gmgn-token的Token Traders历史非Holder范围、单次100条和first native transfer标签限度；未授权实测 |
 | REF-012 | Solana Microscope | SOURCE_AUDITED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
 | REF-013 | FnZero Solana Parser SDK Python | SOURCE_AUDITED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
 | REF-014 | FnZero Solana Parser SDK Rust | SOURCE_AUDITED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
@@ -103,6 +103,9 @@
 - 明确新发现：`known_group_reentry/code/kg_10_features.py` 的G4是当前Sniper**在历史中曾发生Token向外转移**，而非“同一Token接收钱包重复出现”的完整身份关系；`kg_30_analysis.py`包含将匹配基线条件加入最终判定的自我修正。
 - 已核查CD/EM/ED/FN/KG冻结文件关键计数，但**未重新运行原仓库全部测试、未自行重放SOL交易历史**。不同来源的作者统计、平台标签和当前Meme V0.1运行成果仍严格隔离。
 - 下一次阅读应沿具体代码缺口追查：`fn_30_analysis`的去重是否覆盖所有汇总、`exit_destination`高活跃节点历史删失、`economic_mechanics`时间可见性如何影响cluster、`known_group_reentry`模拟成本和数据可得时间，然后再扩展到旧qb的真实报告与标签，避免将尚未审过的其他资产标成“完成”。
+
+
+- **2026-11-02 共享服务专项续读**：Hermes Skill04设计/源码/排除测试、qb- GMGN报表的实际分类分支、Million Owner聚类/资金边源码，Why-Solana `FN_posthoc.json`的408首跳目标地址签名分组，GMGN Token/Holder官方Skill、OKX Cluster/Wallet History官方契约及Bubblemaps OpenAPI已按本轮具体问题核验。独立JS合成两例检验算法推论，不是原仓实际数据重放。结果归位[L3深度研究§23](../domain/L3-actor-economic-mechanisms-deepstudy.md)与[本专项审计“五再补”](legacy-meme-multihop-deep-audit-2026-11-02.md)。仍未完成65项全量逐文件理解、旧代码运行验收和服务商客户群真实比例估计。
 
 ## 验收状态
 
