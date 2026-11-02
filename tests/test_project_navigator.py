@@ -169,6 +169,32 @@ class NavigationTests(unittest.TestCase):
             with self.subTest(question=question):
                 self.assertEqual(nav.shortlist(question, self.data)["routes"][0]["intent"], intent)
 
+    def test_unseen_paraphrases_are_marked_weak_not_mistaken_for_understanding(self):
+        # Held-out wording: only two of nine happen to rank the intended
+        # specialist first; do NOT extend the cue list to manufacture 9/9.
+        paraphrases = [
+            "一种代币从A的ATA移动到B的ATA，DEX并没有成交，算已经抛售了吗？",
+            "交易所作为中间节点，出入账金额差不多，可以认定背后同一个人吗？",
+            "同slot的五笔机器人买入是否一定属于Jito打包？",
+            "OKX统计前一千名持币者彼此转主流币的比例，能推断资金出自一个人吗？",
+            "一组地址在某币上停止活动，过两天换一组新地址出现在新币上，算资金接力吗？",
+            "这几个账户互相转币，集团库存实际有减少吗？",
+            "为什么榜单显示某个聪明钱很赚，普通人复制他的交易却亏？",
+            "对照代码，原报告记录路径条数不同，如何排查重复计数？",
+            "Meme研究体系还要全员会诊吗，还是按情况深入？",
+        ]
+        for q in paraphrases:
+            with self.subTest(question=q):
+                out = nav.shortlist(q, self.data, limit=3)
+                self.assertTrue(out["weak_literal_match"])
+                self.assertIn("AI must determine intent", out["weak_literal_match_note"])
+                self.assertEqual(out["match_kind"], "literal_cue_candidates_not_semantic_routing")
+
+    def test_explicit_intent_is_not_a_lexical_guess(self):
+        out = nav.shortlist("unexpected phrasing", self.data, intent="DATA_SEMANTICS")
+        self.assertFalse(out["weak_literal_match"])
+        self.assertEqual(out["match_kind"], "explicit_intent")
+
     def test_out_of_scope_id_fails(self):
         with self.assertRaises(ValueError):
             nav.shortlist("", self.data, intent="AUTOTRADE")
