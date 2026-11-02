@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "purpose": "Navigation and UI-to-knowledge/implementation map, NOT a second ontology, knowledge claim, Grok skill or deployed router.",
   "repository": "sunshihao001/grok",
-  "as_of": "2026-11-01",
+  "as_of": "2026-11-02",
   "branches": {
     "knowledge": "knowledge/whole-spectrum-20261030-v1",
     "engineering": "research/p24-cross-mint-m01-batch-monitor-20261031"
@@ -14,7 +14,10 @@
     "Use one canonical source per fact and link, never copy the 152 unit bodies into this index.",
     "Read only relevant files first; source/validation specialists are called when the task needs them.",
     "Cross-branch engineering paths are candidates requiring explicit checkout; a link is not runtime invocation.",
-    "No private keys, trading, signing, paid API or x402 payment without authorization."
+    "No private keys, trading, signing, paid API or x402 payment without authorization.",
+    "Authority for work method: current-operating-guidance.md first; legacy progression/continuity stage checklists are optional historical methods, not compulsory actions or outputs.",
+    "Literal routes and expert_lens_ids are optional candidate pointers; for abstract explanations no expert invocation is required; consult one domain source or extend to external source when it could change the answer.",
+    "For multi-hop shared-service versus common-control questions prioritize D05 economic actor and original signed transaction/source evidence; for provider reuse prioritize capability/contract/price/privacy before market inference."
   ],
   "canonical_assets": [
     {
@@ -303,7 +306,17 @@
         "控制",
         "不同新币",
         "一起出现",
-        "反复出现"
+        "反复出现",
+        "多跳资金",
+        "多跳",
+        "共同签名",
+        "共同控制",
+        "共享执行服务",
+        "共用交易服务",
+        "隐藏钱包",
+        "最终受益",
+        "经济主体",
+        "外部客户"
       ],
       "domains": [
         "D05",
@@ -317,7 +330,8 @@
       ],
       "knowledge_files": [
         "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md",
-        "knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md"
+        "knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md",
+        "knowledge/system/legacy-meme-multihop-deep-audit-2026-11-02.md"
       ],
       "engineering_ids": [
         "event",
@@ -574,7 +588,15 @@
         "Million",
         "Cluster Tracker",
         "TradingAgents",
-        "Degen-Scanner"
+        "Degen-Scanner",
+        "OKX",
+        "GMGN",
+        "Bubblemaps",
+        "成熟平台",
+        "复用平台",
+        "接口复用",
+        "数据平台",
+        "V0.2"
       ],
       "domains": [
         "D10",
@@ -587,7 +609,8 @@
       ],
       "knowledge_files": [
         "knowledge/system/reference-capability-reuse-ledger.v1.md",
-        "knowledge/system/reference-projects-meme-knowledge-audit-20261030.md"
+        "knowledge/system/reference-projects-meme-knowledge-audit-20261030.md",
+        "knowledge/system/current-operating-guidance.md"
       ],
       "engineering_ids": [
         "product",
@@ -665,7 +688,12 @@
         "准确",
         "原始指令",
         "链上交易",
-        "还原买卖"
+        "还原买卖",
+        "共同签名",
+        "签名者",
+        "Fee Payer",
+        "Token Transfer",
+        "资金误归因"
       ],
       "domains": [
         "D01",
@@ -710,7 +738,13 @@
         "污染",
         "专家体系",
         "知识关系",
-        "导航"
+        "导航",
+        "持续推进制度",
+        "专家调用",
+        "去约束",
+        "冲突约束",
+        "研究质量",
+        "研究制度"
       ],
       "domains": [
         "D12",
@@ -723,7 +757,10 @@
       "knowledge_files": [
         "knowledge/system/gpt-meme-project-core.v1.md",
         "knowledge/system/gpt-meme-knowledge-accumulation.v1.md",
-        "knowledge/system/whole-project-convergence-audit-2026-11-01.md"
+        "knowledge/system/whole-project-convergence-audit-2026-11-01.md",
+        "knowledge/system/current-operating-guidance.md",
+        "knowledge/system/gpt-meme-progress-current.md",
+        "knowledge/experts/registry.v1.json"
       ],
       "engineering_ids": [],
       "reference_ids": [
