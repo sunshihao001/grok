@@ -842,3 +842,54 @@ Why-Solana 的操作群体是按早期研究冻结的“operator cluster”**研
 **下一项有区分力的验证**：优先在已冻结的 `fn_table.json.gz` 和原 `funding` 数据中，按实际资金事件重新统计119条关联对应多少**唯一资助事件、唯一目标钱包及重复上游路径**；再在明确数据覆盖的少量路径中检查收支余额是否允许直接资本回流。若冻结表没有足够的唯一事件键或余额记录，明确输出“不可识别”，不借口另建架构。随后可与 Million `ledger.ts` 的“Transfer ≠ Sell”和 `owners.service.ts` 的资金边语义交叉核查。
 
 **研究状态**：实际源码阅读＋3个独立合成断言通过＋原位知识修订；未执行原始119关联的唯一事件去重、原始RPC资金追踪或PR#16工程修改。
+
+
+## 23｜2026-11-02 共享服务识别的前置误差：旧Hermes规则、Million连通传递与数据商覆盖范围
+
+> **与§18–22的区别**：前文已经核查 Solana 多签并不等于共同私钥、Why-Solana 桥接路径的时间机会、冻结样本及资金循环的重复统计。本节**不重复这些结论**；专门恢复旧 Hermes/qb- 早期业务代码的实际谓词，检查它如何在多跳追踪**之前**产生假群体，并研究现成数据接口是否足以补充“高活跃服务节点的外部客户群”证据。基于2026-11-02源码/文档检查；合成例是逻辑验证，不是Solana实盘样本。
+
+### 23.1 Hermes 设计规则与实现规则并不一致
+
+旧 [Skill04设计文件](https://github.com/sunshihao001/-/blob/main/design/phase1-skill-04-wallet-structure.md) 在“卖出模式聚类”处写明：`sell_amount_percentage`差值小于0.1的钱包才是相似卖出候选；但其真正的 [`_distribution_groups()`实现](https://github.com/sunshihao001/-/blob/main/skills/meme-wallet-structure/scripts/run.py) 只是选出所有`sell_amount_percentage > 0.5`的钱包、排序后**不再按相似差值分段**，统一输出一组`pattern="similar_sell_ratio"`。
+
+**独立合成反例**：钱包A卖出占比0.51、B为0.99；两者相差0.48，显然不满足旧设计的“<0.1”，实际谓词却将其放进同一组。经独立JS逐项复刻谓词确认。这里证明的是**设计/代码不一致**，不是已测出它导致市场上多少次错误聚类。不能从这个组继续生成“协同派发”或“同一操作者”事实。
+
+相同脚本中的`confidence_score = clamp(0.8 - 0.1×downgrade_reasons数量, 0.1, 1.0)`来自缺失项惩罚，并没有样本标签、交叉验证、似然或概率校准；因此仅能叫**人为可用性分数**，不是“同控的80%概率”。`_suspected_controllers`把“某地址资助至少3个钱包 + 这些钱包合计持仓>5%”写作`strong`，没有排除一个低活跃度共享出资/运营服务，不能按此升级为共同受益所有权。
+
+设计和实现中值得**继承**的内容：先排除池/交易所参与普通持仓评分，对无资金来源和少量样本输出`downgrade`；原始`same_source_groups`和基础设施关系仍应保存，而不是把它们直接当真实庄家数。其测试 `test_wallet_structure_exclusions.py`核实的是池地址不会参与集中度统计，**没有证明所有资金来源都已正确识别，更没有验证同控准确率**。
+
+### 23.2 Million修复了182-wallet错误合并，但仍有未验证的图边界
+
+[Million `owners.service.ts`](https://github.com/Kelows/million/blob/main/apps/api/src/analysis/owners.service.ts) 内作者记录过`coentry`参与连通合并造成182-wallet owner错误；当前实现让`coentry`只作为证据，不再作为`union-find`桥接边，并对每个出资或代付节点的**已记录钱包边数量>6**时停止参与连通。这是针对真实失败的明确修订，应当继承。
+
+但局部阈值不等于经济控制证明：即使每个公共服务节点只连接3个地址，多个服务节点通过另一桥接节点仍可以在`union-find`中传递连成一组。**独立合成验证**：A/B连Service1，C/D连Service2，Service1—Bridge—Service2相连；所有节点的度数≤3，程序的`degree>6`Hub排除条件不会触发，A/B/C/D被合并成一个连通组件。这是代码语义层面可复核的反例，非原Million实际数据，也不证明其既有182错误修正无效。
+
+因此`ownerId`应理解为**该程序所选边/阈值下的聚类ID**，而不是已识别经济法人、交易决策者或最终受益人。共享费用支付服务、普通出资关系和共入场不能在同一信任语义下无条件传递。发现更复杂钱包图后要分别保留“历史事实图”与“在已证实边类型下可合理聚类的候选关系”，而非删除所有服务节点：服务节点**不应参与主体连通**，但经常正是追踪隐藏服务设施的重要线索。
+
+### 23.3 qb-报告早已体现调查方向，但旧标签仍可能提前归因
+
+[旧qb- `sikk_gmgn_token_report.py`](https://github.com/sunshihao001/qb-/blob/main/sikk_gmgn_token_report.py) 把`addr_type==2`单独存为LP/Pool基础设施，`rat_trader`标为“可疑中转节点”，`transfer_in`按Token转入和卖出占比划分接收/派发，并保留地址关系边。这是优秀的产品雏形：**关键钱包发现以后还应调查Token来源、资金来源、转出和是否另有经济职能**。
+
+但`rat_trader`是GMGN供应商行为标签，不能推出该地址真是某笔资金中转；`transfer_in`亦不足以证明它是某个组织的下游分发地址。更具体地，代码中只要钱包`native_transfer.from_address`非空，报表便给出“路由/工具节点候选”，该命名没有要求实际交易路由、反复服务多个客户或签名执行证据。继承其**调查入口**，不能继承这些标签作为事实。
+
+### 23.4 官方平台能否直接证明“某公共签名方服务大量外部客户”？
+
+| 数据端 | 目前核到的实际数据语义 | 是否足以回答服务对象覆盖问题 |
+|---|---|---|
+| **GMGN** `token holders`/`token traders` | 分别当前持仓与历史交易者；Top列表一次最多100、支持标签过滤；`native_transfer`首次原生资产来源，`token_transfer_out`最近转出，非全量历史共同签名集合 | **不足**：只能作为候选地址发现和已有市场行为资料，不提供任意服务方全部非Holder客户名单或逐笔signer集合 |
+| **OKX Token Cluster** | 当前Top300 Holder范围的集群（最多100组）； `holderSameFundSourcePercent`文档其实定义为持有人间主流币往来，不是确认最终同源 | **不足**：集群观察分母是持有人，不是一个高活跃签名服务方的全部交易客户 |
+| **OKX Wallet History** | 官方 `transactions-by-address`文档写六个月历史，单链每页最多20笔，含hash、时间、from/to、asset、方向、类型、状态，接口支持分页；`transaction-detail-by-txhash`有细分资产转移 | **适合筛候选但不够证明共签**：两页响应字段示例和请求示例存在`address`/`addresses`、`transactions`/`transactionList`等差异；未列出Solana完整所需Signer/account-meta数组，实际账户授权响应与Solana支持仍须测 |
+| **Bubblemaps v0.3.2** | `/v0/tokens/map/{chain}/{token_address}`可给`top_holders`、Magic Nodes、Time Nodes、clusters；`POST /v0/relationships/subgraph`需传入**2–1000个已知地址**，聚合关系是transfer数量/总值/首次末次时间，无逐笔签名字段 | **适合发现与对照局部地址关系，不等于一个地址无范围限制的外部客户普查** |
+| **Nansen Address Counterparties（可选）** | Solana支持按钱包查询带时间/金额/次数的交易对手，需授权和套餐；可辅助观察“只联系这批人还是广泛联系市场” | **辅助**：转账对手与必须签名的客户不相同，不能独立证明共签服务 |
+| **Solana原始RPC** | `getSignaturesForAddress`查涉及地址的签名；`getTransaction` `jsonParsed`列出账户的`signer`、`writable`、指令、交易净变化和CPI。v1交易需请求`maxSupportedTransactionVersion:1` | **必要的独立签名核验来源**，但高活跃地址历史分页/调用成本/历史保留必须控制；不意味着能恢复服务商私下合同或密钥保管关系 |
+
+来源：[GMGN官方Skill](https://github.com/GMGNAI/gmgn-skills/blob/main/skills/gmgn-token/SKILL.md)、[OKX Cluster List](https://web3.okx.com/onchainos/dev-docs/market/market-token-cluster-list)、[OKX History](https://web3.okx.com/onchainos/dev-docs/wallet/tx-history-api-history)、[OKX tx detail](https://web3.okx.com/onchainos/dev-docs/wallet/tx-history-api-detail)、[Bubblemaps OpenAPI](https://github.com/bubblemaps/api-docs/blob/main/openapi.json)、[Nansen Counterparties](https://docs.nansen.ai/api/profiler/address-counterparties)、[Solana JSON Structures](https://solana.com/docs/rpc/json-structures)、[Solana Partial Signing](https://solana.com/docs/core/transactions/partial-signing)。
+
+**新认识**：不能为了“优先成熟数据平台”而误以为它们提供了未公开的最终同控标签真值。**候选发现可以成熟平台优先；具体共同签名与交易消息授权必须由具备Signer字段的原始交易核验**。对共享服务的关键研究不只是数有多少外部交易对手，而是抽查他们与服务钱包的**签名参与、支付方向、交易业务类别、持续时间、重复关系、是否同Mint/同时间窗**，同时与普通服务商和独立钱包做对照。外部客户越广使共享服务解释相对更有解释力，但不能直接证明其商业身份；客户越少也不自动证明一个统一资本主体。
+
+### 23.5 下一次单项最有区分力、且可控制调用成本的调查
+
+沿用Why-Solana作者尚未完成的方案：先对共同为多个群体参与签名的高活跃地址，从公开资料/成熟平台拿到候选非研究群体交易对手，再**预先冻结**少量按时间分层的交易签名；只读核验交易消息中哪些地址真正是signer、谁支付手续费、是否属于同一业务路线、接收方是否是Fee Payer、关联钱包是否来自已有研究群体以外的独立Mint/客户样本。不能把“一个地址曾在交易中出现”当“它就是签名者”。
+
+**判定标准**：若大量无关客户在不同Mint、不同时间段使用同样共同签名/结算程序，共享执行服务解释获得支持；若关系主要限于一个资金闭环、共同资本再部署并有反证排除广泛服务对象，则资本组织假设获得更多支持。两种情况仍不能在无私下账本/外部信息时确定最终受益所有权。此测试本轮只完成**方法与文档可得性核查**，尚无授权API真实响应、未从RPC获取新签名、无历史外部客户真实比例、无交易或付费调用。
+
