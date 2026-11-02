@@ -1,0 +1,104 @@
+# Solana Meme 原参考资产逐项审读覆盖账｜2026-11-02
+
+> **任务承诺的边界**：用户要求每一个知识点都深入理解，不跳过重要旧资料。本账用于避免“搜到=学过、列到目录=审过、总结=复现”的误报。它不是另一套领域分类，不自动改变原65项参考登记、152项知识单元或证据准入规则。**仅标本轮实际阅读覆盖**；仓库内重复备份与机器原始数据必须区分，未核实者不能写“完成”。新阅读时应原位更新此账和对应Dxx专题，不要每轮另建一套表。
+
+## 覆盖统计和结构
+
+本轮通过GitHub Git Tree取到5个仓库的文件目录，不等于全文读完：
+- Hermes：264个文件路径，231种不同blob SHA；
+- qb-：4,236个文件路径，3,276种不同blob SHA；其中 `data/` 3,338项，`hermes_harness/` 610项，另有旧备份；
+- meme-：474个文件路径，414种不同blob SHA；
+- Why-Solana个人fork：944个文件路径，925种不同blob SHA；其中 `data/` 503项；
+- grok知识PR分支：180个文件路径，180种不同blob SHA。
+
+上述去重只是按完全相同内容的Git blob进行，不代表其余每个blob都是不同的“专业知识点”。每项需进一步分为：原始理论/报告、程序实现、测试与反例、历史更正、原始事件数据、衍生结果、模板/副本。**大量文件没有逐一打开，因此本轮绝不宣称“全量理解完成”。**
+
+## 原65项逐项覆盖
+
+| ID | 参考资产 | 原登记验证层级 | 本轮阅读状态 | 具体覆盖/未覆盖说明 |
+|---|---|---|---|---|
+| REF-001 | grok (当前正式项目) | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮读取知识PR、项目索引与运行指导（部分文件） |
+| REF-002 | 原 Solana Meme / GMGN 交易研究与 Hermes Workflow OS（跨域历史知识源） | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮精读learning/05–16、00c–00e要点、筹码控制设计与部分程序；远未覆盖全部264文件 |
+| REF-003 | qb- GMGN单Mint程序 | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮重读sikk_gmgn_token_report.py并核对主目录；4,236文件中大量为数据/备份，尚未逐项去重归并 |
+| REF-004 | meme- 理论研究库 | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮审读SOURCE_OF_TRUTH、FCZ/深洗/死亡盘、策略状态机、反证/基准/消融；其余未深审 |
+| REF-005 | Why-Solana-Memecoins-Are-Over (个人fork) | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮深入审读funder_network主要源码/方案/结果/冻结/完整性、coordination及exit/economic/known_group片段；尚未独立重放 |
+| REF-006 | Why-Solana-Memecoins-Are-Over (上游) | REPO_VERIFIED | 局部审读 / 有明确证据范围 | 本轮核查上游FN_INTEGRITY、FN_FREEZE与README；上游全部实验未核 |
+| REF-007 | Kelows/million | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮核读owners/funding/live相关源码，非安装运行 |
+| REF-008 | co-numina/holdtech | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮核读deep-scan与holder-overlap源码；检测到公开明文API Key风险，未执行 |
+| REF-009 | cinder-security/pumpwatch | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮核读pump_watch与creator_reputation源码，未执行 |
+| REF-010 | OKX OnchainOS Skills+CLI | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮核验OKX Holder、Cluster List/Overview/Top Holders官方数据契约；未授权请求 |
+| REF-011 | GMGNAI/gmgn-skills | SOURCE_AUDITED | 局部审读 / 有明确证据范围 | 本轮核读GMGN token/holder-analysis/portfolio/track官方Skills与字段；未授权请求 |
+| REF-012 | Solana Microscope | SOURCE_AUDITED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-013 | FnZero Solana Parser SDK Python | SOURCE_AUDITED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-014 | FnZero Solana Parser SDK Rust | SOURCE_AUDITED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-015 | Carbon Indexing Framework | SOURCE_AUDITED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-016 | solana-dex-parser-go | SOURCE_AUDITED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-017 | solana-dex-parser TypeScript | SOURCE_AUDITED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-018 | MadeOnSol SDK | SOURCE_AUDITED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-019 | Helius core-ai | REPO_VERIFIED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-020 | Yellowstone gRPC | REPO_VERIFIED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-021 | Raydium CP Swap | REPO_VERIFIED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-022 | Pump public docs | REPO_VERIFIED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-023 | Jito Solana Client | REPO_VERIFIED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-024 | Metaplex Token Metadata | REPO_VERIFIED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-025 | Solana Sniper Reverse Engineering | REPO_VERIFIED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-026 | MELT Dataset / Code | REPO_VERIFIED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-027 | Grokbot Playbooks | REPO_VERIFIED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-028 | Helius Enhanced/DAS/Parsed Events | PAGE_VERIFIED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-029 | QuantBloc methodology / Base / MCP | PAGE_VERIFIED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-030 | Triton / Fumarole / Old Faithful | PAGE_VERIFIED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-031 | Bitquery Solana API/Token Holder | PAGE_VERIFIED | 局部审读 / 有明确证据范围 | 本轮比对Bitquery Coinpath历史研究结论，未在本轮执行完整接口重放 |
+| REF-032 | DEX Screener | PAGE_VERIFIED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-033 | Solana Official Docs | PAGE_VERIFIED | 局部审读 / 有明确证据范围 | 本轮按经济事件与账户权限对照既有Solana协议认识；未遍读官方全站 |
+| REF-034 | Jito Docs | PAGE_VERIFIED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-036 | Meme Coin Factories (ACM CCS 2026) | PAGE_VERIFIED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-037 | A Midsummer Meme's Dream (USENIX 2026) | PAGE_VERIFIED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-038 | RED-COHORT 2026 dataset | PAGE_VERIFIED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-039 | Froggy V2 Scanner | PAGE_VERIFIED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-040 | Sputnik Parser / @sputniksol | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-041 | GMGN Terminal / CLI | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-042 | OnchainRadar | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-043 | Genesis Arbitrage | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-044 | ArbitrageScanner | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-045 | Synapse | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-046 | Axiom | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-047 | Photon | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-048 | TradeWiz | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-049 | Ray Bot | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-050 | Stratos | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-051 | Crypto GYM | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-052 | Eclipse Trencher | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-053 | taxiflip Axiom Dev Tracking教程 | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-054 | Arkham | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-055 | Nansen | HISTORICAL_NAMED_ONLY | 局部审读 / 有明确证据范围 | 结合此前Nansen钱包关系API资料，本轮未对该平台完整重新核验 |
+| REF-056 | Ethtective | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-057 | Resonance | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-058 | BlockSec Phalcon | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-059 | CoinGlass | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-060 | solana-foundation/transaction-v1-examples | LINK_UNRESOLVED | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-061 | Meteora AMM | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-062 | PumpSwap | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-063 | Jupiter Aggregator | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-064 | Clanker | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-065 | Zora | HISTORICAL_NAMED_ONLY | 待本轮逐文件审读 | 仅继承索引记录，不代表本轮已阅读该资产的专业知识 |
+| REF-066 | RugCheck | PAGE_VERIFIED | 局部审读 / 有明确证据范围 | 引用先前真实V0.1 RugCheck运行证据，本轮没有重新联网请求 |
+
+## 未计入原65项但本轮需要保留的新增来源候选
+
+- **Bubblemaps Data API v0.3.2**：本轮已读取官方 `openapi.json` 的map、holder、subgraph及数据结构，记录Magic Nodes/Time Nodes、聚合转账边和时间戳参数；尚未真实授权API调用。建议后续核验后正式决定是否进入原参考索引。
+- **Bitquery Coinpath历史多跳示例**：已有官方资料入口，候选作为补充任意钱包多跳调查；本轮未执行请求、未核计费和真实Solana历史覆盖。
+- **GMGN官方2026 Agent API新信息**：应在现有REF-011之下按接口现状更新旧“不能开放API”的历史说法，但不能把过往白名单说明和新Agent API说成同一服务。
+
+## 具体知识点恢复顺序：以原业务因果链而非每项字母顺序
+
+1. **钱包与经济角色的基础**：Hermes learning/10–12、qb关键地址矩阵、Solana owner/authority/fee payer账户语义；回答“地址是什么、行为是什么、经济主体未知在哪里”。
+2. **资金、退出与多跳**：Why-Solana `exit_destination/`→`funder_network/`→`coordination_detection/`，与Million funding/owners、OKX/GMGN/Bubblemaps数据字段对照；回答“关系怎么来、何时丢失、为什么会被错误合并”。
+3. **库存与资本回流**：Hermes Skill4、GMGN transfer_out/PnL、Why economic_mechanics/known_group_reentry、meme FCZ假设；回答“仓位何时真实转移、何时只是执行设施”。
+4. **反证、长期有效性和业务决定**：Hermes 00c–00e/13–16、meme负对照/消融、Why历史冻结/空模型/未发现盈利结论；回答“怎样分清新的结构认识、有效监控与尚未证实的交易优势”。
+5. **未在本轮读过的旧专业来源和65项剩余项目**：逐步逐项审读，不允许因当前主题集中多跳而假定其全部不相关；按研究问题重新调用，并保留遗漏审计状态。
+
+## 验收状态
+
+- 本轮已产生 **[多跳与旧知识专业审计](legacy-meme-multihop-deep-audit-2026-11-02.md)**：包含真实代码、字段、非Holder关联、Hub反例、数字不一致、来源及经济边界。
+- **尚未完成**：逐文件全量研究、全部65项资产的源码测试及版本比较、旧仓库全数据独立复现、Grok多跳运行及三平台同Mint授权数据对照。没有后台运行状态，也不存在已预约的后续交付。
+- 读完一个知识点的必要条件：能准确复述原作者的专业问题；定位到源码/研究证据；说明观察与推断差别；指出具体失败与竞争解释；列出使用旧成果的条件；若发现旧结论错误，在原位置留下修订与来源。不以字数和新增架构为完成标准。
