@@ -8,6 +8,58 @@
 >
 > **一句话收束**：项目已有相当丰富的Meme专业知识、一个152单元的导航、22个知识视角和实际工程进展；最大问题不是再扩充目录，而是旧知识结论、来源等级、当前研究状态和真实程序能力之间**没有足够统一的证据链**。先校准何为“已经知道/已经完成”，再沿具体Mint→钱包→资金→库存→时序→可解释监控结果贯通能力。
 
+## 2026-11-02｜跨市场阶段与跨项目的全链路研究裁决（现行补充）
+
+> **工作方式修正**：上一版审计按Mint→钱包→资金→库存→时序→报告总结业务链，但近期容易把“P阶段”误当研究任务的先后顺序，持续围绕一笔转账、一项RPC字段或一篇参考项目局部深化。此次复核强调：**真实Meme市场是发行者、资本、执行服务、真实/人为买盘、池深度、库存、社交关注、卖出兑现及跨Mint再部署相互反馈的动态系统**；任何一点都可作为研究入口，自主向上下游和其他Mint追踪。产品V0.1/V0.2/V0.3/V1.0是交付验收状态；P1–P6是历史研究坐标；D01–D12及22专家是知识索引，均不是必须串行通过的调度器。保留全部先前研究知识和反例，不增设另一套本体。
+
+### 1. 从一条完整市场经济循环提出问题（不是固定研究流程）
+
+| 相互耦合的市场问题 | 需要同时联系的知识与对象 | 单独研究一个字段会漏掉什么 |
+|---|---|---|
+| 新Mint为什么创建并获得初期流动性？ | Dev真实创建/付费人、系列Mint、Curve/DEX阶段、池库存和LP资本、发币收益与外部叙事 | 不同阶段有不同池机制；creator标签不是最终受益人，池成交量也不是独立买家人数 |
+| 谁在交易、为什么多地址一起行动？ | Token Account与authority、真实Swap/CPI、Fee Payer、资金预算、公共执行服务、Token库存、多Mint重复 | 同一签名/同一资金Hub/同slot不等于共同资本和受益控制；共享服务可能跨多个无关客户 |
+| 价格和所谓市场热度怎样形成？ | 可执行池深度、Curve真实储备、外部传播、真实净需求、wash/机器执行、价格反馈和供应变化 | 小额交易也可能在薄池制造大报价变动；媒体热度/交易量不能自动说明“真买盘” |
+| 买入后发生什么、谁兑现收益？ | Token转仓/LP/锁定、分批出货、归集、成本基础、Creator/服务商费用、跨Mint资金再投入 | 地址路径可达不证明原始SOL一直不变；买者、执行者、出货钱包及经济受益人可分离 |
+| 研究发现能否成为监控或交易价值？ | 历史完整度与实时收到时间、正常样本、市场阶段基线、独立反证、报价/滑点/退出成本 | 发现异常≠预测有增量≠旁观者获利；一个已事后可知的群体不代表当时能看到并跟随 |
+
+**关键是循环和反向关系**：新资金入场可拉动价格与关注，热度引导后续真正的需求，早期钱包可能出货并转去下一枚Mint；同样的交易形状也可能来自普通热度、机器人执行或多客户的公共工具。应把“观察事实—竞争解释—可辨别新证据”联系到**整个市场过程**，不能预设每次都要识别“庄家”。
+
+### 2. 交叉研究现成项目，不按项目/阶段把完整业务拆碎
+
+| 已查源代码或工作流 | 与其他项目的互补关系及实际边界 |
+|---|---|
+| [旧Hermes 学习10–12与Workflow Controller](https://github.com/sunshihao001/-/tree/main/learning) | 钱包角色只是行为推断，Top Holder非控制权，wash/Sybil需要反证；保留事实→角色→证据链→决策条件，不恢复强制Skill串行调度和未经校准阈值 |
+| [旧qb 单Mint报告脚本](https://github.com/sunshihao001/qb-/blob/main/sikk_gmgn_token_report.py) | 同一份业务报告已有关键地址矩阵、基础设施名册、Dev/Smart/KOL/Bundler/Transfer-in等候选分组和复查计划；复用业务语义，不默认GMGN充值、真实接口可用或供应商标签是真值 |
+| [meme- 策略真源](https://github.com/sunshihao001/meme-/blob/main/SOURCE_OF_TRUTH.md) | FCZ/洗盘/反抽/死亡盘等是对市场阶段和库存分配的竞争性解释，而非凭历史价形推“操盘者成本”或确定交易获利 |
+| [Million discovery/live/funding/owners/copyability](https://github.com/Kelows/million/tree/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src) | 原生串联Mint找买家→钱包事件→资金网络→库存及可复制性，是整套成品优先研究对象；但live-feed存在同签名“首触及钱包占据一条事件”的风险，owners基于有限关系做Union-Find，已留182钱包误聚类事故注释，且程序启动可触发paper仓位或配置下实际交易，不能未经隔离直接部署 |
+| [HoldTech业务API](https://github.com/co-numina/holdtech/tree/a75e214bf1ee0a8803eb7d93336be98c481c2db9/app/api) | 从Holder深扫、Deployer、Wallet PnL、Bundler与前端报告串起业务，但部分路由带供应商凭据后备/启发式Token事件语义，须审权限、数据口径与依赖；不照搬未经证明的同控/盈利标签 |
+| [pumpwatch探测与结果追踪](https://github.com/cinder-security/pumpwatch/tree/156a91ab63740ab0ce8700434ff33844d00de519/code) | 有新币发行检测、Creator历史、SQLite保存、按币龄调整追踪频率及429退避；可结合Million动态钱包数据与qb的Mint报告，不把本地seen_at当链上创建时间或假设所有现今发币协议形状不变 |
+| [OKX token-research/wallet-monitor-ws](https://github.com/okx/onchainos-skills/tree/73904b636a0f022dcc13b6d7a0dd2ed3b3195f25/workflows) | 现成Mint全景→钱包与信号→后续监听的业务文档；真实授权、WebSocket套餐、x402自动付款风险及字段时点要独立验；README存在不代表已对接Grok |
+| [Why-Solana源码与冻结研究](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/tree/main) | 多跳资金、共同签名、跨群体服务、资本再部署与时间零模型互相链接；来源级维持review_only，过往源码最大净变化配对可能造假边、静态null可错过时间机会，不能把路径或“operator group”自动当实控主体 |
+
+### 3. 外部研究把“异常识别”和市场经济作用重新连在一起
+
+- [Szwajcok等，Meme Coin Factories（2026-09预印本）](https://arxiv.org/abs/2609.10246)：原作者以约1525万枚pump.fun代币的元数据与抽样交易，研究wash trading、发币者地址伪装、协同卖出、仿冒币、社交操纵和操纵工具服务化。它提示**资金/钱包/池行为可能与社交传播和第三方交易服务在同一经济活动中结合**；但某些服务的具体功能来自公开宣传而未真实运行验证，也不代表所有共享工具都被用于操纵。适用期与当前协议可能不同。
+- [Gafarov，Early-Buyer Groups and Fast-Wallet Teams（2026-10-29 arXiv预印本）](https://arxiv.org/abs/2610.39458)：原作者88.3小时样本观察200,443次发币与约1585万Curve交易，提出23,710个钱包行为群，并在自己的样本外模拟中报告**32种首次群体信号跟随配置均负收益**；该研究没有链下真实实控标签、不能证明我方真实可成交表现，外推性有限。它实质贯通**群体能识别→早期成员获利→外部观察者何时收到→滑点/手续费→跟随者是否有净优势**，提醒本项目不应以“识别庄家”直接承诺可跟单赚钱。
+- [Mongardini与Mei，USENIX Security 2026](https://www.usenix.org/conference/usenixsecurity26/presentation/mongardini)：研究把洗盘成交与**流动性池价格膨胀（LPI）**及后续兑现连起来；报告的82.89%是**该研究高回报代币条件样本**中的比例，不能当作所有Solana Meme的操纵率。需要同时看池深、库存、交易来源与外部参与需求，而非只按K线或钱包数量判断。
+
+**跨阶段认识**：研究既要能描述潜在的资本组织，也要解释为何某些“热闹”是流动性/执行设施效应，哪些是外部真实需求；从结构识别到预测和可交易性之间必须另做真实验证。新认知可以产生纯风险监控或解释价值，无须硬转交易信号。
+
+### 4. 真实工程跨环节断点，来自2026-11-02 PR #16源码合同实查
+
+- [mint_v01.py](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/src/solana_meme_os/mint_v01.py)已用真实DEX和RugCheck缓存提供同Mint池/Holder/Creator候选，另在离线测试中实现RugCheck与RPC按相同Token Account的Owner字段比对；过去真实官方RPC仍429，未在本项目取得这些候选的主网RPC Owner真值。
+- [vendor_event_handoff.py](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/src/solana_meme_os/vendor_event_handoff.py)可以把可审计供应商快照转成研究任务，但其事件级输出明确是供应商缓存标签且chain_transaction_signature为null，**不是链上经济BUY/SELL**。
+- [wallet_batch_monitor.py](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/src/solana_meme_os/wallet_batch_monitor.py)现只接受m01.v1与fixture模式的已解析BUY/SELL/TRANSFER，要求owner、quote及覆盖契约；[raw_tx_adapter.py](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/src/solana_meme_os/raw_tx_adapter.py)仍是受限的离线比较器，不支持任意DEX BUY/SELL和复杂CPI；[monitor.py](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/src/solana_meme_os/monitor.py)使用另一观察与状态契约。
+- **已做静态源码交叉核对**：这些入口属于不同输入输出合同；mint_v01程序未直接引用M01、handoff或raw adapter。静态检查不能排除外部脚本能人工串联，但现有CI和真实Mint报告不能证明“真实经济事件→多钱包完整追踪→两时点库存/资金→跨Mint群体监控”已经通了。工程2026-11-02 CI验证134个离线测试成功，属于**模块级能力**。
+
+### 5. 阶段裁决和非串行推进方式
+
+**知识深度**已覆盖资金、经济主体、市场微观结构、时间/网络反证及跟随者成本；**基础成品**V0.1真实免费供应商Mint预览已验，**持续经济事件网络**V0.2和V0.3尚未真正闭环，**Grok云运行**未验；这不是单一P3或V0.2标签能概括的状态。
+
+**接下来的实际工作围绕跨环节证据可接性，而不是围绕某一个版本号**：同一个真实Mint或一条钱包/Dev事件，从原来源或可许可整套成品出发，解释其市场阶段、关键地址/池关系、至少一条真实交易或资金边、Token库存和观察时点；检查它如何改变上下游行为解释，能否在另一个Mint/时间窗重现，同时排除公共服务和普通行情背景。如果已经有适合的授权实现，优先整套安全只读运行或薄适配；上游无法提供真动作，后续程序不能自动把标签升格为已证事件。并行开展跨币资本复用、价格形成、社交传播和执行成本理论研究，**不必等工程完成V0.2才探索更深的市场机制**。
+
+本轮写回只修订既有审计，不新增等级、专家、框架、强制研究顺序或告警阈值；纸面市场研究不等于真实主网验证。
+
 ## 一｜目标与边界：项目真正要交付什么
 
 **唯一业务主轴**：在Solana Meme市场持续发现/理解Mint、发行者、关键钱包、资金和群体网络、异常转账与时间窗口、真实库存及市场阶段；解释发生什么、存在何种竞争性机制、哪些信息对风险管理/观察/未来策略研究有价值。**跟单只是一个应用**；价格/K线不是默认认知中心；不以“识别庄家”作为唯一答案，不以“交易赚钱”先验压倒解释/监控目标。
