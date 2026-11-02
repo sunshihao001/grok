@@ -26,7 +26,7 @@ class AdaptiveResearchGovernanceTests(unittest.TestCase):
         self.assertTrue(all(x["evidence_status"] for x in registry["specialists"]))
         activation = registry["activation"]
         self.assertIn("zero specialists is valid", activation)
-        self.assertIn("not mandatory", activation.lower())
+        self.assertIn("never a mandatory", activation.lower())
         self.assertNotIn("scan every currently registered", activation)
         self.assertNotIn("For isolated mechanisms select 1–3", activation)
 
