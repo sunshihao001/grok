@@ -1,26 +1,26 @@
 # 统一知识系统（架构真源） V1.0
 
-> **2026-11-01 说明**：本目录的**研究知识、专家视角、专业机制、知识联系、参考源码及证据持续有效，继续支持主动深研与知识发现**。本次仅调整AI在任务中的思考、调用与执行方式：固定阶段和每轮强制模板不再默认执行；知识本身既不是废弃档案，也不要求所有研究都转向产品开发。当前工作方法参见[准则](current-operating-guidance.md)。
+> **现行执行口径（2026-11-02）**：以 [当前工作准则](current-operating-guidance.md) 解释AI怎样行动；用户当前请求和实际证据决定任务范围。V1阶段表、V2完整写库步骤、全员专家扫描和长模板仅为可选的历史方法。目录与专家索引只作专业知识入口，不能拦截自由研究或替代原始源码与实证。安全、授权及证据不越级规则始终适用。\n\n> **2026-11-01 说明**：本目录的**研究知识、专家视角、专业机制、知识联系、参考源码及证据持续有效，继续支持主动深研与知识发现**。本次仅调整AI在任务中的思考、调用与执行方式：固定阶段和每轮强制模板不再默认执行；知识本身既不是废弃档案，也不要求所有研究都转向产品开发。当前工作方法参见[准则](current-operating-guidance.md)。
 
 **状态：体系结构已定义；知识内容仅部分填充；不代表策略已验证。** 本目录是 Grok 项目领域知识的上层契约，不替代已有 `knowledge/catalog.v1.json`（15 张遗留知识候选卡）和 `knowledge/legacy-snapshots/`（21 份固定快照）。
 
 ## 全项目专家审查与去污染裁决（2026-11-01）
 
-**先读[《全项目收束审计》](whole-project-convergence-audit-2026-11-01.md)，再读[《当前恢复点》](gpt-meme-progress-current.md)**：已核查12域、152单元、22专家、65参考、PR #14/#16和PR #15的104项竞争知识草案，整理17类认识/证据/状态污染。**现以原152单元作为统一ID**；PR #15只读候选而非第二套现行本体。两枚Mint的真实DEX公开池快照不等于完整钱包/Dev报告或Grok云端通过。历史早期提到“21位专家”属当时状态，现以registry.v1.json的22位为准。理论与工程各有独立进度，不能相互借用完成状态。
+**仅在全项目审计确有必要时阅读[《全项目收束审计》](whole-project-convergence-audit-2026-11-01.md)；具体任务先读相关专业原文/代码，涉及项目状态再核对[《当前恢复点》](gpt-meme-progress-current.md)**：已核查12域、152单元、22专家、65参考、PR #14/#16和PR #15的104项竞争知识草案，整理17类认识/证据/状态污染。**现以原152单元作为统一ID**；PR #15只读候选而非第二套现行本体。两枚Mint的真实DEX公开池快照不等于完整钱包/Dev报告或Grok云端通过。历史早期提到“21位专家”属当时状态，现以registry.v1.json的22位为准。理论与工程各有独立进度，不能相互借用完成状态。
 
 ## GPT Project 持续积累的完整专业知识镜像
 
-[《GPT Meme 项目全领域知识主册》](gpt-meme-project-core.v1.md) 包含现有全部152项原子研究问题/机制/禁错、21专家及跨域经济机制导航。 [《累积与双向关联规范》](gpt-meme-knowledge-accumulation.v1.md) 把发现保存为**原问题—来源—资产/库存/价格/时点因果—竞争世界—关系边—单元回填—下一轮未知**；[《Project简短指令》](gpt-meme-project-instructions.v1.md) 和 [机器索引](gpt-meme-project-index.v1.json) 帮助不同GPT会话按需恢复已有专业知识，减少零散讨论。系统仍按原L0–L7/D01–D12组织，不新增一个平行本体。Project附件与GitHub版本更新为人工同步，**不能声称已直接改动ChatGPT项目附件**。
+[《GPT Meme 项目全领域知识主册》](gpt-meme-project-core.v1.md) 包含152项研究问题/机制/禁错和形成时的21专家视角及跨域导航；**当前专家数量以22位的注册表为准，历史内容保留原文语境**。 [《累积与双向关联规范》](gpt-meme-knowledge-accumulation.v1.md) 把发现保存为**原问题—来源—资产/库存/价格/时点因果—竞争世界—关系边—单元回填—下一轮未知**；[《Project简短指令》](gpt-meme-project-instructions.v1.md) 和 [机器索引](gpt-meme-project-index.v1.json) 帮助不同GPT会话按需恢复已有专业知识，减少零散讨论。系统仍按原L0–L7/D01–D12组织，不新增一个平行本体。Project附件与GitHub版本更新为人工同步，**不能声称已直接改动ChatGPT项目附件**。
 
 ## GPT Meme 知识成果自动编译与同步 V2（2026-10-31）
 
-研究成果的当前执行入口：[《持续研究知识闭环 V2》](gpt-meme-continuity-v2.md) + [《专业研究写作 Skill V2》](gpt-meme-research-writing-skill.v2.md)。先从真实研究抽取新增认识和反例，检索旧知识并去重，**修订原专题而非每轮堆一份总结**；读回 GitHub commit/PR、核实 Library 镜像和 Project 文件实际状态，再更新 [唯一恢复点](gpt-meme-progress-current.md)。P2.1–P2.4方法成果已经编译为[异常发现方法融合目录](../domain/meme-anomaly-discovery-state.v1.md)。本 V2 继承 V1 阶段推进原则，不新建本体，也不自动发布到生产监控或真实交易。
+有需要沉淀持久知识增量时，按需参考[《持续研究知识闭环 V2》](gpt-meme-continuity-v2.md) + [《专业研究写作 Skill V2》](gpt-meme-research-writing-skill.v2.md)；**普通研究不强制执行整套编译/同步步骤**。先从真实研究抽取新增认识和反例，检索旧知识并去重，**修订原专题而非每轮堆一份总结**；读回 GitHub commit/PR、核实 Library 镜像和 Project 文件实际状态，再更新 [唯一恢复点](gpt-meme-progress-current.md)。P2.1–P2.4方法成果已经编译为[异常发现方法融合目录](../domain/meme-anomaly-discovery-state.v1.md)。V1阶段推进仅是可选历史方法，不新建本体，也不自动发布到生产监控或真实交易。
 
 ## GPT Meme 项目持续推进与恢复点（2026-10-31）
 
-新增 [《持续研究推进、阶段判断与下一轮输入规范 V1.0》](gpt-meme-continuous-progression.v1.md)：每轮给出阶段定位、实质成果、关键未知、晋级判断、下一动作和可直接复制的研究输入，按整体P1–P6及子阶段动态推进。它是**研究运行坐标**，不替换 L0–L7 / D01–D12 或证据等级，不机械串行。
+历史 [《持续研究推进、阶段判断与下一轮输入规范 V1.0》](gpt-meme-continuous-progression.v1.md) 曾要求每轮给出阶段和复制输入；**这些固定输出要求已退出默认执行**，仅在用户要求阶段规划或需要持续研究交接时选用。它是**研究运行坐标**，不替换 L0–L7 / D01–D12 或证据等级，不机械串行。
 
-[《当前研究进度与直接恢复执行提示词》](gpt-meme-progress-current.md)：P2.1 已完成创意初筛，当前建议转入 P2.2 时间×钱包群体×资金×行为的组合异动研究；旧B01保留未完成状态。**GitHub 文档和个人 Library 文件不能自动修改 ChatGPT Project Instructions 或 Project 附件**，需分别核查同步状态。
+[《当前研究进度与历史恢复记录》](gpt-meme-progress-current.md)：P2.1→P2.2是2026-10-31的旧研究快照，**不能覆盖2026-11-02最新源码审读、V0.1/V0.2工程状态或用户当前问题**；旧B01相关知识继续保留。**GitHub 文档和个人 Library 文件不能自动修改 ChatGPT Project Instructions 或 Project 附件**，需分别核查同步状态。
 
 ## 参考知识融合的实际节奏
 
