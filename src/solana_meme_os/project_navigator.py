@@ -142,11 +142,22 @@ def shortlist(question: str, data: dict[str, Any] | None = None,
         scores.sort(key=lambda entry: (-entry[0], entry[1]["id"]))
         picks = [_present(r, engineering, branch, score) for score, r in scores[:limit]]
         match_kind = "literal_cue_candidates_not_semantic_routing"
+    # Scores are only lexical hints; low-specificity matches often miss the
+    # economic question entirely. Surface the limitation without inventing a
+    # replacement semantic router, mandatory expert process, or hard gate.
+    lexical_warning = False
+    if intent is None:
+        best_score = scores[0][0] if scores else 0.0
+        second_score = scores[1][0] if len(scores) > 1 else 0.0
+        lexical_warning = (not scores or best_score < 3.0 or
+                           (len(scores) > 1 and best_score - second_score < 0.6))
     return {
         "query": question,
         "match_kind": match_kind,
         "routes": picks,
         "no_match": not picks,
+        "weak_literal_match": lexical_warning,
+        "weak_literal_match_note": ("Low-specificity or ambiguous lexical evidence; AI must determine intent and source relevance independently. This is not a refusal or mandatory process." if lexical_warning else "Strong literal cue does not verify domain relevance or economic conclusions."),
         "guidance": (
             "AI must infer task intent, inspect relevant ORIGINAL research and actual source/code; "
             "this shortlist does not read files, run tools, confirm a claim or invoke Grok. "
