@@ -106,6 +106,15 @@
 
 **仍不可直接得出的结论**：同一笔可替代 SOL 被“精确追踪”、同一控制人、庄家、可盈利跟单。
 
+
+**2026-11-02 C01 深化（资本闭环≠相同经济资本/同控）**：跨项目继续读取 Why-Solana 的三段研究 [economic_mechanics](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/economic_mechanics/results.md) → [exit_destination](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/exit_destination/results.md) → [funder_network](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/funder_network/results.md)：早期报告只知道 Sniper 向 exit wallet 转仓，后续研究已确认其特定样本中的部分接收钱包出售和17/24个群体的地址级资金路径闭合，进一步研究则发现少数跨群体桥梁但多数网络分离；资金最终受益人及共享签名服务仍未知。**不可把第一篇中的后续去向 UNKNOWN 当作项目最终结论，也不可把路径闭合直接升级为一个经济主体。**
+
+资金可行性进一步具体化：若某个中间地址在收款前持有 B 单位同资产、收到 R、随后支出 S，且没有其它变动/费用，那么收到的 R 对该笔支出的**可能贡献范围**是 `[max(0,S-B), min(R,S)]`（需满足 S≤B+R）。例如已有80 SOL、刚收到18 SOL、后支付15 SOL，范围为 **0–15 SOL**；仅凭时间相邻无法证明上一币的退出资金被用于下一币。该界限是可替代资产的**条件性会计可行性**，不是能识别实际 lamport 来源的追踪算法；现实多笔混合、费用、WSOL和多币兑换必须重算或标 UNKNOWN。
+
+更重要的解析反例：Why-Solana [ed_trace.txflow](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/exit_destination/code/ed_trace.py) 对多个正向余额变化只选最大接收者却分配全部流出额，[fn_trace.funder_of](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/funder_network/code/fn_trace.py) 对多个负向变化只选最大出资者却分配全部净入额。合成交易真实为6+4 SOL时，单一最值近似可把10 SOL错误归给一个6 SOL地址（4 SOL差异）。**这是源码近似边界的合成反例，不是作者原研究的已测错误率**；作者在抽样研究中报告分款很少。工程复用时保留多方余额与签名、资金边来源和数量守恒，不能仅用主对手方当作完整路径。Solana [Partial Signing](https://solana.com/docs/core/transactions/partial-signing) 还说明同交易四个签名可以由不同设备/参与者分别产生；只能证明签名有效与共同交易组装，不能证明一个进程掌握所有私钥。
+
+完整专业证据与反例见 [L3 §18](L3-actor-economic-mechanisms-deepstudy.md)。对本轮 C01 的影响是**从“连通/不连通”进入“多边守恒、可能贡献范围、身份竞争解释、观察时间覆盖”**；不是新增 P3 工程功能，也不授权交易。
+
 ### 8.3 C02 从“同组重复出现”转成“环境匹配的行为变化”
 
 **时间截断**：在比较 Mint B 前，固定钱包群体的定义和所掌握的地址关系；不能事后用 B 的买入倒推“当时已知是同一群”。若需要探索性事后分组，明确标 `RETROSPECTIVE_CLUSTER`，不得作为提前可发现信号。
