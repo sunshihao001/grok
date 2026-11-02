@@ -904,6 +904,8 @@ Why-Solana 的操作群体是按早期研究冻结的“operator cluster”**研
 2. [`funder_network/code/fn_30_analysis.py`](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/funder_network/code/fn_30_analysis.py)对下游首跳按`(sig,primary,dst)`去重1条（原409→408），随后网络分析继续使用该首跳钱包与金额。**去重保证在该键下不重复，并不验证首跳的经济方向、金额对应或实际指令来源**。
 3. [`funder_network/code/fn_40_posthoc.py`第7部分](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/funder_network/code/fn_40_posthoc.py)对每条下游首跳`dst = path[1].wallet`取缓存交易`message.accountKeys[].signer`，若`dst==accountKeys[0]`归“destination signs (fee payer)”，若包含于Signer列表则归“destination signs”；**该部分没有解码特定System Transfer与CloseAccount指令**，没有核对哪个Signer授权了何项经济操作。作者在`funder_network/results.md`据此报告408/408候选接收方Signer，并解释为四签名WSOL sweep工具收款方必须签名关闭自己WSOL账户；这些是**外部作者的业务解释**，并非从第7部分的签名集合检验直接得到的通用协议结论。
 
+**设计史中的真实取舍**：`ed_trace.txflow`的源码注释还说明：作者更早曾直接取“交易中第一条System Transfer的接收方”，但在一笔交易通过新地址与WSOL中转时，它会把中间地址误当终点，因此改用净余额最大增加者。这个修复确实可以避开某些中转误读，却引入本节演示的“多路独立资金在同笔交易中相遇”风险。**既不能简单退回第一条Transfer，也不能直接信任最大净增加地址；需要按指令、账户权限、资产流和经济事件逐层核实。** 这是一项真实可定位的失败经验和设计权衡，而非凭空要求开发全新解析器。
+
 ### 24.2 独立可重算的最小反例：两条合法方向并存，形成虚假首跳与签名加强
 
 构造一个**成功执行的多指令交易的余额算例**，余额前后相差仅交易手续费5000 lamports，非真实主网数据：
