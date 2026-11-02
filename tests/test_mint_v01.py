@@ -229,4 +229,116 @@ class TestMintV01(unittest.TestCase):
             self.assertIn("不列为已确认独立交易钱包",(dest/"report.md").read_text())
 
 
+    def test_reconcile_exact_token_account_owner_agrees_not_beneficial_owner(self):
+        acct = "So11111111111111111111111111111111111111112"
+        owner = "11111111111111111111111111111111"
+        vendor = {"mint": MINT, "retrieved_at": "2026-11-01T00:00:00Z",
+                  "vendor_detected_at": "2026-10-30T00:00:00Z",
+                  "top_holders": [{"token_account_candidate": acct, "owner_candidate": owner,
+                                   "source_path": "root.topHolders[2]", "amount_raw_vendor": "100"}]}
+        rpc = {"mint": MINT, "retrieved_at": "2026-11-02T00:00:00Z",
+               "rpc_slot_largest": 100, "rpc_slot_owner_lookup": 105,
+               "rows": [{"token_account": acct, "owner_candidate": owner,
+                         "owner_status": "RPC_PARSED_TOKEN_OWNER_NOT_BENEFICIAL_OWNER",
+                         "source_path": "getTokenLargestAccounts.result.value[0]",
+                         "owner_source_path": "getMultipleAccounts.result.value[0].data.parsed.info.owner",
+                         "amount_raw_at_first_slot": "90"}]}
+        x = mint_v01.reconcile_vendor_holders_with_rpc(vendor, rpc)
+        self.assertEqual(x["matched_token_accounts"], 1)
+        self.assertEqual(x["owner_address_agreements"], 1)
+        self.assertEqual(x["owner_address_conflicts"], 0)
+        self.assertIn("NOT_BENEFICIAL_OWNER_PROOF", x["observations"][0]["status"])
+        self.assertEqual(x["observations"][0]["rpc_owner_lookup_slot"], 105)
+        self.assertEqual(x["observations"][0]["vendor_path"], "root.topHolders[2]")
+        self.assertTrue(x["observations"][0]["amounts_not_same_slot"])
+        self.assertTrue(x["no_trading"])
+
+    def test_reconcile_owner_disagreement_is_temporal_conflict_not_common_control(self):
+        acct = "So11111111111111111111111111111111111111112"
+        vendor = {"mint": MINT, "top_holders": [
+            {"token_account_candidate": acct, "owner_candidate": "11111111111111111111111111111111"}]}
+        rpc = {"mint": MINT, "rows": [
+            {"token_account": acct, "owner_candidate": "81jgrpTMsQWc1rGWXutyYWW27ruiAtehUZwLydcHHWDB",
+             "owner_status": "RPC_PARSED_TOKEN_OWNER_NOT_BENEFICIAL_OWNER"}]}
+        x = mint_v01.reconcile_vendor_holders_with_rpc(vendor, rpc)
+        self.assertEqual(x["owner_address_conflicts"], 1)
+        self.assertEqual(x["owner_address_agreements"], 0)
+        self.assertIn("SNAPSHOTS_NOT_ATOMIC", x["observations"][0]["status"])
+
+    def test_reconcile_shared_owner_without_exact_token_account_is_not_match(self):
+        vendor = {"mint": MINT, "top_holders": [
+            {"token_account_candidate": "So11111111111111111111111111111111111111112",
+             "owner_candidate": "11111111111111111111111111111111"}]}
+        rpc = {"mint": MINT, "rows": [
+            {"token_account": "81jgrpTMsQWc1rGWXutyYWW27ruiAtehUZwLydcHHWDB",
+             "owner_candidate": "11111111111111111111111111111111",
+             "owner_status": "RPC_PARSED_TOKEN_OWNER_NOT_BENEFICIAL_OWNER"}]}
+        x = mint_v01.reconcile_vendor_holders_with_rpc(vendor, rpc)
+        self.assertEqual(x["status"], "NO_TOKEN_ACCOUNT_OVERLAP_COVERAGE_UNKNOWN")
+        self.assertEqual(x["matched_token_accounts"], 0)
+        self.assertEqual(x["vendor_accounts_not_in_rpc_top20"], 1)
+
+    def test_reconcile_rpc_unresolved_not_mismatch_and_missing_source(self):
+        acct = "So11111111111111111111111111111111111111112"
+        vendor = {"mint": MINT, "top_holders": [
+            {"token_account_candidate": acct, "owner_candidate": "11111111111111111111111111111111"}]}
+        rpc = {"mint": MINT, "rows": [
+            {"token_account": acct, "owner_candidate": None,
+             "owner_status": "UNKNOWN_ACCOUNT_NOT_FOUND"}]}
+        x = mint_v01.reconcile_vendor_holders_with_rpc(vendor, rpc)
+        self.assertEqual(x["owner_comparison_unresolved"], 1)
+        self.assertEqual(x["owner_address_conflicts"], 0)
+        self.assertEqual(x["observations"][0]["status"], "TOKEN_ACCOUNT_MATCH_OWNER_UNRESOLVED")
+        self.assertIsNone(mint_v01.reconcile_vendor_holders_with_rpc(vendor, None))
+        self.assertIsNone(mint_v01.reconcile_vendor_holders_with_rpc(None, rpc))
+        with self.assertRaises(ValueError):
+            mint_v01.reconcile_vendor_holders_with_rpc(vendor, {**rpc, "mint": acct})
+
+    def test_reconcile_top_20_missing_is_coverage_unknown_not_no_holder(self):
+        vendor = {"mint": MINT, "top_holders": [
+            {"token_account_candidate": "So11111111111111111111111111111111111111112",
+             "owner_candidate": "11111111111111111111111111111111"}]}
+        rpc = {"mint": MINT, "rows": []}
+        x = mint_v01.reconcile_vendor_holders_with_rpc(vendor, rpc)
+        self.assertEqual(x["vendor_accounts_not_in_rpc_top20"], 1)
+        self.assertIn("COVERAGE_UNKNOWN", x["status"])
+        self.assertIn("RPC_TOP20_ABSENCE_NOT_PROOF", x["limitations"][0])
+
+    def test_reconcile_in_combined_report_without_any_extra_rpc_calls(self):
+        acct = "So11111111111111111111111111111111111111112"
+        owner = "11111111111111111111111111111111"
+        raw = json.dumps({"mint": MINT,
+                          "topHolders": [{"address": acct, "owner": owner, "amount": "1"}]}).encode()
+        rpc = {"mint": MINT, "status": "RPC_TOKEN_ACCOUNTS_AND_OWNER_HINTS",
+               "rpc_slot_largest": 120, "rpc_slot_owner_lookup": 123,
+               "rows": [{"token_account": acct, "owner_candidate": owner,
+                         "owner_status": "RPC_PARSED_TOKEN_OWNER_NOT_BENEFICIAL_OWNER",
+                         "source_path": "getTokenLargestAccounts.result.value[0]",
+                         "owner_source_path": "getMultipleAccounts.result.value[0].data.parsed.info.owner"}],
+               "no_trading": True}
+        with tempfile.TemporaryDirectory() as td:
+            out = Path(td) / "report"
+            with patch("solana_meme_os.mint_v01.public_pair_report.fetch_pairs",
+                       return_value=(b"[]", "https://api.dexscreener.com/test")):
+                with patch("solana_meme_os.mint_v01.public_token_accounts.collect",
+                           return_value=(rpc, {})) as collect_mock:
+                    with patch("solana_meme_os.mint_v01.public_rugcheck_report.fetch_report",
+                               return_value=raw) as rug_mock:
+                        with contextlib.redirect_stdout(io.StringIO()):
+                            exit_code = mint_v01.main([MINT, "--rpc-holders", "--rugcheck",
+                                                       "--out-dir", str(out)])
+            self.assertEqual(exit_code, 0)
+            collect_mock.assert_called_once_with(MINT)
+            rug_mock.assert_called_once_with(MINT)
+            report = json.loads((out / "report.json").read_text())
+            x = report["holder_rpc_reconciliation"]
+            self.assertEqual(x["matched_token_accounts"], 1)
+            self.assertEqual(x["owner_address_agreements"], 1)
+            md = (out / "report.md").read_text()
+            self.assertIn("同 Token Account 跨源核对", md)
+            self.assertIn("不证明经济同控", md)
+            self.assertEqual((out / "rugcheck-provider-raw.json").read_bytes(), raw)
+            self.assertTrue(report["no_trading"])
+
+
 if __name__ == '__main__': unittest.main()
