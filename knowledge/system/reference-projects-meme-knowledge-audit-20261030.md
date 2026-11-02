@@ -131,3 +131,21 @@
 - 外部研究（仅review_only专项）：https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/tree/9a7ad51d56328e91e67e3f531d6744307d0ee68b
 - OKX接口候选: https://github.com/okx/onchainos-skills/tree/73904b636a0f022dcc13b6d7a0dd2ed3b3195f25
 - Grok原来源审计：docs/grok-cognitive-source-audit-2026-10-30.md；当前运行状态：docs/project-baseline-2026-10-30.md
+
+## 2026-11-02 补充核查｜被历史摘要遗漏的多跳调查能力
+
+> 本段是2026-11-02的新增源码核查，**不是改写2026-10-30原点审计的当时结论**。遵守Why-Solana `review_only`：可以读源码与方法、比较设计和反例；不能把作者数字自动当本项目真实复核、同控真值或Alpha。
+
+1. **Hermes旧知识已有正确的研究入口**：`learning/11.md` 明说中转钱包和拆分路径可能掩盖同源；`design/phase1-research/00c` 已按“市场问题→链上痕迹→字段组合→反例”推进；`00e` 已提出无标签发现与异常驱动。但`00d`把同源、同成本、同时进场作为“极高概率同实体”，其数值和证据独立性未经校准，不能直接继承。
+2. **qb-并不只做单币静态标签**：`sikk_gmgn_token_report.py` 已将“可疑中转节点”“分发接收钱包”“Token来源/去向”“资金来源类型”和LP/Pool隔离为不同业务记录，已有“追查下一个关系节点”的产品意图；程序未形成经独立验收的多跳持续调查。
+3. **Why-Solana已有明确的多跳源码和实验设计**：`funder_network/code/fn_trace.py` 含 `MAX_HOPS=5`、`HOP_WINDOW=7*86400`、`HUB_N=3000`、`MIN_SOL=0.1` 与RPC缓存/分页停止；`analysis_plan.md` 规定上下游扩展、先后时间、已知角色、Hub/查询预算和`UNRESOLVED`终止类别；`fn_20_build.py` 有数据冻结、去重、时序及Hub完整性检查。它已经实现的是**受限图调查方法**，不是无限历史追溯或最终控制权确认。
+4. **作者结果不是本项目的链上实证**：其`funder_network/results.md`自述以62个主要钱包为起点，报告55条上游路径、408个下游分支、13条经过8个桥接地址的有序跨群体序列；活跃地址受到抽样、有限调用和5跳边界。报告还明确说明SOL具有同质性，有序入账/出账不能证明相同lamports流转。此处只记录作者自述及可检查的研究方案，未本地重放全部RPC结果。
+5. **与Million形成跨项目反例**：Million `apps/api/src/analysis/owners.service.ts`以funding/fee payer边聚合候选群组，排除高连接度Hub且不让co-entry直接合并；共享执行或服务节点足以造成错误的同控推断。图的边必须分别保留经济语义，不可把“可达关系→共同控制”当作通用规则。
+
+**这次补充修订的原问题**：为什么既有知识中已经有“中转、同源、群体继承、多跳”，后续研究仍反复从头选择解析器或搜API？因为多数历史成果被存为“字段/项目/功能”而非“市场问题→可继续调查的证据→竞争机制→下一项值得获取的数据”。今后先恢复既有源码/实操经验，再评估OKX、GMGN、Bubblemaps、Bitquery、Nansen等成熟数据能力能否直接补齐调查边；只在额外证据可能改变解释时继续调查，并在原D04–D07/D10–D11专题原位修订。不扩建第二套专家或知识目录，不将本次补充视为V0.2多跳功能已验收。
+
+原始研究入口：
+- [Hermes 00c](https://github.com/sunshihao001/-/blob/main/design/phase1-research/00c-GMGN-%E6%80%9D%E7%BB%B4%E6%A8%A1%E5%9E%8B%E6%8F%90%E7%82%BC.txt)、[Hermes 00e](https://github.com/sunshihao001/-/blob/main/design/phase1-research/00e-%E5%AD%97%E8%8A%82%E5%8F%8D%E6%8E%A8%E6%A1%86%E6%9E%B6-%E7%AA%81%E7%A0%B4%E8%AE%A4%E7%9F%A5%E5%B1%80%E9%99%90.txt)
+- [qb-单Mint报告](https://github.com/sunshihao001/qb-/blob/main/sikk_gmgn_token_report.py)
+- [Why-Solana研究方案](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/funder_network/analysis_plan.md)、[追踪代码](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/funder_network/code/fn_trace.py)、[结果（作者报告）](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/funder_network/results.md)
+- [Million聚类源码](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/analysis/owners.service.ts)
