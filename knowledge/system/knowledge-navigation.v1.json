@@ -17,7 +17,8 @@
     "No private keys, trading, signing, paid API or x402 payment without authorization.",
     "Authority for work method: current-operating-guidance.md first; legacy progression/continuity stage checklists are optional historical methods, not compulsory actions or outputs.",
     "Literal routes and expert_lens_ids are optional candidate pointers; for abstract explanations no expert invocation is required; consult one domain source or extend to external source when it could change the answer.",
-    "For multi-hop shared-service versus common-control questions prioritize D05 economic actor and original signed transaction/source evidence; for provider reuse prioritize capability/contract/price/privacy before market inference."
+    "For multi-hop shared-service versus common-control questions prioritize D05 economic actor and original signed transaction/source evidence; for provider reuse prioritize capability/contract/price/privacy before market inference.",
+    "Regression-tested high-value cases include token transfers without a swap, provider field semantics, repeated frozen path records, bundler-vs-Jito protocol distinction, actual follower net returns, and cross-Mint capital redeployment; index matches indicate reading candidates, never final causal or ownership verdicts."
   ],
   "canonical_assets": [
     {
@@ -316,7 +317,12 @@
         "隐藏钱包",
         "最终受益",
         "经济主体",
-        "外部客户"
+        "外部客户",
+        "同批资金",
+        "资金转仓",
+        "群体停止",
+        "跨Mint再部署",
+        "资本再部署"
       ],
       "domains": [
         "D05",
@@ -362,7 +368,14 @@
         "LP",
         "抛压",
         "池子地址",
-        "大户持仓"
+        "大户持仓",
+        "Token转给",
+        "Token转仓",
+        "Token转移",
+        "内部转仓",
+        "转仓",
+        "新钱包",
+        "库存迁移"
       ],
       "domains": [
         "D06",
@@ -375,7 +388,9 @@
       ],
       "knowledge_files": [
         "knowledge/domain/L3-wallet-actors.md",
-        "knowledge/domain/L4-L5-copytrade-edge.md"
+        "knowledge/domain/L4-L5-copytrade-edge.md",
+        "knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md",
+        "knowledge/domain/meme-anomaly-discovery-state.v1.md"
       ],
       "engineering_ids": [
         "holder",
@@ -500,7 +515,11 @@
         "延迟",
         "可跟",
         "策略",
-        "退出"
+        "退出",
+        "跟单赚钱吗",
+        "盈利率",
+        "可复制收益",
+        "净收益"
       ],
       "domains": [
         "D08",
@@ -515,7 +534,8 @@
       ],
       "knowledge_files": [
         "knowledge/domain/L4-L5-copytrade-edge.md",
-        "knowledge/domain/D04-D08-key-wallet-followability-research-brief.md"
+        "knowledge/domain/D04-D08-key-wallet-followability-research-brief.md",
+        "knowledge/domain/L6-L7-investigation-cases.md"
       ],
       "engineering_ids": [
         "event",
@@ -693,7 +713,16 @@
         "签名者",
         "Fee Payer",
         "Token Transfer",
-        "资金误归因"
+        "资金误归因",
+        "holderSameFundSourcePercent",
+        "字段口径",
+        "分母",
+        "去重",
+        "重复签名",
+        "冻结表",
+        "Jito Bundle",
+        "bundler",
+        "Bundle"
       ],
       "domains": [
         "D01",
@@ -707,7 +736,8 @@
       ],
       "knowledge_files": [
         "knowledge/domain/L1-L2-chain-market.md",
-        "knowledge/domain/L6-L7-investigation-cases.md"
+        "knowledge/domain/L6-L7-investigation-cases.md",
+        "knowledge/system/legacy-meme-multihop-deep-audit-2026-11-02.md"
       ],
       "engineering_ids": [
         "event",
@@ -744,7 +774,9 @@
         "去约束",
         "冲突约束",
         "研究质量",
-        "研究制度"
+        "研究制度",
+        "强制专家会诊",
+        "固定进度模板"
       ],
       "domains": [
         "D12",
