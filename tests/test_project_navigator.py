@@ -123,6 +123,52 @@ class NavigationTests(unittest.TestCase):
         self.assertIn("knowledge/system/gpt-meme-progress-current.md", files)
         self.assertIn("knowledge/experts/registry.v1.json", files)
 
+    def test_extended_real_mechanism_routing_cases(self):
+        # Fixed cases sourced from recurring Solana Meme project questions.
+        # This tests candidate selection, NOT economic inference or an LLM A/B.
+        cases = [
+            ("原Holder把Token转给另外20个新钱包，但没有Swap，算出货了吗？",
+             "SUPPLY_CONTROL", "knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md"),
+            ("收款钱包与资金中转Hub共同签名能证明由一个人掌握全部私钥吗？",
+             "FUNDING_ENTITY", "knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md"),
+            ("Solana v1交易中Token Account owner、fee payer和signer不同，如何计算真实Swap成本？",
+             "DATA_SEMANTICS", "knowledge/domain/L1-L2-chain-market.md"),
+            ("OKX holderSameFundSourcePercent 是否可以证明这些钱包属于同一经济主体？",
+             "DATA_SEMANTICS", "knowledge/system/legacy-meme-multihop-deep-audit-2026-11-02.md"),
+            ("Why-Solana五跳资金追踪只递归最大转出分支，会遗漏小额钱包吗？",
+             "FUNDING_ENTITY", "knowledge/system/legacy-meme-multihop-deep-audit-2026-11-02.md"),
+            ("Why-Solana FN冻结表记载409条下游路径但报告408条，是哪里去重？",
+             "DATA_SEMANTICS", "knowledge/system/legacy-meme-multihop-deep-audit-2026-11-02.md"),
+            ("GMGN smart money盈利率高的钱包可以直接跟单赚钱吗？",
+             "TRADING_ECONOMICS", "knowledge/domain/L6-L7-investigation-cases.md"),
+            ("继续项目，去掉强制专家会诊和固定进度模板，但保留所有旧专业知识",
+             "KNOWLEDGE_MANAGEMENT", "knowledge/system/current-operating-guidance.md"),
+            ("GMGN bundler钱包和Jito Bundle是不是一回事？",
+             "DATA_SEMANTICS", "knowledge/domain/meme-anomaly-discovery-state.v1.md"),
+            ("群体停止交易后，同批资金转仓到新Mint，如何区分迁移与普通退出？",
+             "FUNDING_ENTITY", "knowledge/domain/meme-anomaly-discovery-state.v1.md"),
+        ]
+        for question, intent, original_source in cases:
+            with self.subTest(question=question):
+                out = nav.shortlist(question, self.data, limit=3)
+                self.assertTrue(out["routes"], question)
+                self.assertEqual(out["routes"][0]["intent"], intent)
+                self.assertIn(original_source, out["routes"][0]["knowledge_paths_on_current_branch"])
+                # A shortlist is not an API call, expert Bot, or runtime proof.
+                self.assertTrue(all(not e["invoked"] for route in out["routes"]
+                                    for e in route["engineering_candidates_on_separate_branch"]))
+
+    def test_mechanism_routing_changes_do_not_swallow_unrelated_goals(self):
+        unchanged_cases = [
+            ("这套系统的首页应该显示什么数据和入口", "PRODUCT_UI"),
+            ("Top10持仓很多但里面可能是池子地址", "SUPPLY_CONTROL"),
+            ("我想知道链上交易原始指令能不能还原真实买卖", "DATA_SEMANTICS"),
+            ("检查创建者Dev以前发过哪些代币", "CREATOR_LIFECYCLE"),
+        ]
+        for question, intent in unchanged_cases:
+            with self.subTest(question=question):
+                self.assertEqual(nav.shortlist(question, self.data)["routes"][0]["intent"], intent)
+
     def test_out_of_scope_id_fails(self):
         with self.assertRaises(ValueError):
             nav.shortlist("", self.data, intent="AUTOTRADE")
