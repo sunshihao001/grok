@@ -149,3 +149,24 @@
 - [qb-单Mint报告](https://github.com/sunshihao001/qb-/blob/main/sikk_gmgn_token_report.py)
 - [Why-Solana研究方案](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/funder_network/analysis_plan.md)、[追踪代码](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/funder_network/code/fn_trace.py)、[结果（作者报告）](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/funder_network/results.md)
 - [Million聚类源码](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/analysis/owners.service.ts)
+
+
+## 2026-11-02｜qb旧GMGN字段和当前官方契约的条件性不兼容（多领域高信息价值审计）
+
+**来源实际代码**：旧 [qb- `sikk_gmgn_token_report.py`](https://github.com/sunshihao001/qb-/blob/main/sikk_gmgn_token_report.py) 的 `fl`对无法`float()`的值返回默认；`price=fl(info.get("price"),0) or 0`，`price*supply`生成“当前市值估算”；`info.get("持有人数量")`、`dev.get("创建者地址")`、`link.get("官网")`直接写出报告。
+
+**独立当前契约**：[GMGN官方`skills/gmgn-token/SKILL.md`](https://github.com/GMGNAI/gmgn-skills/blob/main/skills/gmgn-token/SKILL.md) 说明 `token info` 当前为 `price`对象，USD报价字段应取`price.price`；持有人数 `holder_count`，开发者地址`dev.creator_address`，官网`link.website`。这与旧qb相应解析存在**可定位的结构/字段名差异**。
+
+**合成独立检查（非GMGN真实授权返回，非qb原程序运行）**：给旧字段提取逻辑一个符合GMGN当前文档结构的JSON样例：`price={"price":"0.0000025"}, circulating_supply="1000000000", holder_count=1250, dev.creator_address=示例合法形状地址, link.website=https://example.org`。按旧`fl`规则，嵌套对象不能`float()`，得到`price=0`、`market_cap=0`，中文键的Holder数、Creator和官网缺失；按当前文档键则是报价0.0000025、估算市值2500（单位按假设字段）、Holder1250及非空Creator/官网。五个测试字段均有不同结果。**这个演示只验证条件性不兼容，不代表旧GMGN CLI `--raw`在当时就是今天的JSON结构**，也未检验2026当前CLI实际授权响应。
+
+**为什么这是全局优先级而不是一个小API问题**：
+- D02发行者/社交：Dev/官网字段缺失会扭曲发行者历史与社会传播研究入口。
+- D03/D09市场价格与执行：可用报价变成0会连带市值/流动性比率和后续经济成本推理失真。
+- D04/D06钱包与筹码：Holder统计缺失会干扰持有群体分母及结构解释。
+- D10/D11供应商可靠性与验证：用`or 0`会把`字段不匹配/无数据`无声伪装成真实价格0；最终可能在新一轮报表中形成“已计算”的虚假结论。
+- D12复用与产品：旧qb的“币基础→结构→关键钱包→基础设施剔除→复查计划”**整体业务调查思路值得继承**，不能在未经实际契约验收前直接复用该脚本的旧字段或未经校准的筛选阈值。
+
+**裁决**：已有成熟GMGN Skill和OKX全景工作流优先按真实当次授权响应建合同，再用旧qb的业务矩阵组织报告；对于没有来源、响应格式不符、字段未返回，应输出`UNKNOWN / DATA_CONTRACT_MISMATCH`而非0。不要为此新造数据平台或增加一个新专家；先复用原始JSON与官方文档核对必要字段，再决定是否采用该旧程序的部分输出语义。
+
+**研究成熟度**：两份固定来源源码/文档已核，离线条件性解析反例已核；尚无真实GMGN授权CLI返回，也没有对旧qb所有字段逐个做端到端对照，不能将本节当成已修复qb运行时。
+
