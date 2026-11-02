@@ -446,3 +446,50 @@
 - **经济来源限制**：RugCheck`creatorTokens=null`，故不能声称Dev无发币史；供应商风险分及Copycat标签不是交易收益/同控证明；缓存`detectedAt`不是Mint创建时间，DEX报价时点也不是原子同slot。只有实际返回的供应商事实可用于报告。
 - **复用决策**：RugCheck是现有65项台账中已有的候选业务源，无需新的专家/解析器。以OKX现成完整`token-research`为目标，当前无已授权只读会话，且CLI具有x402付款相关逻辑，不应在未隔离时自动调用。RugCheck填补部分Holder/Creator**候选**，仍缺经过独立链上核实的Owner、资金图、完整Dev历史、已确认Swap及库存。
 - 原始数据、精确地址、时间与假设边界见[真实工程证据](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/evidence/v01-pool-vault-holder-cross-source-2026-11-01.md)。
+
+
+## 2026-11-02｜回到原参考的完整业务工作法：跨项目复用裁决
+
+> **背景**：用户指出长期围绕单个多跳细节循环研究使全局认知和成品进展过慢。本次直接回读其已登记的旧Hermes、qb-、meme-、Why-Solana及Million、OKX、HoldTech、pumpwatch的设计原件、源码和历史报告。此处**只记录新核查的业务流程和差异**；前文既有功能表、许可证/安全审查、Dxx知识与65项资产保持原位。未直接运行第三方成品、未访问收费API，也未将README功能宣称为当前Grok已部署。
+
+### 1. 按原参考的实际工作流，而非按其GitHub目录学习
+
+| 来源及直接证据 | 原项目怎样从问题走到下一步（已看源码或业务方案） | 我们应整套继承的业务能力；必须隔离的前提 |
+|---|---|---|
+| [旧Hermes Phase0合同](https://github.com/sunshihao001/-/blob/main/design/phase0-workflow-contract.md)、[Skill07控制器](https://github.com/sunshihao001/-/blob/main/design/phase1-skill-07-workflow-controller.md) | 候选入口→Token面板→钱包角色→结构→Evidence Chain→Paper Gate；每Mint有\`phase_state\`、\`missing_fields\`、\`counter_evidence\`、TTL与失败续跑。 | **保留状态/来源/反证/可恢复性**，不是恢复六Skill固定顺序，旧\`confidence_score\`不具统计校准，也不能把Gate规则直接当实盘。历史\`docs/v2_skill_gap_analysis.md\`又按8层提出新模块，这种层数扩张不等于实际产品提高。 |
+| [qb-历史一键管道真实报告](https://github.com/sunshihao001/qb-/blob/main/data/gmgn_candidates_live_run/orchestrator/pipeline_report.md)、[单Mint脚本](https://github.com/sunshihao001/qb-/blob/main/sikk_gmgn_token_report.py) | 2026-05-04旧运行报告列出**5个候选、4个K线与纸面信号、状态机5币、1个钱包结构BLOCK、1个PAPER_READY被报价安全层进一步确认**；落地原始GMGN响应、状态日志、关键地址矩阵、基础设施目录、研究计划、manifest。 | **继承候选→关键地址→状态变化→复核计划及运行证据组织**；这是旧项目留下的实际结果文件，不等于当前CLI权限仍有效、每个钱包标签已被真实链上验证或真实下单。旧脚本\`price\`/Dev字段与现GMGN官方嵌套契约不一致已在参考审计单独反证。 |
+| [OKX新币筛选](https://github.com/okx/onchainos-skills/blob/main/workflows/new-token-screening.md)、[Token Research](https://github.com/okx/onchainos-skills/blob/main/workflows/token-research.md)、[Wallet WS](https://github.com/okx/onchainos-skills/blob/main/workflows/wallet-monitor-ws.md) | 新币榜→安全/Dev/Bundle补充→单Mint价格/权限+Holder/Cluster/Trader/信号→可选连续钱包WS；业务流程已有合成CLI入口、依赖降级和条件步骤。 | **优先验证现成全景/Dev/群体查询可否拿到安全只读合法结果**，无需先造采集器；限制：文档≠已授权/免费/实时，同类字段必须核实实际响应，隔离可能签名与自动x402付款的CLI路径。 |
+| [Million README完整循环](https://github.com/Kelows/million/blob/main/README.md)、[crawler](https://github.com/Kelows/million/blob/main/apps/api/src/crawler/crawler.service.ts)、[discovery](https://github.com/Kelows/million/blob/main/apps/api/src/discovery/discovery.service.ts)、[live](https://github.com/Kelows/million/blob/main/apps/api/src/live/live-feed.service.ts)、[copyability](https://github.com/Kelows/million/blob/main/apps/api/src/copyability/copyability.service.ts) | 钱包产生新Token候选，Mint交易又发现新钱包→安全筛查/历史钱包分析→自动扩展观察名单→实时订阅→表现反馈。\`crawler\`按API credits/循环限制，初次发现按Token不同历史时间采样、优先补未探索Mint；\`discovery\`预览**约70%大额候选+30%尾部随机**；\`crawler\`承认截断历史PnL有“缺买入但有卖出”的偏差，不按预览利润直接吸收，随后用持续观察判断。\`copyability\`以约60秒后一根分钟K线衡量跟随衰减。 | **最强的自驱式发现→监控→反馈整体业务参照**。但\`live\`的同一签名唯一事件使“触及多个观察钱包”的关系可能丢失；\`owners\`的联合图曾存在182-wallet误并；历史\`copyability\`一分钟K线是代理模拟而非真实报价成交与退出容量。含\`trading\`模块、Helius/Node24/数据库/可能付费，不可未经隔离整套部署。 |
+| [HoldTech界面和扫描](https://github.com/co-numina/holdtech/blob/main/README.md)、[scan-core](https://github.com/co-numina/holdtech/blob/main/app/lib/scan-core.ts)、[deep-scan](https://github.com/co-numina/holdtech/blob/main/app/api/deep-scan/route.ts)、[trending脚本](https://github.com/co-numina/holdtech/blob/main/scripts/trending-refresh.mjs) | 单Mint→Holder质量/年龄/集中度/Bundle时间→资金来源→页面解释，另有本地定期扫描写Redis、前端按缓存展示Trending。业务上把复杂数据呈现给普通用户。 | **参考UI/报告组织与缓存-展示分离**，但不复制其运行配置：公开源码含硬编码的第三方API与缓存凭证（本文件不复述密钥）；\`deep-scan\`以\`feePayer\`当买家，有错误归因风险；\`scan-core\`预设第一名Holder为池地址候选，不是已核池权威真值。 |
+| [pumpwatch只读监控](https://github.com/cinder-security/pumpwatch/blob/main/code/pump_watch.py)、[outcome tracker](https://github.com/cinder-security/pumpwatch/blob/main/code/outcome_tracker.py)、[README](https://github.com/cinder-security/pumpwatch/blob/main/README.md) | pump.fun发行事件→本地Creator信誉/历史→SQLite观察→按币龄动态轮询、429重试与运行失败恢复→跟踪后续结果；README给独立复现入口。 | **发行与Dev历史的完整支线+时效和失败恢复**；仅适用于其识别的发行程序/版本，\`seen_at\`不自动等于区块创建时间，其v0交易请求不能证明覆盖未来版本。 |
+| [Why-Solana Methodology](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/docs/METHODOLOGY.md)、[PITFALLS](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/docs/PITFALLS.md) 与五专题源码 | 跨发行/钱包群体/资金/退出/跨Mint/净收益连续提出假设；\`PITFALLS\`记录**15个待反驳主张中11个未通过原作者验证**，并显式记录一个错误数据链导致的假阴性；有样本分母、Null、Hub、不可成交峰值、看未来、失败读取的修复经验。 | **把主动找错嵌入整条市场判断链**，不是每个细节单开一套新框架。作者报告数字不等于本项目独立复现，来源\`review_only\`。 |
+| [meme-真源](https://github.com/sunshihao001/meme-/blob/main/SOURCE_OF_TRUTH.md)、[FCZ定义](https://github.com/sunshihao001/meme-/blob/main/03_语义概念/第一控盘区定义_v0.1.md)、[基准比较](https://github.com/sunshihao001/meme-/blob/main/09_规则与回测/基准策略对比实验设计_v0.1.md) | 将第一控盘区、深洗、POC/AVWAP、死亡盘看作可讨论的市场形态与成本假说，制定简单POC/AVWAP/Liquidity Sweep基线及失败样本。 | **竞争性市场机制词汇+如何验证复杂策略是否真优于简单方法**；价格接受区不直接等于操盘手真实成本，原模型的“控盘区”需要独立经济证据支持。 |
+
+### 2. 从几套完整流程逆推出当前项目真正缺的环节
+
+现有PR#16（非主分支）已凭真实DEX Screener+RugCheck获取两个Mint的池快照及一个Mint的Holder/Creator候选（其中Top Holder的供应商Owner精确匹配池地址），并能生成只读基础报告；RPC曾429，真实Owner独立核验与完整资金边仍未成功。其\`mint_v01\`、\`vendor_event_handoff\`、\`wallet_batch_monitor\`、\`raw_tx_adapter\`目前是**不同合同和有限样本/离线逻辑**，不应称全链路已经打通。
+
+| 实际用户目标 | 旧参考已具备的整个工作法 | 当前项目仍需证明的最小事实 | 优先对照/复用方式 |
+|---|---|---|---|
+| 从市场中发现值得调查的Mint | OKX new-token-screening、pumpwatch发行监听、Million crawler、HoldTech定期Trending缓存 | 真实候选Mint发现时点、来源与覆盖；不是只有输入一个已知Mint | **先复用现成发现流，保留直接输入Mint入口**，不建第N个榜单 |
+| 一个Mint查关键钱包、Dev与市场状态 | OKX token-research、qb单Mint关键地址矩阵、HoldTech成品页面、RugCheck基本报表 | 真实Dev历史、Holder/Trader与基础设施筛分、池/价/库存来源时钟 | 现有\`mint_v01\`先消费合法保存的成品/公开JSON，产出同一业务视图，按缺失记录UNKNOWN |
+| 关键钱包→发现更多Mint/隐藏地址 | Million Discovery/Crawler、qb转入/转出中继、GMGN历史Trader、Why资金路径/跨组 | 当前系统还没有基于真实市场经济事件持续扩展新钱包和跨Mint名单的验收 | **优先Million的整个只读发现机制/调用合同作对照**，不先写新五跳、同控聚类或自研解析器 |
+| 市场异动、执行服务与库存变化 | Million live/flows、OKX wallet monitor、pumpwatch多时间追踪、Why Null/Hub | 同一签名多钱包视角、真实Swap vs Transfer、事件时间/接收时间、两时点库存、失败恢复 | 仅当证据合同合格才进入现有M01报告；不允许供应商缓存标签冒充真实链上BUY/SELL |
+| 异常解释、反证及是否值得行动 | Why PITFALLS/已冻结比较、meme简单基线、Million shadow/copyability、Hermes Evidence Chain | 能否排除公共服务和普通市场，是否有样本外预测增量与可执行净收益 | **结构解释/后续预测/交易经济分开**；只读风险报告不因没有交易Alpha而失败 |
+
+### 3. 最高信息价值的三个参考源码发现
+
+1. **“找钱包”的偏差不只来自聚类算法，也来自采样**。Million在Discovery中明确将约30%的预览预算随机覆盖大额队列以外的钱包；初始候选仍来自有限的交易时间窗口，\`deepSample\`只是按时间检查点抽样而非全历史枚举。应比较“只看最大买家”与“保留尾部探索”的**新有效地址**，而非只计钱包总数。
+2. **“聪明钱盈利”在早期数据中可能是历史删失的结果**。Million\`crawler\`源码写明：截断历史可能留下卖出而缺少买入，造成不可靠的盈利表现，故候选不再按预览PnL准入；它用持续观察和后续闭环降低这一风险。其\`copyability\`使用一分钟后K线比较，并非成交报价/真实净值。这个经验同时修正D04钱包价值、D07时间、D08跟单信息和D11验证。
+3. **“看起来完整的成品”也有源码级安全和语义失败**。HoldTech有可用的Holder仪表盘组织方式，却在公开脚本中留下凭据、把Fee Payer当买家并把Top1默认当池候选。真正值得重用的是可隔离的业务视图/缓存分层，不是盲目安装全部代码。相反，Why明确保存反证失败史；外部成品的\`README\`、API宣称、界面截图需要源码和测试共同审阅。
+
+### 4. 本轮实际裁决与停止继续无效研究的条件
+
+- **全局产品参考优先级**：就长期市场监控与发现反馈而言，Million的**双向发现循环**作为首要完整流程对照；就可快速形成真实单Mint/新币报告而言，OKX完整Skill/CLI优先验证（在已授权、无付费/签名条件下），现有免费RugCheck+DEX基础版不因此废弃；pumpwatch补发行者循环；HoldTech借鉴界面和Holder分析但不直接部署旧源码。
+- **知识参考优先级**：旧Hermes/qb保留业务问题和运行状态经验，meme-保留市场阶段/价格/库存及反证假说，Why-Solana保留可追溯专业调查方法和历史失败，全部按原D01–D12就地参与具体研究；**不是**只研究多跳或先读完65项才动工。
+- **禁止误判的就绪状态**：源码可读≠程序安装；文档描述可持续监控≠当前Grok已部署；单Mint供应商快照≠链上完整交易事实；一根60秒K线收益≈模拟代理≠真实可成交净利润；界面有“Pool”标签≠该地址已独立验证池Vault身份。
+- **先验收的完整业务证据，而非新增的知识层**：用现有真实Mint \`EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump\`和原保留JSON，形成Mint/Dev/Holder/池到至少一条**真实来源经济行为或观察关系**的连续证据，并对照可授权成熟流程能否直接获得。无真实资金/执行/交易时保留明确空缺而非把Fixture包装成完成。若单来源能完整满足，保留全成品；只有隔离安全/费用/语义不合适时再拆成熟模块。
+- **新研究真正有边际价值的条件**：至少改变一个跨领域判断（例如池库存≠私人持仓；历史PNL≠可跟随收益）或直接减少未交付业务的真实证据缺口。单个签名/多跳问题已不能改变顶层复用/市场解释时，主动暂停深挖转向发行、流动性、监控或市场经济新机制；不建立新专家/分类/阶段流程。
+
+**本轮交付范围**：完整业务源码、设计与历史数据报告交叉阅读和可复核复用裁决。没有运行用户本机/云电脑上的整套Million、OKX或HoldTech，没有新Mint实网采集、Grok部署、钱包私钥/签名、交易或付费调用；仍需真实授权来源与工程隔离才能证明整个业务已运行。
+
