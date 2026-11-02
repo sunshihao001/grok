@@ -55,6 +55,100 @@ def pool_related_holder_observations(
     return observations
 
 
+
+def reconcile_vendor_holders_with_rpc(
+    vendor: dict[str, Any] | None,
+    rpc: dict[str, Any] | None,
+) -> dict[str, Any] | None:
+    """Cross-check exact TOKEN ACCOUNT addresses, never infer beneficial owners.
+
+    RugCheck is a potentially stale vendor snapshot; the official RPC reads
+    largest balances and parsed owners at potentially different finalized slots.
+    Shared owners without a shared token-account address are NOT a match.
+    A missing top-20 account is NOT evidence that the vendor record is false.
+    No extra HTTP calls or token account decoding are performed here.
+    """
+    if vendor is None or rpc is None:
+        return None
+    mint = vendor.get("mint")
+    if not public_token_accounts.valid_address(mint) or rpc.get("mint") != mint:
+        raise ValueError("cached Holder and RPC reports must refer to the same valid Mint")
+    rpc_rows = {
+        row.get("token_account"): row
+        for row in rpc.get("rows", [])
+        if isinstance(row, dict) and public_token_accounts.valid_address(row.get("token_account"))
+    }
+    observations: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    vendor_count = 0
+    for vendor_row in vendor.get("top_holders", []):
+        if not isinstance(vendor_row, dict):
+            continue
+        token_account = vendor_row.get("token_account_candidate")
+        if not public_token_accounts.valid_address(token_account) or token_account in seen:
+            continue
+        seen.add(token_account)
+        vendor_count += 1
+        chain_row = rpc_rows.get(token_account)
+        if chain_row is None:
+            continue
+        vendor_owner = vendor_row.get("owner_candidate")
+        chain_owner = (chain_row.get("owner_candidate")
+                       if chain_row.get("owner_status") == "RPC_PARSED_TOKEN_OWNER_NOT_BENEFICIAL_OWNER"
+                       else None)
+        if not public_token_accounts.valid_address(vendor_owner):
+            vendor_owner = None
+        if not public_token_accounts.valid_address(chain_owner):
+            chain_owner = None
+        if vendor_owner is None or chain_owner is None:
+            state = "TOKEN_ACCOUNT_MATCH_OWNER_UNRESOLVED"
+        elif vendor_owner == chain_owner:
+            state = "TOKEN_ACCOUNT_OWNER_ADDRESS_AGREES_NOT_BENEFICIAL_OWNER_PROOF"
+        else:
+            state = "TOKEN_ACCOUNT_OWNER_ADDRESS_CONFLICT_SNAPSHOTS_NOT_ATOMIC"
+        observations.append({
+            "token_account": token_account,
+            "vendor_owner_candidate": vendor_owner,
+            "rpc_owner_candidate": chain_owner,
+            "status": state,
+            "vendor_path": vendor_row.get("source_path"),
+            "rpc_token_account_path": chain_row.get("source_path"),
+            "rpc_owner_path": chain_row.get("owner_source_path"),
+            "rpc_owner_status": chain_row.get("owner_status"),
+            "rpc_first_slot": rpc.get("rpc_slot_largest"),
+            "rpc_owner_lookup_slot": rpc.get("rpc_slot_owner_lookup"),
+            "vendor_report_detected_at": vendor.get("vendor_detected_at"),
+            "vendor_report_retrieved_at": vendor.get("retrieved_at"),
+            "rpc_report_retrieved_at": rpc.get("retrieved_at"),
+            "amount_raw_vendor": vendor_row.get("amount_raw_vendor"),
+            "amount_raw_rpc_first_slot": chain_row.get("amount_raw_at_first_slot"),
+            "amounts_not_same_slot": True,
+            "no_trading": True,
+        })
+    agree = sum(o["status"].startswith("TOKEN_ACCOUNT_OWNER_ADDRESS_AGREES") for o in observations)
+    conflict = sum("ADDRESS_CONFLICT" in o["status"] for o in observations)
+    return {
+        "status": ("EXACT_TOKEN_ACCOUNT_OVERLAPS_NOT_ATOMIC"
+                   if observations else "NO_TOKEN_ACCOUNT_OVERLAP_COVERAGE_UNKNOWN"),
+        "mint": mint,
+        "vendor_top_token_accounts": vendor_count,
+        "rpc_top_token_accounts": len(rpc_rows),
+        "matched_token_accounts": len(observations),
+        "vendor_accounts_not_in_rpc_top20": vendor_count - len(observations),
+        "owner_address_agreements": agree,
+        "owner_address_conflicts": conflict,
+        "owner_comparison_unresolved": len(observations) - agree - conflict,
+        "observations": observations,
+        "limitations": [
+            "RPC_TOP20_ABSENCE_NOT_PROOF_OF_VENDOR_ACCOUNT_NONEXISTENCE",
+            "VENDOR_CACHED_REPORT_AND_RPC_SLOTS_NOT_ATOMIC",
+            "ACCOUNT_OWNER_ADDRESS_MATCH_NOT_ECONOMIC_BENEFICIAL_OWNER_PROOF",
+            "TOKEN_AMOUNTS_DIFFERENT_TIMES_NOT_DIRECTLY_COMPARABLE",
+        ],
+        "no_trading": True,
+    }
+
+
 def combined(mint: str, out_dir: Path, *, okx_json: Path | None,
              fixture: bool, rpc_holders: bool, rugcheck: bool) -> int:
     """Independent evidence sections, never merge third-party wallet labels with RPC accounts."""
@@ -95,6 +189,7 @@ def combined(mint: str, out_dir: Path, *, okx_json: Path | None,
         if okx is None and pool is None and holders is None and rug is None:
             raise ValueError("all read-only sources unavailable: " + str(errors))
         pool_holder_links = pool_related_holder_observations(pool, rug)
+        holder_rpc_reconciliation = reconcile_vendor_holders_with_rpc(rug, holders)
         # Same-address match across vendors can expose pool/vault entries hidden in
         # "top holders" lists; it does NOT establish human control or intent.
         pool_lookup = {r["pool"]: r for r in pool["pairs"]} if pool else {}
@@ -129,6 +224,7 @@ def combined(mint: str, out_dir: Path, *, okx_json: Path | None,
             "okx_saved": okx, "dex_public": pool, "rpc_token_accounts": holders,
             "rugcheck_public": rug, "cross_source_pool_owner_matches": overlaps,
             "pool_related_holder_candidates": pool_holder_links,
+            "holder_rpc_reconciliation": holder_rpc_reconciliation,
             "limitations": [
                 "RPC_TOP_TOKEN_ACCOUNTS_NOT_VERIFIED_UNIQUE_HOLDERS",
                 "DEX_PAIR_VOLUME_NOT_WALLET_TRADES",
@@ -152,6 +248,19 @@ def combined(mint: str, out_dir: Path, *, okx_json: Path | None,
             for row in overlaps:
                 md.append(f"- \u0060{row['address']}\u0060：\u0060{row['rugcheck_path']}\u0060 ↔ "
                           f"\u0060{row['dex_pair_path']}\u0060；\u0060{row['interpretation']}\u0060")
+        if holder_rpc_reconciliation is not None:
+            check = holder_rpc_reconciliation
+            md += ["", "## 同 Token Account 跨源核对（缓存报告 vs 官方RPC）", "",
+                   f"状态：\u0060{check['status']}\u0060；精确账户重合 {check['matched_token_accounts']} 条；"
+                   f"Owner地址一致 {check['owner_address_agreements']} 条、冲突 {check['owner_address_conflicts']} 条、未知 {check['owner_comparison_unresolved']} 条。",
+                   "**RPC仅返回余额前20个Token Account；未重合不代表供应商记录错误，也不代表没有持有人。Owner地址相同不证明经济同控；缓存时间和RPC slot不可当作原子快照。**", ""]
+            for item in check["observations"]:
+                md.append(f"- Token Account \u0060{item['token_account']}\u0060：RugCheck Owner "
+                          f"\u0060{item['vendor_owner_candidate'] or 'UNKNOWN'}\u0060，RPC Owner "
+                          f"\u0060{item['rpc_owner_candidate'] or 'UNKNOWN'}\u0060；"
+                          f"\u0060{item['status']}\u0060；路径 "
+                          f"\u0060{item['vendor_path']}\u0060 / "
+                          f"\u0060{item['rpc_owner_path'] or 'none'}\u0060。")
         if pool:
             md += ["", "---", "", public_pair_report.render_markdown(pool)]
         if holders:
