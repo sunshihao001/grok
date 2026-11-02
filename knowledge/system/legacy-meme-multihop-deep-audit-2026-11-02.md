@@ -25,8 +25,8 @@
 **重要数据约束**：`funder_of`是最大SOL净损失账户的候选规则，不能推导唯一资本出资人；`Down.step`最多沿一条最大转出继续，不能推出未抽到的支线不存在；`retained`仅意味在有限采样内未找到后续达门槛的转出；`HUB_N`是历史活动量阈值，不能单独证明账户是CEX。
 
 **原始材料内部待核差异（本轮发现，需优先复查）**：
-- `FN_FREEZE.json`记录 `primary=62, ups=55, downs=409, reads=1058, calls=3553, fails=0`；报告和`FN_results.json:B`下游分类总计408条，差异为1；尚未确定是分析阶段去重还是其他原因。
-- `FN_INTEGRITY.json`明确记录“duplicate signature in a wallet's reads”4个钱包、“one transfer starts two branches”1例；`price_file_opened=false`。这些异常并未在该自检文件中显示已被修复。不能因此直接否定全部结论，但在复核之前不能说该研究“全项完整性测试无异常”。
+- `FN_FREEZE.json`记录 `primary=62, ups=55, downs=409, reads=1058, calls=3553, fails=0`；报告与`FN_results.json:B`下游分类总计408条。**已找到差异原因**：`fn_30_analysis.py`的`Data.__init__`按`(第一跳交易签名, primary钱包, 第一跳接收钱包)`去重，并报告`dropped_duplicates=1`；源码注明重叠抽样锚点。最终统计以去重后408条为准。
+- `FN_INTEGRITY.json`仍记录“duplicate signature in a wallet's reads”4个钱包及“one transfer starts two branches”1例，且`price_file_opened=false`。分支重复已被分析层显式去重；原始重复签名仍在自检记录中，尚未核验其对其他统计的影响。自检不能称零异常，但也不能将409→408误判为未处理的数据错误。
 - 上述自检文件在上游 `searadacunha/Why-Solana-Memecoins-Are-Over` 当前公开仓库中也有相同记录，本轮未运行完整历史缓存，因此并未独立判定统计后果。
 
 **作者报告、非本项目复验**：结果自述55上游链、408下游分支、13个有序跨组序列/8个桥接地址、115/119间接回流至同一作者定义的operator狙击钱包；研究也列明Hub与未观测分支的限制及“SOL同质，无法证明同一lamports”的边界。数据结果可作为机制候选，不能当经济主体或可盈利策略真值。
@@ -109,7 +109,7 @@
 **本轮未完成**：旧qb仓库4,236文件逐一阅读（其中3,338在data及大量备份）；Why-Solana 944项中的全部测试和原始数据逐项独立重放；全部65项参考资产的深读；OKX/GMGN/Bubblemaps新账户真实授权请求；Grok云电脑多跳监控。任何“全量已学透”的表述均不成立。
 
 **已形成的新可核查问题**：
-1. 用`FN_FREEZE`/原始`fn_table`和`FN_INTEGRITY`定位409与408差异，并判断重复签名/分支是否影响资金金额或网络连通；缺原缓存时不能声称原始交易重放。
+1. 409→408已由`fn_30_analysis.py`的分析层去重解释。应复核四个重复签名钱包是否影响其他统计，检验最终去重路径与冻结表的对应关系；缺原缓存时不能声称独立重放。
 2. 用同一Mint，对照OKX Holder/Cluster、GMGN历史Trader和Bubblemaps Magic Nodes的**新增地址集合**，计算不同供应商的独有地址及共同地址，并检查地址本身是否为池/公共服务。
 3. 将Why-Solana的“只追最大分支”与“在同预算内追信息价值更高的非Hub分支”做方法对照；先比较新增有效关系，避免按新增地址总数评优。
 4. 每项知识回填原Dxx专题时记录“旧结论→新增证据→修订理由”，不把指标数、专家数、跳数或文档量当进步。
