@@ -337,7 +337,8 @@
       "knowledge_files": [
         "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md",
         "knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md",
-        "knowledge/system/legacy-meme-multihop-deep-audit-2026-11-02.md"
+        "knowledge/system/legacy-meme-multihop-deep-audit-2026-11-02.md",
+        "knowledge/domain/meme-anomaly-discovery-state.v1.md"
       ],
       "engineering_ids": [
         "event",
@@ -737,7 +738,8 @@
       "knowledge_files": [
         "knowledge/domain/L1-L2-chain-market.md",
         "knowledge/domain/L6-L7-investigation-cases.md",
-        "knowledge/system/legacy-meme-multihop-deep-audit-2026-11-02.md"
+        "knowledge/system/legacy-meme-multihop-deep-audit-2026-11-02.md",
+        "knowledge/domain/meme-anomaly-discovery-state.v1.md"
       ],
       "engineering_ids": [
         "event",
