@@ -156,6 +156,19 @@
 
 **本次新的优先调查问题**：原作者已指出跨operator共签Hub外部客户群是区分共享服务与经济控制的关键，优先审查现有Bubblemaps/OKX/GMGN是否有相应服务覆盖/历史交易证据，而不是直接再将五跳扩展到十跳。只有获取该证据可改变解释时才需要补Helius或新的RPC查询；未经授权和费用核验不运行实网。
 
+## 五再补｜共享服务误归因专项：跨项目源码与官方数据对照
+
+**与此前五跳/资本循环审计的增量**：原L3深度底稿已有§18–22讨论多签授权非身份、静态网络时间机会、冻结表二次审读及资本循环重复计数；本轮不重复发明这些内容，而是核验旧分类器与API能否实际支持其结论。可按需阅读 [L3经济主体深度研究§23](../domain/L3-actor-economic-mechanisms-deepstudy.md)。
+
+1. **Hermes设计与代码相冲突**：`design/phase1-skill-04-wallet-structure.md`称`sell_amount_percentage`差值<0.1才适合聚成类似卖出组；但`skills/meme-wallet-structure/scripts/run.py::_distribution_groups`仅以>0.5筛选后全放在一个`similar_sell_ratio`分组。合成0.51与0.99也被聚合，差异0.48；这是原谓词语义反例，未运行原仓库/真实市场。另有`confidence_score=clamp(0.8-0.1*缺失项数)`不是同控概率校准；`suspected_controller`所谓`strong`若依赖三名受资助钱包及持仓>5%，仍需排除公共服务。
+2. **Million的历史失败经验**：`apps/api/src/analysis/owners.service.ts`记录共同入场造成182-wallet合并；当前`coentry`只作证据、不参与`union-find`，排除度数>6的Hub。但多个度数≤6的共享服务/中继节点仍可串联独立钱包；JS离线构造两组独立钱包经`Service1–Bridge–Service2`连接，均未超过阈值，最终并成一组。该例证明**算法边界**，不是现有Million真实误判率。
+3. **qb-调查意图保留，但标签须降级**：`sikk_gmgn_token_report.py`保留中转、分发、Token来源、基础设施边是成熟的调查基础；但`rat_trader`标签被解释成“可疑中转节点”，`native_transfer.from_address`非空便生成“路由/工具节点候选”，没有独立交易执行/路由/共享客户证据，不能直接升格为事实。
+4. **Why-Solana签名证据更强但不等于密钥同控**：`funder_network/derived/FN_posthoc.json`记录408个有效下游首跳均由目标地址签名；其分解为Hub非fee payer130/fee payer23、其他非fee payer238/fee payer17。对方签名是原作者冻结交易中的可检查结果；[Solana Partial Signing](https://solana.com/docs/core/transactions/partial-signing)允许多方独立签署一个交易消息，因此不支持“一个后台保管所有密钥”的确定性判断。正常SOL收款不强制收款者签名，这个观察有业务辨别力，但仍无法判别托管客户/多方协调/共同受益。
+5. **成熟平台谁提供什么证据**：GMGN `token traders`覆盖历史交易者但单次上限100，首次SOL来源和最近Token转出不能普查任意服务方全体客户；OKX Token Cluster限定Top300 Holder、最多100集群，不能代替服务地址客户普查。OKX另有六个月的`transactions-by-address`历史、单链每页≤20条，可作为外部交易对手候选入口，但官方例子`address`/`addresses`及`transactions`/`transactionList`存在不一致，且未标注Solana完整Signer清单。Bubblemaps V0.3.2的`subgraph`需给已知2–1000个地址，返回聚合transfer金额/次数/时间，非逐笔签名或无限客户发现。Nansen Counterparties允许按Solana钱包查交互对手但仍非共同签名真值。关键签名证据最终须核`getTransaction(jsonParsed, maxSupportedTransactionVersion:1)`及完整覆盖。
+6. **下一项最有信息价值的检验**：调查共享签名高活跃服务钱包**在研究群体之外**是否存在广泛不同Mint/不同时间的共同签名交易客户；对预先分层的小样本，记录真实Signer、Fee Payer、交易功能、资金方向、活动时段、与研究样本的交叉，优先成熟业务API发现候选、再少量原始交易核验。不把“多跳路径”“共用fee payer”“买入同期”作为已校准共同控制评分。
+
+**本轮实际状态**：源码与官方文档核查＋两项独立合成谓词/图测试；未取得供应商授权原始响应、未运行旧Hermes或Million全量仓库测试、未开展真实客户样本抽查、未修改工程PR #16。原65项资产审读仍未全部完成。
+
 ## 六、覆盖缺口和下一次最有信息价值的工作
 
 **本轮未完成**：旧qb仓库4,236文件逐一阅读（其中3,338在data及大量备份）；Why-Solana 944项中的全部测试和原始数据逐项独立重放；全部65项参考资产的深读；OKX/GMGN/Bubblemaps新账户真实授权请求；Grok云电脑多跳监控。任何“全量已学透”的表述均不成立。
