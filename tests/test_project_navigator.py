@@ -87,6 +87,42 @@ class NavigationTests(unittest.TestCase):
                 self.assertTrue(got, question)
                 self.assertEqual(got[0]["intent"], expected)
 
+    def test_real_multihop_shared_service_query_starts_with_funding_identity(self):
+        # Known baseline failure: "一批" made ANOMALY_TIME rank above the
+        # economic identity investigation; routing is only a shortlist.
+        q = "一批多跳资金钱包到底同控，还是共用交易服务？"
+        found = nav.shortlist(q, self.data, limit=3)
+        self.assertEqual(found["routes"][0]["intent"], "FUNDING_ENTITY")
+        self.assertIn("knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md",
+                      found["routes"][0]["knowledge_paths_on_current_branch"])
+        self.assertIn("knowledge/system/legacy-meme-multihop-deep-audit-2026-11-02.md",
+                      found["routes"][0]["knowledge_paths_on_current_branch"])
+        self.assertEqual(found["match_kind"], "literal_cue_candidates_not_semantic_routing")
+
+    def test_real_provider_reuse_query_starts_with_implementation_evidence(self):
+        # Prior ties allowed funding theory to outrank vendor capability review.
+        q = "OKX GMGN Bubblemaps如何复用到V0.2钱包资金报告"
+        found = nav.shortlist(q, self.data, limit=3)
+        self.assertEqual(found["routes"][0]["intent"], "SOURCE_REUSE")
+        self.assertIn("E-L7-03", found["routes"][0]["expert_lens_ids"])
+        self.assertIn("knowledge/system/reference-capability-reuse-ledger.v1.md",
+                      found["routes"][0]["knowledge_paths_on_current_branch"])
+        self.assertTrue(all(
+            not item["invoked"]
+            for route in found["routes"]
+            for item in route["engineering_candidates_on_separate_branch"]
+        ))
+
+    def test_governance_maintenance_question_uses_current_rules_not_old_stage(self):
+        q = ("继续 Solana Meme 项目，原位优化现有专家、知识调用与持续推进制度，"
+             "清除重复和冲突约束，保留专业知识与可靠证据，并通过实际任务检验改进效果")
+        found = nav.shortlist(q, self.data, limit=3)
+        self.assertEqual(found["routes"][0]["intent"], "KNOWLEDGE_MANAGEMENT")
+        files = found["routes"][0]["knowledge_paths_on_current_branch"]
+        self.assertIn("knowledge/system/current-operating-guidance.md", files)
+        self.assertIn("knowledge/system/gpt-meme-progress-current.md", files)
+        self.assertIn("knowledge/experts/registry.v1.json", files)
+
     def test_out_of_scope_id_fails(self):
         with self.assertRaises(ValueError):
             nav.shortlist("", self.data, intent="AUTOTRADE")
