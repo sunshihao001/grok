@@ -484,3 +484,58 @@ Jito 官方文档描述 bundle 可按固定顺序处理至多五笔交易，并�
 **外部理论交叉**：实体消歧误差会传导到网络统计的实证研究 [Diesner et al., ICWSM](https://ojs.aaai.org/index.php/ICWSM/article/view/14630)；[Lauren et al., 2026, probabilistic linkage with graphs](https://arxiv.org/abs/2610.00566) 研究了阈值成分传递闭包导致的错合并及替代聚类方法。这里仅借用其**测量/聚类敏感性研究问题**，不声称该论文的算法效果已在 Solana 钱包数据得到验证。
 
 **来源固定版本**：Million `c89ad07caaf70773d40b45943e136eadc4f946a5`（源码+历史提交）；HoldTech `a75e214bf1ee0a8803eb7d93336be98c481c2db9` 的 `app/api/deep-scan/route.ts`；Hermes `2bf694b37cce25b4a3c9364298b784039f3ecc84` 的 `learning/11.md`；qb- `8377ad5611255df5cd4562666a826708575334f0` 的 `sikk_gmgn_token_report.py`；Why-Solana 个人 fork `9a7ad51d56328e91e67e3f531d6744307d0ee68b` 的 `funder_network/results.md` / `docs/PITFALLS.md`（`review_only`）；OKX `73904b636a0f022dcc13b6d7a0dd2ed3b3195f25` 的 `workflows/token-research.md`。本轮未审查全部65项，也未验证实体归并真实检出率。
+
+
+## 16｜2026-11-02 REF-002 源头认知重建：旧 Hermes 是 Meme 市场专业研究历史，不只是运行时
+
+> **范围与版本**：本节原位继承旧 [sunshihao001/-](https://github.com/sunshihao001/-/tree/2bf694b37cce25b4a3c9364298b784039f3ecc84)（固定提交 \`2bf694b37cce25b4a3c9364298b784039f3ecc84\`），对照 [Million](https://github.com/Kelows/million)、[Why-Solana](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over) 与 [Solana Token Account 官方说明](https://solana.com/docs/tokens/basics/create-token-account)。这是 **源码/文档/离线测试审查与专业解释**，不是旧仓库独立完整运行、原链真实数据复算或收益证明。不新建专家/本体/运行框架；原仓文件不修改，保留冲突与历史顺序。
+
+### 16.1 修正参考项目定位错误：REF-002 ≠ 只有旧 Hermes 工作流
+
+之前正式索引把 REF-002 的主要用途写成“业务Skill/状态/证据链/钱包流程参照”，触发条件是“成品缺业务流程”。这会在知识研究阶段把旧仓排除掉，从而遗漏它最有价值的专业内容。现已在原 \`gpt-meme-project-index.v1.json\` 的 **同一 REF-002** 提升为 P0 历史专业知识与方法源头（65项总数不变；不重新登记或重新启用 Hermes 运行时）。
+
+| 原仓证据位置 | 研究对象与实际内容 | 正确继承方式与适用边界 |
+|---|---|---|
+| [learning/INDEX.md](https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/INDEX.md)、\`learning/05–16\` | 发行/迁移、GMGN来源、Token权限、Rug/LP、钱包角色、资金溯源、Sybil/Wash、证据链、Gate | 将问题与原理回填 D01–D09/D11；这是历史知识与候选判断，不是最新协议/已校准市场事实 |
+| [00c/00d/00e](https://github.com/sunshihao001/-/tree/2bf694b37cce25b4a3c9364298b784039f3ecc84/design/phase1-research) 与 [2026-05-26 grill](https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/design/phase1-research/grill-sessions/2026-05-26-grill-bytes-to-framework.md) | 问题→数据痕迹→字段→特征→竞争结构；同一数据的不同经济解释、未知发现与反证 | 恢复为研究问题生成方法；随机组合产生“新标签”不等于发现可重复机制；宣称 5–10% 全新发现未见实证依据 |
+| \`design/phase1-skill-01…08\`、[Skill4 控制权设计](https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/design/Skill4-%E7%AD%B9%E7%A0%81%E6%8E%A7%E5%88%B6%E6%9D%83%E7%8A%B6%E6%80%81%E5%B1%82%E8%AE%BE%E8%AE%A1.md) | 参与者角色、实体候选、库存控制、状态有效期、UNKNOWN、证据与反证的业务设计 | 继承经济问题和控制权维度；旧状态与公式未证真实效果，不要求按旧架构开发 |
+| \`skills/meme-*\`、\`tests/\`、\`rules/\` | 实际 Python Skills、合同测试、fixture 端到端研究/纸面门控 | 源码存在 ≠ 真正验证实时钱包与市场规律；可复用安全研究逻辑，不能视为已部署交易系统 |
+| \`learning/calibration/\`、\`docs/missing_data_policy.md\`、\`docs/v2_skill_gap_analysis.md\` | 已识别研究深度不足、知识过细、跨 Skill 语义缺口、来源缺失和体系扩张 | 继承“学习停止条件/可检验判断/横向语义缺口”的历史经验，不继承“增加 Skill 数量必然提高质量”的方案 |
+
+### 16.2 同仓不同年代的结论相互冲突：必须恢复认识演化，不能一键择优
+
+**历史强断言 A**：[早期“链上本质思维工具箱”](https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/01-04-%E5%9F%BA%E7%A1%80%E7%90%86%E8%AE%BA/04-%E9%93%BE%E4%B8%8A%E6%9C%AC%E8%B4%A8%E6%80%9D%E7%BB%B4%E5%B7%A5%E5%85%B7%E7%AE%B1.md) 示例把“来自同一 Binance 提款地址”直接称为“同一庄家”，又说极短时间卖出大概率同控、“时间戳不会骗人”。**纠正**：公共出金/代付/共用机器人/公开事件都可能制造类似关系；上链时间也不等于策略决策或观察者可用时间。它们仅形成资金与同步候选。原仓较后的 [learning/11.md](https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/11.md)、[learning/12.md](https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/12.md) 已将同源/协调降为概率推断。旧“极高概率”没有可引用的校准统计。
+
+**历史强断言 B**：\`00d-GMGN-多维度推理扩展.txt\` 将“同源＋相似成本＋同时间”定性成“极高概率同一实体”。**纠正**：若三个变量共享上游事件/路由/市场阶段，不是三个独立确认。Why-Solana 的 [PITFALLS P13](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/docs/PITFALLS.md) 报告，在**其对照钱包总体**的40钱包随机群体中，“共享私人出资人”条件可触发88.9%，说明判据必须针对同规模/市场阶段/样本抽样方式校准；不能把该数值泛化为全 Solana 误报率。
+
+**历史强断言 C**：\`00e\` 的字段穷举、无监督聚类与异常筛选，用于扩展未知很有价值，但其中“5–10% 组合是超出直觉发现”未经验证，且在大量候选中挑表现最好者会出现多重比较/事后选择偏差。Why-Solana 的 [PITFALLS P10](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/docs/PITFALLS.md) 给出一组 38 退出策略筛选后显著性消失的案例。**保留作为假设生成手段，不因指标新颖就升级为经济机制。**
+
+**旧研究还存在有价值的自我纠正**：[2026-05-26 grill 记录](https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/design/phase1-research/grill-sessions/2026-05-26-grill-bytes-to-framework.md) 已明确“字节产生待检验假设，不产生真理”，并提出静态/动态、反例与样本复核。其“价格信号是最终裁判”只适用于**交易收益类命题**；发行组织、公共基础设施、钱包角色、资金循环等结构命题可以通过其他相称的证据得到实质验证，不能强迫每项结构研究以价格预测为目标。
+
+### 16.3 源码揭示的另一层偏差：结构候选被命名为已发生经济动作
+
+旧 [Skill 04 主程序](https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/skills/meme-wallet-structure/scripts/run.py) 实际可见：
+1. \`_same_source_groups()\` 按 \`native_transfer_from\` 合并；\`_suspected_controllers()\` 在群组≥3且合计持仓>5%时把出资地址标 \`strong\`。**共享资金来源不是控制权证明**，尤其是 CEX 和公共服务；比例阈值未发现经标注数据的概率校准。
+2. \`_coordinated_buy_groups()\` 实际按 \`start_holding_at // 300\` 将≥3钱包并入 \`coordinated_buy_groups\`，**未在此函数核对成功的 Swap、交易签名、真实买入时间或同控原因**。“首次持有接近”不能直接升级为“协调买入”。
+3. \`_distribution_groups()\` 只用累计 \`sell_amount_percentage > 0.5\` 将不同地址集合合并，**并不要求同一市场窗口、相互资金关系或统一行动**；名称应解释为“高累计卖出比例组候选”，不能直接声称同步出货。
+4. \`confidence_score\` 从0.8出发按若干 \`downgrade_reasons\` 扣减，不是经过真实样本测定的经济控制概率；\`counter_evidence\` 字段声明存在不代表运行时已真实填入或全面挑战假设。
+5. \`tests/test_fixture_e2e_pipeline.py\` 明确禁止直播 GMGN 调用，\`docs/project_status.md\` 仍标示验收待完成。**历史源码/fixture 测试/设计/真实运行之间必须分离**。
+
+**对照协议**：Solana [Token Account 文档](https://solana.com/docs/tokens/basics/create-token-account) 将授权 Token Owner、Token Account 和创建/手续费付款者分开；签名者/fee payer 不可无条件映射成实际买家、资金承担者或最终受益人。以上旧源码输出不应作为当前 grok V0.2 的未经验证上游标签使用。
+
+### 16.4 与其他成品正确组合后的“新”认知（推论，不是实证规律）
+
+- [Million \`flows.service.ts\`](https://github.com/Kelows/million/blob/main/apps/api/src/live/flows.service.ts) 作者明确指出：原退出观察只盯触发跟单的一个钱包，会错过其他跟踪钱包集体离场；从**单地址**转向**观察组状态**是已存在的真实业务需求。当前 Grok 原 M01 的成员演化可研究变化，但群组边界一旦受不稳定实体归并影响，可能虚构“共识/群体替换”。需要分别记录**原始固定钱包集合**与**不同假设下的动态群组**。
+- [Million \`ledger.ts\`](https://github.com/Kelows/million/blob/main/apps/api/src/analysis/ledger.ts) 区分有对价的出售、无收益的转仓与 Token-to-Token 换仓成本延续；说明“Token 余额减少”不等价于卖出或资金撤离。旧 Skill04 的累计卖出百分比也不能替代群体净库存或实际收益。
+- Why-Solana 的 [PITFALLS P12/P14/P15](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/docs/PITFALLS.md) 分别暴露公共基础设施制造巨型连通簇、错误对照总体制造显著结果、网络 403/429 被当成“零买家”等问题。故异常监控必须区分**真实市场沉默**与**数据丢失/身份解析变化**。
+- **研究候选 R16-1**：如果 Wallet Group 的成员因供应商标签更新/旧边过期而替换，则“群体突然建仓/撤出”的告警可能完全由归因版本变化产生。需保留同一时间范围的签名与地址集合，冻结原始事件，仅替换归并算法做对照；目前尚无真实误报率。
+- **研究候选 R16-2**：公开市场事件可以共同决定入场时间、相似成交价和机器人执行节奏；这些观测不应重复计作独立同控证据。应选择有鉴别力的资金职责、授权关系、跨周期库存流与独立对照，而不是增加相关特征数量。
+
+### 16.5 对当前项目的实际作用及边界
+
+- **当前已有**：PR #16 的真实供应商多源 Mint 只读预览 + fixture-only M01；不因恢复旧仓而重新开始早期 GMGN/Hermes 架构，也不擅自激活真实交易。
+- **专业研究**：把本节作为 D04–D07 原位机制与错误前提修正；D01 是账户/交易语义依据，D10 负责时间与缺失、D11 负责判据基线/反证，D12 保留来源与版本。当前不改 152 单元和22专家注册表。
+- **工程交接**：V0.2 优先复用成熟业务流程取得真实资金/Token 边，并明确边类型、金额、方向、签名、事件与观察时点、服务节点和 UNKNOWN。对其经济解释保留竞争机制；不能直接复制旧 \`same_source\` 控制强度或 \`coordinated_buy\` 标签。
+- **停止条件**：这一轮已经足以纠正 REF-002 的分类和关键错误前提；下一次仅当新真实证据能改变钱包资金关系归因、时序异常判断或产品实现时继续深入相应原文件，不再逐页产生重复框架。
+
+**来源与验收**：仅对旧仓固定SHA的目录、上述理论文件、Skill04源码、离线测试和校准报告进行了选择性审查；外部 Million/Why-Solana 采用固定源码和项目作者的可复查报告。未完整重跑旧 Skills、未验证真实链上操盘身份/收益。原仓历史文件原样保留；本文为**经源码支持的纠偏与推论注记**。
