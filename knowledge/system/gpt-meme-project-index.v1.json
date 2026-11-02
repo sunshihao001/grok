@@ -476,14 +476,14 @@
       },
       {
         "id": "REF-002",
-        "name": "原Hermes Workflow OS",
+        "name": "原 Solana Meme / GMGN 交易研究与 Hermes Workflow OS（跨域历史知识源）",
         "kind": "internal",
         "url": "https://github.com/sunshihao001/-",
         "verification": "SOURCE_AUDITED",
-        "role": "业务Skill/状态/证据链/钱包流程参照，不复用运行时",
-        "priority": "P1",
+        "role": "核心历史专业知识与研究方法源头：Meme发行/池/钱包角色/同源资金/Sybil/Wash/筹码控制/执行风险/策略与决策；00c–00e从市场问题反推字段、跨维度机制生成与主动反证；learning/05–16及校准/设计演化；7个业务Skill源码与离线测试、证据/缺失/降级契约。只继承有证据的知识与成熟流程，不继承旧Hermes运行时、未经校准阈值或自动交易。早期强断言与后期审慎表述冲突须保留并核查。",
+        "priority": "P0",
         "lead_expert": "E-L7-01",
-        "when_to_review": "当前成品缺业务流程或状态恢复经验"
+        "when_to_review": "任何Meme专业机制、钱包/资金/筹码/交易行为、未知发现与知识方法演化的高价值问题；可按具体问题进入原始learning/design/skills/tests/calibration，不必每轮扫描全仓。"
       },
       {
         "id": "REF-003",
