@@ -79,6 +79,12 @@
 - 供应商不一致时，优先核实“观察时间、Holder/Trader分母、Token Account owner、共用服务、关系边是否逐笔可验证”，不要将多个标签简单累加成同控概率。
 - 未来需深入研究Nansen、Bitquery Coinpath等真正提供多跳服务的具体接口，但不能未经权限/实测就把文档能力写成项目已拥有能力。
 
+
+### 补充：成熟平台官方字段说明也有需要实际响应澄清的口径问题
+- GMGN官方不同Skills对`native_transfer`嵌套字段的叙述不完全一致：`gmgn-token`在共同首次资金来源示例中使用`native_transfer.address`，`gmgn-holder-analysis`的字段表写`native_transfer.from_address`。这只是**文档/脚本口径差异**，尚不能确认当前真实JSON采用哪一种；集成时必须取得原响应并核对，不可直接复制其中任一名称。
+- OKX `cluster/overview`的`top100HoldingsPercent`等在文档中标成百分比，而示例JSON为`0.68776`之类小数；不应在未核对实际响应/页面口径前决定乘以100或按已经是百分比显示。类似`holderSameFundSourcePercent`不能因其英文名便认为是“上游同源真值”。
+- 这些口径差异意味着**成熟平台并不免除数据字典与真实响应验收**。它们是辅助经济事实调查的高价值来源，但在没有API授权与同Mint原始JSON时不能给出已验证准确率。
+
 ## 五、对三类关键问题的研究判定
 
 ### 多跳后哪些关系仍可识别
