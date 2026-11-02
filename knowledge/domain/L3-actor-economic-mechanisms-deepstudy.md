@@ -601,3 +601,72 @@ Jito 官方文档描述 bundle 可按固定顺序处理至多五笔交易，并�
 **最小可检验条件**：同一个 Mint 冻结同一窗口的完整交易签名及采集水位，记录观察集合版本；区分每个 owner 的 buy/sell/transfer 和 Token 数量变化，给出 quote gross、净额、已观察钱包集合变化以及 UNKNOWN，然后分别用“A同人来回”“B不同群换手”“C早期群出货但总净买正”“D纯转仓”做对抗性回归。只有在真实事件覆盖可核对后，才升级为真实链上监控效果；如现成方案可直接提供上述业务事实，优先安全复用。
 
 **来源/证据等级**：Million `flows.service.ts` SHA `7bee35d2bf022c0d9b48afc7e347faff5b27dc6e`；`live-feed.service.ts` SHA `244f334bfe2ed4ddf70527c6b3b32c662333a798`；`metrics.ts` SHA `897f04856990fdcff7d1b68bf520c14026441378`；`ledger.ts` SHA `522b627b5c2e307292f161a482c6e116218c5389`；`schema.prisma` SHA `e28e2b3d82d253a7d9ed63b76b51daa383876fca`。Why-Solana 作者报告 `economic_mechanics/results.md` SHA `e9f6c8df1cacbc4823030794d4daa0e9a80fdbe1`；Solana 官方 [Token Accounts](https://solana.com/docs/tokens) / [RPC JSON Structures](https://solana.com/docs/rpc/json-structures)。本轮没有运行 Million 原仓库、没有独立重算 Why-Solana 样本、没有真实钱包群体误报率或收益测量。
+
+
+
+## 18｜2026-11-02 资本循环、签名组织与最终受益：恢复完整研究链后的经济可识别性边界
+
+> **研究入口**：不是“如何给一组钱包贴庄家标签”，而是：**一个 Mint 的资本从融资、买入、转仓、卖出到再次资助下一枚 Mint，究竟哪些环节可被链上确认，哪些因资金可替代性、多方签名和经济权利安排而不可唯一识别？** 源头项目：旧 Hermes 的 [Skill8 筹码控制权状态设计](https://github.com/sunshihao001/-/blob/main/design/Skill4-%E7%AD%B9%E7%A0%81%E6%8E%A7%E5%88%B6%E6%9D%83%E7%8A%B6%E6%80%81%E5%B1%82%E8%AE%BE%E8%AE%A1.md)、Million [ledger](https://github.com/Kelows/million/blob/522b627b5c2e307292f161a482c6e116218c5389/apps/api/src/analysis/ledger.ts)，及 Why-Solana 的 [economic_mechanics](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/e9f6c8df1cacbc4823030794d4daa0e9a80fdbe1/economic_mechanics/results.md) → [exit_destination](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/cebbf7217b71e7dcdae18103d18cbf8056913af7/exit_destination/results.md) → [funder_network](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/a9968fb25836b0d2d5a5e372a86c885f78c3255c/funder_network/results.md)。本节只新增上述**研究演化及数据归因边界**，不重复 §2–§3 的基本定义，不把推论升级为已验证交易优势。
+
+### 18.1 从“上篇报告里未知”追溯后续研究，避免陈旧结论
+
+- **第一阶段** [economic_mechanics/results.md](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/e9f6c8df1cacbc4823030794d4daa0e9a80fdbe1/economic_mechanics/results.md)：作者观察 Funder→Sniper→早期 Token 转出和跨发行资金复用，但只看到初始移出，明确接收钱包的后续出售和 SOL 去向未追踪。
+- **第二阶段** [exit_destination/results.md](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/cebbf7217b71e7dcdae18103d18cbf8056913af7/exit_destination/results.md)：作者从固定的1,737个复用 exit wallets 总体，按预设规则选择300钱包、1,457个 wallet-launch 事件。报告称在1,457个事件中均看到了接收钱包后续出售，首次出售中位延迟81秒；1,131事件读到卖尽，326事件在每窗口最多10笔交易的**截断**下仍处于部分出售。**只证明窗口内看到了出售，不证明所有接收Token已全部出售，也不证明全市场普遍比例。**作者报告17/24个操作组存在“出资→狙击→转仓→接收钱包出售→归集→再次出资”的可观察地址级路径；其余7组是路径未覆盖，不等于无资金循环。
+- **第三阶段** [funder_network/results.md](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/a9968fb25836b0d2d5a5e372a86c885f78c3255c/funder_network/results.md)：作者进一步读取62个 funder/collector 对象的部分上游与下游；报告64%的向外 SOL 流向高活跃地址、32%流向此前未见地址、约13%终端资金量未解析；在其预设非枢纽规则下，多数 operator 网络相对分离，只出现少数跨组桥梁，**不是“全部一个超级庄家网络”**。作者仍未证实密钥实际保管人、服务商—客户契约或最终受益所有权。统计均为**外部研究报告**，本轮未从原始链重新复算；样本筛选、交易窗口、限额影响结论。
+
+**研究入口的实质改进**：每读一篇参考结论，应检查同项目是否已经完成该结论自己提出的“下一项最有信息价值的测试”，并保留**旧未知→新观察→仍未知**的演化链；不能将早期文档里的 UNKNOWN 永久当最终状态，也不能因晚期新增了观察就忘记样本筛选与截断。
+
+### 18.2 同交易多签只证明多方授权，不证明同一签名机器或一人控制
+
+Why-Solana [exit_destination/results.md](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/cebbf7217b71e7dcdae18103d18cbf8056913af7/exit_destination/results.md) 报告归集交易常有四个签名者，并进一步把它描述为“一个签名进程持有这些密钥”。**这里后半句超出了签名字段本身可证明的内容。**
+
+[Solana 官方 Partial Signing](https://solana.com/docs/core/transactions/partial-signing) 明确允许不同主体在**不同时间、不同设备**上分别签署相同交易消息，由协调者合并签名；[Signing in Production](https://solana.com/docs/core/transactions/signing-in-production) 区分本地、浏览器钱包、KMS/HSM、托管等密钥保管方式。因此仅从同笔交易的多个签名可以确定：这些公钥对该交易消息提供了有效签名，存在共同交易组装/授权；**不能推断一个进程控制全部私钥、必然同一人、必然同一风险承担者或最终受益人**。服务托管与多人协调签名都是竞争解释；若要验证统一保管需要额外独立证据。签名有效性与账户权限也须区分：Token Account owner/delegate/fee payer 仍有不同语义。
+
+对结果的合理修正：把作者的“同一签名进程”“不是交易所存款”当成**有背景支持但非链上直接可识别**的解释；这不抹掉链上签名、资金路径和复用操作事实，也不证明原研究所有经济结论都错。
+
+### 18.3 资本有可观察金额与路径，但没有链上唯一可识别的“同一单位来源”
+
+当一笔可替代 SOL 进入已有余额的钱包，即使后续有等额转出，也无法在协议层把转出的“具体那份SOL”唯一归到新收到的来源。
+
+**独立数学示例（仅两笔入/出、无手续费/其他转账、没有资产跨类型转换）**：钱包在某笔新收入前余额为 B，收到新资金 R，然后支出 S（要求 S≤B+R）。允许支出中来自 R 的部分可在以下代数范围内：
+`lower = max(0, S-B)`，`upper = min(R,S)`。
+- 若 B=80 SOL、R=18 SOL、S=15 SOL，则与数据相容的“新收入参与下一笔支出”金额在 **0–15 SOL**；无法声称 A 币出售所得必然转投 B 币。
+- 若 B=3、R=18、S=15，范围是 **12–15 SOL**；即便如此，仍无法确认控制者、受益人或具体“哪几个 lamport”的历史身份。
+- 若 B=0、R=18、S=15，支出必须由新到余额（在此简化条件下）支持，但仍**不证明同一经济主体或投资决策**。
+
+这是**资金可能贡献的会计界限**，不是币种 UTXO 级污点追踪、链上实际 provenance 标签或市场实证。现实中其它入出金、手续费、租金、SOL↔WSOL、兑换、托管、池/程序、未覆盖交易、非确定性经济控制会改变界限，必须按资产、交易、观察时点和完整账户余额重新计算，不能将简化公式直接部署成通用资金追踪分数。
+
+现有 C01 早已指出“要看上一笔收入前是否已有足够余额”；本轮新增的是**说明可归因范围而非二元认定资金再部署**。资金循环的地址级结构可以非常有意义，但“同一份资金、同一个受益人”是不同的主张。
+
+### 18.4 从真实代码反推的两种资金图近似误归因
+
+- [exit_destination/code/ed_trace.py 的 `txflow()`](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/0571deac674ffabc4057cd1bb17223bc307cc8b1/exit_destination/code/ed_trace.py) 在钱包 SOL 净减少、无目标 Token 变化时，优先选择**同笔交易中 lamport 净增加最多**的地址作为去向，结果把钱包的**整个净损失金额**赋给它。
+- [funder_network/code/fn_trace.py 的 `funder_of()`](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/c1a69944933fcaab51a97c634fab6b43891b4018/funder_network/code/fn_trace.py) 在收款钱包净增加时，选**同笔交易 lamport 净减少最多**的对手方作为单一出资者，却返回整个收款钱包的**全部净增金额**。
+
+**合成反例（独立最小复刻，不是原仓测试/真实样本）**：
+- S 在一笔交易中净减少10 SOL，同时 X净增加6、Y净增加4。按上述单最大接收者近似，会生成 **S→X 10 SOL**，即使真实地址净变化为 X仅增加6。误差4 SOL。
+- F1净减少6、F2净减少4、W净增加10。按单最大出资者近似，会生成 **F1→W 10 SOL**，而非 F1实际减少6，误差4 SOL。
+
+两者说明：“选择最主要来源/接收者”若被当成**完整金额归因**，可能把多出资者、多接收者交易压成虚假单边，从而制造**错误的资金路径、共同出资和跨币闭环**。作者自己在特定 exit-wallet 样本报告中称明确分款事件非常少；**本轮没有证据表明这些反例实际改变了其原始统计**。不能因为一般算法存在边界就宣称整篇研究失效。
+
+对本项目的直接提醒：若复用已有资金网络程序，优先保留交易签名、每个账户净变化和多个实际接收对象；对金额不能守恒或多个候选贡献无法区分时，应显式显示 PARTIAL/UNRESOLVED，而不从最大值选一个“确定上游”。
+
+### 18.5 转仓会切断逐钱包成本归因，但不能凭此断言集团利润
+
+[Million `ledgerStep`](https://github.com/Kelows/million/blob/522b627b5c2e307292f161a482c6e116218c5389/apps/api/src/analysis/ledger.ts) 对“无出售对价的Token转出”只注销原钱包对应库存与成本，不记盈利；收到免费Token的新钱包若没有可信历史买入，则未来卖出在单钱包账本中可能属于未匹配成本。该选择**防止了伪造单地址盈利**，但原控制者与接收钱包若是同一经济受益人，完整经济盈亏的成本需要有证据的跨钱包承接；若是赠与、OTC、托管服务、外部主体购买，直接传递成本又可能错误。
+
+**最小情形**：S用20 SOL买1000 Token，Transfer 800给 X；X之后换得18 SOL。地址级事实是S让出800、X发生出售、收款18；“同一经济主体”的假设下，那800的原成本为16 SOL、这部分交易对价比原成本多2 SOL（未计费用和中间转移），**但谁享有2 SOL、谁承担成本与风险仍未链上证实**，不能把它写成已实现利润，更不能把所有钱包的P&L直接相加叫“庄家利润”。
+
+旧 Hermes [Skill8 筹码控制权状态](https://github.com/sunshihao001/-/blob/main/design/Skill4-%E7%AD%B9%E7%A0%81%E6%8E%A7%E5%88%B6%E6%9D%83%E7%8A%B6%E6%80%81%E5%B1%82%E8%AE%BE%E8%AE%A1.md) 研究了早期库存剩余、分发接收者、回流、状态时效与 UNKNOWN；这个专业问题已存在。但其“FULL_EXIT→实体权重0”“状态概率数值”只有在完整追到相关库存与实体归属、经校准时才有经济解释；**原 sniper 地址持仓为零不应自动判定整套经济控制结构 COLLAPSED**。
+
+### 18.6 现有项目如何使用，而不是再造框架
+
+研究输入 `Mint A→资金源 F→Sniper S→接收者 X→Swap→F→Mint B` 时：
+
+1. **可核查事实**：逐笔签名、slot、Tx版本、inner CPI、具体 Token Account/owner/authority/fee payer、净 SOL/WSOL/Token（含费用）、多接收人、真实时间与可得时间；地址级资金转移与交易状态。
+2. **候选经济机制**：同一资本组织多地址分工、共享交易/签名/资金服务商、多个客户由服务商联合执行、跨 Mint 轮动资金复用；保留竞争解释，不能仅由共同签名升级为统一控制权。
+3. **区分边界**：库存转出 ≠ Token出售；观察到资金闭环 ≠ 相同可替代资金单位；地址网络连通 ≠ 一个受益主体；组合签名 ≠ 同一人保管密钥；旧仓设计概率 ≠ 已校准概率。
+4. **对原方法的影响**：C01跨Mint资本循环获得**余额归因可行区间**及多来源/接收人防误配；C02群体执行与转仓要分地址/经济实体解释；C05“原钱包不活跃”不能替代 exit wallet 后续出售和资本网络再使用。保持 PR #16 的真实只读报告/fixture工程边界，不要求本轮强行实盘或启动交易。
+5. **最小可验收反例**：本轮用独立 Python 脚本构建8步 F→S→AMM→X→F→S_B 的合成守恒账；同一路径支持单一主体与平台代理客户两种解释；验证归因区间 `0–15`、`12–15`；并分别复刻“最大接收者/最大出资者”把6+4压成10的4 SOL误归因。脚本仅为**逻辑/代码近似反例**，没有调用第三方原程序或真实 RPC，更不声称重算作者的1,457样本。不会将它们当成真实市场预警规则。
+
+**本轮结论**：旧参考项目的高价值专业知识不只是“发现钱包关联”，而是**历史上如何逐步将一个未知的市场资本循环问题追到具体的 Token 去向、交易出售、跨轮归集，再在共享服务与多方签名处识别可证明的边界**。研究应继续追随“下一个最能改变竞争解释的证据”，而不是停在某个中间阶段的报告。旧 L3 与 C01 的知识仍保留，本节只修正此前遗漏的研究演化、签名推断与资金归因实现边界。
