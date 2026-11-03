@@ -131,8 +131,100 @@ KOL 提及、社群消息、热门榜排名、推文传播、交易量、持币�
 
 **正确知识输出**：事实清单、可解释关系强度的边界、至少两个竞争机制、能区分它们的下一项数据。尚未跨到可盈利结论。
 
+
+## 2026-10-31｜来自真实工具与源码的钱包角色判读增量（D04/D05/D06/D07）
+
+**证据界限**：本节是公开产品文档和部分仓库源码的对照，尚未通过本地RPC逐笔复核真实钱包标签；商业服务的标签算法若未开源，记录“供应商声称”而非已证真值。无需新增领域、本体或新Bot。
+
+### A. 标签不是一种单一分类：四个正交问题
+
+1. **身份/来源**：KOL、creator/dev、CEX/service、fund、已公开签名身份；问“地址属于谁/与谁有关”，链外身份须有额外证据。
+2. **执行/策略**：sniper、bundler、MEV、DEX bot、flipper、arbitrage；问“怎样进入与执行”，不自动推出胜率、内幕或一个操作者。
+3. **资产/经济角色**：early buyer、top holder、transfer-in、distributor、collector、LP、库存转移与持币状态；问“钱和Token到哪里”，余额变化不等于成交利润。
+4. **历史表现/关系候选**：smart trader、fresh、dev-linked、same funder、suspected insider、wash candidate、multi-Mint cohort；问“有什么统计历史或关系”，标签必须有观察窗口、样本覆盖和正常解释。
+
+同一地址可在同一个Mint/阶段带多标签，又可随Mint、时间和状态改变。应保存原始供应商标签、版本、其定义、原始事实、推断、证据链接、实际可得时点、有效范围及撤销历史。
+
+### B. 实际来源的可操作差异与路径
+
+| 来源 | 实际接口/规则与可用知识 | 不能直接继承 |
+|---|---|---|
+| GMGN 官方 Featured Icon + gmgn-skills token/traders/holders/track | smart_degen、renowned/KOL、sniper、bundler、dev、transfer_in、rat_trader等过滤；KOL与smartmoney是不同流，Sniper按早期block判读 | 不能把GMGN“bundler”与Jito真实Bundle直接等同，也不能把Smart Money标签当未来盈利 |
+| Birdeye Holder Profile/Positions（2026-04-21） | bundler/sniper/insider/dev四类分别给钱包数、供应持仓比例、买卖量、PnL；Positions细化单地址；First Buyers（2026-07-08）提供buy_more/hold/sell_partial/sell_all | Bundler对2026-03-01前Mint仍在回补；前1000早买样本不是全部买家；标签口径未公开证明 |
+| Cielo Finding Good Wallets | Flipper/MEV/Sniper/Human Operated/Gem Finder/High Winrate；其Sniper定义重视平均持仓不足2分钟，和GMGN早期区块定义不同 | 同名标签跨平台不可直接合并；短持仓不一定是发行初期首买 |
+| Nansen Smart Money API | Smart Trader/Fund及30D/90D/180D窗口，行为与身份分离 | 历史盈利不等于跟随者可复制优势 |
+| Bubblemaps V2 | 前250大Holder间的转账关系、历史分布和Supernodes过滤 | 图连接代表发生转账，不能证明私人同控；前250地址存在选择边界 |
+| Watchtower Wallet Intelligence公开规则 | sniper=至少三次在创建slot或下一slot买入；bundler=至少两次发行同笔多钱包买入；flipper=至少五次闭合早期头寸且首买到首卖中位数小于120秒；记录标签历史 | 规则仅为供应商明示的启发式，不是本项目统计校准阈值；其索引仅覆盖已追踪币的一部分 |
+| MadeOnSol SDK（读取接口+类型，非后台模型源码） | atomic_tx与same_slot分开；bundle的当前持币份额、wallet flags及label_coverage/evidence_horizon；is_bundler lifetime、is_dumper 42d，false不等于无行为；onchain holdings对照trade-derived并计算transfer_delta | 不可将SDK类型注释误认为算法已复现或全量历史覆盖 |
+| HoldTech深度扫描源码 | 以Slot对交易分组、采用不同fee payer数发现潜在群组，追溯SOL来源和Top持仓集中度 | detectBundles包含TRANSFER/UNKNOWN并以fee payer近似buyer；同Slot>=3不能证明Jito Bundle/同控；fundedBy使用fee payer推断并非实际转账发出地址；历史取样/分页不足会造成fresh误判 |
+
+核心源码路径：
+- https://github.com/GMGNAI/gmgn-skills/blob/main/src/commands/token.ts
+- https://github.com/co-numina/holdtech/blob/main/app/api/deep-scan/route.ts
+- https://github.com/MadeOnSol/madeonsol-sdk/blob/main/src/index.ts
+- https://watchtowersol.com/docs
+- https://birdeye.so/data-api/blog/detail/token-holder-profile-token-holder-positions-complete-holder-intelligence-on-solana
+- https://birdeye.so/data-api/blog/detail/new-api-token-first-buyers-identify-the-earliest-buyers-of-any-solana-token
+- https://docs.cielo.finance/guides/copy-trading/finding-good-wallets
+- https://docs.nansen.ai/api/smart-money
+- https://wiki.bubblemaps.io/bubblemaps-v2/how-does-it-work
+- https://docs.jito.wtf/lowlatencytxnsend/
+
+### C. Bundler三个不同对象不可合并
+
+- **MULTI_SIGNER_OR_ATOMIC_TX**：同一原子交易中多个有证据的参与者；必须读签名、真实指令、Token owner/authority；并非多签必然同一实控。
+- **JITO_BUNDLE_VERIFIED**：需要能识别原始Jito Bundle成员关系的证据，官方最多五笔、同Slot原子排序；仅共同Slot或tip不足以证明真实Bundle。
+- **SAME_SLOT_COHORT**：只证实时段/Slot聚集，应与池子创建、公共事件、交易机器人服务和正常热点买入竞争解释比较。
+
+对于任意Bundler候选，除买入时点，应同步计算：涉及钱包集合（与fee payer分别记录）、实际BUY、初始份额、当前库存、去向、卖出与转仓区分、资金来源、历史跨Mint重复出现。无法确认解析或覆盖时保持UNKNOWN。
+
+### D. KOL与Sniper实际场景的关键分叉
+
+- **Sniper**：观察Mint创建→市场真正可交易→首次已证Swap→进入价格/Slot→后续卖出→跨Mint重复；早进只能说明速度/排序位置，不证明内幕、持续盈利或可模仿。
+- **KOL**：先确认公开钱包绑定/签名来源，再区分主动Swap与被动Token空投；将公开帖子传播时间与交易发生/可得时间分别记账。持仓不代表推荐，公开发言与买卖时序相关不等于因果。
+- **Smart Money**：历史PnL还需补齐转仓成本、未实现头寸、平台选择偏差、窗口和实际上可观测延迟；供应商评分不能直接覆盖本项目信号到独立净收益断层。
+- **Dev/Insider候选**：创建者/程序权限/初始资金/同源/分发/库存和公开事件有多种解释，不能给现实个人贴确定内幕或诈骗标签。
+
+### E. 与当前项目的真实转化优先级
+
+**优先完成“事实与标签分离”小样本对照，而不是先造万能分类器**：
+1. 将旧qb-关键钱包矩阵、Hermes learning/10~12与Skill4、GMGN Skills和Birdeye的标签字典逐项对应到本项目D04；保存不同平台同名标签的定义冲突。
+2. P3-M01先保证Swap/Transfer/fee payer/Token owner区分，才能计算sniper或bundler。现有fixture-only适配器不支持协议级BUY/SELL，不能声称现在已能自动标记真实Sniper。
+3. 从一个真实Mint选几类非个人身份的链上行为样本，人工核对已有供应商标签和实际指令/持仓/转仓；保留无法确认。C02研究跨Mint群体重复，D05/D06追资金/库存，D07记录时序。
+4. 标签作为观察入口，不自动触发交易规则；只有在后续机会存在并早于价格反应可见时，才讨论交易信息价值。旧项目的历史经验不断作为对照而非一次性读完丢弃。
+
+**当前方向判断：CONTINUE，优先源语义和钱包角色交叉核对；暂缓建设规模化自动钱包身份分类器。** 更换路线的关键证据，是某个成熟现成解析/标签系统可以用透明契约和真实样本证明具备显著更好覆盖、较低误报与可复用性。
+
 ## 来源和已知污染边界
 
 历史机制来源：`sunshihao001/-/learning/10.md`、`11.md`、`12.md`、`design/phase1-skill-03-wallet-roles.md`、`design/phase1-skill-04-wallet-structure.md`；`sunshihao001/meme-/07_样本标注/` 的正反例设计；本仓库 `wallet-roles`、`funding-graph`、`concentration`、`sybil-wash`、`deployer-history` 旧卡。
 
 旧文档中“共享 Binance 出金地址 = 同一庄家”“同步阈值证明内部人”等只能列为**被挑战的历史断言**。本篇保留其值得调查的行为问题，不恢复这种归因。后期 `Why-Solana` 结论不参与本篇的事实基础。
+
+## 2026-11-01｜从钱包标签转向完整Mint报告的实际可用数据（D04–D07）
+
+本轮对照[外部成品功能台账](../system/reference-capability-reuse-ledger.v1.md)确认：OKX `token-research`的**实际Rust CLI**能获取Mint的Holder、Cluster、Top Trader、Smart Money及条件性的Dev/Bundle供应商字段（需授权、接口限额和取数时点）；这些只能是**标签与供应商观测**，不能把`bundle rate`、`dev rug count`、`SM`直接当作链上真相或同一资金实际控制权。数据失败时CLI保留null，不能转成“风险为0”。
+
+Million整套服务适合钱包发现→订阅→后续活动→资金关系，但源码当前`LiveEvent.signature @unique`与首个命中钱包即退出，使一笔多人参与的交易只留一个被订阅钱包视角；D07群体时间序列需要**同一签名按不同实际钱包角色/指令位置保留多行证据**，而不是只计唯一签名。此语义对D04 Sniper、D05资金关系、D06库存和D07异常均是共同前提；应先在只读成品验收中修复或隔离该问题，不能用单次统计补成“庄家群体”。D06库存必须和当前Holder余额、已确证买卖、Token普通Transfer、LP/Pool资产拆开；两次快照差额不等于已确证卖盘。
+
+来自[OKX官方费用](https://web3.okx.com/zh-hans/onchainos/dev-docs/market/market-api-fee)的现实限制：免费订阅档不含WS，按需Premium报告与24小时持续监控属于不同成本路径；这也是为什么应先验收**单Mint按需报告**，随后才评估持续订阅。此段为功能与专业认识连接，不表示我们的D04–D07已有真实链上分类器或Mint库存重建。
+
+## 2026-11-01｜联合专家对外部成品库存与发行时间语义的修正
+
+本轮完整项目审查（21位专家全覆盖，具体发现见[统一复用台账](../system/reference-capability-reuse-ledger.v1.md)）提炼出两条会直接改变D04–D07判断的实际源码机制：
+
+**D06库存口径**：Million `apps/api/prisma/schema.prisma::RosterPosition` 使用`qty Float`和`source=analysis|live`，意图按分析快照+实时增量记录钱包库存。这是可复用的**持续账本思路**，但单靠浮点数和可能不完整的实时事件无法保证任意Token的原子金额/Token账户owner关系与漏帧修复。对一个Mint的两时点，应分别展示TokenAccount总余额、owner归并、池LP/托管排除、已确认Swap净增减、普通Transfer和未知差额；不能把报告的群体库存当成经济主体真实可卖库存。**必须保留原始整数数量及decimals语义，并在资产净变化无法解释时输出UNKNOWN**，具体实现仍优先调用成熟余额索引而非自建通用索引器。
+
+**D04/D07发行人历史**：pumpwatch `code/creator_reputation.py::record_launch` 的`seen_at=int(time.time())`写的是监控本地首次入库时间，24h/7d统计以它聚合。实时记录可以是有效观察频率的代理，但RPC断线后的补录不能被宣称为当时链上创建频率。需把`chain_event_time`与`first_seen_at`在数据解释中分开；creator标签仍需识别代理发币/公共程序/权限所有者。
+
+这两条是对外部已实现成品的源码语义审查，不是本项目有了真实链上库存对账、开发者行为分类或历史回放结果。保持原D04–D07知识结构和实证等级，禁止从第一报告中的供应商Cluster标签直接生成同控身份。
+
+## 2026-11-01｜真实Mint跨源反证：持仓Owner与PumpSwap池地址匹配
+
+**实际供应商数据与精确地址相等（非链上RPC独立确认）**：Mint `EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump` 的RugCheck缓存报告中，第1条Token Account为`BYonfuCMtQL9rLeYLhLar7Jon87Nwj7PyurLFj6sNx3i`，供应商占比约5.877731%。其报告的Owner候选`81jgrpTMsQWc1rGWXutyYWW27ruiAtehUZwLydcHHWDB`与DEX Screener返回的PumpSwap池地址**完全一致**。真实在线记录及原始响应SHA见[工程证据文件](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/evidence/v01-pool-vault-holder-cross-source-2026-11-01.md)。
+
+**D04/D05/D06机制**：Token Account、Token Owner、池/Vault、LP经济权利、资金出资人和最终受益人不能画等号。跨源相等只支持`POOL_RELATED_CANDIDATE`，不支持“单一鲸鱼持有5.88%”或“庄家控制5.88%”。普通自由持仓集中度应暂时单列该候选，不自动扣减供应量或推断控制权，需Solana RPC及池状态核对；此次公共RPC请求遭遇429。
+
+**D07与旧资料的改进**：Hermes `learning/10-12.md`认为角色必须由行为支持，其`phase1-skill-04-wallet-structure.md`的同Funder、5分钟阈值只能作为筛选启发式，不是本样本的协同交易证据。旧qb的关键地址矩阵与基础设施注册表本就分开；现有报告应继续保留此区别。RugCheck的缓存detectedAt与实际拉取时间也不同，不能当同一slot交易时钟。
+
+**工程闭环**：PR#16的`mint_v01.pool_related_holder_observations`添加严格地址全等的报告提示及缺源/不匹配负例，不启用交易或自动经济归因，GitHub离线CI本轮120项通过。
