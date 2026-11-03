@@ -7,27 +7,24 @@ description: Read-only Solana Meme Mint investigation and source-linked observat
 
 **实际运行门槛：** Grok云电脑中必须有已审查的 `sunshihao001/grok` 工程PR #16工作树、Python 3.11+及可访问的只读数据源。GitHub代码/Skill文件存在不等于Grok已经安装/执行；先记录 `git rev-parse HEAD`，不得把Actions结果充当Grok运行结果。
 
-## 模式A：用户提出“分析这个 Mint”或“调查这枚 Meme”
+## 模式A：用户提出“分析这个 Mint”或“调查这枚 Meme”——成品入口优先
 
-**优先使用已实现的两个程序**，不是重新编写数据客户端、启动六个Bot或创建新后端。下面在仓库根目录执行；`MINT`必须是用户提供的Solana Mint地址，`RUN_DIR`每次取新的、未使用目录。
+先运行**已有产品单命令**，不需要先让用户理解两条CLI的拼接，也不创建额外Bot、重写解析器或搭建MCP服务。以下在工程PR #16仓库根目录执行（Mint从用户输入取得）：
 
 ```bash
-MINT="用户提供的真实Solana_Mint"
-RUN_DIR=".runtime/grok-mint-$(date -u +%Y%m%dT%H%M%SZ)"
-PYTHONPATH=src python -m solana_meme_os.mint_v01 "$MINT" \
-  --rugcheck --out-dir "$RUN_DIR/mint"
-PYTHONPATH=src python -m solana_meme_os.vendor_event_handoff \
-  --report "$RUN_DIR/mint/report.json" \
-  --rugcheck-raw "$RUN_DIR/mint/rugcheck-provider-raw.json" \
-  --dex-raw "$RUN_DIR/mint/dex-provider-raw.json" \
-  --out-dir "$RUN_DIR/grok-outbox"
+PYTHONPATH=src python -m solana_meme_os.product <REAL_SOLANA_MINT>
 ```
 
-- 第一步请求公开DEX Screener和可能缓存的RugCheck，只读、无需交易钱包。第二步**离线**比对原始响应SHA、链/Mint及数据状态，生成 `evidence.json`、`provisional_monitor_opinion.md`、按供应商风险项产生的 `grok_task_*.md`。这些是**供你审阅的程序任务**，不是Bot已研究完成。
-- **不要在第一步成功但第二步失败时宣布端到端成功**；第二步需要双方真实源同时可用。如果缺少DEX/RugCheck任一原始文件、身份不一致、错误/限流，明确报 `UNAVAILABLE` 或 `EVIDENCE_HANDOFF_FAILED`，不要补造另一源或伪装为无风险。
-- Grok本人必须实际读取 `mint/report.md`、`mint/report.json`、`grok-outbox/evidence.json`；根据现有知识按需调查X相关CA/Dev/叙事和市场外部解释。**区分**：供应商事实/标签、链上尚未验证的Token Account Owner、经济主体竞争解释、需要补的原始交易签名。没有X访问权限时只报告 `X_RESEARCH_UNAVAILABLE`。
-- 对每项重要结论给出具体原始证据路径和采集时间，说明池/AMM不能直接算独立鲸鱼，供应商风险标签不等于已证欺诈，Token Transfer不等于Swap，未知钱包资金关系不得假装已经查到。
-- 在Grok会话中返回实际执行的Git SHA、两步退出状态、原始数据源状态、生成文件路径、一次真实源码/证据判断，以及一个最有信息价值的下一步。只有**确实从Grok云电脑完成运行并读取任务**后，才可以标为 `GROK_CLOUD_MINIMUM_ACCEPTED`；否则始终 `GROK_NOT_EXECUTED`。
+程序仅组合原有`mint_v01`与`vendor_event_handoff`，自动创建新运行目录，返回`run_status.json`路径、`mint/report.json`、`mint/report.md`及（来源校验通过时）`grok-outbox/evidence.json`。运行阶段不发起任何Grok调用、不签名、不交易、不自动付款。
+
+**判定本次运行能否交付**：
+- **exit 0 / `READY_FOR_GROK_REVIEW_NOT_EXECUTED`**：两个来源的原始文件完成身份/哈希核验。你必须实际读取`report.md`、`report.json`、`evidence.json`，结合项目现有专业知识及可用X资料独立调查，单独保存`grok_analysis.md`。只有真的在Grok云电脑执行和回读，才能把Grok执行状态记为通过。
+- **exit 4 / `PARTIAL_MINT_REPORT_NO_GROK_HANDOFF`**：只取得部分来源时，基础Mint报告仍可查看；解释缺失来源，不声称已完成多源核查、钱包调查或Bot分析。
+- **exit 2/3**：数据采集/验证或运行目录错误，读取`run_status.json`或失败输出并说明原因，绝不补造数据。
+
+**本阶段能给用户什么**：真实公开池与缓存Holder/Creator候选、供应商标签及时间/来源、跨源池基础设施候选抑制、可复查的风险问题；没有真实交易签名时不得声称已经识别操盘手资金、Token出售、钱包群体异动和可交易收益。X不可用时标`X_RESEARCH_UNAVAILABLE`。正式产品功能优先于新增专家、阶段或研究制度。
+
+**可以按需进一步使用**：旧两条独立CLI仍然保留，供指定来源/排错和复盘；未来由用户实际需要再调用经过授权的Million/OKX等完整只读业务，而不是把来源缺失自动变成自研新适配器。实际交付应包含本次程序退出状态、Git SHA、文件路径、时间、可靠事实、竞争解释和一个最有价值的后续行动。
 
 ## 模式B：用户请求“观察变化/追踪钱包”
 
