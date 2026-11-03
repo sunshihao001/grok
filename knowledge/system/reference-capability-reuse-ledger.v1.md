@@ -547,3 +547,39 @@
 
 **总结对原用户问题的认知增量**：PumpGrok回答了“**Grok怎样调用和管理现有程序**”的组织层问题，却没有填补本项目最难的“**跨Mint钱包/资本经济事实、全时段数据覆盖、持续可靠监控**”的数据层缺口；这两层必须分别验收。无需新增第二套知识本体或角色系统。
 
+
+
+## 2026-11-03｜全产品参考资产与现有Grok的业务级收束（产品选型，不是新架构）
+
+**用户目标（优先于历史单Mint阶段）**：全市场新币/热门发现 → 排除明显低价值批量发行盘，但保留独立的高风险异常观察 → 形成当天动态重点名单 → 持续观察代币与钱包 → 重要异常触发交易、转账、资金、库存和跨Mint调查 → Grok自然语言报告与反馈。钱/钱包反过来发现币，同样是正式入口。当前只读；不交易、签名、自动付款或启用未经审查的软件。
+
+**资产范围**：原 [65项参考候选](gpt-meme-project-index.v1.json)包含5项内部历史、6项已登记成品、SDK/协议、数据服务、理论、社区工具；不是65个可运行程序。截至原登记：17 SOURCE_AUDITED（仅部分源码）、10 REPO_VERIFIED、12 PAGE_VERIFIED、25 HISTORICAL_NAMED_ONLY、1 LINK_UNRESOLVED。其后新增Pulse、PumpGrok、Birdeye、Cielo、Bubblemaps及新MCP候选，不以65封闭选择边界，也不以数量证明可用。
+
+### 本轮从源码/官方接口确认后改变的候选排序
+
+| 真实用户工作 | 候选完整能力与审查后用途 | 已知条件/严重边界 | 当前裁决 |
+|---|---|---|---|
+| 新币、批量盘、今日热门初筛 | OKX现有`onchainos workflow new-tokens --chain solana --stage MIGRATING`、`memepump tokens --stage NEW`、Dev/Bundle/Token安全补充；[源码](https://github.com/okx/onchainos-skills/blob/main/cli/src/commands/workflows/new_tokens.rs)、[流程](https://github.com/okx/onchainos-skills/blob/main/workflows/new-token-screening.md) | 工作流仅对前10个输入做4种并行补充；NEW/MIGRATING约24h、MIGRATED约72h；代码存在不证明本账户接口权限/价格/返回覆盖；其WS新币/指标通道需API Key、密钥与登录；包内还有写入/支付Skill，必须隔离 | **先验证成套OKX只读新币工作流**，不预设Pulse必须先部署 |
+| 连续榜单、市场历史与生命周期 | [Pulse](https://github.com/nirholas/pulse)：定时采集、榜单出现、market snapshots、持久库、API/只读MCP/UI，支持发现“今天变热”和反例历史 | 需要Node24及稳定运行环境；榜单“volume”常指24h，不能直接叫今天热门；生命周期阈值与多池去重须查；第三方程序未本项目实跑 | **作为OKX的独立比较与历史主体候选**，是否常驻取决于实际质量 |
+| 发币者频次及垃圾盘 | [pumpwatch](https://github.com/cinder-security/pumpwatch)的发行记录/SQLite/creator历史；其paper_stats按同一creator过去24小时发行数分箱 | `seen_at`是采集观察时间，不当然等于链上创建时间；同创建者地址≠同经济主体；漏数与分类影响误杀 | 复用逻辑或已有程序，保留过滤原因、覆盖、误杀复核，不能按阈值永久删除 |
+| 钱包↔代币发现、钱包跟踪、资金 | [Million](https://github.com/Kelows/million)有双向crawler、discovery、funding、flows、live、Web UI/MCP；OKX wallet-monitor-ws亦有现成会话 | Million依赖Helius，Node24，可能自动分析额外候选耗配额，且有真实交易执行模块；OKX WS登录与价格需核验；二者均不保证直接识别经济主体 | 真实候选Mint/钱包上比较完整只读流程，优先调用而非重建 |
+| 持仓、同币/跨币重合、资金群体 | [HoldTech](https://github.com/co-numina/holdtech) deep-scan/holder-overlap、Bubblemaps Data API map/holders、Million owners/funding、OKX cluster；原Why-Solana 5跳/Hub/时间边界用作反证 | HoldTech overlap接口对每币最多取200条持有人候选，并有源码中API key回退字符串；样本交集≠全体Holder交集；资金路径≠共同控制；Bubblemaps正式API可能需密钥 | 先安全复用已提供的报告/API；对真实签名与采样范围独立核实 |
+| 托管告警与专业数据平台 | Cielo跟踪钱包/告警与API、Birdeye 5m/30m/1h/4h/24h trending、GMGN/Nansen/Arkham/Bitquery等 | Cielo API有额度/方案限制，跟踪名单需账户写入；Birdeye/专业源各有授权/费用；不能把供应商风险标签当链上事实 | 作为可直接用的成品/有界数据源对照，不强制本地部署 |
+| Grok操作、安装、技能调用、回放 | 现有Grok PR16的product.py/证据包、PR17知识导航；[PumpGrok](https://github.com/swcstudiospace/PumpGrok)的CLI→受控工具注册→JSON→事件账本/权限/重放；原Hermes/qb-/meme-的业务思考 | PumpGrok高级scout pipeline CLI返回not_implemented；只读工具与paper模拟不同，AGPL许可不应直接复制；Grok云电脑尚未实际执行产品命令 | **保留现有Grok作为唯一产品工程与自然语言入口**，借鉴工具/可验证工作方法，不再扩建Bot专家体系 |
+| 看似免费现成MCP | [pumpfun-mcp](https://github.com/nirholas/pumpfun-mcp)提供少量无需凭据的只读链查询 | 其README说明六项新币/热门/创建者查询在默认托管端无索引器而不可用；目录还含返回密钥材料与元数据上传相关能力；不安全地把全工具开放给AI | 不作为今天热门自动发现的默认引擎；仅按实际只读工具白名单审查 |
+
+### 自有项目当前真源与缺口
+
+- **工程**：[PR #16](https://github.com/sunshihao001/grok/pull/16)仍Draft，`src/solana_meme_os/product.py`确有Mint→DEX Screener/RugCheck源JSON→SHA验证→`grok-outbox/evidence.json`；返回`READY_FOR_GROK_REVIEW_NOT_EXECUTED`不代表Bot调用。2026-11-03真实GitHub Actions #41570660069两公开来源成功、5池、20条Holder Token Account候选、1项池基础设施排除；真实交易、资金图和全市场榜单未验证。`wallet_batch_monitor.py`明写`mode=fixture`，不能宣称已在线监控。
+- **知识**：[PR #14](https://github.com/sunshihao001/grok/pull/14)保留D01–D12、22视角、152待核单元、65索引，新增自主产品创造指引。**集成候选**[PR #17](https://github.com/sunshihao001/grok/pull/17)有Million免密只读smoke等工作流和知识导航，但缺少PR16后加的`product.py`，不能默认PR17包含PR16当前全部代码。三个PR都未合并main；工作流存在与CI实际成功要分开。
+- **原知识价值**：旧[qb-](https://github.com/sunshihao001/qb-)保留关键钱包矩阵/基础设施/分发/持仓报告格式；原[Hermes](https://github.com/sunshihao001/-)保留资金与库存、经济机制、00c–00e及业务推理；[meme-](https://github.com/sunshihao001/meme-)保留多策略理论及失败形态；[Why-Solana](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over)的`fn_trace.py`有5跳、时间与Hub限制，但最大SOL负变化归因是候选启发式，非共同控制确证。
+
+### 最短可检查的产品工作（不另立阶段制度）
+
+1. **第一项实测**：在隔离/授权的运行环境，对`onchainos memepump tokens --chain solana --stage NEW`以及现成`workflow new-tokens --stage MIGRATING`做只读联网输出检查；验证实际登录/费用、Mint完整地址、创建时点、候选数、Dev/Bundle字段、空值、源失败。保留同时间窗候选和排除清单。不满足则直接试Pulse完整API或其他成熟可用源，不为OKX重造采集器。
+2. **第二次观察**：同样候选复查，检查热度变化/名单更替，并保留此前被过滤的币作为误杀反例。若需要连续历史而工作流没有，优先尝试Pulse自带归档，不自研第二个索引器。
+3. **异常调查**：以当前Grok真实Mint报告为证据底座，让成熟钱包/资金服务输出同Mint钱包候选、来源、时间、覆盖、交易签名与角色；池/TokenAccount/钱包归属分别标注。之后再测Wallet→Mint反向发现及断线、重复事件恢复。
+4. **Grok云端验收**：只在完成受控数据到报告的真实交接后调用主Bot，确认程序调用、实际解读、报告保存及异常复查。不可将GitHub Actions或离线Fixture冒充Grok云电脑执行。
+5. **共同硬边界**：默认只读，不交易/签名/自动支付，拒绝未审插件安装和凭据泄漏；比较成品是否真的覆盖业务、成本和法律许可证。若某成品直接满足整套场景，允许放弃原来指定的Pulse/Million等计划。
+
+**验收必须有**：原始输入/输出或接口返回、时间与代码版本、真实Mint、数据覆盖、拒绝/保留原因、运行日志和错误回退；不因已有文档、模型主张、单测通过而宣布市场监控上线。
