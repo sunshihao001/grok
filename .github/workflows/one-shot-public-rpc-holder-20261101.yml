@@ -1,5 +1,5 @@
 # Rerun once after AMM/pool-owner collision rejection: 2026-11-01
-name: one-shot-public-rugcheck-readonly
+name: one-shot-public-mint-grok-evidence-readonly
 on:
   push:
     branches:
@@ -39,9 +39,57 @@ jobs:
           else:
               print('NO_REPORT; see stderr in artifact')
           PY
+      - name: Verify real Mint → source-checked Grok outbox (no Bot invocation)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path(".runtime/one-shot")
+          exit_status=json.loads((root/"exit.json").read_text())
+          report=json.loads((root/"mint/report.json").read_text()) if (root/"mint/report.json").exists() else {}
+          expected={
+              "dex_public_pairs": "PUBLIC_PROVIDER_PAIR_SNAPSHOT_UNVERIFIED_ONCHAIN",
+              "rugcheck_public_report": "RUGCHECK_CACHED_VENDOR_REPORT_NOT_INDEPENDENTLY_VERIFIED",
+          }
+          actual=report.get("source_status",{})
+          if exit_status["program_exit_code"] != 0 or report.get("no_trading") is not True:
+              raise SystemExit("Mint report unavailable or unsafe; Grok handoff must not proceed")
+          if any(actual.get(k)!=v for k,v in expected.items()):
+              raise SystemExit(f"Required dual-source evidence unavailable: {actual}")
+          if report.get("source_errors"):
+              raise SystemExit(f"Mint report has source errors: {report['source_errors']}")
+          print("VERIFIED_MINT_SOURCES", json.dumps(actual, sort_keys=True))
+          PY
+          PYTHONPATH=src python -m solana_meme_os.vendor_event_handoff \
+            --report .runtime/one-shot/mint/report.json \
+            --rugcheck-raw .runtime/one-shot/mint/rugcheck-provider-raw.json \
+            --dex-raw .runtime/one-shot/mint/dex-provider-raw.json \
+            --out-dir .runtime/one-shot/grok-outbox \
+            > .runtime/one-shot/grok-handoff-stdout.txt \
+            2> .runtime/one-shot/grok-handoff-stderr.txt
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path(".runtime/one-shot")
+          packet=json.loads((root/"grok-outbox/evidence.json").read_text())
+          assert packet["disposition"] == "PREPARE_GROK_TASKS_ONLY_NO_BOT_INVOKED"
+          assert packet["model_calls"] == packet["auto_payments"] == 0
+          assert packet["coverage"]["wallet_transactions"] == "NOT_OBSERVED"
+          assert packet["source_proofs"]["dex_sha256"]
+          assert packet["source_proofs"]["rugcheck_sha256"]
+          print("GROK_HANDOFF_READY_NOT_EXECUTED", json.dumps({
+              "mint":packet["mint"],
+              "vendor_risk_review_tasks":len(packet["investigations"]),
+              "suppressed_or_unresolved_holders":len(packet["suppressed_candidates"]),
+              "not_a_grok_cloud_test":True,
+              "not_a_live_wallet_monitor":True
+          }, sort_keys=True))
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: one-shot-mint-rugcheck-readonly-20261101
+          name: one-shot-mint-to-grok-evidence-20261103
           path: .runtime/one-shot/
           retention-days: 14
