@@ -107,8 +107,12 @@ class GrokMintEvidencePipeline(unittest.TestCase):
             report = json.loads((mint_dir / "report.json").read_text())
             self.assertEqual(report["source_status"]["dex_public_pairs"], "UNAVAILABLE")
             self.assertFalse((mint_dir / "dex-provider-raw.json").exists())
-            with self.assertRaises(FileNotFoundError):
-                run_handoff(mint_dir, outbox)
+            # The handoff CLI deliberately converts missing raw files into
+            # a failing process exit code rather than leaking FileNotFoundError.
+            with contextlib.redirect_stderr(io.StringIO()):
+                with self.assertRaises(SystemExit) as failure:
+                    run_handoff(mint_dir, outbox)
+            self.assertEqual(failure.exception.code, 2)
             self.assertFalse((outbox / "evidence.json").exists())
 
 
