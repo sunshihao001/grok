@@ -116,5 +116,22 @@ class GrokMintEvidencePipeline(unittest.TestCase):
             self.assertFalse((outbox / "evidence.json").exists())
 
 
+    def test_tampered_raw_source_is_rejected_before_bot_handoff(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            mint_dir = Path(tmp) / "mint"
+            outbox = Path(tmp) / "grok-outbox"
+            self.assertEqual(collect_mocked(mint_dir), 0)
+            raw_path = mint_dir / "rugcheck-provider-raw.json"
+            payload = json.loads(raw_path.read_text())
+            payload["risks"][0]["name"] = "Unverified changed claim"
+            raw_path.write_text(json.dumps(payload))
+            with contextlib.redirect_stderr(io.StringIO()):
+                with self.assertRaises(SystemExit) as failure:
+                    run_handoff(mint_dir, outbox)
+            self.assertEqual(failure.exception.code, 2)
+            self.assertFalse((outbox / "evidence.json").exists())
+
+
+
 if __name__ == "__main__":
     unittest.main()
