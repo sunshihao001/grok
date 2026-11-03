@@ -493,3 +493,36 @@
 
 **本轮交付范围**：完整业务源码、设计与历史数据报告交叉阅读和可复核复用裁决。没有运行用户本机/云电脑上的整套Million、OKX或HoldTech，没有新Mint实网采集、Grok部署、钱包私钥/签名、交易或付费调用；仍需真实授权来源与工程隔离才能证明整个业务已运行。
 
+
+## 2026-11-03｜X上Grok Meme交易工作流：Bot和成熟程序的边界
+
+> **问题**：用户希望依据X原操作者实操分享，判断Grok Bot到底能完成哪些加密/Meme业务，减少现有Grok项目重复开发。**本补录不是新架构或自动交易授权**，用现有成品复用账本记录：公开功能/代码证据、实际可验范围、适用到当前只读业务的边界。调查于2026-11-03；X帖子可见性不稳定，有些全文由公开镜像读取。所有高收益截图/作者自称成交，未经钱包地址+交易签名独立核对一律属于**营销主张**，不能当收益证据。
+
+### 已核对的X场景和源码等级
+
+| 来源（原X操作者/公开成品） | 其宣称或实际存在的Grok分工 | 可核对性与重要限制 | 对当前项目的选择 |
+|---|---|---|---|
+| [官方Grok Bot概览](https://docs.x.ai/grok-bot/overview)、[技能和Routine](https://docs.x.ai/grok-bot/skills-routines-and-automations)、[X官方@bot](https://help.x.com/en/using-x/about-bot) | 同一个持久云电脑的浏览器/终端/文件、Bot协作、可保存Skill、定时和webhook Routine；X连接可搜索帖子/时间线/书签 | **官方原生功能已确认**，但不是Grok已接入本用户API、已运行长期链上服务。Routine Webhook收到HTTP200代表已开始运行，不代表任务执行成功 | Grok适合市场问题理解、X研究、按需运行已有CLI/MCP、读取报告、定时调查和复盘；不必重复开发AI命令调度器 |
+| [Memecoin Report社区模板](https://botshelf.dev/templates/44b5ee5f9574/)（作者@fomomofosol，2026-10-08 X分享） | 从X交易者列表总结Meme叙事、提及CA、谁在买卖讨论、定时发送Trenches报告 | 有Bot模板+原贴入口，但公开目录明确**未测试**，无独立钱包经济事实 | **优先试纯Grok原生X研究**：不需自行抓取全X，但仍需验证X连接权限、引用覆盖与API额度 |
+| [Fomo Clanker运行页](https://fomoclanker.lol/) | Scanner每5分钟查FOMO热门/前50Holder和X情绪，写共享文件；Trader读取评分调用FOMO Swap API和Jito提交 | 项目方描述流程且网页仅显示1笔交易、钱包和X账户未发布；程序的交易密钥与执行质量**无法独立审计** | 借鉴双向任务文件/周期调查交接，不拷真实签名、交易API、加密密钥或盈利说法 |
+| [AI Pirate 2026-11-01 X长文镜像](https://teapawt.net/A_Pirate_I/article/2116889572982284516) | **核心做法是Grok Bot只做调研和交易台协调，现有Freqtrade交易机器人负责运行；两者之间提供只读bot_status、profit、balance、whitelist，危险行为另批**；可选Jev做定型分类 | 原文大量用“我会构建”描述设计，不是已验收实际系统；可选Jev不能当更精准交易决策已得到证明 | **最贴近本项目**：Grok管理Million/OKX/现有Mint报告，而非让Grok重新写采集/解析/监控；最小只读API/CLI/MCP作为交接即可，不要引入额外“Jev决策层” |
+| [PumpGrok源码](https://github.com/swcstudiospace/PumpGrok)（以X上Grok交易台项目为启发） | 10-seat、35 Skill、Python CLI、ledger、research/paper流程和多角色交接 | README明示：`scout pipeline`有未实现部分、某些paper指令拒绝、无真实下单或签名；[LIVE_READINESS](https://github.com/swcstudiospace/PumpGrok/blob/main/docs/LIVE_READINESS.md)明确尚无live adapter、实际实盘就绪数据和完整审核。**10个Bot≠10项已运行能力** | 引用其“权限边界+失败审计/纸面与真实严格隔离”；不复制10角色/35技能，也不能让其替代Million |
+| [clawd Bot模板](https://botshelf.dev/templates/2b89ca71fd28/)（@0rdlibrary X） | Pump.fun动态和新项目，用户批准后设备签名 | 模板公开，目录标记“未测试”，无完整链上交易签名复算 | 仅说明Grok可做人机界面，当前项目禁止交易和签名，暂不需要 |
+| [Grok The Trencher仓库](https://github.com/hoodpumps/Grok-The-Trencher-4.5) | 以Grok 4.5模型作评分决策，普通TS交易服务用Pump.fun WS、DexScreener与PumpPortal买币 | README称完整，但公开仓库所查仅3个文件（无相应后端源码），无法核验实际执行；**调用Grok模型API≠运行Grok Bot原生云电脑** | 可以学习模型API作为后台决策服务的思路，**不作为可靠成品依赖** |
+| X上@x_insider4、@A_Pirate_I、@abubaa0x、@0xboan等收益宣传 | 多Bot自称一晚几十倍、上百笔复制或“超过1万枚历史币识别Rug” | 未见真实可核对的完整钱包成交、手续费/滑点和独立OOS验证；收益截图和Prompt不能证明执行、可复制利润或无亏损。部分帖文经 [公开转存页面](https://teapawt.net/x_insider4) 阅读 | 可研究他们提到的功能和操作习惯，但不给收益数字或“99%Rug识别”赋予实证地位；不因热帖改变产品权限边界 |
+
+### 运营能力边界：把“能用Grok直接做”与“必须可重复计算”彻底分开
+
+| 具体Meme业务 | Grok原生最佳职责 | 已有程序/API最佳职责 | 当前用户项目应如何验收 |
+|---|---|---|---|
+| X叙事/热度/KOL与被喊CA | 已连接X后按需检索、摘要、跨帖子推断，保存证据时间；Routine只在必要周期触发 | 可选批量历史X数据/曝光量独立采集；无需先建 | 真实X帖引用与可追溯帖子时间，不把讨论热度当链上买入 |
+| 市场发现、已知Mint基础报告 | 接收自然语言、调用现有`mint_v01`、查找是否值得调查的Dev/Mint、比较候选 | PR#16 DEX Screener+RugCheck已实测；OKX工作流可提供增强报告 | Grok实际云电脑运行**同一只读命令**并保存`report.json`/原始JSON/SHA |
+| 一笔钱包交易资金/Token关系 | 融合竞争解释、决定下一项证据、解释公共服务与共同资本的不同 | Million Funding/Discovery，Helius/OKX真实事件/签名、合法程序和数据库提供可重放事实 | 至少1条真实交易签名、账户权限和支付关系；不得由X或供应商标签替代 |
+| 长期钱包→Mint→钱包循环 | Grok按需调整观察目标、定期研判重要异常、不为每个链上事件调用LLM | Million Crawler/Live、稳定RPC/WebSocket、持久数据库、限额/重试、断连补偿 | 连续事件到达、去重、多个Wallet视角、失败恢复实际测试；不是单纯Routine存在 |
+| 异常事件驱动Grok | 从程序事件摘要/Webhook收到任务，比较既有知识、回访X/链上并报告 | 程序负责触发阈值、签名列表、幂等键及事件证据 | 只发**少量值得调查的事件**，Webhook 200≠分析已完成；需核对最终回复/报告 |
+| 自动交易/止损/下单 | 当前**不授权Grok执行任何交易** | 成熟执行程序可以独立实现，但超出本项目只读范围 | 不传私钥，不启动交易模块，不自动支付/签名；将纸面判断与收益证明区分 |
+
+**新的最小连接判断**：现阶段优先只要一个Grok主Bot（自然语言、X与市场跨源研究）+已存在的Mint CLI/Million或OKX只读数据流+必要时一个常驻监听程序。Grok用Skill描述**怎样调用已有程序和验证输出**；Routine做**经过一次验证的定时任务或被程序Webhook触发**。无需让每个专家、策略、数据源都成为独立Bot。先验收真实Grok云电脑对当前PR#16单Mint程序的调用，再对同Mint接入现成只读关键钱包业务，之后再补实时长期监听。**没有进行真实Grok端安装/登录/运行，本节仅完成源码/文档与公开分享的交叉证据研究**。
+
+**安全细节**：Grok所有Bot共享同一台云电脑的文件、登录和凭证；不能用多个Bot当安全隔离。任何API Key必须通过受控密钥流程，不放进群聊/源码，也不赋予交易、资金转移、自动付费能力；数据消费者和稳定监听服务可采取最小只读凭据。详细参考[官方安全](https://docs.x.ai/grok-bot/approvals-security-and-privacy)。
+
