@@ -19,7 +19,7 @@ After that acceptance, use the *same* Grok Bot to call an approved read-only Mil
 PYTHONPATH=src python -m unittest discover -s tests -v
 ```
 
-[`tests/test_grok_mint_handoff_integration.py`](../tests/test_grok_mint_handoff_integration.py) uses mocked vendor HTTP bytes to execute **both real Python CLI entrypoints**, checks provider SHA-256 and rejects tampering; this is not a live API or a Grok runtime test. [`docs/vendor-event-handoff.md`](vendor-event-handoff.md) documents the same two-step interface.
+[`tests/test_grok_mint_evidence_pipeline.py`](../tests/test_grok_mint_evidence_pipeline.py) uses mocked vendor HTTP bytes to execute **both real Python CLI entrypoints**, checks provider SHA-256 and rejects tampering; this is not a live API or a Grok runtime test. [`docs/vendor-event-handoff.md`](vendor-event-handoff.md) documents the same two-step interface.
 
 For operational expansion, `BOTS.md` and `routines/monitor.md` remain historical/optional design references: **do not create six Bots or enable a live Routine simply because those files exist.** Secrets stay in a least-privilege environment; all Bots share the same Grok cloud computer and should never receive private keys or automatic wallet/transaction permissions.
 
