@@ -87,6 +87,33 @@ jobs:
               "not_a_live_wallet_monitor":True
           }, sort_keys=True))
           PY
+      - name: Product-entry one-command live read-only acceptance
+        shell: bash
+        run: |
+          set +e
+          MINT=EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump
+          PYTHONPATH=src python -m solana_meme_os.product "$MINT" --out-dir .runtime/one-shot/product > .runtime/one-shot/product-stdout.txt 2> .runtime/one-shot/product-stderr.txt
+          exit_status=$?
+          printf 'PRODUCT_EXIT=%s\n' "$exit_status"
+          set -e
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('.runtime/one-shot/product')
+          receipt=json.loads((root/'run_status.json').read_text())
+          print('PRODUCT_STATUS',receipt['status'])
+          print('PRODUCT_SOURCES',json.dumps(receipt['source_status'],sort_keys=True))
+          if receipt['status']!='READY_FOR_GROK_REVIEW_NOT_EXECUTED':
+              raise SystemExit('Product did not produce a verified two-source review packet')
+          evidence=json.loads((root/'grok-outbox/evidence.json').read_text())
+          if evidence.get('disposition')!='PREPARE_GROK_TASKS_ONLY_NO_BOT_INVOKED':
+              raise SystemExit('Evidence cannot be claimed as Grok-reviewed')
+          if evidence.get('model_calls')!=0 or evidence.get('auto_payments')!=0:
+              raise SystemExit('Unexpected side effects')
+          print('PRODUCT_REAL_MINT_ACCEPTED',receipt['mint'])
+          PY
+          test "$exit_status" -eq 0
+
       - uses: actions/upload-artifact@v4
         if: always()
         with:
