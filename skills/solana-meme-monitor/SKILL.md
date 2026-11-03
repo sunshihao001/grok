@@ -1,66 +1,47 @@
 ---
 name: solana-meme-monitor
-description: Use Grok's terminal to run the reviewed Solana Meme read-only Mint report, inspect provenance-checked evidence, and investigate candidates. Historical normalized monitoring requires independently verified data.
+description: Read-only Solana Meme Mint investigation and source-linked observation; run existing Python commands, verify evidence, and explain uncertainty. No trading.
 ---
 
-# Grok 主 Bot | 现有程序的只读调用与调查
+# Grok 主Bot｜按需单Mint调查与观察（调用现有程序）
 
-**Current status:** This is a GitHub Skill draft, **not** evidence that a Grok Bot has run. Source repo: `sunshihao001/grok`, engineering draft PR #16, branch `research/p24-cross-mint-m01-batch-monitor-20261031`. One main Bot is sufficient for the first acceptance; historical six development Bot descriptions in BOTS.md are optional reference material, not prerequisites.
+**实际运行门槛：** Grok云电脑中必须有已审查的 `sunshihao001/grok` 工程PR #16工作树、Python 3.11+及可访问的只读数据源。GitHub代码/Skill文件存在不等于Grok已经安装/执行；先记录 `git rev-parse HEAD`，不得把Actions结果充当Grok运行结果。
 
-**Trigger:** User says “分析 <Solana Mint>”, “调查这个Meme”, or asks to review known Mint risks. Grok should use the terminal and existing Python CLI, **not** rebuild the Solana crawler or invent chain facts. All outputs remain read-only. Do not trade, sign, broadcast, access seed/private keys, install unknown agents, start x402 payments, or enable auto-payment.
+## 模式A：用户提出“分析这个 Mint”或“调查这枚 Meme”
 
-## 1. Real Mint → reproducible source files
-
-Use the currently checked-out **reviewed engineering PR** and confirm repository SHA and Python version (3.11+). Set `MINT` to the user's validated Solana Mint; use one fresh directory per run to prevent mixing snapshots. The following example Mint was previously tested with public vendor data; it is **not** a claim of a fresh live observation.
+**优先使用已实现的两个程序**，不是重新编写数据客户端、启动六个Bot或创建新后端。下面在仓库根目录执行；`MINT`必须是用户提供的Solana Mint地址，`RUN_DIR`每次取新的、未使用目录。
 
 ```bash
-MINT=EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump
-RUN_ID=$(date -u +%Y%m%dT%H%M%SZ)
-RUN_DIR=".runtime/grok-runs/$RUN_ID"
-mkdir -p "$RUN_DIR"
-git rev-parse HEAD
-PYTHONPATH=src python -m solana_meme_os.mint_v01 "$MINT" --rugcheck --out-dir "$RUN_DIR/mint"
-```
-
-The command writes `report.md`, `report.json`, `dex-provider-raw.json` and, only if available, `rugcheck-provider-raw.json`. Report timestamps are **acquisition** times; RugCheck may be cached. If no report is produced, stop and report the source error.
-
-## 2. Existing evidence handoff → Grok investigation
-
-**Only run if the same acquisition produced all three files**: `report.json`, `rugcheck-provider-raw.json`, `dex-provider-raw.json`. If one source is unavailable, return `SOURCE_UNAVAILABLE`; do not fabricate a JSON, fill missing values with zero, or substitute an old report's raw files.
-
-```bash
+MINT="用户提供的真实Solana_Mint"
+RUN_DIR=".runtime/grok-mint-$(date -u +%Y%m%dT%H%M%SZ)"
+PYTHONPATH=src python -m solana_meme_os.mint_v01 "$MINT" \
+  --rugcheck --out-dir "$RUN_DIR/mint"
 PYTHONPATH=src python -m solana_meme_os.vendor_event_handoff \
   --report "$RUN_DIR/mint/report.json" \
   --rugcheck-raw "$RUN_DIR/mint/rugcheck-provider-raw.json" \
   --dex-raw "$RUN_DIR/mint/dex-provider-raw.json" \
-  --out-dir "$RUN_DIR/outbox"
+  --out-dir "$RUN_DIR/grok-outbox"
 ```
 
-Read `$RUN_DIR/outbox/evidence.json` and generated `grok_task_*.md`, **then** independently inspect report and source fields. The existing adapter validates raw byte SHA-256, chain/Mint, vendor data status and limited structural coherence. It emits:
-- `investigations[]`: vendor **risk-label review tasks**, **not verified on-chain alerts**.
-- `suppressed_candidates[]`: pool/AMM or unresolved holder identities, **not whales or insider proof**.
-- `coverage.wallet_transactions=NOT_OBSERVED`, `funding_graph=NOT_OBSERVED`: do not infer live transaction activity, shared controller or copy-trading alpha.
-- `model_calls=0` / `PREPARE_GROK_TASKS_ONLY_NO_BOT_INVOKED`: these describe the *program's stage*, not Grok's subsequent analysis.
+- 第一步请求公开DEX Screener和可能缓存的RugCheck，只读、无需交易钱包。第二步**离线**比对原始响应SHA、链/Mint及数据状态，生成 `evidence.json`、`provisional_monitor_opinion.md`、按供应商风险项产生的 `grok_task_*.md`。这些是**供你审阅的程序任务**，不是Bot已研究完成。
+- **不要在第一步成功但第二步失败时宣布端到端成功**；第二步需要双方真实源同时可用。如果缺少DEX/RugCheck任一原始文件、身份不一致、错误/限流，明确报 `UNAVAILABLE` 或 `EVIDENCE_HANDOFF_FAILED`，不要补造另一源或伪装为无风险。
+- Grok本人必须实际读取 `mint/report.md`、`mint/report.json`、`grok-outbox/evidence.json`；根据现有知识按需调查X相关CA/Dev/叙事和市场外部解释。**区分**：供应商事实/标签、链上尚未验证的Token Account Owner、经济主体竞争解释、需要补的原始交易签名。没有X访问权限时只报告 `X_RESEARCH_UNAVAILABLE`。
+- 对每项重要结论给出具体原始证据路径和采集时间，说明池/AMM不能直接算独立鲸鱼，供应商风险标签不等于已证欺诈，Token Transfer不等于Swap，未知钱包资金关系不得假装已经查到。
+- 在Grok会话中返回实际执行的Git SHA、两步退出状态、原始数据源状态、生成文件路径、一次真实源码/证据判断，以及一个最有信息价值的下一步。只有**确实从Grok云电脑完成运行并读取任务**后，才可以标为 `GROK_CLOUD_MINIMUM_ACCEPTED`；否则始终 `GROK_NOT_EXECUTED`。
 
-The Bot's real user-facing result must distinguish **source facts**, **vendor labels**, **economic hypotheses**, **contradictory explanations**, **missing evidence**, and **best next investigation**. Reference files/field paths and the command's checked-out commit SHA. Research X discourse when it can change the current investigation; X posts are not on-chain confirmations. Any specialist knowledge perspective is optional and selected by relevance, not by mandatory role counts.
+## 模式B：用户请求“观察变化/追踪钱包”
 
-If Grok successfully performs this investigation, write the *Grok-authored* response in **a separate** `$RUN_DIR/grok_analysis.md` and retain original evidence files unchanged. This file can only prove Grok ran when it was actually created during a **real Grok session with runtime logs**; a local test or CI document must never imply that.
+目前仅有 `solana_meme_os.monitor`（规范化观测输入）和 `wallet_batch_monitor`（fixture-only的1/5/15分钟经济事件聚合），**尚无真实、可靠的持续链上事件流**。
 
-## 3. Separate continuous monitoring mode (not yet live)
+1. 先确认观察来自被允许的数据来源、时间/字段单位、Mint地址和覆盖范围；仅真实归因的交易事件才可交给批次监控。不能把模式A的供应商快照变成已确认的BUY/SELL。
+2. 对已有合法观测文件运行：
+   `PYTHONPATH=src python -m solana_meme_os.monitor --input OBSERVATION_PATH --state-dir .runtime`
+   `--allow-fixture`只能用于明确标注为演示的离线测试。
+3. 依据已记录的状态变化、来源和竞争解释输出观察报告。数据缺失或断开时报告UNKNOWN，不输出“该钱包停止交易”的肯定结论；不因Grok的Routine存在就称真实监控已上线。
+4. 只有经过**真实观察两时点、缺失恢复和重复事件核验**，且用户要求持续扫描，才考虑已授权的Routine；Routine创建/启用与云电脑运行仍需在Grok端逐项验收。
 
-The legacy normalized observation monitor is an **existing** module, not an authenticated RPC stream:
+**专业知识选择**：按当前任务调用相关D01–D12或已有专家视角即可，**不强制22位专家会诊、六Bot启动或固定阶段流程**。专业意见必须能改变经济解释或下一步核查。相关资料保存在 `knowledge/` 和旧参考仓库。
 
-```bash
-PYTHONPATH=src python -m solana_meme_os.monitor --input OBSERVATION_PATH --state-dir .runtime
-```
+**安全边界**：仅只读网络查询、既有审核过的CLI和本地报告。禁止私钥、交易签名/广播、购买服务、自动付款、安装未经审查代码、未经用户授权的对外发布或把X营销利润当事实。
 
-Inputs must contain independently validated `schema_version`, `chain`, `token_address`, `observed_at`, `mode`, `source`, `metrics`, optionally `events`. The `--allow-fixture` flag is **demonstration-only**, never live evidence. Explain differences, contradictory evidence, source freshness and missingness; do not claim a “no activity” interval if data coverage is unknown.
-
-**Do not enable a Routine or claim real-time monitoring until a real Grok on-cloud-computer one-shot run, an independently verified chain transaction, at least two actual observations, duplicate handling and restart recovery have separate proofs.** A future WebSocket/stream belongs in a tested persistent service (e.g., approved read-only Million functionality), not in LLM reasoning on each tx.
-
-## Verification and boundary
-
-- Offline CI: `PYTHONPATH=src python -m unittest discover -s tests -v`.
-- Existing live public-supplier precedent: engineering evidence `docs/evidence/v01-real-rugcheck-holder-2026-11-01.md`.
-- Program-to-evidence handoff: `docs/vendor-event-handoff.md`.
-- Grok cloud **runtime acceptance** requires its own command transcript, source status, created files and answer. A passing GitHub CI job validates Python, **not a Grok Bot deployment**.
+**工程测试（不是Grok云端验收）**：`PYTHONPATH=src python -m unittest discover -s tests -v`；真实GitHub Actions双来源采集与交接证据见 `.github/workflows/one-shot-public-rpc-holder-20261101.yml`。
