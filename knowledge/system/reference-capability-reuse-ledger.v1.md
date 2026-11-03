@@ -526,3 +526,24 @@
 
 **安全细节**：Grok所有Bot共享同一台云电脑的文件、登录和凭证；不能用多个Bot当安全隔离。任何API Key必须通过受控密钥流程，不放进群聊/源码，也不赋予交易、资金转移、自动付费能力；数据消费者和稳定监听服务可采取最小只读凭据。详细参考[官方安全](https://docs.x.ai/grok-bot/approvals-security-and-privacy)。
 
+
+### PumpGrok源码级整机对照（2026-11-03）
+
+[PumpGrok](https://github.com/swcstudiospace/PumpGrok) 当前主分支源码直接审读，区别于上一小节对X公开宣传的复述。GitHub元数据显示AGPL-3.0、35项Skill、10个角色和大量测试，**但“10角色/35技能”不是10个Bot已在用户Grok云电脑启动**，也不是实时Meme监控业务通过验收。
+
+**原项目实际怎样把Grok与程序关联**：
+- [`ARCHITECTURE.md`](https://github.com/swcstudiospace/PumpGrok/blob/main/ARCHITECTURE.md)将Grok/Cursor等**宿主agent**与`agents/*.md`角色、`skills/*/SKILL.md`操作流程、`src/pumpgrok/tools/`查询实现和`var/ledger.sqlite`持久账本分开。Skills**是可重用程序操作说明**，不是新的数据采集服务；Python CLI产出结构化结果供Bot读取；权限分为read/paper-write/live-write。
+- [`SETUP.md`](https://github.com/swcstudiospace/PumpGrok/blob/main/SETUP.md)要求在宿主云电脑克隆项目、安装工具、创建Bot/技能和验证。脚本示例仍有`https://github.com/your-org/pumpgrok.git`占位符，原Setup文本还没有证明任何人的Grok账户已完成实际安装，不能照原文直接复制到生产。官方Grok Bot支持云电脑、终端、文件与Skills/Routines，**需对本用户账户另做真实端到端验收**。
+- [`src/pumpgrok/cli/wiring.py::_find_only`](https://github.com/swcstudiospace/PumpGrok/blob/main/src/pumpgrok/cli/wiring.py)表明多个高层SCOUT/RISK/CHIEF等复合动词只进行权限查找，随后返回`not_implemented`（退出码5），**并未运行相关后端**；部分底层`pumpgrok tools ...`实有源码，不能一概认作不可用。检查是否能执行具体命令，优先于数菜单入口。
+- [`src/pumpgrok/cli/verbs_state.py::_run`](https://github.com/swcstudiospace/PumpGrok/blob/main/src/pumpgrok/cli/verbs_state.py)的核心运行入口仅接受`paper --once --replay`或`paper --serve --replay`，`--record`未实现；`engine/pipeline.py`是输入录制事件的重放引擎，不调用实时Grok模型，`engine/monitor.py`有PumpPortal WS类但不等于已接到同一对外CLI的长期网络监控。参见[运行文档](https://github.com/swcstudiospace/PumpGrok/blob/main/docs/runbooks/engine.md)和[Live Readiness](https://github.com/swcstudiospace/PumpGrok/blob/main/docs/LIVE_READINESS.md)：无已注册实盘Adapter，明确paper-only。
+- [`src/pumpgrok/engine/agents/base.py`](https://github.com/swcstudiospace/PumpGrok/blob/main/src/pumpgrok/engine/agents/base.py)另外实现**程序调用xAI Chat Completions API**。它与Grok Bot云电脑本体的任务自动化是两种机制，不能把有HTTP Grok Client当成Grok Bot已运行。
+- [`src/pumpgrok/tools/onchain/deployer_history.py`](https://github.com/swcstudiospace/PumpGrok/blob/main/src/pumpgrok/tools/onchain/deployer_history.py)令`tokens_seen = len(recent_sigs)`，此处**交易签名数≠Dev历史发行币数**；`tokens_bought=0`和`rugs=0`为未实现的占位结果。对本项目D02发行者历史和D10未知处理构成重大风险，不能直接复用该指标。
+- [`src/pumpgrok/tools/onchain/holders.py`](https://github.com/swcstudiospace/PumpGrok/blob/main/src/pumpgrok/tools/onchain/holders.py)以RPC`getTokenLargestAccounts`采样Top账户的总额为持仓占比**分母**、未自动剔LP；`market.holders_snapshot`提供`holder_count=len(sampled token accounts)`、`creator_share=0`但Creator未确认。不可作为真实全体Holder数量、供给集中比例或Creator持仓为零的证据，尤其已在本用户真实Mint发现池地址与Top Holder Owner重合。
+- [`src/pumpgrok/tools/market/trades.py`](https://github.com/swcstudiospace/PumpGrok/blob/main/src/pumpgrok/tools/market/trades.py)以首位账户Fee Payer的SOL净变化和其Token余额变化推断BUY/SELL，无Owner时还以整体正负Token余额替代，不能可靠还原复杂CPI/代付费/多个独立转账的经济成交。本用户D01/D05已检验多跳余额错配，**需要先核原始Swap/Transfer事件才可以接入M01监控**。以上均是代码语义风险的静态审计，没有对其全历史主网结果测量实际假阳率。
+
+**完整复用决策**：不把PumpGrok作为现有Million/OKX/RugCheck/DEX成熟采集的替代品，也不重建10Bot/35Skill。**最有价值的原位借鉴**是“一个自然语言Grok入口→只读CLI工具注册/JSON契约→持久运行结果/失败/证据→Grok按需研究与复查”的结合方式；其中程序的权限边界、读写分离、幂等执行、账本哈希核验与离线replay方法可以以其设计为**对照**，现有`mint_v01`已经支持单Mint原始JSON与来源SHA，无须重写成PumpGrok。接下来应先在Grok实际云电脑直接运行现有只读Mint命令，再补Million发现/资金候选，最终接实测Wallet事件。Grok云电脑尚未授权/接入本ChatGPT会话，故未实机验收。
+
+**开源合规**：PumpGrok根目录[LICENSE](https://github.com/swcstudiospace/PumpGrok/blob/main/LICENSE)标AGPL-3.0；其移植引擎有单独MIT来源声明（[VENDOR_PIN](https://github.com/swcstudiospace/PumpGrok/blob/main/docs/VENDOR_PIN.md)）。**借鉴已公开设计思路、调用独立程序与直接复制/合并受版权保护代码不是同一行为**；大规模搬入现有项目之前先按各文件许可证与部署/网络使用方式做兼容性核查。不能因本地试运行就假定改造后的代码不受原许可证约束。
+
+**总结对原用户问题的认知增量**：PumpGrok回答了“**Grok怎样调用和管理现有程序**”的组织层问题，却没有填补本项目最难的“**跨Mint钱包/资本经济事实、全时段数据覆盖、持续可靠监控**”的数据层缺口；这两层必须分别验收。无需新增第二套知识本体或角色系统。
+
