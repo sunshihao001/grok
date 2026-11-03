@@ -8,6 +8,22 @@
 理论库：https://github.com/sunshihao001/meme-
 GMGN 工具原型：https://github.com/sunshihao001/qb-
 
+## 当前产品入口：先运行，再按真实缺口扩展（2026-11-03）
+
+**默认只运行一条命令**，不需要用户理解内部的Mint采集、RugCheck或Grok证据交接：
+
+```bash
+PYTHONPATH=src python -m solana_meme_os.product EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump
+```
+
+- **成功（exit 0）**：真实DEX与RugCheck原始响应均通过已有来源核验；在新的`.runtime/product-runs/<mint>/<run-id>/`下生成`mint/report.md`、`mint/report.json`、`grok-outbox/evidence.json`和`run_status.json`。状态为`READY_FOR_GROK_REVIEW_NOT_EXECUTED`：**仅表明可供Grok研究，并不代表Grok已经运行。**
+- **部分可用（exit 4）**：仍有一家的公开来源可取到，保留`mint/report.md`供查看，并记录`PARTIAL_MINT_REPORT_NO_GROK_HANDOFF`，不伪造另一家数据及综合证据包。
+- **失败（exit 3或2）**：全部数据不可用、源校验错误、Mint地址非法或重复目录等，明确记录/返回原因；**不会交易、签名、付款或调用模型**。自动创建每次独立运行目录，避免覆盖既有证据。
+
+现在程序已经能“一条命令→真实公开Mint快照→可核查结果”；**还不等于真实钱包经济事件、持续监控或Grok云电脑验收**。后续按实际使用价值依次复用Million/OKX的完整只读钱包业务，只有确实缺失的能力才补开发，不再以扩展知识/专家/阶段作为产品门槛。
+
+**运行责任分工**：程序稳定采集、去重和保存可复查状态；Grok从用户普通表达出发调用既有命令、读取文件、结合专业知识与X研判。当前一个Grok主Bot足够，只有真实持续交易订阅必要时才使用独立后台服务。参见[最小Grok云端验收说明](docs/grok-setup.md)。
+
 ## 目标
 
 优先完成一个真实可重复运行的只读监控业务链；只有实测能改善质量时才增加开发Bot、专家或自动化。
