@@ -1,0 +1,334 @@
+"""One Solana Mint → read-only report. Mature OKX JSON or public DEX / RPC facts.
+
+Public RPC token-account hints are opt-in; no keys, wallets, payments or trades.
+Existing single-source CLI behavior remains unchanged for backwards compatibility.
+"""
+from __future__ import annotations
+
+import argparse
+from datetime import datetime, timezone
+import hashlib
+import json
+from pathlib import Path
+import sys
+from typing import Any
+
+from . import mint_report, public_pair_report, public_token_accounts, public_rugcheck_report
+
+
+def pool_related_holder_observations(
+    pool: dict[str, Any] | None,
+    holder_report: dict[str, Any] | None,
+) -> list[dict[str, Any]]:
+    """Exact cross-vendor address equality, NOT validation of chain account control.
+
+    A holder token account or its reported owner might be a liquidity-pool
+    address. Such candidates must not be automatically counted as free whales.
+    This comparison is purely descriptive; no heuristic wallet clustering.
+    """
+    if not pool or not holder_report:
+        return []
+    pools = {p.get("pool"): p for p in pool.get("pairs", [])
+             if isinstance(p, dict) and public_token_accounts.valid_address(p.get("pool"))}
+    observations: list[dict[str, Any]] = []
+    for row in holder_report.get("top_holders", []):
+        if not isinstance(row, dict):
+            continue
+        for matched_field in ("owner_candidate", "token_account_candidate"):
+            addr = row.get(matched_field)
+            if addr not in pools:
+                continue
+            p = pools[addr]
+            observations.append({
+                "holder_token_account": row.get("token_account_candidate"),
+                "holder_owner_vendor": row.get("owner_candidate"),
+                "matched_as": matched_field,
+                "matching_pool_address": addr,
+                "dex_vendor": p.get("dex"),
+                "holder_pct_vendor": row.get("pct_vendor"),
+                "holder_source_path": row.get("source_path"),
+                "pool_source_path": p.get("source_path"),
+                "status": "CROSS_VENDOR_POOL_ADDRESS_MATCH_NOT_CHAIN_VERIFIED",
+                "economic_interpretation": "POOL_RELATED_CANDIDATE_NOT_FREE_WHALE_PROOF",
+                "next_check": "Verify token vault owner/program and pool vault accounting from one consistent finalized RPC slot",
+            })
+    return observations
+
+
+
+def reconcile_vendor_holders_with_rpc(
+    vendor: dict[str, Any] | None,
+    rpc: dict[str, Any] | None,
+) -> dict[str, Any] | None:
+    """Cross-check exact TOKEN ACCOUNT addresses, never infer beneficial owners.
+
+    RugCheck is a potentially stale vendor snapshot; the official RPC reads
+    largest balances and parsed owners at potentially different finalized slots.
+    Shared owners without a shared token-account address are NOT a match.
+    A missing top-20 account is NOT evidence that the vendor record is false.
+    No extra HTTP calls or token account decoding are performed here.
+    """
+    if vendor is None or rpc is None:
+        return None
+    mint = vendor.get("mint")
+    if not public_token_accounts.valid_address(mint) or rpc.get("mint") != mint:
+        raise ValueError("cached Holder and RPC reports must refer to the same valid Mint")
+    rpc_rows = {
+        row.get("token_account"): row
+        for row in rpc.get("rows", [])
+        if isinstance(row, dict) and public_token_accounts.valid_address(row.get("token_account"))
+    }
+    observations: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    vendor_count = 0
+    for vendor_row in vendor.get("top_holders", []):
+        if not isinstance(vendor_row, dict):
+            continue
+        token_account = vendor_row.get("token_account_candidate")
+        if not public_token_accounts.valid_address(token_account) or token_account in seen:
+            continue
+        seen.add(token_account)
+        vendor_count += 1
+        chain_row = rpc_rows.get(token_account)
+        if chain_row is None:
+            continue
+        vendor_owner = vendor_row.get("owner_candidate")
+        chain_owner = (chain_row.get("owner_candidate")
+                       if chain_row.get("owner_status") == "RPC_PARSED_TOKEN_OWNER_NOT_BENEFICIAL_OWNER"
+                       else None)
+        if not public_token_accounts.valid_address(vendor_owner):
+            vendor_owner = None
+        if not public_token_accounts.valid_address(chain_owner):
+            chain_owner = None
+        if vendor_owner is None or chain_owner is None:
+            state = "TOKEN_ACCOUNT_MATCH_OWNER_UNRESOLVED"
+        elif vendor_owner == chain_owner:
+            state = "TOKEN_ACCOUNT_OWNER_ADDRESS_AGREES_NOT_BENEFICIAL_OWNER_PROOF"
+        else:
+            state = "TOKEN_ACCOUNT_OWNER_ADDRESS_CONFLICT_SNAPSHOTS_NOT_ATOMIC"
+        observations.append({
+            "token_account": token_account,
+            "vendor_owner_candidate": vendor_owner,
+            "rpc_owner_candidate": chain_owner,
+            "status": state,
+            "vendor_path": vendor_row.get("source_path"),
+            "rpc_token_account_path": chain_row.get("source_path"),
+            "rpc_owner_path": chain_row.get("owner_source_path"),
+            "rpc_owner_status": chain_row.get("owner_status"),
+            "rpc_first_slot": rpc.get("rpc_slot_largest"),
+            "rpc_owner_lookup_slot": rpc.get("rpc_slot_owner_lookup"),
+            "vendor_report_detected_at": vendor.get("vendor_detected_at"),
+            "vendor_report_retrieved_at": vendor.get("retrieved_at"),
+            "rpc_report_retrieved_at": rpc.get("retrieved_at"),
+            "amount_raw_vendor": vendor_row.get("amount_raw_vendor"),
+            "amount_raw_rpc_first_slot": chain_row.get("amount_raw_at_first_slot"),
+            "amounts_not_same_slot": True,
+            "no_trading": True,
+        })
+    agree = sum(o["status"].startswith("TOKEN_ACCOUNT_OWNER_ADDRESS_AGREES") for o in observations)
+    conflict = sum("ADDRESS_CONFLICT" in o["status"] for o in observations)
+    return {
+        "status": ("EXACT_TOKEN_ACCOUNT_OVERLAPS_NOT_ATOMIC"
+                   if observations else "NO_TOKEN_ACCOUNT_OVERLAP_COVERAGE_UNKNOWN"),
+        "mint": mint,
+        "vendor_top_token_accounts": vendor_count,
+        "rpc_top_token_accounts": len(rpc_rows),
+        "matched_token_accounts": len(observations),
+        "vendor_accounts_not_in_rpc_top20": vendor_count - len(observations),
+        "owner_address_agreements": agree,
+        "owner_address_conflicts": conflict,
+        "owner_comparison_unresolved": len(observations) - agree - conflict,
+        "observations": observations,
+        "limitations": [
+            "RPC_TOP20_ABSENCE_NOT_PROOF_OF_VENDOR_ACCOUNT_NONEXISTENCE",
+            "VENDOR_CACHED_REPORT_AND_RPC_SLOTS_NOT_ATOMIC",
+            "ACCOUNT_OWNER_ADDRESS_MATCH_NOT_ECONOMIC_BENEFICIAL_OWNER_PROOF",
+            "TOKEN_AMOUNTS_DIFFERENT_TIMES_NOT_DIRECTLY_COMPARABLE",
+        ],
+        "no_trading": True,
+    }
+
+
+def combined(mint: str, out_dir: Path, *, okx_json: Path | None,
+             fixture: bool, rpc_holders: bool, rugcheck: bool) -> int:
+    """Independent evidence sections, never merge third-party wallet labels with RPC accounts."""
+    now = datetime.now(timezone.utc).isoformat()
+    try:
+        public_token_accounts.valid_address(mint) or (_ for _ in ()).throw(
+            ValueError("invalid Solana Mint address"))
+        okx = None
+        okx_raw = None
+        if okx_json is not None:
+            okx_raw = okx_json.read_bytes()
+            okx = mint_report.compile_report(
+                json.loads(okx_raw), mint, fixture=fixture,
+                source_sha256=hashlib.sha256(okx_raw).hexdigest(), processed_at=now)
+        pool = None
+        pool_raw = None
+        errors: dict[str, str] = {}
+        try:
+            pool_raw, endpoint = public_pair_report.fetch_pairs(mint)
+            pool = public_pair_report.compile_pairs(pool_raw, mint, retrieved_at=now, source=endpoint)
+        except (OSError, ValueError, TypeError) as exc:
+            errors["public_pairs"] = str(exc)[:180]
+        holders = None
+        rpc_raw: dict[str, bytes] = {}
+        if rpc_holders:
+            try:
+                holders, rpc_raw = public_token_accounts.collect(mint)
+            except (OSError, ValueError, TypeError) as exc:
+                errors["public_rpc_token_accounts"] = str(exc)[:180]
+        rug = None
+        rug_raw = None
+        if rugcheck:
+            try:
+                rug_raw = public_rugcheck_report.fetch_report(mint)
+                rug = public_rugcheck_report.compile_report(rug_raw, mint, retrieved_at=now)
+            except (OSError, ValueError, TypeError) as exc:
+                errors["rugcheck_public_report"] = str(exc)[:180]
+        if okx is None and pool is None and holders is None and rug is None:
+            raise ValueError("all read-only sources unavailable: " + str(errors))
+        pool_holder_links = pool_related_holder_observations(pool, rug)
+        holder_rpc_reconciliation = reconcile_vendor_holders_with_rpc(rug, holders)
+        # Same-address match across vendors can expose pool/vault entries hidden in
+        # "top holders" lists; it does NOT establish human control or intent.
+        pool_lookup = {r["pool"]: r for r in pool["pairs"]} if pool else {}
+        overlaps = []
+        if rug:
+            for r in rug["top_holders"]:
+                addr = r["owner_candidate"]
+                if addr in pool_lookup:
+                    p = pool_lookup[addr]
+                    overlaps.append({
+                        "address": addr, "rugcheck_path": r["source_path"] + ".owner",
+                        "dex_pair_path": p["source_path"] + ".pairAddress",
+                        "interpretation": "CROSS_SOURCE_POOL_ADDRESS_MATCH_INFRASTRUCTURE_CANDIDATE",
+                        "not_proven": "NOT_HUMAN_WALLET_OR_COMMON_CONTROLLER_PROOF",
+                    })
+        # Coverage is evidence-specific, and a saved OKX file is not live verified.
+        result: dict[str, Any] = {
+            "schema_version": "grok.mint_v01_combined.v0",
+            "mint": mint, "chain": "solana",
+            "status": "FIXTURE_WITH_PUBLIC_SOURCES" if fixture else
+                      "READONLY_MULTISOURCE_CANDIDATES_NOT_FULL_MINT_INTELLIGENCE",
+            "processed_at": now, "no_trading": True,
+            "source_status": {
+                "okx_saved_json": okx["status"] if okx else "NOT_SUPPLIED",
+                "dex_public_pairs": pool["status"] if pool else "UNAVAILABLE",
+                "solana_public_rpc_token_accounts": holders["status"] if holders else
+                    ("UNAVAILABLE" if rpc_holders else "NOT_REQUESTED"),
+                "rugcheck_public_report": rug["status"] if rug else
+                    ("UNAVAILABLE" if rugcheck else "NOT_REQUESTED"),
+            },
+            "source_errors": errors,
+            "okx_saved": okx, "dex_public": pool, "rpc_token_accounts": holders,
+            "rugcheck_public": rug, "cross_source_pool_owner_matches": overlaps,
+            "pool_related_holder_candidates": pool_holder_links,
+            "holder_rpc_reconciliation": holder_rpc_reconciliation,
+            "limitations": [
+                "RPC_TOP_TOKEN_ACCOUNTS_NOT_VERIFIED_UNIQUE_HOLDERS",
+                "DEX_PAIR_VOLUME_NOT_WALLET_TRADES",
+                "OKX_VENDOR_LABELS_NOT_CONFIRMED_CONTROL_OR_PNL",
+                "NO_DEV_HISTORY_WHEN_PROVIDER_HAS_NOT_RETURNED_IT",
+                "CROSS_PROVIDER_TIMESTAMPS_NOT_ATOMIC_SNAPSHOT",
+                "NO_WALLET_TRADING_AUTOPAYMENT_OR_MONITOR_DEPLOYMENT",
+            ],
+        }
+        md = ["# Solana Meme｜Mint多来源只读报告 V0.1", "",
+              f"Mint：`{mint}`", f"状态：**{result['status']}**",
+              f"处理时间：`{now}`（不是统一链上事件时间）", "",
+              "本报告仅将来源隔离并列展示，不会把池、Token Account及OKX钱包标签推断为同一经济主体。",
+              "", "## 数据源实际覆盖", ""]
+        for key, state in result["source_status"].items():
+            md.append(f"- {key}: **{state}**" +
+                      (f"（{errors[key]}）" if key in errors else ""))
+        if overlaps:
+            md += ["", "## 供应商交叉核查：Holder候选与已知DEX池地址重合", "",
+                   "**以下地址与DEX池匹配，应优先作为池/基础设施候选，不列为已确认独立交易钱包。**"]
+            for row in overlaps:
+                md.append(f"- \u0060{row['address']}\u0060：\u0060{row['rugcheck_path']}\u0060 ↔ "
+                          f"\u0060{row['dex_pair_path']}\u0060；\u0060{row['interpretation']}\u0060")
+        if holder_rpc_reconciliation is not None:
+            check = holder_rpc_reconciliation
+            md += ["", "## 同 Token Account 跨源核对（缓存报告 vs 官方RPC）", "",
+                   f"状态：\u0060{check['status']}\u0060；精确账户重合 {check['matched_token_accounts']} 条；"
+                   f"Owner地址一致 {check['owner_address_agreements']} 条、冲突 {check['owner_address_conflicts']} 条、未知 {check['owner_comparison_unresolved']} 条。",
+                   "**RPC仅返回余额前20个Token Account；未重合不代表供应商记录错误，也不代表没有持有人。Owner地址相同不证明经济同控；缓存时间和RPC slot不可当作原子快照。**", ""]
+            for item in check["observations"]:
+                md.append(f"- Token Account \u0060{item['token_account']}\u0060：RugCheck Owner "
+                          f"\u0060{item['vendor_owner_candidate'] or 'UNKNOWN'}\u0060，RPC Owner "
+                          f"\u0060{item['rpc_owner_candidate'] or 'UNKNOWN'}\u0060；"
+                          f"\u0060{item['status']}\u0060；路径 "
+                          f"\u0060{item['vendor_path']}\u0060 / "
+                          f"\u0060{item['rpc_owner_path'] or 'none'}\u0060。")
+        if pool:
+            md += ["", "---", "", public_pair_report.render_markdown(pool)]
+        if holders:
+            md += ["", "---", "", public_token_accounts.markdown(holders)]
+        if rug:
+            md += ["", "---", "", public_rugcheck_report.markdown(rug)]
+        if okx:
+            md += ["", "---", "", mint_report.markdown(okx)]
+        if pool_holder_links:
+            md += ["", "## 跨源地址核对：交易池相关持仓候选", "",
+                   "**以下仅为两个供应商返回的地址相同，不是链上已证明的经济控制关系。**", ""]
+            for link in pool_holder_links:
+                md.append(f"- RugCheck Token Account `{link['holder_token_account']}` "
+                          f"的 `{link['matched_as']}` 地址与 "
+                          f"DEX Screener `{link['dex_vendor']}` 池 "
+                          f"`{link['matching_pool_address']}` 完全一致；"
+                          f"RugCheck供应商持仓占比 `{link['holder_pct_vendor']}`。"
+                          "标记为流动性池相关候选，**禁止直接算作独立鲸鱼/庄家控制**；"
+                          "需要同slot链上Vault/Owner验证。")
+        md += ["", "## 尚未完成的业务能力", "",
+               "- Dev真实历史、资金闭环、协议级Swap、持续异常和可交易收益都需独立来源/验证。",
+               "- RPC公共节点受限且没有生产SLA；任何一个来源失败时不得填0或宣称无事件。",
+               ""]
+        out_dir.mkdir(parents=True, exist_ok=True)
+        if pool_raw is not None:
+            (out_dir / "dex-provider-raw.json").write_bytes(pool_raw)
+        for filename, blob in rpc_raw.items():
+            (out_dir / ("rpc-" + filename)).write_bytes(blob)
+        if okx_raw is not None:
+            (out_dir / "okx-saved-input.json").write_bytes(okx_raw)
+        if rug_raw is not None and rug is not None:
+            (out_dir / "rugcheck-provider-raw.json").write_bytes(rug_raw)
+        (out_dir / "report.json").write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        (out_dir / "report.md").write_text("\n".join(md), encoding="utf-8")
+        print(json.dumps({"status": result["status"], "mint": mint,
+                          "sources": result["source_status"],
+                          "report": str(out_dir / "report.md"), "no_trading": True}, ensure_ascii=False))
+        return 0
+    except (OSError, ValueError, TypeError, json.JSONDecodeError) as exc:
+        print(json.dumps({"status": "ERROR", "reason": str(exc), "no_trading": True}, ensure_ascii=False),
+              file=sys.stderr)
+        return 3
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="V0.1 one Mint → sourced read-only report")
+    parser.add_argument("mint", help="Solana token Mint address")
+    parser.add_argument("--out-dir", type=Path, help="Default .runtime/mint-v0.1/<mint>")
+    parser.add_argument("--okx-json", type=Path, help="Already saved, authorized OKX token-research JSON")
+    parser.add_argument("--fixture", action="store_true", help="Explicitly mark synthetic saved OKX JSON")
+    parser.add_argument("--rpc-holders", action="store_true",
+                        help="Opt-in: public Solana RPC top 20 token accounts / parsed owner hints (rate-limited)")
+    parser.add_argument("--rugcheck", action="store_true",
+                        help="Opt-in: cached no-key RugCheck GET for vendor Holder, Creator and risk hints")
+    args = parser.parse_args(argv)
+    if args.fixture and not args.okx_json:
+        parser.error("--fixture only applies to --okx-json")
+    dest = args.out_dir or Path(".runtime") / "mint-v0.1" / args.mint
+    if args.rpc_holders or args.rugcheck:
+        return combined(args.mint, dest, okx_json=args.okx_json, fixture=args.fixture,
+                        rpc_holders=args.rpc_holders, rugcheck=args.rugcheck)
+    if args.okx_json:
+        flags = ["--mint", args.mint, "--okx-json", str(args.okx_json), "--out-dir", str(dest)]
+        if args.fixture:
+            flags.append("--fixture")
+        return mint_report.main(flags)
+    return public_pair_report.main(["--mint", args.mint, "--out-dir", str(dest)])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

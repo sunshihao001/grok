@@ -1,0 +1,138 @@
+{
+  "schema_version": "m01.raw.v1",
+  "chain": "sol",
+  "mode": "fixture",
+  "mint": "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM",
+  "quote_mint": "So11111111111111111111111111111111111111112",
+  "quote_decimals": 9,
+  "coverage": {
+    "start": "2026-10-31T00:00:00Z",
+    "end": "2026-10-31T00:15:00Z",
+    "complete": true,
+    "gaps": []
+  },
+  "as_of": "2026-10-31T00:16:40Z",
+  "source": {
+    "tool": "synthetic_rpc_fixture",
+    "ref": "fixture://raw-adapter"
+  },
+  "transactions": [
+    {
+      "signature": "fixture-sig-1",
+      "source_ref": "fixture://fixture-sig-1",
+      "available_at": "2026-10-31T00:00:03Z",
+      "rpc": {
+        "slot": 90001,
+        "blockTime": 1793404801,
+        "version": 0,
+        "transaction": {
+          "signatures": [
+            "fixture-sig-1"
+          ],
+          "message": {
+            "accountKeys": [
+              {
+                "pubkey": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+                "signer": true,
+                "writable": true,
+                "source": "transaction"
+              },
+              {
+                "pubkey": "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
+                "signer": true,
+                "writable": true,
+                "source": "transaction"
+              },
+              {
+                "pubkey": "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+                "signer": false,
+                "writable": true,
+                "source": "transaction"
+              },
+              {
+                "pubkey": "UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU",
+                "signer": false,
+                "writable": true,
+                "source": "transaction"
+              },
+              {
+                "pubkey": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+                "signer": false,
+                "writable": false,
+                "source": "transaction"
+              }
+            ],
+            "instructions": [
+              {
+                "programId": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+                "program": "spl-token",
+                "parsed": {
+                  "type": "transferChecked",
+                  "info": {
+                    "source": "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+                    "destination": "UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU",
+                    "mint": "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM",
+                    "authority": "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD",
+                    "tokenAmount": {
+                      "amount": "250",
+                      "decimals": 6
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "meta": {
+          "preTokenBalances": [
+            {
+              "accountIndex": 2,
+              "mint": "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM",
+              "owner": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "programId": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+              "uiTokenAmount": {
+                "amount": "1000",
+                "decimals": 6
+              }
+            },
+            {
+              "accountIndex": 3,
+              "mint": "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM",
+              "owner": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+              "programId": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+              "uiTokenAmount": {
+                "amount": "1000",
+                "decimals": 6
+              }
+            }
+          ],
+          "postTokenBalances": [
+            {
+              "accountIndex": 2,
+              "mint": "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM",
+              "owner": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "programId": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+              "uiTokenAmount": {
+                "amount": "1000",
+                "decimals": 6
+              }
+            },
+            {
+              "accountIndex": 3,
+              "mint": "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM",
+              "owner": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+              "programId": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+              "uiTokenAmount": {
+                "amount": "1000",
+                "decimals": 6
+              }
+            }
+          ],
+          "err": null,
+          "innerInstructions": [],
+          "fee": 5000
+        }
+      }
+    }
+  ]
+}

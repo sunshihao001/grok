@@ -1,0 +1,21 @@
+{
+  "ok": true,
+  "data": {
+    "workflow": "token-research",
+    "address": "87QChghgFr2XBNumi2Tg1MJCWHLqoTTT5KThtnDspump",
+    "chain": "501",
+    "core": {
+      "info": {"tokenSymbol": "SYNTHETIC_DEMO", "note": "NOT_LIVE_DATA"},
+      "price": null,
+      "contract": {"protocolId": null},
+      "security": null
+    },
+    "structure": {
+      "holders": [{"address": "SYNTHETIC_ONLY", "note": "This is not a wallet"}],
+      "cluster": null,
+      "topTraders": null,
+      "signals": []
+    },
+    "launchpad": null
+  }
+}

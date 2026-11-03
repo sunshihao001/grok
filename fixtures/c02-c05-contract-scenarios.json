@@ -1,0 +1,111 @@
+{
+  "schema_version": "p3.contract.scenarios.v1",
+  "purpose": "adversarial_data_contract_not_executed_c02_c05_monitor",
+  "source": "synthetic fixture; not on-chain facts",
+  "c02_cases": [
+    {
+      "id": "same_group_different_mint",
+      "group": {
+        "frozen_at": "2026-10-31T00:00:00Z",
+        "members": [
+          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+        ]
+      },
+      "opportunities": [
+        {
+          "mint": "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM",
+          "eligible_at": "2026-10-31T00:01:00Z",
+          "stage": "curve",
+          "liquidity_bucket": "medium"
+        },
+        {
+          "mint": "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN",
+          "eligible_at": "2026-10-31T00:11:00Z",
+          "stage": "curve",
+          "liquidity_bucket": "medium"
+        }
+      ],
+      "future_economic_actions": "required; currently unsupported by raw adapter",
+      "expected": "MAY_COMPARE_ONLY_IF_PROTOCOL_DECODER_AND_COVERAGE_VALID"
+    },
+    {
+      "id": "group_frozen_after_event",
+      "group": {
+        "frozen_at": "2026-10-31T00:20:00Z"
+      },
+      "opportunity": {
+        "eligible_at": "2026-10-31T00:10:00Z"
+      },
+      "expected": "REJECT_LOOKAHEAD"
+    },
+    {
+      "id": "nonbuyer_right_censored",
+      "as_of": "2026-10-31T00:03:00Z",
+      "first_buy_time": null,
+      "deadline": "2026-10-31T00:06:00Z",
+      "expected": "RIGHT_CENSORED_NOT_ZERO_DELAY"
+    },
+    {
+      "id": "stage_mismatch",
+      "stages": [
+        "curve",
+        "amm"
+      ],
+      "expected": "NOT_DIRECTLY_COMPARABLE"
+    },
+    {
+      "id": "mixed_quote_mints",
+      "quote_mints": [
+        "So11111111111111111111111111111111111111112",
+        "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"
+      ],
+      "expected": "CANNOT_SUM_RAW_AMOUNTS"
+    }
+  ],
+  "c05_cases": [
+    {
+      "id": "zero_eligible_opportunities",
+      "coverage_status": "COMPLETE",
+      "eligible_opportunities": 0,
+      "participated": 0,
+      "expected": "NO_OPPORTUNITY"
+    },
+    {
+      "id": "unknown_coverage_zero_trade",
+      "coverage_status": "UNKNOWN",
+      "eligible_opportunities": 5,
+      "participated": 0,
+      "expected": "COVERAGE_UNKNOWN"
+    },
+    {
+      "id": "eligible_without_participation",
+      "coverage_status": "COMPLETE",
+      "eligible_opportunities": 5,
+      "participated": 0,
+      "expected": "ELIGIBLE_BUT_INACTIVE"
+    },
+    {
+      "id": "eligible_with_participation",
+      "coverage_status": "COMPLETE",
+      "eligible_opportunities": 5,
+      "participated": 2,
+      "expected": "ACTIVE"
+    },
+    {
+      "id": "activity_other_venue_only",
+      "coverage_status": "COMPLETE",
+      "eligible_opportunities": 5,
+      "participated": 0,
+      "alternative_activity": true,
+      "expected": "ELIGIBLE_BUT_INACTIVE_PLUS_ALTERNATIVE_ACTIVITY_OBSERVED"
+    },
+    {
+      "id": "future_opportunity_not_yet_available",
+      "coverage_status": "COMPLETE",
+      "opportunity_available_at": "2026-10-31T00:20:00Z",
+      "as_of": "2026-10-31T00:15:00Z",
+      "expected": "EXCLUDE_FROM_DENOMINATOR"
+    }
+  ]
+}
