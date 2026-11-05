@@ -189,6 +189,7 @@ def main(argv: list[str] | None = None) -> int:
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--audit", action="store_true")
     group.add_argument("--list", action="store_true")
+    group.add_argument("--goal-state", action="store_true", help="Read the current decision and goal evolution record")
     group.add_argument("--question")
     group.add_argument("--intent")
     group.add_argument("--open-path", help="Read a permitted original knowledge file excerpt")
@@ -198,6 +199,9 @@ def main(argv: list[str] | None = None) -> int:
         data = load_navigation()
         if args.audit:
             output = audit(data)
+        elif args.goal_state:
+            from solana_meme_os.goal_state import load, brief
+            output = brief(load())
         elif args.open_path:
             output = open_knowledge(args.open_path, data)
         elif args.list:
