@@ -12,3 +12,5 @@
 
 - **目标演化与自主责任**：[从最初跟单钱包到当前市场智能产品的现行目标关系和重大决策](design/goal-evolution-decision-record.v1.md)。这是决策记录，不是新的框架；对应的[首个真实业务试点与验收证据](docs/evidence/goal-evolution-first-product-pilot-2026-11-05.md)区分源码/旧实测/未验内容。
 
+
+- **动态目标恢复**：先用 `PYTHONPATH=src python -m solana_meme_os.project_navigator --goal-state` 查看 [当前目标与决策状态](docs/goal-evolution-current.json)，理解目标层级和演变、保留的原始目标、竞争方案、可推翻条件及下一项验收；该程序只做状态读取和结构核验，并非已经具备语义目标推理的自主Agent。重大价值/战略变更需用户决定。
