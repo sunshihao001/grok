@@ -1,3 +1,5 @@
+> **2026-11-05 状态修订**：本图是既有groK/知识/工程资产的历史关系图，不再预设它是唯一或必须实现的产品架构。现行优先从完整成熟主体 Blix / Pulse 的隔离实跑和关键业务适配出发，按需继承此前研究与代码；详见 [现行工作准则](../knowledge/system/current-operating-guidance.md)。原有专业证据和数据语义要求继续有效。
+
 # Solana Meme｜整体系统设计与集成关系 V0.1
 
 > **性质：已有资产关系和产品集成设计，不是新建框架。** 用户体验详见 [产品UI设计](product-experience-architecture.v1.md)，知识调用路径见 [AI知识导航说明](../docs/ai-knowledge-navigation-guide.v1.md)。本文件不替换已有 `D01–D12` 专业知识、22个专家视角或代码模块。当前两个PR尚未合并，部分实现只在工程PR #16。
