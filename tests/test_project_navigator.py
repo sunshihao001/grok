@@ -78,7 +78,7 @@ class NavigationTests(unittest.TestCase):
 
     def test_original_research_can_be_read_with_hash(self):
         result = nav.open_knowledge("knowledge/system/current-operating-guidance.md", self.data)
-        self.assertIn("AI思维", result["excerpt"])
+        self.assertIn("AI承担专业职责", result["excerpt"])
         self.assertEqual(len(result["source_sha256"]), 64)
 
     def test_unregistered_file_cannot_be_opened(self):
