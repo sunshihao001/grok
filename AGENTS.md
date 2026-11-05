@@ -1,41 +1,10 @@
-# Project Agent / Bot Rules — Solana Meme Workflow OS (Grok Edition)
+# Solana Meme｜AI 当前项目入口
 
-## Safety Boundary (Hard)
+**现行最高优先级项目准则**：请先阅读 [current-operating-guidance.md](knowledge/system/current-operating-guidance.md)。本文件替代旧AGENTS的固定多Bot/GMGN前置流程要求，**不是废弃旧领域研究知识**；原内容保存在 docs/history/AGENTS-legacy-2026-11-05.md。
 
-Phase 1 is read-only research / paper-only gating.
-
-**Forbidden for all Bots**:
-- real orders
-- private key access
-- wallet signing
-- transaction broadcast
-- gmgn-cli swap / multi-swap / cooking create
-- auto deploy
-- claims like “确定庄家”, “确定内幕”, “一定会涨”
-
-## Roles
-
-See `BOTS.md` for the multi-Bot development + single Monitor design.
-
-## Required Reading Before Work
-
-- `CONTEXT.md`
-- `BOTS.md`
-- Relevant design docs (link back to original Hermes repo for full history)
-
-## Completion
-
-Every significant rule or skill change should produce a short result note under `reports/`.
-
-## Knowledge-preserving migration (mandatory)
-
-- **Do not import Hermes startup, CLI, control hooks, absolute paths, memory store or runtime behavior.** Prior Hermes and qb- repositories are evidence/source archives, not Grok OS dependencies.
-- Start with `knowledge/README.md` and `knowledge/catalog.v1.json`. Use `PYTHONPATH=src python -m solana_meme_os.knowledge --question "普通语言问题"` as a retrieval triage tool; this is not a substitute for reasoning or research.
-- For each claim, select knowledge **by relevance and mechanism**, then test whether required inputs exist. Never copy the rule's conclusion just because keywords match.
-- Label historical claims as documented_legacy_method / unverified_hypothesis / source_contract. Historical provenance does NOT validate financial effectiveness.
-- A rule release requires actual market/source data, counterexamples, error attribution and independent review. Revisions go to a reviewed PR, not automatic self-upgrade.
-- When retrieval has no match, explicitly expand research, add sources and a candidate card; never hallucinate missing knowledge.
-
-## Demand-driven source reasoning
-
-For ambiguous research tasks run `PYTHONPATH=src python -m solana_meme_os.research --question "原始问题"` and review `docs/on-demand-research-design.md`. Never fill a prompt with the entire corpus or mistake keyword matching for understanding. Use sources selectively and challenge them using original primary data. Record decision_at, observed_at, available_at; no future-info features. Treat statistical pattern detection, causal explanation and positive net executable expectancy as three independent evidentiary claims.
+- 用户只用简短自然语言表达目标；AI负责主动升级意图、发现重要未知、研究外部成熟做法、形成多个战略选项和推荐，在授权范围内完成研究、设计、编码、测试、验收。
+- 当前业务范围：市场发现、单Mint专业调查、跨Mint群体监控、经济机制与机会研究。Blix、Pulse为待实跑主体候选；不预设必须Grok融合。
+- 原有D01–D12、旧Hermes/qb-/meme-、全部参考源码、专家方法与失败经验继续按需调用，不强制固定阶段、六Bot、七Skill、全专家覆盖或知识目录先行。
+- 标明源码、供应商、链上证据、离线测试、真实运行与UNKNOWN；资产身份、事件时间、重复/遗漏和竞争解释必须审查。
+- 当前仅只读。禁止真实交易、钱包签名、私钥访问、广播、自动付款；外部不可逆操作要另行审批。不能把研究成果冒充已部署产品。
+- 实际完成后核对改动、测试、证据、版本及剩余阻断；旧的固定工作约束明确退役。

@@ -1,3 +1,5 @@
+> **2026-11-05 当前工作入口调整**：旧六Bot部署步骤仅是可选历史参考，不得作为当前部署前置条件。请优先遵循 [现行准则](../knowledge/system/current-operating-guidance.md)。下面早期的固定Bot/GMGN/阶段/专家/下一轮提示词等内容**只保留为历史研究和方法记录，不再作为默认操作命令**；原研究事实、源码与证据不因本次修正而无效。
+
 # Grok Bot setup — implementation handoff
 
 The existing **BOTS.md** is authoritative for the six roles: Rule Architect, GMGN Data, Wallet Structure, Evidence & Gate, QA / Fixture, and final Meme Monitor. The new bots/04-monitor.md adds the runtime owner's operating instructions; it is not an extra sixth development Bot. These roles are Grok app objects to create later, not processes initialized by this repository.

@@ -1,3 +1,5 @@
+> **2026-11-05 当前工作入口调整**：旧知识库指南保留资料索引，但知识目录和专家数量不再约束当前行动。请优先遵循 [现行准则](system/current-operating-guidance.md)。下面早期的固定Bot/GMGN/阶段/专家/下一轮提示词等内容**只保留为历史研究和方法记录，不再作为默认操作命令**；原研究事实、源码与证据不因本次修正而无效。
+
 # Solana Meme knowledge is the core; Grok is the host
 
 > **知识可用性入口（2026-11-01）**：[AI知识导航与原有资产归位](../docs/ai-knowledge-navigation-guide.v1.md) | [机器可读任务→领域/专家/源码映射](system/knowledge-navigation.v1.json)。此导航不替代原有专业知识、跨领域关联或知识积累机制；应继续使用和深化原研究正文。所有“已实现”仍需工程分支证据，不因索引存在自动成立。
