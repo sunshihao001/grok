@@ -2,7 +2,10 @@
 from __future__ import annotations
 
 import copy
+import io
+import json
 import unittest
+from contextlib import redirect_stdout
 
 from solana_meme_os import project_navigator as nav
 
@@ -98,6 +101,17 @@ class NavigationTests(unittest.TestCase):
                 got = nav.shortlist(question, self.data, limit=3)["routes"]
                 self.assertTrue(got, question)
                 self.assertEqual(got[0]["intent"], expected)
+
+    def test_goal_state_command_exposes_actual_next_action(self):
+        # This is an existing read-only navigator entry, NOT autonomous semantic reasoning.
+        stream = io.StringIO()
+        with redirect_stdout(stream):
+            code = nav.main(["--goal-state"])
+        self.assertEqual(code, 0)
+        data = json.loads(stream.getvalue())
+        self.assertEqual(data["current_decision"]["preferred"], "A")
+        self.assertEqual(data["next_action"]["state"], "NOT_RUN")
+        self.assertTrue(data["human_boundaries"]["operation"] == "read_only")
 
     def test_out_of_scope_id_fails(self):
         with self.assertRaises(ValueError):
