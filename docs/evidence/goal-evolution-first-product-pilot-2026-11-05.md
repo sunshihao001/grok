@@ -60,6 +60,19 @@
 
 这几条是测试设计和预期结果。只有在独立任务中比较 AI 的实际行为、实际运行证据和无此引导的基线后，才能称能力已验证。不能让提示词复述替代评测。
 
+## 本轮新增的可复查反例：钱包事件主键与专业调查的关系
+
+对 [Blix `server/wallets.js`](https://github.com/blixvip/blixtrade/blob/main/server/wallets.js) 的源码进一步核查：
+
+1. `wallet_trades` 用 `PRIMARY KEY (sig,wallet,mint)`，`readTx()` 对 `sol.parseSwaps(tx,w.address)` 逐项执行 `INSERT OR IGNORE`；如果一笔交易为同一地址/同一Mint产生多笔不同经济事件，其键不能区分事件位置与方向。这里是**数据模型表达能力**的限制，不自动证明实际样本漏记。
+2. 在本轮当前执行容器的 Python `sqlite3` 内存库，按上述**相同主键和 INSERT OR IGNORE 语句**离线重现两行：`SIG_TEST,WALLET_TEST,MINT_TEST,buy,100` 与 `SIG_TEST,WALLET_TEST,MINT_TEST,sell,90`。实测第一行插入`1`，第二行插入`0`，最终`SELECT`仅保留一行；断言通过。**这只是合成约束测试，不是Blix服务运行、不是一笔真实Solana交易。**
+3. `readTx()` 还在同签名/钱包已经存在任何 `wallet_trades` 记录时提前返回。若将来多个解析阶段或重新解码需要补上同一签名的其他事件，这个条件也需要专项检查；当前尚无真实触发证据。
+4. 真正的专业要求不只是防止双计数：一次交易可以包含多个顶层/内部指令，观察层需保留签名+明确的指令/事件位置，经济成交层又必须避免将一个多腿Swap算成多个独立买卖。[Solana 官方交易解析文档](https://solana.com/docs/core/transactions/transaction-introspection) 可用于设计对照，但**不应未经业务验证直接替换Blix原有去重规则**。
+
+**该发现如何改变下一步**：主体首轮测试须加入“同签名/同钱包/同Mint的多事件与多池交易”，核对 `parseSwaps` 输出、持久化行、净资产变化和用户报告。若Blix只是用于行情/钱包概览，可以局部保留现实现；若作为专业资金事实底座，则必须通过更细粒度的证据与事件身份验收。发现不满足时比较轻量适配或独立调查源，不先全面重写数据库。
+
+**实际证据等级**：源码定位 + 离线SQLite约束反例 = 已检查；真实链上触发、最终业务影响、修复效果 = UNKNOWN / 未验收。
+
 ## 本轮执行环境预检（2026-11-05，非产品实跑）
 
 - 当前可用执行容器里，实际运行 `node --version` 得到 **v22.16.0**，`node24` 未找到，现有 NVM 版本目录只有 Node v22.16.0；这只说明**本次执行容器**的状态，不代表用户本地电脑或 Grok 云电脑的环境。
