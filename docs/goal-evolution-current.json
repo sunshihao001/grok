@@ -1,0 +1,181 @@
+{
+  "schema_version": "1.0",
+  "record_kind": "goal_evolution_and_decision_snapshot",
+  "updated_on": "2026-11-05",
+  "notice": "供AI按需阅读的决策记录，不是自动意图推理、任务调度器或已部署Bot。战略目标由用户决定；以下源码与产品结论需实测确认。",
+  "boundaries": {
+    "operation": "read_only",
+    "human_controls": [
+      "长期目的及重大方向",
+      "真实资金/账户",
+      "不可逆发布和扩大权限"
+    ],
+    "unknown_is_allowed": true
+  },
+  "goals": [
+    {
+      "id": "P",
+      "level": "purpose",
+      "status": "active",
+      "authority": "user",
+      "text": "理解Solana Meme市场、风险和可验证的潜在机会，降低用户的专业技术负担。"
+    },
+    {
+      "id": "S",
+      "level": "strategy",
+      "status": "active",
+      "authority": "user",
+      "text": "建设可运行的市场智能产品，而非孤立的跟单工具或知识目录。"
+    },
+    {
+      "id": "C1",
+      "level": "capability",
+      "status": "retained",
+      "authority": "user",
+      "text": "寻找值得继续调查、可能具有可跟性的盈利钱包；最初目标保留为子目标。"
+    },
+    {
+      "id": "C2",
+      "level": "capability",
+      "status": "active",
+      "authority": "user",
+      "text": "市场发现→单Mint Creator/关键钱包/资金/库存调查→跨Mint群体监控→经济机制与机会研究。"
+    },
+    {
+      "id": "S2",
+      "level": "strategy",
+      "status": "active",
+      "authority": "user",
+      "text": "用户简单表达与重大选择，AI主动承担产品、研究、方案生成、实施、验收、下一轮高价值问题发现。"
+    },
+    {
+      "id": "I",
+      "level": "implementation",
+      "status": "provisional",
+      "authority": "ai_recommendation",
+      "text": "优先复用成熟主体，Blix作为第一候选、Pulse作为竞争对照；尚未在本项目隔离实跑。"
+    }
+  ],
+  "links": [
+    {
+      "from": "C1",
+      "to": "S",
+      "relation": "retained_as_subgoal"
+    },
+    {
+      "from": "C2",
+      "to": "S",
+      "relation": "realizes"
+    },
+    {
+      "from": "S",
+      "to": "P",
+      "relation": "serves"
+    },
+    {
+      "from": "S2",
+      "to": "S",
+      "relation": "enables"
+    },
+    {
+      "from": "I",
+      "to": "S",
+      "relation": "candidate_implementation"
+    }
+  ],
+  "changes": [
+    {
+      "id": "E1",
+      "from": "C1",
+      "to": "C2",
+      "meaning": "从跟单钱包扩展到资金、库存、经济主体、机制与全市场监控；原钱包研究并未废弃。",
+      "basis": "user_goal_history"
+    },
+    {
+      "id": "E2",
+      "from": "S",
+      "to": "S2",
+      "meaning": "过去不断扩建知识框架降低了AI自主判断；改变工作方法，不删除原专业研究。",
+      "basis": "user_confirmed"
+    },
+    {
+      "id": "E3",
+      "from": "S2",
+      "to": "I",
+      "meaning": "从先研究完再建设，转向成熟成品优先、只读实跑和完整业务验收。",
+      "basis": "user_confirmed_direction_and_source_review"
+    }
+  ],
+  "decision": {
+    "id": "D-BASE",
+    "question": "怎样最快证明市场智能产品可承载专业能力？",
+    "state": "provisional",
+    "options": [
+      {
+        "id": "A",
+        "route": "Blix第一候选做完整Mint调查纵切，Pulse作为对照",
+        "benefit": "市场界面与钱包功能较完整，原项目具日志及故障恢复设计",
+        "risk": "历史资金数据、只读隔离与可靠性尚未独立实测",
+        "falsifier": "重大数据覆盖缺陷或高成本改造"
+      },
+      {
+        "id": "B",
+        "route": "Pulse优先做历史证据与调查验证",
+        "benefit": "采集、数据、MCP分层清晰",
+        "risk": "选择性事件存储与队列出错恢复需要修正验证",
+        "falsifier": "修复后仍难覆盖完整业务/用户体验"
+      },
+      {
+        "id": "C",
+        "route": "复用grok现有真实供应商Mint预览先拼完整调查",
+        "benefit": "已有真实公开数据证据，可避免大主体部署成本",
+        "risk": "实时市场发现、UI、持续监控仍不完整",
+        "falsifier": "拼接成本超过整用成熟成品"
+      }
+    ],
+    "preferred": "A",
+    "why": "优先获取完整可用产品，但源码判断不足以冻结最终架构。",
+    "reopen_if": [
+      "Blix无法通过同Mint调查与断流恢复实测",
+      "Pulse或新成品在总成本和业务完整性上明显更优",
+      "发现现有供应商数据不足以支持经济关系解释"
+    ]
+  },
+  "next_action": {
+    "id": "ACT-01",
+    "state": "NOT_RUN",
+    "goal_ids": [
+      "S",
+      "C2",
+      "S2",
+      "I"
+    ],
+    "action": "在隔离、只读、无签名交易或付款凭据环境启动Blix，验证真实Mint→钱包/Creator/资金→关系与历史→API/UI；以Pulse及现有V0.1对照。",
+    "acceptance": [
+      "保存源码版本、启动命令、依赖与安全隔离证据",
+      "核对同一Mint的原始来源、时间、覆盖、未知和多钱包/多池语义",
+      "验证历史回补、断线/重启、去重与费用；记录实际成功与失败",
+      "依据结果决定整用Blix、有限修正、切换Pulse或暂留现有V0.1"
+    ],
+    "on_blocker": "只有源码审查或离线测试时如实标UNKNOWN，不宣布主体实跑完成。"
+  },
+  "evidence_status": {
+    "user_confirmed": [
+      "目标演变",
+      "旧知识保留与默认流程退役",
+      "主动执行与输出后二次研判"
+    ],
+    "source_review": [
+      "Blix与Pulse代码结构和风险"
+    ],
+    "real_run": [
+      "grok既有PR#16中DEX/RugCheck供应商预览，不是Blix/Pulse实跑"
+    ],
+    "unknown": [
+      "Blix/Pulse本项目隔离端到端验收",
+      "真实经济关系和可交易优势"
+    ]
+  },
+  "knowledge_preservation": "旧Hermes、qb-、meme-、D01-D12、152研究问题、22专家视角和所有原始证据保持可调用，不作为固定执行规则。",
+  "review_rule": "每次实质任务完成后，依据新增证据检查目标是否细化/扩展/被替代、提供竞争选项与反证、选择下一行动；证据不足不伪造新方向。"
+}
