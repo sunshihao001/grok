@@ -27,3 +27,51 @@ ai-d 最新研究区分 **知识摘要 → 问题表征/判断方法 → 经外�
 区分 `USER_CONFIRMED`、`SOURCE_READ`、`AUTHOR_REPORT`、`SUPPLIER_RETURN`、`OFFLINE_TEST`、`LIVE_READ_ONLY`、`PRODUCTION_VERIFIED`、`INFERENCE`、`HYPOTHESIS`、`UNKNOWN`。保留来源、签名及事件位置、Slot、事件和采集时间、资产单位、覆盖/缺口、正常竞争解释、可推翻条件；无数据不能当0活动。
 
 **每项重要成果后再想一次**：有没有比原方案更成熟的产品/算法/机制解释？新认识改变哪个上层目标或执行选择？比较少量实质方向并推荐首选；若没有增量，就继续当前路线，不为凑选项创造伪问题。
+
+
+## 已核原始知识的实际激活：三种问题，不是复制旧规则（2026-11-06）
+
+本节从旧研究**直接读过的原文**反向连接现有 Blix 源码，补足 [主体能力/知识基准](blix-heritage-capability-baseline-v0.1.md) 中尚属概括的映射。只证明**原文已读、机制适用性进行了人工源审查**，不证明模型已自动学会、知识路由已上线或资金归因实测通过。
+
+### A｜“这些钱包一起买，是不是一个人在控制？”
+
+**应按需读取原文**：
+- [旧 Hermes 钱包角色](https://github.com/sunshihao001/-/blob/main/design/phase1-skill-03-wallet-roles.md)：有 wallet roles、`native_transfer_from`、关键钱包标签、证据和反证字段；**GMGN 标签是输入候选，不是身份真值**。
+- [旧 Hermes 钱包结构](https://github.com/sunshihao001/-/blob/main/design/phase1-skill-04-wallet-structure.md)：把同 `native_transfer_from`、五分钟内买入3钱包、卖出比例相似定义为调查组；这些是**筛查阈值**，不是经过独立校准的共同控制证据。
+- [PR #14 D04–D07 深入知识](https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/domain/L3-wallet-actors.md)：节点/边角色、共享服务、Dust、市场共同事件、经济受益人和可卖库存的竞争解释。
+
+**Blix 现成入口**：`server/coin.js` Holder/Dev、`server/bubblemap.js` RugCheck/first-funder/同Slot/四跳图、`server/wallets.js` 聚类及 `wtrack.js` 钱包活动、`web/src/pages/Coin.tsx`。不要先写第二套聚类。
+
+**原文改变的判断**：先确认具体 `funded` 边究竟是 SOL 转账，还是 `bubblemap.js:119-129` 的 Fee Payer 代理；查看是否公共交易所/分发服务，以及同Slot是否受共同市场事件影响。正确结论可为“观察到共享出资候选与同步买入；共同控制 **UNKNOWN**”。**禁止**直接使用 Hermes 的“同源=一个团队”或 Blix graph cluster=实际庄家作为既定事实。
+
+### B｜“这个 Mint 的关键钱包、池和成本应该怎样调查？”
+
+**应按需读取原文**：
+- [旧 qb- 单 Mint 报告程序](https://github.com/sunshihao001/qb-/blob/main/sikk_gmgn_token_report.py)：输出 `04_key_address_matrix.csv`（关键地址）、`05_infrastructure_registry.csv`（公共设施）、`06_low_weight_scope.csv`（低权重范围）、`07_review_plan.csv`（复查计划）等完整工作产品，**是业务问题与报告设计参考**。源码用 `subprocess.run(..., shell=True)` 调旧 GMGN 命令，**绝不未经审查直接运行**。
+- [原 Grok D01/D06/D10 主册](https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/system/gpt-meme-project-core.v1.md)：Token Account/Owner/程序、供应量、钱包角色与数据时点的区分。
+- [PR #16 受限适配器契约](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/p3-m01-raw-adapter-contract.md)：原始 RPC、`available_at` 与未支持事件需要分离；离线 fixture 并非完整 Swap 归因。
+
+**Blix 现成入口**：`server/holders.js` ledger、`holderslive.js` 链上 Owner 快照、`coin.js` 多供应商/Dev/Pool、`bubblemap.js` 后备前20 Token Account，再看 `web/src/pages/coin/tabviews.tsx` 的结果位置。
+
+**原文改变的判断**：将 `Pool/AMM/vault`、Token Account 与真实 Owner 分开；按源报告持仓分母、快照 Slot/确认级别、历史交易覆盖和成本缺失。将 “被观察到的持仓”与 “可归于某经济主体的可卖库存”分开。不要用旧 qb- 的优先级分数、GMGN 标签或 Blix `partial:false` 自动产出确定的成本/控盘概率。
+
+### C｜“拉升前12小时转账激增，是吸筹还是要出货？”
+
+**应按需读取原文**：
+- [旧 meme- 深洗与死亡盘](https://github.com/sunshihao001/meme-/blob/main/02_%E5%BA%84%E5%AE%B6%E5%91%A8%E6%9C%9F/%E6%B7%B1%E6%B4%97%E4%B8%8E%E6%AD%BB%E4%BA%A1%E7%9B%98%E8%AF%AD%E4%B9%89%E6%B7%B1%E5%8C%96_v0.1.md)：Wyckoff/POC/AVWAP 的恢复、失败和需求语义只是价格结构**待检验假设**，不是操盘者身份或真实成本的证据。
+- [Hermes 筹码状态设计](https://github.com/sunshihao001/-/blob/main/design/Skill4-%E7%AD%B9%E7%A0%81%E6%8E%A7%E5%88%B6%E6%9D%83%E7%8A%B6%E6%80%81%E5%B1%82%E8%AE%BE%E8%AE%A1.md)：时间对齐、过期立即 UNKNOWN、排除Pool/CEX/系统账户是**有价值的条件判断**；其状态概率和权重公式未经当前链上实证校准，不迁入生产评分。
+- [Grok PR #14 D05/D07/D11](https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/domain/L3-wallet-actors.md)：时序角色、共同事件基线、公共资金服务与反证；[PR #16 离线钱包批次](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/p3-m01-raw-adapter-contract.md)：窗口在 `coverage.complete` 不足时不能证明“没有活动”。
+
+**Blix 现成入口**：`server/journal.js`、`wtrack.js`、`wallets.js`、`coin-flow.js`、`server/health.js`、`research.js`。先查是否真的观察到6/12h连续签名/资产净变化，调查集是否改变、是否发生缓存回补，再考虑供需/资金准备/拆分接力/出货/普通做市等解释。
+
+**原文改变的判断**：如果某个时间段 RPC 断流，不能从零条事件推出“钱包沉默”；如果价格形态像“深洗”，也不能从K线替代真实仓位/资金证据。合理报告是观察事实、数据覆盖、多个机制假设及可推翻条件。
+
+### 防污染：一处旧知识明确不应直接带入
+
+[Hermes Evidence Chain 原设计](https://github.com/sunshihao001/-/blob/main/design/phase1-skill-05-evidence-chain.md) 的 `calculate_confidence` 用固定 `base=0.8` 加减启发式权重，并把同源占比等用作 `CONTROLLED` 的候选条件。该设计可借鉴“证据/反证/降级/缺失字段都应出现在报告”，但**不能把其0.8或阈值复制成 Blix 的概率标签**；没有真实基准、校准和独立反例，精确数值会制造虚假确定性。
+
+### 什么叫“已把知识放进主体”，当前到了哪一级？
+
+- **已完成 SOURCE_READ + LINKED**：AI入口 `AGENTS.md` → `docs/project/README.md` → 本文件 / 主体继承总图 → 上述精确原来源 → Blix现有业务代码。具体可回查原文，旧知识仍留在原仓库，**不需要迁移复制152题、22专家和65资产**。
+- **尚未完成 APPLIED_AND_VERIFIED**：没有运行的同 Mint 调查样本验证这三条调用链是否提高了结论质量；没有将上述推断写入 Blix 运行时的数据结构、UI、MCP、持续告警；没有真正的 Grok Bot知识调用。
+- **后续按用户新指令**：先让这三条主体业务—知识链清晰、确认重要的专业缺口，再按“能够改善哪个业务判断”去解剖 Million/Why-Solana/HoldTech/OKX 等成熟实现。不能以研究项目的名称或功能个数代替复用判断。

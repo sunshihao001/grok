@@ -452,5 +452,28 @@
     "runtime": "NOT_RUN",
     "next_decision": "Restore domain problem semantics into existing Blix business flow before external project deep dissection",
     "business_code_changed": false
+  },
+  "legacy_knowledge_activation": {
+    "date": "2026-11-06",
+    "source_baseline": "4a6a003eeea60744b02895aa6e504e87eb3cb372",
+    "document": "docs/project/knowledge-use.md",
+    "mode": "DIRECT_OLD_SOURCE_READ_TO_CURRENT_BLIX_BUSINESS_LINKS",
+    "examples": [
+      "COORDINATED_WALLETS_VS_SHARED_SERVICE",
+      "MINT_OWNER_POOL_REPORT_SEMANTICS",
+      "TWELVE_HOUR_FUND_FLOW_VS_PRICE_PATTERN"
+    ],
+    "direct_sources_read": [
+      "GROK_PR14_D01_D12",
+      "GROK_PR16_RAW_ADAPTER",
+      "HERMES_WALLET_ROLES_STRUCTURE_EVIDENCE_CHIP",
+      "QB_SIKK_MINT_REPORT",
+      "MEME_MARKET_STAGE_COUNTEREXPLANATION"
+    ],
+    "status": "SOURCE_READ_LINKED_MANUAL_REASONING_NOT_MODEL_EVAL",
+    "runtime": "NOT_RUN",
+    "business_code_changed": false,
+    "old_code_merged": false,
+    "external_projects_reanalysis": "DEFERRED_UNTIL_BLIX_BASELINE_KNOWLEDGE_MAPPED"
   }
 }
