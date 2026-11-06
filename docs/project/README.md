@@ -31,6 +31,9 @@ flowchart LR
 
 以上表示**目标与能力关系**，不代表已把参考仓库接入 Blix 或创建了持续运行 Bot。项目管理的权威“当前状态”以本分支文件和后续实测日志为准，不因一个新聊天的总结自动变更。
 
+## 从知识导航到真正的产品能力
+[跨项目 × 现代 Agent 研究：知识转化为Blix业务能力蓝图 V0.1](knowledge-to-capability-integration-v0.1.md) 解释旧Grok、Hermes/qb-/meme-和Million/PumpTrace/Pulse等参考成品应分别进入事实校验、业务程序、按需AI和可验证经验，仍属静态方案，未经运行验收。
+
 ## 继承而不重造
 - 原 Blix README、设计、API、UI、市场发现和交易日志保持原位；只读隔离未完成前不做实盘运行。
 - 旧 Grok 的研究 PR 与 ai-d 独立研究保留在原仓库，不全文复制；用原始链接和适用范围定位。
