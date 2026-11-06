@@ -81,6 +81,20 @@
 | 机制研究与反证 | `evidence-synthesis`、`research-states`、`reclaim-theory` | 证据状态≠交易建议，历史FCZ/POC不具实证优势 |
 | AI可靠性 | `anti-false-completion` | 离线通过≠云端已运行≠真实市场效益 |
 
+### 旧快照精读后的可继承与应拒绝内容（第一批）
+
+已实际抽读旧 `main` 21份来源快照中的6份原文：`domain-contracts/handoff-schema.md`、`solana-learning/field-forensics-toolbox.md`、`solana-learning/L15-GMGN.md`、`method/anti-fake-completion.md`、`method/calibration.md`、`theory/knowledge-source-map.md`。仅记录以下有依据的处理判断，**不据此声称审完21份**：
+
+| 历史原文 | 旧资产的优点 | Blix的接收裁决 |
+|---|---|---|
+| [原交接契约](https://github.com/sunshihao001/grok/blob/main/knowledge/legacy-snapshots/domain-contracts/handoff-schema.md) | 分开 `evidence`、`counter_evidence`、`missing_fields`、`downgrade_reasons`、`blocker_reasons` 和状态；下游不得默默填0或删除反证 | **提炼方法**，作为Blix AI报告与未来安全工具契约的设计参考；**不复制**旧S01–S07顺序、`/root/sikk-gmgn`路径、GMGN-CLI依赖；未经校准的`confidence_score`不应假装概率 |
+| [字段与链上思维工具箱](https://github.com/sunshihao001/grok/blob/main/knowledge/legacy-snapshots/solana-learning/field-forensics-toolbox.md) | 不依赖平台标签的首买时间、持仓集中、资金对手、交易行为等问题模型；字段反推原则有可迁移价值 | **只吸收问题模型**。原文存在明确高风险旧断言：`<2秒基本是机器人或内部人`、共同Binance出金即`同一庄家`、`<3秒大概率同控`、`时间戳不会骗人`。这些并非经独立校准、也忽略公共基础设施与数据时间误差，**拒绝将这些阈值/控制权断言升级为Blix规则** |
+| [GMGN字段组合](https://github.com/sunshihao001/grok/blob/main/knowledge/legacy-snapshots/solana-learning/L15-GMGN.md) | 将流动性、市场热度、Holder、风险、钱包质量与社交作为不同维度，提出承接力、扩散力、控制力、伪装力、退出力问题 | **吸收跨维度的研究问题**，不照搬固定乘法、风险密度阈值或旧GMGN API口径；应首先查Blix现有`quality.js`/`engine.js`及原始数据 |
+| [校准方法](https://github.com/sunshihao001/grok/blob/main/knowledge/legacy-snapshots/method/calibration.md) 与 [反假完成](https://github.com/sunshihao001/grok/blob/main/knowledge/legacy-snapshots/method/anti-fake-completion.md) | 明确“运行校准流水线≠现实世界可靠性改善”“文档≠执行/实测” | **继承验证原则**，不把Hermes专属Harness、旧程序状态当Blix已经实施 |
+| [meme-来源真源地图](https://github.com/sunshihao001/grok/blob/main/knowledge/legacy-snapshots/theory/knowledge-source-map.md) | 区分项目规则、知识原文、Skill与桥接层；冲突可追溯 | **继承分离原则**；旧项目的固定文件权威等级不应覆盖Blix现有产品/证据真源 |
+
+**关键实质增量**：本次确认“先保存来源，再按成熟度筛掉旧强断言”不是保守形式主义，而是避免把旧知识污染带入Blix的必要步骤。已有15张核心卡对同源资金、同步行为和策略假说的表达较为审慎，**应优先作为历史研究的条件化入口**；快照中的高风险具体断言则保存原文供反证，不作为默认结论。后续逐份精读其余15份快照，不按来源数量衡量知识成熟度。
+
 **剩余实质工作**：21份快照逐项判断何者提供17份正文和15卡没有涵盖的独立知识，优先看`handoff-schema`、`field-forensics-toolbox`、`calibration`等；随后核验PR14的系统性研究与Hermes/qb-/meme-独有资产。未发现独立增量的内容保留来源不重复复制。
 
 本轮不会为了“融合”再次复制同一文件，也不重新生成152张知识卡。若要断言“全文迁移完毕”，应同时复核文件尾、原blob SHA、正文与迁入头部；旧源中的指令始终是历史内容，而非本分支强制指令。
