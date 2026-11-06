@@ -5,13 +5,15 @@
 ## 为什么建设？
 从“找可跟单盈利钱包”逐渐扩展为“全市场发现、单 Mint 资金与库存调查、跨 Mint 群体演化、经济机制与潜在机会研究”。原赚钱/跟单兴趣没有被删，而是归入更大的研究目标。用户只需简单表达想法；AI 应主动研究、做产品/UX/工程/测试、验证、解释未知、推演更优方向。用户保留重要价值选择与风险授权。
 
+**最新协作方式（2026-11-06）**：一次研究以完整业务目标及相互依赖的关键问题为单位；AI 主动统筹 Blix 产品、旧专业知识、ai-d 认知方法、跨项目证据和实际验收，不只做一个小问题后把剩余规划退回用户。最重要的整体打磨项见 [交付与优先判断](delivery.md)。相关知识按需调用，不要求每轮全量研究。当前仅授权静态只读审查，未授权启动服务及交易相关操作。
+
 ## 四个可快速进入的位置
 | 现在要处理的问题 | 读取 |
 |---|---|
 | 目标在哪一层？和过去的目标有什么关系？ | [目标层级与演化](goal-map.md)、[可核查状态](state.json) |
 | Blix 官网、UI、业务和代码怎样对应？ | [全主体研究](whole-product-cross-layer-audit-v0.1.md)、[官网业务能力对照](official-site-to-code-audit-v0.1.md)、[113个官网页面目录](blix-public-pages-catalog-v0.1.md) |
 | Blix 已有多大能力，旧 Grok/Hermes/qb-/meme- 知识怎么进入主体？ | [主体能力与旧知识继承总图](blix-heritage-capability-baseline-v0.1.md)、[主体能力上限与旧知识内化深审](blix-knowledge-activation-ceiling-v0.2.md)、[知识与证据应用](knowledge-use.md) |
-| Blix现已迁入哪些分类知识，怎样直接读取？ | [Blix本地分类知识库](../../knowledge/README.md)、[17份全文迁入与来源清单](../../knowledge/MIGRATION.json)、[参考项目源头与未迁入资产](../../knowledge/references/README.md) |
+| Blix现已迁入哪些分类知识，怎样直接读取？ | [Blix本地分类知识库](../../knowledge/README.md)、[当前19项迁入与来源清单](../../knowledge/MIGRATION.json)、[参考项目源头与未迁入资产](../../knowledge/references/README.md) |
 | 旧 Grok 全部152研究单元怎样分类融合进 Blix？ | [融合解释与业务边界](legacy-knowledge-fusion-v1.md)、[152单元路由索引](legacy-knowledge-routing.v1.json)；按问题调用，不默认全量注入 |
 | 同一个 Mint 在不同模块的数据为什么可能冲突？ | [跨模块事实一致性深审 V0.2](mint-cross-module-evidence-audit-v0.2.md)、[外挂大脑全局审查](external-brain-completeness-audit-v0.1.md) |
 | Grok Bot 与API/MCP/SSE怎样衔接？ | [云电脑三种模式](grok-bot-usage-options-v0.1.md)、[接口契约](api-mcp-sse-contract-v0.1.md)、[AI外挂大脑全局反向审查](external-brain-completeness-audit-v0.1.md)、[交付状态](delivery.md) |
@@ -37,7 +39,7 @@ flowchart LR
 
 ## 继承而不重造
 - 原 Blix README、设计、API、UI、市场发现和交易日志保持原位；只读隔离未完成前不做实盘运行。
-- 已将17份重要旧研究全文按用途迁入 `knowledge/` 并保留来源SHA；未迁入的旧 PR、历史文件和参考资产仍在原仓库，用源链接与适用范围定位，避免一次性加载。
+- 已将17份旧研究正文与2份结构化来源资产（共19项）登记在 `knowledge/MIGRATION.json` 并保留来源SHA；未迁入的旧 PR、历史文件和参考资产仍在原仓库，用源链接与适用范围定位，避免一次性加载。
 - 每项专业扩展先问：已有完整成品直接能做吗？能调 API 吗？需要有限适配吗？为什么必须改变 Blix 核心？
 - 单项任务可以直接完成，不强制“先画图—开专家会—多轮研究—再执行”。
 
