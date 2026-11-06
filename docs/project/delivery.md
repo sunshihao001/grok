@@ -46,3 +46,13 @@
 - 独立 Node 22 环境对实际提交内容的 6 个单元测试通过（使用受控 API 响应，不是主网实跑）；主项目要求 Node >=24.16，完整测试尚未执行。
 - `npm run inspect:mint -- <Mint>` 在**已存在且获批准的本地只读服务**启动后才能读取真实 Mint；当前默认 npm 启动阻断仍生效。
 - 分层目标、来源、统一事实表达与 UNKNOWN 见 [intelligence-layer.md](intelligence-layer.md)。这只是第一项能力，不能称已经集成 PumpTrace 或 Million。
+
+
+## 2026-11-06 全主体跨层研究 V0.1（静态，未运行）
+
+- [完整研究报告：从业务/页面追踪到 API、资金/持仓账本、工程、安全与整合判断](whole-product-cross-layer-audit-v0.1.md)。
+- **重大已有能力**：Blix 的 bubblemap.js 已有 RugCheck 关系、首笔 funder 追踪、四跳候选网络、共享服务/资金分发排除与持仓群体计算。外部项目不再默认作为“从零新增多跳功能”。
+- **三套钱包关联数据**：wallets.js、wtrack.js、bubblemap.js 各有状态、口径与历史限制；不应直接拼出共同控制/真实库存结论。
+- **静态安全问题**：bin/supervise.mjs 直接启动原 server/server.js，绕开 npm start 安全门禁；只读运行未获证实。
+- **状态/测试冲突**：test/project-goals.test.mjs 的两项旧状态断言仍与 state.json 当前暂停运行状态不一致。未运行测试，待获实施授权后修正代码或断言。
+- 当前继续只读研究；**不要把报告、原作者历史部署、源码存在和项目初步单测当作当前 Blix 主网或云端验收**。

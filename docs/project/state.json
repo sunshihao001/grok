@@ -303,5 +303,43 @@
       "PAY"
     ],
     "completion": "Business/UI to APIs, code, source evidence, history, operations and integration decision map; gaps and UNKNOWN explicit"
+  },
+  "whole_product_review": {
+    "date": "2026-11-06",
+    "document": "docs/project/whole-product-cross-layer-audit-v0.1.md",
+    "baseline_sha": "96e1f9f6540bc814ca01fe62f3ce6e70267014f9",
+    "evidence": "STATIC_SOURCE_REVIEW_ONLY",
+    "runtime": "NOT_RUN",
+    "modified_runtime_code": false,
+    "scopes": [
+      "BUSINESS_TO_UI",
+      "REACT_AND_CLASSIC",
+      "API_SSE",
+      "WALLET_AND_MINT_FACTS",
+      "BUBBLEMAP_FUNDERS",
+      "DATABASE_HISTORY",
+      "PROVIDER_FRESHNESS",
+      "AUTH_AND_RUNTIME",
+      "AI_RESEARCH",
+      "TEST_DEFINITIONS",
+      "INTEGRATION_CHOICES"
+    ],
+    "key_findings": [
+      "BLIX_NATIVE_BUBBLEMAP_ALREADY_TRACES_FIRST_FUNDER_AND_FOUR_HOP_CANDIDATES",
+      "WALLETS_WTRACK_BUBBLEMAP_USE_DIFFERENT_GRANULARITIES",
+      "HOLDER_LEDGER_IS_NOT_EQUAL_TO_COIN_AGGREGATED_HOLDERS",
+      "JOURNAL_24H_VS_WTRACK_7D_VS_LONG_TERM_CANDLES",
+      "SUPERVISOR_BYPASSES_NPM_START_STATIC_GATE",
+      "PROJECT_TEST_EXPECTATIONS_STALE_AGAINST_USER_PAUSED_STATE"
+    ],
+    "unknowns": [
+      "REAL_RUNTIME",
+      "EXTERNAL_PROVIDER_COVERAGE",
+      "COMPLETE_HISTORY",
+      "CURRENT_FULL_TEST_RESULTS",
+      "CLOUD_DEPLOYMENT",
+      "ECONOMIC_CONTROL_ATTRIBUTION"
+    ],
+    "next_research": "Source contract mapping Coin/Holder/BubbleMap and all wallet data without executing the product"
   }
 }

@@ -9,7 +9,7 @@
 | 现在要处理的问题 | 读取 |
 |---|---|
 | 目标在哪一层？和过去的目标有什么关系？ | [目标层级与演化](goal-map.md)、[可核查状态](state.json) |
-| Blix 有哪些代码和 UI？缺少哪个完整业务环节？ | [成品能力与参考复用地图](capability-map.md)、[原 Blix 说明](../HOW-IT-WORKS.md) |
+| Blix 有哪些代码和 UI？缺少哪个完整业务环节？ | [跨层源码研究 V0.1](whole-product-cross-layer-audit-v0.1.md)、[成品能力与参考复用地图](capability-map.md)、[原 Blix 说明](../HOW-IT-WORKS.md) |
 | D01–D12、Hermes 和 ai-d 怎么帮助判断？ | [知识与证据应用](knowledge-use.md) |
 | 当前应该落实什么？完成条件是什么？ | [实施判断和下一步](delivery.md) |
 
