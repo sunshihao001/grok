@@ -403,5 +403,17 @@
     "runtime": "NOT_RUN",
     "changed_business_code": false,
     "next": "Verify field contracts, counterexamples and stop rules before proposing any integration"
+  },
+  "mint_cross_module_evidence_review": {
+    "date": "2026-11-06",
+    "baseline": "891df69746a3b5d80b3d670b8f88ccd84cb29380",
+    "document": "docs/project/mint-cross-module-evidence-audit-v0.2.md",
+    "status": "SOURCE_REVIEWED_COUNTEREXAMPLES_SPECIFIED_NOT_EXECUTED",
+    "new_priority_finding": "EARLIEST_TRANSACTION_FEE_PAYER_MAY_BE_MISCLASSIFIED_AS_FUNDER",
+    "counterexample_count": 8,
+    "tests": "NOT_RUN",
+    "live_mint": "NOT_RUN",
+    "business_code_changed": false,
+    "decision": "PRESERVE_BLIX_AS_CORE; PRIORITIZE_EVIDENCE_SEMANTICS_AND_REPRODUCIBLE_COUNTEREXAMPLES"
   }
 }

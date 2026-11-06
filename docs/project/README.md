@@ -11,6 +11,7 @@
 | 目标在哪一层？和过去的目标有什么关系？ | [目标层级与演化](goal-map.md)、[可核查状态](state.json) |
 | Blix 官网、UI、业务和代码怎样对应？ | [全主体研究](whole-product-cross-layer-audit-v0.1.md)、[官网业务能力对照](official-site-to-code-audit-v0.1.md)、[113个官网页面目录](blix-public-pages-catalog-v0.1.md) |
 | D01–D12、Hermes 和 ai-d 怎么帮助判断？ | [知识与证据应用](knowledge-use.md) |
+| 同一个 Mint 在不同模块的数据为什么可能冲突？ | [跨模块事实一致性深审 V0.2](mint-cross-module-evidence-audit-v0.2.md)、[外挂大脑全局审查](external-brain-completeness-audit-v0.1.md) |
 | Grok Bot 与API/MCP/SSE怎样衔接？ | [云电脑三种模式](grok-bot-usage-options-v0.1.md)、[接口契约](api-mcp-sse-contract-v0.1.md)、[AI外挂大脑全局反向审查](external-brain-completeness-audit-v0.1.md)、[交付状态](delivery.md) |
 
 ```mermaid
