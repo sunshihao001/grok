@@ -10,7 +10,9 @@
     "blix_original_business": "knowledge/BLIX-NATIVE-ATLAS.md",
     "old_knowledge": "knowledge/OLD-GROK-ATLAS.md",
     "import_manifest": "knowledge/MIGRATION.json",
-    "route": "docs/project/legacy-knowledge-routing.v1.json"
+    "route": "docs/project/legacy-knowledge-routing.v1.json",
+    "legacy_main_cards": "knowledge/methods/legacy-grok-core-cards.v1.json",
+    "legacy_historical_snapshot_source_index": "knowledge/references/legacy-snapshot-sources.v1.json"
   },
   "structure": {
     "goal_axis": "G0用户价值 > G1整体市场研究与AI协作 > G2市场发现/单Mint/跨Mint/机制 > G3 Blix单主体 > G4当前工作；G是目标关系，不等于知识深度",
@@ -147,7 +149,13 @@
         "knowledge/foundations/solana-chain-and-market.md"
       ],
       "open_gap": "确认多动作CPI、Token账户Owner、SOL/WSOL和经济净额的跨模块口径",
-      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION",
+      "legacy_main_core_cards": [
+        {
+          "id": "token-security",
+          "source_status": "documented_legacy_method"
+        }
+      ]
     },
     {
       "id": "D02",
@@ -177,7 +185,25 @@
         "knowledge/foundations/solana-chain-and-market.md"
       ],
       "open_gap": "发行平台、曲线/迁移、多池与阶段判断缺实际对照",
-      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION",
+      "legacy_main_core_cards": [
+        {
+          "id": "candidate-entry",
+          "source_status": "source_contract"
+        },
+        {
+          "id": "market-lifecycle",
+          "source_status": "documented_legacy_method"
+        },
+        {
+          "id": "token-security",
+          "source_status": "documented_legacy_method"
+        },
+        {
+          "id": "deployer-history",
+          "source_status": "documented_legacy_method"
+        }
+      ]
     },
     {
       "id": "D03",
@@ -208,7 +234,25 @@
         "knowledge/mechanisms/market-price-mechanism-research.md"
       ],
       "open_gap": "池深、报价、可成交性与真实费用不能混为一谈",
-      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION",
+      "legacy_main_core_cards": [
+        {
+          "id": "market-lifecycle",
+          "source_status": "documented_legacy_method"
+        },
+        {
+          "id": "liquidity-depth",
+          "source_status": "documented_legacy_method"
+        },
+        {
+          "id": "gmgn-field-combinations",
+          "source_status": "documented_legacy_method"
+        },
+        {
+          "id": "reclaim-theory",
+          "source_status": "unverified_hypothesis"
+        }
+      ]
     },
     {
       "id": "D04",
@@ -237,7 +281,25 @@
         "knowledge/mechanisms/wallet-roles-and-inventory.md"
       ],
       "open_gap": "钱包角色/历史/Owner与PnL需跨源核验",
-      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION",
+      "legacy_main_core_cards": [
+        {
+          "id": "wallet-roles",
+          "source_status": "documented_legacy_method"
+        },
+        {
+          "id": "funding-graph",
+          "source_status": "documented_legacy_method"
+        },
+        {
+          "id": "deployer-history",
+          "source_status": "documented_legacy_method"
+        },
+        {
+          "id": "gmgn-raw-prototype",
+          "source_status": "documented_legacy_method"
+        }
+      ]
     },
     {
       "id": "D05",
@@ -267,7 +329,17 @@
         "knowledge/mechanisms/capital-organization-and-incentives.md"
       ],
       "open_gap": "直接入金、代付手续费、公共Hub与控制权仍有混淆风险",
-      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION",
+      "legacy_main_core_cards": [
+        {
+          "id": "funding-graph",
+          "source_status": "documented_legacy_method"
+        },
+        {
+          "id": "concentration",
+          "source_status": "documented_legacy_method"
+        }
+      ]
     },
     {
       "id": "D06",
@@ -298,7 +370,17 @@
         "knowledge/mechanisms/wallet-roles-and-inventory.md"
       ],
       "open_gap": "供应量分母/Pool/Token Account/Owner/可卖库存存在分层缺口",
-      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION",
+      "legacy_main_core_cards": [
+        {
+          "id": "sybil-wash",
+          "source_status": "documented_legacy_method"
+        },
+        {
+          "id": "concentration",
+          "source_status": "documented_legacy_method"
+        }
+      ]
     },
     {
       "id": "D07",
@@ -327,7 +409,17 @@
         "knowledge/methods/anomaly-and-cohort-discovery.md"
       ],
       "open_gap": "6/12小时事件覆盖、断流恢复与跨Mint成员演化未验",
-      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION",
+      "legacy_main_core_cards": [
+        {
+          "id": "candidate-entry",
+          "source_status": "source_contract"
+        },
+        {
+          "id": "sybil-wash",
+          "source_status": "documented_legacy_method"
+        }
+      ]
     },
     {
       "id": "D08",
@@ -358,7 +450,13 @@
         "knowledge/mechanisms/strategy-and-execution-economics.md"
       ],
       "open_gap": "历史Alpha假设与长期样本外预测能力未证实",
-      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION",
+      "legacy_main_core_cards": [
+        {
+          "id": "reclaim-theory",
+          "source_status": "unverified_hypothesis"
+        }
+      ]
     },
     {
       "id": "D09",
@@ -387,7 +485,17 @@
         "knowledge/mechanisms/strategy-and-execution-economics.md"
       ],
       "open_gap": "执行价格、滑点/费用/真实退出条件尚需严格区分，当前只读",
-      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION",
+      "legacy_main_core_cards": [
+        {
+          "id": "token-security",
+          "source_status": "documented_legacy_method"
+        },
+        {
+          "id": "liquidity-depth",
+          "source_status": "documented_legacy_method"
+        }
+      ]
     },
     {
       "id": "D10",
@@ -418,7 +526,21 @@
         "knowledge/cases/independent-validation-and-failure-cases.md"
       ],
       "open_gap": "数据来源/时间/缓存/NULL/配额/恢复与云端可靠性未统一验收",
-      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION",
+      "legacy_main_core_cards": [
+        {
+          "id": "candidate-entry",
+          "source_status": "source_contract"
+        },
+        {
+          "id": "gmgn-field-combinations",
+          "source_status": "documented_legacy_method"
+        },
+        {
+          "id": "gmgn-raw-prototype",
+          "source_status": "documented_legacy_method"
+        }
+      ]
     },
     {
       "id": "D11",
@@ -450,7 +572,21 @@
         "knowledge/cases/independent-validation-and-failure-cases.md"
       ],
       "open_gap": "原始研究观点未通过一致的基准/反例/样本外验证",
-      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION",
+      "legacy_main_core_cards": [
+        {
+          "id": "evidence-synthesis",
+          "source_status": "source_contract"
+        },
+        {
+          "id": "research-states",
+          "source_status": "source_contract"
+        },
+        {
+          "id": "anti-false-completion",
+          "source_status": "documented_legacy_method"
+        }
+      ]
     },
     {
       "id": "D12",
@@ -479,7 +615,21 @@
         "knowledge/ai/intent-knowledge-selection-and-reasoning.md"
       ],
       "open_gap": "按需知识适用与任务自动调用仍未实跑验收",
-      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION",
+      "legacy_main_core_cards": [
+        {
+          "id": "evidence-synthesis",
+          "source_status": "source_contract"
+        },
+        {
+          "id": "research-states",
+          "source_status": "source_contract"
+        },
+        {
+          "id": "anti-false-completion",
+          "source_status": "documented_legacy_method"
+        }
+      ]
     }
   ],
   "relations": [
@@ -627,12 +777,16 @@
     "D05共同资金≠共同控制，D06集中度≠操盘，D08策略假说≠净收益",
     "按需选择相关领域与深度，不固定L1-L7顺序、不创建22个Bot",
     "Blix原生代码和历史故障优先用于理解自身能力；第三方资料保留版本与许可",
-    "本轮不修改业务代码、不启动交易/签名/支付/云部署/实跑"
+    "本轮不修改业务代码、不启动交易/签名/支付/云部署/实跑",
+    "Old main core cards are historically source-pinned investigation candidates; do not treat source_contract, documented_legacy_method, or unverified_hypothesis as independent real-world validation.",
+    "Historical snapshot manifest is a provenance index; its referenced snapshot bodies have NOT been imported into Blix, and source-repository paths in cards remain old-main-relative until adapted."
   ],
   "counts": {
     "layers": 8,
     "domains": 12,
     "legacy_research_units": 152,
-    "source_imports": 17
+    "source_imports": 17,
+    "legacy_main_core_cards": 15,
+    "historical_snapshot_sources": 21
   }
 }
