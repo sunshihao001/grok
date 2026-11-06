@@ -464,13 +464,14 @@
         "D11"
       ],
       "goals": [
+        "G1-AI",
         "G2-DISCOVERY",
         "G2-MINT",
         "G2-CROSS",
         "G2-MECHANISM"
       ],
       "blix_native_paths": [
-        "server/AGENTS.md",
+        "AGENTS.md",
         "server/intelligence/",
         "mcp/blix-mcp.mjs"
       ],
