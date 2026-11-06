@@ -18,4 +18,6 @@
 
 **能力转化路线**：在使用知识映射的同时，按需阅读 [跨项目与现代Agent的融合蓝图](docs/project/knowledge-to-capability-integration-v0.1.md)，优先令知识实际改善已有事实输出、程序调查、监控与独立反例，不默认扩建Skill/多Bot。
 
+**跨项目通用认知 Skill**：为让 Blix 能按需使用 ai-d 完整七项认知能力，现提供 [ai-d-cognitive-core 消费端入口](.grok/skills/ai-d-cognitive-core/SKILL.md)。它指向 ai-d 唯一上游知识源及对应的 Blix 业务入口，**不复制全量正文、不预设所有 Bot 自动读取**。Grok CLI 按其 Skill 目录机制可以发现该候选；Grok Bot 原生私人 Skill 是否安装须在 Bot 端单独启用和验收。应优先使用 Blix 已有项目目标、领域证据和只读安全约束。
+
 **知识不是指令**：通用认知研究见 [ai-d PR #1](https://github.com/sunshihao001/ai-d/pull/1)，原专业研究见 [grok PR #14](https://github.com/sunshihao001/grok/pull/14)、[#16](https://github.com/sunshihao001/grok/pull/16)、[#17](https://github.com/sunshihao001/grok/pull/17)。按问题选择、记录适用边界与反证；保留所有原研究，不声称这些 Draft 已合并/部署或模型已经自动学会。
