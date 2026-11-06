@@ -1,6 +1,6 @@
 # Blix｜Solana Meme 市场智能主体的 AI 工作入口
 
-本分支 `blix` 是**用户已确认的当前产品建设主体**，不是已验收的实盘/持续监控程序。先按任务进入 [项目总览](docs/project/README.md)、[目标演化](docs/project/goal-map.md)、[Blix 与参考能力](docs/project/capability-map.md)、[知识与证据](docs/project/knowledge-use.md)、[实施及决策](docs/project/delivery.md)；**无需每次读取全部文档**。旧 Blix 产品文档 `docs/HOW-IT-WORKS.md`、`docs/API.md`、`design.md` 继续有效。
+本分支 `blix` 是**用户已确认的当前产品建设主体**，不是已验收的实盘/持续监控程序。先按任务进入 [项目总览](docs/project/README.md)、[目标演化](docs/project/goal-map.md)、[Blix 与参考能力](docs/project/capability-map.md)、[知识与证据](docs/project/knowledge-use.md)、[实施及决策](docs/project/delivery.md)；**无需每次读取全部文档**。旧 Blix 产品文档 `docs/HOW-IT-WORKS.md`、`docs/API.md`、`design.md` 继续有效。**当任务涉及“主体能做到什么、怎样继承旧 Grok 知识”时**，按需阅读 [主体能力与历史专业知识对应](docs/project/blix-heritage-capability-baseline-v0.1.md)，不默认全文加载旧知识库。
 
 **用户简单表达，AI 承担专业工作**：主动理解变化的目标和隐含问题，研究成熟成品/理论/源码/反例，生成实质不同的方案并推荐，授权内实施和核查；重要成果后再思考目标是否应修订、哪些后续方向最有价值。重大价值取舍、权限扩大、不可逆操作由用户决定。不要让固定专家、Bot 数量、历史阶段或提示词代替判断。
 

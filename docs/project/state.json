@@ -415,5 +415,42 @@
     "live_mint": "NOT_RUN",
     "business_code_changed": false,
     "decision": "PRESERVE_BLIX_AS_CORE; PRIORITIZE_EVIDENCE_SEMANTICS_AND_REPRODUCIBLE_COUNTEREXAMPLES"
+  },
+  "blix_heritage_capability_baseline": {
+    "date": "2026-11-06",
+    "branch_head_before": "a5f8b162657a453b697f5ab7614d55c618f1e638",
+    "document": "docs/project/blix-heritage-capability-baseline-v0.1.md",
+    "status": "SOURCE_MAPPED_PROVISIONAL_NOT_RUNTIME_VERIFIED",
+    "source_prs": [
+      {
+        "number": 14,
+        "state": "OPEN_DRAFT",
+        "sha": "eeb40b050369e4525919500f144325c9a9fc8b74",
+        "role": "KNOWLEDGE_INDEX_AND_MECHANISMS"
+      },
+      {
+        "number": 16,
+        "state": "OPEN_DRAFT",
+        "sha": "a44ef436b660165b7bf2f9145e3b155984da7017",
+        "role": "VENDOR_MINT_EVIDENCE_AND_OFFLINE_PROTOTYPES"
+      },
+      {
+        "number": 17,
+        "state": "OPEN_DRAFT",
+        "sha": "4611aa2c2f9056b442eb1a3b60aa7cb33338a55b",
+        "role": "LEGACY_NON_DESTRUCTIVE_KNOWLEDGE_ENGINEERING_INTEGRATION"
+      }
+    ],
+    "recovered": [
+      "HERMES_WALLET_ROLE_EVIDENCE",
+      "QB_MINT_ADDRESS_MATRIX",
+      "MEME_MARKET_STAGE_FALSIFICATION",
+      "GROK_D01_D12_PROBLEM_MAP",
+      "GROK_P16_VENDOR_MINT_AND_FIXTURE_BATCH"
+    ],
+    "app_knowledge_auto_installed": false,
+    "runtime": "NOT_RUN",
+    "next_decision": "Restore domain problem semantics into existing Blix business flow before external project deep dissection",
+    "business_code_changed": false
   }
 }
