@@ -1,0 +1,637 @@
+{
+  "schema_version": "1.0",
+  "title": "Blix knowledge hierarchy: goals x depth x domain x archive type",
+  "as_of": "2026-11-06",
+  "status": "STRUCTURAL_ADOPTION_NOT_RUNTIME_KNOWLEDGE_ACTIVATION",
+  "source": {
+    "old_ontology": "https://github.com/sunshihao001/grok/blob/eeb40b050369e4525919500f144325c9a9fc8b74/knowledge/system/ontology.v1.json",
+    "old_ontology_blob": "601ead5a17eef6db02107c86f368b840ad9cfc2f",
+    "blix_goal_map": "docs/project/goal-map.md",
+    "blix_original_business": "knowledge/BLIX-NATIVE-ATLAS.md",
+    "old_knowledge": "knowledge/OLD-GROK-ATLAS.md",
+    "import_manifest": "knowledge/MIGRATION.json",
+    "route": "docs/project/legacy-knowledge-routing.v1.json"
+  },
+  "structure": {
+    "goal_axis": "G0用户价值 > G1整体市场研究与AI协作 > G2市场发现/单Mint/跨Mint/机制 > G3 Blix单主体 > G4当前工作；G是目标关系，不等于知识深度",
+    "depth_axis": "L0治理横贯；L1链上事实；L2市场机制；L3经济主体/库存/行为；L4候选策略；L5执行和风险；L6实证反证横贯；L7单主体AI知识进化；L为知识层，非任务步骤",
+    "domain_axis": "D01-D12是专业覆盖范围，保留152个原ID和来源；跨域关联不等于强制依赖",
+    "storage_axis": "foundations / mechanisms / methods / cases / ai / references是原文主存放用途，可被多个领域交叉引用",
+    "evidence_axis": "来源/事实/供应商声明/推论/假说/离线测试/实际运行/失效与未知必须分开"
+  },
+  "goals": [
+    {
+      "id": "G0",
+      "meaning": "减少用户专业负担，理解Solana Meme市场及风险/潜在机会"
+    },
+    {
+      "id": "G1-MARKET",
+      "meaning": "完整、可发展可反证的市场智能研究和产品"
+    },
+    {
+      "id": "G1-AI",
+      "meaning": "AI主动升级意图、寻找知识、选择工具、验证与改进"
+    },
+    {
+      "id": "G2-DISCOVERY",
+      "meaning": "市场发现、过滤、连续跟踪"
+    },
+    {
+      "id": "G2-MINT",
+      "meaning": "单Mint/Creator/钱包/资金库存的专业调查"
+    },
+    {
+      "id": "G2-CROSS",
+      "meaning": "跨Mint资金/群体演化/异常时序"
+    },
+    {
+      "id": "G2-MECHANISM",
+      "meaning": "经济机制与潜在机会研究"
+    },
+    {
+      "id": "G3-BLIX",
+      "meaning": "Blix是当前唯一产品主体，未来Grok云电脑待验收"
+    },
+    {
+      "id": "G4-KNOWLEDGE",
+      "meaning": "在Blix本体先理解原生、再继承旧Grok和外部项目成熟知识"
+    }
+  ],
+  "layers": [
+    {
+      "id": "L0",
+      "slug": "provenance_governance",
+      "purpose": "来源、版权、版本、冲突与责任边界",
+      "blix_adaptation": "来源、版权、版本、冲突与责任边界",
+      "is_required_step": false,
+      "cross_cutting": true
+    },
+    {
+      "id": "L1",
+      "slug": "onchain_primitives",
+      "purpose": "交易、Slot、账户、程序、时间语义与字段",
+      "blix_adaptation": "交易、Slot、账户、程序、时间语义与字段",
+      "is_required_step": false,
+      "cross_cutting": false
+    },
+    {
+      "id": "L2",
+      "slug": "market_mechanics",
+      "purpose": "市场生命周期、微观结构、流动性",
+      "blix_adaptation": "市场生命周期、微观结构、流动性",
+      "is_required_step": false,
+      "cross_cutting": false
+    },
+    {
+      "id": "L3",
+      "slug": "actor_networks",
+      "purpose": "钱包行为、资金网络、筹码主体与时序",
+      "blix_adaptation": "钱包行为、资金网络、筹码主体与时序",
+      "is_required_step": false,
+      "cross_cutting": false
+    },
+    {
+      "id": "L4",
+      "slug": "strategy_mechanisms",
+      "purpose": "可证伪的市场机制与策略假设",
+      "blix_adaptation": "可证伪的市场机制与策略假设",
+      "is_required_step": false,
+      "cross_cutting": false
+    },
+    {
+      "id": "L5",
+      "slug": "execution_economics",
+      "purpose": "执行、净期望、风险和可交易性",
+      "blix_adaptation": "执行、净期望、风险和可交易性",
+      "is_required_step": false,
+      "cross_cutting": false
+    },
+    {
+      "id": "L6",
+      "slug": "empirical_validation",
+      "purpose": "基准、负例、预注册、反证和样本外",
+      "blix_adaptation": "基准、负例、预注册、反证和样本外",
+      "is_required_step": false,
+      "cross_cutting": true
+    },
+    {
+      "id": "L7",
+      "slug": "agent_runtime_evolution",
+      "purpose": "多 Bot 研究、经审查的规则、单 Monitor",
+      "blix_adaptation": "Blix单主体AI任务与知识进化，旧多Bot属于历史候选",
+      "is_required_step": false,
+      "cross_cutting": false
+    }
+  ],
+  "domains": [
+    {
+      "id": "D01",
+      "name": "Solana 链上基础",
+      "layer": "L1",
+      "role": "foundation",
+      "scope": "链上交易、账户、指令、程序、Slot与可观测时间；不涉及钱包实控身份或盈亏判断",
+      "required_dependencies": [],
+      "related_optional": [
+        "D10"
+      ],
+      "goals": [
+        "G2-MINT",
+        "G2-CROSS"
+      ],
+      "blix_native_paths": [
+        "server/solana.js",
+        "server/coin.js",
+        "server/holderslive.js"
+      ],
+      "candidate_local_knowledge": [
+        "knowledge/foundations/solana-chain-and-market.md"
+      ],
+      "open_gap": "确认多动作CPI、Token账户Owner、SOL/WSOL和经济净额的跨模块口径",
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+    },
+    {
+      "id": "D02",
+      "name": "Meme 市场生命周期",
+      "layer": "L2",
+      "role": "market",
+      "scope": "发行路径、合约权限、Bonding Curve、迁移、建池和生命周期的技术状态",
+      "required_dependencies": [
+        "D01"
+      ],
+      "related_optional": [
+        "D03",
+        "D09",
+        "D10"
+      ],
+      "goals": [
+        "G2-DISCOVERY",
+        "G2-MINT"
+      ],
+      "blix_native_paths": [
+        "server/engine.js",
+        "server/launchlab.js",
+        "server/creator.js",
+        "server/coin.js"
+      ],
+      "candidate_local_knowledge": [
+        "knowledge/foundations/solana-chain-and-market.md"
+      ],
+      "open_gap": "发行平台、曲线/迁移、多池与阶段判断缺实际对照",
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+    },
+    {
+      "id": "D03",
+      "name": "市场微观结构",
+      "layer": "L2",
+      "role": "market",
+      "scope": "池子深度、流动性、价格形成、路由、滑点与交易时点的微观结构",
+      "required_dependencies": [
+        "D01",
+        "D02"
+      ],
+      "related_optional": [
+        "D06",
+        "D09",
+        "D10"
+      ],
+      "goals": [
+        "G2-DISCOVERY",
+        "G2-MINT",
+        "G2-MECHANISM"
+      ],
+      "blix_native_paths": [
+        "server/candles.js",
+        "server/quote.js",
+        "server/pumpswap.js"
+      ],
+      "candidate_local_knowledge": [
+        "knowledge/mechanisms/market-price-mechanism-research.md"
+      ],
+      "open_gap": "池深、报价、可成交性与真实费用不能混为一谈",
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+    },
+    {
+      "id": "D04",
+      "name": "钱包行为与角色",
+      "layer": "L3",
+      "role": "actors",
+      "scope": "基于行为的地址角色候选及时间变化，不推断现实身份",
+      "required_dependencies": [
+        "D01"
+      ],
+      "related_optional": [
+        "D05",
+        "D06",
+        "D07"
+      ],
+      "goals": [
+        "G2-MINT",
+        "G2-CROSS"
+      ],
+      "blix_native_paths": [
+        "server/wallets.js",
+        "server/wtrack.js",
+        "server/walletpage.js"
+      ],
+      "candidate_local_knowledge": [
+        "knowledge/mechanisms/wallet-roles-and-inventory.md"
+      ],
+      "open_gap": "钱包角色/历史/Owner与PnL需跨源核验",
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+    },
+    {
+      "id": "D05",
+      "name": "资金网络与主体关系",
+      "layer": "L3",
+      "role": "actors",
+      "scope": "资金路径、共同出资、枢纽剔除、经济主体聚类与不确定性",
+      "required_dependencies": [
+        "D01"
+      ],
+      "related_optional": [
+        "D04",
+        "D06",
+        "D07"
+      ],
+      "goals": [
+        "G2-MINT",
+        "G2-CROSS",
+        "G2-MECHANISM"
+      ],
+      "blix_native_paths": [
+        "server/bubblemap.js",
+        "server/wallets.js",
+        "server/coin-flow.js"
+      ],
+      "candidate_local_knowledge": [
+        "knowledge/mechanisms/capital-organization-and-incentives.md"
+      ],
+      "open_gap": "直接入金、代付手续费、公共Hub与控制权仍有混淆风险",
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+    },
+    {
+      "id": "D06",
+      "name": "筹码与市场控制结构",
+      "layer": "L3",
+      "role": "actors",
+      "scope": "持有/可流通供应、地址集中度、经济控制候选与转移结构；集中不等于控盘",
+      "required_dependencies": [
+        "D01"
+      ],
+      "related_optional": [
+        "D03",
+        "D04",
+        "D05",
+        "D08"
+      ],
+      "goals": [
+        "G2-MINT",
+        "G2-CROSS",
+        "G2-MECHANISM"
+      ],
+      "blix_native_paths": [
+        "server/holders.js",
+        "server/holderslive.js",
+        "server/coin.js"
+      ],
+      "candidate_local_knowledge": [
+        "knowledge/mechanisms/wallet-roles-and-inventory.md"
+      ],
+      "open_gap": "供应量分母/Pool/Token Account/Owner/可卖库存存在分层缺口",
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+    },
+    {
+      "id": "D07",
+      "name": "市场行为与时序",
+      "layer": "L3",
+      "role": "market_context",
+      "scope": "跨币/跨钱包行为序列、市场状态、叙事传播、注意力与信息扩散，不预设盈利方向",
+      "required_dependencies": [],
+      "related_optional": [
+        "D02",
+        "D04",
+        "D05",
+        "D08"
+      ],
+      "goals": [
+        "G2-DISCOVERY",
+        "G2-CROSS",
+        "G2-MECHANISM"
+      ],
+      "blix_native_paths": [
+        "server/wtrack.js",
+        "server/journal.js",
+        "server/notify.js"
+      ],
+      "candidate_local_knowledge": [
+        "knowledge/methods/anomaly-and-cohort-discovery.md"
+      ],
+      "open_gap": "6/12小时事件覆盖、断流恢复与跨Mint成员演化未验",
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+    },
+    {
+      "id": "D08",
+      "name": "交易策略与 Alpha",
+      "layer": "L4",
+      "role": "hypotheses",
+      "scope": "跟单、突破、回收、风险过滤等策略的可证伪规则与适用总体；不预设任何钱包结构",
+      "required_dependencies": [],
+      "related_optional": [
+        "D03",
+        "D04",
+        "D05",
+        "D06",
+        "D07",
+        "D09",
+        "D10",
+        "D11"
+      ],
+      "goals": [
+        "G2-MECHANISM"
+      ],
+      "blix_native_paths": [
+        "server/research.js",
+        "server/triage.js",
+        "server/brain.js"
+      ],
+      "candidate_local_knowledge": [
+        "knowledge/mechanisms/strategy-and-execution-economics.md"
+      ],
+      "open_gap": "历史Alpha假设与长期样本外预测能力未证实",
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+    },
+    {
+      "id": "D09",
+      "name": "交易执行与风险",
+      "layer": "L5",
+      "role": "economics",
+      "scope": "交易权限与可卖性、真实可成交价格、延迟、手续费/冲击/退出、持仓容量与尾部损失",
+      "required_dependencies": [],
+      "related_optional": [
+        "D02",
+        "D03",
+        "D08",
+        "D10",
+        "D11"
+      ],
+      "goals": [
+        "G2-MINT",
+        "G2-MECHANISM"
+      ],
+      "blix_native_paths": [
+        "server/quote.js",
+        "server/fee-ledger.js",
+        "server/price-sanity.js"
+      ],
+      "candidate_local_knowledge": [
+        "knowledge/mechanisms/strategy-and-execution-economics.md"
+      ],
+      "open_gap": "执行价格、滑点/费用/真实退出条件尚需严格区分，当前只读",
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+    },
+    {
+      "id": "D10",
+      "name": "数据源与工程可靠性",
+      "layer": "L1",
+      "role": "crosscut_quality",
+      "scope": "数据提供者、字段与单位、索引延迟、缺失、采集覆盖率、取样完整性及数据可追溯性",
+      "required_dependencies": [],
+      "related_optional": [
+        "D01",
+        "D03",
+        "D09",
+        "D11"
+      ],
+      "goals": [
+        "G2-DISCOVERY",
+        "G2-MINT",
+        "G2-CROSS",
+        "G2-MECHANISM"
+      ],
+      "blix_native_paths": [
+        "server/db.js",
+        "server/coverage.js",
+        "server/heliuskeys.js",
+        "server/health.js"
+      ],
+      "candidate_local_knowledge": [
+        "knowledge/cases/independent-validation-and-failure-cases.md"
+      ],
+      "open_gap": "数据来源/时间/缓存/NULL/配额/恢复与云端可靠性未统一验收",
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+    },
+    {
+      "id": "D11",
+      "name": "实证研究与反证",
+      "layer": "L6",
+      "role": "crosscut_validation",
+      "scope": "任意研究阶段的反证、零假设、基准、数据泄露、样本分组、功效与样本外复验",
+      "required_dependencies": [],
+      "related_optional": [
+        "D05",
+        "D06",
+        "D07",
+        "D08",
+        "D09",
+        "D10"
+      ],
+      "goals": [
+        "G2-DISCOVERY",
+        "G2-MINT",
+        "G2-CROSS",
+        "G2-MECHANISM"
+      ],
+      "blix_native_paths": [
+        "test/",
+        "server/journal.js",
+        "server/research.js"
+      ],
+      "candidate_local_knowledge": [
+        "knowledge/cases/independent-validation-and-failure-cases.md"
+      ],
+      "open_gap": "原始研究观点未通过一致的基准/反例/样本外验证",
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+    },
+    {
+      "id": "D12",
+      "name": "AI 推理与知识进化",
+      "layer": "L7",
+      "role": "governance",
+      "scope": "Bot 推理与交接、知识冲突、版本/回滚、人工审阅与只读监控发布",
+      "required_dependencies": [],
+      "related_optional": [
+        "D10",
+        "D11"
+      ],
+      "goals": [
+        "G2-DISCOVERY",
+        "G2-MINT",
+        "G2-CROSS",
+        "G2-MECHANISM"
+      ],
+      "blix_native_paths": [
+        "server/AGENTS.md",
+        "server/intelligence/",
+        "mcp/blix-mcp.mjs"
+      ],
+      "candidate_local_knowledge": [
+        "knowledge/ai/intent-knowledge-selection-and-reasoning.md"
+      ],
+      "open_gap": "按需知识适用与任务自动调用仍未实跑验收",
+      "coverage": "SOURCE_LINKED_NO_END_TO_END_VERIFICATION"
+    }
+  ],
+  "relations": [
+    {
+      "from": "D01",
+      "to": "D02",
+      "kind": "grounds",
+      "guard": "必须用链上事件确认发币阶段"
+    },
+    {
+      "from": "D02",
+      "to": "D03",
+      "kind": "changes_market_regime",
+      "guard": "发行/迁移切换改变流动性与可观测性"
+    },
+    {
+      "from": "D01",
+      "to": "D04",
+      "kind": "defines_observables",
+      "guard": "交易签名和账户角色需分开"
+    },
+    {
+      "from": "D04",
+      "to": "D05",
+      "kind": "links_behavior_to_funding",
+      "guard": "钱包角色需要资金关系与时间证据"
+    },
+    {
+      "from": "D05",
+      "to": "D06",
+      "kind": "supports_not_proves",
+      "guard": "共同出资不能单独证明共同控制"
+    },
+    {
+      "from": "D03",
+      "to": "D06",
+      "kind": "conditions",
+      "guard": "集中持仓判断需考虑池子与退出深度"
+    },
+    {
+      "from": "D05",
+      "to": "D07",
+      "kind": "reveals_cycles",
+      "guard": "循环资金和重复团队可形成时序假设"
+    },
+    {
+      "from": "D07",
+      "to": "D08",
+      "kind": "generates_hypothesis",
+      "guard": "观察到周期不等于存在预测能力"
+    },
+    {
+      "from": "D06",
+      "to": "D08",
+      "kind": "generates_hypothesis",
+      "guard": "控盘结构不等于价格必然上涨"
+    },
+    {
+      "from": "D03",
+      "to": "D09",
+      "kind": "constrains_executability",
+      "guard": "价格达到目标不等于可成交"
+    },
+    {
+      "from": "D08",
+      "to": "D09",
+      "kind": "requires_economic_test",
+      "guard": "策略必须在实际时点和成本下测试"
+    },
+    {
+      "from": "D10",
+      "to": "D11",
+      "kind": "qualifies_measurement",
+      "guard": "数据错误不能记为反证"
+    },
+    {
+      "from": "D09",
+      "to": "D11",
+      "kind": "defines_outcome",
+      "guard": "用净收益和可执行退出定义经济结果"
+    },
+    {
+      "from": "D11",
+      "to": "D12",
+      "kind": "gates_release",
+      "guard": "经独立审查的可复算证据才可触发规则升级"
+    },
+    {
+      "from": "D12",
+      "to": "D08",
+      "kind": "proposes_not_authorizes",
+      "guard": "AI 提议可产生候选，不能自我批准"
+    }
+  ],
+  "dimensions": {
+    "epistemic_object_types": [
+      "source",
+      "measurement",
+      "observation",
+      "mechanism",
+      "hypothesis",
+      "finding",
+      "counterexample",
+      "rule",
+      "decision"
+    ],
+    "evidence_states": [
+      "proposed",
+      "historical_documented",
+      "external_reported",
+      "locally_reproduced",
+      "independently_validated",
+      "falsified",
+      "superseded"
+    ],
+    "evidence_separation": [
+      "raw_observation",
+      "external_claim",
+      "derived_inference",
+      "unknown_or_error"
+    ],
+    "time_axes": [
+      "event_time_utc",
+      "source_capture_time_utc",
+      "decision_cutoff_utc",
+      "outcome_window",
+      "knowledge_review_time_utc"
+    ],
+    "economic_axes": [
+      "entry_price_executable",
+      "latency",
+      "fill_assumptions",
+      "fee",
+      "priority_fee",
+      "price_impact",
+      "exit_policy",
+      "net_return",
+      "max_drawdown"
+    ]
+  },
+  "guardrails": [
+    "六类目录是存放用途，不是全部专业范围或必经研究阶段",
+    "原知识的mapped_unverified状态不因迁入、分类为facts或增加关联就自动升级",
+    "D10可靠性及D11反证是必要时横贯检查，不是强制全文每次加载",
+    "D05共同资金≠共同控制，D06集中度≠操盘，D08策略假说≠净收益",
+    "按需选择相关领域与深度，不固定L1-L7顺序、不创建22个Bot",
+    "Blix原生代码和历史故障优先用于理解自身能力；第三方资料保留版本与许可",
+    "本轮不修改业务代码、不启动交易/签名/支付/云部署/实跑"
+  ],
+  "counts": {
+    "layers": 8,
+    "domains": 12,
+    "legacy_research_units": 152,
+    "source_imports": 17
+  }
+}
