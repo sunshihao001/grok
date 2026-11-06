@@ -21,7 +21,7 @@ description: "Blix 的跨项目通用认知能力入口：按需访问 sunshihao
 | 6. 来源/证据/反证/纠错 | Token Account 不等于 Owner，资金路径不等于共同控制，离线不等于实跑 | `docs/project/knowledge-use.md`、`docs/project/read-only-safety.md` |
 | 7. 长期知识继承、反馈和方法更新 | 保留旧 Grok/Hermes/qb-/meme- 的机制与失败经验，不复活旧固定流程 | `knowledge/INTEGRATION-CROSSWALK.md`、`knowledge/MIGRATION.json` |
 
-Blix 的**Solana Meme 专业知识和产品本身仍是业务主体**。ai-d 负责跨专业、跨模型可复用的认知方法与专业研究来源；绝不把 ai-d 的案例当成链上事实，也不替换 Blix 的采集、UI、解析、业务指标或安全权限。通用部分可按需深入到上游 `knowledge/INDEX.md`（P1–P8）、`knowledge/COGNITIVE-MAP.md`、`planning/goal-navigation-v0.1.md`、`research/`、`evaluation/`，不只访问 Skill 摘要，也不一次性全文注入。
+Blix 的**Solana Meme 专业知识和产品本身仍是业务主体**。ai-d 负责跨专业、跨模型可复用的认知方法与专业研究来源；绝不把 ai-d 的案例当成链上事实，也不替换 Blix 的采集、UI、解析、业务指标或安全权限。通用部分可按需深入到 ai-d 上游 [P1–P8知识总索引](https://github.com/sunshihao001/ai-d/blob/proposal/goal-planning-knowledge-delivery-20261106/knowledge/INDEX.md)、[专业认知总图](https://github.com/sunshihao001/ai-d/blob/proposal/goal-planning-knowledge-delivery-20261106/knowledge/COGNITIVE-MAP.md)、[目标导航](https://github.com/sunshihao001/ai-d/blob/proposal/goal-planning-knowledge-delivery-20261106/planning/goal-navigation-v0.1.md)、[专家认知专题](https://github.com/sunshihao001/ai-d/blob/proposal/goal-planning-knowledge-delivery-20261106/research/expert-cognition-distillation-positioning-2026-11-06.md)及[评测记录](https://github.com/sunshihao001/ai-d/blob/proposal/goal-planning-knowledge-delivery-20261106/evaluation/first-cross-domain-tests.md)，不只访问 Skill 摘要，也不一次性全文注入。
 
 ## 如何判断不是空的链接
 
