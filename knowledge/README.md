@@ -73,3 +73,7 @@
 - 业务阅读入口：[Blix总览](../docs/project/README.md)、[知识使用方式](../docs/project/knowledge-use.md)、[已知语义缺口](../docs/project/mint-cross-module-evidence-audit-v0.2.md)。
 
 > 不应以“已经复制X份文件”声称 AI 判断水平已经提升；迁移完成和实际应用验收是两种任务。
+
+## 重要修订：先完整学习独立知识，再决定如何应用
+
+现有六类目录属于**知识存放位置**，不是决定哪些专业知识值得研究的门槛；Blix能力缺口仅影响最终是否迁移/修改代码，不限制参考项目独立研究。见[跨原项目深层研究与认知增量](references/source-knowledge-deep-study-v0.1.md)和[按版本的阅读覆盖状态](references/source-coverage-v0.1.json)。不得因没Blix对应模块、无法立即转为规则、或旧项目包含未经验证假说就停止研究其原设计；同时不得把假说当已验证市场事实。

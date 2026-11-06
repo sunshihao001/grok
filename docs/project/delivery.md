@@ -115,3 +115,10 @@
 - [定向深审 V0.2](blix-knowledge-activation-ceiling-v0.2.md)：从Blix现有用户结果判断可实现的源码上限；实读原Grok main的15知识卡、21历史快照清单、17定向来源、PR#14十二领域、Hermes00c/00d/00e、qb报表、meme成熟度和Why机制研究，并给出精准业务落点。
 - 知识应先被正确选择与应用，不能让旧Hermes阈值、qb标签、meme形态预测直接变为Blix确定性推断；旧代码/分支未合并、不自动部署。
 - 下一研究关注跨Mint资本循环中被现有Wallet/Journal/Bubble Map丢失的经济事件，再以该缺口去解剖成熟参考项目。当前只读研究，未运行、未改业务代码。
+
+## 2026-11-06 参考项目完整知识研究入口纠偏（仅文档）
+
+- [来源项目独立知识纵深 V0.1](../../knowledge/references/source-knowledge-deep-study-v0.1.md)：不是把项目压缩为Blix功能缺口，而是对Hermes、qb-、meme-原始思想、经济假说、证据层、实验、认知错误与Million/PumpTrace/Pulse先做独立剖析。
+- [全量Git树/哈希与阅读状态](../../knowledge/references/source-coverage-v0.1.json)：Hermes 264/231、qb- 4236/3276、meme- 474/414（文件/不同blob）；内容只读了选定子集，未虚报全量掌握。
+- 新认识：Hermes的未知机制生成和未校准的控制状态、qb的AI反自欺和5/5仅为夹具回放、meme的FCZ后验定义与未来泄漏风险；都是不依赖Blix即时缺口的知识增量。
+- 旧代码不合并，未运行Blix/测试/云电脑，未接入钱包或付费数据；未来按原知识脉络继续深化，每一条结论保留证据和反证。

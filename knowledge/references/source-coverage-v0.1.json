@@ -1,0 +1,183 @@
+{
+  "schema_version": "0.1",
+  "as_of": "2026-11-06",
+  "purpose": "Track completeness of source-repo understanding independently from Blix integration; tree inventory is not knowledge mastery.",
+  "source_state_terms": {
+    "TREE_INVENTORIED": "All paths and hash counts enumerated, content NOT all read",
+    "CONTENT_READ": "Specific original files read",
+    "DEEP_CONCEPT_STUDIED": "Original problem, mechanism, assumptions, counterexamples, cross-source implications studied; not empirical proof",
+    "IMPLEMENTED_OR_LIVE": "Only when future verified, none in this round"
+  },
+  "repo_sources": [
+    {
+      "repo": "sunshihao001/-",
+      "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+      "tree_files": 264,
+      "unique_blob_shas": 231,
+      "status": "TREE_INVENTORIED_PARTIAL_DEEP_READING",
+      "top_scope": {
+        "learning": 43,
+        "reports": 41,
+        "skills": 38,
+        "tasks": 34,
+        "design": 29,
+        "docs": 23,
+        "tests": 10,
+        "fixtures": 6
+      },
+      "deep_read_paths": [
+        "design/phase1-research/00c-GMGN-思维模型提炼.txt",
+        "design/phase1-research/00d-GMGN-多维度推理扩展.txt",
+        "design/phase1-research/00e-字节反推框架-突破认知局限.txt",
+        "design/Skill4-筹码控制权状态层设计.md",
+        "design/phase1-skill-04-wallet-structure.md",
+        "design/phase1-skill-05-evidence-chain.md"
+      ],
+      "other_content": "PENDING"
+    },
+    {
+      "repo": "sunshihao001/qb-",
+      "commit": "8377ad5611255df5cd4562666a826708575334f0",
+      "tree_files": 4236,
+      "unique_blob_shas": 3276,
+      "status": "TREE_INVENTORIED_PARTIAL_DEEP_READING",
+      "top_scope": {
+        "data": 3338,
+        "hermes_harness": 610,
+        "recovery_pack": 203
+      },
+      "deep_read_paths": [
+        "sikk_gmgn_token_report.py",
+        "hermes_harness/01_control_plane/wallet_intel_data_layering_rule_v2.md",
+        "hermes_harness/01_control_plane/wallet_intel_data_passport_rule_v2.md",
+        "hermes_harness/01_control_plane/wallet_intel_compat_read_priority_rule_v2.md",
+        "hermes_harness/01_control_plane/wallet_intel_token_level_verification_requirement_v2.md",
+        "hermes_harness/01_control_plane/reliability_calibration_policy_v1_7.md",
+        "hermes_harness/22_anti_self_deception/README.md",
+        "hermes_harness/22_anti_self_deception/fake_completion_audit.md",
+        "hermes_harness/22_anti_self_deception/document_only_audit.md",
+        "hermes_harness/23_real_task_regression/README.md",
+        "hermes_harness/23_real_task_regression/error_taxonomy/judgment_error_taxonomy_v2_1.json",
+        "hermes_harness/23_real_task_regression/regression_runs/v21.regression.20260509.062832/regression_summary.json"
+      ],
+      "other_content": "PENDING"
+    },
+    {
+      "repo": "sunshihao001/meme-",
+      "commit": "5ab2b01f08e4e512fa4fcd1aed88953ff534bd0a",
+      "tree_files": 474,
+      "unique_blob_shas": 414,
+      "status": "TREE_INVENTORIED_PARTIAL_DEEP_READING",
+      "top_scope": {
+        "keyword_research": 136,
+        "multilingual_materials": 55,
+        "articles": 36,
+        "knowledge_iteration": 34,
+        "specs": 32,
+        "samples": 23
+      },
+      "deep_read_paths": [
+        "SOURCE_OF_TRUTH.md",
+        "第一控盘区成本中枢回收模型_成熟度审计.md",
+        "03_语义概念/第一控盘区定义_v0.1.md",
+        "02_庄家周期/深洗与死亡盘语义深化_v0.1.md",
+        "04_风险管理/诱多反抽与二次启动区分_v0.1.md",
+        "09_规则与回测/反证实验设计_v0.1.md"
+      ],
+      "other_content": "PENDING"
+    }
+  ],
+  "external_reference_first_pass": [
+    {
+      "repo": "Kelows/million",
+      "commit": "c89ad07caaf70773d40b45943e136eadc4f946a5",
+      "tree_files": 165,
+      "read_paths": [
+        "README.md",
+        "apps/api/src/funding/funding.service.ts",
+        "apps/api/src/wallets/wallets.service.ts",
+        "apps/api/prisma/schema.prisma"
+      ],
+      "status": "SELECTED_SOURCE_READ_NOT_COMPLETE"
+    },
+    {
+      "repo": "AntC215/Pumptrace",
+      "commit": "1fa070bed079e0d7e54c1bd4f12efa6e35a451c1",
+      "tree_files": 41,
+      "read_paths": [
+        "docs/ARCHITECTURE.md",
+        "src/modules/backfill-manager.mjs",
+        "src/modules/wallet-intelligence/analyze.mjs"
+      ],
+      "status": "SELECTED_SOURCE_READ_NOT_COMPLETE"
+    },
+    {
+      "repo": "nirholas/pulse",
+      "commit": "eea24c2357d65428427880fa873bb62441857dac",
+      "tree_files": 144,
+      "read_paths": [
+        "README.md"
+      ],
+      "status": "README_READ_SOURCE_TREE_ONLY_NOT_COMPLETE"
+    }
+  ],
+  "independent_knowledge_topics": [
+    {
+      "id": "H01",
+      "name": "question_to_observable_trace",
+      "evidence": "ORIGINAL_METHOD",
+      "maturity": "DEEP_CONCEPT_STUDIED_NOT_TESTED"
+    },
+    {
+      "id": "H02",
+      "name": "unknown_mechanism_generation_and_multiple_testing",
+      "evidence": "ORIGINAL_METHOD_PLUS_NEW_INFERENCE",
+      "maturity": "DEEP_CONCEPT_STUDIED_NOT_TESTED"
+    },
+    {
+      "id": "H03",
+      "name": "dynamic_inventory_control_states",
+      "evidence": "ORIGINAL_DESIGN_AND_UNCALIBRATED_MODEL",
+      "maturity": "DEEP_CONCEPT_STUDIED_NOT_TESTED"
+    },
+    {
+      "id": "Q01",
+      "name": "key_wallet_selection_and_label_limits",
+      "evidence": "ORIGINAL_SCRIPT",
+      "maturity": "DEEP_CONCEPT_STUDIED_NOT_TESTED"
+    },
+    {
+      "id": "Q02",
+      "name": "wallet_evidence_semantic_layering_and_data_passport",
+      "evidence": "ORIGINAL_CONTRACT",
+      "maturity": "DEEP_CONCEPT_STUDIED_NOT_TESTED"
+    },
+    {
+      "id": "Q03",
+      "name": "AI_anti_self_deception_and_reliability_calibration",
+      "evidence": "ORIGINAL_AUDIT_AND_FIXTURE_REPORT",
+      "maturity": "DEEP_CONCEPT_STUDIED_NOT_LIVE_VERIFIED"
+    },
+    {
+      "id": "M01",
+      "name": "first_control_zone_and_lookahead_bias",
+      "evidence": "ORIGINAL_MODEL_PLUS_NEW_INFERENCE",
+      "maturity": "DEEP_CONCEPT_STUDIED_NOT_TESTED"
+    },
+    {
+      "id": "M02",
+      "name": "washout_vs_abandonment_competing_mechanisms",
+      "evidence": "ORIGINAL_MODEL",
+      "maturity": "DEEP_CONCEPT_STUDIED_NOT_TESTED"
+    },
+    {
+      "id": "M03",
+      "name": "falsification_baselines_and_ablation",
+      "evidence": "ORIGINAL_RESEARCH_METHOD",
+      "maturity": "DEEP_CONCEPT_STUDIED_NOT_TESTED"
+    }
+  ],
+  "product_runtime": "NOT_RUN",
+  "model_knowledge_gain_ab": "NOT_TESTED",
+  "exhaustive_content_review_completed": false
+}
