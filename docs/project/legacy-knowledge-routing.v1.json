@@ -1,0 +1,1833 @@
+{
+  "schema_version": "1.0",
+  "target": "grok/blix existing business surfaces",
+  "source_commit": "eeb40b050369e4525919500f144325c9a9fc8b74",
+  "source_branch": "knowledge/whole-spectrum-20261030-v1",
+  "source_atlas": "knowledge/system/whole-domain-atlas.v1.json",
+  "counts": {
+    "total": 152,
+    "domain": 144,
+    "L0": 8,
+    "domain_groups": 12,
+    "expert_lenses": 22,
+    "reference_assets": 65
+  },
+  "meaning": "routing shortlist only; original research, source provenance and uncertainty remain at source; no production knowledge injection",
+  "surfaces": {
+    "FACTS": [
+      "server/solana.js",
+      "server/journal.js",
+      "server/holderslive.js"
+    ],
+    "DISCOVER": [
+      "server/engine.js",
+      "server/quality.js",
+      "web/src/pages/Pulse.tsx"
+    ],
+    "MINT": [
+      "server/coin.js",
+      "server/holders.js",
+      "web/src/pages/Coin.tsx"
+    ],
+    "WALLET": [
+      "server/wallets.js",
+      "server/wtrack.js",
+      "server/bubblemap.js"
+    ],
+    "MONITOR": [
+      "server/journal.js",
+      "server/notify.js",
+      "server/health.js"
+    ],
+    "RESEARCH": [
+      "server/research.js",
+      "server/brain.js",
+      "server/triage.js"
+    ],
+    "RELIABILITY": [
+      "server/db.js",
+      "server/health.js",
+      "scripts/read-only-audit.mjs"
+    ],
+    "AI_ENTRY": [
+      "AGENTS.md",
+      "server/intelligence/index.mjs",
+      "mcp/blix-mcp.mjs"
+    ]
+  },
+  "domains": [
+    {
+      "id": "D01",
+      "name": "Solana 链上基础",
+      "old_layer": "L1",
+      "primary": "FACTS",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source_status": "declared_research_gap"
+    },
+    {
+      "id": "D02",
+      "name": "Meme 市场生命周期",
+      "old_layer": "L2",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "FACTS"
+      ],
+      "source_status": "legacy_seeded_unverified"
+    },
+    {
+      "id": "D03",
+      "name": "市场微观结构",
+      "old_layer": "L2",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source_status": "legacy_seeded_unverified"
+    },
+    {
+      "id": "D04",
+      "name": "钱包行为与角色",
+      "old_layer": "L3",
+      "primary": "WALLET",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source_status": "legacy_seeded_unverified"
+    },
+    {
+      "id": "D05",
+      "name": "资金网络与主体关系",
+      "old_layer": "L3",
+      "primary": "WALLET",
+      "related": [
+        "MONITOR",
+        "RESEARCH"
+      ],
+      "source_status": "legacy_seeded_unverified"
+    },
+    {
+      "id": "D06",
+      "name": "筹码与市场控制结构",
+      "old_layer": "L3",
+      "primary": "MINT",
+      "related": [
+        "WALLET",
+        "RESEARCH"
+      ],
+      "source_status": "legacy_seeded_unverified"
+    },
+    {
+      "id": "D07",
+      "name": "市场行为与时序",
+      "old_layer": "L3",
+      "primary": "MONITOR",
+      "related": [
+        "WALLET",
+        "DISCOVER"
+      ],
+      "source_status": "declared_research_gap"
+    },
+    {
+      "id": "D08",
+      "name": "交易策略与 Alpha",
+      "old_layer": "L4",
+      "primary": "RESEARCH",
+      "related": [
+        "MONITOR",
+        "DISCOVER"
+      ],
+      "source_status": "legacy_seeded_unverified"
+    },
+    {
+      "id": "D09",
+      "name": "交易执行与风险",
+      "old_layer": "L5",
+      "primary": "RESEARCH",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source_status": "legacy_seeded_unverified"
+    },
+    {
+      "id": "D10",
+      "name": "数据源与工程可靠性",
+      "old_layer": "L1",
+      "primary": "RELIABILITY",
+      "related": [
+        "FACTS",
+        "MONITOR"
+      ],
+      "source_status": "legacy_seeded_unverified"
+    },
+    {
+      "id": "D11",
+      "name": "实证研究与反证",
+      "old_layer": "L6",
+      "primary": "RESEARCH",
+      "related": [
+        "RELIABILITY",
+        "AI_ENTRY"
+      ],
+      "source_status": "legacy_seeded_unverified"
+    },
+    {
+      "id": "D12",
+      "name": "AI 推理与知识进化",
+      "old_layer": "L7",
+      "primary": "AI_ENTRY",
+      "related": [
+        "RESEARCH",
+        "RELIABILITY"
+      ],
+      "source_status": "legacy_seeded_unverified"
+    }
+  ],
+  "units": [
+    {
+      "id": "L0-K01",
+      "title": "来源与版本固定",
+      "primary": "RELIABILITY",
+      "source": "knowledge/system/whole-domain-atlas.v1.json"
+    },
+    {
+      "id": "L0-K02",
+      "title": "领域本体",
+      "primary": "RELIABILITY",
+      "source": "knowledge/system/whole-domain-atlas.v1.json"
+    },
+    {
+      "id": "L0-K03",
+      "title": "事实等级",
+      "primary": "RELIABILITY",
+      "source": "knowledge/system/whole-domain-atlas.v1.json"
+    },
+    {
+      "id": "L0-K04",
+      "title": "依赖边界",
+      "primary": "RELIABILITY",
+      "source": "knowledge/system/whole-domain-atlas.v1.json"
+    },
+    {
+      "id": "L0-K05",
+      "title": "权利与许可证",
+      "primary": "RELIABILITY",
+      "source": "knowledge/system/whole-domain-atlas.v1.json"
+    },
+    {
+      "id": "L0-K06",
+      "title": "未知与冲突",
+      "primary": "RELIABILITY",
+      "source": "knowledge/system/whole-domain-atlas.v1.json"
+    },
+    {
+      "id": "L0-K07",
+      "title": "研究与交易权限",
+      "primary": "RELIABILITY",
+      "source": "knowledge/system/whole-domain-atlas.v1.json"
+    },
+    {
+      "id": "L0-K08",
+      "title": "术语与语义演进",
+      "primary": "RELIABILITY",
+      "source": "knowledge/system/whole-domain-atlas.v1.json"
+    },
+    {
+      "id": "D01-K01",
+      "title": "公钥与账户类型",
+      "question": "不同账户被谁授权、由谁的程序拥有？",
+      "primary": "FACTS",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D01-K02",
+      "title": "Mint 与 Token Program",
+      "question": "同名代币对应哪个 Mint、哪一版 Token Program？",
+      "primary": "FACTS",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D01-K03",
+      "title": "Token Account 与 ATA",
+      "question": "Token余额究竟存在哪里，owner是谁？",
+      "primary": "FACTS",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D01-K04",
+      "title": "PDA与程序授权",
+      "question": "没有私钥的地址怎样移动资产？",
+      "primary": "FACTS",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D01-K05",
+      "title": "Authority与Delegate",
+      "question": "哪些主体具有铸造、冻结或授权转出权？",
+      "primary": "FACTS",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D01-K06",
+      "title": "交易消息与版本",
+      "question": "v0交易、地址查找表和账户索引怎样影响解析？",
+      "primary": "FACTS",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D01-K07",
+      "title": "外层指令与inner CPI",
+      "question": "一笔聚合交易到底调用了哪些程序？",
+      "primary": "FACTS",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D01-K08",
+      "title": "余额守恒与单位",
+      "question": "raw amount、decimals、SOL/wSOL、rent应怎样记账？",
+      "primary": "FACTS",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D01-K09",
+      "title": "Slot/Blocktime/Finality",
+      "question": "链上发生时间和可用时间有何区别？",
+      "primary": "FACTS",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D01-K10",
+      "title": "失败交易与日志",
+      "question": "一笔失败交易可能付费但没有成功swap吗？",
+      "primary": "FACTS",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D01-K11",
+      "title": "发行和跨程序事件",
+      "question": "Mint创建、建池、迁移怎样确定对象和阶段？",
+      "primary": "DISCOVER",
+      "related": [
+        "FACTS",
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D01-K12",
+      "title": "交易重建的可识别边界",
+      "question": "链上可见授权与链下最终受益关系如何分开？",
+      "primary": "FACTS",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D02-K01",
+      "title": "创建与初始化",
+      "question": "Mint何时创建、实际交易开放何时发生？",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "FACTS"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D02-K02",
+      "title": "发币平台识别",
+      "question": "相同形态的新币是否都来自同一机制？",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "FACTS"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D02-K03",
+      "title": "Bonding Curve类型",
+      "question": "曲线价格由哪些状态变量决定？",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "FACTS"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D02-K04",
+      "title": "曲线买卖权限",
+      "question": "曲线阶段的出售路径和可用余额是什么？",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "FACTS"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D02-K05",
+      "title": "毕业条件",
+      "question": "达到什么事件才进入迁移或毕业阶段？",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "FACTS"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D02-K06",
+      "title": "迁移事件链",
+      "question": "曲线结束到新池可用之间可能发生什么？",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "FACTS"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D02-K07",
+      "title": "池重建与分母重置",
+      "question": "迁移前后价格、流动性、volume怎样拼接？",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "FACTS"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D02-K08",
+      "title": "多池与跨路径",
+      "question": "同一Mint是否会同时存在多个交易池？",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "FACTS"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D02-K09",
+      "title": "LP权利与锁定",
+      "question": "谁拥有撤出流动性的权利？",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "FACTS"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D02-K10",
+      "title": "Token权限和扩展",
+      "question": "Transfer Hook/fee/permanent delegate怎样影响流通？",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "FACTS"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D02-K11",
+      "title": "创建者与协议费",
+      "question": "在发行/迁移各阶段谁收取什么费用？",
+      "primary": "MINT",
+      "related": [
+        "DISCOVER",
+        "FACTS"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D02-K12",
+      "title": "市场阶段的玩家激励",
+      "question": "早期持币、毕业套利和后期持仓群的动机怎样变化？",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "FACTS"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D03-K01",
+      "title": "价格是什么",
+      "question": "最近成交价、边际价、TWAP和可成交报价有何区别？",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D03-K02",
+      "title": "CPMM与恒定乘积",
+      "question": "买入改变储备后后来者的价格会怎样？",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D03-K03",
+      "title": "CLMM/DLMM流动性",
+      "question": "集中区间或分箱流动性如何改变价格冲击？",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D03-K04",
+      "title": "虚拟储备与真实报价",
+      "question": "curve虚拟深度意味着真实能提出多少资产吗？",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D03-K05",
+      "title": "买卖方向成交量",
+      "question": "已成交swap计数和真正独立买方需求差什么？",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D03-K06",
+      "title": "LP增加撤出",
+      "question": "池reserve变动究竟来自swap还是LP动作？",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D03-K07",
+      "title": "报价路径与聚合器",
+      "question": "多池最优路线是否随规模和拥堵变化？",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D03-K08",
+      "title": "冲击成本与容量",
+      "question": "买入规模增加时平均成交价和退出价如何变化？",
+      "primary": "RESEARCH",
+      "related": [
+        "DISCOVER",
+        "MINT"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D03-K09",
+      "title": "套利与价格联动",
+      "question": "不同池价格为何可能接近却不完全一致？",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D03-K10",
+      "title": "MEV/Bundle与排序",
+      "question": "抢跑、夹击、优先费与Jito如何改变执行？",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D03-K11",
+      "title": "成交质量与换手",
+      "question": "高换手是否真正增加可持续风险资本？",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D03-K12",
+      "title": "市场状态跃迁",
+      "question": "流动性薄、突然迁移、拥堵时价格统计为何失真？",
+      "primary": "DISCOVER",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D04-K01",
+      "title": "地址与主体多重身份",
+      "question": "一个地址在不同Mint阶段可能承担哪些角色？",
+      "primary": "WALLET",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D04-K02",
+      "title": "早期进入与可见领先",
+      "question": "抢先买入是发现优势还是执行优势？",
+      "primary": "WALLET",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D04-K03",
+      "title": "Swap与转仓区别",
+      "question": "钱包余额变化来自交易还是内部/外部移转？",
+      "primary": "FACTS",
+      "related": [
+        "WALLET",
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D04-K04",
+      "title": "已实现/未实现PnL",
+      "question": "利润和成本基础如何分配部分出售与转仓？",
+      "primary": "WALLET",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D04-K05",
+      "title": "胜率与样本选择",
+      "question": "平台聪明钱排名筛出了哪些失败钱包？",
+      "primary": "WALLET",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D04-K06",
+      "title": "钱包规模与容量",
+      "question": "同一利润率在不同仓位下经济意义相同吗？",
+      "primary": "WALLET",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D04-K07",
+      "title": "持仓周期与策略类型",
+      "question": "秒级快进快出与长持分别承担什么风险？",
+      "primary": "WALLET",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D04-K08",
+      "title": "跨币仓位管理",
+      "question": "多Mint并发和轮动怎样改变钱包可用本金？",
+      "primary": "WALLET",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D04-K09",
+      "title": "对冲/做市与纯投机",
+      "question": "买卖频繁是方向策略还是库存管理？",
+      "primary": "WALLET",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D04-K10",
+      "title": "跟单拥挤与自反性",
+      "question": "被大量观察的钱包是否改变市场后续需求？",
+      "primary": "WALLET",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D04-K11",
+      "title": "账户/收益分离",
+      "question": "执行代理、费用支付者与实际盈利主体是否一致？",
+      "primary": "WALLET",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D04-K12",
+      "title": "持续竞争能力",
+      "question": "历史优势因平台、市场阶段变化是否衰减？",
+      "primary": "WALLET",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D05-K01",
+      "title": "资金路径边类型",
+      "question": "SOL转账、Token转移、LP、执行补款有何经济差异？",
+      "primary": "WALLET",
+      "related": [
+        "MONITOR",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md"
+    },
+    {
+      "id": "D05-K02",
+      "title": "风险资本与执行赞助",
+      "question": "手续费付款方和承担仓位亏损的人是同一个吗？",
+      "primary": "WALLET",
+      "related": [
+        "MONITOR",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md"
+    },
+    {
+      "id": "D05-K03",
+      "title": "CEX/HUB与公共基础设施",
+      "question": "高连接资金节点是否具有共同控制识别力？",
+      "primary": "WALLET",
+      "related": [
+        "MONITOR",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md"
+    },
+    {
+      "id": "D05-K04",
+      "title": "托管/委托/受益",
+      "question": "资产控制权与经济受益如何脱钩？",
+      "primary": "WALLET",
+      "related": [
+        "MONITOR",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md"
+    },
+    {
+      "id": "D05-K05",
+      "title": "资金图谱净流守恒",
+      "question": "资金在内部地址循环是否产生新增市场资本？",
+      "primary": "WALLET",
+      "related": [
+        "MONITOR",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md"
+    },
+    {
+      "id": "D05-K06",
+      "title": "跨币资金回收",
+      "question": "一个群体重复准备与归集可能说明什么？",
+      "primary": "WALLET",
+      "related": [
+        "MONITOR",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md"
+    },
+    {
+      "id": "D05-K07",
+      "title": "行为同步的共同原因",
+      "question": "同源、同价、同时间为何可能是同一事件投影？",
+      "primary": "WALLET",
+      "related": [
+        "MONITOR",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md"
+    },
+    {
+      "id": "D05-K08",
+      "title": "公开执行服务与机器人",
+      "question": "共用程序、tip、费用模式是否证明同一策略？",
+      "primary": "WALLET",
+      "related": [
+        "MONITOR",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md"
+    },
+    {
+      "id": "D05-K09",
+      "title": "资金同源反例",
+      "question": "dust、账户租金、空投和支付服务能制造怎样的误判？",
+      "primary": "WALLET",
+      "related": [
+        "MONITOR",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md"
+    },
+    {
+      "id": "D05-K10",
+      "title": "资金主体身份不可识别性",
+      "question": "链下合同不可见时能确认到什么层级？",
+      "primary": "WALLET",
+      "related": [
+        "MONITOR",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md"
+    },
+    {
+      "id": "D05-K11",
+      "title": "费用性收入与库存利润",
+      "question": "创建者、服务商是否可能与持币者有不同激励？",
+      "primary": "RESEARCH",
+      "related": [
+        "WALLET",
+        "MONITOR"
+      ],
+      "source": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md"
+    },
+    {
+      "id": "D05-K12",
+      "title": "经济控制对跟单影响",
+      "question": "即使确认资金组织，对后来者有什么剩余信息？",
+      "primary": "WALLET",
+      "related": [
+        "MONITOR",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md"
+    },
+    {
+      "id": "D06-K01",
+      "title": "总供应和流通口径",
+      "question": "Mint supply、可售供应、池储备应如何定义分母？",
+      "primary": "MINT",
+      "related": [
+        "WALLET",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D06-K02",
+      "title": "Token Account集中度",
+      "question": "Top holders按地址还是owner汇总？",
+      "primary": "MINT",
+      "related": [
+        "WALLET",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D06-K03",
+      "title": "候选实体集中度",
+      "question": "共同控制未证实时如何表示区间？",
+      "primary": "MINT",
+      "related": [
+        "WALLET",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D06-K04",
+      "title": "LP/托管持仓排除",
+      "question": "池子Token储备是否是某鲸鱼可直接卖出库存？",
+      "primary": "MINT",
+      "related": [
+        "WALLET",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D06-K05",
+      "title": "可卖库存与现金深度",
+      "question": "持有量和可提走SOL数量之间是什么关系？",
+      "primary": "MINT",
+      "related": [
+        "WALLET",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D06-K06",
+      "title": "权限改变库存处分",
+      "question": "冻结、delegate、Token扩展会怎样影响卖出能力？",
+      "primary": "MINT",
+      "related": [
+        "WALLET",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D06-K07",
+      "title": "早期/狙击库存供应",
+      "question": "前期买入者剩余库存何时成为潜在卖压？",
+      "primary": "MINT",
+      "related": [
+        "WALLET",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D06-K08",
+      "title": "筹码分散与Sybil",
+      "question": "地址数增加时经济控制可能仍集中吗？",
+      "primary": "MINT",
+      "related": [
+        "WALLET",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D06-K09",
+      "title": "转移、成交与派发",
+      "question": "大量Token转出是否真的在市场中卖掉？",
+      "primary": "WALLET",
+      "related": [
+        "MINT",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D06-K10",
+      "title": "市场制造与刷量",
+      "question": "高volume弱独立持仓是否意味着wash？",
+      "primary": "MINT",
+      "related": [
+        "WALLET",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D06-K11",
+      "title": "筹码周期与FCZ",
+      "question": "POC/AVWAP可等于真实控制者成本吗？",
+      "primary": "MINT",
+      "related": [
+        "WALLET",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D06-K12",
+      "title": "风险控制与操纵归因",
+      "question": "怎样描述潜在经济集中却不诬指真实身份？",
+      "primary": "MINT",
+      "related": [
+        "WALLET",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D07-K01",
+      "title": "市场事件时间轴",
+      "question": "Mint创建、开放、迁移和KOL消息按什么时钟排列？",
+      "primary": "MONITOR",
+      "related": [
+        "WALLET",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D07-K02",
+      "title": "同步交易与共因",
+      "question": "多个钱包为何可能同时买入？",
+      "primary": "MONITOR",
+      "related": [
+        "WALLET",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D07-K03",
+      "title": "注意力传播机制",
+      "question": "社区话题、热门榜和价格谁先影响谁？",
+      "primary": "DISCOVER",
+      "related": [
+        "MONITOR",
+        "WALLET"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D07-K04",
+      "title": "叙事与基本面缺位",
+      "question": "Meme价格由什么注意力与流动性机制推动？",
+      "primary": "MONITOR",
+      "related": [
+        "WALLET",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D07-K05",
+      "title": "跨Mint共同参与",
+      "question": "钱包群反复买不同Mint是资金轮动还是市场beta？",
+      "primary": "MONITOR",
+      "related": [
+        "WALLET",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D07-K06",
+      "title": "资金轮动与净回收",
+      "question": "退出A再买B是否存在确切资产连续性？",
+      "primary": "MONITOR",
+      "related": [
+        "WALLET",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D07-K07",
+      "title": "生命周期角色转变",
+      "question": "毕业前sniper如何变为毕业后供应提供者？",
+      "primary": "MONITOR",
+      "related": [
+        "WALLET",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D07-K08",
+      "title": "异常序列发现",
+      "question": "怎样发现未命名的先后条件与节奏？",
+      "primary": "MONITOR",
+      "related": [
+        "WALLET",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D07-K09",
+      "title": "市场总体状态",
+      "question": "Solana整体热度/行情如何影响单币结构？",
+      "primary": "MONITOR",
+      "related": [
+        "WALLET",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D07-K10",
+      "title": "价格与传播的双向反馈",
+      "question": "钱包出手后被更多监控者模仿会怎样？",
+      "primary": "MONITOR",
+      "related": [
+        "WALLET",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D07-K11",
+      "title": "时钟泄露与回填",
+      "question": "观察时当时没有的标签如何误导策略？",
+      "primary": "RELIABILITY",
+      "related": [
+        "MONITOR",
+        "WALLET",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D07-K12",
+      "title": "第二阶段机会与时差",
+      "question": "早期买入后的后续承接能否独立形成新窗口？",
+      "primary": "MONITOR",
+      "related": [
+        "WALLET",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L3-wallet-actors.md"
+    },
+    {
+      "id": "D08-K01",
+      "title": "研究目标层次",
+      "question": "解释机制、预测变化、净收益能否各自独立成立？",
+      "primary": "AI_ENTRY",
+      "related": [
+        "RESEARCH",
+        "MONITOR",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D08-K02",
+      "title": "监控领先钱包",
+      "question": "到底复制哪笔swap和哪个可见时间？",
+      "primary": "RESEARCH",
+      "related": [
+        "MONITOR",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D08-K03",
+      "title": "发现型策略",
+      "question": "钱包先买能否提高候选Mint发现覆盖？",
+      "primary": "RESEARCH",
+      "related": [
+        "MONITOR",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D08-K04",
+      "title": "多钱包协作策略",
+      "question": "同源/同步聚集是否有额外信息？",
+      "primary": "RESEARCH",
+      "related": [
+        "MONITOR",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D08-K05",
+      "title": "资金再部署策略",
+      "question": "上一币退出后能否前瞻知道下一币？",
+      "primary": "RESEARCH",
+      "related": [
+        "MONITOR",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D08-K06",
+      "title": "FCZ/POC/AVWAP结构",
+      "question": "回收成本锚机制为什么可能成立或失效？",
+      "primary": "RESEARCH",
+      "related": [
+        "MONITOR",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D08-K07",
+      "title": "动量与突破",
+      "question": "趋势什么时候持续，什么时候是流动性诱多？",
+      "primary": "RESEARCH",
+      "related": [
+        "MONITOR",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D08-K08",
+      "title": "均值回归与二次启动",
+      "question": "什么状态下回收有经济含义？",
+      "primary": "RESEARCH",
+      "related": [
+        "MONITOR",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D08-K09",
+      "title": "事件驱动与迁移",
+      "question": "迁移/社交触发是机制变化还是纯热度？",
+      "primary": "RESEARCH",
+      "related": [
+        "MONITOR",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D08-K10",
+      "title": "负面策略与过滤",
+      "question": "风险过滤能否产生正增量经济价值？",
+      "primary": "RESEARCH",
+      "related": [
+        "MONITOR",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D08-K11",
+      "title": "组合和并发",
+      "question": "同时出现多个候选币时资金如何分配？",
+      "primary": "RESEARCH",
+      "related": [
+        "MONITOR",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D08-K12",
+      "title": "未知模式探索",
+      "question": "自动发现异常是否会过拟合或自证？",
+      "primary": "RESEARCH",
+      "related": [
+        "MONITOR",
+        "DISCOVER"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D09-K01",
+      "title": "双向可交易性",
+      "question": "买得进与卖得出是两种不同条件吗？",
+      "primary": "MINT",
+      "related": [
+        "RESEARCH",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D09-K02",
+      "title": "滑点定义",
+      "question": "报价容差与实际价格冲击有何区别？",
+      "primary": "RESEARCH",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D09-K03",
+      "title": "手续费全分类",
+      "question": "base fee、priority fee、tip、DEX fee怎么记？",
+      "primary": "RESEARCH",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D09-K04",
+      "title": "执行延迟与确定性",
+      "question": "信号到确认之间状态会发生什么？",
+      "primary": "RESEARCH",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D09-K05",
+      "title": "路由与DEX报价",
+      "question": "多池、失败route、聚合器估价的可靠性如何？",
+      "primary": "RESEARCH",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D09-K06",
+      "title": "仓位冲击与容量",
+      "question": "不同规模是否导致收益非线性变化？",
+      "primary": "RESEARCH",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D09-K07",
+      "title": "部分退出与余仓",
+      "question": "卖出一部分后如何记实际残余风险？",
+      "primary": "RESEARCH",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D09-K08",
+      "title": "失败交易与不可卖",
+      "question": "失败日志代表权限风险、滑点还是拥堵？",
+      "primary": "RESEARCH",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D09-K09",
+      "title": "MEV与竞争对手",
+      "question": "热门钱包被跟踪时优先级竞争会怎样？",
+      "primary": "RESEARCH",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D09-K10",
+      "title": "尾部风险与池蒸发",
+      "question": "价格暴跌时还剩多少可执行退出能力？",
+      "primary": "RESEARCH",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D09-K11",
+      "title": "风险预算与机会成本",
+      "question": "跳过风险币的收益/成本怎么比较？",
+      "primary": "RESEARCH",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D09-K12",
+      "title": "净期望与币本位",
+      "question": "SOL/USD变化和多资产交易怎样统一计价？",
+      "primary": "RESEARCH",
+      "related": [
+        "MINT",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L4-L5-copytrade-edge.md"
+    },
+    {
+      "id": "D10-K01",
+      "title": "来源身份与许可",
+      "question": "每个供应商能合法稳定提供哪些读能力？",
+      "primary": "RELIABILITY",
+      "related": [
+        "FACTS",
+        "MONITOR"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D10-K02",
+      "title": "RPC与索引器差异",
+      "question": "原始链上交易和平台派生标签分别是什么？",
+      "primary": "RELIABILITY",
+      "related": [
+        "FACTS",
+        "MONITOR"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D10-K03",
+      "title": "字段路径与单位",
+      "question": "JSON path/decimals/币本位/百分数分母如何标注？",
+      "primary": "RELIABILITY",
+      "related": [
+        "FACTS",
+        "MONITOR"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D10-K04",
+      "title": "覆盖范围与观察总体",
+      "question": "榜单入口漏掉了哪些币或钱包？",
+      "primary": "RELIABILITY",
+      "related": [
+        "FACTS",
+        "MONITOR"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D10-K05",
+      "title": "时间可得与回填",
+      "question": "服务商何时返回字段，是否事后补写？",
+      "primary": "MONITOR",
+      "related": [
+        "RELIABILITY",
+        "FACTS"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D10-K06",
+      "title": "空值错误与零值",
+      "question": "429/403/超时/空列表/无事件如何区别？",
+      "primary": "RELIABILITY",
+      "related": [
+        "FACTS",
+        "MONITOR"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D10-K07",
+      "title": "去重与消息顺序",
+      "question": "WS重连、分页、重复事件怎样防双算？",
+      "primary": "RELIABILITY",
+      "related": [
+        "FACTS",
+        "MONITOR"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D10-K08",
+      "title": "供应商交叉检验",
+      "question": "OKX与GMGN价格/钱包PnL不一致怎么办？",
+      "primary": "RELIABILITY",
+      "related": [
+        "FACTS",
+        "MONITOR"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D10-K09",
+      "title": "快照和来源固定",
+      "question": "研究结论如何绑定原始响应与生成代码？",
+      "primary": "RELIABILITY",
+      "related": [
+        "FACTS",
+        "MONITOR"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D10-K10",
+      "title": "敏感权限与只读边界",
+      "question": "哪些OKX命令可能签名或广播？",
+      "primary": "RELIABILITY",
+      "related": [
+        "FACTS",
+        "MONITOR"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D10-K11",
+      "title": "数据漂移与退化",
+      "question": "字段变化、接口废弃、缺采怎样报警？",
+      "primary": "RELIABILITY",
+      "related": [
+        "FACTS",
+        "MONITOR"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D10-K12",
+      "title": "多源成本与可持续性",
+      "question": "调用额度、延迟、付费限制如何改变研究策略？",
+      "primary": "RELIABILITY",
+      "related": [
+        "FACTS",
+        "MONITOR"
+      ],
+      "source": "knowledge/domain/L1-L2-chain-market.md"
+    },
+    {
+      "id": "D11-K01",
+      "title": "问题与总体",
+      "question": "到底研究全部新币还是被榜单发现的候选？",
+      "primary": "RESEARCH",
+      "related": [
+        "RELIABILITY",
+        "AI_ENTRY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D11-K02",
+      "title": "解释/预测/经济区分",
+      "question": "解释出现的结构是否能预测或赚钱？",
+      "primary": "RESEARCH",
+      "related": [
+        "RELIABILITY",
+        "AI_ENTRY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D11-K03",
+      "title": "竞争假设与共同原因",
+      "question": "同源/同步/价格关系有哪些零假设？",
+      "primary": "RESEARCH",
+      "related": [
+        "RELIABILITY",
+        "AI_ENTRY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D11-K04",
+      "title": "时点冻结与前瞻",
+      "question": "特征何时能用，标签是否来自未来？",
+      "primary": "RESEARCH",
+      "related": [
+        "RELIABILITY",
+        "AI_ENTRY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D11-K05",
+      "title": "反例与缺失样本",
+      "question": "无信号、不可成交、死亡盘、漏捕怎么处理？",
+      "primary": "RESEARCH",
+      "related": [
+        "RELIABILITY",
+        "AI_ENTRY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D11-K06",
+      "title": "简单基准与消融",
+      "question": "复杂规则是否优于简单价格/年龄/流动性过滤？",
+      "primary": "RESEARCH",
+      "related": [
+        "RELIABILITY",
+        "AI_ENTRY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D11-K07",
+      "title": "多重检验与数据挖掘",
+      "question": "字段穷举和反复调整如何产生假规律？",
+      "primary": "RESEARCH",
+      "related": [
+        "RELIABILITY",
+        "AI_ENTRY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D11-K08",
+      "title": "样本外与群组泄漏",
+      "question": "跨币同团队与时间相关怎样阻断泄漏？",
+      "primary": "RESEARCH",
+      "related": [
+        "RELIABILITY",
+        "AI_ENTRY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D11-K09",
+      "title": "成交可达与极端值",
+      "question": "K线高点和实际退出是什么关系？",
+      "primary": "RESEARCH",
+      "related": [
+        "RELIABILITY",
+        "AI_ENTRY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D11-K10",
+      "title": "因果叙事与可识别性",
+      "question": "资金图能否唯一证明市场操纵或动机？",
+      "primary": "RESEARCH",
+      "related": [
+        "RELIABILITY",
+        "AI_ENTRY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D11-K11",
+      "title": "效应大小与不确定性",
+      "question": "样本稀少或分层多时结论稳定吗？",
+      "primary": "RESEARCH",
+      "related": [
+        "RELIABILITY",
+        "AI_ENTRY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D11-K12",
+      "title": "复算与知识失效",
+      "question": "何种新证据应让专家主动修正旧理论？",
+      "primary": "AI_ENTRY",
+      "related": [
+        "RESEARCH",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D12-K01",
+      "title": "研究问题路由",
+      "question": "自然语言请求怎样调用最少的相关专家？",
+      "primary": "AI_ENTRY",
+      "related": [
+        "RESEARCH",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D12-K02",
+      "title": "专家知识分工",
+      "question": "同一专家职责和领域知识应如何关联？",
+      "primary": "AI_ENTRY",
+      "related": [
+        "RESEARCH",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D12-K03",
+      "title": "K0/K1/K2层级",
+      "question": "常驻原则、按需理论、市场观察如何分配？",
+      "primary": "AI_ENTRY",
+      "related": [
+        "RESEARCH",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D12-K04",
+      "title": "知识来源准入",
+      "question": "旧仓库与外部研究怎样分批纳入？",
+      "primary": "AI_ENTRY",
+      "related": [
+        "RESEARCH",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D12-K05",
+      "title": "专家分歧和编译",
+      "question": "不同观点如何在知识里保存而不投票？",
+      "primary": "AI_ENTRY",
+      "related": [
+        "RESEARCH",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D12-K06",
+      "title": "跨Bot合同与责任",
+      "question": "B01-B07如何传数据和禁止权限混用？",
+      "primary": "AI_ENTRY",
+      "related": [
+        "RESEARCH",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D12-K07",
+      "title": "本地程序能力边界",
+      "question": "GPT开发什么，GitHub保存什么，Grok运行什么？",
+      "primary": "AI_ENTRY",
+      "related": [
+        "RESEARCH",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D12-K08",
+      "title": "OKX只读接入",
+      "question": "市场/钱包/信号Skill怎么按需获取？",
+      "primary": "RELIABILITY",
+      "related": [
+        "AI_ENTRY",
+        "RESEARCH"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D12-K09",
+      "title": "知识增长机制",
+      "question": "专家新想法什么时候进主知识？",
+      "primary": "AI_ENTRY",
+      "related": [
+        "RESEARCH",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D12-K10",
+      "title": "测试与CI含义",
+      "question": "offline unit test证明了什么？",
+      "primary": "AI_ENTRY",
+      "related": [
+        "RESEARCH",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D12-K11",
+      "title": "监控规则冻结",
+      "question": "何时能将机制升级为正式只读监控？",
+      "primary": "AI_ENTRY",
+      "related": [
+        "RESEARCH",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    },
+    {
+      "id": "D12-K12",
+      "title": "长期运行演进",
+      "question": "运行漂移、数据中断、错误告警和策略失效怎样回馈？",
+      "primary": "AI_ENTRY",
+      "related": [
+        "RESEARCH",
+        "RELIABILITY"
+      ],
+      "source": "knowledge/domain/L6-L7-investigation-cases.md"
+    }
+  ],
+  "original_reference_registry": "knowledge/system/gpt-meme-project-index.v1.json",
+  "original_expert_registry": "knowledge/experts/registry.v1.json",
+  "status": "MAPPED_NOT_RUNTIME_INTEGRATED"
+}
