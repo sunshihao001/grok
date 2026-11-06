@@ -1,9 +1,12 @@
-.runtime/
-__pycache__/
-*.py[cod]
-.pytest_cache/
-.env
-.env.*
-!.env.example
-*.key
-*.pem
+data/
+node_modules/
+worker/.wrangler/
+web/tsconfig.tsbuildinfo
+# The Forge's runtime (forge/setup.mjs fetches it) and the Remilio backgrounds (third-party pictures, shipped by
+# bin/deploy-vm.mjs, not kept in git)
+forge/vendor/
+forge/models/
+forge/bg/
+forge/thumb/
+.wrangler/
+.ui-deploy/
