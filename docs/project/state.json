@@ -341,5 +341,23 @@
       "ECONOMIC_CONTROL_ATTRIBUTION"
     ],
     "next_research": "Source contract mapping Coin/Holder/BubbleMap and all wallet data without executing the product"
+  },
+  "official_site_review": {
+    "date": "2026-11-06",
+    "catalog": "docs/project/blix-public-pages-catalog-v0.1.md",
+    "audit": "docs/project/official-site-to-code-audit-v0.1.md",
+    "declared_pages": 128,
+    "canonical_paths": 113,
+    "aliases": 23,
+    "online_every_url_verified": false,
+    "runtime": "NOT_RUN"
+  },
+  "grok_bot_usage_review": {
+    "date": "2026-11-06",
+    "document": "docs/project/grok-bot-usage-options-v0.1.md",
+    "idle_hibernation": "OFFICIAL_DOC",
+    "public_web_hosting": "NOT_CONFIRMED",
+    "preferred_long_term": "SEPARATE_BLIX_ALWAYS_ON_PLUS_WEB_PLUS_BOT",
+    "deployed": false
   }
 }

@@ -56,3 +56,10 @@
 - **静态安全问题**：bin/supervise.mjs 直接启动原 server/server.js，绕开 npm start 安全门禁；只读运行未获证实。
 - **状态/测试冲突**：test/project-goals.test.mjs 的两项旧状态断言仍与 state.json 当前暂停运行状态不一致。未运行测试，待获实施授权后修正代码或断言。
 - 当前继续只读研究；**不要把报告、原作者历史部署、源码存在和项目初步单测当作当前 Blix 主网或云端验收**。
+
+
+## 2026-11-06 官网功能与云电脑承接研究
+- [官网113条规范页面索引](blix-public-pages-catalog-v0.1.md) 已保存，非逐页在线HTTP验证。
+- [官网功能/业务/源码对照](official-site-to-code-audit-v0.1.md)；注意AI/MCP与交易API权限并不等价。
+- [Grok Bot对话、网站、持续监控三种路线](grok-bot-usage-options-v0.1.md)。官方云电脑可能闲置休眠，不将其当成已验证的24h运行主机。
+- 仅文档静态研究，未运行未部署。
