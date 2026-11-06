@@ -4,6 +4,8 @@
 
 ## 推荐理解顺序：先 Blix，后旧 Grok，再做对应
 
+- **Hermes多维推理、反向异常发现与ai-d跨行业视角**：[旧项目知识纵深研究（2026-11-07）](references/hermes-reasoning-ai-d-cross-domain-study-20261107.md)。与qb-、meme-原始实现对照；含未审范围、反证和下一轮任务，非运行时已融合。
+
 1. [Blix 原生产品与知识总图](BLIX-NATIVE-ATLAS.md)：先弄清 Blix 自己的业务、UI、数据、AI、工程经验和证据边界，不把它当空白工程。
 2. [旧 Grok 内部目录与知识总图](OLD-GROK-ATLAS.md)：独立梳理旧 `main`、PR #14/#16/#17、知识卡/专业正文/实验/训练/工程资产，不混同运行状态。
 3. [两套知识的对应与去重](INTEGRATION-CROSSWALK.md)：在现有六类知识目录内判定迁入、链接、提炼或保留，不机械复刻旧目录。
