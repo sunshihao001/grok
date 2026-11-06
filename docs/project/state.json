@@ -379,5 +379,29 @@
     "runtime": "NOT_RUN",
     "tests": "NOT_RUN",
     "next": "Cross-source Mint/Holder/BubbleMap field contracts"
+  },
+  "external_brain_completeness_review": {
+    "date": "2026-11-06",
+    "baseline": "d4be09440964bc28d171de8a6db11feb76a81026",
+    "doc": "docs/project/external-brain-completeness-audit-v0.1.md",
+    "mode": "STATIC_CROSS_LAYER_AND_ORIGINAL_RESEARCH",
+    "result": "NOT_ALL_CRITICAL_ASSUMPTIONS_COVERED",
+    "confirmed_source_findings": [
+      "FUNDER_UNKNOWN_NEGATIVE_CACHE_CAN_PERSIST_WITHOUT_RETRACE",
+      "HOLDERS_SNAPSHOT_COMMITMENT_AND_SLOT_MIXED",
+      "TOP_20_TOKEN_ACCOUNTS_NOT_TOP_20_OWNER_ENTITIES",
+      "PARTIAL_FALSE_NOT_HISTORICAL_TRANSACTION_COMPLETENESS",
+      "ACCOUNTING_AND_HISTORY_DIFFER_ACROSS_WALLET_MODULES"
+    ],
+    "eval_status": "AI_INDEPENDENT_END_TO_END_A_B_NOT_RUN",
+    "high_value_future_scenarios": [
+      "MARKET_DISCOVERY",
+      "MINT_TRANSFER_TO_SELL",
+      "CROSS_MINT_GROUP",
+      "RELIABLE_ALERT"
+    ],
+    "runtime": "NOT_RUN",
+    "changed_business_code": false,
+    "next": "Verify field contracts, counterexamples and stop rules before proposing any integration"
   }
 }
