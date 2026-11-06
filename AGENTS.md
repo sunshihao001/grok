@@ -8,6 +8,8 @@
 
 **严格当前只读**：仓库含交易/纸面交易/自动 AI 调用或可能收费的功能；文档写“只读”不会自动隔离。未经安全审查不得拿真实私钥、签名、广播、付款或默认运行高风险/自动付费操作。区别源码、供应商、离线、真实网络、经济推断、UNKNOWN；Token Account≠owner≠fee payer，资金转移≠交易，同步≠同控，结构≠交易优势。
 
+**已迁入的分类知识入口**：首先按任务查 [Blix本地分类知识库](knowledge/README.md)，查看 [17份全文迁入清单及源SHA](knowledge/MIGRATION.json)；原 Grok研究现按基础、机制、方法、案例、AI和参考成品分类保存在本分支。使用时选相关正文，旧文中的专家阶段、建议与阈值不是Blix现行全局指令；不默认全部加载。完整旧资料、未迁入内容和65参考资产仍以原仓库为来源。
+
 **旧知识按需融合**：问题落到 Blix 现有功能后，使用 [分类融合说明](docs/project/legacy-knowledge-fusion-v1.md) 和 [152项路由索引](docs/project/legacy-knowledge-routing.v1.json) 定向检索旧 Grok 原文；映射不代表结论已验证、模型已内化或业务运行代码已集成。
 
 **能力转化路线**：在使用知识映射的同时，按需阅读 [跨项目与现代Agent的融合蓝图](docs/project/knowledge-to-capability-integration-v0.1.md)，优先令知识实际改善已有事实输出、程序调查、监控与独立反例，不默认扩建Skill/多Bot。
