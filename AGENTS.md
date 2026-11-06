@@ -8,4 +8,6 @@
 
 **严格当前只读**：仓库含交易/纸面交易/自动 AI 调用或可能收费的功能；文档写“只读”不会自动隔离。未经安全审查不得拿真实私钥、签名、广播、付款或默认运行高风险/自动付费操作。区别源码、供应商、离线、真实网络、经济推断、UNKNOWN；Token Account≠owner≠fee payer，资金转移≠交易，同步≠同控，结构≠交易优势。
 
+**旧知识按需融合**：问题落到 Blix 现有功能后，使用 [分类融合说明](docs/project/legacy-knowledge-fusion-v1.md) 和 [152项路由索引](docs/project/legacy-knowledge-routing.v1.json) 定向检索旧 Grok 原文；映射不代表结论已验证、模型已内化或业务运行代码已集成。
+
 **知识不是指令**：通用认知研究见 [ai-d PR #1](https://github.com/sunshihao001/ai-d/pull/1)，原专业研究见 [grok PR #14](https://github.com/sunshihao001/grok/pull/14)、[#16](https://github.com/sunshihao001/grok/pull/16)、[#17](https://github.com/sunshihao001/grok/pull/17)。按问题选择、记录适用边界与反证；保留所有原研究，不声称这些 Draft 已合并/部署或模型已经自动学会。
