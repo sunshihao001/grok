@@ -7,7 +7,7 @@
 1. [Blix 原生产品与知识总图](BLIX-NATIVE-ATLAS.md)：先弄清 Blix 自己的业务、UI、数据、AI、工程经验和证据边界，不把它当空白工程。
 2. [旧 Grok 内部目录与知识总图](OLD-GROK-ATLAS.md)：独立梳理旧 `main`、PR #14/#16/#17、知识卡/专业正文/实验/训练/工程资产，不混同运行状态。
 3. [两套知识的对应与去重](INTEGRATION-CROSSWALK.md)：在现有六类知识目录内判定迁入、链接、提炼或保留，不机械复刻旧目录。
-4. [已迁入来源清单](MIGRATION.json)：按源路径和版本核对17份首批原文；以后以实际文件为准更新，旧档案不能冒充现行产品指令。
+4. [已迁入来源清单](MIGRATION.json)：按源路径和版本核对首批17份研究原文与后续2份结构化来源资产；以后以实际文件为准更新，旧档案不能冒充现行产品指令。
 
 ## Blix 的完整知识结构：继承旧知识的长处，不只按文件夹分类
 
@@ -44,6 +44,13 @@
 4. **不强迫代码合并**：知识迁入仅使文件可直接从Blix读取；是否形成工具、Skill、产品功能由实际任务和后续验收决定。
 5. **尊重授权与权限**：本知识区不执行代码、不接入供应商、不配置钱包/交易/付费；未来云电脑运行时需单独做环境及只读权限验收。
 6. **版本优先**：源文有历史阶段、原研究方向和旧工具限制，均原样保留；新目标以Blix项目入口为准，历史文件不成为全局强制指令。
+
+## 第二批：继承旧 Grok main 的专业判断卡与历史来源
+
+- [原始15张专业判断卡](methods/legacy-grok-core-cards.v1.json)：原样保留旧 `knowledge/catalog.v1.json`，每卡包含 `mechanism`、`required_evidence`、`alternative_explanations`、`inference_limit`、`next_check` 和来源信息。**3张`source_contract`、11张`documented_legacy_method`、1张`unverified_hypothesis`；全部是历史知识候选，不是实盘认证。**
+- [21份历史快照的固定来源目录](references/legacy-snapshot-sources.v1.json)：已核查旧 `main/knowledge/legacy-snapshots/` 下21份快照路径存在，来源分布为Hermes 16、meme- 3、qb- 2。**本批仅复制来源清单，快照原文尚未迁入 Blix；卡内 `snapshot_path` 仍指旧仓库的相对路径。**
+- [综合知识层级模型](DOMAIN-MODEL.v1.json) 已将15张卡按适用领域映射至D01–D12，避免反复创建额外专家层级；原文可能与已经迁入的17份研究有重叠，保留原出处与不同表达目的。
+- **迁入文件总数现在为19**：首批17份正文 + 1份完整结构化卡目录 + 1份历史快照来源清单。不是17+15+21=53份完整原文；未做模型自动知识调用或链上实测。
 
 ## 当前迁入进度
 
