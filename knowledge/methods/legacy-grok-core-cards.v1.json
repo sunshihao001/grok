@@ -1,0 +1,697 @@
+{
+  "schema_version": "1.0",
+  "title": "Solana Meme knowledge migration, source-bound hypotheses and methods",
+  "note": "This catalog contains reviewed descriptions of historical documentation, NOT verified on-chain truths, calibrated financial signals or proof of profitable prediction.",
+  "cards": [
+    {
+      "id": "candidate-entry",
+      "title": "市场候选的来源 ≠ 质量结论",
+      "status": "source_contract",
+      "triggers": [
+        "BASELINE",
+        "MISSING_FIELDS"
+      ],
+      "keywords": [
+        "候选",
+        "热度",
+        "trending",
+        "trenches",
+        "signal",
+        "新币"
+      ],
+      "mechanism": "先记录为什么进入视野。trending偏活跃，trenches偏早期，signal偏行为；任何一个都不能代表优质或安全。",
+      "required_evidence": [
+        "入口类型和筛选区间",
+        "实际成交及时间戳",
+        "池子和持有人结构"
+      ],
+      "alternative_explanations": [
+        "刷量/批量钱包推高热度",
+        "平台选择偏差",
+        "本来就存在的正常市场关注"
+      ],
+      "inference_limit": "入口只负责发现，不能直接给交易或确定性质量判断。",
+      "next_check": "对照同时间窗未入选样本，并核查市场来源、池子和主体。",
+      "sources": [
+        {
+          "repository": "sunshihao001/-",
+          "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+          "path": "learning/06.md",
+          "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/06.md",
+          "snapshot_path": "knowledge/legacy-snapshots/solana-learning/L06.md"
+        }
+      ]
+    },
+    {
+      "id": "market-lifecycle",
+      "title": "发行、迁移、建池、流动性阶段必须分别建模",
+      "status": "documented_legacy_method",
+      "triggers": [
+        "BASELINE",
+        "NEW_SOURCE_EVENT"
+      ],
+      "keywords": [
+        "生命周期",
+        "迁移",
+        "pump.fun",
+        "raydium",
+        "建池",
+        "migration"
+      ],
+      "mechanism": "新发币交易阶段与池子迁移后的流动性和数据可用性不同，不能把不同阶段指标直接混用。",
+      "required_evidence": [
+        "发行和池子创建交易",
+        "路由/池状态",
+        "阶段切换时间和来源"
+      ],
+      "alternative_explanations": [
+        "平台索引延迟",
+        "迁移之外的流动性调整"
+      ],
+      "inference_limit": "没有原始事件不能确认具体阶段。",
+      "next_check": "比对池子状态、链上事件时序及不同源的时间粒度。",
+      "sources": [
+        {
+          "repository": "sunshihao001/-",
+          "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+          "path": "learning/05.md",
+          "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/05.md",
+          "snapshot_path": "knowledge/legacy-snapshots/solana-learning/L05.md"
+        }
+      ]
+    },
+    {
+      "id": "token-security",
+      "title": "权限和卖出限制风险是不同机制",
+      "status": "documented_legacy_method",
+      "triggers": [
+        "BASELINE",
+        "NEW_SOURCE_EVENT"
+      ],
+      "keywords": [
+        "权限",
+        "mint",
+        "freeze",
+        "honeypot",
+        "rug",
+        "安全"
+      ],
+      "mechanism": "mint/freeze authority、池子撤资、持仓集中抛售和路由/卖出失败属于不同风险机制，必须分别列证据。",
+      "required_evidence": [
+        "Mint/Token Program及权限状态",
+        "池子变化",
+        "实际失败交易及错误类型"
+      ],
+      "alternative_explanations": [
+        "新账户标准/程序版本差异",
+        "路由故障并非恶意限制",
+        "市场深度不足"
+      ],
+      "inference_limit": "不可仅由单一平台安全标签断言 rug 或 honeypot。",
+      "next_check": "区分链上权限、AMM流动性和交易路由失败类型。",
+      "sources": [
+        {
+          "repository": "sunshihao001/-",
+          "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+          "path": "learning/07.md",
+          "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/07.md",
+          "snapshot_path": "knowledge/legacy-snapshots/solana-learning/L07.md"
+        },
+        {
+          "repository": "sunshihao001/-",
+          "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+          "path": "learning/08.md",
+          "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/08.md",
+          "snapshot_path": "knowledge/legacy-snapshots/solana-learning/L08.md"
+        }
+      ]
+    },
+    {
+      "id": "liquidity-depth",
+      "title": "流动性变化不等于一定撤池",
+      "status": "documented_legacy_method",
+      "triggers": [
+        "LIQUIDITY_DROP",
+        "BASELINE"
+      ],
+      "keywords": [
+        "流动性",
+        "池子",
+        "撤池",
+        "lp",
+        "滑点",
+        "深度"
+      ],
+      "mechanism": "流动性变化值得调查退出能力、池子储备、价格冲击和LP控制，但估值变化或资金流动也能改变美元计价流动性。",
+      "required_evidence": [
+        "相同池、同一计价单位和采集时间",
+        "LP add/remove交易",
+        "两侧储备与价格",
+        "链上流动性与路由深度"
+      ],
+      "alternative_explanations": [
+        "SOL或Token价格变动造成USD估值变化",
+        "正常再平衡/迁移",
+        "行情API口径变化"
+      ],
+      "inference_limit": "只观察到liquidity_usd下降不能断言LP被抽走或人为rug。",
+      "next_check": "将美元余额变化拆分为储备数量变化与价格变动，再核实LP事件。",
+      "sources": [
+        {
+          "repository": "sunshihao001/-",
+          "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+          "path": "learning/09.md",
+          "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/09.md",
+          "snapshot_path": "knowledge/legacy-snapshots/solana-learning/L09.md"
+        },
+        {
+          "repository": "sunshihao001/-",
+          "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+          "path": "learning/08.md",
+          "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/08.md",
+          "snapshot_path": "knowledge/legacy-snapshots/solana-learning/L08.md"
+        }
+      ]
+    },
+    {
+      "id": "wallet-roles",
+      "title": "钱包角色由行为形成候选，不是实名身份",
+      "status": "documented_legacy_method",
+      "triggers": [
+        "TOP10_SHARE_RISE",
+        "NEW_SOURCE_EVENT"
+      ],
+      "keywords": [
+        "钱包",
+        "sniper",
+        "smart money",
+        "聪明钱",
+        "deployer",
+        "dev",
+        "地址"
+      ],
+      "mechanism": "sniper/dev-linked/exit wallet等是行为候选。平台标签可做线索，但应由交易时序、部署历史、仓位变化及执行路径交叉验证。",
+      "required_evidence": [
+        "钱包交易签名与时间",
+        "创建代币历史",
+        "钱包资金流与持仓变化",
+        "标签来源和定义"
+      ],
+      "alternative_explanations": [
+        "标签过期或营销",
+        "做市与路由地址",
+        "机器人但不属于内部团体"
+      ],
+      "inference_limit": "早买、大仓位、smart money标签都不能单独证明内部人或盈利能力。",
+      "next_check": "逐个钱包输出可复核事实、role_candidate、反证和无法验证之处。",
+      "sources": [
+        {
+          "repository": "sunshihao001/-",
+          "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+          "path": "learning/10.md",
+          "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/10.md",
+          "snapshot_path": "knowledge/legacy-snapshots/solana-learning/L10.md"
+        },
+        {
+          "repository": "sunshihao001/-",
+          "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+          "path": "design/phase1-skill-03-wallet-roles.md",
+          "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/design/phase1-skill-03-wallet-roles.md",
+          "snapshot_path": "knowledge/legacy-snapshots/domain-contracts/wallet-roles.md"
+        }
+      ]
+    },
+    {
+      "id": "funding-graph",
+      "title": "资金同源是关联线索，不等于同一个人",
+      "status": "documented_legacy_method",
+      "triggers": [
+        "NEW_SOURCE_EVENT",
+        "TOP10_SHARE_RISE"
+      ],
+      "keywords": [
+        "同源",
+        "资金",
+        "追踪",
+        "cluster",
+        "关联钱包",
+        "溯源",
+        "资金循环"
+      ],
+      "mechanism": "把转入来源、时间、金额与后续交易连接成图。具有共享资金来源的群体值得审查，但群组可能只是共享交易所或基础设施。",
+      "required_evidence": [
+        "资金转账签名",
+        "跳数和中转时间",
+        "排除CEX/池子/托管基础设施",
+        "后续协同行为"
+      ],
+      "alternative_explanations": [
+        "共享CEX热钱包的无关用户",
+        "代付或批量服务",
+        "地址标签错误"
+      ],
+      "inference_limit": "不可把同一CEX提款地址视为单一控制者，也不可仅由两层转账证明控制权。",
+      "next_check": "先排除基础设施，再做多线索关联与竞争解释。",
+      "sources": [
+        {
+          "repository": "sunshihao001/-",
+          "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+          "path": "learning/11.md",
+          "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/11.md",
+          "snapshot_path": "knowledge/legacy-snapshots/solana-learning/L11.md"
+        },
+        {
+          "repository": "sunshihao001/-",
+          "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+          "path": "design/phase1-skill-04-wallet-structure.md",
+          "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/design/phase1-skill-04-wallet-structure.md",
+          "snapshot_path": "knowledge/legacy-snapshots/domain-contracts/wallet-structure.md"
+        }
+      ]
+    },
+    {
+      "id": "sybil-wash",
+      "title": "热闹可能被制造：Sybil/Wash/协调行为的区分",
+      "status": "documented_legacy_method",
+      "triggers": [
+        "TOP10_SHARE_RISE",
+        "NEW_SOURCE_EVENT"
+      ],
+      "keywords": [
+        "sybil",
+        "刷量",
+        "洗售",
+        "wash",
+        "协调",
+        "多钱包",
+        "持有人"
+      ],
+      "mechanism": "交易次数、持有人数和活跃度可能被拆地址与关联交易影响；同时同步交易可能来自真实共同事件。",
+      "required_evidence": [
+        "买卖对手交易路径",
+        "净资金流",
+        "持有人增量及唯一主体估计",
+        "金额时间聚集、转账关联"
+      ],
+      "alternative_explanations": [
+        "新闻驱动的群体行为",
+        "聚合器/套利基础设施",
+        "单纯交易活跃"
+      ],
+      "inference_limit": "不能由同步买入、相似金额或相关性阈值直接认定操纵。",
+      "next_check": "交叉比较资金闭环、净买入、源地址网络及反事实同期样本。",
+      "sources": [
+        {
+          "repository": "sunshihao001/-",
+          "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+          "path": "learning/12.md",
+          "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/12.md",
+          "snapshot_path": "knowledge/legacy-snapshots/solana-learning/L12.md"
+        },
+        {
+          "repository": "sunshihao001/-",
+          "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+          "path": "learning/01-04-基础理论/04-链上本质思维工具箱.md",
+          "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/01-04-%E5%9F%BA%E7%A1%80%E7%90%86%E8%AE%BA/04-%E9%93%BE%E4%B8%8A%E6%9C%AC%E8%B4%A8%E6%80%9D%E7%BB%B4%E5%B7%A5%E5%85%B7%E7%AE%B1.md",
+          "snapshot_path": "knowledge/legacy-snapshots/solana-learning/field-forensics-toolbox.md"
+        }
+      ]
+    },
+    {
+      "id": "concentration",
+      "title": "Top10集中度变化需要区分地址与经济控制",
+      "status": "documented_legacy_method",
+      "triggers": [
+        "TOP10_SHARE_RISE"
+      ],
+      "keywords": [
+        "前十",
+        "top10",
+        "集中",
+        "筹码",
+        "持仓",
+        "控盘"
+      ],
+      "mechanism": "Top holders 可描述地址层面的集中，不能证明经济主体集中。转账、供应量变化、池子地址混入和重复计量都会影响指标。",
+      "required_evidence": [
+        "供应量与持仓快照口径",
+        "是否排除池子/CEX",
+        "地址间转账",
+        "同源与控制关系证据"
+      ],
+      "alternative_explanations": [
+        "CEX/LP地址排名变化",
+        "供应量分母变化",
+        "正常鲸鱼买入"
+      ],
+      "inference_limit": "不能直接把top10变化解读为控盘、庄家或内幕。",
+      "next_check": "验证holder样本与分母，再对疑似关联地址追加网络和历史分析。",
+      "sources": [
+        {
+          "repository": "sunshihao001/-",
+          "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+          "path": "learning/11.md",
+          "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/11.md",
+          "snapshot_path": "knowledge/legacy-snapshots/solana-learning/L11.md"
+        },
+        {
+          "repository": "sunshihao001/-",
+          "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+          "path": "design/phase1-skill-04-wallet-structure.md",
+          "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/design/phase1-skill-04-wallet-structure.md",
+          "snapshot_path": "knowledge/legacy-snapshots/domain-contracts/wallet-structure.md"
+        }
+      ]
+    },
+    {
+      "id": "deployer-history",
+      "title": "部署者历史和系列发行行为",
+      "status": "documented_legacy_method",
+      "triggers": [
+        "NEW_SOURCE_EVENT"
+      ],
+      "keywords": [
+        "发币",
+        "开发者",
+        "部署者",
+        "deployer",
+        "creator",
+        "rug ratio"
+      ],
+      "mechanism": "把同一部署地址的历史发行、资金准备、早期买家和退出结果放到时间序列。地址可更换，历史表现未必覆盖真实实体。",
+      "required_evidence": [
+        "deployment签名",
+        "历史发行全集及选择口径",
+        "新币资金来源",
+        "同一链上地址控制的证据"
+      ],
+      "alternative_explanations": [
+        "代发工具/launchpad共用地址",
+        "地址转让或更替",
+        "幸存者偏差"
+      ],
+      "inference_limit": "不能以creator标签或单个rug比例断定未来行为。",
+      "next_check": "验证部署身份、历史样本覆盖率、对照组和相关钱包变更。",
+      "sources": [
+        {
+          "repository": "sunshihao001/-",
+          "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+          "path": "design/phase1-skill-03-wallet-roles.md",
+          "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/design/phase1-skill-03-wallet-roles.md",
+          "snapshot_path": "knowledge/legacy-snapshots/domain-contracts/wallet-roles.md"
+        },
+        {
+          "repository": "sunshihao001/qb-",
+          "commit": "8377ad5611255df5cd4562666a826708575334f0",
+          "path": "sikk_gmgn_token_report.py",
+          "url": "https://github.com/sunshihao001/qb-/blob/8377ad5611255df5cd4562666a826708575334f0/sikk_gmgn_token_report.py"
+        }
+      ]
+    },
+    {
+      "id": "gmgn-field-combinations",
+      "title": "GMGN组合指标只是形成问题的工具",
+      "status": "documented_legacy_method",
+      "triggers": [
+        "BASELINE",
+        "MISSING_FIELDS",
+        "LIQUIDITY_DROP"
+      ],
+      "keywords": [
+        "gmgn",
+        "字段",
+        "市值",
+        "量价",
+        "风险",
+        "bundler",
+        "liquidity"
+      ],
+      "mechanism": "对liquidity、market cap、volume、holders、bundler等做跨维度核对；核心是辨别交易活跃、承接能力和参与真实性。",
+      "required_evidence": [
+        "每个字段的源端JSON路径",
+        "单位、百分数分母与有效时间",
+        "是否有可自算的链上对应"
+      ],
+      "alternative_explanations": [
+        "后端字段别名或采样口径变化",
+        "营销/刷量指标污染"
+      ],
+      "inference_limit": "没有真实field mapping或时间窗口就不能当作有效量化指标。",
+      "next_check": "逐字段回答量什么、能否操纵、能否复算、衡量哪个机制；先审计再参与判断。",
+      "sources": [
+        {
+          "repository": "sunshihao001/-",
+          "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+          "path": "learning/15-GMGN字段组合地基.md",
+          "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/15-GMGN%E5%AD%97%E6%AE%B5%E7%BB%84%E5%90%88%E5%9C%B0%E5%9F%BA.md",
+          "snapshot_path": "knowledge/legacy-snapshots/solana-learning/L15-GMGN.md"
+        },
+        {
+          "repository": "sunshihao001/-",
+          "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+          "path": "skills/common/gmgn_client.py",
+          "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/skills/common/gmgn_client.py"
+        },
+        {
+          "repository": "sunshihao001/qb-",
+          "commit": "8377ad5611255df5cd4562666a826708575334f0",
+          "path": "sikk_gmgn_token_report.py",
+          "url": "https://github.com/sunshihao001/qb-/blob/8377ad5611255df5cd4562666a826708575334f0/sikk_gmgn_token_report.py"
+        }
+      ]
+    },
+    {
+      "id": "evidence-synthesis",
+      "title": "证据链、反证与缺失证据独立呈现",
+      "status": "source_contract",
+      "triggers": [
+        "BASELINE",
+        "MISSING_FIELDS",
+        "LIQUIDITY_DROP",
+        "TOP10_SHARE_RISE",
+        "NEW_SOURCE_EVENT"
+      ],
+      "keywords": [
+        "证据",
+        "反证",
+        "冲突",
+        "判断",
+        "机制",
+        "分析",
+        "为什么"
+      ],
+      "mechanism": "来源事实、角色假说、机制推断、竞争解释不能混成一个确定性评分。保留时效性和不可用字段。",
+      "required_evidence": [
+        "各判断的原始来源与时间",
+        "支持与反驳证据",
+        "未观测的关键变量"
+      ],
+      "alternative_explanations": [
+        "同一数据来源重复计为多个独立证据",
+        "相关而非因果",
+        "过期数据"
+      ],
+      "inference_limit": "原有证据链文档的默认主观0.8置信度和叠加加分公式未得到校准，不能直接移植。",
+      "next_check": "列最可能改变结论的缺失证据，决定继续查验或停止，而非只给分数。",
+      "sources": [
+        {
+          "repository": "sunshihao001/-",
+          "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+          "path": "learning/13.md",
+          "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/13.md",
+          "snapshot_path": "knowledge/legacy-snapshots/solana-learning/L13.md"
+        },
+        {
+          "repository": "sunshihao001/-",
+          "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+          "path": "design/phase1-skill-05-evidence-chain.md",
+          "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/design/phase1-skill-05-evidence-chain.md",
+          "snapshot_path": "knowledge/legacy-snapshots/domain-contracts/evidence-chain.md"
+        }
+      ]
+    },
+    {
+      "id": "research-states",
+      "title": "Gate本质是研究状态而非交易指令",
+      "status": "source_contract",
+      "triggers": [
+        "BASELINE",
+        "MISSING_FIELDS"
+      ],
+      "keywords": [
+        "gate",
+        "watch",
+        "paper",
+        "阻断",
+        "继续",
+        "下一步"
+      ],
+      "mechanism": "区分可继续研究、证据不足、风险阻断和纸面验证。工作流状态应由证据决定，不由Bot信心或词汇诱导决定。",
+      "required_evidence": [
+        "可复核的当前证据",
+        "阻断理由",
+        "缺失字段和失败重试信息"
+      ],
+      "alternative_explanations": [
+        "平台不可用但并非市场异常",
+        "局部信息缺失导致暂不可评估"
+      ],
+      "inference_limit": "BLOCK/WATCH/PAPER_ONLY/NEED_MORE_DATA不代表买卖或盈利预期。",
+      "next_check": "说明停止原因、需补的数据、建议观察窗口及需人复核的问题。",
+      "sources": [
+        {
+          "repository": "sunshihao001/-",
+          "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+          "path": "learning/14.md",
+          "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/learning/14.md",
+          "snapshot_path": "knowledge/legacy-snapshots/solana-learning/L14.md"
+        },
+        {
+          "repository": "sunshihao001/-",
+          "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+          "path": "rules/downgrade_rules_v1.json",
+          "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/rules/downgrade_rules_v1.json"
+        }
+      ]
+    },
+    {
+      "id": "reclaim-theory",
+      "title": "第一控盘区、POC/AVWAP回收属于待验证的策略理论",
+      "status": "unverified_hypothesis",
+      "triggers": [
+        "ON_DEMAND"
+      ],
+      "keywords": [
+        "第一控盘区",
+        "poc",
+        "avwap",
+        "深洗",
+        "回收",
+        "wyckoff",
+        "庄家周期"
+      ],
+      "mechanism": "历史库提出第一控盘区与成本锚回收的候选语义；存在事后选区、不同标的流动性、低样本覆盖等问题，不能直接变成链上控盘因果结论。",
+      "required_evidence": [
+        "可重复的区间定义",
+        "有时间先后约束的原始价量数据",
+        "未上涨与失败案例",
+        "样本外比较"
+      ],
+      "alternative_explanations": [
+        "事后画线、市场整体趋势",
+        "低流动性噪声",
+        "交易区间偶然重合"
+      ],
+      "inference_limit": "不把模型名字当成熟策略；未经过回放、对照验证前不进入监控发布规则。",
+      "next_check": "把概念转成可观测字段和否证条件，并保留原始假设身份。",
+      "sources": [
+        {
+          "repository": "sunshihao001/meme-",
+          "commit": "5ab2b01f08e4e512fa4fcd1aed88953ff534bd0a",
+          "path": "03_语义概念/第一控盘区定义_v0.1.md",
+          "url": "https://github.com/sunshihao001/meme-/blob/5ab2b01f08e4e512fa4fcd1aed88953ff534bd0a/03_%E8%AF%AD%E4%B9%89%E6%A6%82%E5%BF%B5/%E7%AC%AC%E4%B8%80%E6%8E%A7%E7%9B%98%E5%8C%BA%E5%AE%9A%E4%B9%89_v0.1.md",
+          "snapshot_path": "knowledge/legacy-snapshots/theory/first-control-zone.md"
+        },
+        {
+          "repository": "sunshihao001/meme-",
+          "commit": "5ab2b01f08e4e512fa4fcd1aed88953ff534bd0a",
+          "path": "04_风险管理/结构风险评分字段表_v0.1.md",
+          "url": "https://github.com/sunshihao001/meme-/blob/5ab2b01f08e4e512fa4fcd1aed88953ff534bd0a/04_%E9%A3%8E%E9%99%A9%E7%AE%A1%E7%90%86/%E7%BB%93%E6%9E%84%E9%A3%8E%E9%99%A9%E8%AF%84%E5%88%86%E5%AD%97%E6%AE%B5%E8%A1%A8_v0.1.md",
+          "snapshot_path": "knowledge/legacy-snapshots/theory/structure-risk-fields.md"
+        }
+      ]
+    },
+    {
+      "id": "gmgn-raw-prototype",
+      "title": "旧工具原型中的分类是启发式而非真相",
+      "status": "documented_legacy_method",
+      "triggers": [
+        "MISSING_FIELDS",
+        "BASELINE"
+      ],
+      "keywords": [
+        "gmgn工具",
+        "采集",
+        "原型",
+        "分类",
+        "字段映射",
+        "数据源"
+      ],
+      "mechanism": "qb工具通过多种GMGN查询获得token/holder/trader信息并给钱包角色建议；原脚本标签规则不可直接作为被验证的真实身份。",
+      "required_evidence": [
+        "原始API或CLI返回",
+        "字段别名与实际单位",
+        "调用时间和权限",
+        "异常率"
+      ],
+      "alternative_explanations": [
+        "GMGN版本更新",
+        "数据服务不可用",
+        "脚本假设与当前接口不一致"
+      ],
+      "inference_limit": "本仓库只读采集器不等于已完成真实字段解析，更不能凭样本空值生成市场结论。",
+      "next_check": "先核实原始请求与响应，再逐一实现可测、可回退的规范化映射。",
+      "sources": [
+        {
+          "repository": "sunshihao001/qb-",
+          "commit": "8377ad5611255df5cd4562666a826708575334f0",
+          "path": "sikk_gmgn_token_report.py",
+          "url": "https://github.com/sunshihao001/qb-/blob/8377ad5611255df5cd4562666a826708575334f0/sikk_gmgn_token_report.py"
+        },
+        {
+          "repository": "sunshihao001/-",
+          "commit": "2bf694b37cce25b4a3c9364298b784039f3ecc84",
+          "path": "skills/common/gmgn_client.py",
+          "url": "https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/skills/common/gmgn_client.py"
+        }
+      ]
+    },
+    {
+      "id": "anti-false-completion",
+      "title": "计划、模拟测试、已部署、有效判断必须分别核验",
+      "status": "documented_legacy_method",
+      "triggers": [
+        "BASELINE",
+        "MISSING_FIELDS"
+      ],
+      "keywords": [
+        "验收",
+        "完成",
+        "验证",
+        "复盘",
+        "测试",
+        "经验"
+      ],
+      "mechanism": "旧Harness的防自欺审计提醒：文档、fixture、dry-run、自评不能替代真实链上数据和外部结果。",
+      "required_evidence": [
+        "实际输入与运行产物",
+        "程序提交与CI",
+        "独立重放",
+        "真实事件结局"
+      ],
+      "alternative_explanations": [
+        "自选成功案例",
+        "未观测失败/漏报",
+        "测试环境优于现实"
+      ],
+      "inference_limit": "离线测试通过不是Grok生产Bot已部署，也不是策略有效。",
+      "next_check": "每轮区分DESIGNED、TESTED_OFFLINE、VERIFIED_LIVE和PERFORMANCE_EVALUATED。",
+      "sources": [
+        {
+          "repository": "sunshihao001/qb-",
+          "commit": "8377ad5611255df5cd4562666a826708575334f0",
+          "path": "hermes_harness/22_anti_self_deception/README.md",
+          "url": "https://github.com/sunshihao001/qb-/blob/8377ad5611255df5cd4562666a826708575334f0/hermes_harness/22_anti_self_deception/README.md",
+          "snapshot_path": "knowledge/legacy-snapshots/method/anti-fake-completion.md"
+        },
+        {
+          "repository": "sunshihao001/qb-",
+          "commit": "8377ad5611255df5cd4562666a826708575334f0",
+          "path": "hermes_harness/16_reliability_calibration/README.md",
+          "url": "https://github.com/sunshihao001/qb-/blob/8377ad5611255df5cd4562666a826708575334f0/hermes_harness/16_reliability_calibration/README.md",
+          "snapshot_path": "knowledge/legacy-snapshots/method/calibration.md"
+        }
+      ]
+    }
+  ]
+}
