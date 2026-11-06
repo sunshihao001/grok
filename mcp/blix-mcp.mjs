@@ -7,6 +7,8 @@ import { MCP_TOOLS } from "../public/mcp-tools.js";
 
 const BASE = (process.env.BLIX_URL || `http://localhost:${process.env.RADAR_PORT || 4420}`).replace(/\/$/, "");
 const MAX_CHARS = 40_000;
+// The Solana Meme research branch exposes only non-mutating tools to MCP.
+const READ_TOOLS = MCP_TOOLS.filter((tool) => tool.write !== true);
 const LIMIT = { type: "integer", description: "Most rows to return in any list (default 10, max 50)" };
 const DROP = new Set(["image", "uri", "icon"]);
 
@@ -19,7 +21,7 @@ function trim(v, n, tail) {
 }
 
 async function callTool(name, args = {}) {
-  const tool = MCP_TOOLS.find((t) => t.name === name);
+  const tool = READ_TOOLS.find((t) => t.name === name);
   if (!tool) throw new Error(`Unknown tool: ${name}`);
   for (const k of tool.required || []) if (args[k] === undefined || args[k] === "") throw new Error(`Missing argument: ${k}`);
   const limit = Math.min(Math.max(Math.round(+args.limit) || 10, 1), 50);
@@ -44,9 +46,9 @@ async function handle(msg) {
   if (id === undefined || id === null) return null; // a notification: nothing to answer
   const ok = (result) => ({ jsonrpc: "2.0", id, result });
   if (method === "initialize") return ok({ protocolVersion: params?.protocolVersion || "2025-06-18", capabilities: { tools: {} },
-    serverInfo: { name: "blix", version: "0.2.0" }, instructions: "Read-only view of the Blix Solana memecoin radar running on this PC, plus a paper-money desk. Nothing here can spend real funds." });
+    serverInfo: { name: "blix", version: "0.2.0" }, instructions: "Read-only market research tools only. Paper trading tools are not exposed by this MCP endpoint; the underlying Blix HTTP/server code is not yet certified safe for startup." });
   if (method === "ping") return ok({});
-  if (method === "tools/list") return ok({ tools: MCP_TOOLS.map(schema) });
+  if (method === "tools/list") return ok({ tools: READ_TOOLS.map(schema) });
   if (method === "tools/call") {
     try { return ok({ content: [{ type: "text", text: await callTool(params?.name, params?.arguments) }] }); }
     catch (e) { return ok({ content: [{ type: "text", text: e.message }], isError: true }); }
