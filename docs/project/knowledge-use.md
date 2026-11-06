@@ -1,5 +1,8 @@
 # 按实际问题使用专业知识、AI研究与可证伪证据
 
+**新认知入口**：[Hermes生框架、qb数据护照、meme反证与多对象经济过程](../../knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md)。根据任务需要用因果、过程挖掘、取证等问题视角生成竞争解释，未审来源保留UNKNOWN；不是新增固定专家、硬标签或运行时强制Prompt。
+
+
 **主体认识优先入口**：先看[主体能力与旧知识内化深审 V0.2](blix-knowledge-activation-ceiling-v0.2.md)（按业务判断上限、旧方法适用、不能继承的规则），再按需回查下述来源。
 
 **主体认识优先入口（原基准）**：[Blix 已有业务能力 × 旧 Grok 专业知识继承基准](blix-heritage-capability-baseline-v0.1.md)。面对实际业务先定位 Blix 已有 UI/数据/逻辑，再按需要调用 PR #14 的原专业正文或 Hermes/qb-/meme- 的机制，不全文搬迁、不把旧历史程序当作已在 Blix 运行。

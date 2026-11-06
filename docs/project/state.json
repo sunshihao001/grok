@@ -516,5 +516,15 @@
     "business_code_changed": false,
     "blix_run": "NOT_RUN",
     "model_effect_verified": false
+  },
+  "legacy_deep_cognitive_study": {
+    "date": "2026-11-06",
+    "document": "knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md",
+    "baseline": "63a3df55e38ff27b16723f994e298de3b30885b7",
+    "result": "MULTI_OBJECT_PROCESS_HYPOTHESIS",
+    "evidence": "SOURCE_READ_AND_CROSS_DOMAIN_INFERENCE",
+    "runtime": "NOT_RUN",
+    "ai_ab": "NOT_TESTED",
+    "business_code_changed": false
   }
 }

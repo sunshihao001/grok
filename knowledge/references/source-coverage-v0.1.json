@@ -31,7 +31,9 @@
         "design/phase1-research/00e-字节反推框架-突破认知局限.txt",
         "design/Skill4-筹码控制权状态层设计.md",
         "design/phase1-skill-04-wallet-structure.md",
-        "design/phase1-skill-05-evidence-chain.md"
+        "design/phase1-skill-05-evidence-chain.md",
+        "design/phase1-skill-03-wallet-roles.md",
+        "docs/missing_data_policy.md"
       ],
       "other_content": "PENDING"
     },
@@ -58,7 +60,8 @@
         "hermes_harness/22_anti_self_deception/document_only_audit.md",
         "hermes_harness/23_real_task_regression/README.md",
         "hermes_harness/23_real_task_regression/error_taxonomy/judgment_error_taxonomy_v2_1.json",
-        "hermes_harness/23_real_task_regression/regression_runs/v21.regression.20260509.062832/regression_summary.json"
+        "hermes_harness/23_real_task_regression/regression_runs/v21.regression.20260509.062832/regression_summary.json",
+        "hermes_harness/06_verification/project_governance/wallet_intel_stage6_data_passport_verification.md"
       ],
       "other_content": "PENDING"
     },
@@ -82,7 +85,8 @@
         "03_语义概念/第一控盘区定义_v0.1.md",
         "02_庄家周期/深洗与死亡盘语义深化_v0.1.md",
         "04_风险管理/诱多反抽与二次启动区分_v0.1.md",
-        "09_规则与回测/反证实验设计_v0.1.md"
+        "09_规则与回测/反证实验设计_v0.1.md",
+        "01_策略定义/策略成熟度定位与商业角色_v0.1.md"
       ],
       "other_content": "PENDING"
     }
@@ -179,5 +183,20 @@
   ],
   "product_runtime": "NOT_RUN",
   "model_knowledge_gain_ab": "NOT_TESTED",
-  "exhaustive_content_review_completed": false
+  "exhaustive_content_review_completed": false,
+  "research_rounds": [
+    {
+      "date": "2026-11-06",
+      "document": "knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md",
+      "kind": "ORIGINAL_STUDY_MULTIDISCIPLINARY_SYNTHESIS",
+      "new_problem": "MULTI_OBJECT_ECONOMIC_EVENT_IDENTIFIABILITY",
+      "evidence": "SOURCE_READ_AND_INFERENCE",
+      "unreviewed": [
+        "Hermes remaining learning/skills/reports/tests",
+        "qb full real data and source_wallet_bot",
+        "meme indicators, specs, samples"
+      ],
+      "live_validation": "NOT_RUN"
+    }
+  ]
 }
