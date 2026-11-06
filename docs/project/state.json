@@ -359,5 +359,25 @@
     "public_web_hosting": "NOT_CONFIRMED",
     "preferred_long_term": "SEPARATE_BLIX_ALWAYS_ON_PLUS_WEB_PLUS_BOT",
     "deployed": false
+  },
+  "interface_contract_review": {
+    "date": "2026-11-06",
+    "document": "docs/project/api-mcp-sse-contract-v0.1.md",
+    "baseline_sha": "cc468cca7df8916e57159171e481aa5512465fcc",
+    "evidence": "SOURCE_READ_AND_INFERRED_RISK",
+    "tools": {
+      "declared": 20,
+      "read_exposed": 18
+    },
+    "sse_replay": "NO_PERSISTENT_EVENT_ID",
+    "wallet_tracker": {
+      "ui_poll_seconds": 20,
+      "latest_trade_limit": 300,
+      "latest_transfer_limit": 150,
+      "since_pagination_risk": "UNTESTED"
+    },
+    "runtime": "NOT_RUN",
+    "tests": "NOT_RUN",
+    "next": "Cross-source Mint/Holder/BubbleMap field contracts"
   }
 }

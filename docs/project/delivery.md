@@ -63,3 +63,10 @@
 - [官网功能/业务/源码对照](official-site-to-code-audit-v0.1.md)；注意AI/MCP与交易API权限并不等价。
 - [Grok Bot对话、网站、持续监控三种路线](grok-bot-usage-options-v0.1.md)。官方云电脑可能闲置休眠，不将其当成已验证的24h运行主机。
 - 仅文档静态研究，未运行未部署。
+
+
+## 2026-11-06 API/MCP/SSE→经济事实与持续监控研究
+- [跨层接口契约报告](api-mcp-sse-contract-v0.1.md)：20个MCP定义中当前发布18项读工具，尚未直接提供BubbleMap和WTrack完整资金历史。
+- MCP数组默认10条/最多50条可能污染完整性判断；Wallet Tracker原生UI每20秒轮询，而feedSince有待验证的高活动分页风险。两者不能混同。
+- SSE无持久事件回放，Journal部分场所24h、WTrack 7天，无法单凭它们证明6/12h及跨Mint完整资金活动。
+- 只读静态审查，不运行、不装依赖、不连接Grok Bot、不修改业务代码。
