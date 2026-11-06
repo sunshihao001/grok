@@ -9,13 +9,14 @@
     "relative_links_to_original": true,
     "all_historical_instructions_are_nonbinding": true,
     "import_is_not_validation": true,
-    "source_manifest_not_copy": "The 21 historical snapshots referenced in the source manifest are not local Blix snapshot documents; content needs separate review or import."
+    "source_manifest_not_copy": "The 21 historical snapshots referenced in the source manifest are not local Blix snapshot documents; content needs separate review or import.",
+    "original_theory_not_current_verdict": "Original Hermes 00d/00e contain speculative controls, thresholds and post hoc discovery suggestions. Preserve unmodified text while treating claims as hypothesis or historical author assertion, not Blix validated finding."
   },
-  "count": 19,
+  "count": 21,
   "by_category": {
     "foundations": 2,
     "mechanisms": 5,
-    "methods": 6,
+    "methods": 8,
     "cases": 1,
     "ai": 1,
     "references": 4
@@ -212,6 +213,26 @@
       "source_url": "https://github.com/sunshihao001/grok/blob/main/knowledge/legacy-snapshots/manifest.json",
       "migration_status": "SOURCE_PROVENANCE_MANIFEST_COPIED_21_SNAPSHOT_BODIES_NOT_MIGRATED",
       "contained_entries": 21
+    },
+    {
+      "target": "knowledge/methods/hermes-multidimensional-reasoning-original.md",
+      "category": "methods",
+      "source_repo": "sunshihao001/-",
+      "source_ref": "main",
+      "source_path": "design/phase1-research/00d-GMGN-多维度推理扩展.txt",
+      "source_blob_sha": "262866de3c4d00bcbd2c17b2c71398e6bc158465",
+      "source_url": "https://github.com/sunshihao001/-/blob/main/design/phase1-research/00d-GMGN-%E5%A4%9A%E7%BB%B4%E5%BA%A6%E6%8E%A8%E7%90%86%E6%89%A9%E5%B1%95.txt",
+      "migration_status": "ORIGINAL_TEXT_EMBEDDED_WITH_SOURCE_PROVENANCE_HYPOTHESES_UNVERIFIED"
+    },
+    {
+      "target": "knowledge/methods/hermes-reverse-discovery-original.md",
+      "category": "methods",
+      "source_repo": "sunshihao001/-",
+      "source_ref": "main",
+      "source_path": "design/phase1-research/00e-字节反推框架-突破认知局限.txt",
+      "source_blob_sha": "6c008fa4a016099cbd5a71f3ff880afada225aea",
+      "source_url": "https://github.com/sunshihao001/-/blob/main/design/phase1-research/00e-%E5%AD%97%E8%8A%82%E5%8F%8D%E6%8E%A8%E6%A1%86%E6%9E%B6-%E7%AA%81%E7%A0%B4%E8%AE%A4%E7%9F%A5%E5%B1%80%E9%99%90.txt",
+      "migration_status": "ORIGINAL_TEXT_EMBEDDED_WITH_SOURCE_PROVENANCE_DISCOVERY_IDEAS_UNVERIFIED"
     }
   ],
   "non_imported_sources": [
