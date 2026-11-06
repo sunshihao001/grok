@@ -4,6 +4,12 @@
 
 **主体认识优先入口（原基准）**：[Blix 已有业务能力 × 旧 Grok 专业知识继承基准](blix-heritage-capability-baseline-v0.1.md)。面对实际业务先定位 Blix 已有 UI/数据/逻辑，再按需要调用 PR #14 的原专业正文或 Hermes/qb-/meme- 的机制，不全文搬迁、不把旧历史程序当作已在 Blix 运行。
 
+## 通用 ai-d 完整能力的接入入口（2026-11-06）
+
+**Blix 消费入口**：[ai-d-cognitive-core Skill](../../.grok/skills/ai-d-cognitive-core/SKILL.md)，上游唯一来源：[ai-d Cognitive Core Skill](https://github.com/sunshihao001/ai-d/blob/proposal/goal-planning-knowledge-delivery-20261106/.agents/skills/ai-d-cognitive-core/SKILL.md)。它开放七项完整的长期认知能力——目标理解、专业知识、未知发现、方案判断、实际交付、证据反证与长期迁移——并指回原始资料，不把知识体系复制成又一套 Blix 目录或强制全流程。
+
+**真实状态**：已验收两个 GitHub 仓库的 Skill 文件、AGENTS 入口、上游原文和本地专业文件的静态可达性；但尚未在 Grok Bot 云电脑私人 Skill 库安装，亦未证明 Bot 实际调用了全部来源。Grok CLI 的 `.grok/skills/` 发现路径不等于 Grok Bot 原生私人 Skill 的注册；后者在该环境启用后还需要安全任务测试。日常市场调查首先遵循 Blix 自身目标与只读限制，需要专业研究、任务判断或跨领域知识时再读取 ai-d 对应原文，不默认全文加载。
+
 ## 知识来源与正确定位
 | 入口 | 贡献 | 限制 |
 |---|---|---|
