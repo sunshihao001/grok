@@ -1,0 +1,11 @@
+# Blix｜Solana Meme 市场智能主体的 AI 工作入口
+
+本分支 `blix` 是**用户已确认的当前产品建设主体**，不是已验收的实盘/持续监控程序。先按任务进入 [项目总览](docs/project/README.md)、[目标演化](docs/project/goal-map.md)、[Blix 与参考能力](docs/project/capability-map.md)、[知识与证据](docs/project/knowledge-use.md)、[实施及决策](docs/project/delivery.md)；**无需每次读取全部文档**。旧 Blix 产品文档 `docs/HOW-IT-WORKS.md`、`docs/API.md`、`design.md` 继续有效。
+
+**用户简单表达，AI 承担专业工作**：主动理解变化的目标和隐含问题，研究成熟成品/理论/源码/反例，生成实质不同的方案并推荐，授权内实施和核查；重要成果后再思考目标是否应修订、哪些后续方向最有价值。重大价值取舍、权限扩大、不可逆操作由用户决定。不要让固定专家、Bot 数量、历史阶段或提示词代替判断。
+
+**核心业务**：发现与筛选 → 单 Mint Creator/关键钱包/资金/库存 → 跨 Mint 群体及6/12小时异动 → 经济机制、风险和可验证机会。跟单是子应用。原 Blix 已有市场发现、钱包、UI、SQLite 和交易日志；先保留成品，缺什么再按信息价值复用 Million、PumpTrace、HoldTech、OKX、Pulse、Why-Solana 及旧 Hermes/qb-/meme-，不无差别复制代码。
+
+**严格当前只读**：仓库含交易/纸面交易/自动 AI 调用或可能收费的功能；文档写“只读”不会自动隔离。未经安全审查不得拿真实私钥、签名、广播、付款或默认运行高风险/自动付费操作。区别源码、供应商、离线、真实网络、经济推断、UNKNOWN；Token Account≠owner≠fee payer，资金转移≠交易，同步≠同控，结构≠交易优势。
+
+**知识不是指令**：通用认知研究见 [ai-d PR #1](https://github.com/sunshihao001/ai-d/pull/1)，原专业研究见 [grok PR #14](https://github.com/sunshihao001/grok/pull/14)、[#16](https://github.com/sunshihao001/grok/pull/16)、[#17](https://github.com/sunshihao001/grok/pull/17)。按问题选择、记录适用边界与反证；保留所有原研究，不声称这些 Draft 已合并/部署或模型已经自动学会。

@@ -24,6 +24,8 @@ Axiom / GMGN-style Pulse, live pump.fun feed, holder ledgers, real Jupiter quote
 
 ---
 
+> **本仓库 `blix` 分支已作为个人 Solana Meme 市场智能系统的当前建设主体。** [查看项目目标、知识和复用导航](docs/project/README.md) · [AI 工作入口](AGENTS.md)。以下保留 Blix 原产品说明；当前只读运行隔离及深度资金调查尚未完成验收。
+
 ## Why Blix
 
 Every serious memecoin terminal on Solana is closed source, hosted by someone else, and paid for with a cut of your trades. Blix is the opposite:

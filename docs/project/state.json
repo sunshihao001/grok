@@ -1,0 +1,216 @@
+{
+  "schema_version": "0.1",
+  "date": "2026-11-06",
+  "branch": "blix",
+  "purpose": "project_knowledge_and_goal_orientation_not_runtime",
+  "sources": [
+    {
+      "id": "BLIX",
+      "repo": "sunshihao001/grok",
+      "ref": "blix",
+      "head_before_change": "e2c69d42dcdae7690f9d47e0d0e7e8257ed48326",
+      "evidence": "SOURCE_READ"
+    },
+    {
+      "id": "AI-D",
+      "repo": "sunshihao001/ai-d",
+      "ref": "proposal/goal-planning-knowledge-delivery-20261106",
+      "sha": "333ae1492b4f12d8a0e69648669f731349300a50",
+      "evidence": "DRAFT_RESEARCH"
+    },
+    {
+      "id": "GROK-KNOWLEDGE",
+      "repo": "sunshihao001/grok",
+      "ref": "pull/14",
+      "evidence": "HISTORICAL_DRAFT"
+    },
+    {
+      "id": "GROK-ENGINEERING",
+      "repo": "sunshihao001/grok",
+      "ref": "pull/16",
+      "evidence": "HISTORICAL_DRAFT"
+    },
+    {
+      "id": "GROK-INTEGRATION",
+      "repo": "sunshihao001/grok",
+      "ref": "pull/17",
+      "evidence": "HISTORICAL_DRAFT"
+    }
+  ],
+  "goals": [
+    {
+      "id": "G0",
+      "level": "purpose",
+      "text": "理解市场风险和潜在机会，降低用户专业负担",
+      "authority": "user",
+      "status": "USER_CONFIRMED"
+    },
+    {
+      "id": "G1-MARKET",
+      "level": "strategy",
+      "text": "持续演化的Solana Meme市场智能产品",
+      "authority": "user",
+      "status": "USER_CONFIRMED"
+    },
+    {
+      "id": "G1-AI",
+      "level": "strategy",
+      "text": "用户简单表达，AI承担专业研究、执行、验收、下一阶段发现",
+      "authority": "user",
+      "status": "USER_CONFIRMED"
+    },
+    {
+      "id": "G2-DISCOVERY",
+      "level": "capability",
+      "text": "市场发现与风险过滤",
+      "status": "USER_CONFIRMED"
+    },
+    {
+      "id": "G2-MINT",
+      "level": "capability",
+      "text": "单Mint的Creator/资金/钱包/库存调查",
+      "status": "USER_CONFIRMED"
+    },
+    {
+      "id": "G2-CROSS",
+      "level": "capability",
+      "text": "跨Mint群体监控和6/12小时异常",
+      "status": "USER_CONFIRMED"
+    },
+    {
+      "id": "G2-MECHANISM",
+      "level": "capability",
+      "text": "可证伪经济机制及机会研究",
+      "status": "USER_CONFIRMED"
+    },
+    {
+      "id": "G2-DELIVERY",
+      "level": "capability",
+      "text": "可靠数据、统一UI、知识和运行验收",
+      "status": "USER_CONFIRMED"
+    },
+    {
+      "id": "G3-BLIX",
+      "level": "implementation",
+      "text": "blix分支作为当前产品建设主体",
+      "status": "USER_CONFIRMED",
+      "authority": "user"
+    },
+    {
+      "id": "G3-REUSE",
+      "level": "implementation",
+      "text": "成熟成品整体复用与专业知识补全",
+      "status": "USER_CONFIRMED"
+    },
+    {
+      "id": "G4-ORIENT",
+      "level": "task",
+      "text": "建立目标/知识/能力导航",
+      "status": "DOCS_ONLY"
+    },
+    {
+      "id": "G4-SAFETY",
+      "level": "task",
+      "text": "只读和自动费用安全审查",
+      "status": "NOT_VERIFIED"
+    },
+    {
+      "id": "G4-MINT",
+      "level": "task",
+      "text": "单Mint真实业务验收",
+      "status": "NOT_VERIFIED"
+    }
+  ],
+  "links": [
+    [
+      "G1-MARKET",
+      "G0",
+      "supports"
+    ],
+    [
+      "G1-AI",
+      "G0",
+      "supports"
+    ],
+    [
+      "G2-DISCOVERY",
+      "G1-MARKET",
+      "refines"
+    ],
+    [
+      "G2-MINT",
+      "G1-MARKET",
+      "refines"
+    ],
+    [
+      "G2-CROSS",
+      "G1-MARKET",
+      "refines"
+    ],
+    [
+      "G2-MECHANISM",
+      "G1-MARKET",
+      "refines"
+    ],
+    [
+      "G2-DELIVERY",
+      "G1-MARKET",
+      "enables"
+    ],
+    [
+      "G3-BLIX",
+      "G2-DELIVERY",
+      "implements"
+    ],
+    [
+      "G3-REUSE",
+      "G2-MINT",
+      "enables"
+    ],
+    [
+      "G4-ORIENT",
+      "G1-AI",
+      "supports"
+    ],
+    [
+      "G4-ORIENT",
+      "G3-BLIX",
+      "supports"
+    ],
+    [
+      "G4-SAFETY",
+      "G3-BLIX",
+      "tests"
+    ],
+    [
+      "G4-MINT",
+      "G2-MINT",
+      "tests"
+    ]
+  ],
+  "decision": {
+    "id": "D-BLIX-2026-11-06",
+    "choice": "blix current branch is selected product base",
+    "status": "USER_CONFIRMED",
+    "live_state": "NOT_VERIFIED",
+    "revisit_if": [
+      "只读隔离无法可靠实现",
+      "关键经济事实覆盖不足而无法有限补全",
+      "持续改造比整用成熟能力显著更昂贵"
+    ]
+  },
+  "next": [
+    {
+      "id": "SAFE",
+      "goal_id": "G4-SAFETY",
+      "priority": 1,
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "MINT",
+      "goal_id": "G4-MINT",
+      "priority": 2,
+      "status": "NOT_RUN"
+    }
+  ]
+}
