@@ -77,3 +77,22 @@ ai-d 最新研究区分 **知识摘要 → 问题表征/判断方法 → 经外�
 - **已完成 SOURCE_READ + LINKED**：AI入口 `AGENTS.md` → `docs/project/README.md` → 本文件 / 主体继承总图 → 上述精确原来源 → Blix现有业务代码。具体可回查原文，旧知识仍留在原仓库，**不需要迁移复制152题、22专家和65资产**。
 - **尚未完成 APPLIED_AND_VERIFIED**：没有运行的同 Mint 调查样本验证这三条调用链是否提高了结论质量；没有将上述推断写入 Blix 运行时的数据结构、UI、MCP、持续告警；没有真正的 Grok Bot知识调用。
 - **后续按用户新指令**：先让这三条主体业务—知识链清晰、确认重要的专业缺口，再按“能够改善哪个业务判断”去解剖 Million/Why-Solana/HoldTech/OKX 等成熟实现。不能以研究项目的名称或功能个数代替复用判断。
+
+
+## 首批资产整合决策：把旧研究和成熟成品作用于现有Blix（2026-11-06源码对照）
+
+**目标**：只建设、运行 Blix 一个产品；旧 Grok/Hermes/qb-/meme-和 ai-d 为知识与方法来源，参考成品为业务实现与失败经验来源。以下是从**具体原始代码**而不是项目介绍得出的第一批可行动判断。状态仅 `SOURCE_REVIEWED`，**未拷贝模块、未修改业务程序、未运行真实Mint**；此前152条映射与65资产索引保持原位，不重建新体系。
+
+| 当前Blix真实问题 | 原始证据/可复用资产 | 精确落点与迁移决定 | 第一次验收反例 |
+|---|---|---|---|
+| Bubble Map资金边将直接出资与代付手续费混合；查无最老记录会持久负缓存 | [Blix bubblemap.js](../../server/bubblemap.js) `readFunder`、`bubble_funders`；[Hermes 00c](https://github.com/sunshihao001/-/blob/main/design/phase1-research/00c-GMGN-思维模型提炼.txt)事实→特征→结构；Grok D01-K03、D05-K01/02/03/09/10 | **第一优先，限定修改原模块**：未来应让资金边明确 `DIRECT_SOL_TRANSFER` / `FEE_PAYER_ONLY` / `UNRESOLVED_TRUNCATED` / `UNKNOWN` 的证据语义与历史覆盖；只有经真实交易证实的边才能用于相应资金关联推断；保留源引用、可重新补查策略。**不是**让 AI 靠提示词给现有错误关系图“解释一下” | 交易只有第三方Fee Payer且无对目标钱包的入金：不得生成“已证实资助”；最老签名超3页时不得永久认定无关系 |
+| 同一个Mint的Creator/持仓/池子在不同页面口径和来源不同 | [qb-单Mint八表](https://github.com/sunshihao001/qb-/blob/main/sikk_gmgn_token_report.py)关键地址/基础设施/复查组织；[PumpTrace trust-engine](https://github.com/AntC215/Pumptrace/blob/main/src/modules/trust-engine/analyze.mjs)按Owner/TokenAccount/程序分类与不同证据强度；Grok D06、D10 | **复用报告构造与验证语义，不搬旧GMGN脚本/新UI/未经校准风险分**。优先对照 `coin.js`/`holders.js`/`holderslive.js`/`bubblemap.js`；区分池/程序/Owner、数据源、供应量分母、观察时点 | 前20 Token Account对应少于20个Owner；池子是大Holder但不是个人钱包；两源分母不一致时明确UNKNOWN |
+| 从一批值得关注的Mint发现隐藏地址，再经地址找出其他Mint | [Million discovery.service.ts](https://github.com/Kelows/million/blob/main/apps/api/src/discovery/discovery.service.ts) 已通过pool/venue过滤、按买入净额挑候选并试探性分析头部与尾部；[funding.service.ts](https://github.com/Kelows/million/blob/main/apps/api/src/funding/funding.service.ts) 显示方向、对手、次数、金额并声明截断 | **有限吸收算法经验/研究缺口，不整套复制Million**：Blix已有`wallets.js`+`wtrack.js`+`bubblemap.js`，先比对其候选发现是否识别非Holder/非头部接收地址、公共设施误报和跨Mint重复；如实际优于原生，再决定薄适配 | 聚合池在同交易中大额收到Token不能被选为鲸鱼；仅最近窗口的样本不可标成“最早获利钱包”；一个公共资金入口的许多接收者不能被当一人 |
+| 不完整历史却被AI解释为“连续12小时无异动” | [PumpTrace backfill-manager.mjs](https://github.com/AntC215/Pumptrace/blob/main/src/modules/backfill-manager.mjs)有QUEUED/RUNNING/PAUSED/RATE_LIMITED/CAP_REACHED/COMPLETE及重启恢复；旧PR#16的`available_at`、C05覆盖限制 | **优先学习恢复语义并比较现有Journal/WTrack能力**，不直接接入PumpTrace服务/第二数据库；只有当前模块无法做到时才有限引入能保存cursor和缺口的成熟模式 | 429、重启、超cap或索引断流，不得产生“无事件”的错误结论；历史补到后不得当新发生的资金激增 |
+| AI知道152个题目但仍无法自主判断应调用哪项知识 | [ai-d工作流部件](https://github.com/sunshihao001/ai-d/blob/proposal/goal-planning-knowledge-delivery-20261106/research/workflow-components-and-boundaries.md)、[Hermes 00c](https://github.com/sunshihao001/-/blob/main/design/phase1-research/00c-GMGN-思维模型提炼.txt)、[Blix原152路由](legacy-knowledge-routing.v1.json) | **不再扩建专家目录**。一条任务首先识别事实问题与必要证据，再检索少量Dxx-Kxx原文、判断适用/冲突，调用Blix已有只读能力，输出支持和反证及缺口；将调用过程做可复核记录。此处仍是任务设计，现有`mint-facts`不具备自动知识检索/工具调度 | 给出“同步买入=同控”作为故意错误假设，模型应主动查D05公共服务/共同市场因素，并在证据不足时回答UNKNOWN |
+
+**本轮复用裁决**：
+1. 第一批重点不是哪个参考项目最强，而是**Blix原资金边类型与历史完整性**。旧Grok/Hermes指出专业错误，PumpTrace提供恢复候选，Million提供下一轮跨币发现实现对照。
+2. `meme-`的Wyckoff/POC/AVWAP、旧Hermes概率/阈值与PumpTrace数值风险分只保留为有条件的研究假说，不作为未经校准的同控身份、交易信号或精确置信概率。
+3. `Pulse`的长期市场档案、`HoldTech`的Holder质量与快照轨迹、`pumpwatch`的冻结研究样本、`OKX`的现成只读工作流、`PumpGrok`的任务契约/收据是下一批比较对象；先对照Blix已存在的功能和真实缺口。保留65资产索引避免遗漏，但**登记不等于已经全部核验和融合**。
+4. 未来任何迁入必须分类标记：**来源已读** / **已选具体代码接口** / **离线回归通过** / **真实只读验收通过**。当前仅达到前两项的候选判断。保持暂停启动、签名、交易、付费及自动联网测试的既定边界。
