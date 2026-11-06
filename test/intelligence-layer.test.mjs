@@ -57,3 +57,10 @@ test("local API reader only issues fixed GET routes on loopback", async () => {
   await read("/api/token/" + mint);
   assert.deepEqual(calls, [{ url: "http://127.0.0.1:4420/api/token/" + mint, method: "GET" }]);
 });
+
+test("HTTP 200 with malformed source data is not considered a completed observation", async () => {
+  const result = await runCapability("mint-facts", { mint, read: async () => ({ ok: true, status: 200, data: { error: "upstream partial" } }) });
+  assert.equal(result.status, "UNAVAILABLE");
+  assert.equal(result.facts.token, null);
+  assert.equal(result.facts.holderLedger, null);
+});

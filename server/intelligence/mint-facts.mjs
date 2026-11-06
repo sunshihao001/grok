@@ -18,10 +18,12 @@ export async function run({ mint, read, now = Date.now } = {}) {
   const [token, holders] = await Promise.all(paths.map(one));
   const t = token.ok ? token.data?.token : null;
   const wrongMint = Boolean(t && t.mint !== mint);
-  const h = holders.ok && holders.data && typeof holders.data === "object" ? holders.data : null;
+  const validToken = Boolean(t && typeof t === "object" && t.mint === mint);
+  const rawHolders = holders.ok && holders.data && typeof holders.data === "object" ? holders.data : null;
+  const h = rawHolders && (Number.isFinite(rawHolders.holders) || Array.isArray(rawHolders.top)) ? rawHolders : null;
   const top = Array.isArray(h?.top) ? h.top.slice(0, 25) : [];
   const facts = {
-    token: t && !wrongMint ? {
+    token: validToken ? {
       mint: t.mint, symbol: t.symbol ?? null, name: t.name ?? null,
       creatorCandidate: t.creator ?? null, dex: t.dex ?? null,
       firstSeen: t.first_seen ?? null, priceSource: t.fresh?.source ?? null,
@@ -45,9 +47,9 @@ export async function run({ mint, read, now = Date.now } = {}) {
   ];
   if (h && h.partial !== false) unknowns.push("Holder ledger reports missing or unverified coverage.");
   if (!token.ok || !facts.token) unknowns.push("Token details are unavailable or mismatched.");
-  if (!holders.ok) unknowns.push("Holder ledger is unavailable.");
+  if (!h) unknowns.push("Holder ledger is unavailable or malformed.");
   if (wrongMint) unknowns.push("Token response Mint does not match the requested Mint.");
-  const status = wrongMint ? "SOURCE_MISMATCH" : token.ok && holders.ok ? "OBSERVED_UNVERIFIED" : token.ok || holders.ok ? "PARTIAL" : "UNAVAILABLE";
+  const status = wrongMint ? "SOURCE_MISMATCH" : validToken && h ? "OBSERVED_UNVERIFIED" : validToken || h ? "PARTIAL" : "UNAVAILABLE";
   return {
     schemaVersion: "0.1", capability: manifest.id, mint, status,
     observedAt: new Date(now()).toISOString(), evidenceLevel: "BLIX_API_NOT_INDEPENDENTLY_CHAIN_VERIFIED",

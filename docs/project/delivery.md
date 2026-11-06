@@ -31,3 +31,10 @@
 - `mcp/blix-mcp.mjs` 默认只发布非写入工具，过滤 `write:true` 的 paper 交易；这**不保护**直接访问旧 HTTP/账户服务的请求。
 - `docs/project/single-mint-audit.md` 已将同 Mint 调查所需现成 API、历史覆盖缺口与参考项目对应；**未进行主网 Mint 调查**。
 - 后续需要真正独立的只读运行方式和 Node 24 环境测试，检查后台账户/自动研究/供应商配额及断流恢复。不能用“改文档/单测”冒充实跑。
+
+## 2026-11-06 单层专业扩展已接入代码
+
+- 新增 `server/intelligence/` 作为**唯一的增量专业能力层**，可按需加载，第一项 `mint-facts` 读取已有 Blix Token/Holder GET API，不启动主服务、自动 AI 或钱包任务。
+- 独立 Node 22 环境对实际提交内容的 6 个单元测试通过（使用受控 API 响应，不是主网实跑）；主项目要求 Node >=24.16，完整测试尚未执行。
+- `npm run inspect:mint -- <Mint>` 在**已存在且获批准的本地只读服务**启动后才能读取真实 Mint；当前默认 npm 启动阻断仍生效。
+- 分层目标、来源、统一事实表达与 UNKNOWN 见 [intelligence-layer.md](intelligence-layer.md)。这只是第一项能力，不能称已经集成 PumpTrace 或 Million。

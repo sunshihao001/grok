@@ -222,5 +222,28 @@
     "integration": "SINGLE_MINT_SOURCE_MAP_ONLY",
     "live_data_test": "NOT_RUN",
     "source": "docs/project/read-only-safety.md"
+  },
+  "intelligence_layer": {
+    "path": "server/intelligence/",
+    "implementation": "ONE_LAZY_LOADED_CAPABILITY_LAYER",
+    "modules": [
+      {
+        "id": "mint-facts",
+        "status": "UNIT_TESTED_ONLY",
+        "live": "NOT_RUN",
+        "sources": [
+          "GET /api/token/:mint",
+          "GET /api/holders/:mint?top=25"
+        ],
+        "certification": "NOT_CHAIN_VERIFIED"
+      }
+    ],
+    "test": {
+      "suite": "test/intelligence-layer.test.mjs",
+      "result": "6_PASS_0_FAIL",
+      "runtime": "Node 22 local standalone; not full Blix Node >=24.16",
+      "source": "independent isolated unit test on exact Git blob contents"
+    },
+    "server_runtime": "BLOCKED_PENDING_READ_ONLY_ISOLATION"
   }
 }
