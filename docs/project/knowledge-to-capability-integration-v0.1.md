@@ -1,0 +1,88 @@
+# Solana Meme｜Blix 知识转化为产品能力：跨项目与现代 Agent 体系融合蓝图 V0.1
+
+> 2026-11-06。目标主体：`sunshihao001/grok@blix`。研究方式：静态阅读本分支源码/旧Grok、ai-d及 Million、PumpTrace、Pulse、HoldTech、PumpGrok、OKX、pumpwatch 的公开源码或原作者文档，并对照2025–2026 Agent Skills、Context Engineering、Agent Memory/SkillsBench 研究。**未运行主体、未安装/合并参考代码、未部署Bot、未接入付费数据或链上实测。此文是实施决策，不是完成证明。**
+
+## 0. 最终目标、不是知识工程目标
+
+用户只用普通话提出问题；Blix 负责持续市场发现、Mint调查、关键钱包/资金/库存、跨Mint群体演化、异常监控和专业解释；AI主动识别关键问题、选择成熟工具/知识、解释竞争机制、在授权范围内执行并验收。跟单只是潜在下游。保留单一Blix市场产品主体，不重建Web/采集/钱包关系图，不把历史D01–D12、152单元或22专家全量注入模型。
+
+当前已存在：[旧知识→Blix分类融合](legacy-knowledge-fusion-v1.md)、[152条路由表](legacy-knowledge-routing.v1.json)、[Blix能力基线](blix-heritage-capability-baseline-v0.1.md)、[原始事实反例](mint-cross-module-evidence-audit-v0.2.md)。此文不重复目录，重点是**知识到底能改变哪一条真实业务事实/行为/决策**。
+
+## 1. 五种不同资产，五种不同安放方式
+
+| 获得的东西 | 例子 | 融入现有主体的位置 | 怎样证明已融合 |
+|---|---|---|---|
+| **协议/事实不变量** | Token Account≠Owner≠Fee Payer；Swap不等于Transfer；时间与覆盖不等于历史完整 | `server/solana.js`、`coin.js`、`holders*.js`、`bubblemap.js`、`wtrack.js` 既有链路的输入校验、事实字段、反例单测 | 相同交易与Holder跨接口一致，关键反例不再误报 |
+| **成熟业务程序** | 钱包查币/币找钱包、Creator验证、可恢复历史回补、长期快照 | **优先现有** Discover/Coin/Wallet/Journal/Health；必要时 `server/intelligence/` 有限薄适配，或调用经许可审查的外部服务 | 一个真实用户任务的端到端结果、失败恢复和回归测试 |
+| **条件化专业方法** | Hermes角色与资金边、qb-关键地址矩阵、meme-竞争解释、Grok D05/D11 | 已有 `AGENTS.md`、`knowledge-use.md` 与少量**按任务加载**研究程序，不全量常驻prompt | 同任务出现正确补查与反证，结论与基本方案相比更准 |
+| **证据/经验案例** | 原始签名、错误归因、断流与漏钱包、历史失败样本 | 既有日志、SQLite、测试fixtures、报告来源链接；原研究保留原仓库 | 能从结论追到签名/快照/时间、并在相同输入重现 |
+| **通用AI协作方法** | ai-d目标升级、信息价值、知识适用、执行复核与停止 | Grok Bot的任务控制方式，Blix MCP/HTTP受限工具接口，GitHub状态与测试记录 | 仅给口语命令，模型能选对能力并交付，重大操作仍不越权 |
+
+**特别重要：**保存了文档不等于程序实现；读取原文不等于实际应用；Agent给出分析不等于证据正确。每个位置应有独立结果检查。知识源保留原始版本与许可证，不随意整库搬迁。
+
+## 2. 参考产品向Blix贡献什么；不能盲搬什么
+
+| 参考 | 有价值的可复用知识/业务 | 已有Blix要避免重复的部分 | 深审后选择条件 |
+|---|---|---|---|
+| **Million** `Kelows/million` | 钱包↔代币双向发现、过滤/决策日志、跳过原因、观察→结果反馈 | Blix已有Wallets/WTrack/Pulse/纸面与AI；别整套替换终端，也不复制真实交易 | 若实证可补Blix跨Mint发现与群体历史，再考虑只读能力或方法 |
+| **PumpTrace** `AntC215/Pumptrace` | Creator指令验证、证据层级、append-only原始交易、可恢复的全历史 backfill、关注与重要变化通知 | Blix已有Coin/Dev/Bubble Map UI与部分历史 | 若在真实数据覆盖、回补与资金边证据上更强，优先外部独立只读查询/适配 |
+| **Pulse** `nirholas/pulse` | 生命周期档案、多来源快照、榜单出现时点、长期对照、API/MCP/自有数据库 | Blix已有实时市场流与Pulse UI；不再造第二个发现终端 | 借鉴长期档案/断流工程；注意其为降存储成本**选择性保存成交**，并非全历史资金事实 |
+| **HoldTech** `co-numina/holdtech` | Holder年龄、集中度、同Slot/同资金源调查、可视化 | Blix已有持仓与四跳关系图 | 比较Gini/HHI口径、Owner聚合、误报；不可当作同一实际人证据 |
+| **PumpGrok** `swcstudiospace/PumpGrok` | 主Agent读取Skills、任务契约、执行收据、paper隔离、门禁/复现机制 | 不复制10席Bot/35 Skills/另一套交易台 | 只提取可验证的安全及任务交接方式；其插件包不是24/7采集服务 |
+| **OKX OnchainOS** `okx/onchainos-skills` | 已包装的只读token研究、市场筛选、钱包分析、工具/工作流 | Blix原生有部分相同指标与查询；不应混用来源口径 | 优先选择`okx-dex-market`只读路径；交易/钱包/支付Skills必须隔离，先检查费用、鉴权与覆盖 |
+| **pumpwatch** `cinder-security/pumpwatch` | 发行群体统计的冻结样本、可复现SQL/观察证据与不归因边界 | Blix已有实时采集但不等于科学对照 | 作为异常检测的独立样本/反证基线，注意项目研究窗口限制 |
+| **原Hermes/qb-/meme-/Grok** | 钱包与资金/库存语义、单币调查组织、失败形态、可证伪机制和原始交易契约 | 不复制旧固定Skills、不引入旧GMGN费用依赖、未校准分数 | 逐项放到现有Blix事实/业务/研究位置并做可复查测试 |
+
+阅读入口：以上各仓 `README.md`、PumpGrok `ARCHITECTURE.md`；Pulse https://nirholas.github.io/pulse/docs/how-it-works.html；各项目所谓“完整、实时、无误报”是作者陈述而不是本分支独立验收。
+
+## 3. 用现有Blix组成一个用户实际能走通的调查过程
+
+**普通命令**：“这个币有一些钱包同步买，转给新地址后是不是一起出货？过去12小时有没有类似事件？”
+
+**步骤 A：意图与专业问题（AI而非规则层）**：拆成Mint真伪/候选钱包、同步与资金关系、Token转移→卖出、历史窗口、跨币重复，判断是否需要补历史。引用旧Grok D01/D04/D05/D06/D07/D10/D11及Hermes/qb具体方法，**只选择相关原文**。
+
+**步骤 B：真实取证（程序而非LLM）**：Blix现有`token/coin/holders/bubblemap/wallet/wtrack/journal`按需返回各自源时间与覆盖。不能把`/api/token`的本地ledger与`/api/coin`的链上/Jupiter Holder强行合成一份同期事实。MCP现只有部分读取工具，跨模块调查不能假装MCP已暴露全部。
+
+**步骤 C：经济动作（确定性证据优先）**：需要 `signature+instruction_position+token_account+owner+fee_payer+asset_delta+slot+event_time+ingest_time+source+coverage`；系统已观察到的部分分别报告，缺失的标记UNKNOWN。不要一开始另造“全链万能解析器”；先核查/复用Blix与成熟解析服务能够给出的原始动作，再在现有路径规范化输出。
+
+**步骤 D：竞争解释（AI）**：对同Slot、共享出资候选、接收钱包出货等提出共同控制/共享服务/普通热门追涨/历史补数/做市等可区分解释；不套用旧Hermes固定0.8置信度，不因结构相似就声称获利优势。
+
+**步骤 E：持续观察和业务交付（程序+AI）**：将真正可证据支持的对象写成关注/查询目标；是否具备6/12h完整覆盖、跨Mint成员冻结、通知重试、断流回补，全部独立核验。现有`wtrack`、`journal`的保留/去重不同，不能用它们拼出无损全市场。用户看到的是Blix原Coin/Wallet/Research视图及可回查的调查报告。
+
+这是一条**按实际需要选择的路径**，简单Mint查询不强制走完所有步骤。
+
+## 4. AI工作体系与Blix分工：不要把所有“AI”放进brain.js
+
+- **Blix确定性业务程序**：市场、交易、资产、存储、历史、钱包图、数据来源及规则；严格输出事实和覆盖。
+- **Blix当前AI市场研究**：已有`triage.js`、`research.js`、`brain.js`，负责筛选/叙事/候选/纸面结果回访；不把`brain.review()`当作整个项目的自主治理。
+- **Grok Bot/外部AI任务控制**：用户语言→问题重构→按需检索旧知识/参考成品→选择Blix已有受限读取工具→报告→有证据才更新知识或请求授权；避免预设多Bot。
+- **ai-d通用认知研究**：方法源头而非Solana交易事实或不可变主指令；项目实际失败可反向提交经验证的通用方法，但不默认同步或扩大权限。
+
+**知识调用最小机制**：已有路由表负责定位候选 Dxx-Kxx；对同一用户任务通常只取2–4份最相关的原文片段/反例并标记来源和版本；程序事实优先于研究叙述；若知识与新版协议或真实日志冲突，拒绝直接使用旧观点。是否需要向量数据库/RAG、图数据库或训练，仅在简单路径检索对照失败后再决定。
+
+2026研究启示：[SkillsBench](https://arxiv.org/abs/2602.12670) 的手工Skills平均改善但部分任务退化，自生成Skill没有平均增益；[IFCMemoryBench](https://arxiv.org/abs/2607.26072) 说明领域记忆**检索到**不等于**能正确用于专业任务**；[Anthropic Context Engineering](https://www.anthropic.com/research/effective-context-engineering-for-ai-agents)强调渐进式上下文；[OpenAI Agent Improvement Loop](https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop)提倡轨迹/反馈→测试→变更。外部基准不是Blix已通过性能测试。
+
+## 5. 需要先过的安全与可靠性门槛
+
+当前 `npm start` 静态门禁不代表`bin/supervise.mjs`、HTTP写路径、Vault、收费模型/供应商都被隔离。MCP中的`readOnlyHint`是提示而非权限合同；GET也可调用外部数据/更新本地状态。首个实际运行必须拥有独立的服务端只读权限边界、禁用签名/交易/自动模型费/支付、明确供应商费用预算、数据源失败时 fail-closed；未审前不启动旧完整服务。MCP规范说明：https://blog.modelcontextprotocol.io/posts/2026-03-16-tool-annotations/。
+
+## 6. 最小可证伪验收；比“移了多少知识”重要
+
+固定同一组Mint/交易/历史样本，至少做三种对照：
+- A：Blix原生事实/分析，不追加历史专业知识。
+- B：Blix + `AGENTS.md`和152路由按需检索旧Grok片段。
+- C：B + 经过验证的外部程序/历史回补能力。
+
+用相同数据、时间截点、工具预算、模型、问题与盲审标准比较：**事实正确率、实际资金边误报/漏报、历史覆盖与UNKNOWN正确性、关键遗漏发现、工具成本、完成时间、用户需要介入次数**。先记录四类真实任务（发现候选、单Mint调查、跨Mint群体、稳定告警），而不是先提出一个漂亮的自评分数。
+
+优先反例：首笔Fee Payer非实际资助、3×1000签名历史截断负缓存、非10亿供应量分母不一致、20 Token Account≠20 Owner、Swap+Transfer同签名多腿、RPC断流≠群体沉默、历史回补造成假异动、MCP分页截断造成假完整、来自Token文本/网页的不可信指令注入。
+
+仅当B/C在未见样本上比A显著更可靠且代价合理，才将相应专业方法提升为长期可调用Skill/业务规则。没收益可保留原知识但不默认激活。程序级变更每次须有确定性fixture和证据回读。
+
+## 7. 本阶段的明确选择与下一步
+
+**保留Blix主体 + 先修已有事实语义 + 用一条单Mint→资金转移→售出/跨币任务验证融合 + 再定向整用成熟历史/解析程序**，是目前证据下首选。
+
+本轮只是设计与静态比对，未实际运行评测或接入Million/PumpTrace/Pulse。下一次授权业务代码变更时，先针对`bubblemap.js`两种资金边和历史负缓存做离线反例/事实字段修正，再验证Coin/Holder分母、Wallet/WTrack同签名多动作和来源口径。达到证据门槛后才向现有Coin/Wallet页面增加调查说明；Grok Bot调用与全天候运行另按权限与部署验证推进。
+
+停止条件：一项新增知识/成品不能改变真实证据、执行行为、成本、可靠性或用户理解时，先不融入。保留原材料，不把文档数量当进步。
