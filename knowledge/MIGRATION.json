@@ -8,16 +8,17 @@
     "source_preserved": true,
     "relative_links_to_original": true,
     "all_historical_instructions_are_nonbinding": true,
-    "import_is_not_validation": true
+    "import_is_not_validation": true,
+    "source_manifest_not_copy": "The 21 historical snapshots referenced in the source manifest are not local Blix snapshot documents; content needs separate review or import."
   },
-  "count": 17,
+  "count": 19,
   "by_category": {
     "foundations": 2,
     "mechanisms": 5,
-    "methods": 5,
+    "methods": 6,
     "cases": 1,
     "ai": 1,
-    "references": 3
+    "references": 4
   },
   "items": [
     {
@@ -189,6 +190,28 @@
       "source_blob_sha": "8228be4ea80b0faea3bf41e094ff7baafbd5a45e",
       "source_url": "https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/system/reference-capability-reuse-ledger.v1.md",
       "migration_status": "FULL_TEXT_COPIED_WITH_PROVENANCE_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "target": "knowledge/methods/legacy-grok-core-cards.v1.json",
+      "category": "methods",
+      "source_repo": "sunshihao001/grok",
+      "source_ref": "main",
+      "source_path": "knowledge/catalog.v1.json",
+      "source_blob_sha": "ca8be3a1e64c820264dc3e3c6b91e37c978203ac",
+      "source_url": "https://github.com/sunshihao001/grok/blob/main/knowledge/catalog.v1.json",
+      "migration_status": "FULL_STRUCTURED_SOURCE_CATALOG_COPIED_15_CARDS_UNVERIFIED",
+      "contained_entries": 15
+    },
+    {
+      "target": "knowledge/references/legacy-snapshot-sources.v1.json",
+      "category": "references",
+      "source_repo": "sunshihao001/grok",
+      "source_ref": "main",
+      "source_path": "knowledge/legacy-snapshots/manifest.json",
+      "source_blob_sha": "5bd100caa46bb3bec4c3093180a534b93629d4c3",
+      "source_url": "https://github.com/sunshihao001/grok/blob/main/knowledge/legacy-snapshots/manifest.json",
+      "migration_status": "SOURCE_PROVENANCE_MANIFEST_COPIED_21_SNAPSHOT_BODIES_NOT_MIGRATED",
+      "contained_entries": 21
     }
   ],
   "non_imported_sources": [
@@ -223,6 +246,10 @@
     {
       "ref": "https://github.com/sunshihao001/grok/pull/17",
       "status": "ENGINEERING_DRAFT_NOT_MIGRATED"
+    },
+    {
+      "ref": "https://github.com/sunshihao001/grok/tree/main/knowledge/legacy-snapshots",
+      "status": "MANIFEST_INDEXED_21_SNAPSHOT_BODIES_NOT_YET_COPIED_OR_SEMANTICALLY_REVIEWED"
     }
   ]
 }
