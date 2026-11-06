@@ -12,7 +12,10 @@
     "import_manifest": "knowledge/MIGRATION.json",
     "route": "docs/project/legacy-knowledge-routing.v1.json",
     "legacy_main_cards": "knowledge/methods/legacy-grok-core-cards.v1.json",
-    "legacy_historical_snapshot_source_index": "knowledge/references/legacy-snapshot-sources.v1.json"
+    "legacy_historical_snapshot_source_index": "knowledge/references/legacy-snapshot-sources.v1.json",
+    "hermes_multidimensional_source": "knowledge/methods/hermes-multidimensional-reasoning-original.md",
+    "hermes_reverse_discovery_source": "knowledge/methods/hermes-reverse-discovery-original.md",
+    "hermes_ai_d_qb_meme_deep_study": "knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md"
   },
   "structure": {
     "goal_axis": "G0用户价值 > G1整体市场研究与AI协作 > G2市场发现/单Mint/跨Mint/机制 > G3 Blix单主体 > G4当前工作；G是目标关系，不等于知识深度",
@@ -155,6 +158,9 @@
           "id": "token-security",
           "source_status": "documented_legacy_method"
         }
+      ],
+      "research_related_fulltexts": [
+        "knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md"
       ]
     },
     {
@@ -203,6 +209,10 @@
           "id": "deployer-history",
           "source_status": "documented_legacy_method"
         }
+      ],
+      "research_related_fulltexts": [
+        "knowledge/methods/hermes-multidimensional-reasoning-original.md",
+        "knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md"
       ]
     },
     {
@@ -252,6 +262,11 @@
           "id": "reclaim-theory",
           "source_status": "unverified_hypothesis"
         }
+      ],
+      "research_related_fulltexts": [
+        "knowledge/methods/hermes-multidimensional-reasoning-original.md",
+        "knowledge/methods/hermes-reverse-discovery-original.md",
+        "knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md"
       ]
     },
     {
@@ -299,6 +314,10 @@
           "id": "gmgn-raw-prototype",
           "source_status": "documented_legacy_method"
         }
+      ],
+      "research_related_fulltexts": [
+        "knowledge/methods/hermes-multidimensional-reasoning-original.md",
+        "knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md"
       ]
     },
     {
@@ -339,6 +358,11 @@
           "id": "concentration",
           "source_status": "documented_legacy_method"
         }
+      ],
+      "research_related_fulltexts": [
+        "knowledge/methods/hermes-multidimensional-reasoning-original.md",
+        "knowledge/methods/hermes-reverse-discovery-original.md",
+        "knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md"
       ]
     },
     {
@@ -380,6 +404,10 @@
           "id": "concentration",
           "source_status": "documented_legacy_method"
         }
+      ],
+      "research_related_fulltexts": [
+        "knowledge/methods/hermes-multidimensional-reasoning-original.md",
+        "knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md"
       ]
     },
     {
@@ -419,6 +447,11 @@
           "id": "sybil-wash",
           "source_status": "documented_legacy_method"
         }
+      ],
+      "research_related_fulltexts": [
+        "knowledge/methods/hermes-multidimensional-reasoning-original.md",
+        "knowledge/methods/hermes-reverse-discovery-original.md",
+        "knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md"
       ]
     },
     {
@@ -456,6 +489,11 @@
           "id": "reclaim-theory",
           "source_status": "unverified_hypothesis"
         }
+      ],
+      "research_related_fulltexts": [
+        "knowledge/methods/hermes-multidimensional-reasoning-original.md",
+        "knowledge/methods/hermes-reverse-discovery-original.md",
+        "knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md"
       ]
     },
     {
@@ -495,6 +533,10 @@
           "id": "liquidity-depth",
           "source_status": "documented_legacy_method"
         }
+      ],
+      "research_related_fulltexts": [
+        "knowledge/methods/hermes-multidimensional-reasoning-original.md",
+        "knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md"
       ]
     },
     {
@@ -540,6 +582,10 @@
           "id": "gmgn-raw-prototype",
           "source_status": "documented_legacy_method"
         }
+      ],
+      "research_related_fulltexts": [
+        "knowledge/methods/hermes-reverse-discovery-original.md",
+        "knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md"
       ]
     },
     {
@@ -586,6 +632,10 @@
           "id": "anti-false-completion",
           "source_status": "documented_legacy_method"
         }
+      ],
+      "research_related_fulltexts": [
+        "knowledge/methods/hermes-reverse-discovery-original.md",
+        "knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md"
       ]
     },
     {
@@ -629,6 +679,10 @@
           "id": "anti-false-completion",
           "source_status": "documented_legacy_method"
         }
+      ],
+      "research_related_fulltexts": [
+        "knowledge/methods/hermes-reverse-discovery-original.md",
+        "knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md"
       ]
     }
   ],
@@ -779,13 +833,14 @@
     "Blix原生代码和历史故障优先用于理解自身能力；第三方资料保留版本与许可",
     "本轮不修改业务代码、不启动交易/签名/支付/云部署/实跑",
     "Old main core cards are historically source-pinned investigation candidates; do not treat source_contract, documented_legacy_method, or unverified_hypothesis as independent real-world validation.",
-    "Historical snapshot manifest is a provenance index; its referenced snapshot bodies have NOT been imported into Blix, and source-repository paths in cards remain old-main-relative until adapted."
+    "Historical snapshot manifest is a provenance index; its referenced snapshot bodies have NOT been imported into Blix, and source-repository paths in cards remain old-main-relative until adapted.",
+    "Do not conflate exploratory anomaly, provisional mechanism naming, and economic-control attribution; deep source review may identify new domains beyond D01–D12."
   ],
   "counts": {
     "layers": 8,
     "domains": 12,
     "legacy_research_units": 152,
-    "source_imports": 19,
+    "source_imports": 21,
     "legacy_main_core_cards": 15,
     "historical_snapshot_sources": 21
   }
