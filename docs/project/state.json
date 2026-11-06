@@ -119,6 +119,13 @@
       "level": "task",
       "text": "单Mint真实业务验收",
       "status": "NOT_VERIFIED"
+    },
+    {
+      "id": "G4-STUDY",
+      "level": "task",
+      "text": "Blix 全主体只读研究：业务与UI→API→代码→事实/存储→工程/权限→可靠性/整合判断",
+      "status": "USER_DIRECTED_STATIC_RESEARCH_ONLY",
+      "authority": "user"
     }
   ],
   "links": [
@@ -186,6 +193,26 @@
       "G4-MINT",
       "G2-MINT",
       "tests"
+    ],
+    [
+      "G4-STUDY",
+      "G3-BLIX",
+      "supports"
+    ],
+    [
+      "G4-STUDY",
+      "G2-MINT",
+      "informs"
+    ],
+    [
+      "G4-STUDY",
+      "G2-CROSS",
+      "informs"
+    ],
+    [
+      "G4-STUDY",
+      "G2-MECHANISM",
+      "informs"
     ]
   ],
   "decision": {
@@ -201,16 +228,28 @@
   },
   "next": [
     {
+      "id": "WHOLE",
+      "goal_id": "G4-STUDY",
+      "priority": 1,
+      "status": "SOURCE_RESEARCH_IN_PROGRESS"
+    },
+    {
+      "id": "FACTS",
+      "goal_id": "G4-STUDY",
+      "priority": 2,
+      "status": "STATIC_RESEARCH_ONLY"
+    },
+    {
       "id": "SAFE",
       "goal_id": "G4-SAFETY",
-      "priority": 1,
-      "status": "STATIC_AUDIT_BLOCKED"
+      "priority": 3,
+      "status": "STATIC_AUDIT_ONLY_NO_RUNTIME"
     },
     {
       "id": "MINT",
       "goal_id": "G4-MINT",
-      "priority": 2,
-      "status": "NOT_RUN"
+      "priority": 4,
+      "status": "PAUSED_UNTIL_USER_AUTHORIZES_EXECUTION"
     }
   ],
   "audit": {
@@ -245,5 +284,24 @@
       "source": "independent isolated unit test on exact Git blob contents"
     },
     "server_runtime": "BLOCKED_PENDING_READ_ONLY_ISOLATION"
+  },
+  "current_policy": {
+    "date": "2026-11-06",
+    "source": "USER_DIRECTION_THIS_TURN",
+    "mode": "READ_ONLY_STATIC_WHOLE_PRODUCT_RESEARCH",
+    "goal_anchor": "docs/project/goal-map.md",
+    "status": "PROVISIONAL_REVISABLE_ANCHORS",
+    "paused": [
+      "BLIX_RUNTIME",
+      "NETWORKED_MINT_TEST",
+      "INSTALL_DEPS",
+      "CODE_CHANGES",
+      "MODEL_OR_PAID_PROVIDER_ACTIVATION",
+      "CLOUD_DEPLOY",
+      "TRADE",
+      "SIGN",
+      "PAY"
+    ],
+    "completion": "Business/UI to APIs, code, source evidence, history, operations and integration decision map; gaps and UNKNOWN explicit"
   }
 }
