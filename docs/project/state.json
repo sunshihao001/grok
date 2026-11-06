@@ -475,5 +475,24 @@
     "business_code_changed": false,
     "old_code_merged": false,
     "external_projects_reanalysis": "DEFERRED_UNTIL_BLIX_BASELINE_KNOWLEDGE_MAPPED"
+  },
+  "legacy_knowledge_activation_review": {
+    "date": "2026-11-06",
+    "baseline_blix_sha": "bbeb31a541c73cc2a5b95688faa71d56ad3ae6b6",
+    "document": "docs/project/blix-knowledge-activation-ceiling-v0.2.md",
+    "status": "SOURCE_LINKED_NOT_RUNTIME_ACTIVATED",
+    "read_origins": [
+      "grok-main-15-cards",
+      "grok-main-21-snapshots-manifest",
+      "grok-main-17-sources",
+      "grok-pr14-domain",
+      "hermes-00c-00d-00e",
+      "qb-single-mint-script",
+      "meme-maturity",
+      "why-method-and-economic-mechanics"
+    ],
+    "next": "Investigate one Mint-to-Mint token and SOL capital cycle with existing Blix component evidence before deep external product dissect",
+    "runtime": "NOT_RUN",
+    "code_changed": false
   }
 }
