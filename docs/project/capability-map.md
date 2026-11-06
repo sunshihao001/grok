@@ -15,3 +15,6 @@
 **已有 UI 优先**：Discover / Pulse / Trackers / Signals / Research / Health 等是真实产品入口；深化调查优先为 Mint/钱包详情中的可展开证据，不因概念图新建六个页面。原 UI 规范见 `design.md` 和 `web/src/shell/Rail.tsx`。
 
 **参考资产可提供五种价值**：业务功能、算法方法、工程设计、专业经济解释、失败教训。跨语言可调用服务不等于必须翻译源码；若数据口径或许可不兼容，先标明阻断。完整参考范围仍指向原 [65项资产登记](https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/system/gpt-meme-project-index.v1.json)，后续新增项目应补充来源而不是删掉旧条目。
+
+## 扩展层实际落点（2026-11-06）
+当前只增加 **一个** 统一扩展层 [server/intelligence](../../server/intelligence/index.mjs)；第一个能力为 Mint/Holder 事实读取，详见 [渐进式整合说明](intelligence-layer.md)。已具备按需加载入口、allowlist、来源与 UNKNOWN、独立单测；**尚未接入运行中的 UI/服务器，真实数据和安全启动未验收**。
