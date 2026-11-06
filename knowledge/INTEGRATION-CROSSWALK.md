@@ -113,6 +113,28 @@
 | qb-、meme- 原项目 | 关键钱包矩阵、资金接力、FCZ/POC等机制与反例 | 后续 **分别深入审查原目录再纳入同一Blix六类**，不是另起两套体系 |
 | Million/PumpTrace/Pulse/OKX/Why-Solana等 | 有成熟程序、证据/历史/费用边界，许可各异 | `references` 先收可复核**独立研究与源码链接**，未经许可核对不全量搬第三方资料 |
 
+### 21份旧历史快照：按已定融合方法完成首轮内容筛查
+
+**执行范围及限度**（2026-11-06）：旧 `main` 快照来源清单共有21项。本轮核对了此前剩余15项的原文标题、章节、任务定义及主要判断，与此前已做针对性阅读的6项合并，完成**21/21首轮内容筛查**；这不是逐行代码审计、独立市场复算或证明研究方法有效。全部原文继续由 [带SHA的来源目录](references/legacy-snapshot-sources.v1.json)追踪；不以目录数量冒充实际迁移。
+
+| 来源（旧main相对路径） | 发现的内容与对Blix的独立增量 | 收录裁决 |
+|---|---|---|
+| `solana-learning/L05–L09.md`（5篇） | 生命周期、GMGN三类入口、安全权限、Rug形式、流动性深度；与`candidate-entry`、`market-lifecycle`、`token-security`、`liquidity-depth`四卡及既有正文大幅重叠 | **保留来源LINK**；不复制重复知识或旧Skill顺序。只在Blix的发现、Pool、Creator事实存在明确空缺时补充相应专题 |
+| `solana-learning/L10–L12.md`（3篇） | 钱包角色、同源资金、Sybil与交易行为；与`wallet-roles`、`funding-graph`、`sybil-wash`、`concentration`四卡及已迁入机制正文重叠 | **保留来源LINK**，核心的角色候选/竞争解释已入库；不能把同槽/同CEX资金/Holder标签当共同控制 |
+| `solana-learning/L13–L14.md`（2篇） | `evidence` / `counter_evidence` / `missing_fields` / 研究降级状态的判断方法，旧阶段最高仅PAPER_ONLY | **方法已由`evidence-synthesis`、`research-states`卡覆盖**；保留状态分离与证据缺失思想，不恢复固定交易Gate或授权 |
+| `domain-contracts/wallet-roles.md`、`wallet-structure.md`、`evidence-chain.md`（3篇） | 出入参、钱包候选清单、结构关系、反面证据、降级字段及跨步骤数据契约比一般知识正文更具体 | **提炼为Blix未来报告与只读工具的契约候选ADAPT**：保留角色、来源、证据、时间、未知及失败字段；不复制旧GMGN CLI/旧绝对路径、不自动绑定旧`confidence_score`。尤其拒绝`5分钟≥3钱包=协调`、相似卖出比例=同操作者及主观0.8等未校准判断 |
+| `theory/first-control-zone.md`、`structure-risk-fields.md`（2篇） | FCZ/POC/AVWAP 概念、正反表现、观察样本及解释字段；现有`reclaim-theory`和Blix`strategy-and-execution-economics.md`已有对应假说 | **保留为未经验证的理论来源LINK**，其中正/负/缺失证据字段可为机制研究提供参考，不作为可部署的控盘标签或交易规则 |
+
+此前已针对性阅读的另外6项，继续采用 [第一批裁决](#旧快照精读后的可继承与应拒绝内容第一批)：`field-forensics-toolbox`、`L15-GMGN`、`handoff-schema`、`calibration`、`anti-fake-completion`、`knowledge-source-map`。不另建一套快照目录。
+
+**融合判断现已固定、后续只按问题应用**：
+1. **先确认目标与Blix原生能力**：相关G2业务、已有模块、已有文档及错误/空缺，不重做原产品。
+2. **按 L/D 读旧来源并作去重判断**：同类知识已经由旧15卡或首批17篇准确覆盖则仅保留出处；内容独特且已审查才考虑复制原文。
+3. **做三种处理之一**：`LINK`（已有覆盖/历史背景）、`ADAPT`（新颖的领域机制/方法及边界补到现有知识）、`TEST_CANDIDATE`（真实事故/规则风险可以设计离线反例）；`PROMOTE_RUNTIME`必须另经实现、测试与云电脑安全验收。误判和过时阈值一律注明`REJECT_UNVERIFIED_RULE`。
+4. **以实际知识覆盖和未来业务结果收束**：每次只更新现有分类、交叉索引、来源清单；没有可验证新价值则停止，不反复创建框架、规划文档或新专家体系。
+
+**本批结果**：21/21首轮内容筛查，19份Blix已迁入文件保持不变；15卡原文与21快照来源清单均已保留，**21快照正文仍未全量复制**。筛查结论不能代替运行时知识使用或完整业务验收。下一项价值增量应优先来自 **Hermes/qb-/meme- 未被现有正文覆盖的独有专业知识**，然后再按同样方法评估成熟参考项目。
+
 ## 四、真正融合时的低成本做法
 
 **从内容而非旧目录名出发**，选择以下处理之一：
