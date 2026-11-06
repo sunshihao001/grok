@@ -112,7 +112,7 @@
       "id": "G4-SAFETY",
       "level": "task",
       "text": "只读和自动费用安全审查",
-      "status": "NOT_VERIFIED"
+      "status": "STATIC_AUDIT_BLOCKED"
     },
     {
       "id": "G4-MINT",
@@ -204,7 +204,7 @@
       "id": "SAFE",
       "goal_id": "G4-SAFETY",
       "priority": 1,
-      "status": "NOT_RUN"
+      "status": "STATIC_AUDIT_BLOCKED"
     },
     {
       "id": "MINT",
@@ -212,5 +212,15 @@
       "priority": 2,
       "status": "NOT_RUN"
     }
-  ]
+  ],
+  "audit": {
+    "date": "2026-11-06",
+    "commit": "3565e1f22a3adb5891002e05e89d569866acb591",
+    "tier": "SOURCE_AUDIT",
+    "conclusion": "UNREVIEWED_RUNTIME_BLOCKED_BY_DEFAULT_NPM_START",
+    "mcp": "READ_TOOL_FILTER_ADDED",
+    "integration": "SINGLE_MINT_SOURCE_MAP_ONLY",
+    "live_data_test": "NOT_RUN",
+    "source": "docs/project/read-only-safety.md"
+  }
 }
