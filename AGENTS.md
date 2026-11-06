@@ -10,6 +10,8 @@
 
 **已迁入的分类知识入口**：首先按任务查 [Blix本地分类知识库](knowledge/README.md)，查看 [17份全文迁入清单及源SHA](knowledge/MIGRATION.json)；原 Grok研究现按基础、机制、方法、案例、AI和参考成品分类保存在本分支。使用时选相关正文，旧文中的专家阶段、建议与阈值不是Blix现行全局指令；不默认全部加载。完整旧资料、未迁入内容和65参考资产仍以原仓库为来源。
 
+**知识理解顺序**：涉及主体知识建设时，优先阅读 [Blix 原生知识与业务总图](knowledge/BLIX-NATIVE-ATLAS.md)；再读 [旧 Grok 独立目录总图](knowledge/OLD-GROK-ATLAS.md)；最后按 [既有分类的融合对应表](knowledge/INTEGRATION-CROSSWALK.md) 处理。不要让旧专家/阶段覆盖 Blix 真实产品逻辑，知识文档迁入不等于运行时自动应用。
+
 **旧知识按需融合**：问题落到 Blix 现有功能后，使用 [分类融合说明](docs/project/legacy-knowledge-fusion-v1.md) 和 [152项路由索引](docs/project/legacy-knowledge-routing.v1.json) 定向检索旧 Grok 原文；映射不代表结论已验证、模型已内化或业务运行代码已集成。
 
 **能力转化路线**：在使用知识映射的同时，按需阅读 [跨项目与现代Agent的融合蓝图](docs/project/knowledge-to-capability-integration-v0.1.md)，优先令知识实际改善已有事实输出、程序调查、监控与独立反例，不默认扩建Skill/多Bot。
