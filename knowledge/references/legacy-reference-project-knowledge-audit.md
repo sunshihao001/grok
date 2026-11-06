@@ -174,3 +174,81 @@
 
 **研究成熟度**：两份固定来源源码/文档已核，离线条件性解析反例已核；尚无真实GMGN授权CLI返回，也没有对旧qb所有字段逐个做端到端对照，不能将本节当成已修复qb运行时。
 
+
+
+---
+
+## 2026-11-06｜Hermes × qb- × meme- 原始知识纵深与跨学科反证（SOURCE_READ，不等于全库验收）
+
+**本轮问题**：此前“参考项目→功能标签→Blix模块”过早裁剪原始知识，特别是旧Hermes如何提出新框架、qb-如何组织可复查对象与证据、meme-如何证伪后验市场解释之间的联系。坚持把旧项目当独立研究对象；下面给出**已读原文的具体认识**，未读的原库文件绝不等同已覆盖。
+
+### 1. 知识覆盖状态及此前错误简化
+
+- **[旧Hermes](https://github.com/sunshihao001/-)**：本轮通过 Git 树确认264个文件；深读 [00c 思维模型](https://github.com/sunshihao001/-/blob/main/design/phase1-research/00c-GMGN-思维模型提炼.txt)、[00d 多维推理](https://github.com/sunshihao001/-/blob/main/design/phase1-research/00d-GMGN-多维度推理扩展.txt)、[00e 反向生成](https://github.com/sunshihao001/-/blob/main/design/phase1-research/00e-字节反推框架-突破认知局限.txt)、[研究拷问记录](https://github.com/sunshihao001/-/blob/main/design/phase1-research/grill-sessions/2026-05-26-grill-bytes-to-framework.md)、[钱包结构设计](https://github.com/sunshihao001/-/blob/main/design/phase1-skill-04-wallet-structure.md)、[筹码控制状态草案](https://github.com/sunshihao001/-/blob/main/design/Skill4-筹码控制权状态层设计.md)。**未完成**学习资料、源码和全部测试的逐条覆盖。
+- **[qb-](https://github.com/sunshihao001/qb-)**：目录发现4236个文件，3338个落在data/、610个在hermes_harness/；这不是4236项不同专业结论，更不是4236次有效实盘。已读 [单Mint报告脚本](https://github.com/sunshihao001/qb-/blob/main/sikk_gmgn_token_report.py)、[4TKY摘要](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/summary_overview.md)、[同一Mint的标准化钱包交易](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/wallet_data/normalized/wallet_trade_normalized.json)、[资金边CSV](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/structure_analysis/wallet_fact/fund_flow_edges.csv)、[判断候选](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/structure_analysis/intelligence/wallet_intelligence_decision.json)，以及 [防假完成](https://github.com/sunshihao001/qb-/blob/main/hermes_harness/22_anti_self_deception/README.md)、[真实任务回放边界](https://github.com/sunshihao001/qb-/blob/main/hermes_harness/23_real_task_regression/README.md)。大量历史原始文件和测试未逐项复核。
+- **[meme-](https://github.com/sunshihao001/meme-)**：目录发现474个文件，涵盖外部资料吸收、市场定义、规则、标注、消融和工程；非单纯K线策略仓。已读 [FCZ定义](https://github.com/sunshihao001/meme-/blob/main/03_语义概念/第一控盘区定义_v0.1.md)、[深洗/死亡盘](https://github.com/sunshihao001/meme-/blob/main/02_庄家周期/深洗与死亡盘语义深化_v0.1.md)、[反证设计](https://github.com/sunshihao001/meme-/blob/main/09_规则与回测/反证实验设计_v0.1.md)、[消融模板](https://github.com/sunshihao001/meme-/blob/main/09_规则与回测/消融实验执行模板_v0.1.md)、[反证字段](https://github.com/sunshihao001/meme-/blob/main/07_样本标注/GMGN反证样本库字段表_v0.1.md)、[策略自审](https://github.com/sunshihao001/meme-/blob/main/09_规则与回测/策略成熟度质疑审计与商业诊断_v0.1.md)、[FCZ_B_0001](https://github.com/sunshihao001/meme-/blob/main/07_样本标注/样本记录/FCZ_B_0001.md)、[FCZ_D_0001](https://github.com/sunshihao001/meme-/blob/main/07_样本标注/样本记录/FCZ_D_0001.md)。没有完成逐Mint独立链上复算。
+
+### 2. Hermes真正独特的认知链，不应降格为“钱包标签”
+
+**第一层，问题驱动的可观察量设计**：00c 从“要理解什么市场事实→什么链上痕迹→供应商哪个字段可能观察→哪些字段联合→需要哪个分母”反推派生特征。其“选分母=选比较背景”可迁移到持仓占比、钱包活动比率、资金路径覆盖和池深度，并且与 Blix 当前不同模块分母不一致风险直接相关。旧文将 GMGN 聚合字段视为Canonical，并非Solana原始事件；需要保留中间处理层，不能改叫真正raw chain fact。
+
+**第二层，同一证据下的多问题表征**：00d 将同一字段分别问钱包角色演化、钱包行为相似、市场微结构、资金组织生命周期、策略适用环境。研究价值是**切换要解释的对象和尺度**，而不是“维度越多标签越准”。其中“同源＋入场时间/成本相近→极高概率同一实体”没有经审定的先验、基准率、独立证据或对照，必须降级为有竞争解释的同源/同步候选。微结构部分用K线位置代理实际买压也只能作代理，不能等同主动买卖成交量；写出的“庄家阶段”尤其不能从价格形状直接确定真实主控人。
+
+**第三层，从意外中生成未知**：00e 提出枚举字段组合、极端异常、无标签聚类、对立假设、时间序列和跨链比较。这些是**假设发现工具**而非已知市场机制。所谓“5–10%完全想不到的组合”等比例无实证依据；80个字段两两组合已有3160种，若后续还搜索多函数、时窗、阈值，会明显放大选择偏差与伪发现。正确迁移的是：先发现意外 → 生成竞争性机制 → 冻结可观测区分标准 → 用不同时间/不同Mint留出样本检验；不能“发现形状就命名为新真值”。
+
+**第四层，库存与时序不能被资金标签吞并**：[筹码控制状态层](https://github.com/sunshihao001/-/blob/main/design/Skill4-筹码控制权状态层设计.md) 已提出实体剩余库存、流入/流出/回流、已清仓实体权重、公共设施排除、时间新鲜度、状态转移与 UNKNOWN。其真正价值是“角色/资金网络应与剩余可售库存和行为变化共同分析”，而非继承未校准的控制权概率、贝叶斯似然和设计数值。
+
+### 3. qb-的独有价值：对象选择、证据拆分、演化记录与反证
+
+- 原 [单Mint报告脚本](https://github.com/sunshihao001/qb-/blob/main/sikk_gmgn_token_report.py) 不仅输出角色标签，还输出分析深度、代币基础、结构指标、关键地址矩阵、**基础设施登记、低权重范围、后续复查计划**等；方法价值是成本受约束时仍保留被忽略对象与跳过理由。其分级阈值/供应商标签是旧假设，不直接复用。
+- 4TKY [早期摘要](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/summary_overview.md) 报94条wallet_trade、missing_trade_records=94、交易总数0；**另一个同Mint标准化交易文件**记录record_count=95并有buy/sell记录。可能是**不同时间批次/不同数据来源/报告未同步**，本轮未证明程序统计错误；恰恰说明不能把同一Mint不同阶段的结果无版本对齐地拼成“完整结论”。
+- 4TKY [资金边CSV](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/structure_analysis/wallet_fact/fund_flow_edges.csv) 的金额、时间为unknown，relation_type是pre_buy_funding_candidate，来自GMGN native_transfer L1，却给数值confidence_score=0.6；这个0.6不是已校准的实际共控概率，且缺少原交易签名/金额/时间，因此仅可用作**补查队列与数据缺失反例**。旧决策文件E3/E2等分级也不能升级为经济实体确定性。
+- [hermes_harness](https://github.com/sunshihao001/qb-/tree/main/hermes_harness) 具有防假完成、真实任务回放与上下文/权限校验研究；此部分与 ai-d 对模型是否真的完成、历史知识是否误用的研究相关，不能当作纯钱包代码遗弃。但历史测试夹具通过不能代表 Blix 本地实跑。
+
+### 4. meme-的独有价值：从“有漂亮解释”转向“有可推翻的解释”
+
+- FCZ定义中“成本共识”“控盘区”是经济机制**假设**，POC/AVWAP 是价格×成交分布的**统计代理**；不能从成交密集区直接反推特定控制者的真实建仓成本。
+- [反证设计](https://github.com/sunshihao001/meme-/blob/main/09_规则与回测/反证实验设计_v0.1.md) 包括“规则符合但失败”“规则不符合却大涨”“死亡盘误判”等，要求冻结规则与事前信息、不事后更改边界，是独特且可迁移的**市场解释失败登记**办法。适合 Blix 异常监控的误报/漏报追踪，不要求先建立交易策略。
+- [消融模板](https://github.com/sunshihao001/meme-/blob/main/09_规则与回测/消融实验执行模板_v0.1.md) 将复杂结构与POC-only、AVWAP-only、sweep-only简单基准比较；**当前仅实验模板**，不能声称策略有效。
+- [FCZ_B_0001](https://github.com/sunshihao001/meme-/blob/main/07_样本标注/样本记录/FCZ_B_0001.md) 仍为空模板；[FCZ_D_0001](https://github.com/sunshihao001/meme-/blob/main/07_样本标注/样本记录/FCZ_D_0001.md) 有WORLDCUP候选快照和GMGN来源，但`sample_source=real_pending`同时`is_real_sample=true`，且候选/trending 与token快照的 holder_count 和 liquidity 显著不同，未确认同时间/同池/同语义；应视为**来源与复算待审**，不能当作成功反证完成的“实证样本”。
+- 深洗/死亡盘文档的部分定义含“后续恢复才算深洗”，容易造成**事后看结果给历史时点标签**。若Blix要在t时预测，必须只用t时可获得的信息；事后定义可用于生命周期归档，不能伪装成t时可判定的预警。
+
+### 5. 借用跨学科专业视角做竞争性重建（各为分析方法，不虚构专家参与）
+
+| 视角与可核验经典来源 | 给旧项目的审查问题 | 对 Blix 判断的实际改变 |
+|---|---|---|
+| **科学哲学／溯因推理**：[Peirce研究说明](https://plato.stanford.edu/entries/peirce/) | 意外观察能否生成几个真正不同的解释？每个解释推出什么可观察、可被否定的后果？ | 00e生成的是“候选解释”，不是新增真值；把替代假设与缺证据连接回调查任务 |
+| **统计学／多重比较**：[Benjamini–Hochberg 1995](https://doi.org/10.1111/j.2517-6161.1995.tb02031.x) | 3160+字段组合、不同阈值/窗口反复搜索是否产生伪发现？有没有冻结定义、留出样本、选择偏差记录？ | 先做探索、稳定性/负例与样本外确认，再考虑提升为长期知识 |
+| **流程挖掘／序列行为**：[IEEE Process Mining Manifesto](https://tf-pm.org/resources/manifesto) | 原始事件是否完整？转币→换钱包→出售与普通路由/共享平台的事件序列如何区分？缺史能否导致沉默假象？ | 从静态Holder关系升级为有覆盖说明的时间事件链与机制候选；不要求复制固定序列标签 |
+| **实体解析／因果推断**：[记录链接方法综述](https://academic.oup.com/ije/article/45/3/954/2572621)、[Pearl因果推断](https://proceedings.mlr.press/v6/pearl10a) | 同源/同步/共享地址是关联还是同控？是否有共同服务、热门事件、采样机制这样的替代原因？ | 分离钱包地址→行为关系→经济主体假说；不同证据层分开，不把图簇自动当“庄家” |
+| **数字取证／证据工程**：[NIST SP 800-86](https://csrc.nist.gov/pubs/sp/800/86/final) | 来源是否可复核、事件/抓取时间、原始快照版本、缺失情况是否清楚？ | qb- 4TKY摘要与后续规范化数据必须区分批次；保留SOURCE/TIME/COVERAGE，修复可追溯性 |
+| **机器学习／概念漂移**：[Gama等2014](https://doi.org/10.1145/2523813) | 原来有效的钱包形态、模式阈值、供应商口径在不同发行平台/时间段是否仍成立？ | 区分概念发现、时间条件下的失效与阶段转换；避免静态标签恒定化 |
+| **产品与系统工程**：[视角结合的架构逆向研究](https://www.sciencedirect.com/science/article/pii/S0164121224003212) | 旧文档的专业意图和旧代码实际执行、测试覆盖、界面表现是否一致？ | 用现有 Blix 事实/API/UI 承载新的报告语义；确有缺口才选择小改、外部复用或产品方向调整 |
+| **AI认知与知识调用**：[ai-d知识组织协议](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/organization-protocol.md) | 是否因为Blix当前没有模块就丢掉独有知识？是否历史全文注入导致认知退化？ | 独立研究深度与运行时按需调用分开；按实际问题检索有关原文，不创建固定“专家Bot” |
+
+### 6. 三种互相竞争的机制解释示范
+
+假设未来某Mint观察到：早期A/B/C收到同一来源资金，在短时间买入；随后部分Token转到D/E；D/E卖出，价格没有明显下跌。
+
+- **H1：组织性库存转移/分发并出货**。预期：可跨时间重现有方向的资金/Token接力、原群体库存净减少、接收方后续有可归因出售；控制权身份仍UNKNOWN。
+- **H2：独立买家与共享服务/路由造成的表面连接**。预期：共同入口是CEX、路由、公共资助平台，分组跨大量无关Mint出现；精确Token转移链或独立资金闭环不足。
+- **H3：套利、做市或跨池再平衡**。预期：同签名/近时间存在对价腿、多池资产与库存变化，净风险敞口与简单“单向出货”不一致。
+
+**决定性研究不是让AI三选一**，而是根据可检验的区分信息，查签名、动作位置、Token Account/Owner、SOL/WSOL与手续费、池和公共设施、时间覆盖、跨Mint复现与反面案例。某些假设无法仅链上识别，保留UNKNOWN；不得因为“价格没跌”自动改称吸筹。该场景是分析设计，不是真实Mint实跑。
+
+### 7. 这次认识具体改变Blix什么，怎样限制融合？
+
+1. **知识对象从“功能标签”升级为“问题—证据—机制—反证—适用条件—相邻知识”的连接**；保存旧来源全目录、变更/测试线索，未审阅保持UNKNOWN。无需每个文件新建知识卡；特别有认知增量的原理优先补到既有 `methods/mechanisms/cases`。
+2. **知识可深化≠都必须写进运行时**：实际用户调查只调用相关原文和具体反例；不把Hermes 00d/00e不可靠阈值、Bayes伪精度、qb-启发式E分级与meme-事后FCZ判断升为默认真值。
+3. **业务实现不只看当前Holder或价格图**：优先复原地址—转移—库存—时间—资金来源—下一Mint之间的可追溯事件关系；解决不同模块分母、Fee Payer误认funding、历史截断、数据延迟后，再做机制解释。
+4. **完整产品仍是Blix**：参考成果可以改变Blix业务调查输出、未知问题空间和下一项成熟能力复用决策，不需要重做终端或照搬旧Bot/规则。继续静态只读，未修改交易业务/启动服务。
+
+### 8. 下一轮必须回答的高信息价值问题（联合研究，不是单点修复）
+
+**纵深**：继续核读Hermes 00b/字段契约、Skill 8 状态机及关联测试，验证“观察→角色→群体→库存→机制”在哪一步丢失身份和时序；核读qb- 4TKY数据批次、生成记录与完整链上证据，解释94 vs 95、funding边缺amount/time；核读meme-真实/待验证样本和前瞻/事后定义，找出能够独立重放的反证样本。
+
+**横向**：以相同Mint和同一时间窗口，对照Blix现有`coin/holders/bubblemap/wtrack`与Million资金分析、Pulse历史快照、PumpTrace回补的实际代码语义，识别真实缺口、公共设施误报与来源缺口。**仅做静态原代码与现成样本核查，未授权实跑则不启动**。
+
+**认知实验候选**：给AI同一“钱包接力+出货”问题，比较只用Blix事实、按需引入Hermes+qb-+meme-原始研究、再加入外部实例的三个条件；由独立事实和盲审检查“发现未知、假设可区分性、错误归因、缺失保真与用户介入”，不能以AI回答丰富度证明融合成功。
+
+**验收边界**：本轮已核查以上特定文件并提交研究修订；没有复算4TKY链上交易、没有跑Blix或旧程序、没有证明概率分数、策略收益或主体能力已增强。知识回填位置仍是本审计与原Blix已有导航，不新增Bot/强制阶段。
