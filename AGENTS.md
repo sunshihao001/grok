@@ -12,6 +12,8 @@
 
 **已迁入的分类知识入口**：首先按任务查 [Blix本地分类知识库](knowledge/README.md)，查看 [当前19份迁入与来源清单](knowledge/MIGRATION.json)；原 Grok研究现按基础、机制、方法、案例、AI和参考成品分类保存在本分支。使用时选相关正文，旧文中的专家阶段、建议与阈值不是Blix现行全局指令；不默认全部加载。完整旧资料、未迁入内容和65参考资产仍以原仓库为来源。
 
+**研究参考项目不能止于功能和资料归档**：先理解原项目完整业务、源码、专业模型、设计历史、测试与失败，再沿重要知识对象纵深探索和跨项目反证；Blix已有同名功能不等于专业知识已覆盖。归档/代码去重只是融合形式，不是停止知识研究的理由。示范成果与来源：[钱包关系、资金、库存和历史的跨项目深审](knowledge/references/wallet-relations-cross-project-knowledge-20261106.md)。
+
 **整体知识体系不是六个文件夹**：Blix知识依据 [目标图](docs/project/goal-map.md) 与 [统一层级模型](knowledge/DOMAIN-MODEL.v1.json) 综合定位。保留旧 Grok 的 L0–L7 深度、D01–D12 领域和跨域约束，结合六类原文目录；不机械按层串行、创建22 Bot或把旧推论升格为真值。优先选能改善当前 G2 业务问题的知识和可信来源。
 
 **知识理解顺序**：涉及主体知识建设时，优先阅读 [Blix 原生知识与业务总图](knowledge/BLIX-NATIVE-ATLAS.md)；再读 [旧 Grok 独立目录总图](knowledge/OLD-GROK-ATLAS.md)；最后按 [既有分类的融合对应表](knowledge/INTEGRATION-CROSSWALK.md) 处理。不要让旧专家/阶段覆盖 Blix 真实产品逻辑，知识文档迁入不等于运行时自动应用。
