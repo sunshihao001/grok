@@ -1,6 +1,6 @@
 # Blix × AI 外挂大脑｜全局反向审查与优先决策 V0.1
 
-> **日期：2026-11-06。审查基准：\`sunshihao001/grok\` 的 \`blix\` @ \`d4be09440964bc28d171de8a6db11feb76a81026\`。范围：只读 GitHub 源码、现有项目文档、\`ai-d\` Draft PR 与公开原始研究；未运行 Blix、未访问主网、未接入 Grok Bot、未执行测试、未更改业务代码。**
+> **日期：2026-11-06。审查基准：`sunshihao001/grok` 的 `blix` @ `d4be09440964bc28d171de8a6db11feb76a81026`。范围：只读 GitHub 源码、现有项目文档、`ai-d` Draft PR 与公开原始研究；未运行 Blix、未访问主网、未接入 Grok Bot、未执行测试、未更改业务代码。**
 >
 > 目的不是增加目标体系、专家或模块，而是回答一个实际问题：**用户只说简单目标，AI 是否已经考虑了实现目标不可缺少的业务、专业证据、可靠性、安全、成本和真实验收条件？** 结论：**尚未全部考虑到位；已存在能够改变方向的新反例，且 AI 自身效果尚未独立验证。**
 
@@ -13,7 +13,7 @@
 
 真正的测试不是“生成了多少文档”，而是：**AI 有没有发现此前未发现且足以改变决定的风险？有没有减少用户需要自己做的专业设计？它的建议能否在明确失败条件下被核查？**
 
-已查 \`ai-d\` 的 [目标导航](https://github.com/sunshihao001/ai-d/blob/proposal/goal-planning-knowledge-delivery-20261106/planning/goal-navigation-v0.1.md)、[跨领域实验记录](https://github.com/sunshihao001/ai-d/blob/proposal/goal-planning-knowledge-delivery-20261106/evaluation/first-cross-domain-tests.md)与[专家认知定位](https://github.com/sunshihao001/ai-d/blob/proposal/goal-planning-knowledge-delivery-20261106/research/expert-cognition-distillation-positioning-2026-11-06.md)。当前静态知识适用性测试和局部检索试验**不等于独立 A/B 模型提升证据**，已有文档明确承认这点。
+已查 `ai-d` 的 [目标导航](https://github.com/sunshihao001/ai-d/blob/proposal/goal-planning-knowledge-delivery-20261106/planning/goal-navigation-v0.1.md)、[跨领域实验记录](https://github.com/sunshihao001/ai-d/blob/proposal/goal-planning-knowledge-delivery-20261106/evaluation/first-cross-domain-tests.md)与[专家认知定位](https://github.com/sunshihao001/ai-d/blob/proposal/goal-planning-knowledge-delivery-20261106/research/expert-cognition-distillation-positioning-2026-11-06.md)。当前静态知识适用性测试和局部检索试验**不等于独立 A/B 模型提升证据**，已有文档明确承认这点。
 
 新外部证据：
 - Rabanser 等（ICML/PMLR 2026）[Towards a Science of AI Agent Reliability](https://proceedings.mlr.press/v306/rabanser26a.html)：单一任务成功率不能概括运行可靠性；应同时看一致性、鲁棒性、可预测性和安全；在两组基准上比较多个 Agent，发现能力提升未同步带来同等可靠性提升。**不证明本文方案已经可靠**。
@@ -25,8 +25,8 @@
 ### F1｜“资金来源没查到”可能被永久负缓存（SOURCE_READ，P0）
 
 [server/bubblemap.js](../../server/bubblemap.js)：
-- \`PAGES=3\`，\`readFunder()\` 最多读取约3,000条目标钱包签名；若没有到达可确认的最早历史，返回空字符串 \`""\`。
-- \`putF.run(wallet, "", t)\` 持久化到 \`bubble_funders\`；\`funderOf(wallet)\` 只要不是 \`undefined\`，\`traceNew()\` 就不再追踪。
+- `PAGES=3`，`readFunder()` 最多读取约3,000条目标钱包签名；若没有到达可确认的最早历史，返回空字符串 `""`。
+- `putF.run(wallet, "", t)` 持久化到 `bubble_funders`；`funderOf(wallet)` 只要不是 `undefined`，`traceNew()` 就不再追踪。
 - 因此“历史超过追溯上限未找到”和“钱包确无可观察出资人”，在当前存储口径下都可能保存为同一个负结果。**源代码默认没有后续自动升级/重试这一类历史上限负结果的路径**；并不是独立运行故障复现。
 
 **业务后果**：群体分析会缺少若干关键资金关联，但 UI 的“无边”容易被用户理解为“没有关系”。未来即使获得更好的历史供应商，旧空值仍可能阻断复查。
@@ -35,7 +35,7 @@
 
 ### F2｜跨源的当前 Holder 可能并非同一 Slot/确认状态（SOURCE_READ + RISK，P0）
 
-[holderslive.js](../../server/holderslive.js) 的快照采用 \`getProgramAccounts\` 的 \`commitment:"processed", withContext:true\`，订阅亦是 \`processed\`；[bubblemap.js](../../server/bubblemap.js) 在后备的 \`getTokenLargestAccounts\` 与 \`getMultipleAccounts\` 用 \`confirmed\`；[coin.js](../../server/coin.js) 还可能结合 Jupiter、RugCheck 的供应商缓存。
+[holderslive.js](../../server/holderslive.js) 的快照采用 `getProgramAccounts` 的 `commitment:"processed", withContext:true`，订阅亦是 `processed`；[bubblemap.js](../../server/bubblemap.js) 在后备的 `getTokenLargestAccounts` 与 `getMultipleAccounts` 用 `confirmed`；[coin.js](../../server/coin.js) 还可能结合 Jupiter、RugCheck 的供应商缓存。
 
 现有 Bubble Map 输出只有某些来源摘要时间，**不是每条关系与持仓附加统一的观测 Slot/commitment/刷新时间**。这使多个看似同时存在的持仓、标签和关联，可能属于不同时间视图。并不证明每张图当前错误，但不能把组合结果解释为严格同步的链上快照。
 
@@ -43,31 +43,31 @@
 
 ### F3｜“最大20个账户”不等于“最大20个经济 Owner”（SOURCE + OFFICIAL RPC，P0）
 
-[Bubble Map 后备读取](../../server/bubblemap.js) 使用 \`getTokenLargestAccounts\` 再查询所有者合并；[Solana 官方](https://solana.com/docs/rpc/http/gettokenlargestaccounts) 明确返回的是**最多20个最大 Token Account**，不是最大20个 Owner。
+[Bubble Map 后备读取](../../server/bubblemap.js) 使用 `getTokenLargestAccounts` 再查询所有者合并；[Solana 官方](https://solana.com/docs/rpc/http/gettokenlargestaccounts) 明确返回的是**最多20个最大 Token Account**，不是最大20个 Owner。
 
 单一 Owner 若有多个 Token Account，可占据多个名额；按后得到的20个账户汇总的 Owner 集合可能不同于真实前20个 Owner。更不等于经济实体排名，也不能作为全体 Holder 的代表性样本。
 
-**业务后果**：头部 Holder 比例、群体持仓比例和未发现异常可能受到选择偏差。后备源应标明 \`TOP_20_TOKEN_ACCOUNTS_THEN_GROUPED\` 的覆盖口径，不与全量 \`getProgramAccounts\` 快照无条件混为一谈。
+**业务后果**：头部 Holder 比例、群体持仓比例和未发现异常可能受到选择偏差。后备源应标明 `TOP_20_TOKEN_ACCOUNTS_THEN_GROUPED` 的覆盖口径，不与全量 `getProgramAccounts` 快照无条件混为一谈。
 
-### F4｜\`partial:false\` 与供应量分母的含义不一致（SOURCE_READ，P0）
+### F4｜`partial:false` 与供应量分母的含义不一致（SOURCE_READ，P0）
 
-- [coin.js](../../server/coin.js) 的链上 Holder 快照有 \`partial:false\`、\`genesis:false\`、\`trades:0\`、\`since:null\`；Jupiter Holder 也有类似 \`partial:false\` 路径，均不能证明历史成本、交易对价或资金路径完整。
-- [holders.js](../../server/holders.js) 的 Holder 份额使用 \`knownSupply(mint) || 1e9\`；[coin.js](../../server/coin.js) 内部交易账本 Holder \`top10\` 还存在固定 \`SUPPLY=1e9\` 的计算。对供应量非10亿的 Mint，这些百分比有分母不一致风险。
+- [coin.js](../../server/coin.js) 的链上 Holder 快照有 `partial:false`、`genesis:false`、`trades:0`、`since:null`；Jupiter Holder 也有类似 `partial:false` 路径，均不能证明历史成本、交易对价或资金路径完整。
+- [holders.js](../../server/holders.js) 的 Holder 份额使用 `knownSupply(mint) || 1e9`；[coin.js](../../server/coin.js) 内部交易账本 Holder `top10` 还存在固定 `SUPPLY=1e9` 的计算。对供应量非10亿的 Mint，这些百分比有分母不一致风险。
 - Blix 的 ledger、chain live、Jupiter、RugCheck 的 Holder 结果各自有时间、来源、样本与 Pool 排除定义，不应直接“择优选一份”后丢掉其来源语义。
 
-**业务后果**：AI 可能从一个看似精确的 \`top10=30%\` 得出“同群体控盘”的高置信结论，但这个数字可能并非全量 Owner、不同供应量分母、不同时间视图或未排除全部资金池。
+**业务后果**：AI 可能从一个看似精确的 `top10=30%` 得出“同群体控盘”的高置信结论，但这个数字可能并非全量 Owner、不同供应量分母、不同时间视图或未排除全部资金池。
 
 ### F5｜流与表有很多防错设计，但跨模块的事实一致性未受验收（SOURCE_READ + RISK，P0）
 
 - HTTP/MCP/SSE 不等同三份独立事实：MCP 有18个读取工具但不覆盖 Coin 全部调查与钱包转账；MCP 响应截断还可能省略关键 Holder。
-- [wallets.js](../../server/wallets.js) 的 \`wallet_trades\` 与 [wtrack.js](../../server/wtrack.js) 的 \`wt_feed\` / \`wt_transfers\` 的唯一键和动作模型不同；[journal.js](../../server/journal.js) 有独立的事件去重与24小时保留，K线是汇总数据。**没有一个现成统一、长期、可证明无损的经济事件账本**。
+- [wallets.js](../../server/wallets.js) 的 `wallet_trades` 与 [wtrack.js](../../server/wtrack.js) 的 `wt_feed` / `wt_transfers` 的唯一键和动作模型不同；[journal.js](../../server/journal.js) 有独立的事件去重与24小时保留，K线是汇总数据。**没有一个现成统一、长期、可证明无损的经济事件账本**。
 - 多动作交易、Swap+Transfer、Token Account/Owner、SOL/WSOL、跨 Mint 时间窗、RPC缺口仍然是关键的证据核查对象。不能只因为 Bubble Map 有四跳算法，就推出完整经济机制。
 
 **业务后果**：每个页面单独看可能合理，合起来仍然可能出现重复记账、漏交易、错时间桶或错误同控判断。优先验证“跨模块事实是否一致”，而不是增加另一套算法。
 
 ## 三、被我们持续低估的“产品成功”问题：用户到底怎样完成一次调查？
 
-用户不应需要说“检查 \`holders.js\`、\`wtrack.js\` 的字段”，也不应先理解数据库。
+用户不应需要说“检查 `holders.js`、`wtrack.js` 的字段”，也不应先理解数据库。
 
 **代表性自然语言任务 A：**“今天有哪些值得深查的新币？”
 
@@ -127,7 +127,7 @@
 ## 六、基准和知识入口
 
 - 当前 Blix：[项目目标](goal-map.md) / [完整源码](whole-product-cross-layer-audit-v0.1.md) / [HTTP MCP SSE](api-mcp-sse-contract-v0.1.md) / [官网](official-site-to-code-audit-v0.1.md)。
-- 最新关键源码：\`server/holderslive.js\`、\`server/holders.js\`、\`server/coin.js\`、\`server/bubblemap.js\`、\`server/wallets.js\`、\`server/wtrack.js\`、\`server/journal.js\`。
+- 最新关键源码：`server/holderslive.js`、`server/holders.js`、`server/coin.js`、`server/bubblemap.js`、`server/wallets.js`、`server/wtrack.js`、`server/journal.js`。
 - 外部来源为公开论文和 Solana RPC 官方文档；理论告诉我们**应该验证什么**，不自动证明本仓的实际结果。
 - 原 Grok/Hermes/qb-/meme-/Why-Solana、65份参考资产、D01–D12继续在原来源位置按需引用，不因为此审查建立第二份重复知识总库。
 
