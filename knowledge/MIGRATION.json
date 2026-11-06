@@ -1,0 +1,228 @@
+{
+  "schema_version": "1.0",
+  "as_of": "2026-11-06",
+  "product": "sunshihao001/grok@blix",
+  "scope": "knowledge and research files, not code or deployed AI functionality",
+  "rules": {
+    "classification": "folder is primary knowledge type; D01-D12 and 152 units stay indexed in docs/project/legacy-knowledge-routing.v1.json",
+    "source_preserved": true,
+    "relative_links_to_original": true,
+    "all_historical_instructions_are_nonbinding": true,
+    "import_is_not_validation": true
+  },
+  "count": 17,
+  "by_category": {
+    "foundations": 2,
+    "mechanisms": 5,
+    "methods": 5,
+    "cases": 1,
+    "ai": 1,
+    "references": 3
+  },
+  "items": [
+    {
+      "target": "knowledge/foundations/solana-chain-and-market.md",
+      "category": "foundations",
+      "source_repo": "sunshihao001/grok",
+      "source_ref": "knowledge/whole-spectrum-20261030-v1",
+      "source_path": "knowledge/domain/L1-L2-chain-market.md",
+      "source_blob_sha": "da2bc12cce685bb6b681fe30569219ed43e61944",
+      "source_url": "https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/domain/L1-L2-chain-market.md",
+      "migration_status": "FULL_TEXT_COPIED_WITH_PROVENANCE_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "target": "knowledge/mechanisms/wallet-roles-and-inventory.md",
+      "category": "mechanisms",
+      "source_repo": "sunshihao001/grok",
+      "source_ref": "knowledge/whole-spectrum-20261030-v1",
+      "source_path": "knowledge/domain/L3-wallet-actors.md",
+      "source_blob_sha": "7df6a984a0976f2c80052801b9d94b5643186185",
+      "source_url": "https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/domain/L3-wallet-actors.md",
+      "migration_status": "FULL_TEXT_COPIED_WITH_PROVENANCE_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "target": "knowledge/mechanisms/capital-organization-and-incentives.md",
+      "category": "mechanisms",
+      "source_repo": "sunshihao001/grok",
+      "source_ref": "knowledge/whole-spectrum-20261030-v1",
+      "source_path": "knowledge/domain/L3-E-L3-02-capital-organization-incentives.md",
+      "source_blob_sha": "3df9abfa4fdd98377ec6310bb02035ea44cc6340",
+      "source_url": "https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/domain/L3-E-L3-02-capital-organization-incentives.md",
+      "migration_status": "FULL_TEXT_COPIED_WITH_PROVENANCE_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "target": "knowledge/mechanisms/strategy-and-execution-economics.md",
+      "category": "mechanisms",
+      "source_repo": "sunshihao001/grok",
+      "source_ref": "knowledge/whole-spectrum-20261030-v1",
+      "source_path": "knowledge/domain/L4-L5-copytrade-edge.md",
+      "source_blob_sha": "752ccc09120f7c99bdb454b6720a753059a7fafa",
+      "source_url": "https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/domain/L4-L5-copytrade-edge.md",
+      "migration_status": "FULL_TEXT_COPIED_WITH_PROVENANCE_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "target": "knowledge/mechanisms/market-price-mechanism-research.md",
+      "category": "mechanisms",
+      "source_repo": "sunshihao001/grok",
+      "source_ref": "knowledge/whole-spectrum-20261030-v1",
+      "source_path": "knowledge/domain/D03-market-price-mechanism-research-brief.md",
+      "source_blob_sha": "6927b6795e9abe52daf9d442f445899c385de531",
+      "source_url": "https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/domain/D03-market-price-mechanism-research-brief.md",
+      "migration_status": "FULL_TEXT_COPIED_WITH_PROVENANCE_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "target": "knowledge/methods/wallet-capital-expert-questions.md",
+      "category": "methods",
+      "source_repo": "sunshihao001/grok",
+      "source_ref": "knowledge/whole-spectrum-20261030-v1",
+      "source_path": "knowledge/domain/L3-actor-expert-perspectives.md",
+      "source_blob_sha": "f97d18931bf5cfb249c9a050950a262c4d1ba878",
+      "source_url": "https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/domain/L3-actor-expert-perspectives.md",
+      "migration_status": "FULL_TEXT_COPIED_WITH_PROVENANCE_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "target": "knowledge/methods/key-wallet-investigation-brief.md",
+      "category": "methods",
+      "source_repo": "sunshihao001/grok",
+      "source_ref": "knowledge/whole-spectrum-20261030-v1",
+      "source_path": "knowledge/domain/D04-D08-key-wallet-followability-research-brief.md",
+      "source_blob_sha": "1eb9d228c10f8ac20066710260e9a686d89bc915",
+      "source_url": "https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/domain/D04-D08-key-wallet-followability-research-brief.md",
+      "migration_status": "FULL_TEXT_COPIED_WITH_PROVENANCE_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "target": "knowledge/methods/anomaly-and-cohort-discovery.md",
+      "category": "methods",
+      "source_repo": "sunshihao001/grok",
+      "source_ref": "knowledge/whole-spectrum-20261030-v1",
+      "source_path": "knowledge/domain/meme-anomaly-discovery-state.v1.md",
+      "source_blob_sha": "25e5864a48d0a8499aa03c94dc3a7f47bd4e0bf2",
+      "source_url": "https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/domain/meme-anomaly-discovery-state.v1.md",
+      "migration_status": "FULL_TEXT_COPIED_WITH_PROVENANCE_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "target": "knowledge/cases/independent-validation-and-failure-cases.md",
+      "category": "cases",
+      "source_repo": "sunshihao001/grok",
+      "source_ref": "knowledge/whole-spectrum-20261030-v1",
+      "source_path": "knowledge/domain/L6-L7-investigation-cases.md",
+      "source_blob_sha": "f16d28ff7357dd2b6047929792580f89f972307c",
+      "source_url": "https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/domain/L6-L7-investigation-cases.md",
+      "migration_status": "FULL_TEXT_COPIED_WITH_PROVENANCE_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "target": "knowledge/ai/intent-knowledge-selection-and-reasoning.md",
+      "category": "ai",
+      "source_repo": "sunshihao001/ai-d",
+      "source_ref": "proposal/goal-planning-knowledge-delivery-20261106",
+      "source_path": "knowledge/COGNITIVE-MAP.md",
+      "source_blob_sha": "46e06c4691ac74d12fc1237e39555dfd72b0f6da",
+      "source_url": "https://github.com/sunshihao001/ai-d/blob/proposal/goal-planning-knowledge-delivery-20261106/knowledge/COGNITIVE-MAP.md",
+      "migration_status": "FULL_TEXT_COPIED_WITH_PROVENANCE_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "target": "knowledge/methods/hermes-feature-to-market-structure.md",
+      "category": "methods",
+      "source_repo": "sunshihao001/-",
+      "source_ref": "main",
+      "source_path": "design/phase1-research/00c-GMGN-思维模型提炼.txt",
+      "source_blob_sha": "123c087cba7af99f94565cabf6c31d0e84d98ff3",
+      "source_url": "https://github.com/sunshihao001/-/blob/main/design/phase1-research/00c-GMGN-%E6%80%9D%E7%BB%B4%E6%A8%A1%E5%9E%8B%E6%8F%90%E7%82%BC.txt",
+      "migration_status": "FULL_TEXT_COPIED_WITH_PROVENANCE_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "target": "knowledge/foundations/legacy-grok-domain-core.md",
+      "category": "foundations",
+      "source_repo": "sunshihao001/grok",
+      "source_ref": "knowledge/whole-spectrum-20261030-v1",
+      "source_path": "knowledge/system/gpt-meme-project-core.v1.md",
+      "source_blob_sha": "f0fad0237c27b5170677481fec57765cbb7ec561",
+      "source_url": "https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/system/gpt-meme-project-core.v1.md",
+      "migration_status": "FULL_TEXT_COPIED_WITH_PROVENANCE_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "target": "knowledge/methods/expert-mechanism-research-method.md",
+      "category": "methods",
+      "source_repo": "sunshihao001/grok",
+      "source_ref": "knowledge/whole-spectrum-20261030-v1",
+      "source_path": "knowledge/system/expert-mechanism-research-method.md",
+      "source_blob_sha": "bbf579a2dbe57f24cfab04378c8c8da99c47a7c0",
+      "source_url": "https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/system/expert-mechanism-research-method.md",
+      "migration_status": "FULL_TEXT_COPIED_WITH_PROVENANCE_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "target": "knowledge/references/legacy-reference-project-knowledge-audit.md",
+      "category": "references",
+      "source_repo": "sunshihao001/grok",
+      "source_ref": "knowledge/whole-spectrum-20261030-v1",
+      "source_path": "knowledge/system/reference-projects-meme-knowledge-audit-20261030.md",
+      "source_blob_sha": "e42f319561ded6c23ba1818fb89a1f61a635accf",
+      "source_url": "https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/system/reference-projects-meme-knowledge-audit-20261030.md",
+      "migration_status": "FULL_TEXT_COPIED_WITH_PROVENANCE_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "target": "knowledge/references/multihop-funding-evidence-audit.md",
+      "category": "references",
+      "source_repo": "sunshihao001/grok",
+      "source_ref": "knowledge/whole-spectrum-20261030-v1",
+      "source_path": "knowledge/system/legacy-meme-multihop-deep-audit-2026-11-02.md",
+      "source_blob_sha": "802c46b7bb88e2cd65704298f4d3b4cfee33893b",
+      "source_url": "https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/system/legacy-meme-multihop-deep-audit-2026-11-02.md",
+      "migration_status": "FULL_TEXT_COPIED_WITH_PROVENANCE_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "target": "knowledge/mechanisms/actor-economic-mechanisms-deep-study.md",
+      "category": "mechanisms",
+      "source_repo": "sunshihao001/grok",
+      "source_ref": "knowledge/whole-spectrum-20261030-v1",
+      "source_path": "knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md",
+      "source_blob_sha": "548a04f48a64964a1efc7a15a927caf4c277038b",
+      "source_url": "https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/domain/L3-actor-economic-mechanisms-deepstudy.md",
+      "migration_status": "FULL_TEXT_COPIED_WITH_PROVENANCE_NOT_RUNTIME_VERIFIED"
+    },
+    {
+      "target": "knowledge/references/legacy-reference-capability-ledger.md",
+      "category": "references",
+      "source_repo": "sunshihao001/grok",
+      "source_ref": "knowledge/whole-spectrum-20261030-v1",
+      "source_path": "knowledge/system/reference-capability-reuse-ledger.v1.md",
+      "source_blob_sha": "8228be4ea80b0faea3bf41e094ff7baafbd5a45e",
+      "source_url": "https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/system/reference-capability-reuse-ledger.v1.md",
+      "migration_status": "FULL_TEXT_COPIED_WITH_PROVENANCE_NOT_RUNTIME_VERIFIED"
+    }
+  ],
+  "non_imported_sources": [
+    {
+      "ref": "https://github.com/sunshihao001/grok/tree/knowledge/whole-spectrum-20261030-v1/knowledge",
+      "status": "PARTIAL_FULL_TEXT_COPIED_ORIGINAL_PRESERVED"
+    },
+    {
+      "ref": "https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/system/whole-domain-atlas.v1.json",
+      "status": "EXISTING_152_UNIT_ROUTER_NOT_DUPLICATED"
+    },
+    {
+      "ref": "https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/system/gpt-meme-project-index.v1.json",
+      "status": "65_REFERENCE_ASSETS_ORIGINAL_REGISTRY"
+    },
+    {
+      "ref": "https://github.com/sunshihao001/-",
+      "status": "PARTIAL_HERMES_FULL_TEXT_COPIED"
+    },
+    {
+      "ref": "https://github.com/sunshihao001/qb-",
+      "status": "ORIGINAL_REFERENCED_NOT_COPIED"
+    },
+    {
+      "ref": "https://github.com/sunshihao001/meme-",
+      "status": "ORIGINAL_REFERENCED_NOT_COPIED"
+    },
+    {
+      "ref": "https://github.com/sunshihao001/grok/pull/16",
+      "status": "ENGINEERING_DRAFT_NOT_MIGRATED"
+    },
+    {
+      "ref": "https://github.com/sunshihao001/grok/pull/17",
+      "status": "ENGINEERING_DRAFT_NOT_MIGRATED"
+    }
+  ]
+}
