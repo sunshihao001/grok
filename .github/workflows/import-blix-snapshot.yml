@@ -29,7 +29,8 @@ jobs:
         run: |
           set -euo pipefail
           test "${GITHUB_REF_NAME}" = "blix"
-          rsync -a --delete --exclude='.git' "$RUNNER_TEMP/blix-source/" "$GITHUB_WORKSPACE/"
+          # GitHub Actions token cannot modify workflow files. Import those separately via the GitHub connector.
+          rsync -a --delete --exclude='.git' --exclude='.github/workflows/' "$RUNNER_TEMP/blix-source/" "$GITHUB_WORKSPACE/"
           git add -A
           if git diff --cached --quiet; then echo "Already identical"; exit 0; fi
           git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "Import full Blix source snapshot 51c0dac (MIT)"
