@@ -59,12 +59,23 @@
 
 第一份 [跨项目知识深研成果：钱包关系、经济主体与历史完整性](references/wallet-relations-cross-project-knowledge-20261106.md) 对照 Blix、Million、PumpTrace 源码，示范不局限于功能清单的学习方式；该研究并不代表三个项目的全部知识点已经审完。
 
+## 本轮重点：Hermes多维推理、异常发现与反向生成机制
+
+- [Hermes 00c 原有8种问题/结构推理思想](methods/hermes-feature-to-market-structure.md)；
+- [Hermes 00d 多维度研究原文](methods/hermes-multidimensional-reasoning-original.md) 与 [00e 反向发现原文](methods/hermes-reverse-discovery-original.md)：历史内容完整保留，包含探索性推论及未经校准的阈值，**不能直接做Blix风险/主体标签**；
+- [Hermes×qb-×meme-×ai-d 深层专业认识与下一轮研究](methods/hermes-reverse-discovery-deep-study-20261106.md)：解释“问题驱动、换视角、反向发现”三种能力的联系、各自谬误、跨行业方法启发、qb的调查工作产品及meme的反证制衡；
+- [完整领域模型](DOMAIN-MODEL.v1.json) 已在D01–D12的相关问题入口关联上述研究，不意味着强制每轮读全部文档。
+
+**知识学习不应被早期分类压平**：新异常未有充分身份/原因证据时，保留有来源的观察及竞争解释，不急着叫“庄家/内幕/吸筹/操纵”；也不能因为“Blix已有对应功能”“暂时没有可实证标签”就丢掉高价值研究对象。识别来源与知识成熟度不等于给市场实体贴真值标签。
+
+**当前源文件迁入数是21**（此前19 + 新增Hermes 00d/00e原文2份）；本轮纵深研究为新产生的Blix分析成果，不计入旧来源迁入数。原始00b与37L1/16L2等仍保持源端链接，正在持续深入核查；并未完成旧Hermes/qb-/meme-全仓逐知识点验证。
+
 ## 第二批：继承旧 Grok main 的专业判断卡与历史来源
 
 - [原始15张专业判断卡](methods/legacy-grok-core-cards.v1.json)：原样保留旧 `knowledge/catalog.v1.json`，每卡包含 `mechanism`、`required_evidence`、`alternative_explanations`、`inference_limit`、`next_check` 和来源信息。**3张`source_contract`、11张`documented_legacy_method`、1张`unverified_hypothesis`；全部是历史知识候选，不是实盘认证。**
 - [21份历史快照的固定来源目录](references/legacy-snapshot-sources.v1.json)：已核查旧 `main/knowledge/legacy-snapshots/` 下21份快照路径存在，来源分布为Hermes 16、meme- 3、qb- 2。**本批仅复制来源清单，快照原文尚未迁入 Blix；卡内 `snapshot_path` 仍指旧仓库的相对路径。**
 - [综合知识层级模型](DOMAIN-MODEL.v1.json) 已将15张卡按适用领域映射至D01–D12，避免反复创建额外专家层级；原文可能与已经迁入的17份研究有重叠，保留原出处与不同表达目的。
-- **迁入文件总数现在为19**：首批17份正文 + 1份完整结构化卡目录 + 1份历史快照来源清单。不是17+15+21=53份完整原文；未做模型自动知识调用或链上实测。
+- **旧轮迁入文件总数当时为19**：首批17份正文 + 1份完整结构化卡目录 + 1份历史快照来源清单。不是17+15+21=53份完整原文；未做模型自动知识调用或链上实测。
 
 ## 当前迁入进度
 
