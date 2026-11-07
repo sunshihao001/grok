@@ -149,6 +149,42 @@
         {
           "path": "data/gmgn_candidates_live_run/live_run_manifest.json",
           "level": "STATE_AND_MODE_METADATA_SELECTED_LINES_NOT_RUNTIME_VERIFIED"
+        },
+        {
+          "path": "data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/summary_overview.json",
+          "level": "LIVE_ARCHIVED_SUMMARY_PARSED_95_ROWS_VENDOR_DERIVED_NOT_SIGNATURE_REPLAY"
+        },
+        {
+          "path": "data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/summary_overview.md",
+          "level": "LIVE_ARCHIVED_OLD_SUMMARY_READ_94_ROWS_ZERO_TRADES_DIFFERENT_FROM_JSON"
+        },
+        {
+          "path": "data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/wallet_trade_normalized.json",
+          "level": "95_RECORDS_PARSED_EXIT_SELL_BALANCE_SEMANTIC_CONFLICTS_NOT_ONCHAIN"
+        },
+        {
+          "path": "data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/wallet_intelligence_decision.json",
+          "level": "95_RECORDS_PARSED_FOLLOWUP_MISSING_AND_SOURCE_NOT_VALIDATED"
+        },
+        {
+          "path": "data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/same_source_evidence_normalized.json",
+          "level": "4_GROUPS_PARSE_RELATION_ONLY_NOT_REAL_WORLD_SHARED_OWNER"
+        },
+        {
+          "path": "data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/wallet_fact/same_source_groups.json",
+          "level": "4_GROUPS_GROUP_CONFIDENCE_UNKNOWN"
+        },
+        {
+          "path": "data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/wallet_fact/chip_distribution_summary.json",
+          "level": "REPORTED_51_PERCENT_OF_TRACKED_NOT_SUPPLY_DATA_QUALITY_SCORE_LOCAL"
+        },
+        {
+          "path": "data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/bot2_handoff_packet.json",
+          "level": "43_WALLETS_MISSING_IN_HANDOFF_EVIDENCE_LANGUAGE_ONLY"
+        },
+        {
+          "path": "data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/manifest/token_output_manifest.json",
+          "level": "MIGRATION_DIRECTORY_COPY_NO_RECALC_CONTRACT"
         }
       ]
     },
@@ -384,6 +420,37 @@
         "Market mainnet replay"
       ],
       "next_work": "Trace real source_wallet_bot records through normalization and multi-mint funding; explain meme POC/AVWAP measurement against token inventory/real quote; compare Blix investigation conclusions under fixed evidence.",
+      "live_validation": "NOT_RUN"
+    },
+    {
+      "date": "2026-11-07",
+      "kind": "QB_ARCHIVED_MINT_SOURCE_BUNDLE_DEEP_SEMANTIC_CHECK",
+      "document": "knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md#13-2026-11-07qb真实留存文件核查反推全链经济身份与库存知识",
+      "evidence": "ARCHIVED_SOURCE_DATA_PARSED_NOT_LIVE_ONCHAIN_REVALIDATED",
+      "facts": {
+        "trade_records": 95,
+        "decisions": 95,
+        "groups": 4,
+        "group_wallets": 10,
+        "decisions_needing_onchain_followup": 51,
+        "decisions_missing_funding_source": 34,
+        "handoff_wallets_with_missing_fields": 43,
+        "reported_top10_pct_of_tracked": 51.019219,
+        "exit_true": 54,
+        "zero_balance": 57,
+        "sold_pct_100": 53,
+        "exit_true_but_0_sell_pct": 4,
+        "exit_false_but_100_sell_pct": 3
+      },
+      "different_report_versions": "summary_overview.md:94 accounts/no trades vs JSON:95 accounts/nonzero trades; same snapshot not established",
+      "unsupported_claims": [
+        "same owner proven",
+        "total supply concentration 51%",
+        "54 economic entity exits",
+        "full historical trade completeness",
+        "real-world data quality 100%"
+      ],
+      "next_work": "Trace funding edges and wallet histories to original source response and signatures; review pipeline versioning and inventory accounting before inferring shared control.",
       "live_validation": "NOT_RUN"
     }
   ]
