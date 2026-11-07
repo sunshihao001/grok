@@ -182,3 +182,73 @@ HoldTech、OKX、PumpGrok、Why-Solana、pumpwatch和此前65项参考资产仍�
 **下一项优先原始核验**：继续纵深读取Pulse`solana-stream.ts`所有落库/队列的调用路径、是否存在其他runner回填、落库故障/回补；对照qb-`source_wallet_bot`跨Mint wallet→Mint的保存偏差与Blix`Journal`缺口语义，然后选同一组合成事件进行跨方案“可得时点/留存/筛选”的静态验收。只有这一关通过，才能把选出的未知机制移交真实只读监控。
 
 > 本节状态：`SOURCE_RESEARCH + CROSS_PROJECT_STATIC_PILOT`；不是`LIVE_VALIDATED`、`MODEL_UPLIFT_VERIFIED`或`DEPLOYED`。引用外部检索与源码是为了具体改变可核查的判断，不预设参考项目必须服务于Blix现有目录。
+
+
+## 10. 2026-11-07：用此前未分析的 HoldTech 源码检验“AI 发现隐藏变量”
+
+> **为什么选择它**：第9节首次用Pulse“选择性落库/来源优先”发现**观察过程会改变市场统计**。本轮改用先前未进入该静态反例设计的 [HoldTech](https://github.com/co-numina/holdtech) 原始程序，检查**指标名字→实际代码→市场对象→经济解释**是否仍可能发生断裂。目的是试验 ai-d [2026-11-07 问题驱动发现未知](https://github.com/sunshihao001/ai-d/blob/main/research/2026-11-07-problem-driven-unknown-discovery.md) 的研究原则：不局限于“找到与holder同名的功能”，也不假装独立盲测模型。
+
+**源代码版本（Git blob，main读取时）**：
+- [`app/api/analyze/route.ts`](https://github.com/co-numina/holdtech/blob/main/app/api/analyze/route.ts)，blob `d55b8270c76cd066d68511e740c3845e59865f3e`：Token Account→Owner、历史签名估龄、池分类、Holder指标；
+- [`app/api/deep-scan/route.ts`](https://github.com/co-numina/holdtech/blob/main/app/api/deep-scan/route.ts)，blob `64440cfe809c58641f2a2e9e2bc4e095b92f945e`：事件Slot聚组、资金溯源、时间线、集中度；
+- [`app/api/holder-overlap/route.ts`](https://github.com/co-numina/holdtech/blob/main/app/api/holder-overlap/route.ts)，blob `36fb29b879798d829330fb1733f671ec14e6fbe7`：跨Mint样本持有人集合交集和协调标签。
+- 对照 [Blix`server/holderslive.js`](https://github.com/sunshihao001/grok/blob/blix/server/holderslive.js) blob `1baa865384e42bcaba61db66da74babf46589299`、[`server/holders.js`](https://github.com/sunshihao001/grok/blob/blix/server/holders.js) blob `5050a075144993828209340d6013213364bf1849`、[`server/bubblemap.js`](https://github.com/sunshihao001/grok/blob/blix/server/bubblemap.js) blob `75b824e05e16f50e7a89189a7d5a1fb534f1e915`、[`server/wtrack.js`](https://github.com/sunshihao001/grok/blob/blix/server/wtrack.js) blob `c7fec7d9c9e37c9a4aba72a34f207f4485aec84f`，**仅对照相关入口，不声称全模块验收**。
+- Solana协议原始依据：[getTokenLargestAccounts只返回20个Token Account](https://solana.com/docs/rpc/http/gettokenlargestaccounts)、[getSignaturesForAddress为从新到旧排序](https://solana.com/docs/rpc/http/getsignaturesforaddress)、[Fee Payer允许第三方代付](https://solana.com/docs/payments/send-payments/payment-processing/fee-abstraction)。
+
+### 10.1 通过源码得到的意外专业发现，而不是给HoldTech贴“Holder产品”标签
+
+**I. 钱包年龄不是Token持有时间（持仓久/钻石手的错误代理）**。
+`analyze/route.ts`中 `walletAgeDays = (now - firstTxTime)`，`holdDurationDays`被**直接赋值**为同一个数；`diamondHandsPct`随后统计`holdDurationDays > 2`。即使`firstTxTime`是真正钱包最早活动，也无法推出钱包持有本Mint超过2天。更严重的是其`getWalletInfo()`只取最近1000签名、再试额外最多1000，返回的“最早”是**该窗口最老**，不一定是首次活动；年龄和总交易数都可能被截断影响。
+
+**确定性反例**：合成一个365天前创建/使用的钱包今天刚买入1小时Mint；旧程序报告`holdDurationDays=365`且`diamondHandsPct=100%`（若调查样本只有该人），而真正的Token连续持有时间约0.04天；因此该指标不能作为长持或健康社区的事实。**这不否定“Wallet Age”本身对风险分析可能有价值**，它与Token库存进出的事实必须分开。
+
+**II. “Bundle”按Slot和Fee Payer聚类，不等于买单/同控**。
+`deep-scan/route.ts`的 `detectBundles()`接收`SWAP`、`TRANSFER`、`UNKNOWN`三种事件，直接取`t.feePayer`当buyer，若同Slot存在至少3个不同Fee Payer则生成bundle；没有核实该Mint确有Token净买入、SOL对价、交易方向、是否同一Bundle、公共代付或共同平台。**合成同一Slot有3笔互不相关的TRANSFER、三个不同Fee Payer、无买单**，旧函数仍给出一个3钱包Bundle。官方Solana协议允许代付，Fee Payer不是资产实际买方或真实控制人。既有Hermes的同Slot风险假设、qb的关键地址和Blix Bubble Map均应保留此异质证据区分，不能互相把弱关系升级成强共同控制。
+
+**III. 资金来源追溯中出现两个彼此独立的错误前提**。
+`traceFundingSource()`调用`getSignaturesForAddress(wallet,{limit:20})`拿到**最近20条**签名，却排序升序、取其中前5条并称为“最早交易”；这是**最近20条中相对较早的5条**，不等于钱包出生时的前5条。合成一钱包30条历史、真实第一笔为`sig1`，程序窗口最老候选是`sig11`。然后把某笔交易目标钱包SOL净增加`>0.01`且Fee Payer非目标的**Fee Payer**当作 `fundedBy`；但同一交易完全允许另一账户支付费用，真正SOL转出者不是Fee Payer。第二个合成例：`SENDER`向`RECEIVER`转入2 SOL、`FEE_SPONSOR`代付手续，旧函数会把`FEE_SPONSOR`写入来源。两问题叠加后，“共同资金父级”可能同时受到历史截断和执行角色混淆。这一认识不只关乎HoldTech，也直接对照Blix`bubblemap.js`中首次funder追溯的Fee Payer回退路径与历史有限页数。
+
+**IV. “200名持有者”参数与真实分页/样本分母不一致，且Owner余额可能丢失**。
+`holder-overlap/route.ts`业务调用`getHolders(m,200)`，但内部向供应商请求`limit:1000`，随后一次性把**一整页**写入数组，**只在下轮循环前检查200**。若第一页有1000个正余额Token Account，实际得到1000条，非严格200；如果第1页满足门槛便不取后续。源码注释所称“full holder base”也未得到证明。Owner集合用Set去重，余额Map用`map.set(owner,amount)`，同一Owner多个Token Account时后写入覆盖，而不是求和。合成`Owner W`两个账户余额100、200，显示可被覆盖为200，真正Owner库存应为300。**注意：这不是说跨币集合交集本身绝对错误，而是集合覆盖率、库存数值、TopN经济语义不同**。
+
+**V. 跨Mint“协调严重度”由不完整集合的交集比例驱动，缺少时间与行为因果**。
+`holder-overlap`按`shared/observedSetA`和`shared/observedSetB`的百分比算几何平均，再用`>=60`标`CRITICAL`、`>=40`标`HIGH`。合成两Mint各1000个已采样Owner、600交集，则分数60、`CRITICAL`；如果两Mint实际各有20000个不同Owner、同样只有600交集，完整集合占比3，规则变为`NONE`。这种反例只说明**样本分母与覆盖状态可以根本改变分类**；并不证明生产环境普遍只抓1000或生产观测比率的实际方向。更重要的是，即便完整Owner重叠达到60%，也没有证明共同控制、同步交易、前兆或可预测获利。
+
+**VI. 头部Token账户不等于流动性池，过度假定会改变风险指标**。
+`analyze/route.ts`先解析`getTokenLargestAccounts`返回的20个Token Account owner，然后**无条件**把`holders[0].owner`加入`poolDetected`，后续计算`humanWallets`时剔除。如果最大Token Account实际上是普通鲸鱼，而非经过协议验证的池/vault，那么它被错误剔除，进而影响Fresh/低活动/集中度分析。官方RPC仅承诺返回金额最大的Token Account，而未承诺榜首一定为池。Blix自己`holderslive.js`对Token Account按Owner**求和**，说明同样任务存在更合适的已实现原生方法；但Blix其他页面/历史仍须分开核实，不借对照称全链无损。
+
+### 10.2 静态离线结果：原始条件复算，不是运行时测试
+
+| 复算的条件或输入 | 复算实际值 | 需要拒绝的过强结论 |
+|---|---|---|
+| 调用`getHolders(...,200)`，单页1000个非零Token Account | 首次插入1000条，循环结束；`loaded=1000` | “API永远严格只查200个owner” |
+| 365天的钱包在此Mint仅持有0.04天 | `holdDurationDays=365`，单人样本`diamondHandsPct=100` | “这个Token持有了365天” |
+| 同Slot3个`TRANSFER`、不同Fee Payer、无`SWAP` | `detectBundles`输出1个3钱包Bundle | “3个钱包在同一Slot买入” |
+| 1000名采样Owner各币600交集 vs 20000完整Owner仍600交集 | 分数60/`CRITICAL` vs 3/`NONE` | “重叠分数可不看完整覆盖” |
+| 一Owner有余额100、200两Token Account | `Map.set`终值200，实际合计300 | “跨Mint重叠表的amount就是Owner总余额” |
+| 钱包30个历史签名，窗口仅取最近20 | `sig11`作为最老可选，而真实最早`sig1` | “最近20条中排序最早即历史首次” |
+| 实际发SOL者SENDER，另一方FEE_SPONSOR代付 | 净收2 SOL，但`fundedBy=FEE_SPONSOR` | “Fee Payer就是转账出资者” |
+
+以上测试为**根据源码关键分支独立重写的纯逻辑复算**，并非执行原Next.js应用、调用真实Helius API、运行Blix或独立Agent盲测；保留具体源路径与blob可让后续在安全隔离环境对原代码增加真实单测。源码中部分API凭证写法也需要单独安全审查；本次未使用或转载任何凭证。
+
+### 10.3 此轮 ai-d 的真正贡献：暴露“测量对象错位”这一中间机制
+
+从用户普通问题“某Mint有大量疑似捆绑钱包／跨币持有人重叠是不是同一个操盘群体？”出发，若只按功能标签搜索，会停在“Holder/Bundle/Overlap都支持”。但延着**实际观测对象**追溯：
+
+`Token Account → Owner聚合 → Holder样本来源与覆盖 → 持仓时间的真实开始 → Fee Payer/交易资产变化 → 行为Slot/签名 → 多Mint同一实体的竞争解释 → 可能的经济库存机制`
+
+就会发现：`first active`被当`hold duration`、`same-slot fee-payer`被当`same-slot buy`、`sample overlap`被当`coordinated group`、`fee payer`被当`funding origin`。它们都是**名称/实现观测量/经济概念的错位**，并不靠增加固定专家数来发现。
+
+这也表明需要更精确地区分**观察偏差**（只记录一部分）、**代理变量失效**（钱包年龄≠持有时长）、**角色误归因**（Fee Payer≠买入者/转账出资者）、**分母/聚合错误**（Token Account余额未汇总或重叠覆盖不足）、**经济机制未识别**（可见相关不等于同一控制主体）。这些是不同的错误机制，有不同修复/证据路径，而不是重新发明一组信号标签。
+
+**跨项目对Blix实用判断**：
+1. **只复用有依据的业务形态**：HoldTech的Holder/深度扫描/跨Mint交集UI和原始API流程，能提示Blix要测试哪些问题，但当前不能原样继承其`diamondHandsPct`、`fundedBy`、`bundle`、`coordination`为链上经济真值。
+2. **保留Blix已有较强原生功能，不因外部“成熟”而重写**：`holderslive.js`中`owners.set(owner, old+amount)`的Owner聚合、`journal.js`的去重与Gap概念、`bubblemap.js`的公共Hub排除，值得优先复用；但Bubble Map追踪的Fee Payer和历史截断也要按相同证据标准审查。
+3. **研究价值与交易价值分开**：同Slot/跨MintOwner交集可以是“值得只读调查”的线索，不自动是“捆绑操纵/可以买/可复制”证据。
+4. **下一项最有价值的验证**：用同一Mint的准确Owner汇总和两次冻结Slot快照，分别计算完整覆盖与TopN的跨Mint交集，另把同Slot`TRANSFER`、真实买入`SWAP`、第三方代付作为互斥验证案例；研究谁被漏、谁被误命名、哪些对经济库存/资本循环的解释仍然UNKNOWN。
+5. **后续新增未知知识的兼容机制**：从任何未读参考项目发现的新对象/学科，应在原来源保留版本与完整背景，先寻找它**改变哪个市场观察变量或竞争解释**，再进入Blix调查要求或离线反例；没有适用依据时允许保留为开放研究，不能强塞现有D类或无差别复制代码。
+
+### 10.4 对“真正盲测”的诚实界限
+
+HoldTech在这轮研究前没有作为此前Pulse/Hermes合成反例的原始材料使用，**可作为新的源级诊断**。但同一个研究者/AI现在已经看过HoldTech源码并得知反例，**不能把这七组源码演示再称为隔离的盲评模型测试**。未来必须冻结未见源码/真实任务、工具预算与答案评分器，另用隔离上下文测试ai-d的不同问题表征是否比普通词面检索可靠。此处完成的是`SOURCE_REVIEWED + OFFLINE_BRANCH_REPRODUCED`；`MODEL_AB=NOT_RUN`、`HOLDTECH_RUNTIME=NOT_RUN`、`BLIX_LIVE=NOT_RUN`、`NEW_ECONOMIC_MECHANISM_CONFIRMED=NO`。
+
