@@ -4,6 +4,7 @@ import { db, q, json, logEvent } from "./db.js";
 import { settings } from "./settings.js";
 import { rpcStreamAllowed, noteRpcBytes, keyUrls, keyFree, heliusFetch } from './heliuskeys.js';
 import * as sol from "./solana.js";
+import { persistEvidence } from "./economic-events.mjs";
 import * as src from "./sources.js";
 import { handleOf } from "./fomo.js";
 import { exitState, onCurve } from "./quality.js";
@@ -156,9 +157,14 @@ const tradeHooks = [];
 export const onStoredTrade = (fn) => tradeHooks.push(fn);
 export async function readTx(w, job, emit, fetched = null) {
   const key = `${w.address}:${job.sig}`;
-  if (readSigs.has(key) || db.prepare("SELECT 1 FROM wallet_trades WHERE sig = ? AND wallet = ?").get(job.sig, w.address)) return;
+  // A live feed may already have stored a trade for this signature. That does NOT
+  // mean its complete transaction or mixed transfer instructions were captured.
+  if (readSigs.has(key)) return;
   const tx = fetched || await sol.transaction(job.sig);
   if (!tx) throw new Error("transaction not available yet");
+  // Store the full jsonParsed transaction before lossy swap/transfer summaries.
+  // This is local evidence capture, not a trade, signature, or paid RPC call.
+  persistEvidence(db, job.sig, tx);
   readSigs.add(key);
   if (readSigs.size > 20000) for (const k of [...readSigs].slice(0, 5000)) readSigs.delete(k);
   for (const fn of txHooks) { try { fn(w, tx, job); } catch {} }
