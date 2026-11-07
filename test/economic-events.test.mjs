@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { DatabaseSync } from 'node:sqlite';
-import { decodeEvidence, persistEvidence, recipientCandidates, crossMintCandidates, transactionEvidence } from '../server/economic-events.mjs';
+import { decodeEvidence, persistEvidence, recipientCandidates, crossMintCandidates, transactionEvidence, missingEvidence } from '../server/economic-events.mjs';
 const A='A_OWNER', B='B_OWNER', C='C_OWNER', POOL='POOL_OWNER', M='MINT_M', N='MINT_N';
 const TOKEN='TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA', SYSTEM='11111111111111111111111111111111';
 const bal=(accountIndex, owner, mint, amount)=>({accountIndex, owner, mint, uiTokenAmount:{amount:String(amount),decimals:6}});
@@ -27,3 +27,9 @@ test('cross Mint chain B sell M -> B sends SOL to C -> C buys N is candidate onl
 test('no cross Mint claim without explicit captured SOL transfer',()=>{const d=setup();persistEvidence(d,'B_to_C_token',tx({at:1200,instructions:[transfer('ATA_A','ATA_B',1)]}));d.prepare('INSERT INTO wallet_trades VALUES(?,?,?,?,?,?)').run('B_sells',B,M,'sell',1100_000,1.1);d.prepare('INSERT INTO wallet_trades VALUES(?,?,?,?,?,?)').run('C_buys',C,N,'buy',1300_000,1);assert.equal(crossMintCandidates(d,B).rows.length,0);d.close();});
 test('same Mint follow-up is not misclassified as cross Mint',()=>{const d=setup();persistEvidence(d,'B_to_C',tx({at:1200,instructions:[solTransfer(B,C,1_000_000_000)],accounts:[B,C,SYSTEM]}));d.prepare('INSERT INTO wallet_trades VALUES(?,?,?,?,?,?)').run('B_sells',B,M,'sell',1100_000,1);d.prepare('INSERT INTO wallet_trades VALUES(?,?,?,?,?,?)').run('C_buys',C,M,'buy',1300_000,1);assert.equal(crossMintCandidates(d,B).rows.length,0);d.close();});
 test('multi-swap and opaque program bytes never silently inferred as a verified purchase',()=>{const d=setup();const t=tx({instructions:[{programId:'ROUTER',data:'base64-or-opaque'}, {programId:'COMPUTE',data:'opaque'}]});persistEvidence(d,'opaque',t);assert.deepEqual(transactionEvidence(d,'opaque').instructions.map(i=>i.kind),['OTHER','OTHER']);assert.equal(recipientCandidates(d,A).rows.length,0);d.close();});
+
+test('missing evidence identifies legacy trade signatures and clears on archived replay',()=>{
+ const d=setup();d.prepare('INSERT INTO wallet_trades VALUES(?,?,?,?,?,?)').run('legacy_sig',A,M,'buy',1000_000,2);
+ assert.deepEqual(missingEvidence(d,A).rows.map(x=>x.sig),['legacy_sig']);
+ persistEvidence(d,'legacy_sig',mixed());assert.equal(missingEvidence(d,A).rows.length,0);d.close();
+});
