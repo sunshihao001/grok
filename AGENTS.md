@@ -12,7 +12,7 @@
 
 **严格当前只读**：仓库含交易/纸面交易/自动 AI 调用或可能收费的功能；文档写“只读”不会自动隔离。未经安全审查不得拿真实私钥、签名、广播、付款或默认运行高风险/自动付费操作。区别源码、供应商、离线、真实网络、经济推断、UNKNOWN；Token Account≠owner≠fee payer，资金转移≠交易，同步≠同控，结构≠交易优势。
 
-**已迁入的分类知识入口**：首先按任务查 [Blix本地分类知识库](knowledge/README.md)，查看 [当前19份迁入与来源清单](knowledge/MIGRATION.json)；原 Grok研究现按基础、机制、方法、案例、AI和参考成品分类保存在本分支。使用时选相关正文，旧文中的专家阶段、建议与阈值不是Blix现行全局指令；不默认全部加载。完整旧资料、未迁入内容和65参考资产仍以原仓库为来源。
+**已迁入的分类知识入口**：首先按任务查 [Blix本地分类知识库](knowledge/README.md)，查看 [当前21份迁入与来源清单](knowledge/MIGRATION.json)；原 Grok研究现按基础、机制、方法、案例、AI和参考成品分类保存在本分支。使用时选相关正文，旧文中的专家阶段、建议与阈值不是Blix现行全局指令；不默认全部加载。完整旧资料、未迁入内容和65参考资产仍以原仓库为来源。
 
 **研究参考项目不能止于功能和资料归档**：先理解原项目完整业务、源码、专业模型、设计历史、测试与失败，再沿重要知识对象纵深探索和跨项目反证；Blix已有同名功能不等于专业知识已覆盖。归档/代码去重只是融合形式，不是停止知识研究的理由。示范成果与来源：[钱包关系、资金、库存和历史的跨项目深审](knowledge/references/wallet-relations-cross-project-knowledge-20261106.md)。
 
@@ -25,5 +25,7 @@
 **能力转化路线**：在使用知识映射的同时，按需阅读 [跨项目与现代Agent的融合蓝图](docs/project/knowledge-to-capability-integration-v0.1.md)，优先令知识实际改善已有事实输出、程序调查、监控与独立反例，不默认扩建Skill/多Bot。
 
 **跨项目通用认知 Skill**：为让 Blix 能按需使用 ai-d 完整七项认知能力，现提供 [ai-d-cognitive-core 消费端入口](.grok/skills/ai-d-cognitive-core/SKILL.md)。它指向 ai-d 唯一上游知识源及对应的 Blix 业务入口，**不复制全量正文、不预设所有 Bot 自动读取**。Grok CLI 按其 Skill 目录机制可以发现该候选；Grok Bot 原生私人 Skill 是否安装须在 Bot 端单独启用和验收。应优先使用 Blix 已有项目目标、领域证据和只读安全约束。
+
+**Hermes未知机制研究的实际证据修正（2026-11-07）**：使用旧 `00c–00e` 的问题生成/反向发现方法时，必须检验其L1/L2具体计算的时间窗口、非互斥分母、AMM池型与样本来源。已离线复算的 `volume_momentum` 新币24倍假动量、`insider_activity_composite` 重叠百分比、`spread_quality_proxy` AMM错误代理不能直接写入风险或市场真值。沿[旧Hermes纵深研究第11节](knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md#11-2026-11-07旧推理公式的反例复算与知识进入blix的检验)与[Blix知识使用](docs/project/knowledge-use.md)按需理解其原因；保留原始假说，按经济机制和竞争解释调查，不急贴庄家标签。**研究是否值得深入**与**是否满足交易/安全条件**不同；当前不启用交易、不推定运行时AI已学会。
 
 **知识不是指令**：通用认知研究见 [ai-d PR #1](https://github.com/sunshihao001/ai-d/pull/1)，原专业研究见 [grok PR #14](https://github.com/sunshihao001/grok/pull/14)、[#16](https://github.com/sunshihao001/grok/pull/16)、[#17](https://github.com/sunshihao001/grok/pull/17)。按问题选择、记录适用边界与反证；保留所有原研究，不声称这些 Draft 已合并/部署或模型已经自动学会。
