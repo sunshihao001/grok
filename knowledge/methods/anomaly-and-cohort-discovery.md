@@ -1,5 +1,7 @@
 > **Blix 旧知识全文迁入｜群体时序异常研究** · 原来源：[knowledge/domain/meme-anomaly-discovery-state.v1.md](https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/domain/meme-anomaly-discovery-state.v1.md) · 原文件blob SHA `25e5864a48d0a8499aa03c94dc3a7f47bd4e0bf2` · 原研究领域 D05,D07,D11 · 验证状态 **SOURCE_COPIED / RESEARCH_NOT_RUNTIME_VALIDATED**。旧文件的研究阶段、阈值、假说和引用保持其原意义；不作为现行全局指令。
 
+**2026-11-07 原始研究纠错：RED-COHORT数值撤回（优先核对）**：原 [arXiv:2607.02795 v4，2026-10-05](https://arxiv.org/abs/2607.02795) 明确声明其“买家记录混入卖出并遗漏大量买入”，**旧论文所有数值结果已经撤回，等待修正**。因此任何以前用来支持“群体数/后续买家流提升/某种异常群体有交易优势”的该文具体百分比、匹配效应和统计显著性均不能再视作有效实证。可继续借用“共买+共同资金+跨币关系要对照正常活跃度”的**研究问题和检验思想**，但必须重新核经济交易方向与样本来源。相关跨项目深审：[观察选择、钱包组织与AI反馈的系统级机制](../references/source-knowledge-deep-study-v0.1.md#11-2026-11-07-跨全市场与-ai-的双重反馈从数据选择到经济机制与判断修订)。这是文献**撤回数值**而非本项目已独立证明所有群体不存在。
+
 ---
 
 # Solana Meme｜P2.1–P2.4 异动发现方法融合目录 V1.0
