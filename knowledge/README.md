@@ -75,6 +75,8 @@
 
 **2026-11-07 新增可复算认识**：V0.3现已补入[第11节源公式反例与同输入证据合同](methods/hermes-reverse-discovery-deep-study-20261106.md#11-2026-11-07旧推理公式的反例复算与知识进入blix的检验)：旧Hermes的早期24倍假动量、供应商可疑交易占比重叠、AMM储备价值比错误spread代理；qb优先名额/字段别名、meme`real_pending`样本资格冲突。实用边界同步进入[Blix知识使用入口](../docs/project/knowledge-use.md)与[ai-d实验设计](https://github.com/sunshihao001/ai-d/blob/main/evaluation/first-cross-domain-tests.md)。**这些是独立数学/静态检查，不是实时识别率提升或正式策略规则。**
 
+**研究范围继续展开，而非只纠正三个公式**：[Hermes×qb×meme 纵深研究第12节](methods/hermes-reverse-discovery-deep-study-20261106.md#12-2026-11-07取消先验标签边界后的跨旧项目完整认知连接) 已将旧资料中的七条相互依赖的专业认识连成完整研究链：市场发现与交易决策边界、资本组织/钱包/库存/对价、事件与证据时间、meme 的价格结构与真实链上成本、字段与测量可靠性、失败样本与机制成熟度、AI问题生成与独立验收。**这不是七个新标签或七个强制阶段**；源项目独有的任何高价值内容均继续进入研究，不因当前Blix没有对应模块而忽略。查看[按原文件的审阅深度与未审范围](references/source-coverage-v0.1.json)，勿将目录扫描或摘要当全部知识已掌握。
+
 ## 第二批：继承旧 Grok main 的专业判断卡与历史来源
 
 - [原始15张专业判断卡](methods/legacy-grok-core-cards.v1.json)：原样保留旧 `knowledge/catalog.v1.json`，每卡包含 `mechanism`、`required_evidence`、`alternative_explanations`、`inference_limit`、`next_check` 和来源信息。**3张`source_contract`、11张`documented_legacy_method`、1张`unverified_hypothesis`；全部是历史知识候选，不是实盘认证。**
