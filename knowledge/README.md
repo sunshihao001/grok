@@ -31,6 +31,8 @@
 
 **可追溯性与状态**：原文全文与旧版各自原位保存；[原历史来源映射](MIGRATION.json)、[参考项目已读与未审范围](references/source-coverage-v0.1.json)、[152旧研究项路由](../docs/project/legacy-knowledge-routing.v1.json)分别负责资料出处和覆盖。索引、静态源码分析、离线反例、旧归档真实供应商事实、原始RPC经济事件、Blix实际运行与已验证收益**不能互相替代**。不同来源的局部失败不等于整体成品无用；新的正面证据也应及时提升只读调查优先级。
 
+**整套系统的机制深研（2026-11-07）**：已把[从市场参与者目标→真实链上事件→数据采集选择→产品判断→执行时效→结果修订的完整跨项目研究](references/source-knowledge-deep-study-v0.1.md#11-2026-11-07整套市场智能系统的深层机制从多主体市场可观测性到判断修订)回填到原参考项目深研正文。研究直接交叉检查Blix、Pulse、Million、PumpTrace、HoldTech、pumpwatch、Why-Solana、PumpGrok、OKX、Hermes、meme-及ai-d的代表性源码/原文，不只是原作者功能清单；新增四类认识：参与者收益目标多样、选择性保存改变学习样本、结构与可交易价值分开、事件/可得/决策时间不同。按[来源覆盖记录](references/source-coverage-v0.1.json)确认已读范围，**未宣称全部参考仓库审完或真实链上/运行时已经验收**。日常问题先用下表按需定位，不全文注入。
+
 ## 推荐理解顺序：先 Blix，后旧 Grok，再做对应
 
 - **Hermes多维推理、反向异常发现与ai-d跨行业视角**：[旧项目知识纵深研究（2026-11-07）](references/hermes-reasoning-ai-d-cross-domain-study-20261107.md)。与qb-、meme-原始实现对照；含未审范围、反证和下一轮任务，非运行时已融合。
