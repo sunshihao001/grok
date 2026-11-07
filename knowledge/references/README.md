@@ -7,6 +7,10 @@
 本目录存放的是**对成熟项目的知识研究与复用经验**，不是这些第三方项目的完整代码仓库；用户后续只运行/使用Blix。原版保留在各自仓库，是否移植业务实现需要以后单独审查许可、依赖、安全、费用和功能重叠。**不要将第三方README的功能说明当Blix已具备或独立验收。**
 
 
+## 2026-11-07｜HoldTech新源码试验：从功能名发现被误测的经济对象
+
+[完整研究与七组确定性复算](source-knowledge-deep-study-v0.1.md#10-2026-11-07用此前未分析的-holdtech-源码检验ai-发现隐藏变量)核查HoldTech的Holder质量、跨Mint重叠、同Slot Bundle、钱包年龄与资金来源：发现持有时长被钱包年龄替代、Bundle可能由普通Transfer与Fee Payer触发、最近20签名被误称最早资金历史、跨Mint集合分母/分页与Owner余额合计失真，及“最大Token Account必是池”的未经证明假设。对照Blix原生Owner合并与Bubble Map风险。**仅源码分析及纯逻辑离线复算，非真实链上事实、非独立模型A/B。** 这体现ai-d“从普通问题追问真实测量对象和隐含条件”，不必新建标签或专家制度。
+
 ## 2026-11-07 外部成熟研究法与跨项目实证断层新发现
 
 已将 [Aider源码上下文、ADR设计动机、Contextual Retrieval、GraphRAG、Agent Retrieval Bench、Agent Skills与RAG评测的三轮对照](source-knowledge-deep-study-v0.1.md#9-2026-11-07外部成熟方法三轮检索后的融合修正与pulse源码试验) 原位写入既有深研正文，并用Pulse`solana-stream.ts`、`merge.ts`、`restore.ts`对照Blix`journal.js`、`coverage.js`完成**选择性事件保存/回填的规则复算**。新专业问题：数据采集与样本保留的方式本身可能制造市场机制的伪相关；研究“早期资金/跨币异常”不能只查看已保存记录而不检查其保存条件。**没有启动软件、跑当前RPC或实测模型提升。**
