@@ -2,6 +2,27 @@
 
 > 建立于 2026-11-06。**这是已迁入资料的分类与检索入口，不是重新建立一个专家体系，也不是运行时AI已经掌握的证明。** 源文件旧版保留；本文仅管理Blix持有的副本、出处及使用方式。
 
+
+## 2026-11-07｜快速知识整合与按问题进入（当前优先入口）
+
+**这次整合做的不是再搬一个知识库**：保持已有六类资料目录、L0–L7、D01–D12及152条旧路由原样，新增[统一知识模型里的六类目标＋七条按任务的知识路由](DOMAIN-MODEL.v1.json)，把刚研究的[各参考成品真正想解决的目标](../docs/project/reference-driven-goal-model-v0.1.md)、市场行动者激励和[ai-d问题形成/知识选择方法](ai/intent-knowledge-selection-and-reasoning.md)接到Blix现有业务。**这是可查找的知识导航，不等于运行时AI自动调用。**
+
+**快速调用不是强制流程**：收到口语问题先确定用户是想发现机会、调查风险、追资金库存、观察市场、解释机制还是让AI代办；可以多选但不需要全部跑一遍。根据当前任务读**最有信息价值的原文**，查相关源码/事实、竞争解释与下一项能改变判断的证据。若发现新领域或无法归类的市场机制，应保留来源并允许更新知识关联；不因旧分类没有位置就停止探索。
+
+| 当前问题（自然语言） | 首先研究的现有知识 | 参考来源的独特问题/Blix落点 | 最容易遗漏、需要积极检查的条件 |
+| --- | --- | --- | --- |
+| **“今天有什么盘值得关注？”** | [异常与群体发现](methods/anomaly-and-cohort-discovery.md)＋[价格机制](mechanisms/market-price-mechanism-research.md) | Blix Discover；Pulse生命周期与遗漏样本，pumpwatch正常基线，Million发现回顾 | 是否能及时看到、哪些被筛掉、真实交易池深、不能只事后挑成功盘 |
+| **“这个币的Holder是不是假热闹？”** | [钱包角色/库存](mechanisms/wallet-roles-and-inventory.md)＋[链上事实](foundations/solana-chain-and-market.md) | Blix Coin/Holders/Bubble Map；HoldTech测量口径、PumpTrace Creator历史、qb单币调查 | Token Account≠Owner≠经济主体；池地址、Fee Payer、TopN截断；支持线索也不能无依据一票否决 |
+| **“提前6/12小时转账激增，是否有人组织？”** | [Hermes反向问题生成与旧公式反例](methods/hermes-reverse-discovery-deep-study-20261106.md)＋[资本激励](mechanisms/capital-organization-and-incentives.md) | Blix Journal/Wallet；Hermes时序与筹码、Million持续发现、Pulse历史存储 | 资产净变化/真实签名、观察时钟、覆盖空窗、公共服务；区别准备资金和已经买入 |
+| **“转给新地址后卖了没有？跨币又去哪了？”** | [多跳资金核查](references/multihop-funding-evidence-audit.md)＋[经济主体机制](mechanisms/actor-economic-mechanisms-deep-study.md) | Blix Wallet/Track；Million双向发现、Why-Solana多跳、Hermes库存循环 | 真Token转入与下游卖出、SOL/WSOL、跨Mint时序、共享资金Hub，实际群体与未知身份分开 |
+| **“价格跌后反弹，是卖压还是做市？”** | [三份真实快照调查](../docs/project/single-mint-audit.md)＋[市场微观机制](mechanisms/market-price-mechanism-research.md) | Blix Coin；对照真实DEX/RugCheck样本与其他池、LP/Swap机制 | 原始交易签名、LP增减、滚动24h量≠短期量、极薄旁池价差不等于可交易利润 |
+| **“以前有效的行为现在不灵，是否发现了新机制？”** | [跨参考源码深研](references/source-knowledge-deep-study-v0.1.md)＋[机制/执行经济](mechanisms/strategy-and-execution-economics.md) | Blix Research；Why-Solana结构与优势分离、meme-阶段与失败研究、pumpwatch全样本对照 | 机制变化还是采样变化；同Slot/同源不独占解释，既不乱报也不漏掉强异常 |
+| **“继续项目，你自主整合并验证。”** | [多层目标体系](../docs/project/reference-driven-goal-model-v0.1.md)＋[ai-d知识认知](ai/intent-knowledge-selection-and-reasoning.md) | Blix已有功能优先；按需引入ai-d目标推理、外部成熟成品、旧项目失败经验 | 选目标→核来源→复用→可逆交付→回读；GitHub写入、代码通过、真实市场/模型效果必须分别证明 |
+
+**不同“目标”的必要区别**：Blix用户的V-A至V-F是**产品使用目的**；发行者、套利者、LP、sniper、普通参与者的动机是**待推断的市场隐变量**；取证、微观结构、统计、经济学和工程是**按问题激活的专业视角**。可分别提出同时成立的阶段性结论，不必固定专家名单或对所有观点投票。详细[多主体目标研究](../docs/project/goal-map.md)与[主体目标实践对照](../docs/project/reference-driven-goal-model-v0.1.md)。
+
+**可追溯性与状态**：原文全文与旧版各自原位保存；[原历史来源映射](MIGRATION.json)、[参考项目已读与未审范围](references/source-coverage-v0.1.json)、[152旧研究项路由](../docs/project/legacy-knowledge-routing.v1.json)分别负责资料出处和覆盖。索引、静态源码分析、离线反例、旧归档真实供应商事实、原始RPC经济事件、Blix实际运行与已验证收益**不能互相替代**。不同来源的局部失败不等于整体成品无用；新的正面证据也应及时提升只读调查优先级。
+
 ## 推荐理解顺序：先 Blix，后旧 Grok，再做对应
 
 - **Hermes多维推理、反向异常发现与ai-d跨行业视角**：[旧项目知识纵深研究（2026-11-07）](references/hermes-reasoning-ai-d-cross-domain-study-20261107.md)。与qb-、meme-原始实现对照；含未审范围、反证和下一轮任务，非运行时已融合。
