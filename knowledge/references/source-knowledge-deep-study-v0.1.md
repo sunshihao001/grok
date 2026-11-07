@@ -464,11 +464,11 @@ HoldTech在这轮研究前没有作为此前Pulse/Hermes合成反例的原始材
 **验收状态**：本节完成公开论文/官方规则、上游关键源码、Blix原产品与ai-d原研究之间的原始来源校对，形成明确新问题和互相关联机制；不能宣称全部参考仓库已经深入审完、AI内部参数已被训练、运行中策略有效、自动市场监控已部署、链上真实资金闭环已验证。只有本次GitHub提交并回读后，知识内容才算“已存入Blix”，但那仍不等于运行时掌握。
 
 
-## 12｜2026-11-07 全过程研究的新增源码证据：时间错桶、发现抽样、历史窗口与判断演化
+## 13｜2026-11-07 原始代码专项补充：时间错桶、发现抽样、历史窗口与判断演化
 
 > 本节不是再列三个独立漏洞。研究对象是：**市场真实行为 → 数据被观察/抽样/保存 → 经济主体与资产路径被重建 → AI形成判断 → 结果回访与修订**。以同一业务因果链比较 Blix、Pulse、Million、HoldTech、PumpTrace、pumpwatch 和 ai-d；各源码证据只支持其实现的局部语义，**没有在这里启动原项目或获得新增真实链上交易**。既有第11节的宏观结论保留，本节新增可定位的具体代码条件及其互相作用。
 
-### 12.1 新发现一：Pulse的滚动热度存在“事件到达顺序”假设，可能把历史活动归到最新窗口
+### 13.1 新发现一：Pulse的滚动热度存在“事件到达顺序”假设，可能把历史活动归到最新窗口
 
 **源码**：[Pulse `src/collector/solana-stream.ts`](https://github.com/nirholas/pulse/blob/d80465c043852e85619f5eee86634389e5b4a045/src/collector/solana-stream.ts)，`Rolling.hit(ts,isBuy,sol,wallet)`：`BUCKET_MS=5分钟`、`BUCKETS=12`；先计算`start=floor(ts/BUCKET_MS)*BUCKET_MS`，若`b.start < start`才新建桶；源码注释明确说明：**比最新桶更早的乱序消息直接记入最新桶**。后续`sum(now)`只按桶的`start`判断是否落在最近60分钟，并累加该桶`trades/vol/traders`。
 
@@ -476,7 +476,7 @@ HoldTech在这轮研究前没有作为此前Pulse/Hermes合成反例的原始材
 
 **Blix对照**：[Blix `server/journal.js`](../../server/journal.js)用签名/Mint/交易序号生成去重键，处理确认和缺口修复，交易保留24小时；[Blix `server/engine.js`](../../server/engine.js)处理新币发行/迁移/重启后回补。两者不等价于“全历史、所有事件都准确按发生时刻归桶”。**新的整合判断**：研究“6h/12h转账激增”时，除了`event_time/ingest_time`，还要知道统计桶采用**事件时间还是到达时间**、乱序如何处理、补数是否重算历史窗口。优先核现有Blix具体统计实现，再决定是否需要改代码，不能因为发现Pulse某处缺陷就否定其生命周期和归档价值。
 
-### 12.2 新发现二：Million已经用“头部70%＋尾部30%”应对鲸鱼筛选偏差，但引入可复现性和覆盖问题
+### 13.2 新发现二：Million已经用“头部70%＋尾部30%”应对鲸鱼筛选偏差，但引入可复现性和覆盖问题
 
 **源码**：[Million `apps/api/src/discovery/discovery.service.ts`](https://github.com/Kelows/million/blob/30c1ceef7b2984bde62cf9f7d7bee0d66501dfc0/apps/api/src/discovery/discovery.service.ts)的`discover()`先聚合交易中候选买家并排除部分路由/池设施，再对尚未在名单中的候选做快速预览：`topShare=Math.ceil(previewCap*0.7)`；剩余名额从尾部以`Math.random()`随机抽取，随后`fetchHistory(address,1)`、`computeMetrics(...,history.truncated,...)`。源码注释明确说明：仅看买入规模最大的地址会偏向机器人和设施，尾部未被预览就无法进入后续判断。
 
@@ -484,7 +484,7 @@ HoldTech在这轮研究前没有作为此前Pulse/Hermes合成反例的原始材
 
 **Blix研究价值**：市场发现应同时维护“高价值优先”与“未知尾部探索”。单靠TopN可能错过真正的群体接力，全部平均扫又成本过高；可优先借鉴Million的**探索配额思想**，但在后续验收中保留样本来源/覆盖/是否被抽中。与Pulse选择性留存、pumpwatch总体发行样本对照，区分：未出现、未监听、未保存、未预览、已排除、被误归类六种“看不到”。这比仅新增聪明钱标签更可能改变市场发现质量。
 
-### 12.3 新发现三：同一“钱包关系”会随调查目的改变意义，不能让聚类结果替代经济主体研究
+### 13.3 新发现三：同一“钱包关系”会随调查目的改变意义，不能让聚类结果替代经济主体研究
 
 - [Million `owners.service.ts`](https://github.com/Kelows/million/blob/6e12e45b735df7fc1fad0d5dd807cf323378b031/apps/api/src/analysis/owners.service.ts)：`HUB_DEGREE_MAX=6`，超过阈值的资助/付费Hub不参与并查集连接；注释记载曾发生**182钱包错误并为一个Owner**，因此同批入场边不作为连接桥。它解决的是**减少聚类扩散**，不是经济身份真值证明；硬阈值也可能切断真实大规模组织。
 - [HoldTech `app/api/deep-scan/route.ts`](https://github.com/co-numina/holdtech/blob/64440cfe809c58641f2a2e9e2bc4e095b92f945e/app/api/deep-scan/route.ts)：同Slot检测以Fee Payer和交易类型近似“Bundle”，以及有限历史窗口下的资金来源；原第10节已复算反例。它偏向**快速风险筛查**，不等于完整经济主体恢复。
@@ -493,14 +493,14 @@ HoldTech在这轮研究前没有作为此前Pulse/Hermes合成反例的原始材
 
 **新的整体判断**：同一资金边在“发现值得盯的异常”“判断Token可售库存”“估计经济主体”“预测未来行动”中，所需证据不同。**不应把谨慎的身份归因门槛错误套到早期观察**；同时也不能把弱观察标签无条件传递成“操盘手”或盈利概率。下一条有价值的证据不是更多相似图，而是**能改变解释的实际资产净额、指令/签名和后续库存去向**。
 
-### 12.4 新发现四：回顾数据的“可重放”不等于当时真的知道，失败样本也要有分母
+### 13.4 新发现四：回顾数据的“可重放”不等于当时真的知道，失败样本也要有分母
 
 - [pumpwatch `docs/REPRODUCE.md`](https://github.com/cinder-security/pumpwatch/blob/d598cc5d71ff58a8b59847bc0d0296edbd79f00a/docs/REPRODUCE.md)明确提供冻结SQLite快照、SHA-256校验、`paper_stats.sql`以及重算发行总数/Creator数/模板/结果分布的具体查询。README式“发现工业化发币”由**固定总体和可复算分母**支持；此轮只核查说明及查询样例，**未下载该快照重算**。
 - [Pulse collector](https://github.com/nirholas/pulse/blob/d80465c043852e85619f5eee86634389e5b4a045/src/collector/solana-stream.ts)既有短时内存热度也有选择性持久化/事后回填；[Blix journal](../../server/journal.js)保留24小时、可修缺口；[Million discovery](https://github.com/Kelows/million/blob/30c1ceef7b2984bde62cf9f7d7bee0d66501dfc0/apps/api/src/discovery/discovery.service.ts)使用跨生命周期采样与部分候选预览。它们不是谁绝对更好，而是各自优化**实时、成本、探索、归档**的不同目标。
 - 因此“过去24小时没有异常”至少可能是：市场无异常、源没有监听到、监听到但未保存、被过滤、错桶、被延迟回补、历史查询被截断、数据恢复后才可见。**把这些全部记作正常市场会污染下一轮AI判断**。
 - 研究“历史上这种信号能否盈利”，除了链上`event_time`，必须问**信号实际在何时被系统发现/保留/展示/用户可用**。可在历史事实充足时先提出理论上的优势候选；不能以事后数据当作已实现的交易优势。
 
-### 12.5 ai-d应该怎样真正作用于这条完整研究链
+### 13.5 ai-d应该怎样真正作用于这条完整研究链
 
 [ai-d 整件事深度研究](https://github.com/sunshihao001/ai-d/blob/main/research/2026-11-07-whole-project-deep-research-and-mature-systems-audit.md)已经指出其过去的问题：把复杂目标过早降为三个小题，局部答案没能改变下一任务选择。这里把它用于**一个有真实Blix主体和源代码的完整案例**：
 
@@ -510,7 +510,7 @@ HoldTech在这轮研究前没有作为此前Pulse/Hermes合成反例的原始材
 4. **双向更新**：如果新Swap/LP说明池库存变化主要来自LP而非卖出，修订“卖压”解释和Blix下一项监控；如果实证发现原始事件时间与热度窗口错配，修订事件聚合口径；如果已保存证据足够解释当前现象，就不因理论上存在无穷其他原因而停止给阶段性判断。
 5. **不同成果分开验收**：此轮的原始源码条件和跨项目经济认识已核查；对真实Mint的资金闭环、跨Mint预测力、实时Blix产品、独立AI模型效果均**未验收**。后续若要改代码，优先验证现成系统是否已经解决问题，避免重新造全链解析器。
 
-### 12.6 当前优先级的实质变化：不是再搬知识，而是先做能同时解释多条业务链的两类对照
+### 13.6 当前优先级的实质变化：不是再搬知识，而是先做能同时解释多条业务链的两类对照
 
 **A. 同一真实Mint的事件/可得时间/经济净额对账**：把既有三快照的池库存与价格变化、真实Swap/LP/Transfer签名、Owner与Token Account、供应商采集时间、Blix可见时间串起来。目标同时检验市场发现、单Mint、钱包资金、流动性、AI解释；未获得原始事件时保留待验而不硬编卖压。
 
