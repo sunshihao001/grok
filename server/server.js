@@ -31,7 +31,7 @@ import { writeBrief, explainCoin, briefProblem } from "./ai.js";
 import { cloneCoin, writeCoin, launchStatus, tickerUse } from "./launchtools.js";
 import { notifySignal, notifyBrief, testNotify, decide, rules, destinations, deliveries } from "./notify.js";
 import * as wallets from "./wallets.js";
-import { transactionEvidence, recipientCandidates, crossMintCandidates } from "./economic-events.mjs";
+import { transactionEvidence, recipientCandidates, crossMintCandidates, missingEvidence } from "./economic-events.mjs";
 import * as fomo from "./fomo.js";
 import * as fomoBoard from "./fomoboard.js";
 import * as research from "./research.js";
@@ -1387,6 +1387,11 @@ async function handleRequest(req, res) {
       if (res.blixAs || res.blixVisitor) return send(res, 403, { error: "Owner only" });
       if (params.mint && !new RegExp("^" + MINT + "$").test(params.mint)) return send(res, 400, { error: "Invalid mint" });
       return send(res, 200, recipientCandidates(db, evidenceRecipients[1], params.mint || null, Number(params.limit) || 100));
+    }
+    const evidenceGaps = p.match(/^\/api\/evidence\/missing\/([1-9A-HJ-NP-Za-km-z]{32,44})$/);
+    if (evidenceGaps && req.method === "GET") {
+      if (res.blixAs || res.blixVisitor) return send(res, 403, { error: "Owner only" });
+      return send(res, 200, missingEvidence(db, evidenceGaps[1], Number(params.limit) || 100));
     }
     const evidenceFlow = p.match(/^\/api\/evidence\/cross-mint\/([1-9A-HJ-NP-Za-km-z]{32,44})$/);
     if (evidenceFlow && req.method === "GET") {
