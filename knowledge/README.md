@@ -65,12 +65,12 @@
 
 - [Hermes 00c 原有8种问题/结构推理思想](methods/hermes-feature-to-market-structure.md)；
 - [Hermes 00d 多维度研究原文](methods/hermes-multidimensional-reasoning-original.md) 与 [00e 反向发现原文](methods/hermes-reverse-discovery-original.md)：历史内容完整保留，包含探索性推论及未经校准的阈值，**不能直接做Blix风险/主体标签**；
-- [Hermes×qb-×meme-×ai-d 深层专业认识与下一轮研究](methods/hermes-reverse-discovery-deep-study-20261106.md)：解释“问题驱动、换视角、反向发现”三种能力的联系、各自谬误、跨行业方法启发、qb的调查工作产品及meme的反证制衡；
+- [Hermes×qb-×meme-×ai-d 原始纵深研究 V0.3](methods/hermes-reverse-discovery-deep-study-20261106.md)：已深入核对00c–00e、两部大型L1/L2文档、历史Grill与设计记录，恢复37项L1和16项L2的原始研究用途，并用两份固定合成fixture复核qb字段契约缺口；含多行业专业反证、Blix具体业务落点及ai-d对照评估边界；
 - [完整领域模型](DOMAIN-MODEL.v1.json) 已在D01–D12的相关问题入口关联上述研究，不意味着强制每轮读全部文档。
 
 **知识学习不应被早期分类压平**：新异常未有充分身份/原因证据时，保留有来源的观察及竞争解释，不急着叫“庄家/内幕/吸筹/操纵”；也不能因为“Blix已有对应功能”“暂时没有可实证标签”就丢掉高价值研究对象。识别来源与知识成熟度不等于给市场实体贴真值标签。
 
-**当前源文件迁入数是21**（此前19 + 新增Hermes 00d/00e原文2份）；本轮纵深研究为新产生的Blix分析成果，不计入旧来源迁入数。原始00b与37L1/16L2等仍保持源端链接，正在持续深入核查；并未完成旧Hermes/qb-/meme-全仓逐知识点验证。
+**当前源文件迁入数是21**（此前19 + 新增Hermes 00d/00e原文2份）；本轮纵深研究为新产生的Blix分析成果，不计入旧来源迁入数。原始00b、37L1与16L2规格保持源端版本和路径；本轮已检查其整体结构与关键推理链，但仍未逐项完成现行GMGN接口和真实市场反证，旧Hermes/qb-/meme-全仓也未逐知识点验证。
 
 ## 第二批：继承旧 Grok main 的专业判断卡与历史来源
 
