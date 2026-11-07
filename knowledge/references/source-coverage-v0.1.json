@@ -269,7 +269,11 @@
         "README.md",
         "apps/api/src/funding/funding.service.ts",
         "apps/api/src/wallets/wallets.service.ts",
-        "apps/api/prisma/schema.prisma"
+        "apps/api/prisma/schema.prisma",
+        "apps/api/src/discovery/discovery.service.ts",
+        "apps/api/src/opportunities/opportunities.service.ts",
+        "apps/api/src/copyability/copyability.service.ts",
+        "apps/api/src/analysis/owners.service.ts"
       ],
       "status": "SELECTED_SOURCE_READ_NOT_COMPLETE"
     },
@@ -280,7 +284,11 @@
       "read_paths": [
         "docs/ARCHITECTURE.md",
         "src/modules/backfill-manager.mjs",
-        "src/modules/wallet-intelligence/analyze.mjs"
+        "src/modules/wallet-intelligence/analyze.mjs",
+        "README.md",
+        "docs/METHODOLOGY.md",
+        "src/modules/interpretation-engine/analyze.mjs",
+        "src/modules/insider-intelligence/analyze.mjs"
       ],
       "status": "SELECTED_SOURCE_READ_NOT_COMPLETE"
     },
@@ -289,9 +297,59 @@
       "commit": "eea24c2357d65428427880fa873bb62441857dac",
       "tree_files": 144,
       "read_paths": [
+        "README.md",
+        "src/collector/solana-stream.ts",
+        "src/collector/scheduler.ts",
+        "src/collector/merge.ts",
+        "src/archive/restore.ts"
+      ],
+      "status": "SELECTED_SOURCE_READ_NOT_COMPLETE"
+    },
+    {
+      "repo": "co-numina/holdtech",
+      "read_paths": [
+        "README.md",
+        "app/api/deep-scan/route.ts",
+        "app/api/analyze/route.ts",
+        "app/api/holder-overlap/route.ts"
+      ],
+      "status": "SELECTED_SOURCE_READ_NOT_COMPLETE",
+      "review_scope": "ORIGINAL_GOAL_AND_TARGETED_CODE_NO_FULL_RUN"
+    },
+    {
+      "repo": "cinder-security/pumpwatch",
+      "read_paths": [
+        "README.md",
+        "code/pump_watch.py",
+        "code/outcome_tracker.py"
+      ],
+      "status": "SELECTED_SOURCE_READ_NOT_COMPLETE",
+      "review_scope": "ORIGINAL_GOAL_AND_TARGETED_CODE_NO_FULL_RUN"
+    },
+    {
+      "repo": "sunshihao001/Why-Solana-Memecoins-Are-Over",
+      "read_paths": [
+        "README.md",
+        "docs/ACT_IV.md"
+      ],
+      "status": "SELECTED_SOURCE_READ_NOT_COMPLETE",
+      "review_scope": "ORIGINAL_GOAL_AND_TARGETED_CODE_NO_FULL_RUN"
+    },
+    {
+      "repo": "swcstudiospace/PumpGrok",
+      "read_paths": [
         "README.md"
       ],
-      "status": "README_READ_SOURCE_TREE_ONLY_NOT_COMPLETE"
+      "status": "SELECTED_SOURCE_READ_NOT_COMPLETE",
+      "review_scope": "ORIGINAL_GOAL_AND_TARGETED_CODE_NO_FULL_RUN"
+    },
+    {
+      "repo": "okx/onchainos-skills",
+      "read_paths": [
+        "README.md"
+      ],
+      "status": "SELECTED_SOURCE_READ_NOT_COMPLETE",
+      "review_scope": "ORIGINAL_GOAL_AND_TARGETED_CODE_NO_FULL_RUN"
     }
   ],
   "independent_knowledge_topics": [
@@ -451,6 +509,19 @@
         "real-world data quality 100%"
       ],
       "next_work": "Trace funding edges and wallet histories to original source response and signatures; review pipeline versioning and inventory accounting before inferring shared control.",
+      "live_validation": "NOT_RUN"
+    },
+    {
+      "date": "2026-11-07",
+      "document": "knowledge/references/source-knowledge-deep-study-v0.1.md#11-2026-11-07整套市场智能系统的深层机制从多主体市场可观测性到判断修订",
+      "kind": "WHOLE_MARKET_ACTORS_OBSERVABILITY_SELECTION_EXECUTION_AND_AI_D_DYNAMIC_JUDGMENT",
+      "evidence": "SELECTED_SOURCE_READ_PLUS_PRIMARY_PAPERS_AND_OFFICIAL_DOCS",
+      "unreviewed": [
+        "complete upstream repositories beyond targeted files",
+        "original real Solana SWAP and LP event replay for frozen Mint",
+        "Blix original runtime integration and data lineage",
+        "independent model A/B and real trading advantage"
+      ],
       "live_validation": "NOT_RUN"
     }
   ]
