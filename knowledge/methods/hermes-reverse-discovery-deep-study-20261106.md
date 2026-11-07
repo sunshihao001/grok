@@ -425,3 +425,51 @@ Grill中用户的原始意图并非“做37个指标”，而是用原先的字�
 - **AI是否在不完整数据下作出更好研究选择**：从旧qb-Harness“自动问题解决”、Hermes 00e未知生成、ai-d动态专家方法、Blix当前研究代码与Triage/Research主线，检验是否发现过去遗漏的有价值问题、正确避免假归因、是否保留未解释对象，同时记录上下文/成本/未读范围。只在证据可比时宣布方法有效。
 
 三条链都贯穿市场发现→单Mint调查→跨Mint群体→经济机制研究，不预设固定专家、不新增交易权限、不将暂时无价值的旧观点彻底删除。重点是让**旧知识逐渐改变Blix面对新事实的判断能力**，而不是让旧项目变成被标签切碎的一堆片段。
+
+
+## 13. 2026-11-07：qb真实留存文件核查反推全链经济身份与库存知识
+
+> 新核查对象是原[qb-历史单Mint记录目录](https://github.com/sunshihao001/qb-/tree/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump)中**实际保存的产物**，而非静态方案示意，也不是本轮现场重新运行的结果。它保留了GMGN来源加工、钱包调查、证据分层和handoff之间的真实文件关系；本轮未调GMGN/Solana原始RPC校验某签名/钱包的真实经济归属，不能把历史输出的“疑似”当同控实证。
+
+### 13.1 从文件数据追溯各环节：不要停在95个钱包标签
+
+检索原文件并解析JSON后得到：
+
+| 具体旧文件 | 文件中可直接核查的内容 | 核验方式及边界 |
+|---|---|---|
+| [summary_overview.json](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/summary_overview.json) | \`wallet_trade=95\`、\`wallet_profile=95\`、\`same_source_groups=4\`、\`wallet_decisions=95\`；显示资金源已知61个、95钱包合计持仓、买卖笔数与USD汇总 | 这些是**旧程序汇总声称**，尚未签名级重算总成交/成本 |
+| [wallet_trade_normalized.json](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/wallet_trade_normalized.json) | 直接解析\`records\`实际95条，记录含买卖笔数、买卖额、余额、PnL、卖出比例、\`is_full_exit\`，源说明为\`GMGN token holders/traders readonly summary\` | 这里L1/L2是**该项目来源处理层级**，非Hermes 37 L1/16 L2的同义定义；摘要非原始Swap事件流 |
+| [wallet_intelligence_decision.json](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/wallet_intelligence_decision.json) | 实际95项decision，其中51项\`need_onchain_followup=true\`，34项缺\`funding_source_address\`；E3证据等级16项，R2风险等级42项，\`track\`建议69项 | E3、R2、track是**历史程序输出的候选判断**，绝不是已查实违法操纵、共同控制或盈利预测 |
+| [same_source_evidence_normalized.json](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/same_source_evidence_normalized.json) 与 [wallet_fact/same_source_groups.json](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/wallet_fact/same_source_groups.json) | 4个候选组，人数为2、2、3、3，总计10个地址；后者显式写\`group_confidence: unknown\`；有一组资金源地址又出现在另一组成员中 | 该图是**从供应商资金候选延伸的多层关系结构**，并非4个真实身份主体；一地址既为Group X资金源、又是Group Y成员可提出多跳问题，不足证明控制链 |
+| [bot2_handoff_packet.json](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/bot2_handoff_packet.json) | \`evidence_language_only=true\`，\`missing_fields_summary\`覆盖43个钱包；\`funding_flow_refs=[]\`、\`backflow_path_refs=[]\`、\`token_source_refs=[]\` | 真实交接包有**清晰的未完成路径**：按来源/资金网络/回流解释仍未可直接从此报告闭合 |
+| [wallet_fact/chip_distribution_summary.json](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/wallet_fact/chip_distribution_summary.json) | \`top10_wallet_balance_pct_of_tracked=51.019219\`，\`data_quality_score=1.0\`，\`full_exit_wallet_count=54\` | **分母是所跟踪钱包余额，而不是总发行供应量**；\`data_quality_score=1\`与43钱包缺关键字段并存，不能据此称链上资金调查“100%完整” |
+
+### 13.2 一个被业务摘要掩盖的“经济退出”语义问题
+
+以同一份\`wallet_trade_normalized.json\`的95条记录离线核算（仅属性读取，不作市场证实）：
+
+- \`is_full_exit=true\` 有**54**条；\`current_balance=0\`有**57**条；\`sold_pct=100\`有**53**条。这三种“退出”定义并不完全重合。
+- **4条**同时满足\`is_full_exit=true\`且\`sold_pct=0\`，买入USD金额非0、卖出USD金额为0、当前余额为0；**3条**同时满足\`is_full_exit=false\`且\`sold_pct=100\`，当前余额也为0；另有**7条**买入USD为0、卖出USD为正。
+- 这些现象不必然说明代码/供应商错；可能来自**Token转出而非Swap卖出、历史窗口缺失、不同字段的“已全额卖出”定义、其他钱包转入后出售、字段更新时点不同**。缺少对应签名、Token Account和原始资产变化，不能唯一确定根因。
+
+**与Hermes/meme真正相连的专业问题**：Hermes早期对“狙击手已退出/SM集体卖出/主导侧已派发”的推断，会不会在\`余额=0\`但\`卖出额=0\`时错误理解为“已实现卖出”？meme的“尾仓派发 vs 深洗再组织”究竟要看哪一组真实Token净余额与对价？这两者都不能靠标签或Top Holder快照得到答案。
+
+这次真正应该继承的不是“54个已经退出的主力”，而是**退出状态至少应有地址余额消失、观察到的Swap出售、观察到的Token转移、经济主体边界外库存减少、资金对价到账几种区分**。历史报告没有给出全部真实签名，只能把这是后续调查的**证据需求**。
+
+### 13.3 同一旧目录里“汇总结果”发生版本漂移，需要保留原出处与时间
+
+- [summary_overview.md](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/summary_overview.md)记载**94条钱包、0买/0卖、94条missing trade records**。
+- 同目录[summary_overview.json](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/summary_overview.json)记载**95条钱包、158买/335卖、0 missing trade records**，其95条明细可直接在归一化数据中确认。
+- [token_output_manifest.json](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/manifest/token_output_manifest.json)说明其\`generated_at=2026-05-06T01:42:55Z\`，职责仅为\`directory_governance_only=true\`、\`copy_or_reoutput_only=true\`、\`rewrite_wallet_logic=false\`，并复制各旧目录至新目录。
+
+**发现**：路径治理保留文件不等于重算/同步文件**同一个数据版本**。Markdown与JSON并存且数值冲突，可能是不同运行阶段/生成时点，不能未经证明称哪一个是同一时点真值。这是软件工程版本一致性问题，也是经济研究证据问题：**相互矛盾的报告不能混用组成一个“完整Mint画像”。**
+
+### 13.4 对Blix理解范围的真实改变
+
+1. **现成qb完整调查材料不是低价值遗留**：它真实包含采集、归一化、关系证据、结构候选、资金清单、数据护照式缺口、handoff和部分历史自审；值得沿原始模块继续深入，比只迁入几张标签表更有意义。
+2. **可信度必须落到具体主张**：95条记录存在是文件事实；“供应商交易源已包含所有交易”“四个组是同一控制主体”“卖出54个钱包”“Top10占总供应51%”“data_quality_score=1=链上100%完整”均不能由这些文件推出。
+3. **保留未知的同时扩大专业调查**：调查从“谁是庄家”升级为“谁真正给了资产/报价、余额消失是转仓还是成交、资金回流是否完成、何时首次可见、哪个时间窗口可证伪”。旧meme的失败语义可帮助检验“退出/再积累”解释，Hermes00e可以生成更多未命名机制，ai-d决定哪些问题最值得追加证据。
+4. **进入Blix的方式**：当前**知识级**已写入本研究；未来用户给出只读Mint任务时，在现有Coin/Holder/Wallet/Bubble Map和Research结果中按需补上“来源文件/观察截止时点/资金边类型/Token转出与Swap卖出/群体库存/缺失与后续复查”。**此处没有给Blix新增schema或业务程序**，更不改变交易路径。
+5. **下一轮信息价值最高的证据**：沿当前qb目录的\`wallet_fact/fund_flow_edges.csv\`、\`wallet_fact/address_history.json\`、\`wallet_data/raw\`和\`structure_analysis\`追每种资金边到上游输入/真实签名；评估\`is_full_exit\`实现的定义和来源时间，找是否另有Token转移消耗库存。此项能检验Hermes对经济主体和meme对派发/承接的深层解释，不是仅修复一张表格。
+
+> **审阅深度状态**：已读取具体JSON、Markdown、Manifest及部分结构钱包记录，对95条归一化钱包的若干布尔/金额属性做了确定性统计；并未逐笔验证其95条记录与GMGN原响应及Solana签名一致；也没有运行qb、Blix、真实模型或网络请求。
