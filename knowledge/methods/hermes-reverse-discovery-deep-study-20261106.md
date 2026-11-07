@@ -313,3 +313,115 @@ Grill中用户的原始意图并非“做37个指标”，而是用原先的字�
 5. **下一轮研究以有价值的未知为中心**：第一优先核Hermes字段的**可复算语义**（时窗、同分母、样本重叠、账户角色和池型）；其次结合qb实际关键地址矩阵查哪些匿名经济活动被前25名筛掉，再用meme真实可核验反证样本检查哪些机制假说站不住。A0/A1/A2/A1b的真正独立模型测评保持`NOT_RUN`。
 
 本节成果：**发现并离线复算三项非平凡旧公式反例、核对两组固定mock别名、发现qb优先级名额冲突、确认meme历史20个反证样本元数据冲突，以及指出两部大稿16项与15项的论证深度差异**。它们改变Blix今后**能不能相信哪一种旧知识**的判定，而不是增加知识卡数量。
+
+
+## 12. 2026-11-07：取消先验标签边界后的跨旧项目完整认知连接
+
+> **用户修正**：旧项目的价值不能被“只做钱包”“这是K线”“这是框架控制”“Blix已有同名功能”预先裁掉。以下不是强制把知识归类，也不是将近千条笔记压成十几个标签；它从**跨源码可核验的相互依赖**着手，恢复历史项目在市场理解、经济机制、AI思考、工程可靠性及研究失败上的连续认识。每个来源保留本来目的、具体文件、未审/未经验证状态；这是持续打开研究入口，而非宣告完成整仓全量深读。
+
+### 12.1 跨层知识链一：新币发现 ≠ 值得交易 ≠ 值得研究
+
+**原有认识与矛盾**：
+
+- [Hermes 原00c–00e与2026-05-26 Grill](https://github.com/sunshihao001/-/blob/main/design/phase1-research/grill-sessions/2026-05-26-grill-bytes-to-framework.md)曾从“市场结构信号”逐渐转向在字段异常、反向解释和时间演化中发现**未知**，不要求一开始就能套进SM/庄家、已知16种结构。
+- [Hermes Gate认知原文](https://github.com/sunshihao001/-/blob/main/learning/16-Gate决策框架理论基石.md)明确主张**L2描述观察、Gate描述决策**；还区分evidence TTL与decision TTL。但同文将关键字段缺失默认视为MNAR并BLOCK，这作为“是否可以拿资金冒险”的保守选择可以讨论，**不能当作“这个币/关系已经没有研究价值”的结论**。此处“缺数据=有罪”缺乏真实缺失机制统计证明。
+- [qb-旧单Mint实际脚本](https://github.com/sunshihao001/qb-/blob/main/sikk_gmgn_token_report.py)先对重要地址与深度做研究预算排序，强调无需深挖每个散户；但其硬选前25+标签优先可能漏掉非头部的真实跨Mint资金接收者。**研究预算有上限不等于被忽略地址没有经济作用。**
+- [Blix Triage原代码](../../server/triage.js)根据社交描述、即时规则、模型slop/meh/maybe/promising做高成本研究分流，并允许真实活跃币升级；[Coverage](../../server/coverage.js)已有独立5分钟活跃补漏。**现有产品不是没有发现能力，但它的主要目标是快速排序热点，并非从冷门/看似失败项目中系统发现新资本组织方式**。
+
+**新认识**：至少区分“安全/交易准入”“热度/成本有效的优先级”“能否生成有证据的研究问题”“历史窗口是否足够”四个不同优化目标；同一个Mint可同时是交易不合格、资金异常值得研究、来源不完整、不能判定主体身份。任何硬安全约束仍然适用，研究可否进行取决于安全和数据访问权限，而非Gate信号好坏。
+
+**对Blix**：当前不增加交易路径、不绕过安全筛选；将本知识用于以后只读调查的任务选取和报告解释。需要核对Triage→Research真正队列与保存的未研究Mint是否可再调查，**尚未证明**具备历史全样本召回。
+
+### 12.2 跨层知识链二：从“钱包行为”升级为“资本组织—库存—执行—对价”而不凭身份标签断案
+
+**原有认识与矛盾**：
+
+- [Hermes 旧链上本质学习](https://github.com/sunshihao001/-/blob/main/learning/01-04-基础理论/04-链上本质思维工具箱.md)提出首买时窗、资金树、HHI、同步卖出、PnL指纹、买入金额指纹，都是有探索价值的**观测问题**；但原文将“来自相同Binance地址→同庄”“几秒内同步→高概率同控”“两币价格相关高→同一资金盘”等启发式写成过强结论，存在公共服务/热点/机器人执行和统计混淆。无需废弃观测模型，须撤掉不受证明的共同控制推断。
+- [Hermes 筹码控制状态](https://github.com/sunshihao001/-/blob/main/design/Skill4-筹码控制权状态层设计.md)不只算地址数，还研究“历史操作者是否已经退出、库存是否在别处重聚、状态是否过期”，并尝试明确UNKNOWN/失效条件；数值权重与伪概率仍需独立校准。
+- [qb-钱包数据四层](https://github.com/sunshihao001/qb-/blob/main/hermes_harness/01_control_plane/wallet_intel_data_layering_rule_v2.md)将可回溯事实→结构证据→行为推断→下游交接严格区分；[数据契约](https://github.com/sunshihao001/qb-/blob/main/hermes_harness/01_control_plane/wallet_intel_data_contracts_rule_v2.md)显式分清transfer、候选组、Token来源、路径、钱包决策。它的“已验证”是历史工程内校验状态，**不是对真实资金受益人已经做链下审计**。
+- [meme-深洗与死亡](https://github.com/sunshihao001/meme-/blob/main/02_庄家周期/深洗与死亡盘语义深化_v0.1.md)关心的是阶段发生**结果**：能否持续承接卖出、真实需求是否回来、前期供应是否已转移，不局限于某个地址集合的标签。
+
+**新认识**：研究对象至少包括“地址与账户”“可溯源资产事件”“资本成本和真实交易对价”“在钱包/池间的库存”“获得信息/执行优势的经济角色”“随时间转移的活动机制”。这些对象的边必须有明确谓词和来源；一个地址→另一个地址的转账不自动转移经济受益权；一个群组增加钱包也不等于外部新资本增加。
+
+**可检验问题**：若10个钱包连续卖出Token，但同一候选经济群体有另10个地址从中接收，观测到的是**地址层库存流动**，不能仅凭“卖出地址增多”说整体集团已经派发；应结合真实Swap对价、内部Token转移、群外库存净变化和签名级完整交易。竞争解释包括交易所归集、用户相互转账、做市/套利和共同控制。
+
+**对Blix**：与[bubblemap](../../server/bubblemap.js)、[holders](../../server/holders.js)、[wallet tracker](../../server/wtrack.js)衔接为可溯源报告认识；**不要求立即重写Bubble Map或定义新“庄家”标签**。
+
+### 12.3 跨层知识链三：时间既决定行为，又决定知识是否有效
+
+- [Hermes Gate原设计](https://github.com/sunshihao001/-/blob/main/learning/16-Gate决策框架理论基石.md)有evidence TTL和decision TTL两个不同有效期，强调不能拿过期事实宣称现行状态。其1–3分钟等数字是设计建议，不是市场实测有效期。
+- [Hermes 00c与L1-F](https://github.com/sunshihao001/-/blob/main/design/phase1-research/gmgn-byte-combination-reasoning-v0.1.md)为token年龄、open时间、pool年龄、curve变化速率、holder增长设计上下文。具体“币龄不足5分钟一律不可靠”“大于120分钟才有统计意义”过于概括；真正要看每个指标的可得事件数、窗口覆盖、成熟度和数据生成过程。
+- [qb-数据护照](https://github.com/sunshihao001/qb-/blob/main/hermes_harness/01_control_plane/wallet_intel_data_passport_rule_v2.md)规定本轮有何数据、缺失何项、源路径、能否继续分析；它原本为旧新目录兼容服务，但可迁移为**特定调查时点的信息护照**。
+- [meme状态机](https://github.com/sunshihao001/meme-/blob/main/策略完善_v0.2/策略状态机规则_v0.2.md)有阶段顺序、回收失败、第一次反抽与第二次确认等约束；后验知道“最终涨了”并不能证明在第一次回抽时已有证据。
+- Blix [Coverage](../../server/coverage.js)短窗口与[WTrack](../../server/wtrack.js)历史保留具有不同时间功能，不能拿短窗Feed定义过去12小时“没有异常”。
+
+**新认识**：必须区分至少**事件发生时间、供应商处理时间、首次可用时间、程序采集时间、报告决策时间、缓存更新/回填时间**；关系/机制状态还应拥有被推翻、被覆盖或数据重新可得时的再评价入口。“没观察到”必须带完整覆盖信息，不能推断“没发生”。
+
+### 12.4 跨层知识链四：从价格结构中吸收真实经济问题，不把K线当链上成本
+
+- [meme-策略状态机](https://github.com/sunshihao001/meme-/blob/main/策略完善_v0.2/策略状态机规则_v0.2.md)提出第一控盘区、拉升、回撤、重新接受、再次推进、失败分支；这是一种**事件序列如何区分竞争性市场状态**的研究方法，不要求Blix改为图形交易系统。
+- [meme-诱多与二次启动](https://github.com/sunshihao001/meme-/blob/main/04_风险管理/诱多反抽与二次启动区分_v0.1.md)在第一反弹之后观察是否持续承接、是否有后续失败；对“一个漂亮瞬间不能证明可持续性”的认识可迁移到资金网络的“第一笔大额转账不等于已形成稳定接力”。
+- [meme-VolumeProfile MQL5真实代码](https://github.com/sunshihao001/meme-/blob/main/指标代码库_源码与说明/成交量分布VolumeProfile指标_volume_profile.mq5)默认尝试\`CopyRealVolume\`，在\`VOLUME_TICK\`配置或真实volume首项为0时改用\`CopyTickVolume\`；并按各Bar的high/low覆盖将Bar量分配给价格分档后寻找最大档。这是**Bar级价格区间的估算成交量分布**，不等于逐笔可回溯成交价格/成交者成本，也不自动等于唯一的真实控盘者成本。
+- [meme-日内VWAP MQL5代码](https://github.com/sunshihao001/meme-/blob/main/指标代码库_源码与说明/日内VWAP指标_daily_vwap.mq5)使用K线Typical Price×\`tick_volume\`权重，并以日界线重置，是**特定Bar+tick量加权**计算，不等同于对Solana链上逐笔成交按报价资产真实金额加权；更不等于某经济主体的获利/成本。
+- [Hermes L1-C5旧代理](https://github.com/sunshihao001/-/blob/main/design/phase1-research/gmgn-byte-combination-reasoning-v0.1.md)已在本研究§11被AMM反例否定；市场价格、流动性、交易量之间的因果联系要求池型、报价和多池路径。
+
+**新认识**：POC/AVWAP可回答“特定观察/算法之下成交活动集中在哪个价格区”，不是钱包群体持仓成本真值。若想判定“旧参与者回收成本区再重新组织资本”，至少还要独立追踪实际Token库存、实际对价、受益归属的替代解释与时间顺序。反向也成立：即使不画K线，成本锚失效、承接力改变和失败再部署仍是应调查的经济问题。
+
+### 12.5 跨层知识链五：原数据、字段映射、指标组合、机制解释均存在独立失败方式
+
+- [Hermes 00b字段](https://github.com/sunshihao001/-/blob/main/design/phase1-research/00b-GMGN-Canonical-Bytes.md)是旧GMGN供应商的部分历史“准原始”字典；12类字段，不是当前Solana原始CPI事实，亦不能因旧档案宣称230+字段就断定目前可用。
+- [qb旧单Mint源码](https://github.com/sunshihao001/qb-/blob/main/sikk_gmgn_token_report.py)把多个来源的数据按地址聚合，仍可能混不同快照；原别名\`native_transfer.from_address\`与Hermes\`native_transfer.address\`及旧fixture\`native_transfer_from\`不兼容，真实源字段不能自动靠猜测补齐。
+- [qb来源钱包数据契约](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/source_bot_schema_plan.json)从候选发现就记录多源供给、是否存在池/价格/Holder/安全数据和fallback来源；比“结果总表里写UNKNOWN”更早一步审查信息可用性。
+- [Hermes 旧观测工具箱](https://github.com/sunshihao001/-/blob/main/learning/01-04-基础理论/04-链上本质思维工具箱.md)提出“量什么、能否被制造、自算能否复算、数据测量何种信息/资金/时序不对称性”四问，仍值得沿用。其过强的地址同控判定和Pearson相关即同一资金盘等说法不得继承为事实。
+- 本研究§11的24倍币龄假动量、重叠标签比例、储备价值比价差代理，以及历史假完成样本，展示**字段存在、运算正确、名称专业**仍不能证明测量到了期望的经济量。
+
+**新认识**：知识本身要连“测量能否成立”一起继承。否则越完整的旧指标库越容易把同一供应商错误推理成多源独立证据，最后提升错误结论的表面确信度。新研究不应强制把每个字段都产出L1/L2；有时最重要的发现是“这组字段无法识别该机制”。
+
+### 12.6 跨层知识链六：科学反证与产品成熟度是一条完整轨迹，不是另一个策略模块
+
+- [meme-反证实验](https://github.com/sunshihao001/meme-/blob/main/09_规则与回测/反证实验设计_v0.1.md)要求先写可推翻条件，再看成功；关注符合规则却失败、不符合却成功、明显死亡盘、后视误判和实际执行成本。成功例子只能说明“可以发生”，不能证明系统性优势。
+- [meme-策略成熟度](https://github.com/sunshihao001/meme-/blob/main/01_策略定义/策略成熟度定位与商业角色_v0.1.md)明确观察器/样本标注器/风险审查器与可交易策略不同，并要求更简方案基线、样本外、参数扰动、扣成本后判断。
+- [meme-样本CSV](https://github.com/sunshihao001/meme-/blob/main/07_样本标注/反证样本库_v0.1.csv)仍有20行\`real_pending\`却\`is_real_sample=true\`的合同矛盾。元数据自称真实不是可复算市场结果。
+- [Hermes 00e未知生成](https://github.com/sunshihao001/-/blob/main/design/phase1-research/00e-字节反推框架-突破认知局限.txt)要保留新奇异常的解释空间；但需要将搜索/模型发现在一批数据上完成，**验证**放到不参与探索的历史时间/不同Mint样本，连“没有证据”“预期相反”“根本查不到”均记录。
+- [Blix已存的异常群体研究](anomaly-and-cohort-discovery.md)特别强调事件首次可得时间、完整覆盖、活动群组变化、资本循环不可简单从图可达推断；这些可与meme的负例库融合，不必从头另造研究体系。
+
+**新认识**：市场机制研究至少有三种独立成熟度——**可解释性**（是否逻辑自洽）、**可观测性**（数据足否支持且可及时观察）、**可证伪可重复性**（见过失败样本与外推结果）；若涉及交易，还要增加**经济可执行性**。这不是要求每一研究起步就回测；允许高价值未知保留在假说阶段，但不能宣称已被证实。
+
+### 12.7 跨层知识链七：旧AI工作方法如何吸收，而不重新形成限制
+
+- [qb-自动问题闭环](https://github.com/sunshihao001/qb-/blob/main/hermes_harness/01_control_plane/auto_problem_solving_policy.md)区分问题护照、证据计划、多个假设、根因、方案、验证、失败恢复与经验写回；作者也区分\`memory_write_queue\`与已核实长期记忆。这提供**知识转化责任链**，不是必须复制10个独立文件才能回答一句话。
+- [qb-Harness V2.1入口](https://github.com/sunshihao001/qb-/blob/main/hermes_harness/HERMES_RUNTIME_SYSTEM_INDEX.md)自述其主要强制通过\`/HER_START\`等入口触发，普通聊天不保证执行同样的runtime审计；其状态也注明\`fixture_regression_passed_not_proven_in_live_tasks\`，不能把名称“Runtime”理解为当前Blix已获自动深度推理能力。
+- [qb-旧知识兼容读取](https://github.com/sunshihao001/qb-/blob/main/hermes_harness/01_control_plane/wallet_intel_compat_read_priority_rule_v2.md)支持在新数据护照缺失时按映射回查旧数据，但其“禁止对所有旧目录盲搜”是**旧数据运行兼容安全规则**，不应误读为我们今天独立研究旧项目时不许完整扫描原始知识。
+- [ai-d跨学科基础](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/cross-disciplinary-foundations.md)借鉴知识管理、记录来源、认知迁移与问题表征，其学科观点不能替代Solana市场证据；[ai-d A0/A1/A2/A1b评测](https://github.com/sunshihao001/ai-d/blob/main/evaluation/first-cross-domain-tests.md)区分普通模式、按需知识、过量知识和同来源动态学科视角。
+- [Blix现有知识与业务入口](../README.md)和[AGENTS](../../AGENTS.md)仅能把AI引导至相关来源；未经Grok Bot/运行时实际工具任务验收不能称“自动学会”。
+
+**新认识**：知识研究深度与运行时上下文负担是不同约束。**独立学习应尽可能恢复所有专业知识、设计理由与反例，实际任务只需按证据价值选择相关部分**；有相同输入时比较是否发现真正重要的错误和新机制，不能以文件多、专家数量多、对话更长视为认知升级。
+
+### 12.8 将旧研究的互相纠错变成三项可用的未来只读业务情境
+
+1. **冷门Mint但有跨钱包资金规律**：Blix Triage的社交热度低，安全规则不支持交易；Hermes 00e仍可把“多Mint重复相似接力”列入未知研究。qb-要求资金路径和账户角色原始证据；meme-要求相似节奏也在未涨/失败Mint中比较。**不应生成买入建议、同控结论或盈利优势**。
+2. **Top Holder持仓下降而价格没有下跌**：Hermes和qb-逐地址查Token转出、接收者、池Vault与实际对价；meme-提供“供求是否在高位承接”的竞争解释；AMM层查多池套利与流动性变化。**不能只凭原Holder数量和价格相关认定庄家换仓或吸筹**。
+3. **六小时资金转账激增后又沉默**：Hermes时间序列/状态层提示持续性与失效；qb-数据护照提示真实采集覆盖和字段合同；meme-关注失败路径；Blix持久化/短窗需核对数据断流回补。**先区分真实资金活动停止、共享服务集体行为和历史回补**，再寻找下一次异常。
+
+**这三项是研究方法上的假设业务问题，没有提供真实Mint签名或运行结果。** 其价值是明确“若下一次调查数据到来，AI应主动提出什么比原有标签更深的问题”。
+
+### 12.9 全量研究仍开放：本轮实际读取与尚未完成的纵深
+
+本轮继续实际审阅了：
+
+- **Hermes**：\`learning/01-04-基础理论/04-链上本质思维工具箱.md\`、\`learning/15-GMGN字段组合地基.md\`、\`learning/16-Gate决策框架理论基石.md\`、\`docs/cross_skill_handoff_contract.md\`，并和已读00b–00e/两部大稿/筹码层/Grill相互对照。已核原文主张与部分实际合同，**未对所有历史Skill与fixtures逐行重演**。
+- **qb-**：\`sikk_gmgn_token_report.py\`、\`wallet_intel_data_layering_rule_v2.md\`、\`wallet_intel_data_passport_rule_v2.md\`、\`wallet_intel_data_contracts_rule_v2.md\`、\`wallet_intel_compat_read_priority_rule_v2.md\`、\`auto_problem_solving_policy.md\`、\`HERMES_HARNESS_V1_3_AUTONOMOUS_PROBLEM_CLOSED_LOOP.md\`、\`HERMES_RUNTIME_SYSTEM_INDEX.md\`、\`data/source_wallet_bot/source_bot_schema_plan.json\`、\`data/gmgn_candidates_live_run/live_run_manifest.json\`与runtime launcher部分代码。多源Schema与控制方法**已经读到设计/代码入口，但非全业务运行深验**；source_wallet_bot真实归一化历史、结果版本和风险尚待全面检查。
+- **meme-**：\`SOURCE_OF_TRUTH.md\`、\`01_策略定义/策略成熟度定位与商业角色_v0.1.md\`、\`02_庄家周期/深洗与死亡盘语义深化_v0.1.md\`、\`04_风险管理/诱多反抽与二次启动区分_v0.1.md\`、\`04_风险管理/结构风险评分模型_v0.1.md\`、\`策略完善_v0.2/策略状态机规则_v0.2.md\`、\`09_规则与回测/反证实验设计_v0.1.md\`、\`09_规则与回测/策略稳定性与论坛对标评估_v0.1.md\`、VolumeProfile与日内VWAP的原MQL5实现部分重要函数。它们是观察与失败方法，**不是经过本次编译/回测/样本外证实的高胜率策略**。
+- **ai-d/Blix**：ai-d认知学科资料、评价设计与Blix Triage、Coverage、Quality、Research、Bubble Map、Wallet Tracker原代码部分交叉核查。**AI-D多模型A/B、Blix运行时实际知识检索、现实数据实跑仍未执行**。
+
+未审的旧仓文件继续以完整固定[来源覆盖账本](../references/source-coverage-v0.1.json)与各原仓版本为入口。**尤其不能因为本节串起了七条知识关系，就把其它原始知识自动标记“已经涵盖”**。
+
+### 12.10 下一项研究不是单点标签，而是从全链断裂处追溯更多知识
+
+优先沿三条**互相联系、可推翻当前认知**的研究链深入，其它知识对象继续保持开放：
+
+- **经济事实如何构成跨钱包/跨Mint机制**：先核qb- source_wallet_bot真实采集→归一化→关系/资金/库存→交接→恢复，不按“地址报告”截断；由Hermes的异常生成提问，再追Blix已储存的相应事实/历史和缺口。
+- **市场参与者怎样组织库存与需求，何时失效**：从meme状态、POC/AVWAP多锚点、VolumeProfile/MQL5实际实现，反推链上库存、资金对价、执行位置、价格形成与接受失败的可观察区分；不要将图形叙事当独立链上证据。
+- **AI是否在不完整数据下作出更好研究选择**：从旧qb-Harness“自动问题解决”、Hermes 00e未知生成、ai-d动态专家方法、Blix当前研究代码与Triage/Research主线，检验是否发现过去遗漏的有价值问题、正确避免假归因、是否保留未解释对象，同时记录上下文/成本/未读范围。只在证据可比时宣布方法有效。
+
+三条链都贯穿市场发现→单Mint调查→跨Mint群体→经济机制研究，不预设固定专家、不新增交易权限、不将暂时无价值的旧观点彻底删除。重点是让**旧知识逐渐改变Blix面对新事实的判断能力**，而不是让旧项目变成被标签切碎的一堆片段。
