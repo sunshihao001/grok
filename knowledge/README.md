@@ -77,6 +77,8 @@
 
 **研究范围继续展开，而非只纠正三个公式**：[Hermes×qb×meme 纵深研究第12节](methods/hermes-reverse-discovery-deep-study-20261106.md#12-2026-11-07取消先验标签边界后的跨旧项目完整认知连接) 已将旧资料中的七条相互依赖的专业认识连成完整研究链：市场发现与交易决策边界、资本组织/钱包/库存/对价、事件与证据时间、meme 的价格结构与真实链上成本、字段与测量可靠性、失败样本与机制成熟度、AI问题生成与独立验收。**这不是七个新标签或七个强制阶段**；源项目独有的任何高价值内容均继续进入研究，不因当前Blix没有对应模块而忽略。查看[按原文件的审阅深度与未审范围](references/source-coverage-v0.1.json)，勿将目录扫描或摘要当全部知识已掌握。
 
+**继续向qb-留存的原始调查产物下钻**：同一份Mint归档记录95条钱包、4组候选资金关联与后续核查缺口，且“零余额”“100%卖出”“全部退出”并不等价；旧Markdown/JSON汇总也存在不同版本口径。由此连回Hermes的钱包/库存/资本组织、meme的派发/承接解释和ai-d的证据审查方法。阅读[完整第13节及原数据来源](methods/hermes-reverse-discovery-deep-study-20261106.md#13-2026-11-07qb真实留存文件核查反推全链经济身份与库存知识)，并由[Blix业务知识调用入口](../docs/project/knowledge-use.md)使用；此为源资料静态核查，尚未主网复算或接入实时AI运行时。
+
 ## 第二批：继承旧 Grok main 的专业判断卡与历史来源
 
 - [原始15张专业判断卡](methods/legacy-grok-core-cards.v1.json)：原样保留旧 `knowledge/catalog.v1.json`，每卡包含 `mechanism`、`required_evidence`、`alternative_explanations`、`inference_limit`、`next_check` 和来源信息。**3张`source_contract`、11张`documented_legacy_method`、1张`unverified_hypothesis`；全部是历史知识候选，不是实盘认证。**
