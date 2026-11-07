@@ -129,3 +129,15 @@ export function crossMintCandidates(db, address, maxHours = 24, limit = 40) {
   return { address, windowMs: window, coverage: 'WALLET_TRADES_AND_CAPTURED_SYSTEM_TRANSFERS_ONLY',
     interpretation: 'TEMPORAL_FUNDING_PATH_CANDIDATE_NOT_LAMPORT_PROVENANCE_OR_COMMON_CONTROL', rows };
 }
+// Report pre-upgrade or dropped-feed signatures that have wallet trades but no full RPC capture.
+// This is a gap index, not an RPC call or proof that history can be retrieved.
+export function missingEvidence(db, wallet, limit = 100) {
+  initEvidence(db);
+  const rows = db.prepare(`SELECT w.sig, MIN(w.t) first_trade_at, COUNT(*) summary_rows
+    FROM wallet_trades w LEFT JOIN econ_transactions e ON e.sig=w.sig
+    WHERE w.wallet=? AND e.sig IS NULL AND w.sig NOT LIKE 'slot:%'
+    GROUP BY w.sig ORDER BY first_trade_at DESC LIMIT ?`)
+    .all(wallet, Math.max(1, Math.min(500, limit)));
+  return { wallet, rows, coverage: 'KNOWN_WALLET_TRADES_MISSING_RPC_CAPTURE_ONLY',
+    next: 'Fetch each listed transaction independently or replay archived jsonParsed RPC; empty rows do not prove complete wallet history' };
+}
