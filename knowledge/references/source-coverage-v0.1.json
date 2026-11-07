@@ -63,6 +63,22 @@
         {
           "path": "reports/batch_20260526T123011Z_need_more_data_analysis.md",
           "level": "OUTLINE_AND_AUTHOR_FINDINGS_REVIEWED_NOT_REPLAYED"
+        },
+        {
+          "path": "learning/01-04-基础理论/04-链上本质思维工具箱.md",
+          "level": "FULL_TEXT_SOURCE_READ_ROLE_HEURISTICS_COUNTEREXAMPLES_REVIEWED_NOT_REAL_WORLD_VALIDATED"
+        },
+        {
+          "path": "learning/15-GMGN字段组合地基.md",
+          "level": "OUTLINE_AND_SELECTED_METHODS_REVIEWED_NOT_COMPLETE"
+        },
+        {
+          "path": "learning/16-Gate决策框架理论基石.md",
+          "level": "GATE_AS_DECISION_DUAL_TTL_MISSING_POLICY_SOURCE_READ_NOT_LIVE_TESTED"
+        },
+        {
+          "path": "docs/cross_skill_handoff_contract.md",
+          "level": "HANDOFF_CONTRACT_STRUCTURE_AND_SELECTED_SECTIONS_REVIEWED_NO_FULL_IMPLEMENTATION_TEST"
         }
       ]
     },
@@ -92,7 +108,49 @@
         "hermes_harness/23_real_task_regression/regression_runs/v21.regression.20260509.062832/regression_summary.json",
         "hermes_harness/06_verification/project_governance/wallet_intel_stage6_data_passport_verification.md"
       ],
-      "other_content": "PENDING"
+      "other_content": "PENDING",
+      "recent_targeted_content_paths": [
+        {
+          "path": "hermes_harness/01_control_plane/wallet_intel_data_layering_rule_v2.md",
+          "level": "FULL_TEXT_SOURCE_READ_FACT_EVIDENCE_INFERENCE_HANDOFF_BOUNDARIES"
+        },
+        {
+          "path": "hermes_harness/01_control_plane/wallet_intel_data_contracts_rule_v2.md",
+          "level": "CONTRACT_SECTIONS_SOURCE_READ_NOT_ALL_FIELD_VALIDATED"
+        },
+        {
+          "path": "hermes_harness/01_control_plane/wallet_intel_data_passport_rule_v2.md",
+          "level": "FULL_TEXT_SOURCE_READ_V2_PASSPORT_CONTRACT"
+        },
+        {
+          "path": "hermes_harness/01_control_plane/wallet_intel_compat_read_priority_rule_v2.md",
+          "level": "FULL_TEXT_SOURCE_READ_COMPATIBLE_FALLBACK_BOUNDARIES"
+        },
+        {
+          "path": "hermes_harness/01_control_plane/auto_problem_solving_policy.md",
+          "level": "FULL_TEXT_SOURCE_READ_10_STEP_OPTIONAL_APPLICATION"
+        },
+        {
+          "path": "hermes_harness/HERMES_HARNESS_V1_3_AUTONOMOUS_PROBLEM_CLOSED_LOOP.md",
+          "level": "MAIN_METHOD_AND_FAILURE_CONTRACT_SOURCE_READ_NOT_INVOKED"
+        },
+        {
+          "path": "hermes_harness/HERMES_RUNTIME_SYSTEM_INDEX.md",
+          "level": "SYSTEM_STRUCTURE_AND_RUNTIME_TRIGGER_CONSTRAINT_REVIEWED_NOT_INVOKED"
+        },
+        {
+          "path": "hermes_harness/09_scripts/hermes_runtime_hook_launcher.py",
+          "level": "ENTRYPOINT_SELECTED_LINES_READ_NOT_EXECUTED"
+        },
+        {
+          "path": "data/source_wallet_bot/source_bot_schema_plan.json",
+          "level": "SOURCE_SCHEMA_PARTIAL_READ_NOT_ALL_FIELDS_AUDITED"
+        },
+        {
+          "path": "data/gmgn_candidates_live_run/live_run_manifest.json",
+          "level": "STATE_AND_MODE_METADATA_SELECTED_LINES_NOT_RUNTIME_VERIFIED"
+        }
+      ]
     },
     {
       "repo": "sunshihao001/meme-",
@@ -130,6 +188,38 @@
         {
           "path": "09_规则与回测/策略成熟度质疑审计与商业诊断_v0.1.md",
           "level": "QUESTION_HYPOTHESES_AND_RELEVANT_FAILURE_CRITERIA_REVIEWED_NOT_FULL_SECTION_BY_SECTION_VERIFIED"
+        },
+        {
+          "path": "SOURCE_OF_TRUTH.md",
+          "level": "FULL_TEXT_SOURCE_READ_AUTHORITY_RULES_NOT_CURRENT_BLIX_POLICY"
+        },
+        {
+          "path": "01_策略定义/策略成熟度定位与商业角色_v0.1.md",
+          "level": "FULL_TEXT_SOURCE_READ_PRODUCT_MATURITY_METHOD_NOT_VALIDATED_STRATEGY"
+        },
+        {
+          "path": "04_风险管理/诱多反抽与二次启动区分_v0.1.md",
+          "level": "FULL_TEXT_SOURCE_READ_REBOUND_VS_CONTINUATION_HYPOTHESES"
+        },
+        {
+          "path": "04_风险管理/结构风险评分模型_v0.1.md",
+          "level": "MODEL_SECTIONS_SOURCE_READ_UNCALIBRATED"
+        },
+        {
+          "path": "策略完善_v0.2/策略状态机规则_v0.2.md",
+          "level": "STATE_SEQUENCES_SELECTED_RULES_REVIEWED_NOT_COMPILED_OR_TESTED"
+        },
+        {
+          "path": "09_规则与回测/策略稳定性与论坛对标评估_v0.1.md",
+          "level": "RESEARCH_HYPOTHESES_AND_BASELINE_SECTIONS_REVIEWED_NOT_VALIDATED"
+        },
+        {
+          "path": "指标代码库_源码与说明/成交量分布VolumeProfile指标_volume_profile.mq5",
+          "level": "SELECTED_SOURCE_LINES_VOLUME_FALLBACK_BAR_HILO_INTERPOLATION_NOT_EXECUTED"
+        },
+        {
+          "path": "指标代码库_源码与说明/日内VWAP指标_daily_vwap.mq5",
+          "level": "SELECTED_SOURCE_LINES_BAR_TYPICAL_PRICE_TICK_VOLUME_DAILY_RESET_NOT_EXECUTED"
         }
       ]
     }
@@ -269,6 +359,32 @@
       ],
       "live_validation": "NOT_RUN",
       "read_depth_note": "Main long papers: all 37 L1 + 16 L2 section names indexed and selected central assertions examined; NOT 53 field-level factual/protocol validation. Meme: targeted relevant sections, NOT entire long study."
+    },
+    {
+      "date": "2026-11-07",
+      "document": "knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md#12-2026-11-07取消先验标签边界后的跨旧项目完整认知连接",
+      "kind": "BLIX_OPEN_SCOPE_HERMES_QB_MEME_CROSS_DISCIPLINARY_LINKS",
+      "evidence": "LEGACY_ORIGINAL_DOCUMENTS_READ_AND_SELECTED_SOURCE_CODE_PATHS_INSPECTED",
+      "new_interconnections": [
+        "research_value_vs_trade_gate",
+        "funding_vs_economic_inventory_and_control",
+        "event_time_vs_evidence_and_decision_ttl",
+        "bar_based_profile_vs_actual_onchain_cost",
+        "vendor_data_contract_vs_measurement_validity",
+        "hypothesis_discovery_vs_failed_cases_and_out_of_sample_validation",
+        "harness_process_control_vs_ai_knowledge_use"
+      ],
+      "assessed_scope": "Original project content across market economics, behavior, data contracts, strategy assumptions, research reliability and AI process; not limited by Blix folders or existing functions.",
+      "not_verified": [
+        "Exhaustive all-file per-point review",
+        "Current GMGN API response",
+        "Full qb live pipeline",
+        "MQL5 indicator runtime or strategy edge",
+        "Blix model knowledge-use A/B",
+        "Market mainnet replay"
+      ],
+      "next_work": "Trace real source_wallet_bot records through normalization and multi-mint funding; explain meme POC/AVWAP measurement against token inventory/real quote; compare Blix investigation conclusions under fixed evidence.",
+      "live_validation": "NOT_RUN"
     }
   ]
 }
