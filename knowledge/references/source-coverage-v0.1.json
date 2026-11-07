@@ -1,6 +1,6 @@
 {
   "schema_version": "0.1",
-  "as_of": "2026-11-06",
+  "as_of": "2026-11-07",
   "purpose": "Track completeness of source-repo understanding independently from Blix integration; tree inventory is not knowledge mastery.",
   "source_state_terms": {
     "TREE_INVENTORIED": "All paths and hash counts enumerated, content NOT all read",
@@ -33,7 +33,16 @@
         "design/phase1-skill-04-wallet-structure.md",
         "design/phase1-skill-05-evidence-chain.md",
         "design/phase1-skill-03-wallet-roles.md",
-        "docs/missing_data_policy.md"
+        "docs/missing_data_policy.md",
+        "design/phase1-research/00b-GMGN-Canonical-Bytes.md",
+        "design/phase1-research/gmgn-byte-combination-reasoning-v0.1.md",
+        "design/phase1-research/gmgn-byte-decomposition-v0.1.md",
+        "design/phase1-research/grill-sessions/2026-05-26-grill-bytes-to-framework.md",
+        "reports/canonical_bytes_intake_20260526.md",
+        "reports/updated_project_cognition_v2_20260526.md",
+        "reports/batch_20260526T123011Z_need_more_data_analysis.md",
+        "fixtures/场景05-信号冲突.json",
+        "fixtures/场景04-数据缺失.json"
       ],
       "other_content": "PENDING"
     },
@@ -86,7 +95,10 @@
         "02_庄家周期/深洗与死亡盘语义深化_v0.1.md",
         "04_风险管理/诱多反抽与二次启动区分_v0.1.md",
         "09_规则与回测/反证实验设计_v0.1.md",
-        "01_策略定义/策略成熟度定位与商业角色_v0.1.md"
+        "01_策略定义/策略成熟度定位与商业角色_v0.1.md",
+        "09_规则与回测/基准策略对比实验设计_v0.1.md",
+        "09_规则与回测/策略反证样本库设计_v0.1.md",
+        "09_规则与回测/策略成熟度质疑审计与商业诊断_v0.1.md"
       ],
       "other_content": "PENDING"
     }
@@ -195,6 +207,34 @@
         "Hermes remaining learning/skills/reports/tests",
         "qb full real data and source_wallet_bot",
         "meme indicators, specs, samples"
+      ],
+      "live_validation": "NOT_RUN"
+    },
+    {
+      "date": "2026-11-07",
+      "document": "knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md#10-2026-11-07-原始推理链纵深补审00c00e两部大稿与-grill-原始记录",
+      "kind": "HERMES_L0_L1_L2_RECONSTRUCTION_AND_STATIC_FIELD_CONTRACT_CHECK",
+      "new_problem": "SOURCE_SCHEMA_DRIFT_AND_EVIDENCE_REUSE_CAN_OBSCURE_UNKNOWN_MECHANISMS",
+      "evidence": "PINNED_SOURCE_READ_AND_SYNTHETIC_FIXTURE_STATIC_PROPERTY_REPLAY",
+      "verified": {
+        "hermes_l1_definitions": 37,
+        "hermes_l2_candidates": 16,
+        "hermes_fixture5_holders_with_non_empty_flat_funder": 20,
+        "qb_nested_from_address_matches_fixture5": 0,
+        "fixture4_missing_sources": 20
+      },
+      "not_verified": [
+        "current GMGN API response",
+        "real mint source or owner",
+        "complete field-level reproduction for all 37+16 definitions",
+        "actual Blix runtime automatic knowledge invocation",
+        "independent ai-d A0/A1/A2/A1b model A/B"
+      ],
+      "unreviewed": [
+        "Hermes remaining history, lessons, tests and integrations",
+        "qb independent real Mint raw outputs",
+        "meme indicators and historical annotated real samples",
+        "Blix actual Mint report usage"
       ],
       "live_validation": "NOT_RUN"
     }
