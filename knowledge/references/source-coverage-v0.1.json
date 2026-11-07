@@ -34,17 +34,37 @@
         "design/phase1-skill-05-evidence-chain.md",
         "design/phase1-skill-03-wallet-roles.md",
         "docs/missing_data_policy.md",
-        "design/phase1-research/00b-GMGN-Canonical-Bytes.md",
-        "design/phase1-research/gmgn-byte-combination-reasoning-v0.1.md",
-        "design/phase1-research/gmgn-byte-decomposition-v0.1.md",
         "design/phase1-research/grill-sessions/2026-05-26-grill-bytes-to-framework.md",
-        "reports/canonical_bytes_intake_20260526.md",
-        "reports/updated_project_cognition_v2_20260526.md",
-        "reports/batch_20260526T123011Z_need_more_data_analysis.md",
         "fixtures/场景05-信号冲突.json",
         "fixtures/场景04-数据缺失.json"
       ],
-      "other_content": "PENDING"
+      "other_content": "PENDING",
+      "recent_targeted_content_paths": [
+        {
+          "path": "design/phase1-research/00b-GMGN-Canonical-Bytes.md",
+          "level": "FIELD_GROUPS_CHECKED_NOT_CURRENT_API_VERIFIED"
+        },
+        {
+          "path": "design/phase1-research/gmgn-byte-combination-reasoning-v0.1.md",
+          "level": "FULL_STRUCTURE_37_FEATURE_DEFINITIONS_INDEXED_SELECTED_FORMULAS_STUDIED_NO_ALL_FEATURE_EXECUTION"
+        },
+        {
+          "path": "design/phase1-research/gmgn-byte-decomposition-v0.1.md",
+          "level": "FULL_STRUCTURE_16_CANDIDATES_INDEXED_SELECTED_MECHANISMS_STUDIED_NO_ALL_CONDITIONS_VERIFIED"
+        },
+        {
+          "path": "reports/canonical_bytes_intake_20260526.md",
+          "level": "OUTLINE_AND_KEY_DECISION_SECTIONS_REVIEWED"
+        },
+        {
+          "path": "reports/updated_project_cognition_v2_20260526.md",
+          "level": "OUTLINE_AND_KEY_DECISION_SECTIONS_REVIEWED"
+        },
+        {
+          "path": "reports/batch_20260526T123011Z_need_more_data_analysis.md",
+          "level": "OUTLINE_AND_AUTHOR_FINDINGS_REVIEWED_NOT_REPLAYED"
+        }
+      ]
     },
     {
       "repo": "sunshihao001/qb-",
@@ -95,12 +115,23 @@
         "02_庄家周期/深洗与死亡盘语义深化_v0.1.md",
         "04_风险管理/诱多反抽与二次启动区分_v0.1.md",
         "09_规则与回测/反证实验设计_v0.1.md",
-        "01_策略定义/策略成熟度定位与商业角色_v0.1.md",
-        "09_规则与回测/基准策略对比实验设计_v0.1.md",
-        "09_规则与回测/策略反证样本库设计_v0.1.md",
-        "09_规则与回测/策略成熟度质疑审计与商业诊断_v0.1.md"
+        "01_策略定义/策略成熟度定位与商业角色_v0.1.md"
       ],
-      "other_content": "PENDING"
+      "other_content": "PENDING",
+      "recent_targeted_content_paths": [
+        {
+          "path": "09_规则与回测/基准策略对比实验设计_v0.1.md",
+          "level": "QUESTION_HYPOTHESES_AND_RELEVANT_FAILURE_CRITERIA_REVIEWED_NOT_FULL_SECTION_BY_SECTION_VERIFIED"
+        },
+        {
+          "path": "09_规则与回测/策略反证样本库设计_v0.1.md",
+          "level": "QUESTION_HYPOTHESES_AND_RELEVANT_FAILURE_CRITERIA_REVIEWED_NOT_FULL_SECTION_BY_SECTION_VERIFIED"
+        },
+        {
+          "path": "09_规则与回测/策略成熟度质疑审计与商业诊断_v0.1.md",
+          "level": "QUESTION_HYPOTHESES_AND_RELEVANT_FAILURE_CRITERIA_REVIEWED_NOT_FULL_SECTION_BY_SECTION_VERIFIED"
+        }
+      ]
     }
   ],
   "external_reference_first_pass": [
@@ -236,7 +267,8 @@
         "meme indicators and historical annotated real samples",
         "Blix actual Mint report usage"
       ],
-      "live_validation": "NOT_RUN"
+      "live_validation": "NOT_RUN",
+      "read_depth_note": "Main long papers: all 37 L1 + 16 L2 section names indexed and selected central assertions examined; NOT 53 field-level factual/protocol validation. Meme: targeted relevant sections, NOT entire long study."
     }
   ]
 }
