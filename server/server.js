@@ -31,6 +31,7 @@ import { writeBrief, explainCoin, briefProblem } from "./ai.js";
 import { cloneCoin, writeCoin, launchStatus, tickerUse } from "./launchtools.js";
 import { notifySignal, notifyBrief, testNotify, decide, rules, destinations, deliveries } from "./notify.js";
 import * as wallets from "./wallets.js";
+import { transactionEvidence, recipientCandidates, crossMintCandidates } from "./economic-events.mjs";
 import * as fomo from "./fomo.js";
 import * as fomoBoard from "./fomoboard.js";
 import * as research from "./research.js";
@@ -1374,6 +1375,25 @@ async function handleRequest(req, res) {
     if (p === "/api/health") return send(res, 200, cached("health", 4000, healthReport));
     if (p === "/api/briefs") return send(res, 200, db.prepare("SELECT * FROM briefs ORDER BY t DESC LIMIT 20").all());
     if (p === "/api/events") return send(res, 200, db.prepare("SELECT * FROM events ORDER BY id DESC LIMIT 80").all());
+    // Owner-only evidence from previously captured RPC data: no new RPC calls.
+    const evidenceTx = p.match(/^\/api\/evidence\/tx\/([1-9A-HJ-NP-Za-km-z]{64,100})$/);
+    if (evidenceTx && req.method === "GET") {
+      if (res.blixAs || res.blixVisitor) return send(res, 403, { error: "Owner only" });
+      const data = transactionEvidence(db, evidenceTx[1]);
+      return send(res, data ? 200 : 404, data || { error: "Transaction not captured" });
+    }
+    const evidenceRecipients = p.match(/^\/api\/evidence\/recipients\/([1-9A-HJ-NP-Za-km-z]{32,44})$/);
+    if (evidenceRecipients && req.method === "GET") {
+      if (res.blixAs || res.blixVisitor) return send(res, 403, { error: "Owner only" });
+      if (params.mint && !new RegExp("^" + MINT + "$").test(params.mint)) return send(res, 400, { error: "Invalid mint" });
+      return send(res, 200, recipientCandidates(db, evidenceRecipients[1], params.mint || null, Number(params.limit) || 100));
+    }
+    const evidenceFlow = p.match(/^\/api\/evidence\/cross-mint\/([1-9A-HJ-NP-Za-km-z]{32,44})$/);
+    if (evidenceFlow && req.method === "GET") {
+      if (res.blixAs || res.blixVisitor) return send(res, 403, { error: "Owner only" });
+      return send(res, 200, crossMintCandidates(db, evidenceFlow[1], Number(params.hours) || 24, Number(params.limit) || 40));
+    }
+
     if (p === "/api/brief" && POST) return send(res, 200, await makeBrief("on demand"));
     // A page's caught error (main.tsx guards: the page, the rail and bars): into the log as an "error" event, at most
     // 30 a minute from everyone together, so a crash someone saw can be found and fixed.
