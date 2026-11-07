@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "title": "Blix knowledge hierarchy: goals x depth x domain x archive type",
-  "as_of": "2026-11-06",
+  "as_of": "2026-11-07",
   "status": "STRUCTURAL_ADOPTION_NOT_RUNTIME_KNOWLEDGE_ACTIVATION",
   "source": {
     "old_ontology": "https://github.com/sunshihao001/grok/blob/eeb40b050369e4525919500f144325c9a9fc8b74/knowledge/system/ontology.v1.json",
@@ -15,7 +15,10 @@
     "legacy_historical_snapshot_source_index": "knowledge/references/legacy-snapshot-sources.v1.json",
     "hermes_multidimensional_source": "knowledge/methods/hermes-multidimensional-reasoning-original.md",
     "hermes_reverse_discovery_source": "knowledge/methods/hermes-reverse-discovery-original.md",
-    "hermes_ai_d_qb_meme_deep_study": "knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md"
+    "hermes_ai_d_qb_meme_deep_study": "knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md",
+    "multi_goal_product_evidence": "docs/project/reference-driven-goal-model-v0.1.md",
+    "multi_goal_deep_case": "docs/project/single-mint-audit.md",
+    "ai_d_current_research": "https://github.com/sunshihao001/ai-d/tree/main/research"
   },
   "structure": {
     "goal_axis": "G0用户价值 > G1整体市场研究与AI协作 > G2市场发现/单Mint/跨Mint/机制 > G3 Blix单主体 > G4当前工作；G是目标关系，不等于知识深度",
@@ -843,5 +846,309 @@
     "source_imports": 21,
     "legacy_main_core_cards": 15,
     "historical_snapshot_sources": 21
-  }
+  },
+  "knowledge_application": {
+    "status": "TASK_BASED_NAVIGATION_ONLY_NOT_AUTOMATIC_RUNTIME",
+    "purpose": "From user intent to current Blix surfaces, most useful original professional knowledge, primary reference product goal, traceable evidence and dynamic revision; additive to existing G0-G4/L0-L7/D01-D12.",
+    "goal_types": {
+      "project_goals": "User-owned G0-G4 and V-A..V-F use purposes; the AI may propose revisions but not silently replace them",
+      "market_actor_goals": "Inferred latent incentives of creator, inventory organizer, sniper, arbitrageur, LP, service, community; observable actions are not proof of intention or common controller",
+      "professional_lenses": "Dynamic problem-dependent perspectives: chain forensics, market microstructure, capital/incentives, statistics, execution, reliability; not fixed agents",
+      "reference_author_goals": "Upstream developer's stated user outcome; separate author claim from inspected source, actual run and economic inference"
+    },
+    "adaptive_selection_rule": "Select only knowledge that changes the current question, evidence discrimination, investigation priority or checkable product outcome. Preserve independent source context, avoid unverified certainty and excessive skepticism; read deeper only when information value justifies it.",
+    "update_rule": "When new evidence arrives, revise only affected observation/inference/priority; retain prior source+time and alternatives. A GitHub link/import is not runtime knowledge activation."
+  },
+  "goal_families": [
+    {
+      "id": "V-A",
+      "name": "Market participation and opportunity observation",
+      "user_question": "现在有哪些盘值得重点盯，为什么是现在？",
+      "blix_surface": [
+        "DISCOVER",
+        "MINT",
+        "RESEARCH"
+      ],
+      "blix_original": [
+        "server/engine.js",
+        "server/quality.js",
+        "server/triage.js",
+        "server/coin.js"
+      ],
+      "knowledge": [
+        "knowledge/mechanisms/strategy-and-execution-economics.md",
+        "knowledge/mechanisms/market-price-mechanism-research.md",
+        "knowledge/methods/anomaly-and-cohort-discovery.md"
+      ],
+      "reference_project_goals": [
+        "Million: Wallet↔Token discovery and missed-signal review",
+        "Blix: market surface and paper observation",
+        "Why-Solana: structural signal vs executable edge",
+        "OKX: reusable market research"
+      ],
+      "discriminator": "Signal available_at vs actual pool depth, fees, sellable inventory, observed/filtered candidate denominator",
+      "result": "Prioritized read-only watch candidate and explicit promote/demote conditions",
+      "status": "KNOWLEDGE_INDEXED_NO_LIVE_CLAIM"
+    },
+    {
+      "id": "V-B",
+      "name": "Risk and evidence-weighted token investigation",
+      "user_question": "这币是不是有人提前安排，证据在哪里？",
+      "blix_surface": [
+        "MINT",
+        "WALLET",
+        "FACTS"
+      ],
+      "blix_original": [
+        "server/coin.js",
+        "server/holderslive.js",
+        "server/bubblemap.js"
+      ],
+      "knowledge": [
+        "knowledge/foundations/solana-chain-and-market.md",
+        "knowledge/methods/key-wallet-investigation-brief.md",
+        "knowledge/mechanisms/wallet-roles-and-inventory.md"
+      ],
+      "reference_project_goals": [
+        "PumpTrace: repeated Creator/wallet behavior, next observations",
+        "HoldTech: holder concentration and funding hypotheses",
+        "qb-: token account / owner / infrastructure evidence"
+      ],
+      "discriminator": "Owner vs Token Account vs pool, verified funding transfer vs fee payer, true Swap vs same-slot transfer, temporal coverage",
+      "result": "Evidence-weighted candidate associations, verified events, alternative mechanisms and next signature",
+      "status": "KNOWLEDGE_INDEXED_NO_LIVE_CLAIM"
+    },
+    {
+      "id": "V-C",
+      "name": "Capital organization, inventory and cross-Mint flows",
+      "user_question": "转仓的钱包后来谁卖，资金去了哪里？",
+      "blix_surface": [
+        "WALLET",
+        "MONITOR",
+        "FACTS"
+      ],
+      "blix_original": [
+        "server/wtrack.js",
+        "server/wallets.js",
+        "server/bubblemap.js",
+        "server/journal.js"
+      ],
+      "knowledge": [
+        "knowledge/mechanisms/capital-organization-and-incentives.md",
+        "knowledge/mechanisms/actor-economic-mechanisms-deep-study.md",
+        "knowledge/references/multihop-funding-evidence-audit.md"
+      ],
+      "reference_project_goals": [
+        "Million: wallet-to-token-to-wallet loops",
+        "Why-Solana: funding multihop and repeatable mechanisms",
+        "Hermes: coordinated capital/stock movements"
+      ],
+      "discriminator": "SOL/WSOL and Token balance changes, CPI economic action de-dup, service hub, inventory conservation and actual downstream sale",
+      "result": "Traceable asset path and competing common-control/shared-service explanations",
+      "status": "KNOWLEDGE_INDEXED_NO_LIVE_CLAIM"
+    },
+    {
+      "id": "V-D",
+      "name": "Whole-market baseline, lifecycle and historical recovery",
+      "user_question": "现在市场哪些异常在发生，之前漏掉了什么？",
+      "blix_surface": [
+        "DISCOVER",
+        "MONITOR",
+        "RELIABILITY"
+      ],
+      "blix_original": [
+        "server/engine.js",
+        "server/journal.js",
+        "server/health.js",
+        "server/coverage.js"
+      ],
+      "knowledge": [
+        "knowledge/methods/anomaly-and-cohort-discovery.md",
+        "knowledge/cases/independent-validation-and-failure-cases.md",
+        "knowledge/foundations/legacy-grok-domain-core.md"
+      ],
+      "reference_project_goals": [
+        "Pulse: launch-to-death snapshots, selective trade retention and archive",
+        "pumpwatch: frozen launch population and normal industrial baseline",
+        "Cielo: wallet alert workflow"
+      ],
+      "discriminator": "Full opportunity set vs selected saved trades, event_time vs available_at, archival and recovery gaps, survivors vs failures",
+      "result": "Time-stamped market observations, missing coverage and recurrence/false-negative inquiry",
+      "status": "KNOWLEDGE_INDEXED_NO_LIVE_CLAIM"
+    },
+    {
+      "id": "V-E",
+      "name": "New economic mechanism and falsifiable research",
+      "user_question": "除了庄家标签，这种行为背后还有什么经济机制？",
+      "blix_surface": [
+        "RESEARCH",
+        "MINT",
+        "WALLET"
+      ],
+      "blix_original": [
+        "server/research.js",
+        "server/brain.js",
+        "server/coin.js"
+      ],
+      "knowledge": [
+        "knowledge/mechanisms/market-price-mechanism-research.md",
+        "knowledge/mechanisms/capital-organization-and-incentives.md",
+        "knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md",
+        "knowledge/references/source-knowledge-deep-study-v0.1.md"
+      ],
+      "reference_project_goals": [
+        "Why-Solana: structural patterns and their regime-dependent loss of edge",
+        "meme-: phase, supply, price and failed strategy hypotheses",
+        "ai-d: latent unknown and cross-domain mechanism generation"
+      ],
+      "discriminator": "Which actor goals would produce distinguishable future asset/transaction observations, and what competing mechanism or data bias explains the same signal",
+      "result": "Provisional ranked hypotheses, distinguishing next evidence and change log",
+      "status": "KNOWLEDGE_INDEXED_NO_LIVE_CLAIM"
+    },
+    {
+      "id": "V-F",
+      "name": "Natural language delegation, validation and evolving product knowledge",
+      "user_question": "继续项目，选最值得做的事情并保存核验。",
+      "blix_surface": [
+        "AI_ENTRY",
+        "RESEARCH",
+        "RELIABILITY"
+      ],
+      "blix_original": [
+        "AGENTS.md",
+        "server/intelligence/index.mjs",
+        "server/health.js"
+      ],
+      "knowledge": [
+        "knowledge/ai/intent-knowledge-selection-and-reasoning.md",
+        "knowledge/INTEGRATION-CROSSWALK.md",
+        "knowledge/references/source-coverage-v0.1.json"
+      ],
+      "reference_project_goals": [
+        "ai-d: goals, uncertainty origin, research selection, autonomous authorized delivery",
+        "PumpGrok: task tickets and safety separation",
+        "Pulse/PumpTrace: persisted recoverable evidence"
+      ],
+      "discriminator": "Is uncertainty user-only intent, externally checkable fact, knowledge applicability, missing permission or infrastructure failure? Did output actually run and get checked?",
+      "result": "Reversible evidence-based task outcome, readback and localized knowledge correction",
+      "status": "KNOWLEDGE_INDEXED_NOT_BOT_INSTALLED"
+    }
+  ],
+  "task_knowledge_routes": [
+    {
+      "request": "批量新币/垃圾盘筛选",
+      "goals": [
+        "V-A",
+        "V-D"
+      ],
+      "domains": [
+        "D02",
+        "D03",
+        "D07",
+        "D10"
+      ],
+      "start": "knowledge/methods/anomaly-and-cohort-discovery.md",
+      "independent_source": "Pulse / pumpwatch",
+      "must_check": "Candidates discarded and overall launch coverage"
+    },
+    {
+      "request": "一个Mint的持有人/Dev/捆绑钱包",
+      "goals": [
+        "V-B",
+        "V-C"
+      ],
+      "domains": [
+        "D01",
+        "D04",
+        "D05",
+        "D06"
+      ],
+      "start": "knowledge/mechanisms/wallet-roles-and-inventory.md",
+      "independent_source": "PumpTrace / HoldTech / qb-",
+      "must_check": "Account role, source/time, real funding/swap vs ambiguous inferred control"
+    },
+    {
+      "request": "6h或12h转账与行为突增",
+      "goals": [
+        "V-A",
+        "V-C",
+        "V-D"
+      ],
+      "domains": [
+        "D05",
+        "D07",
+        "D10"
+      ],
+      "start": "knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md",
+      "independent_source": "Hermes / Million / Pulse",
+      "must_check": "Event time, availability, interval coverage, actual asset path, no false window counts"
+    },
+    {
+      "request": "跨Mint相同钱包/资本循环",
+      "goals": [
+        "V-C",
+        "V-E"
+      ],
+      "domains": [
+        "D04",
+        "D05",
+        "D07",
+        "D11"
+      ],
+      "start": "knowledge/references/multihop-funding-evidence-audit.md",
+      "independent_source": "Million / Why-Solana / Hermes",
+      "must_check": "Shared service hubs, multi-hop economic flows, owner clustering and cross-Mint baseline"
+    },
+    {
+      "request": "池价格突变、疑似卖压、套利",
+      "goals": [
+        "V-A",
+        "V-B",
+        "V-E"
+      ],
+      "domains": [
+        "D03",
+        "D06",
+        "D09",
+        "D11"
+      ],
+      "start": "docs/project/single-mint-audit.md",
+      "independent_source": "Blix real three snapshots / market microstructure / meme-",
+      "must_check": "Actual Swap vs LP changes, pool depth, quote asset, fees and read-time alignment"
+    },
+    {
+      "request": "看起来是新机制或过去有效策略失效",
+      "goals": [
+        "V-D",
+        "V-E"
+      ],
+      "domains": [
+        "D03",
+        "D08",
+        "D11",
+        "D12"
+      ],
+      "start": "knowledge/references/source-knowledge-deep-study-v0.1.md",
+      "independent_source": "Why-Solana / meme- / pumpwatch / ai-d",
+      "must_check": "Population/control, evidence available before event, alternative mechanisms and out-of-sample evidence"
+    },
+    {
+      "request": "Blix怎么融合参考项目、AI怎样继续推进",
+      "goals": [
+        "V-F",
+        "V-A",
+        "V-B",
+        "V-C",
+        "V-D",
+        "V-E"
+      ],
+      "domains": [
+        "D10",
+        "D12"
+      ],
+      "start": "docs/project/reference-driven-goal-model-v0.1.md",
+      "independent_source": "ai-d / Blix original / linked original repositories",
+      "must_check": "Read source, compare full-product reuse, safety/permission, deliver-and-readback; no automatic trading"
+    }
+  ]
 }
