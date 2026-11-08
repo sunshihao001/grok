@@ -4,6 +4,31 @@
 >
 > 主体：`sunshihao001/grok` 的 `blix`。本表目前随 [Draft PR #18](https://github.com/sunshihao001/grok/pull/18) 保存在功能分支，**未合并、未部署**。PR基线 `3bc1f7d4`；本表的状态不能代替对最新提交的重新核验。
 
+## 2026-11-09｜当前状态视图：产品、研发、知识、运行四线独立
+
+> 本节是**当日当前状态**，覆盖下方历史轮次的旧状态描述；不删除旧日志。原Blix主体 `blix@3f8c829c`；专业能力集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23) `d53e37f9`，依赖PR #22→#18，未并入`blix`。**产品源码成熟度、代码测试结果、知识研究进度、运行可用性不允许互相替代。**
+
+| 独立状态线 | 现有证据 | 当前结论／边界 |
+|---|---|---|
+| **A｜Blix原产品** | React/经典页面、Discover/Pulse、Coin、Wallet/Tracker、BubbleMap、Journal、AI Research、Radar/SQLite、MCP及账户产品业务代码 | **产品主体已成型，功能丰富**；仍不等于针对本用户的只读调查系统在目标环境已验收 |
+| **B｜新增专业工程** | PR #18钱包RPC存证/失败重试；PR #22签名发现原子水位；PR #23合并去重、修正WTrack、Token-2022、离线Mint报告与跨Mint候选 | **Draft集成候选，CI通过而未合并**。[Node24 CI](https://github.com/sunshihao001/grok/actions/runs/42527921465)：全项目449/449、安全20/20、证据专项42/42；[审计通过](https://github.com/sunshihao001/grok/actions/runs/42527921460) |
+| **C｜内部专业知识研究** | Blix `knowledge/MIGRATION.json`有21条已迁入来源；`legacy-knowledge-routing.v1.json`有152个旧研究单元/12领域的**路由映射**；旧Hermes/qb-/meme-/Why-Solana及ai-d有专业研究成果与反例 | **资料积累、分类和跨源研究有实质基础**；并非152项独立确认事实、全部源码已读，也并非AI运行时自动调用成功 |
+| **D｜知识实际应用** | 旧Blix已有研究业务，`server/intelligence/mint-facts.mjs`已有本地事实摘要；部分链上知识已转化为新证据模型和反例测试 | **有局部转化**；未证明按用户自然语言自动挑选旧专业知识、完成整条Mint调查，并较无知识基线稳定增益 |
+| **E｜目标环境与真实运行** | PR #23有安全受限的**本地离线SQLite报告CLI**，并测试未修改输入文件；原大Server含交易、签名、自动领取和模型费用路径 | **未进行目标Grok云端完整只读隔离、真实主网历史与长期运行验收**；旧服务门禁、GitHub CI通过均不等于已安全运行 |
+
+**按业务场景判断（不是同一个完成百分比）**：
+
+- **市场发现→Coin基础调查**：原产品页面、API、采集和Holder/Dev/BubbleMap等业务逻辑已经存在，接近成品的是此部分；实际覆盖、数据口径与本用户环境仍需实跑。
+- **原始经济事件→钱包接收者→卖出/跨Mint**：PR #23对合成数据已通过跨模块与CLI测试；支持“候选/未观察到”而非证明同控或资本循环；真实v0/ALT、多CPI、Token-2022和公共设施反例没有完成主网验收。
+- **6/12小时群体监控及经济机制发现**：原产品有Journal、Tracker、AI等零件，旧理论已有独特机制；尚无面向目标的完整、持续、真实数据、可解释和可恢复的业务闭环。
+- **“只说一句话，AI自己研究和给出专业结论”**：ai-d方法、知识入口和Blix研究组件存在；其运行时自主正确选知识和使用后的真实价值仍待对照验证。
+
+**当前真正的交付瓶颈**不是Blix原产品缺UI，也不是知识研究资料太少，而是**将PR #23候选与现有主体审慎收束、独立只读运行隔离、真实归档交易验收、最小业务入口对接**。旧PR #19/#21并行探索和旧表“待修复”不可自动诱发重造；PR #20文档台账和本表有重叠，今后宜收束，不以台账数量作为成果。内部经济机制研究可以独立持续，不充当每个产品发布的固定先决条件。
+
+### 对风险锚点的裁决
+
+**方向有效：保留Blix作为成熟主体。方法调整：从继续全面研究文档转到整合与真实业务验收。** 如果PR #23通过合并审查及安全隔离后的真实回放，就优先把它接到已有UI；如果真实归档发现无法正确还原或成本不可接受，再按缺口比较PumpTrace/Million或替代数据源，而不是预设要再造一套底座。
+
 ## 风险锚点｜在下一轮研究前判断“值得研究”与“研究方法是否有效”
 
 > 此条来自用户 2026-11-08 新增要求，服务于产品价值与真实进展；**不是另设固定阶段、专家委员会或让 AI 更保守**。通用原理维护在 [ai-d 研究锚点](https://github.com/sunshihao001/ai-d/blob/main/README.md)，此处只保留 Blix 的具体决策和证据。
@@ -35,9 +60,9 @@
 
 | ID / 重要性 | 阶段与问题 | 当前事实 / 状态 | 下一项可核查动作（通过条件） | 已知位置或复用 |
 |---|---|---|---|---|
-| B01 / P0 | 原始交易证据保留与重放 | **已验证/限定范围**：PR #18 以完整 `jsonParsed` RPC 对象归档，外层/CPI逐位置索引；13项新增CI通过；不代表全链覆盖 | 核验真实v0/ALT、Token-2022、新建/关闭账户与多CPI，记录所有不可解码项目 | `server/economic-events.mjs`、`test/economic-events.test.mjs`；Solana官方交易规范 |
+| B01 / P0 | 原始交易证据保留与重放 | **当前PR#23集成候选CI已验**：获取的RPC原文和指令位置被保存，签名/Token-2022加固已测试；主网/全历史未验 | 核验真实v0/ALT、Token-2022、新建/关闭账户与多CPI，记录所有不可解码项目 | `server/economic-events.mjs`、`test/economic-events.test.mjs`；Solana官方交易规范 |
 | B02 / P0 | 钱包读签名的**处理成功水位** | **已部分修复、离线验收**：`econ_wallet_processing` 将 `CAPTURED/RETRY_REQUIRED/COMPLETE` 分开；`readSigs` 只在钩子与账本处理后写入；失败优先从本地RPC归档重试并有有限次数恢复查询。GitHub CI 对故障注入、缓存、共享签名、限次选择已通过；**未做完整服务重启/持续断流实跑** | 在严格隔离环境验证真正进程重启、定时任务恢复、数据库锁与告警副作用；防止重复报警；确认5次失败后的人工检查路径 | `server/wallets.js`、`server/economic-events.mjs`、`test/wallet-evidence-retry.test.mjs`；不把本次限定验收写成全历史完整 |
-| B03 / P0 | **已知缺口≠历史完整**，持续回填/断点 | **待修复**：`missingEvidence` 只比较现有 `wallet_trades` 与 `econ_transactions`；漏掉根本没识别成 trade 的签名。内存集合和部分分页不等于永久覆盖证据 | 在单个钱包上登记 `[起止slot/签名边界、游标、总数、成功/失败、完整/截断原因]`；断流、429、重启后从同一锚恢复；不能把 `CAP_REACHED` 标 `COMPLETE` | 优先复用 Blix `wallets.pageSignatures`，PumpTrace `BackfillManager` 的可续传任务状态 |
+| B03 / P0 | **已知缺口≠历史完整**，持续回填/断点 | **PR#22已在候选分支部分修复并通过离线CI**：原子签名发现、持久化任务和覆盖窗口；PR#23继承；未证实全历史、长期429/WS缺口恢复 | 在单个钱包上登记 `[起止slot/签名边界、游标、总数、成功/失败、完整/截断原因]`；断流、429、重启后从同一锚恢复；不能把 `CAP_REACHED` 标 `COMPLETE` | 优先复用 Blix `wallets.pageSignatures`，PumpTrace `BackfillManager` 的可续传任务状态 |
 | B04 / P0 | Swap + 转账、一个签名多个事件 | **已验证/限定范围 + 待修复**：新层能存多个原始指令；旧 `wallet_trades/wt_transfers` 仍按签名+钱包+Mint折叠；`wtrack.fromTx` 在命中swap时跳过转账 | 以买入1000转出400、同签名转给B/C、多池CPI作为回归；钱包摘要/监控不再把余额净变化说成实际买单数量 | `solana.parseSwaps`、`wtrack.fromTx`、`journal.tradeKey` |
 | B05 / P0 | 接收方是钱包、池还是公共设施 | **待验证**：`recipientCandidates` 返回能够识别Owner的Token指令边；AMM Vault/池参与者也可能匹配；当前不能无条件称“接力钱包” | 加入已知池+普通接收方对照及来源证据。原始边保留，按 `pool/infrastructure/unknown/wallet-candidate` 明确分类；不得由同slot/fee payer推断共同控制 | `bubblemap` 池标签、`coin` 交易对、PumpTrace wallet intelligence |
 | B06 / P1 | B卖完后仍可发现、按需跟进 | **待验证**：当前Holder快照不能代表历史接收方；新候选查询可见历史边，但无自动历史扩展 | 合成/真实事件：B当前余额0，仍能从历史找到A→B；对候选启动**显式有预算的只读历史调查**，不得无界递归或擅自监控所有钱包 | Million Wallet→Mint→Wallet 双向扩展，Blix现有Wallet页面 |
@@ -47,8 +72,8 @@
 | B10 / P1 | 错误资金关联：Funder/fee payer | **待修复**：Bubble Map历史过长返回空并长期缓存；在找不到直接转账时退化为fee payer = funder | 3页截断/代付手续费离线反例；显示 `HISTORY_TRUNCATED` 和 `FEE_PAYER_ONLY`，绝不自动生成 `DIRECT_FUNDER` | `server/bubblemap.js:109-151`；既有 `mint-cross-module-evidence-audit-v0.2.md` R1/R2 |
 | B11 / P1 | 同一Mint持仓与供应量口径 | **待修复**：`holders.js` 可用动态供应量；`coin.js` 多处1e9；链上快照 `partial:false` 不等于历史完整 | 5亿供应、1亿持仓的20%测试；各数据表都回传 `source/slot/observedAt/denominator/historyCoverage` | 既有V0.2审查R3/R4，不删历史结论 |
 | B12 / P1 | 发现与真实市场样本 | **保留/待验收**：Blix已有Mint发现、Pool和发行生命周期；历史真实Mint的3份供应商快照存在，但没有真实交易签名序列 | 对 `EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump` 取**安全隔离的历史签名**，检验Pool库存变化是Swap还是LP、是否确有A→B | `single-mint-audit.md`、旧PR #16；优先复用现成采集 |
-| B13 / P1 | AI/产品报告把事实连起来 | **待实施**：现有 `mint-facts` 只从少数本地API取信息，新证据未进报告、MCP与UI | 一个Mint完整报告展示事件路径、签名/位置、已知/未知、覆盖缺口与竞争解释；不将示例假设写成“内幕已确认” | `server/intelligence/mint-facts.mjs`、旧Hermes/qb-/meme- |
-| B14 / P0合并门槛 | 原有CI测试不一致 | **阻断**：PR #18的GitHub Actions 420项中412过、8失败；新13项全部通过。8项与引入新测试前一致，包括旧状态断言及7项WTrack测试 | 对比`blix`同基线确认8项归属；将修复放独立且最小化的工作项，避免为清绿灯伪改断言 | [PR #18测试运行](https://github.com/sunshihao001/grok/actions/runs/42419470824)、[Audit通过](https://github.com/sunshihao001/grok/actions/runs/42419470857) |
+| B13 / P1 | AI/产品报告把事实连起来 | **PR#23已有独立只读SQLite报告CLI并离线测试**：可列接收方、后续卖出候选和UNKNOWN；尚未接到现有UI或研究运行时 | 一个Mint完整报告展示事件路径、签名/位置、已知/未知、覆盖缺口与竞争解释；不将示例假设写成“内幕已确认” | `server/intelligence/mint-facts.mjs`、旧Hermes/qb-/meme- |
+| B14 / P0合并门槛 | 原有CI测试不一致 | **PR#23集成候选CI已全部通过**：Node24全项目449/449、安全20/20、证据专项42/42，审计通过；当前真正门槛转为未合并、安全隔离及真实业务验收 | 对比`blix`同基线确认8项归属；将修复放独立且最小化的工作项，避免为清绿灯伪改断言 | [PR #18测试运行](https://github.com/sunshihao001/grok/actions/runs/42419470824)、[Audit通过](https://github.com/sunshihao001/grok/actions/runs/42419470857) |
 | B15 / P0安全门槛 | 运行/交易/付费隔离 | **阻断**：本轮只静态、离线测试和GitHub代码写入；原Blix仍有交易、签名、费用路径 | 单独验收只读隔离、配置/密钥、请求成本和监控后，再考虑真实Mint主网只读回放、云端上线 | `docs/project/read-only-safety.md`；绝不把PR通过等同生产可启动 |
 
 ## 2026-11-08｜继承检查与下一轮综合研究（第一轮已完成）
