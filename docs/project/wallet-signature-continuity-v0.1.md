@@ -1,6 +1,6 @@
 # Blix｜钱包签名持续采集与恢复 V0.1（2026-11-08）
 
-> **状态：FEATURE_BRANCH / OFFLINE_CI_PENDING / NOT_LIVE.** 这是已有经济证据加固PR #19之上的小幅续接，不属于已合并的 `blix`。没有运行原主服务、真实RPC、交易、签名、付费或部署。
+> **状态：FEATURE_BRANCH / OFFLINE_CI_CHECKED_PARTIAL / NOT_LIVE.** 这是已有经济证据加固PR #19之上的小幅续接，不属于已合并的 `blix`。没有运行原主服务、真实RPC、交易、签名、付费或部署。
 
 ## 为什么优先做，而不是继续建钱包图
 
@@ -45,3 +45,21 @@
 - [PumpTrace可续传回补任务](https://github.com/AntC215/Pumptrace/blob/main/src/modules/backfill-manager.mjs)：保留cursor、CAP_REACHED与COMPLETE不同；不复制另一套执行引擎。
 - [Million历史采集与truncated](https://github.com/Kelows/million/blob/main/apps/api/src/analysis/helius.service.ts)：交易类型与分页范围各自影响可见性，不以短窗口推全历史。
 - [现有Blix建设台账](https://github.com/sunshihao001/grok/pull/20)：BL-04/11/13；[功能分支的建设登记](https://github.com/sunshihao001/grok/blob/feat/blix-economic-evidence-20261108/docs/project/build-register.md)：B02/B03/B04/B09。两份登记各有作用，尚未统一合并。
+
+## 跨模块离线验收追加（同日）
+
+[新增 test/wallet-evidence-chain.test.mjs](../../test/wallet-evidence-chain.test.mjs) 使用真实的 Blix `wallets.readTx`、现有 `wallet_trades` 和本分支的 `economic-events`：
+- 同一交易签名内原始指令表现为 Pool→A 1,000 Token、A→B 400 Token，但 A 的旧 `parseSwaps` 只把净增600 Token登记为买入量。**证明了“钱包余额净变化摘要≠执行中的真实买入量”这一具体语义差异**（仅合成交易，对链上价格/对价未做真实鉴定）。
+- 在经济RPC保存及旧钱包摘要写入后模拟后续回调异常，`RPC_CAPTURED` 保留，第二次调用不传RPC对象，直接从本地原始归档恢复并完成 Reader 标记。
+- B 当前持仓在合成样本中归零后，仍能从历史A→B指令找到接收记录，并与已采集的B卖M、B→C转SOL、C买N建立时序候选。系统未把候选升级为共同控制或真实资金来源。
+- 当B的后续卖出尚未采集，返回 `NOT_OBSERVED_IN_CAPTURED_WINDOW`，不得解释成没有卖出。
+
+[最新CI](https://github.com/sunshihao001/grok/actions/runs/42485375853)：440测试、433通过、7失败（7项均为旧 `wtrack.test.mjs`）；11个签名水位单测与1个跨模块离线测试均通过。[审计](https://github.com/sunshihao001/grok/actions/runs/42485375939)成功。此结果仍**不是**真实主网/完整CPI/生产的端到端验收。
+
+关键未解决：
+- 原市场流在所有早期事件上并不经过钱包Reader；钱包候选可能根本没有被跟踪。
+- 原始转账索引、净余额、实际成交价格对价要继续分开；不能把合成样本的1000理解为真实买单量的广泛定论。
+- WebSocket瞬时断流、超时与旧WTrack hook异常仍需独立恢复检查；
+- 长期签名任务表空间上限和安全的手动/自动修复入口尚待建设；现有主服务仍不是安全的纯只读部署。
+
+下一项优先：以“钱包交易未产生wallet_trades摘要但已经发生Token转移”为反例，校验该签名能否从交易签名池与新水位恢复；并用真正的Token账户创建/关闭、Pool公共设施案例逐个压测Owner归因。
