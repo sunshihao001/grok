@@ -1,0 +1,60 @@
+name: Blix PR23 exact failure fingerprint
+on:
+  push:
+    branches: [audit/blix-pr21-regression-20261108]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      failures: ${{ steps.inspect.outputs.failures }}
+      counts: ${{ steps.inspect.outputs.counts }}
+      wtrack: ${{ steps.inspect.outputs.wtrack }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 26b354851b6a29624bb3273e312915a4f0f59f4f
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Count exact full-suite failures
+        id: inspect
+        shell: bash
+        env:
+          BLIX_MARKET_FEEDS: "0"
+        run: |
+          set +e
+          npm test > full.tap 2>&1
+          rc=$?
+          set -e
+          sed -n '/^not ok /p' full.tap > failures.txt
+          sed -n '/^# tests/p;/^# pass/p;/^# fail/p' full.tap > counts.txt
+          failures=$(sed -E 's/^not ok [0-9]+ - //' failures.txt | paste -sd ';' - | cut -c 1-230)
+          counts=$(paste -sd ':' counts.txt | cut -c 1-120)
+          echo "failures=$failures" >> "$GITHUB_OUTPUT"
+          echo "counts=$counts; npmrc=$rc" >> "$GITHUB_OUTPUT"
+          echo "wtrack=$(grep '^not ok ' failures.txt | wc -l | tr -d ' ')" >> "$GITHUB_OUTPUT"
+          cat failures.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: full-suite-failure-fingerprint
+          path: |
+            failures.txt
+            counts.txt
+          retention-days: 7
+  show:
+    needs: detect
+    name: "FAILS: ${{ needs.detect.outputs.failures }}"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'Extracted exact failure fingerprint above'
+  counts:
+    needs: detect
+    name: "COUNTS: ${{ needs.detect.outputs.counts }}"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'Regression counts exposed above'
