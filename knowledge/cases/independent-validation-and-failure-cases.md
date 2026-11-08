@@ -164,3 +164,14 @@ meme-的反证思想可用来检查任何“专业发现”：
 ### 3. 如何验证该知识是否真的影响 Blix？
 
 以冻结的旧qb- 4TKY 资料做相同任务的对照：一组仅看到同源组和风险标签，另一组加上原始证据依赖与Hermes/meme-反证要求。独立验收应查：能否发现跨组桥接；能否指出61条边未给金额时间；会否把同一数据变换当不同证据；是否避免把“全退出”当已见Swap；能否提出下一项高价值只读补查。不能因为结果文字更丰富就判定AI变强。**本轮是来源审查与知识修订，没有执行模型A/B、链上签名复算或Blix运行时验收。**
+
+
+### 4. qb-判断基准比README更有价值，但不能冒充真实验证
+
+本轮又向下读了 [qb-判断治理模板](https://github.com/sunshihao001/qb-/blob/main/hermes_harness/15_judgment_governance/templates/judgment_governance_state_template.json)（blob `62905b4a4d2863ab79f338b6e0092a7c94f2fd1d`），以及 [fake closure样本](https://github.com/sunshihao001/qb-/blob/main/hermes_harness/15_judgment_governance/benchmark_cases/fake_closure_dry_run_as_real_completion.json)（`60455e789690c60a421e7a613e5a74aaad1b7c2d`）、[benchmark 001](https://github.com/sunshihao001/qb-/blob/main/hermes_harness/21_judgment_benchmark/benchmark_cases/bench_v2_001.json)（`c531c65e07cde839ca9a70d56b30cea2c1dd22ca`）和 [可靠性状态模板](https://github.com/sunshihao001/qb-/blob/main/hermes_harness/16_reliability_calibration/templates/reliability_calibration_state_template.json)（`39ba0714f14eb8af5af7a82064554c80e16ff1c6`）。
+
+- **实质知识**：纠错不仅是在最后说UNKNOWN；原模板对问题真实性、根因、证据充分性、真正独立的验证、认知成本、可撤回性、记忆过时与后续偏差修正提出不同的审查问题。对普通AI项目可用于检验“复杂度是否值得”和“知识是否因历史错误影响下一次研究”。
+- **具体例子**：fake_closure样本列明正确处理需要真实执行证据、独立验证、验证可失败、dry-run单独标记；不接受文件存在/模型自述作为系统已完成。
+- **证据级别**：原`21_judgment_benchmark/README.md`明确称其为**benchmark skeleton**。样本`bench.v2.001`只包含任务名称及预期判别，不能把它视为模型已通过真实回归。状态模板`overall_passed=false`是初始内容，不是一次真实测试输出；预设`evidence_sufficiency.threshold=0.7`也不是跨任务已校准的专业证据阈值。
+
+**Blix迁移修正**：保留上述判断思维，不复制整套Hormes Harness的空模板与固定自评分数；把`模型是否发现正确的新问题`、`工具是否提供真正新来源`、`产品是否实现并通过独立反例`分别检查。**本轮只审阅了原数据/模板，未执行这些benchmark。**
