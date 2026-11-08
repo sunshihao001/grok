@@ -14,35 +14,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: eade9072d28ac8fc088c8af3a7b58376ac6a6ce5
+          ref: 26b354851b6a29624bb3273e312915a4f0f59f4f
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
       - name: Check economic-events cases
-        continue-on-error: true
+        if: always()
         run: node --no-warnings --test test/economic-events.test.mjs
       - name: Check retry and hook acknowledgement cases
-        continue-on-error: true
+        if: always()
         run: node --no-warnings --test test/wallet-evidence-retry.test.mjs
       - name: Check signature discovery checkpoint cases
-        continue-on-error: true
+        if: always()
         run: node --no-warnings --test test/wallet-signature-coverage.test.mjs
       - name: Check synthetic cross-Mint economic chain cases
-        continue-on-error: true
+        if: always()
         run: node --no-warnings --test test/wallet-evidence-chain.test.mjs
       - name: Combined evidence suite with default concurrency
-        continue-on-error: true
+        if: always()
         run: npm run test:evidence
       - name: Combined evidence suite with explicit serial process execution
-        continue-on-error: true
+        if: always()
         run: node --no-warnings --test --test-concurrency=1 test/economic-events.test.mjs test/wallet-evidence-retry.test.mjs test/wallet-signature-coverage.test.mjs test/wallet-evidence-chain.test.mjs
       - name: Full regression suite before an evidence rerun
         continue-on-error: true
         run: npm test
       - name: Evidence suite rerun after full regression
-        continue-on-error: true
+        if: always()
         run: npm run test:evidence
       - name: Independent security suite
-        continue-on-error: true
+        if: always()
         run: npm run test:security
