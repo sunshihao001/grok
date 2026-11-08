@@ -1,14 +1,14 @@
-name: Blix PR23 isolated failure diagnostics
+name: Blix PR23 isolated test-file diagnosis
 on:
   push:
     branches: [audit/blix-pr21-regression-20261108]
+  workflow_dispatch:
 permissions:
   contents: read
-  issues: write
 jobs:
   diagnose:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 12
     env:
       BLIX_MARKET_FEEDS: "0"
     steps:
@@ -19,37 +19,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
-      - name: Collect offline test failures without network or server startup
-        id: tests
-        shell: bash
-        run: |
-          set +e
-          npm run test:evidence > evidence.tap 2>&1
-          rc=$?
-          set -e
-          echo "exit=$rc" >> "$GITHUB_OUTPUT"
-          echo '### Isolated evidence tests' >> "$GITHUB_STEP_SUMMARY"
-          grep -E '^not ok |^# (tests|pass|fail)' evidence.tap >> "$GITHUB_STEP_SUMMARY" || :
-          awk '/^not ok /{p=1;c=0} p{print;c++} c>23{p=0}' evidence.tap > failing-context.txt
-          head -c 10500 failing-context.txt > failure-short.txt
-          printf "Test exit: %s\n" "$rc"
-          cat failure-short.txt
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: blix-pr23-offline-diagnostics
-          path: |
-            evidence.tap
-            failing-context.txt
-          retention-days: 7
-      - name: Publish one scoped review diagnostic to PR23
-        if: always()
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TEST_RC: ${{ steps.tests.outputs.exit }}
-        shell: bash
-        run: |
-          printf 'Offline evidence CI diagnostic, pinned source eade9072 (Node 24). No server/RPC/signing/payments used. Test exit code: %s.\n\n' "$TEST_RC" > pr-body.txt
-          printf 'Failed test cases and truncated TAP context:\n\n' >> pr-body.txt
-          cat failure-short.txt >> pr-body.txt
-          gh api repos/sunshihao001/grok/issues/23/comments -f body="$(head -c 11500 pr-body.txt)" > /dev/null
+      - name: Check economic-events cases
+        continue-on-error: true
+        run: node --no-warnings --test test/economic-events.test.mjs
+      - name: Check retry and hook acknowledgement cases
+        continue-on-error: true
+        run: node --no-warnings --test test/wallet-evidence-retry.test.mjs
+      - name: Check signature discovery checkpoint cases
+        continue-on-error: true
+        run: node --no-warnings --test test/wallet-signature-coverage.test.mjs
+      - name: Check synthetic cross-Mint economic chain cases
+        continue-on-error: true
+        run: node --no-warnings --test test/wallet-evidence-chain.test.mjs
+      - name: Independent security suite
+        continue-on-error: true
+        run: npm run test:security
