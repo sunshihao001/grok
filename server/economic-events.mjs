@@ -161,8 +161,16 @@ export function crossMintCandidates(db, address, maxHours = 24, limit = 40) {
 // Report pre-upgrade or dropped-feed signatures that have wallet trades but no full RPC capture.
 // This is a gap index, not an RPC call or proof that history can be retrieved.
 export function missingEvidence(db, wallet, limit = 100) {
-  if (!evidenceAvailable(db)) return { wallet, coverage: 'EVIDENCE_NOT_INITIALIZED',
-    next: 'Capture or replay RPC; index unavailable is not full coverage', rows: [] };
+  if (!evidenceAvailable(db)) {
+    // No evidence tables yet: every locally summarized signature is a known evidence gap.
+    // Query the existing wallet table without creating or modifying SQLite objects.
+    const rows = db.prepare(`SELECT sig, MIN(t) first_trade_at, COUNT(*) summary_rows
+      FROM wallet_trades WHERE wallet=? AND sig NOT LIKE 'slot:%'
+      GROUP BY sig ORDER BY first_trade_at DESC LIMIT ?`)
+      .all(wallet, Math.max(1, Math.min(500, limit)));
+    return { wallet, coverage: 'EVIDENCE_NOT_INITIALIZED_ALL_KNOWN_WALLET_TRADES_UNCAPTURED',
+      next: 'Capture or replay archived RPC; this is not a complete wallet history', rows };
+  }
   const rows = db.prepare(`SELECT w.sig, MIN(w.t) first_trade_at, COUNT(*) summary_rows
     FROM wallet_trades w LEFT JOIN econ_transactions e ON e.sig=w.sig
     WHERE w.wallet=? AND e.sig IS NULL AND w.sig NOT LIKE 'slot:%'
@@ -177,7 +185,7 @@ export function recipientOutcomes(db, sender, mint = null, limit = 20, maxHours 
   const direct = recipientCandidates(db, sender, mint, Math.min(30, Math.max(1, limit)));
   if (!evidenceAvailable(db)) return { ...direct, observation: 'LOCAL_INDEX_UNAVAILABLE', rows: [] };
   const windowMs = Math.max(1, Math.min(168, Number(maxHours) || 24)) * 3600_000;
-  const sells = db.prepare(`SELECT sig, wallet, mint, side, tokens, sol, t FROM wallet_trades
+  const sells = db.prepare(`SELECT sig, wallet, mint, side, sol, t FROM wallet_trades
     WHERE wallet=? AND mint=? AND side='sell' AND t>=? AND t<=?
     ORDER BY t ASC LIMIT 5`);
   const rows = direct.rows.map(r => {
