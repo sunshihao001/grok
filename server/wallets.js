@@ -164,9 +164,7 @@ export async function readTx(w, job, emit, fetched = null) {
   if (!tx) throw new Error("transaction not available yet");
   // Store the full jsonParsed transaction before lossy swap/transfer summaries.
   // This is local evidence capture, not a trade, signature, or paid RPC call.
-  persistEvidence(db, job.sig, tx);
-  readSigs.add(key);
-  if (readSigs.size > 20000) for (const k of [...readSigs].slice(0, 5000)) readSigs.delete(k);
+  persistEvidence(db, job.sig, tx, Date.now(), { captureSource: 'WALLET_RPC', commitment: 'confirmed' });
   for (const fn of txHooks) { try { fn(w, tx, job); } catch {} }
   const price = await solPrice();
   for (const sw of sol.parseSwaps(tx, w.address)) {
@@ -183,6 +181,9 @@ export async function readTx(w, job, emit, fetched = null) {
     if (!job.quiet) lag.set(w.address, Math.round((lag.get(w.address) ?? now() - t) * 0.6 + (now() - t) * 0.4));
     if (!job.quiet && now() - t < 30 * MIN) emit?.(event);
   }
+  // Only mark completed once evidence and wallet summary processing succeeded.
+  readSigs.add(key);
+  if (readSigs.size > 20000) for (const k of [...readSigs].slice(0, 5000)) readSigs.delete(k);
 }
 
 // Backstop poll, round-robin. New wallets get their last ~25 transactions backfilled once (no alerts).
