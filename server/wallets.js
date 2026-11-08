@@ -4,7 +4,7 @@ import { db, q, json, logEvent } from "./db.js";
 import { settings } from "./settings.js";
 import { rpcStreamAllowed, noteRpcBytes, keyUrls, keyFree, heliusFetch } from './heliuskeys.js';
 import * as sol from "./solana.js";
-import { persistEvidence, transactionEvidence, walletProcessing, setWalletProcessing } from "./economic-events.mjs";
+import { persistEvidence, transactionEvidence, walletProcessing, setWalletProcessing, retryableWalletProcessing } from "./economic-events.mjs";
 import * as src from "./sources.js";
 import { handleOf } from "./fomo.js";
 import { exitState, onCurve } from "./quality.js";
@@ -228,6 +228,13 @@ async function pollWallets(emit) {
     pauseBots();
   } finally {
     polling = false;
+    // Persistent, bounded retry for already-captured transactions, including
+    // work lost from an in-memory queue after restart. No extra RPC is needed.
+    try {
+      for (const x of retryableWalletProcessing(db)) enqueue(x.wallet, [{
+        sig: x.sig, t: x.block_time ? x.block_time * 1000 : now(), quiet: true,
+      }]);
+    } catch (e) { logEvent("error", `wallet retry queue: ${e.message}`); }
     drain(emit).catch((e) => logEvent("error", `wallet reader: ${e.message}`));
   }
 }
