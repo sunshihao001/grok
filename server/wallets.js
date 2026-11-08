@@ -4,7 +4,8 @@ import { db, q, json, logEvent } from "./db.js";
 import { settings } from "./settings.js";
 import { rpcStreamAllowed, noteRpcBytes, keyUrls, keyFree, heliusFetch } from './heliuskeys.js';
 import * as sol from "./solana.js";
-import { persistEvidence } from "./economic-events.mjs";
+import { persistEvidence, transactionEvidence } from "./economic-events.mjs";
+import { checkpointWalletPage, pendingWalletSignatures, markWalletRpcCaptured, markWalletReaderFinished, markWalletReaderFailed } from "./wallet-signature-coverage.mjs";
 import * as src from "./sources.js";
 import { handleOf } from "./fomo.js";
 import { exitState, onCurve } from "./quality.js";
@@ -141,7 +142,10 @@ async function drain(emit) {
         try { await readTx(w, job, emit); }
         catch (e) {
           if (++job.tries < 3) backlog.get(w.address).push(job);
-          else miss(w.address, 1, e.limited ? "RPC rate limit" : e.message);
+          else {
+            markWalletReaderFailed(db, w.address, job.sig, Boolean(e.limited));
+            miss(w.address, 1, e.limited ? "RPC rate limit" : e.message);
+          }
           if (e.limited) return;   // the RPC needs a rest; the next tick picks the backlog up again
         }
       }
@@ -160,11 +164,13 @@ export async function readTx(w, job, emit, fetched = null) {
   // A live feed may already have stored a trade for this signature. That does NOT
   // mean its complete transaction or mixed transfer instructions were captured.
   if (readSigs.has(key)) return;
-  const tx = fetched || await sol.transaction(job.sig);
+  // An already archived transaction survives a crash after capture; do not pay to refetch it.
+  const tx = fetched || transactionEvidence(db, job.sig)?.rpc || await sol.transaction(job.sig);
   if (!tx) throw new Error("transaction not available yet");
   // Store the full jsonParsed transaction before lossy swap/transfer summaries.
   // This is local evidence capture, not a trade, signature, or paid RPC call.
   persistEvidence(db, job.sig, tx, Date.now(), { captureSource: 'WALLET_RPC', commitment: 'confirmed' });
+  markWalletRpcCaptured(db, w.address, job.sig);
   for (const fn of txHooks) { try { fn(w, tx, job); } catch {} }
   const price = await solPrice();
   for (const sw of sol.parseSwaps(tx, w.address)) {
@@ -181,7 +187,8 @@ export async function readTx(w, job, emit, fetched = null) {
     if (!job.quiet) lag.set(w.address, Math.round((lag.get(w.address) ?? now() - t) * 0.6 + (now() - t) * 0.4));
     if (!job.quiet && now() - t < 30 * MIN) emit?.(event);
   }
-  // Only mark completed once evidence and wallet summary processing succeeded.
+  // Reader finished means source capture and the current summary completed; not full economic decoding.
+  markWalletReaderFinished(db, w.address, job.sig);
   readSigs.add(key);
   if (readSigs.size > 20000) for (const k of [...readSigs].slice(0, 5000)) readSigs.delete(k);
 }
@@ -237,12 +244,21 @@ export async function pageSignatures(fetch, { first, lastSig, pages }) {
 }
 
 async function pollOne(w) {
+  // Recover any durable signatures before requesting the newest page. This also
+  // works when the RPC page fails; pollWallets still drains the recovered queue.
+  enqueue(w.address, pendingWalletSignatures(db, w.address).map(j => ({
+    sig: j.sig, t: j.t || now(), quiet: Boolean(j.quiet)
+  })));
   const first = !w.backfilled;
   const { all, reached } = await pageSignatures((o) => sol.signatures(w.address, o), { first, lastSig: w.last_sig, pages: first ? 1 : settings.rpcUrl ? 8 : 3 });
-  db.prepare("UPDATE wallets SET last_poll = ?, last_sig = COALESCE(?, last_sig), backfilled = 1 WHERE address = ?").run(now(), all[0]?.signature || null, w.address);
-  // More activity than we could page through since the last look: the older part is a known gap.
+  // SQLite atomic checkpoint: discover each signature BEFORE advancing last_sig.
+  // Crash between this statement and in-memory enqueue no longer loses jobs.
+  checkpointWalletPage(db, { wallet: w.address, rows: all, priorAnchor: w.last_sig || null,
+    first, reached, observedAt: now() });
   if (!reached) miss(w.address, 1, `more than ${all.length} transactions since the last check; the oldest were skipped`);
-  enqueue(w.address, all.filter((s) => !s.err).map((s) => ({ sig: s.signature, t: (s.blockTime || 0) * 1000 || now(), quiet: first })));
+  enqueue(w.address, all.filter(s => !s.err).map(s => ({
+    sig: s.signature, t: (s.blockTime || 0) * 1000 || now(), quiet: first
+  })));
 }
 
 // ---------- live streams ----------
