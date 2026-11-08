@@ -4,7 +4,7 @@ import { db, q, json, logEvent } from "./db.js";
 import { settings } from "./settings.js";
 import { rpcStreamAllowed, noteRpcBytes, keyUrls, keyFree, heliusFetch } from './heliuskeys.js';
 import * as sol from "./solana.js";
-import { persistEvidence } from "./economic-events.mjs";
+import { persistEvidence, transactionEvidence, walletProcessing, setWalletProcessing } from "./economic-events.mjs";
 import * as src from "./sources.js";
 import { handleOf } from "./fomo.js";
 import { exitState, onCurve } from "./quality.js";
@@ -157,31 +157,58 @@ const tradeHooks = [];
 export const onStoredTrade = (fn) => tradeHooks.push(fn);
 export async function readTx(w, job, emit, fetched = null) {
   const key = `${w.address}:${job.sig}`;
-  // A live feed may already have stored a trade for this signature. That does NOT
-  // mean its complete transaction or mixed transfer instructions were captured.
   if (readSigs.has(key)) return;
-  const tx = fetched || await sol.transaction(job.sig);
+  // The live feed can pre-populate wallet_trades. It does not prove that the
+  // transaction was captured OR processed by this reader. Keep per-wallet state.
+  if (walletProcessing(db, job.sig, w.address)?.state === "COMPLETE") {
+    readSigs.add(key);
+    return;
+  }
+  // A previous attempt may have captured RPC before a downstream failure.
+  // Prefer that immutable local evidence to an unnecessary fresh RPC call.
+  const tx = fetched || transactionEvidence(db, job.sig)?.rpc || await sol.transaction(job.sig);
   if (!tx) throw new Error("transaction not available yet");
-  // Store the full jsonParsed transaction before lossy swap/transfer summaries.
-  // This is local evidence capture, not a trade, signature, or paid RPC call.
   persistEvidence(db, job.sig, tx);
-  readSigs.add(key);
-  if (readSigs.size > 20000) for (const k of [...readSigs].slice(0, 5000)) readSigs.delete(k);
-  for (const fn of txHooks) { try { fn(w, tx, job); } catch {} }
-  const price = await solPrice();
-  for (const sw of sol.parseSwaps(tx, w.address)) {
-    const usd = sw.usd ?? sw.sol * price;
-    const k0 = tx.transaction.message.accountKeys[0];
-    const payer = typeof k0 === "string" ? k0 : k0?.pubkey;
-    const t = sw.t || job.t;
-    const r = db.prepare("INSERT OR IGNORE INTO wallet_trades (sig, wallet, mint, side, tokens, sol, usd, t, payer) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
-      .run(job.sig, w.address, sw.mint, sw.side, sw.tokens, sw.sol, usd, t, payer || null);
-    if (!r.changes || w.scan) continue;
-    db.prepare("UPDATE wallets SET last_trade = MAX(COALESCE(last_trade, 0), ?) WHERE address = ?").run(t, w.address);
-    const event = { wallet: w, trade: { ...sw, t, usd, sig: job.sig }, lagMs: now() - t };
-    for (const fn of tradeHooks) { try { fn(event); } catch (e) { logEvent("error", `wallet trade subscriber: ${e.message}`); } }
-    if (!job.quiet) lag.set(w.address, Math.round((lag.get(w.address) ?? now() - t) * 0.6 + (now() - t) * 0.4));
-    if (!job.quiet && now() - t < 30 * MIN) emit?.(event);
+  setWalletProcessing(db, job.sig, w.address, "CAPTURED");
+  try {
+    // Transfer hooks can fail independently of raw capture. Do not claim the
+    // signature was fully processed when a hook silently threw.
+    let hookError = null;
+    for (const fn of txHooks) {
+      try { fn(w, tx, job); }
+      catch (e) {
+        if (!hookError) hookError = e;
+        logEvent("error", `wallet transaction hook ${job.sig}: ${e?.message || String(e)}`);
+      }
+    }
+    const swaps = sol.parseSwaps(tx, w.address);
+    // No swap = no conversion price required. Transfer-only retries stay offline.
+    if (swaps.length) {
+      const price = await solPrice();
+      for (const sw of swaps) {
+        const usd = sw.usd ?? sw.sol * price;
+        const k0 = tx.transaction.message.accountKeys[0];
+        const payer = typeof k0 === "string" ? k0 : k0?.pubkey;
+        const t = sw.t || job.t;
+        const r = db.prepare("INSERT OR IGNORE INTO wallet_trades (sig, wallet, mint, side, tokens, sol, usd, t, payer) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
+          .run(job.sig, w.address, sw.mint, sw.side, sw.tokens, sw.sol, usd, t, payer || null);
+        if (!r.changes || w.scan) continue;
+        db.prepare("UPDATE wallets SET last_trade = MAX(COALESCE(last_trade, 0), ?) WHERE address = ?").run(t, w.address);
+        const event = { wallet: w, trade: { ...sw, t, usd, sig: job.sig }, lagMs: now() - t };
+        for (const fn of tradeHooks) { try { fn(event); } catch (e) { logEvent("error", `wallet trade subscriber: ${e.message}`); } }
+        if (!job.quiet) lag.set(w.address, Math.round((lag.get(w.address) ?? now() - t) * 0.6 + (now() - t) * 0.4));
+        if (!job.quiet && now() - t < 30 * MIN) emit?.(event);
+      }
+    }
+    if (hookError) throw hookError;
+    setWalletProcessing(db, job.sig, w.address, "COMPLETE");
+    // This cache is a performance optimization, not the durable success flag.
+    readSigs.add(key);
+    if (readSigs.size > 20000) for (const k of [...readSigs].slice(0, 5000)) readSigs.delete(k);
+  } catch (e) {
+    try { setWalletProcessing(db, job.sig, w.address, "RETRY_REQUIRED", e); }
+    catch (stateError) { logEvent("error", `wallet retry state: ${stateError.message}`); }
+    throw e;
   }
 }
 
