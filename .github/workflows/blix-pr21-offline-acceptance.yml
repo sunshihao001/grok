@@ -1,4 +1,4 @@
-name: Blix PR21 baseline and isolated read-only regression
+name: Blix integrated evidence baseline and read-only regression
 on:
   push:
     branches: [audit/blix-pr21-regression-20261108]
@@ -19,7 +19,7 @@ jobs:
           persist-credentials: false
       - uses: actions/checkout@v4
         with:
-          ref: ff2d22b036fde62d1a2a4bccd88dbbc5e758ae26
+          ref: eade9072d28ac8fc088c8af3a7b58376ac6a6ce5
           path: candidate
           persist-credentials: false
       - uses: actions/setup-node@v4
@@ -36,7 +36,7 @@ jobs:
           set -e
           grep '^not ok ' baseline-wtrack.tap | sed -E 's/^not ok [0-9]+ - //' | sort > baseline-failures.txt || :
           grep '^not ok ' candidate-wtrack.tap | sed -E 's/^not ok [0-9]+ - //' | sort > candidate-failures.txt || :
-          echo "### WTrack original baseline vs PR21 candidate" >> "$GITHUB_STEP_SUMMARY"
+          echo "### WTrack original baseline vs PR23 candidate" >> "$GITHUB_STEP_SUMMARY"
           echo "Baseline exit: $b; candidate exit: $c" >> "$GITHUB_STEP_SUMMARY"
           echo "Baseline failing tests:" >> "$GITHUB_STEP_SUMMARY"
           cat baseline-failures.txt >> "$GITHUB_STEP_SUMMARY"
@@ -48,11 +48,11 @@ jobs:
           grep -E '^# (tests|pass|fail)' candidate-wtrack.tap || :
           echo "Comparing failure names with exact test metadata"
           diff -u baseline-failures.txt candidate-failures.txt
-      - name: PR21 offline economic chain and crash recovery
+      - name: PR23 offline economic chain and crash recovery
         working-directory: candidate
         run: |
-          node --no-warnings --test test/economic-events.test.mjs test/wallet-signature-coverage.test.mjs test/wallet-evidence-chain.test.mjs
-      - name: PR21 security regression independently of legacy suite failures
+          npm run test:evidence
+      - name: PR23 security regression independently of legacy suite failures
         working-directory: candidate
         run: npm run test:security
       - name: Verify default Blix startup is fail-closed without starting it
@@ -69,7 +69,7 @@ jobs:
             exit 1
           fi
           echo "Startup gate correctly refused unsafe full-service launch (exit $result)." >> "$GITHUB_STEP_SUMMARY"
-      - name: Full PR21 regression suite (may retain known WTrack baseline failures)
+      - name: Full PR23 regression suite (may retain known WTrack baseline failures)
         working-directory: candidate
         run: npm test
       - uses: actions/upload-artifact@v4
