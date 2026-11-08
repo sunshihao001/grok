@@ -31,7 +31,7 @@ import { writeBrief, explainCoin, briefProblem } from "./ai.js";
 import { cloneCoin, writeCoin, launchStatus, tickerUse } from "./launchtools.js";
 import { notifySignal, notifyBrief, testNotify, decide, rules, destinations, deliveries } from "./notify.js";
 import * as wallets from "./wallets.js";
-import { transactionEvidence, recipientCandidates, crossMintCandidates, missingEvidence } from "./economic-events.mjs";
+import { transactionEvidence, recipientCandidates, recipientOutcomes, crossMintCandidates, missingEvidence } from "./economic-events.mjs";
 import * as fomo from "./fomo.js";
 import * as fomoBoard from "./fomoboard.js";
 import * as research from "./research.js";
@@ -1387,6 +1387,13 @@ async function handleRequest(req, res) {
       if (res.blixAs || res.blixVisitor) return send(res, 403, { error: "Owner only" });
       if (params.mint && !new RegExp("^" + MINT + "$").test(params.mint)) return send(res, 400, { error: "Invalid mint" });
       return send(res, 200, recipientCandidates(db, evidenceRecipients[1], params.mint || null, Number(params.limit) || 100));
+    }
+    // Owner-only local evidence; does not subscribe to recipients or call RPC.
+    const evidenceFollowup = p.match(/^\/api\/evidence\/recipient-outcomes\/([1-9A-HJ-NP-Za-km-z]{32,44})$/);
+    if (evidenceFollowup && req.method === "GET") {
+      if (res.blixAs || res.blixVisitor) return send(res, 403, { error: "Owner only" });
+      if (params.mint && !new RegExp("^" + MINT + "$").test(params.mint)) return send(res, 400, { error: "Invalid mint" });
+      return send(res, 200, recipientOutcomes(db, evidenceFollowup[1], params.mint || null, Number(params.limit) || 20, Number(params.hours) || 24));
     }
     const evidenceGaps = p.match(/^\/api\/evidence\/missing\/([1-9A-HJ-NP-Za-km-z]{32,44})$/);
     if (evidenceGaps && req.method === "GET") {
