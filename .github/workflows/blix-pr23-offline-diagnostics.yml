@@ -31,6 +31,12 @@ jobs:
       - name: Check synthetic cross-Mint economic chain cases
         continue-on-error: true
         run: node --no-warnings --test test/wallet-evidence-chain.test.mjs
+      - name: Combined evidence suite with default concurrency
+        continue-on-error: true
+        run: npm run test:evidence
+      - name: Combined evidence suite with explicit serial process execution
+        continue-on-error: true
+        run: node --no-warnings --test --test-concurrency=1 test/economic-events.test.mjs test/wallet-evidence-retry.test.mjs test/wallet-signature-coverage.test.mjs test/wallet-evidence-chain.test.mjs
       - name: Independent security suite
         continue-on-error: true
         run: npm run test:security
