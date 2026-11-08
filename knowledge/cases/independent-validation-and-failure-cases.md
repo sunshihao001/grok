@@ -137,3 +137,30 @@ meme-的反证思想可用来检查任何“专业发现”：
 ### 对 ai-d / Blix 的双重意义
 
 对 Blix：将上述认识用于专业调查报告、独立核验、错误归因复盘、旧知识失效修订；保留实际市场样本与具体版本时点。对 ai-d：将“文档写完≠模型学会”“对照得分高≠真实可靠”“想出了很多解释≠真正发现新机制”作为通用AI自检问题。旧qb的校准文档明确说明dry-run只是证明校准流程能走通，不证明真实可靠性提升。**此节是知识研究与来源审查，不等于Blix已经具备可运行的失败追踪系统。**
+
+
+## 2026-11-09｜知识推断关系审计：多项一致不等于独立证据
+
+**原始理论来源**：[Hermes 13 多信号融合/Evidence Chain](https://github.com/sunshihao001/-/blob/main/learning/13.md)（blob `f192a8fb138d6632b74a04e3a0becb9220824a66`），[14 Trade Gate 与 Downgrade](https://github.com/sunshihao001/-/blob/main/learning/14.md)（blob `31f3c483e36a4a33168293c1687082d273d64fae`），[meme-复杂策略成熟度审计](https://github.com/sunshihao001/meme-/blob/main/09_规则与回测/策略成熟度质疑审计与商业诊断_v0.1.md)（blob `ca3771516dcf13f1dbe0a7fd7a4b79d4c57c92ce`），[qb-判断治理](https://github.com/sunshihao001/qb-/blob/main/hermes_harness/15_judgment_governance/README.md)（blob `f17421786c23f46beb89e658e02eff8a4aba8873`）。跨学科方法参照 [NIST对自相关测量不宜使用独立样本公式的说明](https://www.nist.gov/programs-projects/uncertainty-analysis-autocorrelated-measurement-data) 与 [Solana getTransaction 的原始账本结构](https://solana.com/docs/rpc/http/gettransaction)。这些参考并非直接证明链上检测器的统计增益。
+
+### 1. 什么可能在知识迁移时被误当成了“独立证据”？
+
+旧Hermes 13篇把“多个Skill一致”列为置信度的来源。但三个Skill可能全部读取同一个GMGN聚合快照、同一笔Swap或同一组资金边；它们**是同一观察的不同变换**。共识不是新增的独立观察。meme-风险项如 failed_reclaim、bull_trap、death_market 等可能都由同一段价格跌回锚点计算出来；如果给每个名称再累计一次风险分，会产生**同源证据重复加权**。
+
+| 可观察原始事实 | 可能派生的多个名称 | 正确的知识解释 |
+|---|---|---|
+| 同一笔地址A给B的资金候选转移 | 同funding、关联群体、资金接力风险 | 可以形成三个不同问题，但默认仍只是一条未确认的原始边；需要后续真实签名/时间/对价才能证明不同主张 |
+| 同一段价格序列发生下跌后反弹失败 | failed_reclaim、bull_trap、death_market 候选 | 多种模型可能同时描述形态，不等于存在三个独立市场失败原因；同一时窗/锚点的派生依赖应能追溯 |
+| 同一供应商的holder_count和top10占比 | 多钱包分散、筹码集中、Sybil风险 | 分母、Token Account/Owner、公用池或CEX分布可能共同影响全部指标；须找独立的链上/历史反证 |
+
+原教材强调支持、反证、missing和downgrade同时记录，这是值得保留的知识；需要补充 **claim → derived field → primitive observation/provider → sampling window** 的依赖关系，避免“名称多=证据强”。对于两个真正独立的新观察，支持关系可以加强，但必须先弄清它们是否共享原始来源、共因或误差。
+
+### 2. 判定动作与市场解释的损失函数不同
+
+原 Hermes 14篇为研究/纸面执行分出 BLOCK、WATCH、PAPER_ONLY、NEED_MORE_DATA。它解释了**约束行动**的重要性；但若把“交易不宜继续”直接复制为“研究不宜继续”，便会遗漏风险高却研究价值高的市场样本。只读研究可用 INVESTIGATE/NEED_EVIDENCE/UNDECIDABLE 等语义描述进度（仅文字示范，**不新建枚举/API**），而不能套用历史交易Gate给市场身份判定。
+
+**过度肯定和过度保守必须一起检查**：四个同源候选组的跨组桥接未获链上时序确认，不能称已确认资金接力；但因此完全不调查桥接地址，也会漏掉一个有信息价值的线索。失败记录应同时覆盖误报、漏报、过度故事化、过度拒绝、历史信息泄漏、来源重复加权。
+
+### 3. 如何验证该知识是否真的影响 Blix？
+
+以冻结的旧qb- 4TKY 资料做相同任务的对照：一组仅看到同源组和风险标签，另一组加上原始证据依赖与Hermes/meme-反证要求。独立验收应查：能否发现跨组桥接；能否指出61条边未给金额时间；会否把同一数据变换当不同证据；是否避免把“全退出”当已见Swap；能否提出下一项高价值只读补查。不能因为结果文字更丰富就判定AI变强。**本轮是来源审查与知识修订，没有执行模型A/B、链上签名复算或Blix运行时验收。**
