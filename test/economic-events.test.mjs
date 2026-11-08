@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { DatabaseSync } from 'node:sqlite';
-import { decodeEvidence, persistEvidence, recipientCandidates, crossMintCandidates, transactionEvidence, missingEvidence } from '../server/economic-events.mjs';
+import { decodeEvidence, persistEvidence, recipientCandidates, crossMintCandidates, transactionEvidence, missingEvidence, setWalletProcessing, retryableWalletProcessing } from '../server/economic-events.mjs';
 const A='A_OWNER', B='B_OWNER', C='C_OWNER', POOL='POOL_OWNER', M='MINT_M', N='MINT_N';
 const TOKEN='TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA', SYSTEM='11111111111111111111111111111111';
 const bal=(accountIndex, owner, mint, amount)=>({accountIndex, owner, mint, uiTokenAmount:{amount:String(amount),decimals:6}});
@@ -32,4 +32,29 @@ test('missing evidence identifies legacy trade signatures and clears on archived
  const d=setup();d.prepare('INSERT INTO wallet_trades VALUES(?,?,?,?,?,?)').run('legacy_sig',A,M,'buy',1000_000,2);
  assert.deepEqual(missingEvidence(d,A).rows.map(x=>x.sig),['legacy_sig']);
  persistEvidence(d,'legacy_sig',mixed());assert.equal(missingEvidence(d,A).rows.length,0);d.close();
+});
+
+test('retry selection resumes captured failed wallet work only when watched and due', () => {
+ const d=setup(),s='resume-sig';
+ d.exec('CREATE TABLE wallets(address TEXT PRIMARY KEY, watching INTEGER)');
+ d.prepare('INSERT INTO wallets VALUES (?,1)').run(A);
+ persistEvidence(d,s,mixed());
+ setWalletProcessing(d,s,A,'CAPTURED');
+ setWalletProcessing(d,s,A,'RETRY_REQUIRED',new Error('mock consumer failed'));
+ assert.equal(retryableWalletProcessing(d,{beforeMs:Date.now()+1000}).length,1);
+ assert.equal(retryableWalletProcessing(d,{beforeMs:0}).length,0);
+ d.prepare('UPDATE wallets SET watching=0 WHERE address=?').run(A);
+ assert.equal(retryableWalletProcessing(d,{beforeMs:Date.now()+1000}).length,0);
+ d.close();
+});
+test('completed and exhausted captures do not loop forever', () => {
+ const d=setup(),s='exhausted-sig';
+ d.exec('CREATE TABLE wallets(address TEXT PRIMARY KEY, watching INTEGER)');
+ d.prepare('INSERT INTO wallets VALUES (?,1)').run(A);
+ persistEvidence(d,s,mixed());
+ for(let i=0;i<5;i++) {setWalletProcessing(d,s,A,'CAPTURED');setWalletProcessing(d,s,A,'RETRY_REQUIRED','fixture failure');}
+ assert.equal(retryableWalletProcessing(d,{beforeMs:Date.now()+1000,maxAttempts:5}).length,0);
+ setWalletProcessing(d,s,A,'COMPLETE');
+ assert.equal(retryableWalletProcessing(d,{beforeMs:Date.now()+1000,maxAttempts:20}).length,0);
+ d.close();
 });
