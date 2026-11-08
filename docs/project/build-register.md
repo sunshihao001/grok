@@ -1,0 +1,64 @@
+# Blix 滚动建设台账｜继承、修复、研究与验收
+
+> 2026-11-08 初版。**这不是新的产品架构或专家体系**，仅作为当前 `blix` 主体的一个持续更新的工程事实清单；以后说“按照建设来”时，先更新状态和证据，再按信息价值/业务价值选下一项工作。旧知识和历史参考原位保留，不机械挪入本表。
+>
+> 主体：`sunshihao001/grok` 的 `blix`。本表目前随 [Draft PR #18](https://github.com/sunshihao001/grok/pull/18) 保存在功能分支，**未合并、未部署**。PR基线 `3bc1f7d4`；本表的状态不能代替对最新提交的重新核验。
+
+## 状态约定（防止“计划=做完”）
+
+- **已验证/限定范围**：测试或源码证明具体事项，须写明环境；不能推导生产已运行。
+- **待修复**：有具体代码路径与可构造的反例，尚无已验收修复。
+- **待验证**：可能的重要缺口，仍需要离线反例、真实RPC签名、运行日志或成本测量。
+- **阻断**：会影响合并/安全部署，优先说明阻断条件。
+- **保留**：已有可复用成果，不因本轮关注其他点而删除或重新开发。
+
+## 业务链与滚动事项
+
+| ID / 重要性 | 阶段与问题 | 当前事实 / 状态 | 下一项可核查动作（通过条件） | 已知位置或复用 |
+|---|---|---|---|---|
+| B01 / P0 | 原始交易证据保留与重放 | **已验证/限定范围**：PR #18 以完整 `jsonParsed` RPC 对象归档，外层/CPI逐位置索引；13项新增CI通过；不代表全链覆盖 | 核验真实v0/ALT、Token-2022、新建/关闭账户与多CPI，记录所有不可解码项目 | `server/economic-events.mjs`、`test/economic-events.test.mjs`；Solana官方交易规范 |
+| B02 / P0 | 钱包读签名的**处理成功水位** | **待修复**：`wallets.readTx` 在钩子/下游落账前执行 `readSigs.add(key)`；下游抛错时重试可能被提早的“已读”标记跳过（源码可推导，尚未单测复现） | 构造持久化成功而下游注入失败的离线反例；区分 `captured`、`processed`、`needs_retry`，在重试后补全且无重复报警 | `server/wallets.js:158-185`；Blix journal已有按事件位置去重 |
+| B03 / P0 | **已知缺口≠历史完整**，持续回填/断点 | **待修复**：`missingEvidence` 只比较现有 `wallet_trades` 与 `econ_transactions`；漏掉根本没识别成 trade 的签名。内存集合和部分分页不等于永久覆盖证据 | 在单个钱包上登记 `[起止slot/签名边界、游标、总数、成功/失败、完整/截断原因]`；断流、429、重启后从同一锚恢复；不能把 `CAP_REACHED` 标 `COMPLETE` | 优先复用 Blix `wallets.pageSignatures`，PumpTrace `BackfillManager` 的可续传任务状态 |
+| B04 / P0 | Swap + 转账、一个签名多个事件 | **已验证/限定范围 + 待修复**：新层能存多个原始指令；旧 `wallet_trades/wt_transfers` 仍按签名+钱包+Mint折叠；`wtrack.fromTx` 在命中swap时跳过转账 | 以买入1000转出400、同签名转给B/C、多池CPI作为回归；钱包摘要/监控不再把余额净变化说成实际买单数量 | `solana.parseSwaps`、`wtrack.fromTx`、`journal.tradeKey` |
+| B05 / P0 | 接收方是钱包、池还是公共设施 | **待验证**：`recipientCandidates` 返回能够识别Owner的Token指令边；AMM Vault/池参与者也可能匹配；当前不能无条件称“接力钱包” | 加入已知池+普通接收方对照及来源证据。原始边保留，按 `pool/infrastructure/unknown/wallet-candidate` 明确分类；不得由同slot/fee payer推断共同控制 | `bubblemap` 池标签、`coin` 交易对、PumpTrace wallet intelligence |
+| B06 / P1 | B卖完后仍可发现、按需跟进 | **待验证**：当前Holder快照不能代表历史接收方；新候选查询可见历史边，但无自动历史扩展 | 合成/真实事件：B当前余额0，仍能从历史找到A→B；对候选启动**显式有预算的只读历史调查**，不得无界递归或擅自监控所有钱包 | Million Wallet→Mint→Wallet 双向扩展，Blix现有Wallet页面 |
+| B07 / P1 | 卖M→转SOL→买N 的资本解释 | **已验证/限定范围**：PR #18 合成时序能输出候选，不能证明同批SOL/同一经济控制 | 做时间、数量、手续费、账户前后余额约束，排除公共交易所/路由；用反例证伪“同源资金”；无法排除则标 UNKNOWN | `crossMintCandidates`；Why-Solana 对照/负例、Million 资金边 |
+| B08 / P1 | Token Account/Owner/Authority等角色 | **待验证**：新层仅根据RPC pre/post token balance owner映射；本交易中新建/关闭、Owner变化、无法识别的CPI仍可能为 UNKNOWN | 使用RPC真值和合成反例：新建/关闭Token账户、Token-2022、ALT/v0；区分`accountIndex`、地址与Owner；冲突不强行回填 | 官方 Solana JSON-structures、transaction-introspection；已登记的M01适配器 |
+| B09 / P1 | 全量RPC归档成本和故障恢复 | **阻断生产**：`econ_transactions.rpc_json` 无保留期/空间预算，表只增不减；没有持久化的批次级覆盖检查点 | 测量100/1000/10000交易空间与写延迟，设置明确上限、归档和恢复策略；断电/数据库锁后验收原始证据与游标一致性 | PumpTrace 原文分仓+持久任务；Blix `journal` 限期与gap/repair |
+| B10 / P1 | 错误资金关联：Funder/fee payer | **待修复**：Bubble Map历史过长返回空并长期缓存；在找不到直接转账时退化为fee payer = funder | 3页截断/代付手续费离线反例；显示 `HISTORY_TRUNCATED` 和 `FEE_PAYER_ONLY`，绝不自动生成 `DIRECT_FUNDER` | `server/bubblemap.js:109-151`；既有 `mint-cross-module-evidence-audit-v0.2.md` R1/R2 |
+| B11 / P1 | 同一Mint持仓与供应量口径 | **待修复**：`holders.js` 可用动态供应量；`coin.js` 多处1e9；链上快照 `partial:false` 不等于历史完整 | 5亿供应、1亿持仓的20%测试；各数据表都回传 `source/slot/observedAt/denominator/historyCoverage` | 既有V0.2审查R3/R4，不删历史结论 |
+| B12 / P1 | 发现与真实市场样本 | **保留/待验收**：Blix已有Mint发现、Pool和发行生命周期；历史真实Mint的3份供应商快照存在，但没有真实交易签名序列 | 对 `EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump` 取**安全隔离的历史签名**，检验Pool库存变化是Swap还是LP、是否确有A→B | `single-mint-audit.md`、旧PR #16；优先复用现成采集 |
+| B13 / P1 | AI/产品报告把事实连起来 | **待实施**：现有 `mint-facts` 只从少数本地API取信息，新证据未进报告、MCP与UI | 一个Mint完整报告展示事件路径、签名/位置、已知/未知、覆盖缺口与竞争解释；不将示例假设写成“内幕已确认” | `server/intelligence/mint-facts.mjs`、旧Hermes/qb-/meme- |
+| B14 / P0合并门槛 | 原有CI测试不一致 | **阻断**：PR #18的GitHub Actions 420项中412过、8失败；新13项全部通过。8项与引入新测试前一致，包括旧状态断言及7项WTrack测试 | 对比`blix`同基线确认8项归属；将修复放独立且最小化的工作项，避免为清绿灯伪改断言 | [PR #18测试运行](https://github.com/sunshihao001/grok/actions/runs/42419470824)、[Audit通过](https://github.com/sunshihao001/grok/actions/runs/42419470857) |
+| B15 / P0安全门槛 | 运行/交易/付费隔离 | **阻断**：本轮只静态、离线测试和GitHub代码写入；原Blix仍有交易、签名、费用路径 | 单独验收只读隔离、配置/密钥、请求成本和监控后，再考虑真实Mint主网只读回放、云端上线 | `docs/project/read-only-safety.md`；绝不把PR通过等同生产可启动 |
+
+## 2026-11-08｜继承检查与下一轮综合研究（第一轮已完成）
+
+**核查输入**：PR #18源码/13项CI结果、旧 `mint-cross-module-evidence-audit-v0.2.md` 和 `single-mint-audit.md`；Blix `wallets.js/wtrack.js/bubblemap.js/solana.js`；成熟参考工程 PumpTrace 的 `src/modules/backfill-manager.mjs`、Million 的 `apps/api/src/crawler/crawler.service.ts`，Solana 官方 `getTransaction`/JSON结构及 transaction-introspection。
+
+**发生的专业认识变化**：
+
+1. **“保留原文”与“历史采集完整”分属两个独立验收坐标**。PR #18确已保存被获取的 `jsonParsed` 响应对象，但如果根本没发现某笔签名，`missingEvidence` 就无法列出它。原来“欠缺补查”要升级为“独立的签名历史覆盖登记”，不能只比较Trade表的有无。
+2. **连续性需要三层状态**：`signature discovered` → `raw transaction captured` → `economic events indexed/consumed`。`readSigs` 的内存标志不能同时代表这三层成功。PumpTrace的 `QUEUED/RUNNING/RATE_LIMITED/CAP_REACHED/COMPLETE/ERROR` +游标持久化、重启恢复，证明成熟成品已有更稳妥方法。
+3. **不宜直接复制一套PumpTrace/Million后端**。Blix自身已有 `pageSignatures` 分页、Journal签名事件去重与gap/repair；最小路线是补持久水位和失败重试语义。Million的**单次信用额度约束、停机后状态可见、垃圾钱包过滤**可用作候选扩展约束。
+4. **不要夸大Solana v0/ALT障碍**。官方规范确认 `jsonParsed` 的 `accountKeys` 可包括地址表加载地址；当前 `keyOf` 可读取其pubkey。不过未经实测的Token账户新建/关闭、CPI层级/stackHeight、部分解码指令仍然需要独立验收。若要解析更完整的原始线格式，优先评估官方 `@solana/transaction-introspection`，而不是臆造全套解码器。
+5. **产品价值检验必须贯穿三场景**：发现Mint后追踪所有签名是否有覆盖水位；单Mint以指令确定Token的真实接收方并辨别池；跨Mint仅在收集到卖出、SOL转移和后续买入三种独立事实时给出可证伪候选，不将时序网络等同经济主体。
+
+### AI选择的下一件实施工作
+
+**优先 B02 + B03（一个连续目标）**：在已有Blix wallet reader上做**处理状态/签名覆盖水位与恢复**，而不是先做美观的跨Mint关系图。
+
+- 先造确定性失败：RPC原始交易保存成功，后续钩子/摘要写入故障；重试不得因 `readSigs` 误判完整，也不得重复记账。另造一页历史缺口：`wallet_trades` 中没有某签名，但签名API实际返回它；系统须登记未捕获，不可报“完整”。
+- 复用原 `wallets.pageSignatures` 和 `journal` 机制，按信息价值借鉴PumpTrace的有限任务和游标；优先**少量增补**，不要重建另一个采集服务。
+- 停止条件：两条失败先能复现，修复后离线测试可证实（多钱包相同签名、429/超时、重启、被截断、未完全完成四类反例），且不启动交易或不明付费接口。若在既有DB模型下不可实现，才追加最少的状态表。
+- 本轮**只完成了源码核对与方案选择，尚未宣称上述失败注入测试已运行或修复通过**。
+
+**本表维护原则**：只在同一表里原位改变条目的状态、证据和下一动作；重要反例或外部新证据改变排序时允许提前跳转。完结的条目保留链接和条件，不删除；每次最多执行当前最有价值的一两项，其他问题留在台账内自动继承。
+
+## 原始出处
+
+- Blix：`server/economic-events.mjs`、`server/wallets.js`、`server/wtrack.js`、`server/solana.js`、`server/bubblemap.js`，以及本仓库 `docs/project` 的既有审查文件。
+- [PumpTrace backfill-manager](https://github.com/AntC215/Pumptrace/blob/main/src/modules/backfill-manager.mjs)
+- [Million crawler](https://github.com/Kelows/million/blob/main/apps/api/src/crawler/crawler.service.ts)
+- [Solana JSON 结构](https://solana.com/docs/rpc/json-structures)
+- [Solana Transaction Introspection](https://solana.com/docs/core/transactions/transaction-introspection)
