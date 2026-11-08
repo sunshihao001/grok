@@ -544,6 +544,32 @@
       ],
       "warning": "Semantic transformation and document commits do not prove full knowledge acquisition or operational capabilities.",
       "live_validation": "NOT_RUN"
+    },
+    {
+      "date": "2026-11-09",
+      "kind": "OLD_KNOWLEDGE_RELATIONS_SEMANTIC_RECOVERY_20261109",
+      "source_read_items": 16,
+      "changes": [
+        "knowledge/mechanisms/wallet-roles-and-inventory.md",
+        "knowledge/cases/independent-validation-and-failure-cases.md",
+        "knowledge/mechanisms/market-price-mechanism-research.md",
+        "ai-d:evaluation/first-cross-domain-tests.md"
+      ],
+      "insights": [
+        "role/funding/Sybil-wash-coordination are different propositions connected by evidence",
+        "multiple derived indicators from one source cannot be counted as independent observations",
+        "price stage labels require time order and observable-at-time discipline",
+        "qb judgment governance files include skeleton benchmark, not independently verified performance"
+      ],
+      "not_done": [
+        "full legacy text semantic review",
+        "real Solana signatures reconstruction",
+        "Blix runtime domain knowledge retrieval",
+        "controlled multi-model experiment"
+      ],
+      "research_value_anchor": "Continue only when tracing original source changes a question, correction, falsification, or product result. Do not count migrated files or length as progress.",
+      "status": "SOURCE_READ_STATIC_CROSS_CHECK_ONLY",
+      "next": "Compare fixed historical QB Mint plus Blix existing API outputs with on-demand original knowledge in an authorized read-only, safely controlled setting; first prove source lineage and event coverage."
     }
   ],
   "pure_theory_transformations": [
@@ -618,6 +644,120 @@
       "target": "knowledge/cases/independent-validation-and-failure-cases.md",
       "finding": "Documents not equivalent to implemented or executed functionality.",
       "status": "SOURCE_READ_SEMANTICALLY_TRANSFORMED_NOT_RUNTIME_VALIDATED"
+    }
+  ],
+  "source_knowledge_relation_checks": [
+    {
+      "repo": "sunshihao001/-",
+      "source": "learning/10.md",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Wallet roles as time-indexed behavior, not real-world identity.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/-",
+      "source": "learning/11.md",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Funding similarity as edge candidate with alternative public service explanations.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/-",
+      "source": "learning/12.md",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Sybil, wash trading, coordinated behavior are distinct claims.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/-",
+      "source": "learning/13.md",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Multi-skill agreement may draw from identical upstream observations.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/-",
+      "source": "learning/14.md",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Trading gate is action constraint, not independent research eligibility.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/meme-",
+      "source": "03_语义概念/核心术语表_v0.1.md",
+      "depth": "SELECTED_SOURCE_SECTIONS_READ",
+      "importance": "Terms as context-dependent sequence and failure criteria.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/meme-",
+      "source": "06_资料吸收/资料吸收_Wyckoff_Spring_Test_LPS_v0.1.md",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Spring/SOS/LPS temporal context, not named actor identification.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/meme-",
+      "source": "04_风险管理/结构风险评分模型_v0.1.md",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Multiple scores may derive from same market time series.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/meme-",
+      "source": "09_规则与回测/策略成熟度质疑审计与商业诊断_v0.1.md",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Counterexamples and marginal gain vs simple baseline, historical numeric ratings not proof.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/qb-",
+      "source": "hermes_harness/15_judgment_governance/templates/judgment_governance_state_template.json",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Judgment realness, evidence, independence, cost and memory review are distinct.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/qb-",
+      "source": "hermes_harness/15_judgment_governance/benchmark_cases/fake_closure_dry_run_as_real_completion.json",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Concrete fake-closure counterexample.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/qb-",
+      "source": "hermes_harness/21_judgment_benchmark/README.md",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Benchmark directory is self-described skeleton.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/qb-",
+      "source": "hermes_harness/21_judgment_benchmark/benchmark_cases/bench_v2_001.json",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Expected result is fixture, not executed benchmark.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/qb-",
+      "source": "hermes_harness/21_judgment_benchmark/benchmark_cases/bench_v2_003.json",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Process artifact is expected case, not run evidence.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/qb-",
+      "source": "hermes_harness/16_reliability_calibration/templates/reliability_calibration_state_template.json",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Calibration state schema initial false does not report completed run.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/qb-",
+      "source": "hermes_harness/22_anti_self_deception/dry_run_vs_real_run_audit.md",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Dry-run not real-world reliability.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
     }
   ]
 }
