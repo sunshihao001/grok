@@ -31,3 +31,15 @@
 - 在经安全隔离的环境中对真实签名重放：多 CPI、Token-2022、v1/ALT、Token Account 新建/关闭、Swap+Transfer、LP 事件。
 - 检查完成持仓清仓的 B 依然能否从历史真实转账中被发现，而不是依赖当前 Holder。
 - 对跨 Mint 资金与公共服务节点进行反证；有必要时复用 PumpTrace 可续传游标与 Million 的候选钱包发现，不重造 UI。
+
+## V0.2 安全的经济证据加固（2026-11-08）
+**状态：FIX_BRANCH_ONLY / TESTS_ADDED_NOT_YET_CI_VERIFIED / NOT_LIVE.**
+- 使用 Solana 官方 Token-2022 Program ID，且同步修复 wtrack 的旧错误常量。
+- `persistEvidence` 检查 RPC 第一笔签名与输入签名一致；冲突拒绝写入。
+- 交易索引持久化 Owner 冲突字段；同一 Token Account 的前后余额中，部分缺失的 Owner 不再等同于确实冲突。明确冲突的转账不得生成接收者候选。
+- 在 `econ_transactions` 中保留 `capture_source` 和请求 `commitment`；这些只是采集元数据，不能证明整段交易历史完整。写入路径支持旧表增量迁移。
+- `wallets.readTx` 在完成保存与原有钱包摘要之后标记已处理，避免后续步骤错误时提前屏蔽重试。
+- 新增 owner-only `GET /api/evidence/recipient-outcomes/:wallet?mint=...&hours=24`，只在已经捕获的证据和本地 Wallet Trades 中匹配接收地址后续卖出及跨 Mint 时间候选；**不会自动订阅新钱包、发起 RPC 或签名**，也不能证明卖掉的是刚转入的筹码。
+- 证据表缺失时 GET 返回未初始化标记，不再触发 SQLite CREATE/MIGRATE；当前旧表结构需要写入路径迁移后才能进行新索引查询。
+- 追加签名一致性、Token-2022、Owner 缺失/冲突、Mint 冲突、接收者后续行为和纯读取等离线测试。
+**仍未解决：** 官方真实签名归档验收、Solana CPI 更深层语义、Token-2022 扩展净到账、真正的经济对价/库存守恒、受控的历史补档、自动新钱包监控、原主服务只读安全隔离、UI/MCP 的完整业务整合。该分支不得直接认为生产可用。
