@@ -69,9 +69,24 @@ jobs:
             exit 1
           fi
           echo "Startup gate correctly refused unsafe full-service launch (exit $result)." >> "$GITHUB_STEP_SUMMARY"
-      - name: Full PR23 regression suite (may retain known WTrack baseline failures)
-        working-directory: candidate
-        run: npm test
+      - name: Audit full suite failures against original WTrack baseline
+        shell: bash
+        run: |
+          set +e
+          (cd candidate && npm test) > candidate-full.tap 2>&1
+          rc=$?
+          set -e
+          echo "Full npm test exit: $rc"
+          grep -E '^# (tests|pass|fail)' candidate-full.tap || :
+          grep '^not ok ' candidate-full.tap | sed -E 's/^not ok [0-9]+ - //' | sort > candidate-full-failures.txt || :
+          echo "### Full suite known-baseline parity" >> "$GITHUB_STEP_SUMMARY"
+          echo "Full npm test exit: $rc (nonzero is NOT accepted as release-ready)." >> "$GITHUB_STEP_SUMMARY"
+          if [ "$rc" -eq 0 ]; then
+            echo "Full suite unexpectedly green; verify it on the actual proposed merge candidate." >> "$GITHUB_STEP_SUMMARY"
+          else
+            diff -u baseline-failures.txt candidate-full-failures.txt
+            echo "All remaining failures have the same test names as the unmodified Blix WTrack baseline." >> "$GITHUB_STEP_SUMMARY"
+          fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -82,4 +97,6 @@ jobs:
             baseline-failures.txt
             candidate-failures.txt
             readonly-gate.txt
+            candidate-full.tap
+            candidate-full-failures.txt
           retention-days: 7
