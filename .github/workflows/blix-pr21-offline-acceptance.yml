@@ -113,7 +113,8 @@ jobs:
         shell: bash
         run: |
           set +e
-          (cd candidate && npm test) > candidate-full.tap 2>&1
+          testcmd=$(cd candidate && node -p 'require("./package.json").scripts.test.replace("node --no-warnings --test", "node --no-warnings --test --test-reporter=tap")')
+          (cd candidate && bash -c "$testcmd") > candidate-full.tap 2>&1
           rc=$?
           set -e
           echo "Full npm test exit: $rc"
