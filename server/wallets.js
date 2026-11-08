@@ -5,6 +5,7 @@ import { settings } from "./settings.js";
 import { rpcStreamAllowed, noteRpcBytes, keyUrls, keyFree, heliusFetch } from './heliuskeys.js';
 import * as sol from "./solana.js";
 import { persistEvidence, transactionEvidence, walletProcessing, setWalletProcessing, retryableWalletProcessing } from "./economic-events.mjs";
+import { checkpointWalletPage, pendingWalletSignatures } from "./wallet-signature-coverage.mjs";
 import * as src from "./sources.js";
 import { handleOf } from "./fomo.js";
 import { exitState, onCurve } from "./quality.js";
@@ -270,12 +271,22 @@ export async function pageSignatures(fetch, { first, lastSig, pages }) {
 }
 
 async function pollOne(w) {
+  // First resume durable *discovered* jobs (the reader has a separate durable
+  // CAPTURED/RETRY_REQUIRED/COMPLETE state). Recovery also survives RPC failure.
+  enqueue(w.address, pendingWalletSignatures(db, w.address).map(j => ({
+    sig: j.sig, t: j.t || now(), quiet: Boolean(j.quiet)
+  })));
   const first = !w.backfilled;
-  const { all, reached } = await pageSignatures((o) => sol.signatures(w.address, o), { first, lastSig: w.last_sig, pages: first ? 1 : settings.rpcUrl ? 8 : 3 });
-  db.prepare("UPDATE wallets SET last_poll = ?, last_sig = COALESCE(?, last_sig), backfilled = 1 WHERE address = ?").run(now(), all[0]?.signature || null, w.address);
-  // More activity than we could page through since the last look: the older part is a known gap.
+  const { all, reached } = await pageSignatures((o) => sol.signatures(w.address, o),
+    { first, lastSig: w.last_sig, pages: first ? 1 : settings.rpcUrl ? 8 : 3 });
+  // Persist ALL returned signatures before advancing the next poll's anchor.
+  // Both operations either commit or roll back together.
+  checkpointWalletPage(db, { wallet: w.address, rows: all,
+    priorAnchor: w.last_sig || null, first, reached, observedAt: now() });
   if (!reached) miss(w.address, 1, `more than ${all.length} transactions since the last check; the oldest were skipped`);
-  enqueue(w.address, all.filter((s) => !s.err).map((s) => ({ sig: s.signature, t: (s.blockTime || 0) * 1000 || now(), quiet: first })));
+  enqueue(w.address, all.filter(s => !s.err).map(s => ({
+    sig: s.signature, t: (s.blockTime || 0) * 1000 || now(), quiet: first
+  })));
 }
 
 // ---------- live streams ----------
