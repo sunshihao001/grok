@@ -46,6 +46,6 @@ test('core modules intentionally extended by this branch remain present and reta
   }
   assert.match(fs.readFileSync(fileAt('server/server.js'),'utf8'),/\/api\/discover/);
   assert.match(fs.readFileSync(fileAt('server/server.js'),'utf8'),/\/api\/wtrack/);
-  assert.match(fs.readFileSync(fileAt('server/server.js'),'utf8'),/\/api\/evidence/);
+  assert.match(fs.readFileSync(fileAt('server/server.js'),'utf8'),/evidenceTx\s*=\s*p\.match/);
   // Preserving trading code does not authorize loading or invoking it.
 });
