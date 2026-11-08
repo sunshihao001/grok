@@ -195,7 +195,9 @@ export function recipientOutcomes(db, sender, mint = null, limit = 20, maxHours 
     const observedSells = sells.all(r.to_owner, r.mint, transferAt, transferAt + windowMs);
     const cross = crossMintCandidates(db, r.to_owner, Math.ceil(windowMs / 3600_000), 25).rows
       .filter(x => x.sold_mint === r.mint && x.sold_at >= transferAt && x.sold_at <= transferAt + windowMs);
-    return { ...r, followupStatus: 'LOCAL_OBSERVATIONS_ONLY', observedSells, crossMintCandidates: cross };
+    return { ...r, followupStatus: 'LOCAL_OBSERVATIONS_ONLY',
+      sellObservation: observedSells.length ? 'LOCAL_SELL_SUMMARY_OBSERVED' : 'NOT_OBSERVED_IN_CAPTURED_WINDOW',
+      observedSells, crossMintCandidates: cross };
   });
   return { ...direct, windowMs, observation: 'READ_ONLY_CAPTURED_EVIDENCE_AND_WALLET_TRADE_SUMMARIES',
     interpretation: 'Follow-up sells and cross-Mint paths are candidates, NOT transferred-inventory provenance or common control',
