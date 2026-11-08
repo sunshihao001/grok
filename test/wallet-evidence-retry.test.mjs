@@ -8,7 +8,7 @@ process.env.RADAR_DATA = fs.mkdtempSync(path.join(os.tmpdir(), "blix-economic-wa
 process.env.BLIX_MARKET_FEEDS = "0";
 const wallets = await import("../server/wallets.js");
 const { db } = await import("../server/db.js");
-const { walletProcessing, transactionEvidence } = await import("../server/economic-events.mjs");
+const { walletProcessing, transactionEvidence, retryableWalletProcessing } = await import("../server/economic-events.mjs");
 const A = "4p7SeR6361WJ4T4icgsYTnzAUzfA5NwM4CwYD9kMBjuK";
 const B = "BTmCme13XXrD3VLxXFChL9VnmicJ5PjkVUpAsjrooEYh";
 const M = "GTNHLKQWKZHaHpd6PjfMgfFZUDEuCviwXMwYbCcepump";
@@ -41,6 +41,7 @@ test("pre-existing live feed wallet_trades never replaces raw RPC capture", asyn
 
 test("failed downstream hook is RETRY_REQUIRED and replay uses persisted RPC without an HTTP call", async () => {
   const sig = "retry-hook", original = fixture(sig);
+  wallets.addWallet(A, "", "you");
   let count = 0;
   wallets.onTx((w, tx, j) => {
     if (j.sig !== sig) return;
@@ -55,12 +56,14 @@ test("failed downstream hook is RETRY_REQUIRED and replay uses persisted RPC wit
   assert.equal(failed.attempts,1);
   assert.match(failed.last_error,/injected/);
   assert.deepEqual(transactionEvidence(db,sig).rpc,original);
+  assert.equal(retryableWalletProcessing(db,{beforeMs:Date.now()+1000}).some(x=>x.sig===sig),true);
   // No 'fetched' argument: RPC is deliberately unavailable in this offline test.
   // A successful second call necessarily uses the local captured evidence.
   await wallets.readTx(scan(A),job(sig));
   assert.equal(count,2);
   assert.equal(walletProcessing(db,sig,A).state,"COMPLETE");
   assert.equal(walletProcessing(db,sig,A).attempts,2);
+  assert.equal(retryableWalletProcessing(db,{beforeMs:Date.now()+1000}).some(x=>x.sig===sig),false);
   assert.equal(db.prepare("SELECT COUNT(*) n FROM econ_transactions WHERE sig=?").get(sig).n,1);
   await wallets.readTx(scan(A),job(sig));
   assert.equal(count,2,"completed signature is not consumed twice");
