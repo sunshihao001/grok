@@ -37,6 +37,12 @@ jobs:
       - name: Combined evidence suite with explicit serial process execution
         continue-on-error: true
         run: node --no-warnings --test --test-concurrency=1 test/economic-events.test.mjs test/wallet-evidence-retry.test.mjs test/wallet-signature-coverage.test.mjs test/wallet-evidence-chain.test.mjs
+      - name: Full regression suite before an evidence rerun
+        continue-on-error: true
+        run: npm test
+      - name: Evidence suite rerun after full regression
+        continue-on-error: true
+        run: npm run test:evidence
       - name: Independent security suite
         continue-on-error: true
         run: npm run test:security
