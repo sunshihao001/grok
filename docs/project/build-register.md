@@ -127,6 +127,9 @@
 - 报告明确显示 `knownSenderMintCaptures`、本地签名窗口、`lifetimeHistoryComplete:false`、`sellObservation` 与 UNKNOWN；卖出与跨币关系只为候选，不能证明转入库存卖出、同控或资本来源。
 - `test/offline-mint-report.test.mjs` 对一个带 RPC 原文索引的合成 SQLite 验证 A→B Token 转移、B 后续卖出、未知覆盖以及**文件 SHA256 执行前后不变**；另测空数据库与缺失数据库 fail-closed。**这是隔离数据回放，不是主网实测。**
 
+
+**外部站点 Uptime 另行登记（非 PR 回归）**：最新集成分支的 `tests` 与 `audit` GitHub Actions 为成功，但同一提交还出现名为 `uptime` 的失败任务。已检查 `.github/workflows/uptime.yml`：它通过 `curl` 检查 `https://blixvip.com/` 和 `https://origin.blixvip.com/img/...`，并可能用单独配置的 webhook 提醒，**不是本 PR 的 Node24 代码回归，也不是离线安全验证**。其网站/隧道为何不可达当前仍 `UNKNOWN`；应将其标记 `EXTERNAL_AVAILABILITY_FAIL / NOT_TRIAGED`，不把产品线下线等同于代码新回归，也绝不把 `tests+audit` 通过说成所有 Actions 都绿。不为了绿灯假改健康检查或未经授权启动原服务器。
+
 **代码与真实验收**：集成候选 `3d2ed0e8bf5bfa2e341fc4dab2d1b0bb779909a2`；[Node24 全量、安全、经济证据 CI 全通过](https://github.com/sunshihao001/grok/actions/runs/42527683586)；[独立审计通过](https://github.com/sunshihao001/grok/actions/runs/42527683587)。不虚报实际链上覆盖、正式服务或 Grok Bot 云端已运行。原有 PR #23 仍是 Draft，且直接基于 PR #22 而非 `blix`；本次**没有合并**。
 
 **下一轮只保留真正阻断运行的缺口：** 对一批带来源、slot、签名的真实公开 `getTransaction(jsonParsed)` 归档在隔离环境做同报告回放；检查 Token-2022、同笔 Swap+Transfer、多池、Owner缺失、历史截断及覆盖说明。随后评估独立只读进程和现有 UI 的最小对接，而不是直接把原服务安全门禁打开。若真实 RPC 原文获取受供应商额度/历史可用性限制，记录其为 `UNKNOWN/NOT_AVAILABLE`，不自动拓展付费数据源。
