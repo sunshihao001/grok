@@ -24,7 +24,7 @@ Axiom / GMGN-style Pulse, live pump.fun feed, holder ledgers, real Jupiter quote
 
 ---
 
-> **本仓库 `blix` 分支已作为个人 Solana Meme 市场智能系统的当前建设主体。** [查看项目目标、知识和复用导航](docs/project/README.md) · [AI 工作入口](AGENTS.md)。以下保留 Blix 原产品说明；当前只读运行隔离及深度资金调查尚未完成验收。
+> **本分支的定位（2026-11-09）：完整保留原版 Blix 产品，在成熟成品上进行专业功能二次开发。** Pulse、Discover、K线、Coin、Holder、Wallet Tracker、AI研究、纸面与真实交易、账户/部署等原版能力都是保留对象，不是准备废弃的旧功能。新增 Solana Meme 经济证据、单Mint与跨Mint调查、专业知识能力按现有产品路线逐步扩展，禁止未经审查删减、重写或默认关闭原版功能。当前研究/测试环境为避免未经授权签名、交易、自动领取和模型费用，仍限制原服务启动；**执行隔离不代表功能删除或永久转型为只读产品**。[项目定位与状态](docs/project/README.md) · [AI 工作入口](AGENTS.md)。
 
 ## Why Blix
 
