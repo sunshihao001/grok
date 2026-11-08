@@ -31,8 +31,8 @@
 | BL-02 原始交易 | 原始 JSON 保存、签名一致性、Token-2022 ID、Owner 缺失/冲突、来源/commitment | `CODE_PROPOSED`：[PR#19](https://github.com/sunshihao001/grok/pull/19)，专项单测21项通过 | 合并前审差异、真实归档验证、迁移可恢复；“已提交”不能关单 |
 | BL-03 执行完整性 | v0/v1与ALT、嵌套CPI、Token-2022手续费/扩展、SOL/WSOL、失败指令的完整经济动作 | `RESEARCH`：只存可解析指令索引，原文保留；复杂机制未反例验收 | 选择真实或离线可复现签名，比较事件索引、账户净变化、费用和库存，复用成熟解析器优先 |
 | BL-04 钱包采集覆盖 | 只有被跟踪钱包的 `getTransaction` 才自动进入新经济证据；历史漏签名与断流 | `CODE_PROPOSED / ISOLATED_TESTED`：[PR#21](https://github.com/sunshihao001/grok/pull/21) 将轮询发现的签名与last_sig原子提交并恢复未完成任务，11个新增CI用例通过；**未合并、未实跑** | 扩展到WS瞬时丢包、真正的历史多页预算、持久补档、重启与429实测；不可把首次25笔采样当完整历史 |
-| BL-05 接收钱包发现 | Token接收 W2 从 Owner/Token Account 形成可复查边，未知Owner与服务节点不混同 | `CODE_PROPOSED`：功能分支 recipients，PR#19新增后续候选观察 | 通过混合Swap+Transfer、多接收者、关闭Token账户等离线对照；接收者不等于同控主体 |
-| BL-06 后续卖出 | W2清仓后已不在当前 Holder 头部，如何查到历史卖出、是否卖出受让库存 | `CODE_PROPOSED / NOT_VERIFIED`：PR#19本地 `recipient-outcomes` 仅查询已有wallet_trades | 先比较 `walletpage`、`scanWallet`、现有账本与历史供应商；验证缺失应显示 `NOT_OBSERVED` 而非“没有卖出” |
+| BL-05 接收钱包发现 | Token接收 W2 从 Owner/Token Account 形成可复查边，未知Owner与服务节点不混同 | `CODE_PROPOSED / ISOLATED_TESTED`：PR#21跨模块测试证明合成同签名中原始转账可找到B，旧钱包买入摘要只记录净增，不能代替原事件 | 后续再用真实v0/Token2022/关闭Token账户及池服务反例；接收者不等于同控主体 |
+| BL-06 后续卖出 | W2清仓后已不在当前 Holder 头部，如何查到历史卖出、是否卖出受让库存 | `CODE_PROPOSED / ISOLATED_TESTED`：PR#21在真实Blix reader的合成跨模块样本中找到B卖出且B余额归零；新增 `NOT_OBSERVED_IN_CAPTURED_WINDOW` 字段 | 按需钱包历史/限额补查、真实归档与公共设施负例仍待验，不能将卖出摘要归因为受让库存 |
 | BL-07 跨Mint链 | W2卖 Mint A、转SOL给W3、W3买Mint B；独立钱包、共享服务和资金混用 | `CODE_PROPOSED`：cross-mint时间候选SQL已有；不追踪可替代lamports资本来源 | 用同金额不同来源及共享交易所的反例判断能否升级为真实资金链；未证实保持候选 |
 | BL-08 Bubble Map误归因 | fee payer 误当 funder；超过3页历史缓存空字符串导致“永久无资金人” | `STATIC_RISK`：[同Mint审查](mint-cross-module-evidence-audit-v0.2.md) R1/R2 | 明确 FOUND/TRUNCATED/NO_MATCH/PROVIDER_FAILED 与 FEE_PAYER_ONLY；改前做确定性反例 |
 | BL-09 Holder口径 | `holders.js` 动态供应量与 `coin.js` 固定1e9分母；多源Holder `partial:false`含义不一 | `STATIC_RISK`：[R3/R4](mint-cross-module-evidence-audit-v0.2.md) | 对同一Mint、slot、分母/资产单位、缓存年龄做来源表；一致性反例通过后才自动解读集中度 |
@@ -122,3 +122,14 @@
 - 本文件放在 `blix` 的文档专用PR，便于与未合并的经济证据PR分离；被合并前只在本分支存在。**PR#19未合并并不妨碍这份全项目台账独立审阅/吸收。**
 - 若变更涉及单个技术事项，在相应源文件/PR修正和验收后，更新此处状态、源码链接与验证等级；历史研究原文仍存于原文档，不复制冗长材料。
 - 下一轮真正使台账有价值的，是在同一具体钱包链的真实数据或离线反例上，**更改一个错误假设、排除一种复用路线或证实一个可运行增量**。
+
+## 2026-11-08｜第三次进展：跨模块故障→恢复→接收钱包→跨Mint的离线对照
+
+**新成果：** [PR #21](https://github.com/sunshihao001/grok/pull/21) 在签名检查点外新增 [跨模块离线回归](https://github.com/sunshihao001/grok/blob/feat/blix-wallet-signature-continuity-20261108/test/wallet-evidence-chain.test.mjs)。实际调用Blix `wallets.readTx`、经济事件源表、钱包摘要和接收钱包候选查询：同一签名Pool→A转1000、A→B转400时，旧钱包余额差分只记净增600；保存原文后模拟消费者异常，重试从SQLite恢复原文；B卖M→转SOL到C→C买N形成仅限时序候选。B未被观察时不说“没有卖”。
+
+**新认识转化为建设决策：** 即使签名不丢，`wallet_trades` 也可能因为“净变化”的业务语义而无法代表实际逐指令的转账量，因此BL-05/06和BL-13必须联合验收，不允许在报告里使用钱包摘要证明购买总额、库存出货、真正控制者。
+
+**验收级别：** [本轮Node24](https://github.com/sunshihao001/grok/actions/runs/42485375853) 440项、433通过、7失败；新增的11个签名水位和1个跨模块合成回放均通过；依赖审计通过。剩余7项旧WTrack测试未通过，故整套仍红。CI不是Solana主网或持续运行验证。
+
+**下一关键未知：** 当发生完全没有旧钱包成交摘要的Token转账，现有`pageSignatures`、持久任务队列和`economic-events`是否会在网络中断及重启后仍保存它；能否在不自动追踪整网的前提下，从真正的历史接收钱包发现卖出和资金去向。优先以真实归档/离线负例验证这个未知，再决定是否引入PumpTrace的历史回补调度，而不是复制全部系统。
+
