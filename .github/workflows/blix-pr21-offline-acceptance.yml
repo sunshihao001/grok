@@ -25,7 +25,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
+      - name: Evidence before running WTrack comparison
+        working-directory: candidate
+        run: npm run test:evidence
       - name: Reproduce baseline and candidate WTrack failures independently
+        if: always()
         shell: bash
         run: |
           set +e
@@ -49,13 +53,32 @@ jobs:
           echo "Comparing failure names with exact test metadata"
           diff -u baseline-failures.txt candidate-failures.txt
       - name: PR23 offline economic chain and crash recovery
+        if: always()
         working-directory: candidate
         run: |
           npm run test:evidence
+      - name: Economic evidence after WTrack
+        if: always()
+        working-directory: candidate
+        run: node --no-warnings --test test/economic-events.test.mjs
+      - name: Wallet retry after WTrack
+        if: always()
+        working-directory: candidate
+        run: node --no-warnings --test test/wallet-evidence-retry.test.mjs
+      - name: Wallet discovery checkpoint after WTrack
+        if: always()
+        working-directory: candidate
+        run: node --no-warnings --test test/wallet-signature-coverage.test.mjs
+      - name: Cross-Mint chain after WTrack
+        if: always()
+        working-directory: candidate
+        run: node --no-warnings --test test/wallet-evidence-chain.test.mjs
       - name: PR23 security regression independently of legacy suite failures
+        if: always()
         working-directory: candidate
         run: npm run test:security
       - name: Verify default Blix startup is fail-closed without starting it
+        if: always()
         working-directory: candidate
         shell: bash
         run: |
@@ -70,6 +93,7 @@ jobs:
           fi
           echo "Startup gate correctly refused unsafe full-service launch (exit $result)." >> "$GITHUB_STEP_SUMMARY"
       - name: Audit full suite failures against original WTrack baseline
+        if: always()
         shell: bash
         run: |
           set +e
