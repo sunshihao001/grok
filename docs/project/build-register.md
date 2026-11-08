@@ -91,3 +91,20 @@
 - [Million crawler](https://github.com/Kelows/million/blob/main/apps/api/src/crawler/crawler.service.ts)
 - [Solana JSON 结构](https://solana.com/docs/rpc/json-structures)
 - [Solana Transaction Introspection](https://solana.com/docs/core/transactions/transaction-introspection)
+
+
+## 2026-11-09｜快速开发纠偏登记（继承 2026-11-08 PR #23）
+
+本节只对**上一轮已经发生、已经定位的工程失误**做原位登记；不新增另一套 AI 方法论或重做分阶段架构。审查的固定起点为 [PR #23](https://github.com/sunshihao001/grok/pull/23) `26b354851b6a29624bb3273e312915a4f0f59f4f`（此 SHA 为本轮初始基线，后续按实际提交更新）。`blix` 主分支、其他研究分支会继续变化，不能再把它们当作同一版本。
+
+| 记录 | 上轮具体错误/失败证据 | 修正原则及本轮处理 | 完成判据 |
+|---|---|---|---|
+| R-01 遗留红灯被长期合理化 | PR #23 全量 Node24 CI 446 项中 439 过、7 失败；基线同名失败只能排除**新增回归**，不是发布许可。[精确指纹](https://github.com/sunshihao001/grok/actions/runs/42491184903) | 先用已经存在的 `test/wtrack.test.mjs` 作为红色用例，核对源代码的真实功能缺口；只修缺口，不伪造断言、不标“发布通过” | 全量 `npm test` 真正退出码 0；否则保留 blocker |
+| R-02 重复设计与分支堆叠 | PR #21、#18 独立建立重试状态；PR #22 才收束，PR #23 再整合，历史 PR 仍未合并 | 使用 PR #23 作为**唯一当前集成工作分支**，不再新建重复状态机制，保留 `econ_wallet_processing` 单一处理状态 | 新功能不创建并行的捕获/消费状态表，合并前做一次整体差异审查 |
+| R-03 测试证据展示不严谨 | 曾因 `continue-on-error` 将失败步骤显示为成功；用非 TAP 输出却按 TAP 解析，得到空失败指纹 | CI 正常失败不可屏蔽；记录每次运行的 ref/SHA、退出码、测试量及原始 Actions URL；诊断脚本必须匹配实际 reporter | 全量与专项测试分别真实检查，任何失败不得用“成功步骤”概括 |
+| R-04 过早把隔离测试当产品运行 | PR #23 只跑 Node24/SQLite 合成路径，没有实测 RPC/真实钱包、长期重启和部署，只读安全门禁拒绝启动旧服务器 | 状态严格分离 `ISOLATED_TESTED`、`INTEGRATED_TESTED`、`LIVE_VERIFIED`；先有与交易/签名/付费隔离的运行入口再考虑主网验收 | 不以 CI 成功声称主网、UI、完整钱包历史和真实同控 |
+| R-05 研究代替交付 | 多轮知识整理与大量 Draft PR，未让主体形成统一、可发布版本 | 优先实测反馈→根因→最小代码修复→真实回归→记录，并对新研究规定必须改变现有决策或测试 | 每轮至少一条可以在仓库内检查的新验证、修复或有根据的停止决定 |
+
+**本轮快速开发方法（借鉴成熟工程做法，不能机械套用）：** 以仓库为事实来源，选一个明确阻断；锁定 PR SHA；对照现有失败测试与真实 API；小范围更改后运行 `test/wtrack.test.mjs`→`npm run test:evidence`→`npm run test:security`→`npm test`；任何失败立即回到首个可重现根因，不继续大规模搜索或同时开多个重叠 PR。代码级问题参考 [obra/superpowers 执行与验证](https://github.com/obra/superpowers/blob/main/skills/executing-plans/SKILL.md) 的完成契约，[OpenAI Harness Engineering](https://openai.com/index/harness-engineering/) 的仓库事实源/反馈循环与 [Anthropic 长任务工程](https://www.anthropic.com/research/effective-harnesses-for-long-running-agents) 的跨轮工件继承；这些是工程方法类比，不是 Blix 的运行证据。
+
+**本轮所选改动：B14/R-01。** WTrack 测试对命名组、成员隔离、开发者分类、备注持久化和导入/导出提出明确契约；现有 `server/wtrack.js` 还没有相应数据库列与接口。先按原测试进行最小完整业务修复，而不是删掉测试或仅改状态文档。若单项修复导致旧 UI/成员权限变化，保留失败日志并复核实际产品契约。R-04 的安全隔离和真实链上测试仍为独立后续门槛。
