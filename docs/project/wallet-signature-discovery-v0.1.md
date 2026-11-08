@@ -1,6 +1,6 @@
 # Blix｜签名发现的原子水位与断点补读（2026-11-08）
 
-状态：NEW_BRANCH_ONLY / TESTS_PENDING / NOT_LIVE. 基线：PR #18 `d3da7c9c`（而非旧PR#19），以免重复实现已存在的Reader处理状态。
+状态：NEW_BRANCH_ONLY / ISOLATED_NODE24_TESTED_WITH_BASELINE_FAILURES / NOT_LIVE. 基线：PR #18 `d3da7c9c`（而非旧PR#19），以免重复实现已存在的Reader处理状态。
 
 ## 针对的真实源码缺口
 
@@ -27,3 +27,8 @@
 5. 这是围绕被跟踪钱包的持久采集；接收钱包历史仍需按需受限补查，不能自动把所有关联钱包持续订阅。
 
 参考：[PR #18](https://github.com/sunshihao001/grok/pull/18)、[PR #19](https://github.com/sunshihao001/grok/pull/19)、[PR #20建设台账](https://github.com/sunshihao001/grok/pull/20)、[PR #21先行分支（尚有重复状态，禁止原样合并）](https://github.com/sunshihao001/grok/pull/21)，以及 [PumpTrace回补manager](https://github.com/AntC215/Pumptrace/blob/main/src/modules/backfill-manager.mjs)。
+
+## 实测CI追加（2026-11-08）
+[PR #22 Node 24](https://github.com/sunshihao001/grok/actions/runs/42486404631)：437项测试，429项通过，8项失败。**新增11个签名发现/原子水位/重启恢复/既有处理状态对接测试全部通过**；8项失败由旧项目目标断言1项、旧WTrack分组/标签/成员隔离7项组成，与PR#18基线数量和失败范围相同。安全[依赖审计通过](https://github.com/sunshihao001/grok/actions/runs/42486404633)。测试在GitHub Node24隔离数据库上运行，未执行交易或真实RPC。
+
+**本PR具体改进范围：** 仅保留对PR#18已有处理状态的引用与签名发现水位，不保留旧PR#21另建的RPC处理状态。需要与PR#19的数据归因加固后续对照；不能因为单测通过就直接发布到主网或云电脑。
