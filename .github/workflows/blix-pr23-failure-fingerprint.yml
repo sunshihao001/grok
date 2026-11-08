@@ -13,6 +13,8 @@ jobs:
       failures: ${{ steps.inspect.outputs.failures }}
       counts: ${{ steps.inspect.outputs.counts }}
       wtrack: ${{ steps.inspect.outputs.wtrack }}
+      head: ${{ steps.inspect.outputs.head }}
+      tail: ${{ steps.inspect.outputs.tail }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -38,6 +40,8 @@ jobs:
           echo "failures=$failures" >> "$GITHUB_OUTPUT"
           echo "counts=$counts; npmrc=$rc" >> "$GITHUB_OUTPUT"
           echo "wtrack=$(grep '^not ok ' failures.txt | wc -l | tr -d ' ')" >> "$GITHUB_OUTPUT"
+          echo "head=$(head -n 7 full.tap | tr '\n' ' ' | cut -c 1-235)" >> "$GITHUB_OUTPUT"
+          echo "tail=$(tail -n 8 full.tap | tr '\n' ' ' | cut -c 1-235)" >> "$GITHUB_OUTPUT"
           cat failures.txt
       - uses: actions/upload-artifact@v4
         with:
@@ -58,3 +62,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo 'Regression counts exposed above'
+  head:
+    needs: detect
+    name: "HEAD: ${{ needs.detect.outputs.head }}"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ok
+  tail:
+    needs: detect
+    name: "TAIL: ${{ needs.detect.outputs.tail }}"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ok
