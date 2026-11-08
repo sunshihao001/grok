@@ -133,3 +133,22 @@
 
 **下一关键未知：** 当发生完全没有旧钱包成交摘要的Token转账，现有`pageSignatures`、持久任务队列和`economic-events`是否会在网络中断及重启后仍保存它；能否在不自动追踪整网的前提下，从真正的历史接收钱包发现卖出和资金去向。优先以真实归档/离线负例验证这个未知，再决定是否引入PumpTrace的历史回补调度，而不是复制全部系统。
 
+
+## 2026-11-08｜并行PR冲突审计：停止重复修B02，收束到独有B03
+
+**自动复核时出现新事实**：PR#18功能分支又推进11个提交至 `d3da7c9c`，不只是增加台账：`economic-events.mjs` 已增加 `econ_wallet_processing`，保存 `CAPTURED/RETRY_REQUIRED/COMPLETE`、尝试次数及错误；`wallets.readTx` 可从本地RPC归档重试，并捕获/传播钱包 `onTx` 钩子错误；同一钱包与另一钱包的处理状态分开。新增 [wallet-evidence-retry离线测试](https://github.com/sunshihao001/grok/blob/feat/blix-economic-evidence-20261108/test/wallet-evidence-retry.test.mjs)。[PR#18 CI](https://github.com/sunshihao001/grok/actions/runs/42485475049) 426项/418过/8失败（旧WTrack7及旧goal状态1）；安全审计成功。
+
+**与本轮[PR#21](https://github.com/sunshihao001/grok/pull/21) 的交集**：
+- **重叠，应收束**：`econ_wallet_processing` 和新 `wallet_sig_jobs` 都尝试表达“RPC已捕获、Reader已完成”。如果照原样全合，会有双水位、双重重试、错误ACK的风险。PR#21的`markWalletRpcCaptured/markWalletReaderFinished` 不能直接作为与PR#18平行的第二个处理真相。
+- **真正互补，应保留**：PR#18的状态只能记**已读到RPC的签名**，不包含未获取原文的历史签名清单；PR#21将`pageSignatures`返回的全部签名与 `wallets.last_sig` **同一事务保存**，防止队列入内存之前断电造成永远漏查。也把首次25笔采样、历史分页截断与先前gap留下来。这就是B03所需的新事实层。
+- **需要保留的另一项独立成果**：PR#19对签名一致性、Token-2022错误常量和Owner冲突的加固，以及PR#21同签名Swap+Transfer合成回放，均不应被无条件丢弃。但PR#19的旧`wallets.readTx`没有PR#18新加入的hook错误传播和有界重试，不能简单覆盖后者。
+- **验收区别**：PR#21 [最新CI](https://github.com/sunshihao001/grok/actions/runs/42485526010) 440项/433过/7旧WTrack失败，**12项本轮新增的签名/跨业务测试通过**；它仍建立在PR#19的旧基础上，因此不代表已验证与PR#18新B02可合并。两个PR全部保持Draft未合并。
+
+**最新决策 / 合并门槛（优先级高于造新功能）**：
+1. 在基于PR#18最新头的单独对照分支上，**沿用唯一`econ_wallet_processing`消费状态源**，只迁移PR#21的“签名发现+原子游标+历史coverage”能力；pending任务需排除已COMPLETE，并尊重原重试尝试上限。
+2. PR#19专业事实/接口修正逐段比对保留，特别是Token-2022/签名校验/Owner冲突及接收结果 `NOT_OBSERVED`，不覆盖PR#18的hook重试补丁。
+3. 重新做**断电前未获取RPC的漏签名、后续hook失败、有交易但无Trade摘要、两钱包同签名、公共池伪关系**五组联动离线测试；CI总套件的旧WTrack和目标状态失败独立处理。
+4. **未满足这些条件前不合并PR#19/#21到PR#18，更不合并blix或启动服务。** 技术分支继续保留作为可复用证据，而不新建另一套平行产品。
+
+这次“停止重复开发并改路线”是被**并行GitHub源码事实**触发的有效新认知，不是研究退回原点。下轮不重复读通用原理，直接完成**单一处理状态源的集成分支与跨模块验收**。
+
