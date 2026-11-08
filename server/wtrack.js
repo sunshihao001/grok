@@ -293,7 +293,7 @@ export function fromEngine(ev) {
 }
 
 // ---------- transfers ----------
-const SYSTEM = new Set(["11111111111111111111111111111111", "ComputeBudget111111111111111111111111111111", "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA", "TokenzQdBNbLqP5VYzRBRT44hA3hGMSiYqt6vHu4x5Xm", "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"]);
+const SYSTEM = new Set(["11111111111111111111111111111111", "ComputeBudget111111111111111111111111111111", "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA", "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb", "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"]);
 // A transaction of a tracked wallet that was not a swap: SOL or one token moved in or out. The counterparty is the
 // account whose balance moved the other way the most (for SOL) or the other owner of the token (for a token).
 export function parseTransfer(tx, wallet) {
