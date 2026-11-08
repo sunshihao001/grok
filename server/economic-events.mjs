@@ -17,8 +17,38 @@ export function initEvidence(db) {
     from_owner TEXT, to_owner TEXT, amount_raw TEXT, raw_json TEXT NOT NULL,
     PRIMARY KEY (sig, outer_i, inner_i));
   CREATE INDEX IF NOT EXISTS econ_edges_from ON econ_instructions(from_owner, mint);
-  CREATE INDEX IF NOT EXISTS econ_edges_to ON econ_instructions(to_owner, mint);`);
+  CREATE INDEX IF NOT EXISTS econ_edges_to ON econ_instructions(to_owner, mint);
+  CREATE TABLE IF NOT EXISTS econ_wallet_processing (
+    sig TEXT NOT NULL, wallet TEXT NOT NULL, state TEXT NOT NULL,
+    attempts INTEGER NOT NULL DEFAULT 0, updated_at INTEGER NOT NULL,
+    last_error TEXT,
+    PRIMARY KEY (sig, wallet)
+  );`);
   initialized.add(db);
+}
+// Transaction capture, wallet reader completion, and history coverage are distinct facts.
+// A wallet is complete here only when this wallet reader has run its tx hooks and
+// written its legacy swap summaries; this is NOT full protocol/CPI decoding.
+export function walletProcessing(db, sig, wallet) {
+  initEvidence(db);
+  return db.prepare('SELECT state, attempts, updated_at, last_error FROM econ_wallet_processing WHERE sig=? AND wallet=?').get(sig, wallet) || null;
+}
+export function setWalletProcessing(db, sig, wallet, state, error = null) {
+  if (!['CAPTURED', 'COMPLETE', 'RETRY_REQUIRED'].includes(state)) throw new Error('invalid wallet processing state');
+  if (!sig || !wallet) throw new Error('signature and wallet required');
+  initEvidence(db);
+  const t = Date.now(), message = error ? String(error.message ?? error).slice(0, 400) : null;
+  if (state === 'CAPTURED') {
+    db.prepare(`INSERT INTO econ_wallet_processing(sig,wallet,state,attempts,updated_at,last_error)
+      VALUES (?,?,'CAPTURED',1,?,NULL)
+      ON CONFLICT(sig,wallet) DO UPDATE SET state='CAPTURED',
+      attempts=attempts+1, updated_at=excluded.updated_at, last_error=NULL`).run(sig,wallet,t);
+  } else {
+    const changed = db.prepare('UPDATE econ_wallet_processing SET state=?, updated_at=?, last_error=? WHERE sig=? AND wallet=?')
+      .run(state,t,message,sig,wallet);
+    if (!changed.changes) throw new Error('wallet processing capture state absent');
+  }
+  return walletProcessing(db,sig,wallet);
 }
 const keyOf = k => typeof k === 'string' ? k : (k?.pubkey ?? null);
 function tokenOwners(tx, keys) {
