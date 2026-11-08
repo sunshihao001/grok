@@ -30,23 +30,23 @@
 | BL-01 市场→Mint | Pulse/Coins/Journal发现事件与可追溯 Mint 调查的触发和原始交易如何接通 | `RESEARCH`：市场来源有业务闭环，但经济证据只经钱包原始读取局部接入 | 输出现成调用路径与“发现后不触发原始交易采集”的反例；不预设全市场抓全量 RPC |
 | BL-02 原始交易 | 原始 JSON 保存、签名一致性、Token-2022 ID、Owner 缺失/冲突、来源/commitment | `CODE_PROPOSED`：[PR#19](https://github.com/sunshihao001/grok/pull/19)，专项单测21项通过 | 合并前审差异、真实归档验证、迁移可恢复；“已提交”不能关单 |
 | BL-03 执行完整性 | v0/v1与ALT、嵌套CPI、Token-2022手续费/扩展、SOL/WSOL、失败指令的完整经济动作 | `RESEARCH`：只存可解析指令索引，原文保留；复杂机制未反例验收 | 选择真实或离线可复现签名，比较事件索引、账户净变化、费用和库存，复用成熟解析器优先 |
-| BL-04 钱包采集覆盖 | 只有被跟踪钱包的 `getTransaction` 才自动进入新经济证据；历史漏签名与断流 | `STATIC_RISK`：wallets 的 stream/poll 只订阅选中钱包；新证据无“全币全钱包”入口 | 建覆盖契约：目标钱包、发现来源、最老时间、截断、缺失、预算、错误/恢复状态 |
+| BL-04 钱包采集覆盖 | 只有被跟踪钱包的 `getTransaction` 才自动进入新经济证据；历史漏签名与断流 | `CODE_PROPOSED / ISOLATED_TESTED`：[PR#21](https://github.com/sunshihao001/grok/pull/21) 将轮询发现的签名与last_sig原子提交并恢复未完成任务，11个新增CI用例通过；**未合并、未实跑** | 扩展到WS瞬时丢包、真正的历史多页预算、持久补档、重启与429实测；不可把首次25笔采样当完整历史 |
 | BL-05 接收钱包发现 | Token接收 W2 从 Owner/Token Account 形成可复查边，未知Owner与服务节点不混同 | `CODE_PROPOSED`：功能分支 recipients，PR#19新增后续候选观察 | 通过混合Swap+Transfer、多接收者、关闭Token账户等离线对照；接收者不等于同控主体 |
 | BL-06 后续卖出 | W2清仓后已不在当前 Holder 头部，如何查到历史卖出、是否卖出受让库存 | `CODE_PROPOSED / NOT_VERIFIED`：PR#19本地 `recipient-outcomes` 仅查询已有wallet_trades | 先比较 `walletpage`、`scanWallet`、现有账本与历史供应商；验证缺失应显示 `NOT_OBSERVED` 而非“没有卖出” |
 | BL-07 跨Mint链 | W2卖 Mint A、转SOL给W3、W3买Mint B；独立钱包、共享服务和资金混用 | `CODE_PROPOSED`：cross-mint时间候选SQL已有；不追踪可替代lamports资本来源 | 用同金额不同来源及共享交易所的反例判断能否升级为真实资金链；未证实保持候选 |
 | BL-08 Bubble Map误归因 | fee payer 误当 funder；超过3页历史缓存空字符串导致“永久无资金人” | `STATIC_RISK`：[同Mint审查](mint-cross-module-evidence-audit-v0.2.md) R1/R2 | 明确 FOUND/TRUNCATED/NO_MATCH/PROVIDER_FAILED 与 FEE_PAYER_ONLY；改前做确定性反例 |
 | BL-09 Holder口径 | `holders.js` 动态供应量与 `coin.js` 固定1e9分母；多源Holder `partial:false`含义不一 | `STATIC_RISK`：[R3/R4](mint-cross-module-evidence-audit-v0.2.md) | 对同一Mint、slot、分母/资产单位、缓存年龄做来源表；一致性反例通过后才自动解读集中度 |
 | BL-10 身份/聚类 | Top Token Account不等于Top Owner；Pool/DEX/creator/service和群体关系不是实际控制权 | `STATIC_RISK`：BubbleMap多跳图已存在，非从零缺少聚类 | 保留每条边原始签名/来源/负例，对公共设施和同slot伪关联做压力测试 |
-| BL-11 历史保留 | Journal约24h、WTrack约7天、钱包页近期Swap；6h/12h异动、跨日研究和长历史覆盖不等价 | `RESEARCH`：不同数据层存在但没有统一覆盖水位 | 形成市场事件 vs 钱包原始交易 vs 历史库存的独立保留/补数策略；借鉴Pulse的归档理念 |
+| BL-11 历史保留 | Journal约24h、WTrack约7天、钱包页近期Swap；6h/12h异动、跨日研究和长历史覆盖不等价 | `RESEARCH / PARTIAL_CODE`：PR#21增加签名窗口和已知缺口水位，**但job未设长久保留/压缩预算** | 形成市场事件、交易原文、签名任务和库存的独立保留/空间预算；断电后的缺口修复与归档验收 |
 | BL-12 旧钱包模块测试 | 7项WTrack标签/分组/成员隔离测试未过；原实现缺失被测方法 | `NOT_VERIFIED`：[CI](https://github.com/sunshihao001/grok/actions/runs/42481576097)，尚欠基线同环境对照 | 与blix原基线做CI差异归因，确认产品实际入口后决定补功能或更正过时测试 |
-| BL-13 重复与重试 | `wallet_trades(sig,wallet,mint)`聚合多事件；某些流标记已读/重试与原始记录提交边界 | `CODE_PROPOSED / STATIC_RISK`：PR#19调整readSigs；没有系统复测多源重复及断电 | 原始事件、钱包聚合、Journal、WTrack每层定义唯一键与重入预期，用断点失败注入核对 |
+| BL-13 重复与重试 | `wallet_trades(sig,wallet,mint)`聚合多事件；某些流标记已读/重试与原始记录提交边界 | `CODE_PROPOSED / ISOLATED_TESTED`：PR#19修正标记时机；PR#21提供断电恢复/原子回滚、多钱包同签名回归，但hook级ACK与完整链复原未验 | 继续同签名多事件与hook异常注入，校验历史补查不重发提醒、不重复账本事件 |
 | BL-14 只读隔离 | 原Server仍含账户/交易/自动领取/付费AI；npm start门禁不覆盖所有启动入口 | `NOT_VERIFIED`：[原只读安全审查](read-only-safety.md) | 明确只读运行的进程/网络/权限/成本隔离，未经授权不启动；MCP白名单不等于Server全只读 |
 | BL-15 UI与MCP | Coin、Wallet、BubbleMap、AI如何显示同一证据链；新证据GET仅本地接口且非产品UI | `RESEARCH`：已有页面与MCP，但新经济调查未贯通 | 使用已有页面验证最小可解释调查；不要新造第二个市场终端 |
 | BL-16 AI专业认知 | Hermes、qb-、meme-、Why-Solana、22视角与ai-d方法能否改变同一Mint的判断 | `NOT_VERIFIED`：知识导航/材料存在不代表运行时检索或准确性提高 | 同一冻结事实做无知识/相关知识对照，看遗漏、误归因、反证质量、成本；不要机械堆专家 |
 | BL-17 外部复用 | Million资金/钱包链、PumpTrace持久回补、Pulse归档、OKX/GMGN数据能力选择 | `RESEARCH`：相关成熟原源码已查，尚未实跑/比较真实数据成本 | 先对准 BL-04/06/11 的实际缺口，比较整用、小改和API接入，明确失败条件 |
 | BL-18 运行可靠性 | 钱包stream/poll限额、429/错过水位、SQLite大小/重启、云端是否能长期执行 | `NOT_VERIFIED`：代码存在预算/漏记统计，但实际云电脑运行未验证 | 安全隔离后做历史缺失率、恢复、磁盘与额度验收；不拿单测当持续运行 |
 | BL-19 监控与机制价值 | 多Mint同群体、6/12h异动、库存迁移、刷量、内幕同步和经济机制探索 | `RESEARCH`：相关理论与部分功能存在，缺真实稳定样本链路 | 先得到覆盖可信样本，再研究机制vs竞争解释、阴性对照、预测基线和可重复性 |
-| BL-20 发布/权限边界 | 新feature与PR#19均未合入blix；各PR#14/#16/#17保留历史知识/工程但非当前Blix功能 | `NOT_VERIFIED`：当前分支与PR元数据核查 | 每轮同步分支/CI/权限/实际部署四种状态；不能用PR存在替代功能上线 |
+| BL-20 发布/权限边界 | PR#18经济证据、PR#19加固、PR#20台账、PR#21签名连续性均未合入blix；PR#14/#16/#17为独立历史草稿 | `NOT_VERIFIED`：2026-11-08已核对分支与PR；PR#21尚未实际主网采集 | 每轮同步分支/CI/权限/实际部署，勿把Draft或测试成功说成Blix已上线 |
 
 **约束：** 状态不能因为写了新文档自动由 RESEARCH 变 DONE；只对会改变产品决策的点开展下一轮深研究。所有条目允许合并、降级、重排与关闭，但保留原始链接和推翻理由。
 
@@ -79,6 +79,20 @@
 - **路线2（备选）：复用PumpTrace可续传的历史回补任务语义/程序，或结合Million分类历史查询**。优点是处理历史更深入、游标/成本较成熟；代价是新依赖、配额与不同归因口径。只有路线1在真实案例中失败时，才尝试有限引入；不必为了“成熟项目”整套搬运。
 
 **目前暂停**：批量自动追踪W2、付费RPC、主服务启动、真实链或钱包实跑、修改交易/账户代码、AI自动付费研究、云端部署。代码修改可继续在独立审查分支做可逆且无外部效果的测试/文档，但本轮选择研究和记录，不继续扩大全面变更。
+
+## 2026-11-08｜后一轮实施与自动判断更新（签名采集连续性）
+
+**选择依据：** 不是盯着上一轮的孤立单测，而是验证整条 `Mint → W1 → W2 → W3 → Mint B` 链路是否会因扫描水位与任务队列分离而出现永久的隐形缺口。新版功能分支已另有 [15项工程建设登记](https://github.com/sunshihao001/grok/blob/feat/blix-economic-evidence-20261108/docs/project/build-register.md)（B01–B15），本台账继续作为**单一用户目标与跨模块索引**；旧登记为细粒度证据来源，暂不创建第三套列表或重复移植。
+
+**本轮新发现并交付：** [Draft PR #21：签名持续采集与恢复](https://github.com/sunshihao001/grok/pull/21)，基于PR#19，增加 `server/wallet-signature-coverage.mjs`，原子持久化分页签名及钱包last_sig、重新排入未完成任务、区分已发现/原文捕获/reader处理完成；首次25笔及截断历史保持UNKNOWN，先前已知缺口不会被后续正常轮询覆盖。复用现有钱包Reader与经济证据表，不造新网站、后台队列服务或交易程序。
+
+**真实验收：** [PR#21 Node24 CI](https://github.com/sunshihao001/grok/actions/runs/42484865431) 共439测试、432通过、7失败；本轮新添11项签名连续性隔离用例全部通过；剩余7项仍是旧 `test/wtrack.test.mjs` 分组/标签/成员状态失败。[依赖安全审计成功](https://github.com/sunshihao001/grok/actions/runs/42484865403)。这是**离线CI**，不是长期运行/真链历史。
+
+**这次证据改变了研究排序：** 发现签名与推进水位必须原子化；提交后失败必须有明确 `RPC_CAPTURED`/未完成标记，不应等无钱包交易摘要时才发现缺口。因此BL-04与BL-13由静态风险推进到**有代码候选、部分离线测试**，但没有变为已完成。BL-11因为新增长期任务留存，反而明确产生新的磁盘/归档验收门槛，必须继续登记。
+
+**最重要的下一项工作（动态选择，不是固定阶段）：** 在实际安全隔离前先补**真正的跨入口端到端离线失败注入**：同一签名包含Swap+多接收Token转移，Wallet Reader保存原文→发生hook/摘要错误→进程重启→签名队列恢复→W2历史查询；并且从无交易摘要的交易中证明“缺少Trade ≠ 无签名”。进一步检查WebSocket-only事件丢失、未有限制的任务表、`NEEDS_MANUAL_REPLAY`还没有修复入口、原WTrack hook吞异常，以及现有七项失败的产品级影响。只有这些问题会真正影响下一步产品接收钱包追踪，优先于制作UI或新提示词制度。
+
+**与已有研究保持连续：** 上节的Blix `walletpage/scanWallet` vs PumpTrace/Million/Pulse对照仍成立，但实现优先级依据新的扫描水位反证先转向签名可靠性。研究报告不是被废弃，而是转成了更窄、可核验的实施工作。
 
 ## 4. 下一次验收如何知道研究不只是说法？
 
