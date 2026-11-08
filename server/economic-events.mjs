@@ -171,3 +171,17 @@ export function missingEvidence(db, wallet, limit = 100) {
   return { wallet, rows, coverage: 'KNOWN_WALLET_TRADES_MISSING_RPC_CAPTURE_ONLY',
     next: 'Fetch each listed transaction independently or replay archived jsonParsed RPC; empty rows do not prove complete wallet history' };
 }
+
+// Known local RPC captures that failed wallet-reader consumption can be retried
+// with NO new RPC call. Bounded to prevent permanent parser failures looping.
+export function retryableWalletProcessing(db, { beforeMs = Date.now() - 60_000, limit = 10, maxAttempts = 5 } = {}) {
+  initEvidence(db);
+  return db.prepare(`SELECT p.sig, p.wallet, p.attempts, t.block_time
+    FROM econ_wallet_processing p
+    JOIN econ_transactions t ON t.sig=p.sig
+    JOIN wallets w ON w.address=p.wallet AND w.watching=1
+    WHERE p.state='RETRY_REQUIRED' AND p.attempts < ? AND p.updated_at <= ?
+    ORDER BY p.updated_at ASC LIMIT ?`)
+    .all(Math.max(1, Math.min(20, maxAttempts)),
+      beforeMs, Math.max(1, Math.min(100, limit)));
+}
