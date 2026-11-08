@@ -9,7 +9,7 @@ export function initWalletSignatureCoverage(db) {
   if (initialized.has(db)) return;
   db.exec(`CREATE TABLE IF NOT EXISTS wallet_sig_jobs (
     wallet TEXT NOT NULL, sig TEXT NOT NULL, block_time_ms INTEGER,
-    state TEXT NOT NULL DEFAULT 'DISCOVERED', first_seen_ms INTEGER NOT NULL,
+    state TEXT NOT NULL DEFAULT 'DISCOVERED', quiet INTEGER NOT NULL DEFAULT 0, first_seen_ms INTEGER NOT NULL,
     updated_ms INTEGER NOT NULL, error_kind TEXT,
     PRIMARY KEY (wallet, sig)
   );
@@ -44,15 +44,15 @@ export function checkpointWalletPage(db, { wallet, rows, priorAnchor = null, fir
   if (own) db.exec('BEGIN');
   try {
     const insert = db.prepare(`INSERT INTO wallet_sig_jobs
-      (wallet, sig, block_time_ms, state, first_seen_ms, updated_ms)
-      VALUES (?, ?, ?, ?, ?, ?)
+      (wallet, sig, block_time_ms, state, quiet, first_seen_ms, updated_ms)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(wallet,sig) DO UPDATE SET
       block_time_ms=COALESCE(excluded.block_time_ms,wallet_sig_jobs.block_time_ms),
       updated_ms=excluded.updated_ms`);
     let discovered = 0;
     for (const row of rows) {
       insert.run(wallet, row.signature, Number.isFinite(row.blockTime) ? row.blockTime * 1000 : null,
-        row.err ? 'CHAIN_FAILED' : 'DISCOVERED', observedAt, observedAt);
+        row.err ? 'CHAIN_FAILED' : 'DISCOVERED', first ? 1 : 0, observedAt, observedAt);
       discovered++;
     }
     db.prepare(`INSERT INTO wallet_sig_windows
@@ -78,7 +78,7 @@ export function checkpointWalletPage(db, { wallet, rows, priorAnchor = null, fir
 /** Jobs are replayable after a restart; no network request is initiated here. */
 export function pendingWalletSignatures(db, wallet, limit = 120) {
   initWalletSignatureCoverage(db);
-  return db.prepare(`SELECT sig, block_time_ms AS t, state
+  return db.prepare(`SELECT sig, block_time_ms AS t, quiet, state
     FROM wallet_sig_jobs WHERE wallet=? AND state IN ('DISCOVERED','RPC_CAPTURED')
     ORDER BY updated_ms DESC, block_time_ms DESC LIMIT ?`)
     .all(wallet, Math.max(1, Math.min(120, Number(limit) || 120)));
