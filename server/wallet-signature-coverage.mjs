@@ -18,7 +18,9 @@ export function initWalletSignatureCoverage(db) {
     wallet TEXT PRIMARY KEY, checked_at_ms INTEGER NOT NULL,
     previous_anchor TEXT, newest_sig TEXT, oldest_seen_sig TEXT,
     signatures_found INTEGER NOT NULL, anchor_reached INTEGER NOT NULL,
-    observation TEXT NOT NULL, first_sample INTEGER NOT NULL
+    observation TEXT NOT NULL, first_sample INTEGER NOT NULL,
+    gaps_seen INTEGER NOT NULL DEFAULT 0, last_gap_at_ms INTEGER,
+    ever_initial_sample INTEGER NOT NULL DEFAULT 0
   );`);
   initialized.add(db);
 }
@@ -56,14 +58,19 @@ export function checkpointWalletPage(db, { wallet, rows, priorAnchor = null, fir
       discovered++;
     }
     db.prepare(`INSERT INTO wallet_sig_windows
-      (wallet,checked_at_ms,previous_anchor,newest_sig,oldest_seen_sig,signatures_found,anchor_reached,observation,first_sample)
-      VALUES (?,?,?,?,?,?,?,?,?)
+      (wallet,checked_at_ms,previous_anchor,newest_sig,oldest_seen_sig,signatures_found,anchor_reached,observation,first_sample,gaps_seen,last_gap_at_ms,ever_initial_sample)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
       ON CONFLICT(wallet) DO UPDATE SET checked_at_ms=excluded.checked_at_ms,
       previous_anchor=excluded.previous_anchor,newest_sig=excluded.newest_sig,
       oldest_seen_sig=excluded.oldest_seen_sig,signatures_found=excluded.signatures_found,
       anchor_reached=excluded.anchor_reached,observation=excluded.observation,
-      first_sample=excluded.first_sample`)
-      .run(wallet, observedAt, priorAnchor, newest, oldest, rows.length, reached ? 1 : 0, observation, first ? 1 : 0);
+      first_sample=excluded.first_sample,
+      gaps_seen=wallet_sig_windows.gaps_seen+excluded.gaps_seen,
+      last_gap_at_ms=COALESCE(excluded.last_gap_at_ms,wallet_sig_windows.last_gap_at_ms),
+      ever_initial_sample=MAX(wallet_sig_windows.ever_initial_sample,excluded.ever_initial_sample)`)
+      .run(wallet, observedAt, priorAnchor, newest, oldest, rows.length, reached ? 1 : 0,
+        observation, first ? 1 : 0, (!first && !reached) ? 1 : 0,
+        (!first && !reached) ? observedAt : null, first ? 1 : 0);
     const updated = db.prepare(`UPDATE wallets SET last_poll=?, last_sig=COALESCE(?,last_sig),
       backfilled=1 WHERE address=?`).run(observedAt, newest, wallet);
     if (updated.changes !== 1) throw new Error('wallet cursor update missing: no durable checkpoint');
@@ -104,5 +111,6 @@ export function walletSignatureCoverage(db, wallet) {
   const states = db.prepare(`SELECT state, COUNT(*) count FROM wallet_sig_jobs
     WHERE wallet=? GROUP BY state`).all(wallet);
   return { wallet, window, states, conclusion: window?.observation || 'NO_SCAN_WINDOW_RECORDED',
-    historyComplete: false, note: 'Incremental anchor and processed reader events never prove complete wallet history' };
+    historyComplete: false, unresolvedHistoricalRisk: Boolean(window?.gaps_seen || window?.ever_initial_sample),
+    note: 'Incremental anchor and processed reader events never prove complete wallet history. Prior gaps remain recorded.' };
 }
