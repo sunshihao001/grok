@@ -169,7 +169,7 @@ export async function readTx(w, job, emit, fetched = null) {
   // Prefer that immutable local evidence to an unnecessary fresh RPC call.
   const tx = fetched || transactionEvidence(db, job.sig)?.rpc || await sol.transaction(job.sig);
   if (!tx) throw new Error("transaction not available yet");
-  persistEvidence(db, job.sig, tx);
+  persistEvidence(db, job.sig, tx, Date.now(), { captureSource: 'WALLET_RPC', commitment: 'confirmed' });
   setWalletProcessing(db, job.sig, w.address, "CAPTURED");
   try {
     // Transfer hooks can fail independently of raw capture. Do not claim the
