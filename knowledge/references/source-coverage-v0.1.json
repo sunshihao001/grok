@@ -1,6 +1,6 @@
 {
   "schema_version": "0.1",
-  "as_of": "2026-11-07",
+  "as_of": "2026-11-09",
   "purpose": "Track completeness of source-repo understanding independently from Blix integration; tree inventory is not knowledge mastery.",
   "source_state_terms": {
     "TREE_INVENTORIED": "All paths and hash counts enumerated, content NOT all read",
@@ -523,6 +523,101 @@
         "independent model A/B and real trading advantage"
       ],
       "live_validation": "NOT_RUN"
+    },
+    {
+      "date": "2026-11-09",
+      "kind": "LEGACY_PURE_THEORY_SEMANTIC_TRANSFORM_20261109",
+      "document": "knowledge/README.md#2026-11-09旧项目的纯知识已开始进入专业正文不等于运行时激活",
+      "evidence": "ORIGINAL_SOURCE_FILES_READ+QUALIFIED_INTERPRETATION_WRITTEN_IN_EXISTING_KNOWLEDGE",
+      "changed_existing_knowledge": [
+        "knowledge/methods/hermes-feature-to-market-structure.md",
+        "knowledge/mechanisms/market-price-mechanism-research.md",
+        "knowledge/mechanisms/wallet-roles-and-inventory.md",
+        "knowledge/cases/independent-validation-and-failure-cases.md"
+      ],
+      "source_items_reviewed": 9,
+      "unresolved": [
+        "full legacy-repo concept-by-concept coverage",
+        "AI on-demand retrieval and actual Blix execution",
+        "independent model task uplift",
+        "empirical validation of historical strategy claims"
+      ],
+      "warning": "Semantic transformation and document commits do not prove full knowledge acquisition or operational capabilities.",
+      "live_validation": "NOT_RUN"
+    }
+  ],
+  "pure_theory_transformations": [
+    {
+      "repository": "sunshihao001/-",
+      "source": "learning/01-04-基础理论/04-链上本质思维工具箱.md",
+      "blob": "a581d38e405501067230e311b05c259b27d8875f",
+      "target": "knowledge/methods/hermes-feature-to-market-structure.md",
+      "finding": "Field observation semantics, spoofability and reproducibility; unsupported correlation/threshold claims corrected.",
+      "status": "SOURCE_READ_SEMANTICALLY_TRANSFORMED_NOT_RUNTIME_VALIDATED"
+    },
+    {
+      "repository": "sunshihao001/-",
+      "source": "learning/GMGN字段组合五力模型理论总结.txt",
+      "blob": "7b26b0a9f692ee241b2f7fdaeddc381b750fdbbb",
+      "target": "knowledge/mechanisms/wallet-roles-and-inventory.md",
+      "finding": "Five forces as independent economic inquiry dimensions; distinguish research interest from trading value.",
+      "status": "SOURCE_READ_SEMANTICALLY_TRANSFORMED_NOT_RUNTIME_VALIDATED"
+    },
+    {
+      "repository": "sunshihao001/-",
+      "source": "learning/16-Gate决策框架理论基石.md",
+      "blob": "225167423183bfaca2a46a00fe3295036f34b1d7",
+      "target": "knowledge/mechanisms/wallet-roles-and-inventory.md",
+      "finding": "Observation vs decision, evidence TTL vs decision TTL; mandatory missing→BLOCK not universal.",
+      "status": "SOURCE_READ_SEMANTICALLY_TRANSFORMED_NOT_RUNTIME_VALIDATED"
+    },
+    {
+      "repository": "sunshihao001/meme-",
+      "source": "06_资料吸收/资料吸收_AVWAP锚点选择_v0.1.md",
+      "blob": "8f5b48ee7b9fe11762cf4a84e8c02fe0fbf6bee5",
+      "target": "knowledge/mechanisms/market-price-mechanism-research.md",
+      "finding": "Anchor choice and historical observations are market cost proxies, not identified wallet cost.",
+      "status": "SOURCE_READ_SEMANTICALLY_TRANSFORMED_NOT_RUNTIME_VALIDATED"
+    },
+    {
+      "repository": "sunshihao001/meme-",
+      "source": "06_资料吸收/资料吸收_AccumulationRange_第一控盘区_v0.1.md",
+      "blob": "4b89d573cfe7a5f16d8982b82904bc07f5863324",
+      "target": "knowledge/mechanisms/market-price-mechanism-research.md",
+      "finding": "Past-stage classification vs ex-ante detection; retrospective confirmation can leak future information.",
+      "status": "SOURCE_READ_SEMANTICALLY_TRANSFORMED_NOT_RUNTIME_VALIDATED"
+    },
+    {
+      "repository": "sunshihao001/meme-",
+      "source": "09_规则与回测/反证实验设计_v0.1.md",
+      "blob": "21c321922254eaeececf8fb48957b858c0a3bc4b",
+      "target": "knowledge/cases/independent-validation-and-failure-cases.md",
+      "finding": "Explicit falsification conditions and failed/omitted observation cohorts, not only positive cases.",
+      "status": "SOURCE_READ_SEMANTICALLY_TRANSFORMED_NOT_RUNTIME_VALIDATED"
+    },
+    {
+      "repository": "sunshihao001/qb-",
+      "source": "hermes_harness/15_judgment_governance/README.md",
+      "blob": "f17421786c23f46beb89e658e02eff8a4aba8873",
+      "target": "knowledge/cases/independent-validation-and-failure-cases.md",
+      "finding": "Execution completion vs evidence-backed judgment quality vs benefit.",
+      "status": "SOURCE_READ_SEMANTICALLY_TRANSFORMED_NOT_RUNTIME_VALIDATED"
+    },
+    {
+      "repository": "sunshihao001/qb-",
+      "source": "hermes_harness/16_reliability_calibration/README.md",
+      "blob": "143f89e1ec3c4920aaea4b5d8286c0a1090c596c",
+      "target": "knowledge/cases/independent-validation-and-failure-cases.md",
+      "finding": "Dry-run calibration success is not real-world reliability improvement.",
+      "status": "SOURCE_READ_SEMANTICALLY_TRANSFORMED_NOT_RUNTIME_VALIDATED"
+    },
+    {
+      "repository": "sunshihao001/qb-",
+      "source": "hermes_harness/22_anti_self_deception/document_only_audit.md",
+      "blob": "27bafe4f573f4e81ce83307b448ea037f9f9aa6a",
+      "target": "knowledge/cases/independent-validation-and-failure-cases.md",
+      "finding": "Documents not equivalent to implemented or executed functionality.",
+      "status": "SOURCE_READ_SEMANTICALLY_TRANSFORMED_NOT_RUNTIME_VALIDATED"
     }
   ]
 }
