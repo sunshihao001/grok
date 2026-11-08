@@ -65,6 +65,22 @@ jobs:
         if: always()
         working-directory: candidate
         run: node --no-warnings --test test/wallet-evidence-retry.test.mjs
+      - name: Retry case A - preexisting live feed
+        if: always()
+        working-directory: candidate
+        run: node --no-warnings --test --test-name-pattern="pre-existing live feed" test/wallet-evidence-retry.test.mjs
+      - name: Retry case B - hook fail and resume
+        if: always()
+        working-directory: candidate
+        run: node --no-warnings --test --test-name-pattern="failed downstream hook" test/wallet-evidence-retry.test.mjs
+      - name: Retry case C - same signature two owners
+        if: always()
+        working-directory: candidate
+        run: node --no-warnings --test --test-name-pattern="same signature is processed separately" test/wallet-evidence-retry.test.mjs
+      - name: Retry case D - malformed capture
+        if: always()
+        working-directory: candidate
+        run: node --no-warnings --test --test-name-pattern="missing or malformed RPC capture" test/wallet-evidence-retry.test.mjs
       - name: Wallet discovery checkpoint after WTrack
         if: always()
         working-directory: candidate
