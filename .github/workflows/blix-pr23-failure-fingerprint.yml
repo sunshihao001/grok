@@ -30,7 +30,8 @@ jobs:
           BLIX_MARKET_FEEDS: "0"
         run: |
           set +e
-          npm test > full.tap 2>&1
+          testcmd=$(node -p 'require("./package.json").scripts.test.replace("node --no-warnings --test", "node --no-warnings --test --test-reporter=tap")')
+          bash -c "$testcmd" > full.tap 2>&1
           rc=$?
           set -e
           sed -n '/^not ok /p' full.tap > failures.txt
