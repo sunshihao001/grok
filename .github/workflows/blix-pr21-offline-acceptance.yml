@@ -1,0 +1,85 @@
+name: Blix PR21 baseline and isolated read-only regression
+on:
+  push:
+    branches: [audit/blix-pr21-regression-20261108]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      BLIX_MARKET_FEEDS: "0"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 3bc1f7d4befc4e11e21d9a67fabbd5c4d259b1e7
+          path: baseline
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: ff2d22b036fde62d1a2a4bccd88dbbc5e758ae26
+          path: candidate
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Reproduce baseline and candidate WTrack failures independently
+        shell: bash
+        run: |
+          set +e
+          (cd baseline && node --no-warnings --test --test-reporter=tap test/wtrack.test.mjs) > baseline-wtrack.tap 2>&1
+          b=$?
+          (cd candidate && node --no-warnings --test --test-reporter=tap test/wtrack.test.mjs) > candidate-wtrack.tap 2>&1
+          c=$?
+          set -e
+          grep '^not ok ' baseline-wtrack.tap | sed -E 's/^not ok [0-9]+ - //' | sort > baseline-failures.txt || :
+          grep '^not ok ' candidate-wtrack.tap | sed -E 's/^not ok [0-9]+ - //' | sort > candidate-failures.txt || :
+          echo "### WTrack original baseline vs PR21 candidate" >> "$GITHUB_STEP_SUMMARY"
+          echo "Baseline exit: $b; candidate exit: $c" >> "$GITHUB_STEP_SUMMARY"
+          echo "Baseline failing tests:" >> "$GITHUB_STEP_SUMMARY"
+          cat baseline-failures.txt >> "$GITHUB_STEP_SUMMARY"
+          echo "Candidate failing tests:" >> "$GITHUB_STEP_SUMMARY"
+          cat candidate-failures.txt >> "$GITHUB_STEP_SUMMARY"
+          echo "Baseline TAP counts:"
+          grep -E '^# (tests|pass|fail)' baseline-wtrack.tap || :
+          echo "Candidate TAP counts:"
+          grep -E '^# (tests|pass|fail)' candidate-wtrack.tap || :
+          echo "Comparing failure names with exact test metadata"
+          diff -u baseline-failures.txt candidate-failures.txt
+      - name: PR21 offline economic chain and crash recovery
+        working-directory: candidate
+        run: |
+          node --no-warnings --test test/economic-events.test.mjs test/wallet-signature-coverage.test.mjs test/wallet-evidence-chain.test.mjs
+      - name: PR21 security regression independently of legacy suite failures
+        working-directory: candidate
+        run: npm run test:security
+      - name: Verify default Blix startup is fail-closed without starting it
+        working-directory: candidate
+        shell: bash
+        run: |
+          set +e
+          node scripts/read-only-audit.mjs --gate > ../readonly-gate.txt 2>&1
+          result=$?
+          set -e
+          cat ../readonly-gate.txt
+          if [ "$result" -eq 0 ]; then
+            echo 'ERROR: Original Blix startup gate unexpectedly allowed startup' >&2
+            exit 1
+          fi
+          echo "Startup gate correctly refused unsafe full-service launch (exit $result)." >> "$GITHUB_STEP_SUMMARY"
+      - name: Full PR21 regression suite (may retain known WTrack baseline failures)
+        working-directory: candidate
+        run: npm test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: blix-pr21-baseline-comparison
+          path: |
+            baseline-wtrack.tap
+            candidate-wtrack.tap
+            baseline-failures.txt
+            candidate-failures.txt
+            readonly-gate.txt
+          retention-days: 7
