@@ -69,6 +69,16 @@ test('incremental page reports a missing anchor as a gap rather than complete hi
  assert.equal(c.window.anchor_reached,0);
  assert.equal(c.historyComplete,false);d.close();
 });
+test('later healthy incremental scan does not erase an earlier truncated window',()=>{
+ const d=open();
+ checkpointWalletPage(d,{wallet:A,rows:[row('gap-one')],priorAnchor:'old',first:false,reached:false,observedAt:2000});
+ checkpointWalletPage(d,{wallet:A,rows:[row('new')],priorAnchor:'gap-one',first:false,reached:true,observedAt:3000});
+ const c=walletSignatureCoverage(d,A);
+ assert.equal(c.conclusion,'INCREMENTAL_ANCHOR_REACHED');
+ assert.equal(c.window.gaps_seen,1);
+ assert.equal(c.window.last_gap_at_ms,2000);
+ assert.equal(c.unresolvedHistoricalRisk,true);d.close();
+});
 test('an anchor-reached incremental page is not proof of lifetime completeness',()=>{
  const d=open();checkpointWalletPage(d,{wallet:A,rows:[row('newer')],priorAnchor:'old',first:false,reached:true});
  assert.equal(walletSignatureCoverage(d,A).conclusion,'INCREMENTAL_ANCHOR_REACHED');
