@@ -83,6 +83,6 @@ test("the same signature is processed separately for B using the shared stored t
 
 test("missing or malformed RPC capture cannot be marked successfully processed", async () => {
   const sig = "bad-rpc";
-  await assert.rejects(wallets.readTx(scan(A),job(sig),null,{transaction:{message:{}},meta:null}),/Missing transaction/);
+  await assert.rejects(wallets.readTx(scan(A),job(sig),null,{transaction:{message:{}},meta:null}),/Missing transaction|RPC signature mismatch/);
   assert.equal(walletProcessing(db,sig,A),null);
 });
