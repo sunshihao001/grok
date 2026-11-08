@@ -19,6 +19,9 @@
 
 **下一步不是再增加知识分类**：检验一轮真实调查问题是否能够正确选用上述知识，主动发现新经济问题、区别观测/因果/决策与缺数据、避免错误阈值，并与不加载旧知识的分析对照。**这些专业正文已被实际修改，但并未让Blix当前运行时AI自动读到，也没有测得模型提升。**
 
+
+**连续理论与证据依赖补审（2026-11-09）**：进一步定向核查旧Hermes 10–14从钱包角色→同源关系→Sybil/Wash/协调→证据链→行动Gate的原推导，以及meme-的Spring/SOS/LPS完整时序和qb-的原判定样本。**新的认识**不是多贴三个风险标签，而是多个标签可能由同一笔交易、同一供应商快照或同一价格序列派生，不能充当多份独立验证；交易禁止与只读研究停止也不是一个决定。已原位修订[钱包与协同机制](mechanisms/wallet-roles-and-inventory.md)、[价格形成与阶段序列](mechanisms/market-price-mechanism-research.md)、[反证/判断治理](cases/independent-validation-and-failure-cases.md)，并在[来源覆盖台账](references/source-coverage-v0.1.json)中登记定向审阅状态、未证事项和风险锚点；[ai-d跨领域评测](https://github.com/sunshihao001/ai-d/blob/main/evaluation/first-cross-domain-tests.md)增加非独立证据的失败场景。**均为静态知识修订，尚未实测模型或Blix运行时收益。**
+
 ## 2026-11-07｜跨市场与AI双循环的整体机制研究（先于局部知识调用）
 
 当问题不只是“某个地址/指标对不对”，而是**市场为何这样运行、AI应怎样建立可持续改变的专业判断**，先读[跨参考项目深度研究第11节](references/source-knowledge-deep-study-v0.1.md#11-2026-11-07-跨全市场与-ai-的双重反馈从数据选择到经济机制与判断修订)。原始证据把 **Blix发现/排队/Playbook反馈、Pulse选择性保存、Million跳过与可跟随成本、PumpTrace资金/Holder证据、Why-Solana假设失效、PumpGrok任务限制、Hermes/qb-/meme-经济机制、ai-d问题发现** 放进同一个完整市场调查问题中；同时核对了外部观察系统交集研究与 RED-COHORT 2026-10 数值撤回。
