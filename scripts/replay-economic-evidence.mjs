@@ -23,7 +23,7 @@ if (!dbPath || !inputPath || args.some(a => !['--db','--input',dbPath,inputPath]
     for (const entry of entries) {
       const tx = entry.tx ?? entry;
       const sig = entry.sig || entry.signature || tx.transaction?.signatures?.[0];
-      results.push(persistEvidence(db, sig, tx));
+      results.push(persistEvidence(db, sig, tx, Date.now(), { captureSource: 'OFFLINE_ARCHIVE', commitment: null }));
     }
     console.log(JSON.stringify({ mode: 'LOCAL_ARCHIVED_RPC_JSON_REPLAY', inputCount: entries.length,
       stored: results.filter(x => !x.duplicate).length, duplicates: results.filter(x => x.duplicate).length,
