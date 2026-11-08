@@ -1,0 +1,88 @@
+// Read-only acceptance of a concrete offline Mint report, including proof the input SQLite is unchanged.
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { createHash } from 'node:crypto';
+import { execFileSync, spawnSync } from 'node:child_process';
+import { DatabaseSync } from 'node:sqlite';
+import { persistEvidence } from '../server/economic-events.mjs';
+
+const script = new URL('../scripts/inspect-economic-mint.mjs', import.meta.url).pathname;
+const A = '4p7SeR6361WJ4T4icgsYTnzAUzfA5NwM4CwYD9kMBjuK';
+const B = 'BTmCme13XXrD3VLxXFChL9VnmicJ5PjkVUpAsjrooEYh';
+const M = 'GTNHLKQWKZHaHpd6PjfMgfFZUDEuCviwXMwYbCcepump';
+const TOKEN = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
+const hash = file => createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+const args = (file, extra = []) => [script, '--db', file, '--wallet', A, '--mint', M, ...extra];
+const bal = (accountIndex, owner, amount) =>
+  ({ accountIndex, owner, mint:M, uiTokenAmount:{ amount:String(amount), decimals:6 } });
+
+test('an existing local transaction archive yields a sender-to-recipient Mint report without modifying the database', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blix-readonly-mint-'));
+  const file = path.join(root, 'archive.sqlite');
+  try {
+    const db = new DatabaseSync(file);
+    db.exec('CREATE TABLE wallet_trades (sig TEXT,wallet TEXT,mint TEXT,side TEXT,sol REAL,t INTEGER)');
+    const original = {
+      slot: 151, blockTime: 1700000000,
+      transaction:{ signatures:['archive-only-transfer'], message:{
+        accountKeys:[A,B,'ATA_A','ATA_B',TOKEN],
+        instructions:[{
+          programId:TOKEN, parsed:{ type:'transferChecked', info:{
+            source:'ATA_A',destination:'ATA_B',mint:M,
+            tokenAmount:{ amount:'400000000', decimals:6 }
+          }}
+        }]
+      }},
+      meta:{ err:null,fee:5000,preBalances:[1e9,1e9,0,0,0],postBalances:[1e9-5000,1e9,0,0,0],
+        preTokenBalances:[bal(2,A,400000000),bal(3,B,0)],
+        postTokenBalances:[bal(2,A,0),bal(3,B,400000000)],
+        innerInstructions:[], logMessages:[] }
+    };
+    persistEvidence(db,'archive-only-transfer',original);
+    db.prepare('INSERT INTO wallet_trades(sig,wallet,mint,side,sol,t) VALUES(?,?,?,?,?,?)')
+      .run('recipient-later-sale',B,M,'sell',1,1700000080000);
+    db.close();
+    const before = hash(file);
+    const report = JSON.parse(execFileSync(process.execPath,args(file),{encoding:'utf8',timeout:15000}));
+    assert.equal(report.mode,'OFFLINE_READ_ONLY_SQLITE_MINT_REPORT');
+    assert.equal(report.evidence.knownSenderMintCaptures,1);
+    assert.equal(report.evidence.lifetimeHistoryComplete,false);
+    assert.equal(report.recipients.length,1);
+    assert.equal(report.recipients[0].toOwner,B);
+    assert.equal(report.recipients[0].amountRaw,'400000000');
+    assert.equal(report.recipients[0].sellObservation,'LOCAL_SELL_SUMMARY_OBSERVED');
+    assert.deepEqual(report.recipients[0].observedSells.map(x=>x.sig),['recipient-later-sale']);
+    assert.ok(!JSON.stringify(report).includes('rpc_json'),'report exposes metadata, not whole raw transaction');
+    assert.equal(hash(file),before,'even in shared filesystem the report leaves the SQLite bytes unchanged');
+  } finally { fs.rmSync(root,{recursive:true,force:true}); }
+});
+
+test('missing local evidence tables remain UNKNOWN, not a false statement of no transfer', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(),'blix-empty-mint-'));
+  const file = path.join(root,'empty.sqlite');
+  try {
+    const d = new DatabaseSync(file);
+    d.close();
+    const before=hash(file);
+    const report=JSON.parse(execFileSync(process.execPath,args(file),{encoding:'utf8',timeout:15000}));
+    assert.deepEqual(report.recipients,[]);
+    assert.equal(report.evidence.indexedCoverage,'LOCAL_EVIDENCE_OR_WALLET_SUMMARY_MISSING');
+    assert.equal(report.evidence.lifetimeHistoryComplete,false);
+    assert.equal(hash(file),before);
+  } finally { fs.rmSync(root,{recursive:true,force:true}); }
+});
+
+test('missing DB or unbounded time range fails closed without creating files', () => {
+  const root=fs.mkdtempSync(path.join(os.tmpdir(),'blix-missing-mint-'));
+  const missing=path.join(root,'must-not-create.sqlite');
+  try {
+    const notFound=spawnSync(process.execPath,args(missing),{encoding:'utf8',timeout:15000});
+    assert.equal(notFound.status,2);
+    assert.equal(fs.existsSync(missing),false);
+    const unbounded=spawnSync(process.execPath,args(missing,['--hours','999']),{encoding:'utf8',timeout:15000});
+    assert.equal(unbounded.status,2);
+  } finally { fs.rmSync(root,{recursive:true,force:true}); }
+});
