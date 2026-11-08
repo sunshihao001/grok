@@ -116,3 +116,17 @@
 - **验证范围**：`INTEGRATED_TESTED`，仍非 `LIVE_VERIFIED`，也非已合入 `blix` 主体。新增 WTrack 分组功能的现有 API/UI 接入范围未在此次独立实跑证实。
 - **本轮技术结论**：长期红灯不是必须接受的“历史噪声”。排除回归与关闭发布阻断是两件事；先利用原测试还原既有契约，直接修正实现比重复讨论风险更快。
 - **下一真正的产品缺口（承接 B13/B15）**：只读报告不能依靠启动带交易、自动领收益和模型费用路径的原主服务。优先检查是否能用现有 `economic-events.mjs` 与 SQLite 档案，直接生成**无网络、无签名、无新后台**的单 Mint 证据报告；用一条具体离线交易链验收。若现成脚本已完全解决，则不再开发第二个入口。此方向可以被可运行的既有脚本或成本证据推翻。
+
+
+### 2026-11-09｜R-04 第二轮：独立只读报告的可运行验收
+
+**发现的问题**：PR #23 的经济事实已经能在 SQLite 内形成接收方、后续卖出、跨Mint时序候选；但只通过测试或原服务 API 访问，不等于在安全边界内可直接得到可阅读的单 Mint 调查结果。原 `server/server.js` 仍含交易/签名/自动费用路径，不能为查看结果直接启动。
+
+**本轮修正（同一 PR #23 分支，非新成品）：**
+- 复用现有 `server/economic-events.mjs` 的 `recipientOutcomes` 和旧数据表，新增单独的 `scripts/inspect-economic-mint.mjs`。运行 `npm run inspect:evidence-offline -- --db EXISTING.sqlite --wallet BASE58 --mint BASE58`，打开**已经存在**的 SQLite 为 read-only，且设置 `PRAGMA query_only=ON`；只向标准输出打印有限的元数据与候选关系，不启动主服务器、RPC、交易、签名、模型及后台任务。
+- 报告明确显示 `knownSenderMintCaptures`、本地签名窗口、`lifetimeHistoryComplete:false`、`sellObservation` 与 UNKNOWN；卖出与跨币关系只为候选，不能证明转入库存卖出、同控或资本来源。
+- `test/offline-mint-report.test.mjs` 对一个带 RPC 原文索引的合成 SQLite 验证 A→B Token 转移、B 后续卖出、未知覆盖以及**文件 SHA256 执行前后不变**；另测空数据库与缺失数据库 fail-closed。**这是隔离数据回放，不是主网实测。**
+
+**代码与真实验收**：集成候选 `3d2ed0e8bf5bfa2e341fc4dab2d1b0bb779909a2`；[Node24 全量、安全、经济证据 CI 全通过](https://github.com/sunshihao001/grok/actions/runs/42527683586)；[独立审计通过](https://github.com/sunshihao001/grok/actions/runs/42527683587)。不虚报实际链上覆盖、正式服务或 Grok Bot 云端已运行。原有 PR #23 仍是 Draft，且直接基于 PR #22 而非 `blix`；本次**没有合并**。
+
+**下一轮只保留真正阻断运行的缺口：** 对一批带来源、slot、签名的真实公开 `getTransaction(jsonParsed)` 归档在隔离环境做同报告回放；检查 Token-2022、同笔 Swap+Transfer、多池、Owner缺失、历史截断及覆盖说明。随后评估独立只读进程和现有 UI 的最小对接，而不是直接把原服务安全门禁打开。若真实 RPC 原文获取受供应商额度/历史可用性限制，记录其为 `UNKNOWN/NOT_AVAILABLE`，不自动拓展付费数据源。
