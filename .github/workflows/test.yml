@@ -15,3 +15,6 @@ jobs:
           node-version: 24
       - run: npm test
       - run: npm run test:security
+        if: ${{ !cancelled() }}
+      - run: npm run test:evidence
+        if: ${{ !cancelled() }}
