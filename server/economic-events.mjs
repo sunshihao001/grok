@@ -221,7 +221,7 @@ export function recipientOutcomes(db, sender, mint = null, limit = 20, maxHours 
   const rows = direct.rows.map(r => {
     const transferAt = Number.isFinite(r.block_time) ? r.block_time * 1000 : null;
     if (transferAt === null || !r.mint) return { ...r, followupStatus: 'TRANSFER_TIME_OR_MINT_UNKNOWN',
-      observedSells: [], crossMintCandidates: [] };
+      sellObservation: 'TRANSFER_TIME_OR_MINT_UNKNOWN', observedSells: [], crossMintCandidates: [] };
     const observedSells = sells.all(r.to_owner, r.mint, transferAt, transferAt + windowMs);
     const cross = crossMintCandidates(db, r.to_owner, Math.ceil(windowMs / 3600_000), 25).rows
       .filter(x => x.sold_mint === r.mint && x.sold_at >= transferAt && x.sold_at <= transferAt + windowMs);
