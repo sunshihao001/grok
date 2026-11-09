@@ -194,3 +194,25 @@
 - **知识/产品增量**：**未观察到行为**需要先有可信的观察窗口；**时间未知**是更上游的事实缺口，不能被下游默认值吞掉。该规则同样适用于 6h/12h 异动监控、历史截断与后续卖出判断。
 
 **下一轮研究决策**：暂不扩大专家/知识架构，也不重扫全部参考项目。先用现有 `inspect-economic-mint.mjs` 和 `economic-events.mjs` 检查**时间未知、窗口截断、池/公共设施节点、交易原文覆盖**四种会直接误导单 Mint 调查的边界。每发现一个能复现的错误就先写回归、最小修复，再看是否值得引入 PumpTrace/Million 的历史补查能力。独立只读进程与真实公开归档回放仍是下一项大门槛；在安全隔离和成本边界确认前，不启动原服务器、不签名、不交易、不付费、不部署。
+
+### 2026-11-09｜R-07／B10：最高严重度跨层误归因，已修正候选代码并做离线回归
+
+**本轮自主排序**：比较了 B04（同签名Swap/Transfer的事件颗粒度）、B10（Bubble Map费用代付误当出资人）、B11（Holder分母）及 R-06（时间窗口）。优先B10，因为它不仅造成数字偏差，还把**交易手续费这一确定性技术事实，错误升级成资本来源，再通过多跳图放大为多个钱包的群体关系**；旧证据缓存甚至使错误随时间持续。B04、B11仍保留且是下一轮候选，不把本轮聚焦误认为已解决。
+
+**错误传播路径及正确颗粒度对齐：**
+
+| 层级 | 原始输入 / 已有问题 | 当前修正后的证据契约 |
+|---|---|---|
+| 交易元数据 | `accountKeys[0]`为Fee Payer；旧代码没有System转账就回退为funding钱包 | `feePayer`仅作为**费用支付者**元数据，`FEE_PAYER_ONLY`不能形成funded边 |
+| 指令级经济动作 | 旧代码只取最早交易内一个表面接收记录，未校验类型/金额/失败/多出资者 | 成功交易的明确System `transfer` 或 `createAccount` 且收款人为目标、lamports>0，才有 `DIRECT_SOL_OBSERVED` 候选；同笔多个不同来源为 `MULTIPLE_DIRECT_SOL_SENDERS`，不任选一个 |
+| 钱包历史覆盖 | 三页1000笔以上被旧代码记为 `""`，持久缓存后再也不查 | `HISTORY_TRUNCATED` + `cursor` + 最近已见签名；有界一小时后可继续补查，不能宣称完整历史或无资金来源 |
+| 本地缓存 | 旧 `bubble_funders` 表无来源字段，曾混放历史截断、fee payer、直接转入 | **原表原位新增**status/signature/payer/cursor；旧记录自动为 `UNVERIFIED_LEGACY`，不加入图，复核后更新单一缓存记录；不删除原数据 |
+| 网络结构/经济主体 | 同一个疑似payer可把多个wallet错误连成funded群体 | 仅 `DIRECT_SOL_OBSERVED` 可生成 `funded` 边；节点返回证据status、原签名、payer与截断水位；图返回 `WALLET_GRAPH_CONNECTIVITY_CANDIDATES_NOT_COMMON_CONTROL`。真实资金转入**仍不证明同控或内幕** |
+
+**本轮实际改动**：`server/bubblemap.js`（复用原Coin/BubbleMap UI/API和单表缓存）、新增纯离线验证助手 `server/bubble-funding-evidence.mjs` 与 `test/bubble-funding-evidence.test.mjs`；注册到 `npm test` 和 `npm run test:evidence`。测试覆盖代付误归因、成功的SOL指令及CPI、失败交易、多个出资者、多页截断及续页、遗留缓存复核、无历史/原文缺失。**没有独立重造图谱服务或新钱包采集进程。**
+
+**原版保护的有意变更**：原版 `server/bubblemap.js` 不再字节不变，这是经本轮错误反例审查的专业二次修复；`test/fixtures/blix-import-baseline.json` 已从28个不可改动指纹中将其转入 `reviewed_modified_original_modules`，改用原版且本轮未变动的 `server/solana.js` 保持28项保护；767项原版路径必须完整保留。**保护清单的变更不是略过回归，而是显式承认改动、用测试约束新契约。**
+
+**执行反馈**：最初 [Node24失败](https://github.com/sunshihao001/grok/actions/runs/42564594476) 的唯一失败是原版字节指纹保护发现 `bubblemap.js` 改动，此项是真实保护门禁，不是代码解析器错误，也不能隐藏。完成意图审查和新反例后修订保护基线。之后 [e907cf7f的全量+安全+证据CI](https://github.com/sunshihao001/grok/actions/runs/42564963740) 各步骤真实成功、[Audit](https://github.com/sunshihao001/grok/actions/runs/42564963769) 成功。后续若有新提交仍须重新检查相应SHA，不把旧绿灯移植为最新验收。
+
+**未完成和可推翻条件**：这是 `INTEGRATED_OFFLINE_TESTED` 的 **Draft PR #23**，不是主网真实资金来源的验证；没有运行含签名/交易/付费路径的主服务，也没有向用户展示真实UI。最早可读交易不是钱包经济生命史的全证明，RPC缺页/公共资助服务、跨交易资本混用和多来源融资仍只能标为候选/UNKNOWN。风险锚点判断：此项修复能消除假阳性群体连线，**比继续堆机制文档有更高的即时价值**；下一轮若 R3供给分母与B04混合交易的真实失败影响更大，应按最短反例测试重排，不再重复资金来源定义研究。
