@@ -539,7 +539,7 @@ HoldTech在这轮研究前没有作为此前Pulse/Hermes合成反例的原始材
 
 ### 14.2 真实反例一：成功者队列为什么不能给出全市场成功率
 
-[Why-Solana 的代码与已保存结果](https://github.com/searadacunha/Why-Solana-Memecoins-Are-Over/blob/070d2a6e6dcb89efe18d01091a8040eb323e1099/code/a4_selection_bias.py)给出两个自带定义的参考分母：中性词族 32 / 2740 = **1.168%**；邻近创建Slot窗 6 / 171 = **3.509%**。其第一阶段作者历史交易截屏选中的11个Mint却为**11/11 毕业（100%）**。本轮对发布的整数重新计算：100% / 1.168% = **约85.6倍的表面“毕业率”差别**；在独立、同概率抽取的简化参照下 `(32/2740)^11 ≈ 5.51×10^-22`，与原结果一致。**这不是交易优势的85.6倍，也不等于Blix自己的偏差大小**；它说明“作者挑选出的成功案例”不提供发行总体成功率分母，两个中性样本还反映不同采集框差别。
+[Why-Solana 的代码与已保存结果](https://github.com/searadacunha/Why-Solana-Memecoins-Are-Over/blob/070d2a6e6dcb89efe18d01091a8040eb323e1099/code/a4_selection_bias.py)给出两个自带定义的参考分母：中性词族 32 / 2740 = **1.168%**；邻近创建Slot窗 6 / 171 = **3.509%**。其第一阶段作者历史交易截屏选中的11个Mint却为**11/11 毕业（100%）**。**本轮不仅重算发布的整数，还通过GitHub连接直接读取三份固定SHA原始输入 JSON**：`data/ancrage/symboles.json`（blob `8b28b082…`）、`data/cibles/cibles.json`（`3846eb1f…`）、`data/trace_cohorte/t0_cohorte.json`（`96dfc267…`），按[原脚本](https://github.com/searadacunha/Why-Solana-Memecoins-Are-Over/blob/070d2a6e6dcb89efe18d01091a8040eb323e1099/code/a4_selection_bias.py)的聚合与分母逻辑**独立计算得 2740/32、171/6、11/11**，所有关键计数与作者结果一致；概率 `(32/2740)^11 = 5.513070808628306×10^-22`，与公开JSON精确相同。100% / 1.168% = **约85.6倍的表面毕业比例**。这是一项**真实原始数据复算（在隔离JS运行中实现同一公式），不是原作者完整Python脚本端到端运行**。**这不是交易优势的85.6倍，也不等于Blix自己的偏差大小**；它说明“作者挑选出的成功案例”不提供发行总体成功率分母，两个中性样本还反映不同采集框差别。
 
 [CryptoBot 的MELT队列审计](https://github.com/elalamiimed/CryptoBot/blob/1be592d71020738510b25e3bed7a2f5def13ff0a/reports/cohort_survivorship_20260927/FINDING.md)又给出独立的真实研究失败案例：41,470个带标签Mint **全部**出现在“迁移后第一小时”资料中，即标签总体先满足“存活到迁移”。作者发现该样本从发行时刻起的4x峰值比例为**93.6%**，但其另一个交易记录中的**实际完成4x交易为2/137（1.5%）**。这些不是同口径实验——样本、执行与结果类型都不同，**不能直接相减或把差值全归幸存者偏差**；可以严格得出的是：毕业幸存者的最大理论价格峰值不是“所有新币可执行获利率”。这项审计没有否定其同队列内部的机制/标签相关研究，也没有否定其原始交易修复工程。
 
@@ -576,10 +576,10 @@ HoldTech在这轮研究前没有作为此前Pulse/Hermes合成反例的原始材
 
 | 具体来源（固定版本） | 已检查对象 | 本轮证据类型 | 未核验 |
 | --- | --- | --- | --- |
-| [Why-Solana `a4_selection_bias.py` + 公布JSON](https://github.com/searadacunha/Why-Solana-Memecoins-Are-Over/tree/070d2a6e6dcb89efe18d01091a8040eb323e1099) | 两组发行基率与11个事后挑选样本，重新用整数复算 | `SOURCE_READ + DERIVED_COUNTS_RECOMPUTED` | 本地完整脚本/所有输入数据端到端执行、未来市场外推 |
+| [Why-Solana `a4_selection_bias.py` + 三份原始JSON输入](https://github.com/searadacunha/Why-Solana-Memecoins-Are-Over/tree/070d2a6e6dcb89efe18d01091a8040eb323e1099/data) | 逐项读取 `symboles`/`cibles`/`t0_cohorte` 原始JSON，再按原公式重算2740/32、171/6、11/11与概率，均匹配发布结果 | `SOURCE_INPUTS_READ + ORIGINAL_FORMULA_INDEPENDENTLY_RECOMPUTED` | 原作者Python脚本本地端到端执行、未来市场外推 |
 | [CryptoBot 幸存者队列FINDING](https://github.com/elalamiimed/CryptoBot/blob/1be592d71020738510b25e3bed7a2f5def13ff0a/reports/cohort_survivorship_20260927/FINDING.md) | 41,470标签全在迁移后样本；区别峰值与实际成交 | `SOURCE_REPORT_READ` | 本地重跑大型原始MELT数据、直接外推Blix |
 | [ian05012 采集/标签脚本](https://github.com/ian05012/solana-memecoin-dataset/tree/7070d00e1e4492f8604d988549d91785cc5f43f7/scripts) | 70/30来源配额、6h无行情→24h/3d零标签、`labeled=1`终止、同Mint可重复快照 | `SOURCE_READ + EXACT_BRANCH_REPRODUCTION` | 已发布parquet全体重算、真实币后续复苏频率 |
 | [Million](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/discovery/discovery.service.ts)、[HoldTech](https://github.com/co-numina/holdtech/blob/a75e214bf1ee0a8803eb7d93336be98c481c2db9/app/lib/scan-core.ts)、[PumpTrace](https://github.com/AntC215/Pumptrace/blob/1fa070bed079e0d7e54c1bd4f12efa6e35a451c1/src/modules/backfill-manager.mjs) | 买家前30/60再70/30预览、TopHolder口径、CAP_REACHED与COMPLETE不同 | `SOURCE_READ + STATIC_CROSS_PROJECT_COMPARISON` | 真实同Mint一致性、抽样比例性能改善 |
 | [Blix原源码](https://github.com/sunshihao001/grok/tree/blix/server) | `engine.js`的6h发行存活窗口、`research.js`队列、`brain.js`评分回顾 | `SOURCE_READ / NOT_DEPLOYED` | 用户目标环境真实覆盖、运行时AI学习是否受偏差影响 |
 
-**进度判断**：本轮认知增量不在于再次说明“有偏差”，而在于找到**一个可定位的未来标签过早归零代码分叉**与**两个已经自我纠错的真实研究队列案例**，使样本选择→标签生成→AI判断成为一个能对照的完整对象。进一步发表或市场胜率主张仍需真实新币/已冻结发行样本和独立结果，不允许靠本报告自证。
+**进度判断**：本轮认知增量不在于再次说明“有偏差”，而在于找到**一个可定位的未来标签过早归零代码分叉**、**使用完整原始JSON独立复算一组真实研究抽样审计**，并对照**两个有源记录的纠偏案例**，使样本选择→标签生成→AI判断成为一个能对照的完整对象。进一步发表或市场胜率主张仍需真实新币/已冻结发行样本和独立结果，不允许靠本报告自证。
