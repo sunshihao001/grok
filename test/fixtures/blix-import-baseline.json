@@ -776,7 +776,6 @@
     "server/pulse.js": "5484601c45582f52391cf0b5c55ef97c78087c4d",
     "server/coin.js": "4eea684a90502f7d7ce23f24228c7b3d8be49e60",
     "server/holders.js": "5050a075144993828209340d6013213364bf1849",
-    "server/bubblemap.js": "75b824e05e16f50e7a89189a7d5a1fb534f1e915",
     "server/journal.js": "7afb9c6126efff8ae251e3bff251279ce9227792",
     "server/walletpage.js": "4331fe23fff3f8feb8059645fc631a880e6d4941",
     "server/brain.js": "bfe66cea477e10c38ffc4c86545e39ba01ce72f0",
@@ -799,7 +798,8 @@
     "web/src/pages/Tracker.tsx": "feb8419bb73836255ab52e24462136a9e6d9e094",
     "web/src/pages/Wallets.tsx": "4ea08920f9afb4c146a07704b045fb0fd989e0ce",
     "public/index.html": "fffdc8c7acbaab98ff9b89fe0e2ee97ec799403f",
-    "public/mcp-tools.js": "27bbd7497bd097e27ccd4447ff96dccd516cbcc9"
+    "public/mcp-tools.js": "27bbd7497bd097e27ccd4447ff96dccd516cbcc9",
+    "server/solana.js": "fd1a0ec35b2d831337bc3ad47153297b3455f988"
   },
   "reviewed_modified_original_modules": {
     "server/server.js": "Add owner-only evidence read routes; must retain legacy routing and full server source.",
@@ -809,7 +809,8 @@
     "README.md": "Explain full-product inheritance and safe research environment without deleting upstream documentation.",
     "mcp/blix-mcp.mjs": "Filter write tools in current research MCP facade while preserving original trading tool definitions elsewhere.",
     "package.json": "Add safe test scripts and static start gate while retaining all original scripts.",
-    "test/wtrack.test.mjs": "Maintain legacy tracker behavior while adapting fixture signature checks."
+    "test/wtrack.test.mjs": "Maintain legacy tracker behavior while adapting fixture signature checks.",
+    "server/bubblemap.js": "Intentionally correct original funding provenance: only directly parsed positive System SOL transfer/createAccount may create funded graph edges; legacy cache must be revalidated, truncated history retained with cursor. Reviewed by test/bubble-funding-evidence.test.mjs and full original-module preservation suite."
   },
   "validation_scope": "Paths and byte fingerprints are preservation/change-detection only; functionality, UI reachability, trading safety, network billing and production performance require separate tests. Legitimate enhancements can update baseline assertions after review."
 }
