@@ -57,6 +57,16 @@ test('an existing local transaction archive yields a sender-to-recipient Mint re
     assert.deepEqual(report.recipients[0].observedSells.map(x=>x.sig),['recipient-later-sale']);
     assert.ok(!JSON.stringify(report).includes('rpc_json'),'report exposes metadata, not whole raw transaction');
     assert.equal(hash(file),before,'even in shared filesystem the report leaves the SQLite bytes unchanged');
+    // Unknown transfer time is not a valid observation window, even if B has a sale summary.
+    const edit = new DatabaseSync(file);
+    edit.prepare('UPDATE econ_transactions SET block_time=NULL WHERE sig=?').run('archive-only-transfer');
+    edit.close();
+    const beforeUnknown = hash(file);
+    const unknown = JSON.parse(execFileSync(process.execPath,args(file),{encoding:'utf8',timeout:15000}));
+    assert.equal(unknown.recipients.length,1);
+    assert.equal(unknown.recipients[0].sellObservation,'TRANSFER_TIME_OR_MINT_UNKNOWN');
+    assert.deepEqual(unknown.recipients[0].observedSells,[]);
+    assert.equal(hash(file),beforeUnknown,'unknown-time report must also remain read-only');
   } finally { fs.rmSync(root,{recursive:true,force:true}); }
 });
 
