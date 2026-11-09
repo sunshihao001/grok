@@ -567,7 +567,11 @@
     "extension_model": "IN_PLACE_COMPATIBLE_ADDITIONS_AND_REVIEWED_FIXES",
     "deletion_policy": "NO_UNREVIEWED_REMOVAL_OR_REPLACEMENT_OF_ORIGINAL_CAPABILITIES",
     "runtime_safety": "PRESERVE_SOURCE_BUT_DO_NOT_ACTIVATE_UNAUTHORIZED_SIGNING_TRADING_CLAIMS_BILLING_OR_DEPLOYMENT",
-    "reference": "docs/project/README.md"
+    "reference": "docs/project/README.md",
+    "presence_verified": "767/767 source paths from imported snapshot present in PR #23 candidate CI",
+    "unchanged_core_verified": "28/28 selected original market/UI/trade/AI/core modules byte-identical in PR #23 candidate CI",
+    "regression_test": "test/original-blix-preservation.test.mjs in Draft PR #23",
+    "full_functional_runtime_accepted": false
   },
   "independent_workstreams": {
     "product_base": {
@@ -582,14 +586,18 @@
     },
     "economic_intelligence_extension": {
       "status": "DRAFT_OFFLINE_CI_VERIFIED",
-      "candidate": "PR #23 on PR #22 -> PR #18, NOT_MERGED",
+      "candidate": "Draft PR #23 directly targets blix (cumulative #18 and #22 ancestry), NOT_MERGED",
       "ci": {
-        "sha": "fe3bdbf946ca78d5867ccbdf48693ad36b6cfe9d",
-        "url": "https://github.com/sunshihao001/grok/actions/runs/42529313051",
-        "all_tests": "449/449",
+        "sha": "bae4fec049be8b5dd14522e104291b0ee969dc6c",
+        "url": "https://github.com/sunshihao001/grok/actions/runs/42537815318",
+        "all_tests": "452/452",
         "security": "20/20",
-        "evidence": "42/42"
-      }
+        "evidence": "42/42",
+        "audit": "https://github.com/sunshihao001/grok/actions/runs/42537815434",
+        "scope": "PULL_REQUEST_CI_OFFLINE_NOT_LIVE"
+      },
+      "target_branch": "blix",
+      "mergeable_pr_as_checked": "CLEAN_NO_CONFLICT_NOT_MERGED"
     },
     "domain_knowledge": {
       "status": "SOURCE_INDEXED_AND_PARTIALLY_STUDIED_NOT_FULL_RUNTIME_ACTIVATION",
