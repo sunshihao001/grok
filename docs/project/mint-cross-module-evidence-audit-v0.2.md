@@ -89,3 +89,13 @@
 这轮静态源码已足以改变产品集成优先级：**先核查并纠正错误事实和资金边的传播，再谈 AI 自动结论、跨Mint监控与Grok云端调用。** 下一次不必重复“全面扫描所有文件”；只有在确认已有安全、依赖和只读隔离条件后，才将上述反例做成离线测试。真实Mint、长时间运行、Grok云端、通知可靠性仍是未验收。
 
 相关资料：[全局目标](goal-map.md)、[单Mint验收](single-mint-audit.md)、[现有能力层](intelligence-layer.md)、[API/MCP/SSE契约](api-mcp-sse-contract-v0.1.md)、[安全边界](read-only-safety.md)。
+
+## 2026-11-09 修订结果：R1/R2已转为工程修复候选，原V0.2保留作为错误基线
+
+**修正对象**：[PR #23](https://github.com/sunshihao001/grok/pull/23) 的 `server/bubblemap.js`，以及新 `server/bubble-funding-evidence.mjs`。V0.2第2节R1/R2描述的是**修复前代码路径**，不能再当成当前Draft实现。R3分母不一致、R4余额快照误当历史完整、S1Token Account采样偏差、S2多来源连线与同控区别仍为开放问题。
+
+- **R1 截断缓存**：由旧 `""` 标记修改为 `HISTORY_TRUNCATED`、签名、持久cursor与限期继续扫描；最早可访问历史仍不等于全链完整。旧表记录默认 `UNVERIFIED_LEGACY`，不能用于新增有资金关联的结论。
+- **R2 Fee Payer误认资金**：仅由成功的原始System `transfer`/`createAccount` 指令确定直接SOL转入候选；费支付者只记录 `FEE_PAYER_ONLY`，绝不单独产生 `funded`。同交易多个独立资金发送者返回 `MULTIPLE_DIRECT_SOL_SENDERS`，不任选单一funding钱包。
+- **节点与网络颗粒度**：Bubble Map对每个被追踪holder返回资金来源`status/signature/feePayer/historyCursor`，每张图增加连接候选而非经济主体同控的明示解释；原有多跳结构和UI布局保留。
+
+**验证**：通过新增 `test/bubble-funding-evidence.test.mjs` 的隔离RPC和SQLite旧缓存反例，及 [Node24全量+安全+证据验证](https://github.com/sunshihao001/grok/actions/runs/42564963740)（该固定提交确实成功）。未跑真实公开RPC或完整Blix主服务，没有生产性钱包/群体实测。以后依据最新提交的CI更新此结论，**不能再引用上面历史的“尚未执行所有反例”概括R1/R2**。
