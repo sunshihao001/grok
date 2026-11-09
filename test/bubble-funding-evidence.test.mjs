@@ -45,6 +45,17 @@ test('createAccount funding and parsed inner CPI transfer are independently reco
   assert.equal(directSolFunding(cpi,W)?.funder,F);
 });
 
+test('two independent SOL senders in the same earliest transaction must not collapse into one funder',async()=>{
+  const tx=rpc([transfer(F,W,1000),transfer('SECOND_SENDER',W,4000)]);
+  const individual=directSolFunding(tx,W);
+  assert.equal(individual.ambiguous,true);
+  assert.deepEqual(individual.sources,[F,'SECOND_SENDER']);
+  const result=await one(tx);
+  assert.equal(result.status,'MULTIPLE_DIRECT_SOL_SENDERS');
+  assert.equal(result.funder,null);
+  assert.equal(verifiedFunder(result),null);
+});
+
 test('failed transactions, zero-lamport instructions and unrelated recipients do not fund target',async()=>{
   assert.equal(directSolFunding(rpc([transfer(F,W,2)],{err:{InstructionError:[0,'Custom']}}),W),null);
   assert.equal(directSolFunding(rpc([transfer(F,W,0)]),W),null);
