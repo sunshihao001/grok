@@ -519,3 +519,67 @@ HoldTech在这轮研究前没有作为此前Pulse/Hermes合成反例的原始材
 **何时停止研究？** 当继续阅读相同类型源码/README不会改变关键竞争解释、对象覆盖或实施选择时，先交付当前可验证的判断并转向缺失的原始事件/完整样本；如果发现原本未被识别、能改变经济机制或产品方向的关键领域，则允许继续深入，不受预设文件数或研究轮数约束。
 
 **本轮新证据边界**：核查了上述具体文件的现行GitHub内容、原有Blix知识及ai-d研究；Pulse乱序错桶和Million头尾抽样是新确认的**代码实现条件**，实际发生频率、对某枚真实Mint的影响、端到端运行及预测改善均未测量。此节属于专业研究和产品决策证据，不是已交付新监控功能。
+
+
+## 14｜2026-11-09 新增跨项目实证：样本入选 × 结果成熟 × 数据缺失如何共同制造“市场规律”
+
+> **为何继续这条线而不是重复第9/11/13节**：旧研究已经指出 Pulse 选择性落库、Blix 自评只看已评级币、Million 头尾抽样，这些只是“观察选择存在”的源码认识。本轮引入**此前未在本章核查的两份独立、带代码/实测的开源研究**——[ian05012 的带标签Meme数据集](https://github.com/ian05012/solana-memecoin-dataset/tree/7070d00e1e4492f8604d988549d91785cc5f43f7)和[CryptoBot 的迁移幸存者队列审计](https://github.com/elalamiimed/CryptoBot/blob/1be592d71020738510b25e3bed7a2f5def13ff0a/reports/cohort_survivorship_20260927/FINDING.md)——再对照 [Why-Solana 的可执行抽样偏差测量](https://github.com/searadacunha/Why-Solana-Memecoins-Are-Over/blob/070d2a6e6dcb89efe18d01091a8040eb323e1099/code/a4_selection_bias.py)。从“选了什么”深入到**哪种结果可能根本不能由这个样本推断**，以及“6h无价格”和“3d无涨幅”被写成同一标签的具体失败分叉。**静态原代码+公开数字复算，非实时链上验收、非独立模型A/B、非行情预测。**
+
+### 14.1 重新区分五个总体：为什么它们不是同一批 Mint
+
+| 总体/流程 | 已确认的代码或归档事实 | 真正能够回答的问题 | 不能越界的推论 |
+| --- | --- | --- | --- |
+| **发行总体**（在某时段被独立观测的全部发币） | [Why-Solana a4_selection_bias](https://github.com/searadacunha/Why-Solana-Memecoins-Are-Over/blob/070d2a6e6dcb89efe18d01091a8040eb323e1099/data/adverse/a4_selection_bias.json)记录五组中性词样本2,740个Pump Mint、其中32个毕业；同窗口另171个中6个毕业，二者抽样框各异 | 在**明确这一采集框和时段**内研究毕业率、未入选币与入选币的差别 | 不能无条件当未来全Solana发币或Blix真实覆盖率 |
+| **数据供应商发现总体** | [ian05012 `gmgn_client.py`](https://github.com/ian05012/solana-memecoin-dataset/blob/7070d00e1e4492f8604d988549d91785cc5f43f7/scripts/gmgn_client.py)：先取最近毕业Mint `completed--limit80`，再取多个 `trending--limit100` 榜；`discover_tokens(grad_ratio=0.7)` 按毕业数量对热点尾部截断（只有有毕业Mint时才适用此比例） | “GMGN毕业/热点候选里”有哪些特征 | 不能证明全市场、未毕业/未上榜币具有相同比例 |
+| **深度调查总体** | [Million `discovery.service.ts`](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/discovery/discovery.service.ts)先按购买SOL排出最多30/60个候选，忽略已知基础设施地址，然后对**尚未入库的候选**安排约70%头部+30%剩余候选的预览；随机尾部仅在已截取候选之内 | 该币当前/已抽取历史窗口内值得继续调查的大额买家 | “有30%随机尾部”不等于从所有买家甚至全币市场等概率抽样；原注释明确近期窗口偏向当下买家，不是早期赢家 |
+| **当前持仓抽样总体** | [HoldTech `scan-core.ts`](https://github.com/co-numina/holdtech/blob/a75e214bf1ee0a8803eb7d93336be98c481c2db9/app/lib/scan-core.ts)从 `getTokenLargestAccounts`起步，默认最多20个，`limit`更大时再尝试DAS补足；随后只在已成功拿到Owner/钱包信息的对象上计算年龄等指标 | 当前**被分析到**的大户样本画像 | 不能把这批地址的“新钱包比例”当全体独立持币人比例；`realHolderCount = topAccounts.length` 只是最大账户响应数量，而不是全链持有人真总数 |
+| **结果可回顾总体** | Blix原 `server/engine.js` 的 `launches` 只留最近6h；`server/research.js` 的 AI队列有过期、优先级和容量；`server/brain.js` 的评分回顾从已评级结果中统计；[PumpTrace Backfill](https://github.com/AntC215/Pumptrace/blob/1fa070bed079e0d7e54c1bd4f12efa6e35a451c1/src/modules/backfill-manager.mjs)明确区别 `CAP_REACHED` 和 `COMPLETE` | 对当前**保留、入队、成功读取、已到达结果期限**的对象核查阶段性表现 | 未评、过期、断流、限额与未满期限不能被解释为“失败”或“并不存在” |
+
+这五类不是层级完全嵌套、自动合并的一张名单。Blix发行观察、供应商热榜、某一币的买家、大户快照与最终AI评估使用**不同单位（Mint/快照/账户/买家/已评级事件）**。任何“发现率、胜率、同控率、风险比例”的分母必须说明来自哪一个集合。
+
+### 14.2 真实反例一：成功者队列为什么不能给出全市场成功率
+
+[Why-Solana 的代码与已保存结果](https://github.com/searadacunha/Why-Solana-Memecoins-Are-Over/blob/070d2a6e6dcb89efe18d01091a8040eb323e1099/code/a4_selection_bias.py)给出两个自带定义的参考分母：中性词族 32 / 2740 = **1.168%**；邻近创建Slot窗 6 / 171 = **3.509%**。其第一阶段作者历史交易截屏选中的11个Mint却为**11/11 毕业（100%）**。本轮对发布的整数重新计算：100% / 1.168% = **约85.6倍的表面“毕业率”差别**；在独立、同概率抽取的简化参照下 `(32/2740)^11 ≈ 5.51×10^-22`，与原结果一致。**这不是交易优势的85.6倍，也不等于Blix自己的偏差大小**；它说明“作者挑选出的成功案例”不提供发行总体成功率分母，两个中性样本还反映不同采集框差别。
+
+[CryptoBot 的MELT队列审计](https://github.com/elalamiimed/CryptoBot/blob/1be592d71020738510b25e3bed7a2f5def13ff0a/reports/cohort_survivorship_20260927/FINDING.md)又给出独立的真实研究失败案例：41,470个带标签Mint **全部**出现在“迁移后第一小时”资料中，即标签总体先满足“存活到迁移”。作者发现该样本从发行时刻起的4x峰值比例为**93.6%**，但其另一个交易记录中的**实际完成4x交易为2/137（1.5%）**。这些不是同口径实验——样本、执行与结果类型都不同，**不能直接相减或把差值全归幸存者偏差**；可以严格得出的是：毕业幸存者的最大理论价格峰值不是“所有新币可执行获利率”。这项审计没有否定其同队列内部的机制/标签相关研究，也没有否定其原始交易修复工程。
+
+### 14.3 真实反例二：标签成熟与“缺数据→零结果”不能混为一谈
+
+[ian05012 `collect.py`](https://github.com/ian05012/solana-memecoin-dataset/blob/7070d00e1e4492f8604d988549d91785cc5f43f7/scripts/collect.py)按发现时点生成快照、可对同一Mint每6h再采一次，`tokens`因此是**观察快照行**，不一定是一Mint一行。[同仓 `label_returns.py`](https://github.com/ian05012/solana-memecoin-dataset/blob/7070d00e1e4492f8604d988549d91785cc5f43f7/scripts/label_returns.py)的已读代码：
+
+- 后验标签包括1h/6h/24h/3d内的**最大蜡烛高价/起始蜡烛价**，并非真实可成交的收益。起始价格取 `t0` 之后可取得的**第一根**K线；过滤异常K线后再次寻找峰值。
+- 若连续**6h取不到任何K线**，脚本立即把 **1h、6h、24h、3d 四个结果全部赋0，`labeled=1`**；后续循环只处理 `WHERE labeled=0`，因此即使18h才恢复可见数据，也不会自动重标。这是源码实际分支行为，并不能证明这类币后来真的反弹，也不能证明作者的“死亡即归零”代理假设在真实样本中总是错误。
+- **离线复算本轮已执行**：在SQLite合成行 `t=t0+6h+1s`、`candles=[]`时，该分支写出 `{max_return_24h:0,max_return_3d:0,labeled:1,reaches_2x:0}`；在假设18h出现价格的后续时点，原查询 `WHERE labeled=0` 返回0条。来源代码分支 + 重放SQL双重支持此结论；**并未运行该外部完整采集进程或验证此类现实币的频率**。
+
+这揭示的是两个不能合一的统计问题：**没有数据（OBSERVATION_MISSING）**，与**有完整观测、确认未达到阈值（OBSERVED_NEGATIVE）**。第三个情况是**目标窗口未成熟（HORIZON_NOT_MATURE）**；第四个是观察到数据但**执行/成交不可复现（NON_EXECUTABLE_PRICE_MAX）**。模型若混合这四类，哪怕训练/计算完全正确，研究对象也已经变了。
+
+### 14.4 新的跨学科认识：被选中与被测成“赢家”之间存在反馈链
+
+构造一个完整但**尚待Blix实跑证实**的机制假说：`市场事件→供应商榜单/Blix阈值→入队调查→仅对入选对象深入查历史→可获得更完整的后验标签→AI按这批已评级结果修正策略→下一轮更偏向同类对象`。上面的Million源码证明了**有限容量+非均匀选择**，ian源码证明了**结果成熟/缺失代理的标签分叉**，Why-Solana与CryptoBot归档证明了**事后成样的真实研究后果**。这些材料**共同允许提出**“观察政策驱动自我确认”的竞争性解释，**不证明Blix实际已发生该闭环或因此产生错误交易信号**。
+
+最容易被忽略的新问题不是“某币/钱包有多高的胜率”，而是：
+1. 系统有多大概率**看见**同一种币/钱包？`P(被观察|发行阶段、活跃程度、来源、预算、旧已知标签)`。
+2. 被看见后有多大概率**被保留并最终得到可用结果**？`P(有成熟标签|被观察、时窗、供应商、行情存活、停机/费用)`。
+3. 一群钱包的“跨Mint反复出现”，究竟来自真实的经济行为复现，还是来自算法总在同类高热/高额买家中挑选、既有Roster被优先重访、低信号尾部无人观测？两个机制并存时，不应靠单一聚类系数归因。
+4. 与一次实际用户决策有关的结果，是“样本内最高涨幅”、 “何时可见的候选”，还是“带滑点与交易限制的可执行行动”？跨目标的迁移必须有额外证据。
+
+这把原来分散的 D01 发行、D04 钱包、D05 资金、D06 库存、D07 市场时序、D11 反证和AI自修订联成了一个**可测的观察机制研究对象**，而非新增一个评分器、模型角色或新产品。
+
+### 14.5 Blix 不重造产品的实际知识用法与最小验证
+
+- **产品端保留原样**：原版Pulse/行情/AI/交易能力继续保留，新增这些知识不要求先改原版任何模块、也不默认禁用交易功能。业务报告中的“热度/钱包质量/预测”各自有不同用途，不能因为某一种统计不具全市场代表性就否定整套产品。
+- **按需提出可回答的证据问题**：在讨论新币整体胜率前，先指出数据是否包含曲线阶段死亡币；在讨论多钱包同控前，确认钱包来自全量、TopN、热点、用户手动或既有Roster；在讨论未观察到出货前，区分已覆盖的历史和`CAP_REACHED`；在讨论未来标签前，保留`label_horizon`、`matured_at`、`price_source`、`missing_reason`和`selection_reason`，已有字段可表达时不新增表。
+- **最小、最值钱的全链反例**：同一时间窗内选一批发币，分别记录“初次见到→进入Blix候选→AI入队→已评级→达到24h结果期限→价格可得/缺失/实际可执行”；另从未入选/低热尾部**明确留出少量审查对象**。对两组保持相同期限和来源，比较遗漏机制、标签覆盖与机制命题。若Blix现有`launches`只保留6h，必须先说清分母不可回溯、再评估能否低成本复用外部全发行归档，不把已追踪样本伪装成所有发行。
+- **何时停止这项研究并进入交付**：若已能从已有数据恢复入选/未入选的分母、标签成熟与缺失状态，继续增加同类“幸存者偏差”论文收益低，应优先复用现有Research/Scorecard/Journal报告展示**可回答范围**；若无法恢复分母而成本太高，限定推论，去做仍可可靠完成的单Mint经济调查。若外部采集/结果数据能证实不同市场阶段的反例，才依据新事实调整后续调查与风险模型。
+
+### 14.6 来源级证据、限制与下一轮承接
+
+| 具体来源（固定版本） | 已检查对象 | 本轮证据类型 | 未核验 |
+| --- | --- | --- | --- |
+| [Why-Solana `a4_selection_bias.py` + 公布JSON](https://github.com/searadacunha/Why-Solana-Memecoins-Are-Over/tree/070d2a6e6dcb89efe18d01091a8040eb323e1099) | 两组发行基率与11个事后挑选样本，重新用整数复算 | `SOURCE_READ + DERIVED_COUNTS_RECOMPUTED` | 本地完整脚本/所有输入数据端到端执行、未来市场外推 |
+| [CryptoBot 幸存者队列FINDING](https://github.com/elalamiimed/CryptoBot/blob/1be592d71020738510b25e3bed7a2f5def13ff0a/reports/cohort_survivorship_20260927/FINDING.md) | 41,470标签全在迁移后样本；区别峰值与实际成交 | `SOURCE_REPORT_READ` | 本地重跑大型原始MELT数据、直接外推Blix |
+| [ian05012 采集/标签脚本](https://github.com/ian05012/solana-memecoin-dataset/tree/7070d00e1e4492f8604d988549d91785cc5f43f7/scripts) | 70/30来源配额、6h无行情→24h/3d零标签、`labeled=1`终止、同Mint可重复快照 | `SOURCE_READ + EXACT_BRANCH_REPRODUCTION` | 已发布parquet全体重算、真实币后续复苏频率 |
+| [Million](https://github.com/Kelows/million/blob/c89ad07caaf70773d40b45943e136eadc4f946a5/apps/api/src/discovery/discovery.service.ts)、[HoldTech](https://github.com/co-numina/holdtech/blob/a75e214bf1ee0a8803eb7d93336be98c481c2db9/app/lib/scan-core.ts)、[PumpTrace](https://github.com/AntC215/Pumptrace/blob/1fa070bed079e0d7e54c1bd4f12efa6e35a451c1/src/modules/backfill-manager.mjs) | 买家前30/60再70/30预览、TopHolder口径、CAP_REACHED与COMPLETE不同 | `SOURCE_READ + STATIC_CROSS_PROJECT_COMPARISON` | 真实同Mint一致性、抽样比例性能改善 |
+| [Blix原源码](https://github.com/sunshihao001/grok/tree/blix/server) | `engine.js`的6h发行存活窗口、`research.js`队列、`brain.js`评分回顾 | `SOURCE_READ / NOT_DEPLOYED` | 用户目标环境真实覆盖、运行时AI学习是否受偏差影响 |
+
+**进度判断**：本轮认知增量不在于再次说明“有偏差”，而在于找到**一个可定位的未来标签过早归零代码分叉**与**两个已经自我纠错的真实研究队列案例**，使样本选择→标签生成→AI判断成为一个能对照的完整对象。进一步发表或市场胜率主张仍需真实新币/已冻结发行样本和独立结果，不允许靠本报告自证。
