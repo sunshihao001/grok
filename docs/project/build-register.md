@@ -189,7 +189,7 @@
 
 **R-06 新发现：没有时间戳的 Token 转移被错误地输出为『未观察到卖出』。**
 - **根因**：`recipientOutcomes()` 对缺少 `block_time` 的转账返回 `TRANSFER_TIME_OR_MINT_UNKNOWN`，但没有 `sellObservation` 字段；离线报告脚本用 `row.sellObservation || 'NOT_OBSERVED_IN_CAPTURED_WINDOW'` 回填默认值。这会把**无法建立后续观察窗口**误显示为**窗口内未观察到卖出**，即使本地已存在接收钱包卖出摘要。
-- **实际修正**：在已有 `server/economic-events.mjs` 的缺失时间分支显式输出 `sellObservation:'TRANSFER_TIME_OR_MINT_UNKNOWN'`；不新增第二个报告器、不触发RPC/付费/交易；在 `test/economic-events.test.mjs` 加入 `blockTime:null` 且接收方有卖出摘要的反例，要求 `observedSells:[]` 和 UNKNOWN，不凭空推断先后。
+- **实际修正**：在已有 `server/economic-events.mjs` 的缺失时间分支显式输出 `sellObservation:'TRANSFER_TIME_OR_MINT_UNKNOWN'`；不新增第二个报告器、不触发RPC/付费/交易；在 `test/economic-events.test.mjs` 加入 `blockTime:null` 且接收方有卖出摘要的反例，要求 `observedSells:[]` 和 UNKNOWN；并在 `test/offline-mint-report.test.mjs` 的真实 CLI 子进程验证同一缺失时间反例、执行前后 SQLite 文件 SHA256 不变，不凭空推断先后。
 - **验收条件**：该反例与 `npm run test:evidence`、`npm run test:security`、`npm test` 在本次 PR #23 的**最新 SHA** 上全部通过。若 CI 红灯，继续局部修正；未跑完前仅称 `CODE_PROPOSED`。
 - **知识/产品增量**：**未观察到行为**需要先有可信的观察窗口；**时间未知**是更上游的事实缺口，不能被下游默认值吞掉。该规则同样适用于 6h/12h 异动监控、历史截断与后续卖出判断。
 
