@@ -120,3 +120,16 @@ test('completed and exhausted captures do not loop forever', () => {
  assert.equal(retryableWalletProcessing(d,{beforeMs:Date.now()+1000,maxAttempts:20}).length,0);
  d.close();
 });
+
+test('missing RPC blockTime must remain UNKNOWN even when the recipient has a local sell summary',()=>{
+ const d=setup();
+ const t=mixed();t.blockTime=null;
+ store(d,'unknown-transfer-time',t);
+ d.prepare('INSERT INTO wallet_trades VALUES(?,?,?,?,?,?)').run('B-sells-later',B,M,'sell',1100_000,1);
+ const result=recipientOutcomes(d,A,M,20,24);
+ assert.equal(result.rows.length,1);
+ assert.equal(result.rows[0].followupStatus,'TRANSFER_TIME_OR_MINT_UNKNOWN');
+ assert.equal(result.rows[0].sellObservation,'TRANSFER_TIME_OR_MINT_UNKNOWN');
+ assert.deepEqual(result.rows[0].observedSells,[]);
+ d.close();
+});
