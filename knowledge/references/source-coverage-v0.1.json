@@ -350,6 +350,38 @@
       ],
       "status": "SELECTED_SOURCE_READ_NOT_COMPLETE",
       "review_scope": "ORIGINAL_GOAL_AND_TARGETED_CODE_NO_FULL_RUN"
+    },
+    {
+      "repo": "ian05012/solana-memecoin-dataset",
+      "commit": "7070d00e1e4492f8604d988549d91785cc5f43f7",
+      "read_paths": [
+        "README.md",
+        "scripts/collect.py",
+        "scripts/gmgn_client.py",
+        "scripts/label_returns.py"
+      ],
+      "status": "TARGETED_SOURCE_READ_NO_DATASET_FULL_RECOMPUTE",
+      "issue": "70:30 graduated/hot supplier discovery; six-hour no-candle branch prelabels 24h and 3d at zero; snapshots repeat per mint; no prospective outcome validation"
+    },
+    {
+      "repo": "elalamiimed/CryptoBot",
+      "commit": "1be592d71020738510b25e3bed7a2f5def13ff0a",
+      "read_paths": [
+        "reports/cohort_survivorship_20260927/FINDING.md",
+        "reports/cohort_representative_20260927/cohort_representative.json"
+      ],
+      "status": "TARGETED_RESEARCH_ARTIFACT_READ_NO_REEXECUTION",
+      "issue": "41,470 migrated-only labelled Mint survivors; within-sample price peak cannot be used as all-launch executable return"
+    },
+    {
+      "repo": "searadacunha/Why-Solana-Memecoins-Are-Over",
+      "commit": "070d2a6e6dcb89efe18d01091a8040eb323e1099",
+      "read_paths": [
+        "code/a4_selection_bias.py",
+        "data/adverse/a4_selection_bias.json"
+      ],
+      "status": "SOURCE_READ_DERIVED_COUNTS_RECOMPUTED",
+      "issue": "2740/32 independent reference, 171/6 slot window, 11/11 selected winners; conditional estimate cannot transport to full issuances"
     }
   ],
   "independent_knowledge_topics": [
@@ -570,6 +602,32 @@
       "research_value_anchor": "Continue only when tracing original source changes a question, correction, falsification, or product result. Do not count migrated files or length as progress.",
       "status": "SOURCE_READ_STATIC_CROSS_CHECK_ONLY",
       "next": "Compare fixed historical QB Mint plus Blix existing API outputs with on-demand original knowledge in an authorized read-only, safely controlled setting; first prove source lineage and event coverage."
+    },
+    {
+      "date": "2026-11-09",
+      "kind": "SELECTED_COHORT_FORWARD_LABEL_MATURITY_AND_EVIDENCE_MISSINGNESS",
+      "document": "knowledge/references/source-knowledge-deep-study-v0.1.md#14-2026-11-09-新增跨项目实证样本入选--结果成熟--数据缺失如何共同制造市场规律",
+      "scope": "Blix launch/research/rated sample, Million buyer shortlist, HoldTech top holders, PumpTrace cap; new external issuer cohort and forward label code",
+      "source_commits": {
+        "ian05012/solana-memecoin-dataset": "7070d00e1e4492f8604d988549d91785cc5f43f7",
+        "elalamiimed/CryptoBot": "1be592d71020738510b25e3bed7a2f5def13ff0a",
+        "searadacunha/Why-Solana-Memecoins-Are-Over": "070d2a6e6dcb89efe18d01091a8040eb323e1099"
+      },
+      "artifacts": [
+        "Why-Solana count 32/2740 =1.1679% neutral, 11/11 selected; derived factor 85.62 is descriptive not performance",
+        "ian no-candles 6h+1s => 24h/3d labels zero and labeled=1; later input never revisited by WHERE labeled=0 (replayed simplified SQL branch)",
+        "CryptoBot 41,470 labels all migrated; peak theoretical winner rate cannot be compared to executable rate without harmonizing frame and outcome"
+      ],
+      "source_level_check": "PASSED_TARGETED_STATIC+PUBLIC_COUNT_CALCULATION+MINIMAL_SQL_BRANCH_REPRODUCTION",
+      "incomplete": [
+        "Full source repositories not exhaustively read",
+        "Published parquet and MELT raw large dataset not reexecuted",
+        "Blix live launch vs rated vs unreviewed denominator not reconstructed",
+        "No independent AI method A/B and no mainnet chain validation",
+        "No measured model accuracy or real trading advantage"
+      ],
+      "decision": "Continue knowledge in original domain sections, not build new specialist taxonomy; next useful result is one frozen whole-Mint cohort selection/label maturation audit before changing scoring",
+      "risk_anchor": "Do not repeat generic bias warnings; only continue if new source identifies a decision-changing source path or frozen cohort test"
     }
   ],
   "pure_theory_transformations": [
