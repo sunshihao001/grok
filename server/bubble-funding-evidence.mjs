@@ -9,6 +9,7 @@ export function directSolFunding(tx, wallet) {
   if (!tx?.transaction?.message || tx.meta?.err) return null;
   const outer = tx.transaction.message.instructions || [];
   const inner = (tx.meta?.innerInstructions || []).flatMap(x => x.instructions || []);
+  const candidates = new Map();
   for (const ix of [...outer, ...inner]) {
     if (ix?.program !== 'system' && ix?.programId !== SYSTEM_PROGRAM) continue;
     const kind = ix?.parsed?.type;
@@ -17,10 +18,11 @@ export function directSolFunding(tx, wallet) {
     const to = kind === 'createAccount' ? info.newAccount : info.destination;
     const lamports = Number(info.lamports);
     if (to === wallet && info.source && info.source !== wallet && Number.isSafeInteger(lamports) && lamports > 0) {
-      return { funder: info.source, lamports: String(info.lamports), instruction: kind };
+      if (!candidates.has(info.source)) candidates.set(info.source, { funder: info.source, lamports: String(info.lamports), instruction: kind });
     }
   }
-  return null;
+  if (candidates.size > 1) return { ambiguous: true, sources: [...candidates.keys()] };
+  return candidates.values().next().value || null;
 }
 
 export function feePayer(tx) {
@@ -59,8 +61,9 @@ export async function traceWalletFunding(wallet, {
     signature: oldest, cursor: null, scanned };
   const payer = feePayer(tx);
   const transfer = directSolFunding(tx, wallet);
-  return { status: transfer ? FUNDING_DIRECT : payer && payer !== wallet ? 'FEE_PAYER_ONLY' : 'NO_DIRECT_SOL_IN_EARLIEST_TX',
-    funder: transfer?.funder || null, payer, signature: oldest, cursor: null, scanned };
+  return { status: transfer?.ambiguous ? 'MULTIPLE_DIRECT_SOL_SENDERS'
+      : transfer ? FUNDING_DIRECT : payer && payer !== wallet ? 'FEE_PAYER_ONLY' : 'NO_DIRECT_SOL_IN_EARLIEST_TX',
+    funder: transfer?.ambiguous ? null : transfer?.funder || null, payer, signature: oldest, cursor: null, scanned };
 }
 
 // Single existing cache is migrated in place. Old rows have unknown provenance:
