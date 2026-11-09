@@ -602,7 +602,24 @@
     "domain_knowledge": {
       "status": "SOURCE_INDEXED_AND_PARTIALLY_STUDIED_NOT_FULL_RUNTIME_ACTIVATION",
       "sources": "knowledge/MIGRATION.json",
-      "note": "Unverified research ideas and mapped units are not proven findings"
+      "note": "Unverified research ideas and mapped units are not proven findings",
+      "latest_source_study": {
+        "as_of": "2026-11-09",
+        "topic": "Cohort inclusion and survivorship versus forward label maturity/censoring",
+        "status": "PINNED_SOURCE_READ+INDEPENDENT_JSON_AGGREGATE_REPRODUCED+SYNTHETIC_SQL_BRANCH_REPRODUCED",
+        "source_index": "knowledge/references/source-coverage-v0.1.json",
+        "full_study": "knowledge/references/source-knowledge-deep-study-v0.1.md#14",
+        "evidence": [
+          "Why-Solana original input JSONs reproduced 32/2740, 6/171, 11/11, p=5.513070808628306e-22",
+          "ian dataset 6h no candles prematurely sets 24h/3d to zero and labeled=1 in original code"
+        ],
+        "known_limits": [
+          "Not live/independent model A/B",
+          "Not original Python end-to-end nor full parquet recompute",
+          "Original Blix market engine and trading code untouched"
+        ],
+        "next_validation": "Same frozen Blix market cohort: launch observed, selected, research queued, rated, matured outcome, price missing vs negative; avoid labeling absent as unsuccessful"
+      }
     },
     "read_only_target_runtime": {
       "status": "NOT_LIVE_VERIFIED",
