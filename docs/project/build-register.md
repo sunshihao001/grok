@@ -174,3 +174,23 @@
 **代码与真实验收**：集成候选 `3d2ed0e8bf5bfa2e341fc4dab2d1b0bb779909a2`；[Node24 全量、安全、经济证据 CI 全通过](https://github.com/sunshihao001/grok/actions/runs/42527683586)；[独立审计通过](https://github.com/sunshihao001/grok/actions/runs/42527683587)。不虚报实际链上覆盖、正式服务或 Grok Bot 云端已运行。原有 PR #23 仍是 Draft，且直接基于 PR #22 而非 `blix`；本次**没有合并**。
 
 **下一轮只保留真正阻断运行的缺口：** 对一批带来源、slot、签名的真实公开 `getTransaction(jsonParsed)` 归档在隔离环境做同报告回放；检查 Token-2022、同笔 Swap+Transfer、多池、Owner缺失、历史截断及覆盖说明。随后评估独立只读进程和现有 UI 的最小对接，而不是直接把原服务安全门禁打开。若真实 RPC 原文获取受供应商额度/历史可用性限制，记录其为 `UNKNOWN/NOT_AVAILABLE`，不自动拓展付费数据源。
+
+### 2026-11-09｜快速开发方法复盘 + 下一轮证据语义纠偏（R-06）
+
+**当前起点复核（以本轮实时GitHub为准）**：PR #23 已直接以 `blix` 为 base，保持 Draft、mergeable；上一轮登记的 7 项 WTrack 红灯已在集成候选中修复。2026-11-08 23:59 UTC 的 [Node24 tests](https://github.com/sunshihao001/grok/actions/runs/42537815318) 和 [audit](https://github.com/sunshihao001/grok/actions/runs/42537815434) 均成功。**此前 446/439/7 是旧提交的历史事实，不能覆盖当前版本。** 外部 uptime 工作流失败属于另一独立可用性问题，尚未定位原因。此节写入后的新增测试须以新的 CI 重新确认，不能借用上一轮的绿色结论。
+
+**从成熟工程团队的快速开发实践提炼出的适用方法（工程判断，不冒充 Blix 实跑事实）：**
+- **以现有成品为底座、缩短反馈回路**：需求 → 一条可复现反例 → 最小代码修改 → 定向测试 → 全量/安全测试 → 评审集成；不是需求 → 全量知识搜索 → 新架构 → 多条平行 Draft。
+- **小批量、单一集成真相**：优先复用既有模块、数据库、页面；一个改动只有一个负责的代码入口和唯一的验收来源。PR #18/#21 的重复处理状态是反例，PR #22/#23 的收束是改进。
+- **失败优先、分层验收**：测试必须报告真实退出码与 SHA；离线解析、合成跨模块、只读进程、真实 RPC、长期运行各自独立。CI 全绿不能代替用户完成调查任务；历史红灯不能无限被合理化。
+- **停止无收益的研究**：若新研究不能改变实现选择、具体失败用例、数据来源或产品判断，就暂停；反之，发现会造成误导性结论的事实语义错误，即使只有一行，也值得先修。
+
+**上一轮遗留错误的更新**：R-01 已由旧7项失败转为「集成候选全量 CI 通过，仍待合并及运行」；R-02 不再以 PR #21 的平行状态机作为当前集成路线；R-03 已有真实 reporter/退出码修复，但后续 CI 仍须禁止掩盖失败；R-04/R-05 仍未因文档或测试完成而关闭。
+
+**R-06 新发现：没有时间戳的 Token 转移被错误地输出为『未观察到卖出』。**
+- **根因**：`recipientOutcomes()` 对缺少 `block_time` 的转账返回 `TRANSFER_TIME_OR_MINT_UNKNOWN`，但没有 `sellObservation` 字段；离线报告脚本用 `row.sellObservation || 'NOT_OBSERVED_IN_CAPTURED_WINDOW'` 回填默认值。这会把**无法建立后续观察窗口**误显示为**窗口内未观察到卖出**，即使本地已存在接收钱包卖出摘要。
+- **实际修正**：在已有 `server/economic-events.mjs` 的缺失时间分支显式输出 `sellObservation:'TRANSFER_TIME_OR_MINT_UNKNOWN'`；不新增第二个报告器、不触发RPC/付费/交易；在 `test/economic-events.test.mjs` 加入 `blockTime:null` 且接收方有卖出摘要的反例，要求 `observedSells:[]` 和 UNKNOWN，不凭空推断先后。
+- **验收条件**：该反例与 `npm run test:evidence`、`npm run test:security`、`npm test` 在本次 PR #23 的**最新 SHA** 上全部通过。若 CI 红灯，继续局部修正；未跑完前仅称 `CODE_PROPOSED`。
+- **知识/产品增量**：**未观察到行为**需要先有可信的观察窗口；**时间未知**是更上游的事实缺口，不能被下游默认值吞掉。该规则同样适用于 6h/12h 异动监控、历史截断与后续卖出判断。
+
+**下一轮研究决策**：暂不扩大专家/知识架构，也不重扫全部参考项目。先用现有 `inspect-economic-mint.mjs` 和 `economic-events.mjs` 检查**时间未知、窗口截断、池/公共设施节点、交易原文覆盖**四种会直接误导单 Mint 调查的边界。每发现一个能复现的错误就先写回归、最小修复，再看是否值得引入 PumpTrace/Million 的历史补查能力。独立只读进程与真实公开归档回放仍是下一项大门槛；在安全隔离和成本边界确认前，不启动原服务器、不签名、不交易、不付费、不部署。
