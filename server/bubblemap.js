@@ -205,8 +205,10 @@ function buildMap(mint) {
   }
   const tr = traceNew(mint, nodes.filter((n) => n.kind === "holder").slice(0, TRACE_TOP).map((n) => n.w));
 
-  // One graph over every wallet the sources name. Edge kinds: "transfer" (RugCheck), "funded" (first funder),
-  // "launch" (bought in the dev's launch block). Edges are stored both ways with their real direction.
+  // One graph over wallets the sources name. "funded" only means an observed direct
+  // native SOL instruction in the earliest accessible transaction; "transfer" means a
+  // RugCheck edge; "launch" and "block" are weaker co-occurrence candidates.
+  // Connectivity is not proof that these wallets share an economic controller.
   const holderAt = new Map(nodes.map((n, i) => [n.w, i]));
   const shut = new Set([...EXCHANGES.keys(), ...nodes.filter((n) => n.kind !== "holder").map((n) => n.w)]);
   const adj = new Map();
@@ -263,8 +265,8 @@ function buildMap(mint) {
   // A wallet outside the holders that sent the coin or SOL to many of them is a distributor (an airdrop or rewards
   // wallet, a bot's relay, a launchpad's fee wallet): receiving from it says nothing about who owns a wallet. One
   // sent "API" to 111 of its top holders and the map drew a single 67% cluster (2026-10-10). No line passes
-  // through one; it is listed on its own. Counted on transfer links only: one wallet that opened several holders
-  // (a first funder) is still a cluster.
+  // through one; it is listed on its own. This filter currently counts RugCheck transfer links,
+  // while verified direct SOL funder hubs use the HUB rule above: neither proves common control.
   const distributors = [];
   for (const [w, m] of adj) {
     if (holderAt.has(w)) continue;
@@ -328,6 +330,7 @@ function buildMap(mint) {
   }));
   return {
     mint, t: now(),
+    interpretation: 'WALLET_GRAPH_CONNECTIVITY_CANDIDATES_NOT_COMMON_CONTROL',
     nodes: outNodes,
     links: links.map(({ a, b, hops, kinds, dir, via }) => ({ a, b, hops, kinds, dir, via: via.slice(0, 3) })),
     clusters,
@@ -339,7 +342,8 @@ function buildMap(mint) {
       people: nodes.filter((n) => n.person).length,
       holders: fallback?.list && read === fallback.list ? "largest 20 (chain)" : page?.info?.source || page?.holders?.source || null, holderCount: page?.info?.holders ?? page?.holders?.count ?? null,
       rugcheck: { t: r.t || null, busy: r.busy, error: r.error, networks: (r.nets || []).length, wallets: rcWallets },
-      trace: { error: tr.failed ? bubbleStats.lastError : null, traced: nodes.filter((n) => n.kind === "holder").slice(0, TRACE_TOP).filter((n) => confirmedTrace(n.fundingEvidence?.status)).length, of: Math.min(TRACE_TOP, nodes.filter((n) => n.kind === "holder").length), busy: tr.busy, done: tr.done, total: tr.total, resting: !activeUrl() },
+      trace: { evidenceGranularity: 'EARLIEST_VISIBLE_TRANSACTION_INSTRUCTION_NOT_FEE_PAYER', fullWalletHistory: false,
+        error: tr.failed ? bubbleStats.lastError : null, traced: nodes.filter((n) => n.kind === "holder").slice(0, TRACE_TOP).filter((n) => confirmedTrace(n.fundingEvidence?.status)).length, of: Math.min(TRACE_TOP, nodes.filter((n) => n.kind === "holder").length), busy: tr.busy, done: tr.done, total: tr.total, resting: !activeUrl() },
     },
   };
 }
