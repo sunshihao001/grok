@@ -378,10 +378,19 @@
       "commit": "070d2a6e6dcb89efe18d01091a8040eb323e1099",
       "read_paths": [
         "code/a4_selection_bias.py",
-        "data/adverse/a4_selection_bias.json"
+        "data/adverse/a4_selection_bias.json",
+        "data/ancrage/symboles.json",
+        "data/cibles/cibles.json",
+        "data/trace_cohorte/t0_cohorte.json"
       ],
-      "status": "SOURCE_READ_DERIVED_COUNTS_RECOMPUTED",
-      "issue": "2740/32 independent reference, 171/6 slot window, 11/11 selected winners; conditional estimate cannot transport to full issuances"
+      "status": "ORIGINAL_JSON_INPUTS_FETCHED_AND_ORIGINAL_FORMULAE_INDEPENDENTLY_RECOMPUTED",
+      "issue": "Original fixed JSONs confirm 2740/32, 171/6, 11/11 with exact reported iid reference probability; author Python not executed end to end",
+      "source_input_blob_shas": {
+        "data/ancrage/symboles.json": "8b28b082bf69715c7b55f93194868a10e31586b7",
+        "data/cibles/cibles.json": "3846eb1fa059205600edfa6889d50ba5760b9655",
+        "data/trace_cohorte/t0_cohorte.json": "96dfc26728863ff6010d8188aeb273a79456a780",
+        "data/adverse/a4_selection_bias.json": "b1878388573e75aedbdb5f5ae4bd08d1d9715309"
+      }
     }
   ],
   "independent_knowledge_topics": [
@@ -616,15 +625,17 @@
       "artifacts": [
         "Why-Solana count 32/2740 =1.1679% neutral, 11/11 selected; derived factor 85.62 is descriptive not performance",
         "ian no-candles 6h+1s => 24h/3d labels zero and labeled=1; later input never revisited by WHERE labeled=0 (replayed simplified SQL branch)",
-        "CryptoBot 41,470 labels all migrated; peak theoretical winner rate cannot be compared to executable rate without harmonizing frame and outcome"
+        "CryptoBot 41,470 labels all migrated; peak theoretical winner rate cannot be compared to executable rate without harmonizing frame and outcome",
+        "Independent full-source JSON recompute verified 2740/32,171/6,11/11 and p=5.513070808628306e-22 exactly matches published artifact; no full Python execution"
       ],
-      "source_level_check": "PASSED_TARGETED_STATIC+PUBLIC_COUNT_CALCULATION+MINIMAL_SQL_BRANCH_REPRODUCTION",
+      "source_level_check": "PASSED_PINNED_ORIGINAL_SOURCE_JSON_FETCHED+INDEPENDENT_RECOMPUTATION_OF_PUBLISHED_AGGREGATES+SOURCE_BRANCH_SQL_REPRO",
       "incomplete": [
         "Full source repositories not exhaustively read",
-        "Published parquet and MELT raw large dataset not reexecuted",
         "Blix live launch vs rated vs unreviewed denominator not reconstructed",
         "No independent AI method A/B and no mainnet chain validation",
-        "No measured model accuracy or real trading advantage"
+        "No measured model accuracy or real trading advantage",
+        "Original author Python A4 script not run end-to-end; matched its formula using source JSON via isolated JS",
+        "Published large parquet and MELT raw dataset not reexecuted"
       ],
       "decision": "Continue knowledge in original domain sections, not build new specialist taxonomy; next useful result is one frozen whole-Mint cohort selection/label maturation audit before changing scoring",
       "risk_anchor": "Do not repeat generic bias warnings; only continue if new source identifies a decision-changing source path or frozen cohort test"
