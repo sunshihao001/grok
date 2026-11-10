@@ -48,3 +48,14 @@ const result = await runAiResearchTask({
 ## 后续最有价值的真实交付
 
 不是多建 Bot、插件框架或知识索引，而是在服务端权限隔离完成后：接入一个获明确授权的模型适配器，以一个真实 Mint 的自然语言任务贯通 **Blix 事实读取 → 可选专业知识 → 模型竞争解释 → 可复核报告**，记录成本、失败和来源，再考虑经济证据与跨 Mint 工作流。与 PR #23 的合流应先审查源文件和基线测试，不能直接假定 PR 已合并。
+
+## 2026-11-10：Coin 页面上下文入口（已提交并完成前端构建）
+
+- 原生 `CoinTabs` 新增独立的 **AI assistant** 标签，原有 `AI read`、行情、交易、持仓、Bubble Map 不变。动态导入 `AiCopilot.tsx`，避免页面初始加载所有扩展代码。
+- 组件直接接收 `Coin({mint})` 传给 `CoinTabs` 的同一个 Mint，并由 `key={mint}` 重置编辑中的调查任务，避免切币串台。尊重原来的 `AiGate` 可见性/权限入口。
+- 用户可选钱包关系、买入→转移→接收出售、Dev 与持仓、市场机制四类调查；可改写具体问题。
+- 浏览器端**仅将当前已有页面事实整理成复制到剪贴板的研究任务**，保留源端覆盖标记、UNKNOWN 与既有 AI read 是模型观点的区分；不在页面自造可信链上历史。
+- 严格标注 **Preview · agent not connected**。这不是已实现“在网页直接向 AI 提问并收到回答”，也未建立持久聊天会话或 HTTP Agent 执行入口。
+- [Web CI #42815617467](https://github.com/sunshihao001/grok/actions/runs/42815617467)：Node 24 下 `npm ci --prefix web` 与 `npm run build --prefix web`（含 TypeScript type-check、Vite build、precompress）**成功**。
+
+**下一步真实验收**：在现有能力注册/读侧硬权限隔离和模型费用授权完成后，把这个入口从“复制任务”接上受控 Agent 执行 API，实现连续工具调用、证据追溯、进度、取消以及结果回写。此前不要把入口称为可用的 AI 自动调查。
