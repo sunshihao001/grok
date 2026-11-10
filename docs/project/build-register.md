@@ -216,3 +216,21 @@
 **执行反馈**：最初 [Node24失败](https://github.com/sunshihao001/grok/actions/runs/42564594476) 的唯一失败是原版字节指纹保护发现 `bubblemap.js` 改动，此项是真实保护门禁，不是代码解析器错误，也不能隐藏。完成意图审查和新反例后修订保护基线。之后 [e907cf7f的全量+安全+证据CI](https://github.com/sunshihao001/grok/actions/runs/42564963740) 各步骤真实成功、[Audit](https://github.com/sunshihao001/grok/actions/runs/42564963769) 成功。后续若有新提交仍须重新检查相应SHA，不把旧绿灯移植为最新验收。
 
 **未完成和可推翻条件**：这是 `INTEGRATED_OFFLINE_TESTED` 的 **Draft PR #23**，不是主网真实资金来源的验证；没有运行含签名/交易/付费路径的主服务，也没有向用户展示真实UI。最早可读交易不是钱包经济生命史的全证明，RPC缺页/公共资助服务、跨交易资本混用和多来源融资仍只能标为候选/UNKNOWN。风险锚点判断：此项修复能消除假阳性群体连线，**比继续堆机制文档有更高的即时价值**；下一轮若 R3供给分母与B04混合交易的真实失败影响更大，应按最短反例测试重排，不再重复资金来源定义研究。
+
+### 2026-11-10｜最高优先级的目标—入口冲突：Mint-first vs wallet-first（R-07）
+
+**问题颗粒度对齐：** 已确认的产品验收是「在 Blix 选择一个 Mint → 自动展开已知钱包、转账、接收者后续行为及跨Mint候选 → 给出证据覆盖与未知」，而不是「用户先知道一个发送方钱包 → 输入 wallet+mint → 查看这个钱包的转账」。后者是有用的**局部钻取**，却不应成为单 Mint 调查的唯一入口。此前的 `inspect-economic-mint.mjs` 强制 `--wallet`，是产品目标与实现契约的高优先级偏离。
+
+| 层级 | 产品契约 | 当前最小修正 | 尚未完成 |
+| --- | --- | --- | --- |
+| 用户入口 | 选择 Mint 即能开始调查 | CLI `--db EXISTING.sqlite --mint MINT` 可选 `--wallet`；旧 wallet+mint 精确钻取不破坏 | Blix Coin 页面按钮/API |
+| 事实发现 | 自动识别**本地归档可观察**的发送方 | 只查询已归档成功交易、已解析且Owner无冲突的Token转移，按签名数排序，最多10个sender；每人最多20条边 | 全链签名发现、跨钱包历史自动回填 |
+| 关系语义 | 池/服务/普通钱包不可混称同控 | 输出 `UNCLASSIFIED_OWNER_CANDIDATES_INCLUDING_POSSIBLE_POOLS_OR_SERVICES`，明确不证明交易者或共同控制 | Pool/Router/共享服务分类证据 |
+| 观察覆盖 | 未发现 ≠ 不存在 | 输出选取数量、`truncated`、`lifetimeHistoryComplete:false`，保留转账时间未知状态 | 完整索引覆盖、长周期恢复 |
+| 安全 | 不启动交易或费用路径 | 沿用只读SQLite CLI、只读模式、无RPC/签名/交易/付费；复用现有 `recipientOutcomes` | 真实主网与独立安全服务验收 |
+
+**为什么本轮选择它而不是继续修单个解析细节：** 它直接决定普通用户能否从一个 Mint 开始完成 V0.1 的核心调查；不解决入口错位，即使单钱包算法完全正确，也不能形成目标产品。相反，贸然增加“庄家钱包”标签会把尚未分类的Pool/服务误当操盘实体，故本轮仅实现受限的证据发现，不作身份断言。
+
+**代码改动**：复用 `scripts/inspect-economic-mint.mjs` 与 `server/economic-events.mjs`；新增 Mint-only 查询，保留 wallet-only 限定钻取，沿用旧只读输出与错误退出码。新增 `test/offline-mint-report.test.mjs` 的 Mint-only、时间未知和空库验收，验证输入 SQLite SHA256 不变。**本次改动仍只代表离线归档内的已知关系，不是完整市场发现、持仓分析或Blix UI功能。**
+
+**验收与停止条件**：本次最新SHA的全量测试、安全测试、经济专项、独立审计全部真实成功后，R-07 仅可标记为 `MINT_FIRST_OFFLINE_TESTED`；UI集成、真实历史覆盖、池分类仍独立登记。若归档中没有已解析的Owner边，必须输出空候选及覆盖限制，而不是凭空生成钱包。下一步优先评估复用现有 Coin 页面已有 Mint 上下文，以最小API/只读隔离接入该报告；禁止为了接UI直接启动旧交易服务。
