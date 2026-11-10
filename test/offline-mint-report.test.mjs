@@ -16,6 +16,7 @@ const M = 'GTNHLKQWKZHaHpd6PjfMgfFZUDEuCviwXMwYbCcepump';
 const TOKEN = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA';
 const hash = file => createHash('sha256').update(fs.readFileSync(file)).digest('hex');
 const args = (file, extra = []) => [script, '--db', file, '--wallet', A, '--mint', M, ...extra];
+const mintArgs = (file, extra = []) => [script, '--db', file, '--mint', M, ...extra];
 const bal = (accountIndex, owner, amount) =>
   ({ accountIndex, owner, mint:M, uiTokenAmount:{ amount:String(amount), decimals:6 } });
 
@@ -57,6 +58,18 @@ test('an existing local transaction archive yields a sender-to-recipient Mint re
     assert.deepEqual(report.recipients[0].observedSells.map(x=>x.sig),['recipient-later-sale']);
     assert.ok(!JSON.stringify(report).includes('rpc_json'),'report exposes metadata, not whole raw transaction');
     assert.equal(hash(file),before,'even in shared filesystem the report leaves the SQLite bytes unchanged');
+    // The user-facing investigation starts with a Mint, not a preselected wallet.
+    const mintReport = JSON.parse(execFileSync(process.execPath,mintArgs(file),{encoding:'utf8',timeout:15000}));
+    assert.equal(mintReport.input.wallet,undefined);
+    assert.equal(mintReport.input.mint,M);
+    assert.equal(mintReport.evidence.senderDiscovery.method,'BOUNDED_LOCAL_TOKEN_TRANSFER_OWNER_INDEX');
+    assert.equal(mintReport.evidence.senderDiscovery.selectedSenders,1);
+    assert.equal(mintReport.evidence.senderDiscovery.truncated,false);
+    assert.equal(mintReport.recipients[0].fromOwner,A);
+    assert.equal(mintReport.recipients[0].toOwner,B);
+    assert.equal(mintReport.recipients[0].sellObservation,'LOCAL_SELL_SUMMARY_OBSERVED');
+    assert.equal(mintReport.evidence.lifetimeHistoryComplete,false);
+    assert.equal(hash(file),before,'Mint-first discovery must not mutate the source archive');
     // Unknown transfer time is not a valid observation window, even if B has a sale summary.
     const edit = new DatabaseSync(file);
     edit.prepare('UPDATE econ_transactions SET block_time=NULL WHERE sig=?').run('archive-only-transfer');
@@ -67,6 +80,9 @@ test('an existing local transaction archive yields a sender-to-recipient Mint re
     assert.equal(unknown.recipients[0].sellObservation,'TRANSFER_TIME_OR_MINT_UNKNOWN');
     assert.deepEqual(unknown.recipients[0].observedSells,[]);
     assert.equal(hash(file),beforeUnknown,'unknown-time report must also remain read-only');
+    const unknownMint = JSON.parse(execFileSync(process.execPath,mintArgs(file),{encoding:'utf8',timeout:15000}));
+    assert.equal(unknownMint.recipients[0].sellObservation,'TRANSFER_TIME_OR_MINT_UNKNOWN');
+    assert.equal(hash(file),beforeUnknown);
   } finally { fs.rmSync(root,{recursive:true,force:true}); }
 });
 
@@ -81,6 +97,11 @@ test('missing local evidence tables remain UNKNOWN, not a false statement of no 
     assert.deepEqual(report.recipients,[]);
     assert.equal(report.evidence.indexedCoverage,'LOCAL_EVIDENCE_OR_WALLET_SUMMARY_MISSING');
     assert.equal(report.evidence.lifetimeHistoryComplete,false);
+    assert.equal(hash(file),before);
+    const mintOnly=JSON.parse(execFileSync(process.execPath,mintArgs(file),{encoding:'utf8',timeout:15000}));
+    assert.equal(mintOnly.evidence.senderDiscovery.selectedSenders,0);
+    assert.deepEqual(mintOnly.recipients,[]);
+    assert.equal(mintOnly.evidence.lifetimeHistoryComplete,false);
     assert.equal(hash(file),before);
   } finally { fs.rmSync(root,{recursive:true,force:true}); }
 });
