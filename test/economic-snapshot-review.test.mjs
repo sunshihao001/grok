@@ -57,3 +57,16 @@ test('reject wrong-Mint snapshot pair or identical Mint for cross-Mint compariso
   assert.throws(()=>compareCapturedMintSnapshots(a,b),/DIFFERENT_MINT/);
   assert.throws(()=>compareCapturedCrossMintWallets(a,a),/CROSS_MINT_REQUIRES_DISTINCT/);
 });
+
+
+test('a corrected amount on an already captured signature is a revision, not a new chain event',()=>{
+  const a=snap(M,[row('same','A','B')],'2026-11-11T12:00:00Z');
+  const changed={...row('same','A','B'),amountRaw:'200'};
+  const b=snap(M,[changed],'2026-11-12T12:00:00Z');
+  const delta=compareCapturedMintSnapshots(a,b);
+  assert.equal(delta.newlyVisible.length,0);
+  assert.equal(delta.noLongerVisibleInSample.length,0);
+  assert.equal(delta.revisedCapturedEvents.length,1);
+  assert.equal(delta.revisedCapturedEvents[0].eventId,'same:0:-1');
+  assert.match(delta.revisedCapturedEvents[0].meaning,/NOT_A_NEW_CHAIN_EVENT/);
+});
