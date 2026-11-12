@@ -234,3 +234,28 @@
 **代码改动**：复用 `scripts/inspect-economic-mint.mjs` 与 `server/economic-events.mjs`；新增 Mint-only 查询，保留 wallet-only 限定钻取，沿用旧只读输出与错误退出码。新增 `test/offline-mint-report.test.mjs` 的 Mint-only、时间未知和空库验收，验证输入 SQLite SHA256 不变。**本次改动仍只代表离线归档内的已知关系，不是完整市场发现、持仓分析或Blix UI功能。**
 
 **验收与停止条件**：本次最新SHA的全量测试、安全测试、经济专项、独立审计全部真实成功后，R-07 仅可标记为 `MINT_FIRST_OFFLINE_TESTED`；UI集成、真实历史覆盖、池分类仍独立登记。若归档中没有已解析的Owner边，必须输出空候选及覆盖限制，而不是凭空生成钱包。下一步优先评估复用现有 Coin 页面已有 Mint 上下文，以最小API/只读隔离接入该报告；禁止为了接UI直接启动旧交易服务。
+
+
+### 2026-11-12｜R-08：Mint-first 发送地址竞争与本地交易证据优先
+
+**恢复基线**：在现有 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23) 的原分支修改；PR #24 是独立未合并的 AI 候选。完整原版 Blix、交易和账户模块不动；没有启动主服务器、RPC、AI、签名或部署。
+
+**可复现问题**：原 Mint-only 调查按已归档的 COUNT(DISTINCT sig) 排序，最多10个发送方。AMM池、公共服务或其他高频地址可能挤掉已有本地交易记录的钱包，令后续 AI 调查入口漏掉潜在线索。高频不等于池，有本地交易记录也不等于单人控制。
+
+**实际代码及验收**
+- [8ee364e](https://github.com/sunshihao001/grok/commit/8ee364e40644dbb0d280c11a572c0d6437ef8151)：在已有 SQLite 归档上优先选择存在 wallet_trades 记录的发送地址，之后按已归档签名数量排序；最多10个地址。新增局部互证计数与排序说明，保留 truncated、pool/service 未分类和 UNKNOWN。
+- [4352b33](https://github.com/sunshihao001/grok/commit/4352b337b1e2b9a4ca7fa13fc0c45436e0c31228)：11个未分类竞争地址 + 1个本地已记录钱包的离线夹具，检验钱包不被前10挤掉、SQLite文件SHA256前后不变、没有升格任何地址身份归因。
+- 最新 SHA 4352b337： [Node tests/security/evidence](https://github.com/sunshihao001/grok/actions/runs/43221579187) 通过；[audit](https://github.com/sunshihao001/grok/actions/runs/43221579209) 通过。仅证明离线CI，不代表主网运行。
+
+**从外部项目吸收的具体知识与限制**
+- [Token Finder](https://github.com/Danialsafarli/token-finder/blob/master/src/intel/graph.ts)：共资、同步买入、重复下单、跨Mint参与必须保留关系类型和独立事件依据；热门发行需排除普通拥挤行为，原固定阈值/置信度不应直接照搬。
+- [Solana Holder Analyzer](https://github.com/non-contextual/solana-holder-analyzer/blob/main/src/transfer-scan.ts)：多跳BFS、高连接地址停止扩展、逐层预算值得复用；净额边不能替代逐笔交易与总流入/总流出。
+- [Trading Portfolio](https://github.com/solana-foundation/trading-portfolio/blob/main/src/lib/portfolio/pnl.ts)：历史价格/成本覆盖不足时不应由语言模型补造钱包PnL。
+- [FlowLens](https://github.com/tobenwarrior/FlowLens/blob/main/src/domain/graph-projection.ts)：有界展示图与完整证据保留分开；EVM代码与AGPL许可需独立审查。
+- [Google Skill Reach](https://github.com/google/skill-reach)、[Vercel AI SDK](https://github.com/vercel/ai)：进一步评估AI是否正确选择专业知识、工具及调查停止条件，不以文本丰富作为能力进步。
+
+**未完成与下一项最有价值工作**
+1. 在相同真实Mint已归档数据上对照新旧排序，比较漏钱包、池/公共服务干扰、时间、覆盖及费用；当前仅离线对抗夹具。
+2. 本地交易记录不证明真实交易者身份或共同控制；需要公共基础设施分类、多池/Token-2022和不同历史窗口的实证验证。
+3. PR #24的AI助手仍为预览/离线适配，只有 mint-facts；未来应经受限只读数据通道复用 PR #23 的 Mint→Sender→Recipient→Sell/CrossMint 证据，不新建第二套交易捕获、重试和SQLite状态。
+4. 不在没有权限隔离及实际费用核查前启动原版Blix服务器或模型供应商服务。
