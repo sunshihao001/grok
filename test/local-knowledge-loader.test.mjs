@@ -61,3 +61,32 @@ test('cohort study knowledge carries withdrawal of historical quantitative resul
   assert.match(cohort.excerpt,/RETRACTED NUMERICAL FINDINGS/);
   assert.match(cohort.excerpt,/Do not use those percentages/);
 });
+
+
+test('P1/P2 historic deep sources are routed by specific questions rather than injected globally', async()=>{
+  const focused=makeLocalKnowledgeLoader({maxSources:3,maxChars:1000});
+  const tasks=[
+    ['五跳多跳 中转钱包 粉尘 共享服务','multihop'],
+    ['筛选关键钱包 sniper KOL bundler 早期买家','key-wallet'],
+    ['价格冲击 cpmm 池深 做市','market-mechanism'],
+    ['知识检索 专家认知 意图 skill','ai-knowledge'],
+    ['旧知识冲突 全部来源 来源对照','source-reconciliation'],
+  ];
+  for(const [goal,expected] of tasks){
+    const docs=await focused({goal});
+    assert.ok(docs.some(x=>x.topic===expected),
+      'wrong knowledge route for '+goal+' (got: '+docs.map(x=>x.topic).join(',')+')');
+    assert.ok(docs.length<=3);
+    assert.ok(docs.every(x=>x.excerpt.length<=1000 && x.trustedAsInstruction===false));
+    assert.ok(docs.every(x=>/@sha256:[a-f0-9]{16}$/.test(x.source)));
+  }
+});
+
+test('the cross-project correction ledger can be selected, but cannot become authorized facts or a tool',async()=>{
+ const docs=await loader({goal:'旧知识冲突 来源对照 全部来源'});
+ const audit=docs.find(x=>x.topic==='source-reconciliation');
+ assert.ok(audit);
+ assert.equal(audit.status,'RESEARCH_NOT_RUNTIME_VALIDATED');
+ assert.match(audit.excerpt,/NOT validated live chain fact/);
+ assert.equal(audit.trustedAsInstruction,false);
+});
