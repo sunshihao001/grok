@@ -7,6 +7,7 @@ import { createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
 import { persistEvidence } from '../server/economic-events.mjs';
 import { runAiResearchTask } from '../server/intelligence/ai-workflow.mjs';
+import { runCapability } from '../server/intelligence/index.mjs';
 import { makeOfflineEconomicReader } from '../server/intelligence/offline-economic-reader.mjs';
 
 const M = 'GTNHLKQWKZHaHpd6PjfMgfFZUDEuCviwXMwYbCcepump';
@@ -115,6 +116,8 @@ test('missing archived database is a tool error, not a claim of no transfers; no
     assert.equal(result.status,'DRAFT_WITH_INCOMPLETE_EVIDENCE');
     assert.equal(result.evidence[0].result,undefined);
     assert.ok(result.evidence[0].error);
+    assert.ok(result.unknowns.some(x=>/tool execution failed/.test(x)),
+      'missing reader must be surfaced as an explicit unknown');
     assert.equal(result.assessment.evidenceLevel,'UNVERIFIED_MODEL_INTERPRETATION');
     assert.equal(fs.existsSync(file),false);
   } finally {fs.rmSync(root,{recursive:true,force:true});}
@@ -145,4 +148,42 @@ test('invalid follow-up preserves first evidence but never executes disallowed t
   assert.equal(economicCalls,0);
   assert.equal(readCalls,2);
   assert.ok(result.unknowns.some(x=>/Additional investigation failed/.test(x)));
+});
+
+
+test('missing economic index is UNAVAILABLE, not a positive negative-evidence observation', async () => {
+  const output = await runCapability('mint-economic-evidence', {mint:M,readEconomic:async()=>({
+    mode:'OFFLINE_READ_ONLY_SQLITE_MINT_REPORT',
+    input:{mint:M,hours:24},
+    evidence:{indexedCoverage:'LOCAL_EVIDENCE_OR_WALLET_SUMMARY_MISSING',
+      knownSenderMintCaptures:0,senderDiscovery:{selectedSenders:0,truncated:false}},
+    recipients:[],limitations:['Missing local tables'],
+  })});
+  assert.equal(output.status,'UNAVAILABLE');
+  assert.deepEqual(output.facts.recipients,[]);
+  assert.equal(output.facts.lifetimeHistoryComplete,false);
+  assert.ok(output.unknowns.some(x=>/missing/.test(x)));
+  assert.ok(output.unknowns.some(x=>/does not establish no transfers/.test(x)));
+});
+
+test('incorrect Mint returned by offline evidence source is a rejected tool, not cross-Mint evidence', async () => {
+  const wrong='So11111111111111111111111111111111111111112';
+  await assert.rejects(()=>runCapability('mint-economic-evidence',{mint:M,readEconomic:async()=>({
+    mode:'OFFLINE_READ_ONLY_SQLITE_MINT_REPORT',input:{mint:wrong},
+    evidence:{indexedCoverage:'ONLY_CAPTURED_RPC_TX_AND_RESOLVED_TOKEN_ACCOUNT_OWNERS'},
+    recipients:[{toOwner:B}],
+  })}),/OFFLINE_EVIDENCE_CONTRACT_MISMATCH/);
+});
+
+test('an empty but indexed local archive remains partial and cannot establish complete history', async () => {
+  const output=await runCapability('mint-economic-evidence',{mint:M,readEconomic:async()=>({
+    mode:'OFFLINE_READ_ONLY_SQLITE_MINT_REPORT',input:{mint:M},
+    evidence:{indexedCoverage:'ONLY_CAPTURED_RPC_TX_AND_RESOLVED_TOKEN_ACCOUNT_OWNERS',
+      knownSenderMintCaptures:0,senderDiscovery:{selectedSenders:0,truncated:true}},
+    recipients:[],
+  })});
+  assert.equal(output.status,'LOCAL_EVIDENCE_PARTIAL');
+  assert.equal(output.facts.lifetimeHistoryComplete,false);
+  assert.equal(output.facts.recipients.length,0);
+  assert.ok(output.unknowns.some(x=>/subset/.test(x)));
 });
