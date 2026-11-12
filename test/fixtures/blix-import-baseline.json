@@ -810,7 +810,8 @@
     "mcp/blix-mcp.mjs": "Filter write tools in current research MCP facade while preserving original trading tool definitions elsewhere.",
     "package.json": "Add safe test scripts and static start gate while retaining all original scripts.",
     "test/wtrack.test.mjs": "Maintain legacy tracker behavior while adapting fixture signature checks.",
-    "server/bubblemap.js": "Intentionally correct original funding provenance: only directly parsed positive System SOL transfer/createAccount may create funded graph edges; legacy cache must be revalidated, truncated history retained with cursor. Reviewed by test/bubble-funding-evidence.test.mjs and full original-module preservation suite."
+    "server/bubblemap.js": "Intentionally correct original funding provenance: only directly parsed positive System SOL transfer/createAccount may create funded graph edges; legacy cache must be revalidated, truncated history retained with cursor. Reviewed by test/bubble-funding-evidence.test.mjs and full original-module preservation suite.",
+    "web/src/pages/coin/Tabs.tsx": "Intentionally add the optional Coin AI assistant tab from PR24 while retaining the original AI read, Safety, Trades, Holder and transaction UI. The preview cannot call an unauthorized live model or trade; verified by front-end build and original-preservation regression."
   },
   "validation_scope": "Paths and byte fingerprints are preservation/change-detection only; functionality, UI reachability, trading safety, network billing and production performance require separate tests. Legitimate enhancements can update baseline assertions after review."
 }
