@@ -33,8 +33,11 @@ export async function run({ mint, readEconomic, now = Date.now } = {}) {
     ...(Array.isArray(report.limitations) ? report.limitations.slice(0, 12) : []),
   ];
   if (discovery.truncated) unknowns.push('Mint-first discovery was limited to a subset of sender candidates.');
+  const localIndexMissing = report.evidence.indexedCoverage === 'LOCAL_EVIDENCE_OR_WALLET_SUMMARY_MISSING';
+  if (localIndexMissing) unknowns.push('Required local economic evidence tables are missing; zero recipients does not establish no transfers.');
   return {
-    schemaVersion: '0.1', capability: manifest.id, mint, status: 'LOCAL_EVIDENCE_PARTIAL',
+    schemaVersion: '0.1', capability: manifest.id, mint,
+    status: localIndexMissing ? 'UNAVAILABLE' : 'LOCAL_EVIDENCE_PARTIAL',
     evidenceLevel: 'CAPTURED_LOCAL_ARCHIVE_NOT_FULL_CHAIN_VERIFIED',
     observedAt: new Date(now()).toISOString(),
     sources: [{ provider: 'EXISTING_LOCAL_SQLITE', method: 'OFFLINE_READ_ONLY_REPORT',
