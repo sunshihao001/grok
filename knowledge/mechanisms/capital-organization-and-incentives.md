@@ -356,3 +356,16 @@ Jito bundles 可由最多五笔交易组成，按序原子执行，并按账户�
 **对产品目标的重要修正**：系统应追问“谁承担风险、谁获得哪种收益、信息在什么时候对谁可见、什么后续证据会改变解释”，而非只问“这个地址是不是庄家”。这些主张应与[旧Hermes钱包状态假说](../methods/hermes-reverse-discovery-deep-study-20261106.md)、[钱包角色与库存](wallet-roles-and-inventory.md)及[市场价格微观机制](market-price-mechanism-research.md)保持交叉引用，不新建固定专家或未经验证的控制权概率。
 
 **证据状态**：官方规则/公开论文和部分源码核查支持问题与解释层面；具体Mint的行为者收益动机和可交易利润仍需原始交易/制度适用时点/后续观察，不以这里的理论语言替代实盘验证。
+
+
+## 2026-11-13｜D05资金网络：类型、可行性、身份与误归因分层
+
+[跨项目源—实现对照](../references/p1-p2-knowledge-reconciliation-20261113.md)把 [Why-Solana Dust vs Funding](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over/blob/main/code/r1_dust_vs_funding.py)、[Token Finder typed graph](https://github.com/Danialsafarli/token-finder/blob/master/src/intel/graph.ts)、[Hermes共同来源聚类](https://github.com/sunshihao001/-/blob/main/design/phase1-skill-04-wallet-structure.md)与 Blix 当前源码互相核对：
+
+1. **边型不可互换**：直接系统SOL转账、Fee Payer、Token Transfer、共同出资、同Slot、同金额、同币参与、池内Swap和跨Mint重复，代表不同事实或候选机制；资金图中的“相连”不等于同一个决策者。
+2. **金额可行性必须查**：极小Dust可能仅为标记/垃圾转账。旧Why-Solana的特定SOL阈值是当时研究情景，不是恒定经济常数；要对照发生时手续费、rent、报价、实际买入金额及后续执行。
+3. **共享服务污染**：CEX、bridge、路由、Pool、Vault、PDA或高扇出服务既可能是多钱包公共来源，也可能造成“背后一个团队”的假象；更强证据要靠原签名、直接资金可行性、反复跨时段关系、排除普通共因。
+4. **库存与资金两张账**：Token A→B→C的gross 可能对同一Token重复计量，不能将其当独立流入；钱包接收后卖出摘要也不是转入库存的因果证明。库存成本和SOL回流还需要Swap/WSOL/跨池核对。
+5. **已有实现边界**：`economic-network.mjs` 当前主要是**单Mint Token Transfer投影**；`economic-snapshot-review.mjs` 是本地快照差与跨Mint同地址候选。原Blix `bubble-funding-evidence.mjs` 有直接SOL/fee payer证据区分，但并未自动与新图融合成统一归因真值。
+
+当前专业判断优先输出“观察到何种转账/候选群体、可能的普通解释、缺哪一条资金证据”，不直接输出确定同控、庄家或资金流入另一Mint的结论。上述机制各有不同观察和反证价值，**不是全面否定异常协同的可能性**。
