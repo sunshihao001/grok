@@ -56,7 +56,7 @@ export function projectMintNetwork({ mint, recipients = [] } = {}) {
     if (!nodes.has(wallet)) nodes.set(wallet, {
       wallet, observedInRaw: 0n, observedOutRaw: 0n,
       hasUnknownAmount: false, sentEventCount: 0, receivedEventCount: 0,
-      localSellSummaryCount: 0, roles: new Set(), addressClass: 'UNCLASSIFIED_INCLUDES_INFRASTRUCTURE',
+      localSellSignatures: new Set(), roles: new Set(), addressClass: 'UNCLASSIFIED_INCLUDES_INFRASTRUCTURE',
       economicController: 'UNKNOWN',
     });
     return nodes.get(wallet);
@@ -67,7 +67,7 @@ export function projectMintNetwork({ mint, recipients = [] } = {}) {
     from.sentEventCount++; from.roles.add('OBSERVED_TOKEN_SENDER');
     to.receivedEventCount++; to.roles.add('OBSERVED_TOKEN_RECEIVER');
     if (e.sellSignatures.length) {
-      to.localSellSummaryCount += e.sellSignatures.length;
+      for(const signature of e.sellSignatures) to.localSellSignatures.add(signature);
       to.roles.add('LOCAL_SELL_SUMMARY_NOT_TRANSFER_INVENTORY_PROVENANCE');
     }
     const quantity=raw(e.amountRaw);
@@ -83,7 +83,7 @@ export function projectMintNetwork({ mint, recipients = [] } = {}) {
       fromOwner:e.fromOwner,toOwner:e.toOwner,kind:'OBSERVED_TOKEN_TRANSFER',
       count:0,rawTotal:0n,amountCoverage:'COMPLETE_FOR_LISTED_EVENTS',
       signatureSet:new Set(), eventIds:[],minTime:null,maxTime:null,
-      localSellSummaryObserved:false, crossMintCandidateCount:0,
+      localSellSummaryObserved:false, crossMintCandidateKeys:new Set(),
       relationIsCommonControl:false, addressClassesVerified:false,
     });
     const edge=edges.get(key);edge.count++;
@@ -95,7 +95,9 @@ export function projectMintNetwork({ mint, recipients = [] } = {}) {
       edge.maxTime=edge.maxTime===null?e.blockTime:Math.max(edge.maxTime,e.blockTime);
     }
     if(e.sellSignatures.length) edge.localSellSummaryObserved=true;
-    edge.crossMintCandidateCount+=e.crossMintCandidates.length;
+    for(const candidate of e.crossMintCandidates) {
+      edge.crossMintCandidateKeys.add(JSON.stringify([candidate.fundingSig,candidate.buySig,candidate.boughtMint,candidate.soldMint]));
+    }
   }
   const walletFlows=[...nodes.values()].map(n=>({
     wallet:n.wallet,roles:[...n.roles].sort(),observedInRaw:n.observedInRaw.toString(),
@@ -103,7 +105,7 @@ export function projectMintNetwork({ mint, recipients = [] } = {}) {
     observedNetTransferRaw:(n.observedInRaw-n.observedOutRaw).toString(),
     amountCoverage:n.hasUnknownAmount?'PARTIAL_UNKNOWN_AMOUNT':'KNOWN_FOR_CAPTURED_EVENTS_ONLY',
     sentEventCount:n.sentEventCount,receivedEventCount:n.receivedEventCount,
-    localSellSummaryCount:n.localSellSummaryCount,addressClass:n.addressClass,
+    localSellSummaryCount:n.localSellSignatures.size,addressClass:n.addressClass,
     economicController:n.economicController,
     currentBalance:'UNKNOWN',costBasis:'UNKNOWN',realizedPnl:'UNKNOWN',
   })).sort((a,b)=>a.wallet.localeCompare(b.wallet));
@@ -112,7 +114,7 @@ export function projectMintNetwork({ mint, recipients = [] } = {}) {
     signatureCount:e.signatureSet.size,observedRawTotal:e.rawTotal.toString(),
     amountCoverage:e.amountCoverage,firstBlockTime:e.minTime,lastBlockTime:e.maxTime,
     eventIds:e.eventIds,localSellSummaryObserved:e.localSellSummaryObserved,
-    crossMintCandidateCount:e.crossMintCandidateCount,
+    crossMintCandidateCount:e.crossMintCandidateKeys.size,
     relationIsCommonControl:false,addressClassesVerified:false,
   })).sort((a,b)=>a.fromOwner.localeCompare(b.fromOwner)||a.toOwner.localeCompare(b.toOwner));
   const outgoing=new Map();
@@ -130,6 +132,7 @@ export function projectMintNetwork({ mint, recipients = [] } = {}) {
   if(unidentified)warnings.push('UNRESOLVED_OR_MISMATCHED_TRANSFER_EVENTS_SKIPPED');
   if(unknownAmountEvents)warnings.push('RAW_TRANSFER_AMOUNT_UNKNOWN_FOR_SOME_EVENTS');
   warnings.push('Transfer graph does not establish ultimate controller, trade or current inventory.');
+  warnings.push('Gross transfers across multiple hops may count the same circulating Token more than once; not independent demand or supply.');
   return {
     schemaVersion:'0.1',mint,provenance:'CAPTURED_LOCAL_INSTRUCTION_PROJECTION',
     coverage:'PARTIAL_ARCHIVED_SENDER_SAMPLE_NOT_COMPLETE_MINT_HISTORY',
