@@ -52,3 +52,12 @@ test('untrusted goal cannot specify an arbitrary file path or exceed knowledge l
   const docs=await loader({goal:'../../server/accounts.js /etc/passwd 秘密'});
   assert.deepEqual(docs,[]);
 });
+
+
+test('cohort study knowledge carries withdrawal of historical quantitative results',async()=>{
+  const docs=await loader({goal:'跨Mint 群体同步行为与监控'});
+  const cohort=docs.find(x=>x.topic==='cohort-timing');
+  assert.ok(cohort,'question should select existing cohort research');
+  assert.match(cohort.excerpt,/RETRACTED NUMERICAL FINDINGS/);
+  assert.match(cohort.excerpt,/Do not use those percentages/);
+});
