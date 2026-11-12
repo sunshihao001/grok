@@ -64,8 +64,11 @@ export function makeLocalKnowledgeLoader({maxSources=3,maxChars=1500}={}) {
       // selects another file or changes the read permission.
       const doc=await readFile(new URL(item.path,import.meta.url),'utf8');
       const version=createHash('sha256').update(doc).digest('hex').slice(0,16);
+      const excerpt=extractSection(doc,q,item.cues,maxChars);
+      const caveat=item.id==='cohort-timing' ?
+        'RETRACTED NUMERICAL FINDINGS: The RED-COHORT study cited by this knowledge source withdrew quantitative results. Do not use those percentages or significance claims.\n' : '';
       output.push({source:'LOCAL_PROJECT_RESEARCH:'+item.label+'@sha256:'+version,
-        excerpt:extractSection(doc,q,item.cues,maxChars),
+        excerpt:(caveat+excerpt).slice(0,maxChars),
         trustedAsInstruction:false,
         status:'RESEARCH_NOT_RUNTIME_VALIDATED',
         topic:item.id});
