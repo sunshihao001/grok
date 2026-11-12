@@ -140,3 +140,18 @@ Meme 跟单至少存在五个不同目标：
 - OKX 只读分析接口：`okx-dex-market` 的 wallet PnL / token / signal / wallet activity 是候选输入，仍需核查单位、时间及覆盖。
 
 **本篇的关键产出不是一套交易参数，而是将每条钱包/结构信号转成可审计的“跟随者可复制性问题”。**
+
+
+## 2026-11-13｜D08/D09：从领先钱包收益到可复制跟单的分层验收
+
+这轮结合[知识来源对照](../references/p1-p2-knowledge-reconciliation-20261113.md)、[Trading Portfolio成本覆盖测试](https://github.com/solana-foundation/trading-portfolio/blob/main/tests/portfolio-pnl-basis.test.ts)、[Token Finder校准回放](https://github.com/Danialsafarli/token-finder/blob/master/src/calibration/replay.ts)及旧meme-结构观察者定位，确认**钱包盈利、观察到这笔盈利、跟随者能获得正净收益是三种不同命题**。
+
+**目前实际可运行的只是离线研究门槛**：`server/intelligence/followability-replay.mjs`、`scripts/audit-followability-offline.mjs`接受明确纸面成交收据，检验链上event vs follower首次可见、买入/卖出quote有效期、成交延迟、手续费和滑点标记、完整退出与转仓未知。缺失/过期/事后提前入场/仅部分卖出时返回不可评估类别；条件齐全时用原始数量做算术，但永远标 `PAPER_SCENARIO_CALCULATED_NOT_LIVE`，不会下单或证明收益优势。
+
+**知识纠偏**：
+- 转入Token若成本来源未知，不能按其他钱包已知买入价自动摊平；`currentBalance`、`costBasis` 和 `realizedPnl` 仍 UNKNOWN。
+- 模拟成交收据是输入假设，不是确定会成交；优先费、账户租金、市场冲击、真实成交失败、报价变动、私有执行路径、供应商费用另须独立覆盖。
+- 样本外测试需保留所有未选/失败/归零Mint及错过机会的机会分母，冻结观察时点、策略版本和模型，不能事后选赢家。
+- “同源、bundler、第一批买入”钱包可以有调查价值，但不等于追买可复制；也可以只用于库存风险、出货压力和其他Mint发现研究。
+
+**下一道实证门**：同一条实际钱包事件在原Blix记录、可观察信号、历史可用报价、纸面执行及完整失败样本中对齐；再与不跟随或其他基线比较，不用成功案例数替代净效果。
