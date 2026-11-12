@@ -232,3 +232,18 @@ Million整套服务适合钱包发现→订阅→后续活动→资金关系，�
 **D07与旧资料的改进**：Hermes `learning/10-12.md`认为角色必须由行为支持，其`phase1-skill-04-wallet-structure.md`的同Funder、5分钟阈值只能作为筛选启发式，不是本样本的协同交易证据。旧qb的关键地址矩阵与基础设施注册表本就分开；现有报告应继续保留此区别。RugCheck的缓存detectedAt与实际拉取时间也不同，不能当同一slot交易时钟。
 
 **工程闭环**：PR#16的`mint_v01.pool_related_holder_observations`添加严格地址全等的报告提示及缺源/不匹配负例，不启用交易或自动经济归因，GitHub离线CI本轮120项通过。
+
+
+## 2026-11-13｜D04/D05/D06/D07：已实现钱包图谱与旧钱包标签的纠偏
+
+**现行源码真源**：[Blix P1/P2知识对照账](../references/p1-p2-knowledge-reconciliation-20261113.md)，`server/intelligence/economic-network.mjs`和`test/economic-network.test.mjs`（Draft PR #23，离线回归）。现在可从局部已存RPC交易中输出：指定Mint的Token Transfer事件（Signature+outer/inner）、方向、owner、raw数量、地址流入/流出/净变化、重复卖出摘要去重、跨币候选，以及一对多**分发候选**。这不是可交易库存、全持仓历史、SOL资金溯源或操作者身份系统。
+
+**旧项目具体纠偏**：
+- [Hermes wallet roles](https://github.com/sunshihao001/-/blob/main/design/phase1-skill-03-wallet-roles.md) 的bundler、sniper、KOL、Smart Money、fresh、dev等是供应商/行为候选；不能叠加成万能“庄家分数”。同一钱包在多个Mint及阶段可以有不同角色。
+- [Hermes shared funder / 5分钟聚类](https://github.com/sunshihao001/-/blob/main/design/phase1-skill-04-wallet-structure.md) 是**检索假设**而非同控制权证据；[Token Finder反例](https://github.com/Danialsafarli/token-finder/blob/master/test/intel-graph.test.ts)说明热门发行拥挤、CEX/bridge/PDA可以产生同源/同Slot的错误联系。
+- [qb留存事实报告](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/wallet_fact/wallet_fact_report.md) 的Top10 51.019219%分母是**被跟踪钱包余额**，不是总供应；“full exit 54”来自旧字段，并不能取代Swap卖出、Token转仓的分离。4组10成员的`group_confidence`仍为unknown。
+- **经济状态层级**：Token Account余额 → Owner可见持仓 → 归因到经济主体的库存候选 → 可在某池卖出的库存 → 成本与真实P&L，是五个不同可检验对象。现阶段图谱只证实局部Token转账，不应把 `observedNetTransferRaw` 标成“真实剩余筹码”。
+- **同一卖出签名出现多次**：接收钱包B多次收到Token，但之后某一次卖出摘要只计一个不同Signature；不因此证明出售的就是转入Token。
+- **群体生命周期**：新钱包接收、旧钱包消失、跨Mint重复地址均可能来自池/共享服务、快照样本限制、历史回补或实际不同经济主体；需另查同窗资金边和反证。
+
+**还未完成**：公共池/路由/托管实际分类、群体经济控制归因、跨Mint SOL资金闭环、Token-2022可动用库存、真正成本和已实现P&L，以及原BubbleMap与新图谱的前端联动。按“地址类型/关系类型/证据签名/时间覆盖/竞争解释”显示，不对UNKNOWN强行填标签。
