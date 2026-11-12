@@ -112,3 +112,14 @@
 - `knowledge/source-admission.v1.json`：研究来源默认准入规则（前序 Draft PR）。
 - `src/solana_meme_os/research.py`：按需参考资料检索原型，尚非完整专家判断引擎。
 - `src/solana_meme_os/monitor.py`：只读状态观察原型，尚未证明其具备稳定行情接入与盈利能力。
+
+
+## 2026-11-13｜D11：P1–P2 离线反例已建，真实世界基准尚缺
+
+[专业来源与代码对应表](../references/p1-p2-knowledge-reconciliation-20261113.md)与当前 Draft PR #23 的 `test/economic-network.test.mjs`、`test/economic-snapshot-review.test.mjs`、`test/local-knowledge-loader.test.mjs`、`test/followability-replay.test.mjs` 已将部分旧知识转为**可自动重复的程序反例**：同一指令重复、不同CPI、BigInt原始金额、同一卖出签名去重、未分类公共服务、一对多分发不等于同控、局部空数据、历史回补/更正、跨Mint同地址、知识来源SHA/旧结果撤回、信号可见时间/报价过期/部分退出/负面模拟回放。
+
+**这些测试覆盖的是确定性逻辑**，不证明真实市场同控识别、样本外策略收益，也不能将外部README营销成绩当成本项目分数。今后每个判断至少明确：数据对象（signature/Mint/Owner/Pool）、事件/取数/首次可见三时点、历史分页/漏项、错误竞争世界、可证伪证据、来源版本与结果状态。
+
+比较模型知识价值时，建议同题固定数据和预算，分别测 (A) 不读旧专业知识、(B) 当前 `local-knowledge-loader` 六源词面选择、(C) 扩展/改进知识选择；指标包括：真实证据正确率、误归因、需要查询的下一条事实、错误过度拒绝、无关知识调用、费用与Token。没有真实模型A/B时，状态是 `EVALUATION_NOT_RUN`，不能用“解释更长”代替提升。
+
+**强制区分**：`OFFLINE_TEST` 与 `REAL_ARCHIVE_REVIEW`、`LIVE_READ_ONLY`、`PRODUCTION_VERIFIED`互不等价；旧qb那95钱包虽留存数据，但其报表的full_exit/Top10标签仍须核对来源和分母。
