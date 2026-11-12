@@ -59,7 +59,7 @@ test('Coin AI assistant is additive: original AI read, safety and trading entry 
   assert.match(tabs, /\["copilot", "AI assistant"\]/);
   assert.match(tabs, /tab === "ai" && <AiGate><AiView/);
   assert.match(tabs, /tab === "copilot" && <AiGate>/);
-  assert.match(tabs, /onPaper=\{onPaper\}/);
+  assert.match(tabs, /onRead=\{onPaper\}/);
   assert.match(assistant, /Preview · agent not connected/);
   assert.match(assistant, /Copy research task/);
   assert.match(assistant, /read-only, no trading/);
