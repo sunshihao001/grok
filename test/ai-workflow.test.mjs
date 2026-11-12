@@ -110,3 +110,21 @@ test('model cannot promote a mentioned wallet address into an authorized Mint', 
   }),/MINT_NOT_PRESENT_IN_USER_GOAL/);
   assert.equal(calls,0);
 });
+
+
+test('Coin assistant long contextual task is accepted, but unbounded task is rejected', async () => {
+  // The textarea can contain 1600 characters, plus the displayed source context.
+  const longGoal = goal + '\n' + ('研究持仓来源、Token转仓与经济控制权竞争解释。'.repeat(90));
+  assert.ok(longGoal.length > 2000 && longGoal.length < 4096);
+  const result = await runAiResearchTask({
+    goal:longGoal,model,capabilities,read:async()=>{},execute:async()=>({
+      status:'OBSERVED_UNVERIFIED',unknowns:['Source coverage requires verification'],
+    }),
+  });
+  assert.equal(result.status,'DRAFT_WITH_EVIDENCE');
+  assert.ok(result.unknowns.includes('Source coverage requires verification'));
+  await assert.rejects(
+    () => runAiResearchTask({goal:goal + 'a'.repeat(4096),model,capabilities,read:async()=>{}}),
+    /INVALID_RESEARCH_GOAL/
+  );
+});
