@@ -30,3 +30,19 @@ test('bounded source makes truncation visible',()=>{
  const g=projectMintNetwork({mint:M,recipients:Array.from({length:230},(_,i)=>row('s'+i,0,-1,'A','B','1'))});
  assert.equal(g.eventCount,200);assert.equal(g.knownRawTransferred,'200');assert.equal(g.inputTruncated,true);
 });
+
+
+test('one observed sell or cross-Mint path attached to multiple receipts is counted once',()=>{
+ const repeated={observedSells:[{sig:'same-sell'}],crossMintCandidates:[{
+   fundingSig:'funding',buySig:'follow-buy',boughtMint:'OTHER',soldMint:M,
+ }]};
+ const graph=projectMintNetwork({mint:M,recipients:[
+   row('transfer1',0,-1,'A','B','100',repeated),
+   row('transfer2',0,-1,'A','B','200',repeated),
+ ]});
+ assert.equal(graph.eventCount,2);
+ assert.equal(graph.edges[0].eventCount,2);
+ assert.equal(graph.edges[0].crossMintCandidateCount,1);
+ assert.equal(graph.walletFlows.find(x=>x.wallet==='B').localSellSummaryCount,1);
+ assert.ok(graph.warnings.some(x=>/multiple hops/.test(x)));
+});
