@@ -51,10 +51,12 @@ test('PR24 AI workflow calls PR23 offline evidence for one Mint; full SQLite rem
     const model=async ({stage,permittedCapabilities,evidence})=>{
       if(stage==='plan'){
         assert.deepEqual(permittedCapabilities.map(x=>x.id),['mint-facts','mint-economic-evidence']);
-        return {calls:[
-          {capability:'mint-facts',input:{mint:M}},
-          {capability:'mint-economic-evidence',input:{mint:M}},
-        ]};
+        return {calls:[{capability:'mint-facts',input:{mint:M}}],followup:true};
+      }
+      if(stage==='followup'){
+        assert.equal(evidence.length,1);
+        assert.equal(evidence[0].result.facts.holderLedger.sourceCoverage,'PARTIAL_OR_UNKNOWN');
+        return {calls:[{capability:'mint-economic-evidence',input:{mint:M}}]};
       }
       seen.push(...evidence.map(x=>x.capability));
       assert.equal(evidence[1].result.facts.recipients[0].toOwner,B);
@@ -116,4 +118,31 @@ test('missing archived database is a tool error, not a claim of no transfers; no
     assert.equal(result.assessment.evidenceLevel,'UNVERIFIED_MODEL_INTERPRETATION');
     assert.equal(fs.existsSync(file),false);
   } finally {fs.rmSync(root,{recursive:true,force:true});}
+});
+
+
+test('invalid follow-up preserves first evidence but never executes disallowed tools',async()=>{
+  let readCalls=0, economicCalls=0;
+  const model=async ({stage})=>{
+    if(stage==='plan') return {calls:[{capability:'mint-facts',input:{mint:M}}],followup:true};
+    if(stage==='followup') return {calls:[{capability:'buy-live',input:{mint:M}}]};
+    return {summary:'First evidence only',hypotheses:[],alternativeExplanations:[],nextChecks:[]};
+  };
+  const result=await runAiResearchTask({
+    goal,model,
+    read:async (path)=>{
+      readCalls++;
+      return path.includes('/token/')
+        ? {ok:true,status:200,data:{token:{mint:M}}}
+        : {ok:true,status:200,data:{holders:2,partial:true,top:[]}};
+    },
+    readEconomic:async()=>{economicCalls++;throw Error('unexpected economic tool');},
+  });
+  assert.equal(result.status,'DRAFT_WITH_INCOMPLETE_EVIDENCE');
+  assert.match(result.followupError,/UNAUTHORIZED_TOOL/);
+  assert.deepEqual(result.calls.map(x=>x.capability),['mint-facts']);
+  assert.equal(result.evidence.length,1);
+  assert.equal(economicCalls,0);
+  assert.equal(readCalls,2);
+  assert.ok(result.unknowns.some(x=>/Additional investigation failed/.test(x)));
 });
