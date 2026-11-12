@@ -327,3 +327,28 @@
 5. Uptime工作流需要独立调查真实调度结果；目前不得根据当前无 Job 的 push 失败断言站点不可达。
 
 **下一轮首选**：审查原有 Blix 可复用的鉴权/只读隔离服务，设计并验证 Coin→授权研究端点→经济证据/模型→前端报告的真实可执行链，同时严格隔离交易签名与自动付费。不要再建一套平行抓取/状态机。
+
+
+### 2026-11-13｜R-12：P1–P2 专业网络、群体演化、知识使用、跟单研究实装与验收
+
+**建设范围和理由**：原版 Blix Bubble Map/钱包、paper与本地SQLite数据和历史专业知识已经存在；本轮不再建第二套钱包采集器、交易执行器或专家目录。聚焦将 PR #23 已捕获的成功交易指令转成**可复查的资金关系与历史比较**，将旧知识转换为**按问题调用的参考**，再以**时间可见性/实际执行证据**约束跟单历史研究。未启动主Blix服务器、RPC、真实模型、签名、交易或付费接口。
+
+**P1 实际代码与契约**
+- `scripts/inspect-economic-mint.mjs` 原有单Mint报告新增 `outerI/innerI/mint`，保留精确签名+外层/内层CPI指令位置；不是仅按相同钱包对/net金额合并，避免重复、漏项和无法区别同笔多次指令。
+- `server/intelligence/economic-network.mjs` 从**同一原始经济证据报告**投影有类型的 Token Transfer 事件/边、钱包可观察流入/流出/净转移、方向、时间、签名、多接收方分发候选；以 BigInt 原始量字符串计算防浮点误差，按同一指令位置去重，保留未知时间/数量、样本截断、冲突。资金图不是控制权图；原版 BubbleMap 不动。
+- `server/intelligence/mint-economic-evidence.mjs` 将 graph 附加到现有 `facts.network`，进入此前已通过CI的两阶段AI只读工作流。卖出摘要按接收者的**不同签名**去重，同一跨币候选按原始 funding+buy+mint 组合去重；多跳的总转移量**不能**被解释为独立净流入、当前可卖库存、Swap卖出或获利。
+- `server/intelligence/economic-snapshot-review.mjs` 比较两份本地归档的相同Mint事件：新增可见、未再被当前有限样本展示、同事件元数据更正三类分别输出；不把历史RPC补查当实时转账，不把样本遗漏当真实卖出。两个不同 Mint 之间只输出**地址重合候选**，不认定相同经济主体或资金出处。
+- `scripts/inspect-economic-network.mjs` 与 `npm run inspect:network-offline -- --db EXISTING.sqlite --mint MINT [--previous-db ...] [--other-mint ...] [--goal ...]` 为已有离线证据的实际可运行调查入口，不接付费供应商，不写输入库。
+
+**P2 实际代码与契约**
+- `server/intelligence/local-knowledge-loader.mjs` 使用现存 `knowledge/mechanisms`、`knowledge/methods`、`knowledge/foundations` 与 `knowledge/cases` 文件，不重新复制专业知识；按用户自然语言问题、实际工具证据缺口选1–3个有来源、SHA256版本指纹、长度上限的片段；明确 `RESEARCH_NOT_RUNTIME_VALIDATED` 和 `trustedAsInstruction:false`，不让知识文本赋予交易权限。旧 RED-COHORT 文中**撤回定量结果**有显式模型上下文警示，禁止旧百分比被当作新实证。
+- `server/intelligence/followability-replay.mjs` 和 `scripts/audit-followability-offline.mjs`：用显式提供的纸面成交收据做**跟单可评估性筛查**；区分原钱包链上事件时间与跟随者首次可见时间，拒绝事后提前进场、无退出/不完整库存、无费用和滑点、报价过期/未声明有效期的样本。仅在收据完备时计算模拟SOL净额与收益基点，并永久标为 `PAPER_SCENARIO_CALCULATED_NOT_LIVE`；即使所有模拟样本正收益也**不宣称样本外盈利/Alpha**。不触发原版交易程序。
+- `test/economic-network.test.mjs`、`test/economic-snapshot-review.test.mjs`、`test/local-knowledge-loader.test.mjs`、`test/offline-economic-network-cli.test.mjs`、`test/followability-replay.test.mjs`、`test/offline-followability-cli.test.mjs` 新增合成离线反例：签名+多CPI、巨量raw、重放去重、流入卖出重复计数、图谱分发、回补/更正、跨币地址重合、知识来源与撤回、前瞻偏差、过期报价、缺执行、缺库不建文件、输入SQLite与研究JSON SHA256不变。均进入既有完整/专项Node24 CI。
+
+**本轮验收边界**：上述是 GitHub可执行的离线源代码和fixture；该SHA成功与否以最新 GitHub Actions tests/audit/web 三项为准，不能提前视为生产功能。尚未对真实主网完整历史、具体Pool/Router类别、CPI/Swap真实Pnl、原Coin页图谱联动、模型知识选择质量、全天候监控和样本外收益提供独立证据。
+
+**明确未完成的关键阻断（继续从这里，而不重复新建方法制度）**
+1. P1：真实Mint全历史、多池/Token-2022/CPI事件与Swap/Transfer去重，公共基础设施分类，准确的归属可卖库存/PnL；部分功能源代码已有，依赖授权RPC/真实样本复查，不得用标签替代。
+2. P1：将现有 `web/src/pages/coin/BubbleMap.tsx` 的原图形交互与 `facts.network` 的签名/时序/证据关联展示打通，需要通过只读独立服务/安全鉴权（P0）而不是从原交易主服务借未审权限。
+3. P2：任务轮询/历史监控实际运行、费用与故障恢复、知识模型多轮选择的真实A/B评测、市场影响/策略样本外回测仍待真实输入与授权。当前快照比较是本地离线功能，不是已部署监控。
+4. 原版市场/交易页面及服务保留；GitHub PR #23/#24均为Draft未合并。不要用离线CI绿灯宣传真实主网或Model/交易服务已经上线。
