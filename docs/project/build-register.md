@@ -259,3 +259,21 @@
 2. 本地交易记录不证明真实交易者身份或共同控制；需要公共基础设施分类、多池/Token-2022和不同历史窗口的实证验证。
 3. PR #24的AI助手仍为预览/离线适配，只有 mint-facts；未来应经受限只读数据通道复用 PR #23 的 Mint→Sender→Recipient→Sell/CrossMint 证据，不新建第二套交易捕获、重试和SQLite状态。
 4. 不在没有权限隔离及实际费用核查前启动原版Blix服务器或模型供应商服务。
+
+
+### 2026-11-12｜R-09：PR #24 AI工作流与 PR #23 经济证据离线贯通
+
+**事实状态**：在现有 PR #23 集成分支中，复用 PR #24 的 model({stage}) 外部注入式 AI 编排，不合并或关闭独立 PR #24，也不启动原版 Blix 服务、真实模型、RPC、签名、交易、付费和部署。
+
+**实际代码路径**：
+- server/intelligence/index.mjs 在原 mint-facts 之外允许第二个只读能力 mint-economic-evidence，按需加载；两个能力共享现有允许列表，模型不能扩展工具权限。
+- server/intelligence/mint-economic-evidence.mjs 将 PR #23 原 inspect-economic-mint.mjs 的本地证据报告转成保留签名、时间、钱包关系、卖出摘要、跨 Mint 候选、来源与 UNKNOWN 的工具输出；不声称控制权、接收Token库存卖出因果或完整历史。
+- server/intelligence/offline-economic-reader.mjs 由受信调用方指定已有 SQLite 文件；固定子进程参数和 Mint-only 窗口调用既有 CLI，非模型输入的路径不可越权、没有 Shell、DB readOnly/query_only；原采集与重试数据库没有被复制。
+- server/intelligence/ai-workflow.mjs 可在第一次读证据后，按模型明确 followup:true 请求第二次规划；后续计划重验授权、Mint、重复调用和总预算最多两次。非法后续规划保留首轮事实，不能执行不允许的命令；解释仍标为 UNVERIFIED_MODEL_INTERPRETATION。
+- 移入 test/ai-workflow.test.mjs（原 PR #24），新增 test/ai-economic-workflow.test.mjs 的 Mint→A→B→B本地卖出摘要→AI推论离线 SQLite 路径、执行前后文件 SHA256、缺数据与非法后续规划反例；同步现有 Node24 完整测试和经济专项。
+
+**已解决的内容**：AI 可通过授权接口使用既有 Mint/Holder 与归档转账关系，再根据第一轮证据请求另一项允许工具。现阶段只是被注入的模拟模型和合成归档；没有声称连接真实模型或动态请求链上数据。
+
+**验收状态**：本节提交后的 GitHub CI（完整 npm test、security、evidence、audit）必须按新 SHA 核查。完成前为 CODE_SUBMITTED_NOT_VERIFIED，不能沿用此前 SHA 的绿色测试。
+
+**未完成的真实阻断**：受控真实模型适配、Coin 页原有 AiCopilot 预览变成受授权执行入口、独立只读服务与真实主网 RPC 归档、Pool/Router 归因过滤、跨 Mint 长历史、任务恢复与预算。优先验证端到端的一次真实 Mint 调查质量，不再为已有程序另建状态机。
