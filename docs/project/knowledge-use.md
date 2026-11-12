@@ -7,6 +7,23 @@
 
 **主体认识优先入口（原基准）**：[Blix 已有业务能力 × 旧 Grok 专业知识继承基准](blix-heritage-capability-baseline-v0.1.md)。面对实际业务先定位 Blix 已有 UI/数据/逻辑，再按需要调用 PR #14 的原专业正文或 Hermes/qb-/meme- 的机制，不全文搬迁、不把旧历史程序当作已在 Blix 运行。
 
+## 2026-11-13｜当前P1/P2知识如何真实调用、怎样不误用
+
+最新原始来源、冲突与能力核查见 [P1/P2全域知识对照账](../../knowledge/references/p1-p2-knowledge-reconciliation-20261113.md)。**历史章节中的“没有Blix运行时代码变更”仅针对其写作时点**；现在Draft PR #23已有只读离线工具、专业图谱、快照审查、纸面可跟随性审核与按需知识装载。但**尚未连接Coin页真实模型/API与主网全历史**。
+
+| 问题场景 | 先用的事实与知识 | 当前可执行 | 不能自动下的结论 |
+|---|---|---|---|
+| 一个Mint的关键钱包、转仓与接收卖出 | [D01协议](../../knowledge/foundations/solana-chain-and-market.md)、[D04钱包库存](../../knowledge/mechanisms/wallet-roles-and-inventory.md) | `npm run inspect:network-offline -- --db EXISTING.sqlite --mint MINT` 的本地原始转账/图谱 | 转账=卖出、接收方售出原转入Token、地址=同一操作者 |
+| 同源/多跳/跨Mint群体 | [D05资金来源](../../knowledge/mechanisms/capital-organization-and-incentives.md)、[多跳审计](../../knowledge/references/multihop-funding-evidence-audit.md) | 离线相同地址重合、不同签名与指令位置、资料回补对比 | Pool/交易所共享服务=控制群体、跨Mint地址重合=资金真实流向 |
+| 市场异动/6小时转账激增 | [D03价格机制](../../knowledge/mechanisms/market-price-mechanism-research.md)、[D07群体](../../knowledge/methods/anomaly-and-cohort-discovery.md) | 两份本地快照新可见/丢出样本/数据修订分开 | 新入库=刚链上转账，或曾撤回的论文数字=实证预测 |
+| 看中某个高收益钱包想跟单 | [D08/D09成本与策略](../../knowledge/mechanisms/strategy-and-execution-economics.md)、[D11反证](../../knowledge/cases/independent-validation-and-failure-cases.md) | `npm run audit:followability-offline -- --input PAPER_RECEIPTS.json` | 旧成交价=跟随可成交价，纸面收益=样本外Alpha |
+| AI要学会如何研究 | [D12知识与意图](../../knowledge/ai/intent-knowledge-selection-and-reasoning.md) | `local-knowledge-loader.mjs` 受限源选择 + `ai-workflow.mjs` 离线模拟 | 已阅读/已注册152项=AI已掌握或真实调用正确 |
+
+**最低使用原则**：先区分来源主张、原始链上事实、离线测试和未证实解释；Token Account、Owner、fee payer、Pool、Vault、私钥控制、经济收益权逐层审查；对同一Mint要求签名、Slot、外内指令位置、金额原始单位、事件/获取/首次可见时间与历史覆盖。未知是准确状态，不是默认忽略所有异常。
+
+**知识路由不是强制执行顺序**：模型根据普通问题可探索新领域，既有Dxx与受限11源仅为当前检索入口；资料中包含旧规则、撤回数值、过时假说时不允许直接注入产品判断。正确性由同任务无知识/有知识的证据、反例、工具费用及模型A/B验证。新增资料若不能改变专业问题、代码或误报，不继续为凑数量加规则。
+
+
 ## 通用 ai-d 完整能力的接入入口（2026-11-06）
 
 **Blix 消费入口**：[ai-d-cognitive-core Skill](../../.grok/skills/ai-d-cognitive-core/SKILL.md)，上游唯一来源：[ai-d Cognitive Core Skill](https://github.com/sunshihao001/ai-d/blob/proposal/goal-planning-knowledge-delivery-20261106/.agents/skills/ai-d-cognitive-core/SKILL.md)。它开放七项完整的长期认知能力——目标理解、专业知识、未知发现、方案判断、实际交付、证据反证与长期迁移——并指回原始资料，不把知识体系复制成又一套 Blix 目录或强制全流程。
