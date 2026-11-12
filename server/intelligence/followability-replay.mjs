@@ -24,6 +24,14 @@ export function evaluatePaperFollowabilityCase(record) {
     exit.quoteObservedAtMs<entry.fillAtMs) {
     return reply(id,'MISSING_OR_INVALID_EXIT_EXECUTION','No valid subsequent exit paper fill/available quote.');
   }
+  if(!clock(entry.maxQuoteAgeMs) || entry.maxQuoteAgeMs<1 || entry.maxQuoteAgeMs>60000 ||
+    !clock(exit.maxQuoteAgeMs) || exit.maxQuoteAgeMs<1 || exit.maxQuoteAgeMs>60000) {
+    return reply(id,'QUOTE_FRESHNESS_UNKNOWN','Both paper fills require explicit max quote age (1..60000ms).');
+  }
+  if(entry.fillAtMs-entry.quoteObservedAtMs>entry.maxQuoteAgeMs ||
+    exit.fillAtMs-exit.quoteObservedAtMs>exit.maxQuoteAgeMs) {
+    return reply(id,'STALE_EXECUTION_QUOTE','A paper fill relied on quote data older than its stated maximum age.');
+  }
   if(entry.source!=='PAPER_REPLAY' || exit.source!=='PAPER_REPLAY' ||
     entry.slippageIncluded!==true || exit.slippageIncluded!==true) {
     return reply(id,'PAPER_FILL_PROVENANCE_INCOMPLETE',
