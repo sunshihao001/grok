@@ -305,3 +305,25 @@
 | P2 | **模型/知识调用效果评测与持续监控** 尚未形成真实质量基线。 | 同 Mint 固定模型与动态调用A/B、专业知识使用命中/误用、API预算、误报/漏报、真实持续运行。 |
 
 **决策**：当前代码层面冲突已收束，不再平行开发复制一份 AI / 经济证据平台；实际价值门槛转移到 P0 的受限运行通路和真实交易证据覆盖。用户原版完整产品必须保留；无法安全启动旧服务器并不意味着删除交易代码。PR #23 与 #24 保持 Draft、未合并，已经将 #24 的特定 AI/UI 代码复用于 #23 候选，不等于 GitHub PR merge。下一轮先评估已有安全只读网关/服务可否复用，避免误启付费及签名路径，然后开展隔离真实 Mint 的完整调查验收。
+
+
+### 2026-11-12｜R-11：Coin 自然语言 Mint 范围与任务长度磨合；Uptime 失败语义纠偏
+
+**先于新增文件的差距审查**：PR #24 的 Coin AI assistant 页面已有确定的当前 Mint，并允许用户补充文字、钱包地址；但原 AI 编排仅通过目标文字匹配所有 Base58 地址，含“一个 Mint + 一个钱包”的正常任务会误判为多个 Mint 并拒绝。编辑器允许用户输入1600字及页面数据，原后台2000字符限制造成第二个真实接口错位。
+
+**代码与反例（原 PR #23 分支原位修正）**：
+- `server/intelligence/ai-workflow.mjs` 新增可信调用方提供的 `mint` 范围参数，模型收到的 `mints` 和任何实际可执行 `mint-facts` / `mint-economic-evidence` 调用严格受此单一地址限制。问题中另外提到钱包或跨Mint地址属于研究上下文，不得作为新的工具目标。老的无明确Mint参数调用仍按文字只识别一个地址，避免猜测。调用方范围是授权前提，不能由模型自己填任意 Mint。
+- `test/ai-workflow.test.mjs` 新增双地址输入的正确选择和企图将已提及钱包“提升为允许调用的 Mint”零执行反例。
+- 为同 PR #24 的 1600字符文本问题 + 既有页面来源快照，AI 输入限制从2000统一到4096；新增较长完整页面任务被接受、超长仍拒绝的边界测试。不放开模型/工具权限，不启用服务。
+- 最新代码 SHA `f56c7859c850ee5fbb0b376cad0782640a39d5b9` 的 [完整Node/security/evidence测试](https://github.com/sunshihao001/grok/actions/runs/43228386019)、[Web TypeScript+Vite](https://github.com/sunshihao001/grok/actions/runs/43228386152)、[独立audit](https://github.com/sunshihao001/grok/actions/runs/43228386146) 逐项成功。仍只代表离线可复现契约测试，未作浏览器到实际模型执行演示。
+
+**Uptime 误分类纠正**：历史台账曾把该工作流红灯理解为“外部Blix站点可用性失败”。本轮实际读取 [run #43227366764](https://github.com/sunshihao001/grok/actions/runs/43227366764) 的 GitHub 元数据为 `event=push`、`conclusion=failure`、`jobs.total_count=0`，没有执行 `curl` 检查。仓库原始 `.github/workflows/uptime.yml` 在 `blix` 与集成分支 blob SHA 相同，源文件只有定时或手动触发。**这个具体红灯不能证明站点离线或终端服务故障**；当前正确分类是 `WORKFLOW_NOT_STARTED_OR_INVALID / CAUSE_UNKNOWN`，后续需检查 GitHub Actions 工作流校验/触发与真正的 schedule/manual 日志，不为“绿灯”自行改站点健康探测或部署。
+
+**仍未做好且不得宣称完成**：
+1. Coin 页现在只是将 Mint 与上下文组成待复制文本；虽然后台现在支持可信选中 Mint 入参，尚无经过认证/权限隔离的 Coin→后端实际调用、执行进度、取消和结果回写。
+2. 真实获授权的 GPT/Claude 模型适配、密钥保管、供应商预算与故障恢复尚未集成；当前只有模拟注入。
+3. 离线经测试的经济证据链只覆盖已有 SQLite RPC 归档，未验证真实 Mint 交易与所有钱包历史；公共设施、Token-2022、CPI去重、SOL/WSOL、历史断流、跨Mint库存归因仍在P0/P1。
+4. PR #23 整合了选定 PR #24 代码但两个GitHub Draft仍未合并；PR #24 的旧独立红灯不代表已整合的 PR #23 测试失败；反之通过的离线CI也不意味着生产运行。
+5. Uptime工作流需要独立调查真实调度结果；目前不得根据当前无 Job 的 push 失败断言站点不可达。
+
+**下一轮首选**：审查原有 Blix 可复用的鉴权/只读隔离服务，设计并验证 Coin→授权研究端点→经济证据/模型→前端报告的真实可执行链，同时严格隔离交易签名与自动付费。不要再建一套平行抓取/状态机。
