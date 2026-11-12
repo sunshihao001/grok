@@ -1,5 +1,12 @@
 # Blix 参考项目与未整体搬迁资产入口
 
+## 2026-11-13｜P1–P2原始来源对照、错误裁决与实际落地
+
+[当前完整来源—D01–D12—原位知识修正对照账](p1-p2-knowledge-reconciliation-20261113.md)：汇总 Hermes wallet role/structure/证据、qb-95钱包真实留存、meme-结构策略、ai-d方法、Why-Solana多跳/Dust、Token Finder图谱与校准、Solana Holder Analyzer、Trading Portfolio、Google Skill Reach及Solana官方RPC/Token-2022；逐项列出**来源、错误假设、实际Blix实现、未验约束**，不只做参考项目功能目录。
+
+仍未审阅的原参考项目完整范围以 [旧源覆盖状态](source-coverage-v0.1.json) 为准，不因有新总表而自动提升。对于商业闭源项目的公开描述仅保留业务问题，不宣称已读其生产算法。
+
+
 ## 2026-11-07｜整条市场过程的跨项目研究：从观察偏差到资金机制
 
 [源码深研第12节](source-knowledge-deep-study-v0.1.md#12-2026-11-07-全过程研究的新增源码证据时间错桶发现抽样历史窗口与判断演化)以**同一个完整市场经济过程**连接Blix、Pulse、Million、HoldTech、PumpTrace、pumpwatch及ai-d，而非再拆几个小问题：新核查Pulse滚动热度把乱序旧事件归到最新5分钟桶的代码条件、Million头部70%＋尾部随机30%预览对探索/可重复性的权衡，结合Blix Journal去重/24h历史、Owner合并、资金边，恢复从市场发生、被观察、筛选、保存、经济解释、判断修订到回顾的整体证据链。核心产品决策是优先**真实Mint事件与当时可得时间对账**及**同批发行观察漏选对账**；保持有方向的只读线索，不把身份归因或可交易优势混为一谈。**源码条件已读，实际偏差频率、端到端运行和预测增益未验。**
