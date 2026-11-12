@@ -60,7 +60,8 @@ if (bad || !opts['--db'] || (opts['--wallet'] !== undefined && !validAddress(opt
         WHERE t.status='RPC_OBSERVED' AND (? IS NULL OR i.from_owner=?) AND i.mint=?`).get(wallet ?? null,wallet ?? null,mint).n
       : 0;
     const recipients = observations.flatMap(result => result.rows).map(row => ({
-      signature: row.sig, slot: row.slot, blockTime: row.block_time,
+      signature: row.sig, outerI: row.outer_i, innerI: row.inner_i, mint: row.mint,
+      slot: row.slot, blockTime: row.block_time,
       fromAccount: row.from_account, toAccount: row.to_account,
       fromOwner: row.from_owner, toOwner: row.to_owner, amountRaw: row.amount_raw,
       sellObservation: row.sellObservation || 'TRANSFER_TIME_OR_MINT_UNKNOWN',
