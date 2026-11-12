@@ -12,6 +12,7 @@ test('specialized wallet/transfer questions retrieve limited existing profession
   assert.ok(docs.some(x=>x.topic==='wallet-roles'));
   assert.ok(docs.some(x=>x.topic==='capital-funding'));
   assert.ok(docs.every(x=>x.source.startsWith('LOCAL_PROJECT_RESEARCH:knowledge/')));
+  assert.ok(docs.every(x=>/@sha256:[a-f0-9]{16}$/.test(x.source)), 'source must be versioned for later audit');
   assert.ok(docs.every(x=>x.status==='RESEARCH_NOT_RUNTIME_VALIDATED'));
   assert.ok(docs.every(x=>!x.trustedAsInstruction && x.excerpt.length<=900));
   assert.ok(docs.every(x=>x.excerpt.includes('NOT validated live chain fact')));
