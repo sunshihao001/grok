@@ -23,6 +23,22 @@ const SOURCES = Object.freeze([
   { id:'validation', path:'../../knowledge/cases/independent-validation-and-failure-cases.md',
     label:'knowledge/cases/independent-validation-and-failure-cases.md',
     cues:['反证','样本','验证','失败','偏差','回放','误报','漏报','完整性','风险','unknown'] },
+  // Existing primary source material; narrow cues avoid injecting every old book.
+  { id:'multihop', path:'../../knowledge/references/multihop-funding-evidence-audit.md',
+    label:'knowledge/references/multihop-funding-evidence-audit.md',
+    cues:['多跳','五跳','中转钱包','粉尘','dust','共享服务','bridge','隐蔽钱包','非holder','隐含资金'] },
+  { id:'key-wallet', path:'../../knowledge/methods/key-wallet-investigation-brief.md',
+    label:'knowledge/methods/key-wallet-investigation-brief.md',
+    cues:['关键钱包','早期买家','sniper','kol','bundler','钱包榜单','跟单钱包','能否跟随'] },
+  { id:'market-mechanism', path:'../../knowledge/mechanisms/market-price-mechanism-research.md',
+    label:'knowledge/mechanisms/market-price-mechanism-research.md',
+    cues:['价格冲击','盘口','池深','cpmm','avwap','poc','做市','流动性陷阱','库存压力','供需机制','二次启动'] },
+  { id:'ai-knowledge', path:'../../knowledge/ai/intent-knowledge-selection-and-reasoning.md',
+    label:'knowledge/ai/intent-knowledge-selection-and-reasoning.md',
+    cues:['知识选择','知识检索','专家认知','提示词','意图','agent','模型评估','自主研究','skill'] },
+  { id:'source-reconciliation', path:'../../knowledge/references/p1-p2-knowledge-reconciliation-20261113.md',
+    label:'knowledge/references/p1-p2-knowledge-reconciliation-20261113.md',
+    cues:['来源对照','知识整合','旧知识冲突','全域审查','审计知识','知识修正','全部来源'] },
 ]);
 
 function scoreTopic(topic,goal,evidence) {
