@@ -75,3 +75,38 @@ test('integration with existing mint-facts registry: exactly two pre-existing GE
   assert.equal(result.evidence[0].result.facts.holderLedger.top[0].sourceTag, 'bundle');
   assert.ok(result.unknowns.some((x) => /missing or unverified coverage/i.test(x)));
 });
+
+
+test('Coin-selected Mint is explicit scope even when a question mentions another wallet address', async () => {
+  const wallet = '4p7SeR6361WJ4T4icgsYTnzAUzfA5NwM4CwYD9kMBjuK';
+  const complexGoal = '调查Mint ' + mint + ' 中钱包 ' + wallet + ' 的转移历史';
+  const requested = [];
+  const boundModel = async ({stage,mints}) => {
+    if (stage === 'plan') {
+      assert.deepEqual(mints, [mint], 'selected Coin Mint controls the tool scope');
+      return {calls:[{capability:'mint-facts',input:{mint}}]};
+    }
+    return {summary:'Source data observed only',hypotheses:[],alternativeExplanations:[],nextChecks:[]};
+  };
+  const result = await runAiResearchTask({
+    goal:complexGoal,mint,model:boundModel,capabilities,
+    read:async()=>{},execute:async (id,args)=>{
+      requested.push([id,args.mint]);return {status:'OBSERVED_UNVERIFIED',unknowns:[]};
+    },
+  });
+  assert.equal(result.status,'DRAFT_WITH_EVIDENCE');
+  assert.deepEqual(requested,[['mint-facts',mint]]);
+  assert.equal((await runAiResearchTask({goal:complexGoal,model:boundModel,capabilities,read:async()=>{}})).status,
+    'NEEDS_SINGLE_MINT','unscoped multi-address goal cannot guess which address is Mint');
+});
+
+test('model cannot promote a mentioned wallet address into an authorized Mint', async () => {
+  const wallet = '4p7SeR6361WJ4T4icgsYTnzAUzfA5NwM4CwYD9kMBjuK';
+  let calls = 0;
+  await assert.rejects(() => runAiResearchTask({
+    goal:'调查 ' + mint + ' 与 ' + wallet + ' 的资金流',mint,
+    model:async()=>({calls:[{capability:'mint-facts',input:{mint:wallet}}]}),
+    capabilities,read:async()=>{calls++;},execute:async()=>{calls++;},
+  }),/MINT_NOT_PRESENT_IN_USER_GOAL/);
+  assert.equal(calls,0);
+});
