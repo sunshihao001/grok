@@ -49,3 +49,19 @@ test('core modules intentionally extended by this branch remain present and reta
   assert.match(fs.readFileSync(fileAt('server/server.js'),'utf8'),/evidenceTx\s*=\s*p\.match/);
   // Preserving trading code does not authorize loading or invoking it.
 });
+
+
+test('Coin AI assistant is additive: original AI read, safety and trading entry remain', () => {
+  const tabs = fs.readFileSync(fileAt('web/src/pages/coin/Tabs.tsx'), 'utf8');
+  const assistant = fs.readFileSync(fileAt('web/src/pages/coin/AiCopilot.tsx'), 'utf8');
+  assert.match(tabs, /\["ai", "AI read"\]/);
+  assert.match(tabs, /\["safety", "Safety"\]/);
+  assert.match(tabs, /\["copilot", "AI assistant"\]/);
+  assert.match(tabs, /tab === "ai" && <AiGate><AiView/);
+  assert.match(tabs, /tab === "copilot" && <AiGate>/);
+  assert.match(tabs, /onPaper=\{onPaper\}/);
+  assert.match(assistant, /Preview · agent not connected/);
+  assert.match(assistant, /Copy research task/);
+  assert.match(assistant, /read-only, no trading/);
+  assert.doesNotMatch(assistant, /fetch\s*\(/);
+});
