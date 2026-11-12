@@ -277,3 +277,31 @@
 **验收状态**：本节提交后的 GitHub CI（完整 npm test、security、evidence、audit）必须按新 SHA 核查。完成前为 CODE_SUBMITTED_NOT_VERIFIED，不能沿用此前 SHA 的绿色测试。
 
 **未完成的真实阻断**：受控真实模型适配、Coin 页原有 AiCopilot 预览变成受授权执行入口、独立只读服务与真实主网 RPC 归档、Pool/Router 归因过滤、跨 Mint 长历史、任务恢复与预算。优先验证端到端的一次真实 Mint 调查质量，不再为已有程序另建状态机。
+
+
+### 2026-11-12｜R-10：PR #23 / #24 实际接口磨合审计与缺口重排
+
+**本轮结论（纠正 R-09 的“待 CI”状态）**：在已有 PR #23 的同一 Draft 分支中纳入 PR #24 的 `web/src/pages/coin/AiCopilot.tsx`、原 `Tabs.tsx` 的 AI assistant 入口和独立 Web 构建 workflow。界面使用原 Coin Mint 上下文、原有 AiGate、按需加载、切 Mint 重置，明确仅为 **Preview · agent not connected**；原版 AI read / Safety / 交易界面不被替换。AI 执行后台使用前轮已完成的只读双工具适配和两阶段有条件补查，但仍然没有实际 HTTP Agent API、真实模型或浏览器到后台的执行链。后端能力与前端展示代码处于**同一集成候选**，并不代表它们已经在运行时贯通。
+
+**本轮明确修复的两个证据语义缺口**：
+1. `mint-economic-evidence.mjs` 在原 SQLite 缺少经济证据表时从容易被误读的 `LOCAL_EVIDENCE_PARTIAL` 改为 `UNAVAILABLE`，显式指出“零接收钱包不证明没有转账”；有表但空的已捕获窗口仍是 `LOCAL_EVIDENCE_PARTIAL`，必须展示历史不完整和未知。
+2. `ai-workflow.mjs` 当允许的工具执行失败时，把失败写进 `unknowns`，不只藏在 `evidence[].error`。离线单元测试覆盖缺失数据库、错误 Mint、空索引、截断、追加计划越权拒绝；AI 自己的自然语言结论仍是 `UNVERIFIED_MODEL_INTERPRETATION`。
+
+**原版保护与测试真实性**：
+- 将原版 `web/src/pages/coin/Tabs.tsx` 的有意修改登记到 `test/fixtures/blix-import-baseline.json` 的 reviewed_modified_original_modules；新增源保护回归确保老 `AI read`、`Safety`、`onRead={onPaper}` 和新 `AI assistant` 共存，保持 767 原始路径与 28 个受保护模块的原约束。前端独立 TypeScript/Vite 构建成功。
+- 新保护测试初稿曾错误检查 `onPaper={onPaper}` 而触发 [Node CI 红灯 #43226874895](https://github.com/sunshihao001/grok/actions/runs/43226874895)；没有掩盖，改为实际源代码中的 `onRead={onPaper}` 后复核。最新**代码 SHA [d3c2de5](https://github.com/sunshihao001/grok/commit/d3c2de56f1a124b6ebd2fbd278f77ac8d1d91b36)** 的 [完整测试、安全与证据 CI #43226967098](https://github.com/sunshihao001/grok/actions/runs/43226967098)、[Web CI #43226966757](https://github.com/sunshihao001/grok/actions/runs/43226966757)、[Audit #43226966778](https://github.com/sunshihao001/grok/actions/runs/43226966778) **各自通过**。
+- [外部 Uptime #43226954252](https://github.com/sunshihao001/grok/actions/runs/43226954252) 仍失败，属于原 Blix 网站可用性信号，尚未定位；不可称所有 Actions 全绿，也不可为通过而私自部署/改健康检查。
+
+**剩余问题严重度与下一步（不视为已运行）**：
+
+| 严重度 | 缺口 | 需交付的具体验收 |
+|---|---|---|
+| P0 | **Coin UI → 安全 AI 服务 → 模型执行** 未接通。当前按钮只能复制任务。 | 单独受控、鉴权的研究执行入口；页面真实调用一次、展示过程和结果；取消与重放；不借原交易/签名启动路径。 |
+| P0 | **真实原始 Solana 数据完整覆盖** 未验证。SQLite 离线归档合成测试不代表历史真实。 | 对至少一个真实 Mint 的RPC原文归档进行复查；查 Token-2022/CPI/Owner/fee payer/SOL-WSOL/交易签名/时间窗口/多池与历史缺页。 |
+| P0 | **供应商授权与费用/模型隔离** 未完成。 | 明确获授权的模型账号和数据来源，预算与并发/时限、权限边界、故障行为；模型无法借模型文本提升调用权限。 |
+| P1 | **池、路由器、交易所等共享设施过滤** 不完整。 | 同一真实 Mint 上区分有本地交易记录的地址和公共服务；比较漏关键钱包与误关联，不以启发式排序宣称同控。 |
+| P1 | **长期历史/跨 Mint 资金关系与库存/PnL** 仍局部候选。 | 同笔Swap/Transfer去重、流入流出、接收者转仓、历史价格/成本覆盖、跨Mint身份与资金路径，保留未能归因部分。 |
+| P1 | **运行中断/任务记录与可视化** 不完整。 | 任务进度、取消恢复、证据签名点击、图谱节点选择、报告持久化、时间覆盖和供应商故障显示。 |
+| P2 | **模型/知识调用效果评测与持续监控** 尚未形成真实质量基线。 | 同 Mint 固定模型与动态调用A/B、专业知识使用命中/误用、API预算、误报/漏报、真实持续运行。 |
+
+**决策**：当前代码层面冲突已收束，不再平行开发复制一份 AI / 经济证据平台；实际价值门槛转移到 P0 的受限运行通路和真实交易证据覆盖。用户原版完整产品必须保留；无法安全启动旧服务器并不意味着删除交易代码。PR #23 与 #24 保持 Draft、未合并，已经将 #24 的特定 AI/UI 代码复用于 #23 候选，不等于 GitHub PR merge。下一轮先评估已有安全只读网关/服务可否复用，避免误启付费及签名路径，然后开展隔离真实 Mint 的完整调查验收。
