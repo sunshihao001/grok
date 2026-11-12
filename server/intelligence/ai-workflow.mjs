@@ -124,7 +124,10 @@ export async function runAiResearchTask({ goal, model, read, readEconomic, loadK
     schemaVersion: '0.1', status, goal, completedAt: new Date(now()).toISOString(),
     calls, evidence, knowledgeSources: knowledge.map((x) => x.source),
     assessment: assessment && { ...assessment, evidenceLevel: 'UNVERIFIED_MODEL_INTERPRETATION' },
-    unknowns: [...new Set([...evidence.flatMap((x) => x.result?.unknowns || []),
+    unknowns: [...new Set([...evidence.flatMap((x) => [
+      ...(Array.isArray(x.result?.unknowns) ? x.result.unknowns : []),
+      ...(x.error ? [`${x.capability}: tool execution failed; evidence unavailable, not absence.`] : []),
+    ]),
       ...(followupError ? ['Additional investigation failed or was rejected; findings remain incomplete.'] : [])])],
     ...(followupError ? { followupError } : {}),
     ...(error ? { error } : {}),
