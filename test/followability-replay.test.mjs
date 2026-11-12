@@ -8,10 +8,10 @@ const complete={
  signal:{chainEventAtMs:100,firstAvailableAtMs:200},
  entry:{source:'PAPER_REPLAY',quoteObservedAtMs:210,fillAtMs:250,
    spentLamports:'1000000000',receivedTokensRaw:'1000000',
-   feeLamports:'5000',slippageIncluded:true},
+   feeLamports:'5000',slippageIncluded:true,maxQuoteAgeMs:1000},
  exit:{source:'PAPER_REPLAY',quoteObservedAtMs:310,fillAtMs:350,
    soldTokensRaw:'1000000',receivedLamports:'1200000000',
-   feeLamports:'5000',slippageIncluded:true},
+   feeLamports:'5000',slippageIncluded:true,maxQuoteAgeMs:1000},
  positionContinuityVerified:true,
 };
 test('complete simulated fills yield deterministic paper arithmetic without claiming live PnL',()=>{
@@ -57,4 +57,15 @@ test('case count is bounded and invalid fees or source time cannot be implicitly
    signal:{chainEventAtMs:200,firstAvailableAtMs:100}}).status,'UNKNOWN_SIGNAL_AVAILABILITY');
  assert.equal(evaluatePaperFollowabilityCase({...complete,
    entry:{...complete.entry,feeLamports:'UNKNOWN'}}).status,'INVALID_EXECUTION_AMOUNTS');
+});
+
+test('stale quoted paper entry or missing freshness never generates a performance number',()=>{
+ const missing=evaluatePaperFollowabilityCase({...complete,
+   entry:{...complete.entry,maxQuoteAgeMs:undefined}});
+ const stale=evaluatePaperFollowabilityCase({...complete,
+   entry:{...complete.entry,quoteObservedAtMs:201,maxQuoteAgeMs:10}});
+ assert.equal(missing.status,'QUOTE_FRESHNESS_UNKNOWN');
+ assert.equal(stale.status,'STALE_EXECUTION_QUOTE');
+ assert.equal(missing.simulatedNetLamports,undefined);
+ assert.equal(stale.simulatedNetLamports,undefined);
 });
