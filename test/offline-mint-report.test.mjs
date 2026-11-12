@@ -117,3 +117,55 @@ test('missing DB or unbounded time range fails closed without creating files', (
     assert.equal(unbounded.status,2);
   } finally { fs.rmSync(root,{recursive:true,force:true}); }
 });
+
+
+test('Mint-only discovery keeps a locally evidenced wallet visible when many unclassified senders compete for the top ten', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'blix-mint-sender-priority-'));
+  const file = path.join(root, 'archive.sqlite');
+  try {
+    const db = new DatabaseSync(file);
+    db.exec('CREATE TABLE wallet_trades (sig TEXT,wallet TEXT,mint TEXT,side TEXT,sol REAL,t INTEGER)');
+    // A locally observed wallet is an investigation lead, NOT a verified private operator.
+    db.prepare('INSERT INTO wallet_trades(sig,wallet,mint,side,sol,t) VALUES(?,?,?,?,?,?)')
+      .run('known-buy', A, M, 'buy', 1, 1700000000000);
+    const observed = (sender, sig, slot) => persistEvidence(db, sig, {
+      slot, blockTime: 1700000000 + slot,
+      transaction: { signatures: [sig], message: {
+        accountKeys: [sender, B, 'SRC_TOKEN_ACCOUNT', 'DST_TOKEN_ACCOUNT', TOKEN],
+        instructions: [{ programId: TOKEN, parsed: { type: 'transferChecked', info: {
+          source: 'SRC_TOKEN_ACCOUNT', destination: 'DST_TOKEN_ACCOUNT', mint: M,
+          tokenAmount: { amount: '1000', decimals: 6 },
+        } } }],
+      } },
+      meta: {
+        err: null, fee: 5000, preBalances: [0,0,0,0,0], postBalances: [0,0,0,0,0],
+        preTokenBalances: [bal(2, sender, 1000), bal(3, B, 0)],
+        postTokenBalances: [bal(2, sender, 0), bal(3, B, 1000)],
+        innerInstructions: [],
+      },
+    });
+    // These 11 addresses sort before A and would consume all ten slots in the
+    // former count/address ranking. They are deliberately UNCLASSIFIED; do not
+    // claim a pool, exchange or common controller without additional evidence.
+    for (const [i, last] of [...'23456789ABC'].entries()) {
+      observed('3'.repeat(33) + last, 'unclassified-' + i, i + 1);
+    }
+    observed(A, 'known-transfer', 25);
+    db.close();
+    const before = hash(file);
+    const report = JSON.parse(execFileSync(process.execPath, mintArgs(file), { encoding: 'utf8', timeout: 15000 }));
+    assert.equal(report.evidence.senderDiscovery.selectedSenders, 10);
+    assert.equal(report.evidence.senderDiscovery.truncated, true);
+    assert.equal(report.evidence.senderDiscovery.locallyObservedTradeSenders, 1);
+    assert.match(report.evidence.senderDiscovery.priority, /LOCAL_WALLET_TRADE/);
+    assert.match(report.evidence.senderDiscovery.classification, /POSSIBLE_POOLS_OR_SERVICES/);
+    assert.equal(report.recipients[0].fromOwner, A,
+      'bounded sender sample should include the locally corroborated wallet');
+    assert.equal(report.recipients.filter(x => x.fromOwner === A).length, 1);
+    assert.equal(new Set(report.recipients.map(x => x.fromOwner)).size, 10);
+    assert.equal(report.evidence.lifetimeHistoryComplete, false);
+    assert.equal(hash(file), before, 'priority selection must not mutate the offline archive');
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
