@@ -132,3 +132,16 @@ Solana 的 `getTransaction` 可能涉及版本化消息、Address Lookup Table�
 真实Mint `EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump` 的RugCheck缓存Holder第一名Token Account（供应商5.877731%）其Owner候选与DEX Screener的PumpSwap池`81jgrpTMsQWc1rGWXutyYWW27ruiAtehUZwLydcHHWDB`地址完全相同。该**供应商字段精确匹配**可标池相关候选，但不能证明单一资产受益人、池Vault及LP的真实权益归属。特别不能将这个持仓比例直接加进“个人鲸鱼持币/庄家控盘”指标。需要同slot的Token Account Owner、池Vault、LP状态核查，此次Solana公共RPC曾返回429而未取得数据。
 
 池级24小时买卖统计和价格不是钱包级Swap事实；`pairCreatedAt`不是Mint创建时间；RugCheck`detectedAt`不是区块事件时间。详细原始数据和交叉检验见[工程证据](https://github.com/sunshihao001/grok/blob/research/p24-cross-mint-m01-batch-monitor-20261031/docs/evidence/v01-pool-vault-holder-cross-source-2026-11-01.md)。此条只升级“跨源身份误归因风险”的知识，不代表D01 Swap完整解析或经济控制已验证。
+
+
+## 2026-11-13｜D01/D02/D03/D10：原始RPC与局部经济图谱的适用边界（当前候选PR #23）
+
+本轮专业源级复核见[统一P1/P2知识对照账](../references/p1-p2-knowledge-reconciliation-20261113.md)。Solana 官方 [RPC JSON结构](https://solana.com/docs/rpc/json-structures)、[交易指令解析](https://solana.com/docs/core/transactions/transaction-introspection)、[Token-2022 转账费用](https://solana.com/docs/tokens/extensions/transfer-fees)和[Transfer Hook](https://solana.com/docs/tokens/extensions/transfer-hook)共同要求区分：**交易签名/指令/余额差**、Token Account/owner/authority、fee payer、实际成交对价、Token可用余额、真实经济控制方。官方新文档还描述了v1的transactionConfig结构及其不使用v0 ALT的差异，历史v0/legacy解释不能当成完整版本集合。
+
+- **已在源码出现**：`server/economic-events.mjs`保留jsonParsed原文，索引outer/inner CPI与Token转账；`server/intelligence/economic-network.mjs`按sig+outer+inner生成只读图谱，BigInt输出已观察的raw转入、转出、净变化、事件签名。代码/合成测试存在，不代表支持所有程序和链上事实。
+- **Token-2022限制**：raw transferAmount未必等于收方可动用库存；配置了TransferFee时费用会在目标账户扣留，TransferHook可额外触发CPI。不能仅凭当前图谱的raw数额计算可卖份额或把Hook相关内层事件都当独立外部交易。
+- **SOL/WSOL/Swap限制**：原报告的Token Transfer边只证明局部指令上的资产移动；它可能发生在Swap内部。资产净变化、费用、rent、WSOL包/拆与池内储备应另以原始账本核对，不能用“多跳Token转移量”代替独立买入需求或完整利润。
+- **历史窗口限制**：`getSignaturesForAddress`按地址返回有限签名页面，需按before/until检查分页和覆盖；“最早可见”不是钱包创建时间，局部空查询不是无交易。
+- **下一项检验**：同一真实Mint比较raw/jsonParsed、CPI、Owner、Token-2022 fee/Hook、多池、SOL/WSOL和来源时点；通过前所有真实价格影响、完整余额、经济控制权仍为UNKNOWN。
+
+本节是对历史知识的**现行适用修正**，不修改旧章节的历史身份。部署/真实模型API/主网确认均未因CI通过而自动完成。
