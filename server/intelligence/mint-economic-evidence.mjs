@@ -1,5 +1,6 @@
 // Bounded adapter over PR #23's existing local SQLite Mint report.
 // Importing this module never starts a service, RPC, wallet or provider.
+import { projectMintNetwork } from './economic-network.mjs';
 export const manifest = Object.freeze({
   id: 'mint-economic-evidence', version: '0.1', readonly: true,
   inputs: ['mint'], outputs: ['facts', 'sources', 'unknowns'],
@@ -17,7 +18,11 @@ export async function run({ mint, readEconomic, now = Date.now } = {}) {
   }
   const discovery = report.evidence.senderDiscovery || {};
   const recipients = report.recipients.slice(0, 200).map((row) => ({
-    signature: row.signature ?? null, slot: row.slot ?? null, blockTime: row.blockTime ?? null,
+    signature: row.signature ?? null,
+    outerI: Number.isInteger(row.outerI) ? row.outerI : null,
+    innerI: Number.isInteger(row.innerI) ? row.innerI : null,
+    mint: row.mint ?? mint,
+    slot: row.slot ?? null, blockTime: row.blockTime ?? null,
     fromOwner: row.fromOwner ?? null, toOwner: row.toOwner ?? null,
     fromAccount: row.fromAccount ?? null, toAccount: row.toAccount ?? null,
     amountRaw: row.amountRaw ?? null,
@@ -43,7 +48,8 @@ export async function run({ mint, readEconomic, now = Date.now } = {}) {
     sources: [{ provider: 'EXISTING_LOCAL_SQLITE', method: 'OFFLINE_READ_ONLY_REPORT',
       coverage: report.evidence.indexedCoverage ?? 'UNKNOWN' }],
     facts: { knownSenderMintCaptures: report.evidence.knownSenderMintCaptures ?? 0,
-      senderDiscovery: discovery, lifetimeHistoryComplete: false, recipients },
+      senderDiscovery: discovery, lifetimeHistoryComplete: false, recipients,
+      network: projectMintNetwork({ mint, recipients }) },
     unknowns: [...new Set(unknowns)],
   };
 }
