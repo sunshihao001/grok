@@ -4,7 +4,8 @@ import { listCapabilities, runCapability } from './index.mjs';
 
 const MINT_RE = /(?<![1-9A-HJ-NP-Za-km-z])[1-9A-HJ-NP-Za-km-z]{32,44}(?![1-9A-HJ-NP-Za-km-z])/g;
 const VALID_MINT = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
-const MAX_GOAL_LENGTH = 2000;
+// Coin assistant allows 1,600 editable characters plus a source-labelled context snapshot.
+const MAX_GOAL_LENGTH = 4096;
 const MAX_CALLS = 2;
 const text = (value, max = 1200) => typeof value === 'string' ? value.trim().slice(0, max) : '';
 
