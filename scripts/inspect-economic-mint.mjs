@@ -32,13 +32,18 @@ if (bad || !opts['--db'] || (opts['--wallet'] !== undefined && !validAddress(opt
     const wallet = opts['--wallet'], mint = opts['--mint'];
     // Mint-first discovery is bounded and uses only locally indexed, successful RPC transfers.
     // The selected senders are observed token-account owners, not proven traders or controllers.
+    // Sender count alone lets busy AMM/service addresses crowd out known local wallet
+    // activity. Prioritize wallet-trade corroboration, but NEVER infer owner identity,
+    // exchange/pool status or common control from that signal.
     const discovered = available && !wallet ? db.prepare(`SELECT i.from_owner sender,
-      COUNT(DISTINCT i.sig) capturedSignatures
+      COUNT(DISTINCT i.sig) capturedSignatures,
+      EXISTS(SELECT 1 FROM wallet_trades wt WHERE wt.wallet=i.from_owner LIMIT 1) locallyObservedTrades
       FROM econ_instructions i JOIN econ_transactions t ON t.sig=i.sig
       WHERE t.status='RPC_OBSERVED' AND i.kind='TOKEN_TRANSFER' AND i.owner_conflict=0
         AND i.mint=? AND i.from_owner IS NOT NULL AND i.to_owner IS NOT NULL
         AND i.to_owner!=i.from_owner
-      GROUP BY i.from_owner ORDER BY capturedSignatures DESC, sender ASC LIMIT 11`).all(mint) : [];
+      GROUP BY i.from_owner
+      ORDER BY locallyObservedTrades DESC, capturedSignatures DESC, sender ASC LIMIT 11`).all(mint) : [];
     const senders = wallet ? [wallet] : discovered.slice(0, 10).map(x => x.sender);
     const observations = available
       ? senders.map(sender => recipientOutcomes(db, sender, mint, 20, hours))
@@ -74,6 +79,8 @@ if (bad || !opts['--db'] || (opts['--wallet'] !== undefined && !validAddress(opt
         senderDiscovery: { method: wallet ? 'EXPLICIT_SENDER' : 'BOUNDED_LOCAL_TOKEN_TRANSFER_OWNER_INDEX',
           selectedSenders: senders.length, maxSenders: wallet ? 1 : 10,
           truncated: !wallet && discovered.length > 10,
+          locallyObservedTradeSenders: wallet ? null : discovered.slice(0, 10).filter(x => x.locallyObservedTrades === 1).length,
+          priority: 'LOCAL_WALLET_TRADE_CORROBORATION_THEN_CAPTURED_SIGNATURE_COUNT_NOT_POOL_CLASSIFICATION',
           classification: 'UNCLASSIFIED_OWNER_CANDIDATES_INCLUDING_POSSIBLE_POOLS_OR_SERVICES' },
         note: 'Only transactions already captured in this SQLite database are observable.' },
       recipients,
