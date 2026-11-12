@@ -7,6 +7,12 @@ const ENTRIES = Object.freeze({
     readonly: true,
     load: () => import("./mint-facts.mjs"),
   }),
+  "mint-economic-evidence": Object.freeze({
+    id: "mint-economic-evidence",
+    title: "Captured local Mint economic evidence",
+    readonly: true,
+    load: () => import("./mint-economic-evidence.mjs"),
+  }),
 });
 
 export function listCapabilities() {
