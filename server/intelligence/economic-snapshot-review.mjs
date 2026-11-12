@@ -20,9 +20,14 @@ export function compareCapturedMintSnapshots(before,after){
   const a=snap(before),b=snap(after);
   if(a.network.mint!==b.network.mint)throw Error('DIFFERENT_MINT_SNAPSHOTS');
   const first=a.network.events.filter(identified),second=b.network.events.filter(identified);
-  const old=new Set(first.map(e=>e.eventId)),newIds=new Set(second.map(e=>e.eventId));
+  const old=new Map(first.map(e=>[e.eventId,e])),newIds=new Set(second.map(e=>e.eventId));
   const additions=second.filter(e=>!old.has(e.eventId));
   const omissions=first.filter(e=>!newIds.has(e.eventId));
+  const fingerprint=e=>JSON.stringify([e.fromOwner,e.toOwner,e.amountRaw,e.slot,e.blockTime,
+    e.sellObservation,e.sellSignatures,e.crossMintCandidates]);
+  const revisions=second.filter(e=>old.has(e.eventId)&&fingerprint(e)!==fingerprint(old.get(e.eventId)))
+    .map(e=>({eventId:e.eventId,previous:narrow([old.get(e.eventId)])[0],current:narrow([e])[0],
+      meaning:'LOCAL_EVIDENCE_METADATA_OR_FOLLOWUP_REVISED_NOT_A_NEW_CHAIN_EVENT'}));
   const warnings=['NEWLY_VISIBLE means newly present in a local sample, not newly emitted on Solana.',
     'No longer visible does not prove token was sold, wallet disappeared, or chain reversed.',
     'Neither snapshot establishes complete on-chain history.'];
@@ -38,6 +43,7 @@ export function compareCapturedMintSnapshots(before,after){
     hasCompleteWalletHistory:false,liveChainEventChange:'UNKNOWN',
     newlyVisible:narrow(additions),
     noLongerVisibleInSample:narrow(omissions),
+    revisedCapturedEvents:revisions,
     persistingEventCount:second.filter(e=>old.has(e.eventId)).length,
     uncomparableEventCount:a.network.events.length-first.length +
       b.network.events.length-second.length,
