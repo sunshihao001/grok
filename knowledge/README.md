@@ -3,6 +3,19 @@
 > 建立于 2026-11-06。**这是已迁入资料的分类与检索入口，不是重新建立一个专家体系，也不是运行时AI已经掌握的证明。** 源文件旧版保留；本文仅管理Blix持有的副本、出处及使用方式。
 
 
+## 2026-11-13｜最新 P1–P2 知识融合与现实能力对照（优先读）
+
+**新的单一入口**：[P1–P2专业知识全域核查、矛盾修正与代码对应](references/p1-p2-knowledge-reconciliation-20261113.md)。已核对本地D01–D12、Hermes/qb-/meme-/ai-d/Why-Solana与代表性GitHub源码、Solana官方协议；原有152单元和65参考资产的未审状态不被改成完成。
+
+这一次不只归档：已经在**原领域文件**追加当前知识修正（[链上/协议](foundations/solana-chain-and-market.md)、[钱包与库存](mechanisms/wallet-roles-and-inventory.md)、[资金](mechanisms/capital-organization-and-incentives.md)、[价格机制](mechanisms/market-price-mechanism-research.md)、[时序群体](methods/anomaly-and-cohort-discovery.md)、[跟单与执行](mechanisms/strategy-and-execution-economics.md)、[反证](cases/independent-validation-and-failure-cases.md)、[AI知识选择](ai/intent-knowledge-selection-and-reasoning.md)）；旧研究原文和历史版本仍保留。
+
+**现行代码状态**：Draft [PR #23](https://github.com/sunshihao001/grok/pull/23) 已有离线 Token Transfer事件/钱包流入流出、跨Mint同地址与快照差、纸面跟单有效性审核，以及受限本地知识选择。它们是**代码+离线回归**，而不是“主网全历史、共同控制、盈利优势、动态监控或Coin页真实AI代理已完成”。最新GitHub CI详见[建设台账](../docs/project/build-register.md)。
+
+**快速使用**：真实问题先定位现有Blix数据与原始交易 → 依据问题选择相关领域专业知识 → 检查事实分母、时间、覆盖、反例 → 用确定性代码计算可证明事实 → 模型仅解释竞争机制与下一次补查。不要把所有原文塞入AI提示词；当前 `local-knowledge-loader.mjs` 有受限的**11个候选专题**，实际一次只会选少数源，检索准确率尚待真实模型A/B确认。
+
+**重大纠偏**：同源/同Slot≠同控，Token转移≠卖出，转账总量≠真实独立新增需求，跨Mint重复地址≠资金闭环，历史回填≠最新市场行为，纸面模拟≠可实现Alpha。原问题仍有研究价值，但要查到可证伪交易与竞争解释后才能提升判断。
+
+
 ## 2026-11-07｜跨市场与AI双循环的整体机制研究（先于局部知识调用）
 
 当问题不只是“某个地址/指标对不对”，而是**市场为何这样运行、AI应怎样建立可持续改变的专业判断**，先读[跨参考项目深度研究第11节](references/source-knowledge-deep-study-v0.1.md#11-2026-11-07-跨全市场与-ai-的双重反馈从数据选择到经济机制与判断修订)。原始证据把 **Blix发现/排队/Playbook反馈、Pulse选择性保存、Million跳过与可跟随成本、PumpTrace资金/Holder证据、Why-Solana假设失效、PumpGrok任务限制、Hermes/qb-/meme-经济机制、ai-d问题发现** 放进同一个完整市场调查问题中；同时核对了外部观察系统交集研究与 RED-COHORT 2026-10 数值撤回。
