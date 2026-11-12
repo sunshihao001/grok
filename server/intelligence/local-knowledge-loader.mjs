@@ -2,6 +2,7 @@
 // model-supplied paths, extra expert system, wallet database or prompt authority.
 // This deterministic shortlist is OPTIONAL context, not a verified wallet label.
 import { readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 
 const SOURCES = Object.freeze([
   { id:'wallet-roles', path:'../../knowledge/mechanisms/wallet-roles-and-inventory.md',
@@ -62,7 +63,8 @@ export function makeLocalKnowledgeLoader({maxSources=3,maxChars=1500}={}) {
       // Each path is a hardcoded repository-relative file. Model content never
       // selects another file or changes the read permission.
       const doc=await readFile(new URL(item.path,import.meta.url),'utf8');
-      output.push({source:'LOCAL_PROJECT_RESEARCH:'+item.label,
+      const version=createHash('sha256').update(doc).digest('hex').slice(0,16);
+      output.push({source:'LOCAL_PROJECT_RESEARCH:'+item.label+'@sha256:'+version,
         excerpt:extractSection(doc,q,item.cues,maxChars),
         trustedAsInstruction:false,
         status:'RESEARCH_NOT_RUNTIME_VALIDATED',
