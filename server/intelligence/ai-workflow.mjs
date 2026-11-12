@@ -3,19 +3,20 @@
 import { listCapabilities, runCapability } from './index.mjs';
 
 const MINT_RE = /(?<![1-9A-HJ-NP-Za-km-z])[1-9A-HJ-NP-Za-km-z]{32,44}(?![1-9A-HJ-NP-Za-km-z])/g;
+const VALID_MINT = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
 const MAX_GOAL_LENGTH = 2000;
 const MAX_CALLS = 2;
 const text = (value, max = 1200) => typeof value === 'string' ? value.trim().slice(0, max) : '';
 
 // The server alone controls which tools exist. Model-generated tool names and arguments
 // are untrusted; all calls are checked *before* invoking any capability.
-function validatePlan(proposal, capabilities, goal) {
+function validatePlan(proposal, capabilities, approvedMint) {
   if (!proposal || typeof proposal !== 'object' || !Array.isArray(proposal.calls)) {
     throw new Error('MODEL_PLAN_INVALID');
   }
   if (proposal.calls.length > MAX_CALLS) throw new Error('MODEL_TOOL_BUDGET_EXCEEDED');
   const available = new Map(capabilities.filter((c) => c.readonly === true).map((c) => [c.id, c]));
-  const requestMints = new Set(goal.match(MINT_RE) || []);
+  const requestMints = new Set([approvedMint]);
   const seen = new Set();
   return proposal.calls.map((call) => {
     if (!call || typeof call !== 'object' || !available.has(call.capability)) throw new Error('UNAUTHORIZED_TOOL');
@@ -46,10 +47,12 @@ function modelDraft(value) {
  *   model({ stage:'plan'|'followup'|'interpret', ...context }) => JSON object.
  *   read(path) => existing Blix local-reader contract, injected explicitly.
  *   readEconomic({mint}) => PR23 offline economic report, injected explicitly.
+ *   mint => caller's selected Coin Mint (trusted task scope), distinct from arbitrary
+ *     wallet addresses in goal. Without it, retain legacy single-address inference.
  *   loadKnowledge({goal, evidence}) => optional array of source-labelled text snippets.
  * Never calls trading, accounts, notifications, external HTTP or background jobs.
  */
-export async function runAiResearchTask({ goal, model, read, readEconomic, loadKnowledge, now = Date.now,
+export async function runAiResearchTask({ goal, mint, model, read, readEconomic, loadKnowledge, now = Date.now,
   capabilities = listCapabilities, execute = runCapability } = {}) {
   if (typeof goal !== 'string' || !goal.trim() || goal.length > MAX_GOAL_LENGTH) throw new Error('INVALID_RESEARCH_GOAL');
   if (typeof model !== 'function') return { status: 'MODEL_NOT_CONFIGURED', goal, calls: [], evidence: [], assessment: null };
@@ -57,8 +60,12 @@ export async function runAiResearchTask({ goal, model, read, readEconomic, loadK
     (c.id === 'mint-facts' && typeof read === 'function') ||
     (c.id === 'mint-economic-evidence' && typeof readEconomic === 'function')
   ));
-  const mints = [...new Set(goal.match(MINT_RE) || [])];
-  if (mints.length !== 1) return { status: 'NEEDS_SINGLE_MINT', goal, calls: [], evidence: [], assessment: null };
+  // The Coin page has an authoritative selected Mint. Wallet addresses or other
+  // asset mentions in natural language must not silently expand tool scope.
+  const mints = mint === undefined ? [...new Set(goal.match(MINT_RE) || [])] : [mint];
+  if (mints.length !== 1 || typeof mints[0] !== 'string' || !VALID_MINT.test(mints[0])) {
+    return { status: 'NEEDS_SINGLE_MINT', goal, calls: [], evidence: [], assessment: null };
+  }
   let proposal;
   try {
     proposal = await model({ stage: 'plan', goal, permittedCapabilities: available, mints, maxCalls: MAX_CALLS });
@@ -66,7 +73,7 @@ export async function runAiResearchTask({ goal, model, read, readEconomic, loadK
     return { status: 'MODEL_PLAN_FAILED', goal, error: text(error?.message || String(error)), calls: [], evidence: [], assessment: null };
   }
   // A rejected plan must execute zero tools.
-  const calls = validatePlan(proposal, available, goal);
+  const calls = validatePlan(proposal, available, mints[0]);
   if (!calls.length) return { status: 'NO_EVIDENCE_REQUESTED', goal, calls, evidence: [], assessment: null };
   const evidence = [];
   async function perform(scheduled) {
@@ -88,7 +95,7 @@ export async function runAiResearchTask({ goal, model, read, readEconomic, loadK
       const suggested = await model({ stage: 'followup', goal, mints,
         evidence, usedCalls: calls.slice(), permittedCapabilities: available,
         remainingCalls: MAX_CALLS - calls.length });
-      const next = validatePlan(suggested, available, goal);
+      const next = validatePlan(suggested, available, mints[0]);
       if (next.length > MAX_CALLS - calls.length) throw new Error('MODEL_TOOL_BUDGET_EXCEEDED');
       if (next.some((step) => calls.some((prior) =>
         prior.capability === step.capability && prior.input.mint === step.input.mint))) {
