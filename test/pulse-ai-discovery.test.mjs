@@ -150,6 +150,9 @@ test('loopback /discover route runs validated selection plus one bounded local a
   assert.equal(body.discovery.selectedMint,mintA);
   assert.equal(body.investigation.evidence[0].capability,'mint-economic-evidence');
   assert.equal(body.investigation.evidence[0].result.facts.network.eventCount,1);
+  assert.equal(body.investigation.continuation.stages.participation,
+    'UNASSESSED_NO_HISTORIC_EXECUTABLE_ENTRY_EXIT_QUOTES');
+  assert.equal(body.investigation.continuation.watch.status,'NOT_RUNNING_NO_AUTONOMOUS_WATCHER');
   assert.ok(body.investigation.knowledgeUse.some(x=>x.source==='Hermes@sha256:known'));
   assert.deepEqual(stages,['discover','plan','interpret']);
   assert.deepEqual(mints,[mintA]);
