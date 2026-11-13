@@ -19,3 +19,8 @@ jobs:
         if: ${{ !cancelled() }}
       - run: npm run test:evidence
         if: ${{ !cancelled() }}
+      # Static frontend compilation only; never start the trading-capable Blix server.
+      - run: npm ci --prefix web --ignore-scripts --no-audit --no-fund
+        if: ${{ !cancelled() }}
+      - run: npm --prefix web run build
+        if: ${{ !cancelled() }}
