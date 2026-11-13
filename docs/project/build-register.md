@@ -4,6 +4,19 @@
 >
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
+## 2026-11-13｜R-24：六个业务结果补齐前置小阶段｜数据源到证据/机会/反馈的依赖审查
+
+**用户纠偏**：“自主发现→关键钱包→资金与库存→跨Mint→是否值得参与→持续观察”只是6个**业务结果**，并不包含实现前提；例如“自主发现”之前必须有数据源选择、接入、实时采集、历史补查、保存、标准化、去重、数据源/时点覆盖核查、候选形成和失败样本回馈。之前标作第一阶段“✅完成”，实际上只完成了**Blix前端Pulse已可见的最多12个候选中的AI选Mint**，并未实现或验证完整市场发现系统，不能再以终点按钮当阶段交付。
+
+已补充现有系统完整的[《六大业务结果的全前置能力与依赖审查》](six-business-outcomes-dependency-audit-20261113.md)：**共同底座8组能力**，**六环各自7–9项小阶段、输入/输出/验收条件**，横向依赖与循环反馈图，依据现有`sources/engine/livetrades/coverage/holders/wallets/economic-events/heliuskeys/early/brain`以及PR#23智能服务的实际源码。**不创建新业务仓库、专家制度、平行数据采集器或强制流水线**；仅恢复开发所必需的真实依赖与复用关系。
+
+**当前应该从最早断点，而不是下一张UI开工**：先审计原版Blix各市场/钱包/RPC数据源→真实接收/保留→source/slot/first_available/cursor/完整性→AI输入来源之间的可用链路；为一枚真实Mint/选定时间窗生成真实采集与缺口报告（不能凭浏览器`Date.now()`代替首次可见时间）；之后沿同一证据源推进关键地址、Token库存和跨Mint，再做历史执行报价与真正可参与性验收。对于无法在当前只读隔离下安全访问的原Blix数据，暂记`SOURCE_NOT_ACCESSIBLE_FROM_READONLY_AGENT`，不悄悄开放存在副作用的Token GET。
+
+**验收修正**：研发状态严格区分`EXISTING_BLIX_CODE`、`NEW_COMPONENT_OFFLINE_TESTED`、`SOURCE_AND_COVERAGE_REPLAYED`、`RUNNING_WITH_REAL_RECORDS`、`MODEL_AB_VERIFIED`、`ACTUAL_FOLLOWABILITY_ESTABLISHED`；前者不能宣称替代后者。后续每轮只需选择最有信息价值的一个真实阻塞点贯通，不机械从D01开始全文再研究。
+
+**本轮改动类型**：`SOURCE_REVIEW_AND_DEPENDENCY_MAP`，只更新项目知识/建设台账，没有编写新数据采集代码、没有新联网RPC/模型调用、没有新真实业务实跑；现有CI和原Blix保护不代表新增依赖已跑通。项目PR/CI以最新提交和GitHub为准。
+
+
 ## 2026-11-13｜R-23：六环业务主线首次变成“自主候选选择 → 已有只读调查 → 后续证据状态”
 
 **用户明确的整体目标**：**自主发现市场机会 → 识别关键钱包 → 调查资金与库存 → 发现跨 Mint 联系 → 判断是否值得参与 → 持续观察和修正**。这是一条可分叉、可停止、按证据推进的业务闭环，**不是**每个Mint都必须按六个固定阶段运行，也不是交易机器人。
