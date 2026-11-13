@@ -35,6 +35,28 @@ const tx=(sig,at,keys,{pre,post,preToken=[],postToken=[],ix=[],inner=[]})=>({
 });
 test.after(()=>{try{db.close();}catch{}fs.rmSync(folder,{recursive:true,force:true});});
 
+test('unanchored incremental signature polling reports a capped window as a gap, not an reached cursor',async()=>{
+ const calls=[];
+ const fullPage=async options=>{
+   calls.push(options);
+   return Array.from({length:50},(_,i)=>({signature:'bounded-'+calls.length+'-'+i,blockTime:1000-i}));
+ };
+ const bounded=await wallets.pageSignatures(fullPage,{first:false,lastSig:null,pages:2});
+ assert.equal(calls.length,2,'scanner must respect provider page budget');
+ assert.equal(bounded.all.length,100);
+ assert.equal(bounded.reached,false,'page cap without an anchor is not evidence of a continuous history');
+ assert.equal(calls[1].before,'bounded-1-49');
+ const exhausted=await wallets.pageSignatures(
+   async()=>[{signature:'only-one',blockTime:1000}],
+   {first:false,lastSig:null,pages:2});
+ assert.equal(exhausted.reached,true,'a short page can end the bounded scan');
+ assert.equal(exhausted.all.length,1);
+ const anchored=await wallets.pageSignatures(
+   async options=>{assert.equal(options.until,'previous-sig');return [{signature:'new',blockTime:1000}];},
+   {first:false,lastSig:'previous-sig',pages:2});
+ assert.equal(anchored.reached,true,'existing valid anchor behavior stays intact');
+});
+
 test('full read-only economic chain survives a post-capture failure and keeps candidate-only interpretations',async()=>{
  const original=globalThis.fetch;
  globalThis.fetch=async()=>{throw new Error('test has no network access');};
