@@ -142,3 +142,17 @@ test('short English tickers in unrelated words do not falsely route funding or A
     assert.deepEqual(docs,[],goal+' should not load Solana research from a substring');
   }
 });
+
+
+test('plain-language knowledge acquisition, adoption and trace selects existing D12 source',async()=>{
+  const questions=[
+    '知识追溯怎么从原始项目获取并承接下来',
+    '知识获取之后怎么做来源追溯',
+    '请解释知识形成和知识生命周期中的修订',
+  ];
+  for(const goal of questions){
+    const docs=await loader({goal});
+    assert.ok(docs.some(x=>x.topic==='ai-knowledge'),goal);
+    assert.ok(docs.every(x=>x.trustedAsInstruction===false),goal);
+  }
+});
