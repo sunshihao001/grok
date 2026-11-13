@@ -20,6 +20,33 @@ const PROMPTS = [
   "判断这个代币是否具备信号之后的可成交机会，核查流动性、费用和退出条件。",
   "比较资金组织、关联钱包与正常市场需求等竞争性解释，找出最值得核查的问题。",
 ];
+// Existing Blix sources already curated from Hermes, qb-, meme-, ai-d and native research.
+// This client-only preview links to ORIGINAL sources; it does not read files, run a model,
+// or claim the server actually retrieved or applied any knowledge during this page view.
+const KNOWLEDGE_CANDIDATES = [
+  { id: "wallets", label: "钱包角色与库存", heritage: "Hermes / Blix D04",
+    path: "knowledge/mechanisms/wallet-roles-and-inventory.md",
+    match: /钱包|接收|转仓|转移|持仓|bundle|holder|wallet|卖出|控制/i },
+  { id: "funds", label: "资金组织与资本关系", heritage: "Hermes / D05 / Why-Solana",
+    path: "knowledge/mechanisms/capital-organization-and-incentives.md",
+    match: /资金|同源|关联|共控|洗量|接力|fund|sol|出货/i },
+  { id: "multihop", label: "多跳资金路径和误归因", heritage: "Why-Solana / 跨项目审计",
+    path: "knowledge/references/multihop-funding-evidence-audit.md",
+    match: /资金路径|多跳|跨币|跨mint|转给新钱包|非holder/i },
+  { id: "strategy", label: "机会与执行经济", heritage: "meme- / Blix D08–D09",
+    path: "knowledge/mechanisms/strategy-and-execution-economics.md",
+    match: /交易|策略|成交|机会|参与|跟单|滑点|成本|退出|收益|可跟|流动性/i },
+  { id: "market", label: "市场微观结构与价格机制", heritage: "meme- / Blix D03",
+    path: "knowledge/mechanisms/market-price-mechanism-research.md",
+    match: /价格|市场|机制|解释|做市|量价|拉升|上涨|诱多/i },
+  { id: "validation", label: "证据、反例与失败条件", heritage: "Blix / Hermes / 参考项目反例",
+    path: "knowledge/cases/independent-validation-and-failure-cases.md",
+    match: /反证|竞争解释|证据|风险|失败|回测|误报|验收|不确定/i },
+  { id: "intent", label: "AI 意图与知识选择", heritage: "ai-d / Blix D12",
+    path: "knowledge/ai/intent-knowledge-selection-and-reasoning.md",
+    match: /AI|知识|思考|研究|意图|专家|检索/i },
+] as const;
+const KNOWLEDGE_ROOT = "https://github.com/sunshihao001/grok/blob/integration/blix-evidence-readonly-20261108/";
 const number = (n?: number | null) => n == null || !Number.isFinite(n) ? "未知" : Math.round(n).toLocaleString();
 const percent = (n?: number | null) => n == null || !Number.isFinite(n) ? "未知" : n.toFixed(1) + "%";
 const compact = (mint: string) => mint.length > 18 ? mint.slice(0, 7) + "…" + mint.slice(-6) : mint;
@@ -35,6 +62,7 @@ export function Intelligence() {
   const [search, setSearch] = useState("");
   const [selectedMint, setSelectedMint] = useState<string | null>(null);
   const [goal, setGoal] = useState(PROMPTS[1]);
+  const candidateKnowledge = useMemo(() => KNOWLEDGE_CANDIDATES.filter(x => x.match.test(goal)).slice(0, 3), [goal]);
   const candidates = useMemo(() => selectObservedCandidates(coins, cols, stage, search), [coins, cols, stage, search]);
   const selected = candidates.find(x => x.coin.mint === selectedMint) ?? candidates[0] ?? null;
   const c = selected?.coin ?? null;
@@ -66,6 +94,9 @@ export function Intelligence() {
       "Top-10 holder concentration (%): " + (top10 ?? "UNKNOWN"),
       "Dev holding (%): " + (devShare ?? "UNKNOWN"),
       "Original Blix AI label (unverified): " + (c.ai?.verdict || c.ai?.grade || "UNKNOWN"),
+      "Historical knowledge references to consider (CLIENT PREVIEW ONLY; not actually retrieved or applied):",
+      ...candidateKnowledge.map(x => x.heritage + " | " + x.path),
+      "During server-side research, retrieve source-labelled knowledge before tool planning and refresh after evidence.",
       "Use permitted facts and professional knowledge. Separate observation, inference, alternative explanations and UNKNOWN.",
       "Check quote availability, timestamp, liquidity, fees, slippage, exit completeness and signal-followability before calling anything tradable.",
       "No live trades, signing, provider charges or automatic model API requests are authorized by this task.",
@@ -195,6 +226,27 @@ export function Intelligence() {
                 </button>
               ))}
             </div>
+            <details className="rounded-control border border-rule bg-paper-3 p-3" open>
+              <summary className="cursor-pointer text-sm font-semibold text-ink">
+                专业知识依据预览（{candidateKnowledge.length} 项候选）
+              </summary>
+              <p className="mt-2 text-xs leading-relaxed text-muted">
+                对应 Blix 已承接的 Hermes、qb-、meme-、ai-d 等研究。此处只根据问题显示可能相关的来源，
+                尚未运行服务器知识检索，也不代表 AI 实际采用了它们。
+              </p>
+              <div className="mt-3 space-y-2">
+                {candidateKnowledge.length ? candidateKnowledge.map(x => (
+                  <a key={x.id} href={KNOWLEDGE_ROOT + x.path} target="_blank" rel="noopener noreferrer"
+                    className="block rounded-control border border-rule-2 px-3 py-2 text-sm hover:border-accent">
+                    <span className="block font-semibold text-ink">{x.label}</span>
+                    <span className="block text-xs text-muted">{x.heritage} · 查看来源与适用限制</span>
+                  </a>
+                )) : <p className="text-xs text-muted">此问题暂无静态匹配项；不代表历史资料中没有相关知识。</p>}
+              </div>
+              <p className="mt-3 text-xs text-muted">
+                真正的模型运行记录应显示实际读取的来源、版本、工具调用及判断，而非这些推荐链接。
+              </p>
+            </details>
             <button type="button" onClick={() => void copyTask()} disabled={!c || !goal.trim()}
               className="w-full rounded-full bg-accent px-4 py-2.5 text-sm font-semibold text-accent-ink disabled:cursor-not-allowed disabled:opacity-40">
               复制带数据的研究任务
