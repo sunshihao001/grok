@@ -14,6 +14,7 @@ const migrate=json('knowledge/MIGRATION.json');
 const router=json('docs/project/legacy-knowledge-routing.v1.json');
 const snapshots=json('knowledge/references/legacy-snapshot-sources.v1.json');
 const coverage=json('knowledge/references/source-coverage-v0.1.json');
+const domainModel=json('knowledge/DOMAIN-MODEL.v1.json');
 const loader=read('server/intelligence/local-knowledge-loader.mjs');
 const fileExists=path=>typeof path==='string' && existsSync(resolve(root,path));
 const sourceToLocal=new Map();
@@ -113,9 +114,34 @@ const summary={
 };
 const a=process.argv.slice(2);
 let result;
-if(a.length===0)result={...summary,example:'--unit D05-K01 | --target knowledge/mechanisms/wallet-roles-and-inventory.md | --all'};
+if(a.length===0)result={...summary,example:'--unit D05-K01 | --target knowledge/mechanisms/wallet-roles-and-inventory.md | --axes | --all'};
 else if(a.length===1&&a[0]==='--all')
   result={...summary,migrations:entries,units,historicalSnapshotSources:snapRecords,aiRuntimeAllowlist:runtimeRecords};
+else if(a.length===1&&a[0]==='--axes') {
+  const alignment=domainModel.cross_axis_alignment;
+  if(!alignment || !Array.isArray(alignment.independentAxes) || !Array.isArray(alignment.linkKinds)) {
+    console.error('CROSS_AXIS_MODEL_MISSING');process.exit(2);
+  }
+  result={
+    kind:'READ_ONLY_CROSS_AXIS_KNOWLEDGE_ALIGNMENT',
+    schemaVersion:domainModel.schema_version,
+    alignmentVersion:alignment.revision,
+    alignmentStatus:alignment.status,
+    legacyAxes:{goals:domainModel.goals.length,knowledgeLayers:domainModel.layers.length,
+      domains:domainModel.domains.length,storageTypes:domainModel.structure.storage_axis},
+    independentAxes:alignment.independentAxes,
+    linkKinds:alignment.linkKinds,
+    proofBoundaries:alignment.proofBoundaries,
+    sampleTask:alignment.sampleTask,
+    canonicalGuides:alignment.canonicalGuides,
+    limits:[
+      'This is a declarative knowledge relation map, not a source-of-truth of observed market relationships.',
+      'Conceptual link is not an RPC event; source provenance is not independent validation.',
+      'Implemented_by and tested_by do not prove deployed or production correctness.',
+      'No AI retrieval or economic controller inference is performed by this command.',
+    ],
+  };
+}
 else if(a.length===2&&a[0]==='--unit') {
   const unit=units.find(x=>x.id===a[1]);
   if(!unit){console.error('UNKNOWN_LEGACY_UNIT');process.exit(2)}
@@ -133,7 +159,7 @@ else if(a.length===2&&a[0]==='--unit') {
     aiWhitelisted:loaderSet.has(target),aiActuallyUsed:'NOT_CHECKED',
     limitations:summary.limitations};
 }else{
-  console.error('Usage: node scripts/audit-knowledge-trace.mjs [--all | --unit D05-K01 | --target knowledge/path.md]');
+  console.error('Usage: node scripts/audit-knowledge-trace.mjs [--axes | --all | --unit D05-K01 | --target knowledge/path.md]');
   process.exit(2);
 }
 console.log(JSON.stringify(result,null,2));
