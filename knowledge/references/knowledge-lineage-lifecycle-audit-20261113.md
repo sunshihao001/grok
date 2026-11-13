@@ -241,3 +241,14 @@ npm run test:knowledge-lineage
 **最终衡量**不是文档数、指标数、专家数或知识命中次数，而是从用户一句简单问题出发，能否沿 `结论→证据→来源→解释→适用边界→代码/测试→真实反馈` 双向复查，并能在新事实到来时**有依据地改变判断**。
 
 **涉及外部来源的原始规范**：[ai-d 知识维护](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/organization-protocol.md)、[W3C PROV-O](https://www.w3.org/TR/prov-o/)、[OpenLineage 运行数据血缘](https://openlineage.io/docs/spec/facets/)、[Google skill-reach](https://google.github.io/skill-reach/)、[OpenAI Agent evals](https://developers.openai.com/api/docs/guides/agent-evals)。借鉴其关系和测试思想，不默认安装整套平台。
+
+
+## 13. 原始版本回读与本地承接不能混为一谈（2026-11-13）
+
+本次额外使用 GitHub 连接器独立重读21个迁入项上游原文件（21/21 Git blob SHA吻合）及21个历史快照在Hermes、qb-、meme-原仓的固定版本（21/21吻合）。因此：
+- 原来源存在并且**记录的字节版本可辨识**：21+21上游记录通过身份检查。
+- 现有Blix本地迁入项存在：21/21，但包含后续知识修订，不声称与原文保持同一字节。
+- 历史快照只在原仓可读：21/21，上述快照正文目前在本地目标路径 0/21。
+- 专业主张逐条受支持、外部论文的实证有效性、AI正确调用，以及真实主网运行：均不能由Git SHA吻合推导。
+
+这份有日期的核对记录存于原有 [迁入manifest](../MIGRATION.json) 和 [快照manifest](legacy-snapshot-sources.v1.json)。上述追溯CLI是离线静态检查，显示记录但不在每次运行时重新对外请求GitHub；后续源ref移动时仍须重新核对。
