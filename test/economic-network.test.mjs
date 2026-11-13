@@ -45,4 +45,5 @@ test('one observed sell or cross-Mint path attached to multiple receipts is coun
  assert.equal(graph.edges[0].crossMintCandidateCount,1);
  assert.equal(graph.walletFlows.find(x=>x.wallet==='B').localSellSummaryCount,1);
  assert.ok(graph.warnings.some(x=>/multiple hops/.test(x)));
+ assert.ok(graph.warnings.some(x=>/fee-adjusted inventory|withheld fee/.test(x)));
 });
