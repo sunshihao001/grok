@@ -56,7 +56,7 @@ export async function discoverPulseInvestigation({input,model,readEconomic,loadK
       if(Array.isArray(items))planningKnowledge=items.slice(0,3)
         .filter(x=>typeof x?.source==='string'&&typeof x?.excerpt==='string')
         .map(x=>({
-          source:x.source.slice(0,240),excerpt:x.excerpt.slice(0,1500),
+          source:x.source.slice(0,240),excerpt:x.excerpt.slice(0,900),
           topic:typeof x.topic==='string'?x.topic.slice(0,70):null,
           status:typeof x.status==='string'?x.status.slice(0,75):'RESEARCH_NOT_RUNTIME_VALIDATED',
           trustedAsInstruction:false,
