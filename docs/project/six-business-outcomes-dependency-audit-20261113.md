@@ -197,3 +197,112 @@ flowchart TD
 - [blix-ai-investigation-product-comparison-20261113.md](blix-ai-investigation-product-comparison-20261113.md)：Million、PumpTrace、Bubblemaps、Pulse、dexterm等业务对照；其资金/用户身份/利润说法仍需要独立复查。
 - 原版市场源码：`server/sources.js`、`engine.js`、`livetrades.js`、`pulse.js`、`coverage.js`、`holders.js`、`triage.js`、`early.js`、`research.js`、`brain.js`。
 - 原版与集成的事实代码：`server/wallets.js`、`wallet-signature-coverage.mjs`、`solana.js`、`bubblemap.js`、`economic-events.mjs`、`intelligence/{pulse-discovery.mjs,investigation-continuation.mjs,mint-economic-evidence.mjs,economic-network.mjs,economic-claim-trace.mjs,followability-replay.mjs,research-http.mjs}`。
+
+
+---
+
+## 13. 第二轮可靠性修正：六阶段完整还不等于研究系统可信
+
+本节是原文的纵深验收补丁，不另立专家系统。上一轮已列出的43个子阶段依然有效；这一轮补充横向约束和实测方法。
+
+**新增的五个重要区别**：
+
+1. 已有数据源 ≠ 已经获得指定时间窗的完整数据。原版Blix有发行/成交流、市场API、钱包RPC和数据库，但新独立AI服务只消费浏览器有限候选与已捕获SQLite。没有明确市场覆盖分母，就不应宣布全市场召回率。
+2. 链事件时间 ≠ 提供方交付时间 ≠ Blix接收时间 ≠ AI可见时间 ≠ 用户可成交时间。现有候选提交时间只是本地网页时间。没有首可见时点的历史价格不是可跟单回测依据。
+3. 能解析交易 ≠ 已重建真实经济账。原Blix的Solana RPC已支持最大交易版本1；应优先验证ALT加载地址、CPI、Token-2022、Swap/LP/WSOL、费用及Token账户/Owner等语义，而非重造一个网络请求入口。钱包摘要表以签名、钱包、Mint组合为主键，只能当摘要，不是每签名多动作完整账。
+4. 钱包相连 ≠ 共同控制 ≠ 同一批库存被出售 ≠ SOL确实进入另一Mint。每一项都是不同强度的证据主张，可形成竞争解释；单靠时间排序和共用资金服务地址不成立。
+5. AI能选择一个候选 ≠ AI能够长期自主调查。当前一次任务限制工具次数、单Mint范围和已落盘档案，暂无跨Mint自动补查、案例持久化、重开修订、后台观察与真实模型市场价值对照。
+
+### 13.1 动态研究不是把六步改成六个固定Agent
+
+系统应允许从市场异动、被跟踪钱包、Dev历史、跨币资金新边、用户当前Mint等任何合法入口开始。先问“下一份最有信息价值的事实是什么”，再选现有工具。资金池变化可能先查Swap与LP；跨Mint重合先排除服务地址；价格涨得快但报价滞后，可以停止在“值得研究”，不把它硬说成“值得跟单”。
+
+当新数据源不可用时，正确结果可以是“本地没观察到、需要历史补查”，不能说链上没有该行为。无足够事实时允许不选Mint；并记录没选中什么、为什么不选。
+
+## 14. 必须同时有的两类事实契约
+
+这不是建议增加两套新数据库。可以在原Blix表与只读API上增量映射，先对一个真实Mint和窗口验收，缺项明确填UNKNOWN。
+
+### 14.1 市场观察契约
+
+| 事实字段组 | 目的 | 没有时不允许下的结论 |
+|---|---|---|
+| Mint/Pool/DEX/Launchpad/网络/交易对 | 同币多池及曲线迁移，不把池设施当Holder | 不得跨池直接换算利润 |
+| Source及其API/WS类别、原始事件ID、来源版本与原文摘要 | 追查这个价格/交易从何而来，避免多渠道重复记账 | 不得称独立多源互相验证 |
+| ChainSlot/BlockTime/ProviderObservedAt/BlixReceivedAt/FirstAvailableAt | 区分链上发生、到达系统和用户最早可使用的时点 | 不得把事后涨幅当可跟入场价 |
+| 市场数据快照/池流动性/观察窗/报价尺寸/路由/费用 | 市值和成交量不是当前可执行价格 | 不得给可成交净收益 |
+| 源所覆盖DEX和目标Mint范围、采样规则、补查游标与缺口 | 没有分母无法估计实际漏币 | 不得宣布全市场覆盖、漏币率已核实 |
+| 入选与被拒的候选、拒绝原因、后续结果 | 保留反例和错过的机会 | 不得仅凭被选中赢家估计策略胜率 |
+
+底层市场采集应分为三个成本等级：连续但轻量的全候选发现；对有潜在信息价值的币补市场/Pool/Holder数据；对进入调查的少量地址补原始交易历史。不是对所有币抓完整链上历史，也不是只保存AI选中过的赢家。
+
+### 14.2 链上经济事件契约
+
+| 事实字段组 | 目的 | 常见失败 |
+|---|---|---|
+| 签名、外层/内层指令位置、Slot、交易版本、Commitment | 同一笔签名可有多动作和CPI；要能去重/重放 | 同签名重复、同一Swap双计 |
+| TokenAccount/Owner/Authority/FeePayer/Program/Pool/Vault | 地址角色分离，明确设施与私人钱包的竞争性解释 | Pool Holder当鲸鱼、FeePayer当出资者 |
+| Mint/TokenProgram/Decimals/RawAmount | 以原始整数核对Token数量与Token-2022 | 浮点损失、转账费漏算 |
+| pre/post SOL与Token余额、WSOL wrap/unwrap、手续费、Swap/LP事件 | 重建资产净变化和对价，不用纯时间顺序替代经济事实 | 多池、混合LP/Swap、库存批次错误 |
+| CaptureSource/RPC原文Hash/指令索引校验/Owner冲突/缺失meta | 每条结论可逆向查到原文、可修订解析器 | 静态图表冒充已验证资金路径 |
+| 钱包历史游标/历史缺页/重试状态/截断/首可见窗口 | 新发现钱包后要知道是否查完整、遗漏多少 | 查不到卖出误称未卖 |
+| 解释、反证、证据引用、限制和失效条件 | 经济控制/同源资金/利润属于强主张 | 将同一地址误判同一幕后控制者 |
+
+Solana官方文档已经明确区分版本化地址、预后余额与inner CPI。原Blix使用支持v1的交易RPC，并不说明其当前简化钱包收益/资金解析已经正确处理每一类经济动作。
+
+## 15. 经过外部成熟成品对照的取舍
+
+| 可核参考 | 真正有价值的能力 | 对Blix的取舍 |
+|---|---|---|
+| Solana官方Transaction Introspection、RPC JSON Structures、Indexing | ALT/CPI真实指令树、原始数据与解析分开；实时流和历史回放有不同成本 | 先修解析和证据覆盖，别造重复RPC入口 |
+| Solana Foundation trading-portfolio | 明确暴露hasUnpriced、historyTruncated、partial等状态；历史资金成本未知时不把未知当零成本 | 优先把“来源缺口影响PnL”传给AI决策层 |
+| PumpTrace backfill-manager | 有游标、暂停、恢复、扫描量上限、429状态和完成范围 | 对齐原wallet_sig_windows及处理状态，避免新建平行钱包游标 |
+| Million decision-log/opportunities | 把所有重要候选的跳过原因留下；区分发现事件、拒绝理由和后续结果 | 比再加AI评分更急需保留“为什么没选” |
+| dexterm agents/gate | 会话授权、工具作用域、参数验证、速率和拒绝审计；其代码为AGPL，不能无视许可证搬进MIT Blix | 复用安全门禁原则，不复制源码 |
+| GeyserIndex | Fork/确认/回滚及回放可测试；生产Indexer是独立的大型基础设施 | 必须经成本/覆盖实测证明有必要，才考虑Geyser/Yellowstone |
+
+三种取数路线：A 优先复用原Blix发行/行情与已有钱包RPC归档；B A缺历史才按有授权的归档RPC/成品Indexer补指定地址/签名；C 只有A/B实测无法满足覆盖/延迟SLO时，才考虑重建或采购完整程序级Indexer。先测清楚，不按复杂度选架构。
+
+## 16. 本轮已新增的“最早断点”离线验收程序
+
+已提交 scripts/audit-intelligence-source-readiness.mjs，可在部署者授权的环境使用已有SQLite副本。它不会启动Blix，不调用交易/模型/API，不创建或修改数据库，且不会把私有数据库路径传给模型。
+
+使用方式（把Mint和已有数据库地址换成真实的）：
+
+    npm run audit:data-readiness:offline -- --db /absolute/path/to/existing/radar.db --mint YOUR_REAL_MINT
+
+程序从只读数据库中检查以下明确事实：
+
+- 该Mint在tokens、snapshots、signals、early、feed_events中是否有市场/早期记录；它只证明**本地保存了什么**，并不证明全市场发行和交易流已被完整采到。
+- 是否有已经捕获的RPC交易和可与该Mint指令索引匹配的签名，及Slot/捕获时点/Token转移与Owner冲突数。
+- 至多12条原始RPC JSON在本地存储的哈希与基本形态是否正常；仍不代表所有交易或经济解析已经准确。
+- 对至多8个从已捕获交易中出现的Owner抽查签名窗口、断点及缺口；既不覆盖该Mint全部持有人，也不证明某一钱包终生历史已查完。
+- 单独暴露未验证的市场覆盖分母、事件首次可见时间、完整资产库存与Swap/LP语义、历史可执行报价以及持续监控。
+
+与已有test/intelligence-source-readiness.test.mjs的隔离合成SQLite测试配合，验证原文件哈希不变、缺表与缺行情只标UNKNOWN、源哈希损坏可检出、无效文件路径不会被创建。**这些是工程检查能力，不是已取得真实Mint的完整采集结果。**
+
+## 17. 不是提高文件数量，而是提高业务完成可信度
+
+| 业务环节 | 正例最少应能做到 | 反例/中断时必须如何降级 |
+|---|---|---|
+| 市场发现 | 独立核过来源的目标覆盖与实际可见时点、候选+被拒记录 | 断WS/RPC429/缓存恢复时标SOURCE_GAP、UNKNOWN_FIRST_AVAILABLE |
+| 关键钱包 | Holder+首买+转入接收+设施排除，能回查签名 | 公共资金服务、池、TokenAccount口径不明时标ADDRESS_UNCLASSIFIED |
+| 资金库存 | 多CPI净资产变化、真实Token/SOL/费边界、库存连续性 | WSOL、LP混合动作/未捕获转账时标INVENTORY_NOT_RECONCILED |
+| 跨Mint | 实际不同签名、时间序列、转账与买币事实都能重放 | 同时段共现/公共服务/Jito不同于共同控制 |
+| 可参与性 | 先可见的信号、实际交易尺寸、当时进出报价、滑点/费及退出 | 无历史报价/无法退出时不可报正收益 |
+| 持续观察 | 同一案例至少两次真实观察、增量及修改依据可追 | 迟到回填不当新交易，缺历史不当没有活动 |
+| AI知识有效性 | 同输入同证据预算与原Blix对照，判断更准或更省时间 | 一旦只增加报告长度、工具成本与幻觉，就停扩AI功能 |
+
+四级验收证据：解析单测 → 已知存档离线反例与重放 → 实际连通的只读源与Blix/AI同数据路径 → 新发生事件的前瞻纸面观察与完整错过样本。不能以其中一级代替更高一级。即使第四级显示有优势，也不构成任何收益保证。
+
+衡量指标按目标范围定而不是设魔法数字：市场可观测覆盖/延迟分布、错误排除与漏币率，钱包角色误报及签名追溯，跨Mint假链接，历史报价与退出可得率，AI知识有无实际改善、每个可信调查的API成本、断流恢复时长以及真实结论修订质量。
+
+## 18. 现在最值得推进的一条“真数据贯通”，而不是新规划
+
+1. 选**同一真实Mint、同一有界窗口**，先在现有数据库副本上运行上面数据来源可读性审计；如无既有完整数据，则原样报告缺口，不拿另一Mint的合成交易替代。
+2. 交叉对比原Blix的市场记录、采集时间与钱包签名水位、保存的原始RPC、指令索引与哈希。输出有哪些已经可复核，哪些只是Pulse/AI界面暂时能看到。
+3. 对一条确凿的买入/Token转仓证据补查接收钱包后续活动；有完整原始签名就逐步跨Mint扩张，没则停在明确的中断点。
+4. 之后才开始用同样输入对照：原Blix vs +确定性经济证据 vs +按需AI知识。比较正确率、信息增量和成本，而非谁的报告更华丽。
+5. 如果修复数据源/权限问题比开发复杂新模块更有效，先修最早阻塞。没有可信底层事实的监控只是定期重复过时解释。
+
+**最终完成条件**：输出一个在真实业务中可重新打开的调查，从数据源到签名/资产净额，再到资金/钱包竞争解释、机会可跟随条件与新事实修正，每一条都能指向来源且能标出UNKNOWN。六大业务结果是共同目标而不是硬性的运行流水线。
