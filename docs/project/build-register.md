@@ -424,11 +424,11 @@
 **本轮末复核/小范围运行时入口修正**：已回读知识全链说明及相关四个原入口，静态检查全部相对链接可达、Markdown代码格式正确；再次从现有清单计算21/21已登记本地目标存在、144/152旧单元映射、8个L0仅索引、21旧快照正文未本地导入、11/11本地AI允许源存在。复用现有 `test/knowledge-lineage-trace.test.mjs` 并增加知识说明入口完整性测试；在现有 `local-knowledge-loader.mjs` 的 **D12 ai-knowledge** 原11源路由内补充“知识追溯/承接/获取/形成/生命周期/修订”口语别名，并加3条对应回归用例，不新增模型权限或新的知识系统。对新问句按当前词面算法静态检查能命中D12；**截至本次检查最新SHA没有新的Node24 CI工作流记录，不能据此声称回归已在GitHub跑过**。PR #23仍有与最新blix的合并冲突；不强行合并或覆盖双方知识。
 
 
-### 2026-11-13｜R-15：知识全生命周期的获取→理解→承接→应用→验收→反向追溯
+#### R-15 补记｜知识术语、静态双向溯源和可查缺口
 
 **实际断点**：旧152单元索引、21迁入文件、21历史快照来源清单、11运行时知识白名单和产品真实执行属于五种不同证据身份。此前文件来源→当前承接→AI可选的双向映射不可直接核查，容易把来源扫描、复制、理解、实现与真实效果混为一谈。
 
-**已完成研究成果**：[知识全生命周期溯源与断链审查](../../knowledge/references/knowledge-lineage-lifecycle-audit-20261113.md)；对照旧Blix D01–D12、Hermes/qb-/meme-、ai-d的知识维护原则、W3C PROV-O来源关系、OpenLineage输入/输出/运行关系，梳理发现、获取、原项目逆向理解、主张与适用条件、承接、转代码/AI、验证、版本修订、停用与重开。未扩建第二个知识/专家/图数据库架构。
+**已完成研究成果**：以[知识全生命周期唯一总入口](../../knowledge/references/knowledge-lineage-lifecycle-20261113.md)为主；[细分概念与静态双向溯源附录](../../knowledge/references/knowledge-lineage-lifecycle-audit-20261113.md)进一步审查断链；对照旧Blix D01–D12、Hermes/qb-/meme-、ai-d的知识维护原则、W3C PROV-O来源关系、OpenLineage输入/输出/运行关系，梳理发现、获取、原项目逆向理解、主张与适用条件、承接、转代码/AI、验证、版本修订、停用与重开。未扩建第二个知识/专家/图数据库架构。
 
 **实际代码**：scripts/audit-knowledge-trace.mjs 只读取已有 MIGRATION/legacy-routing/legacy-snapshots/source-coverage/AI知识加载器。支持 --unit D05-K01、--target knowledge/mechanisms/capital-organization-and-incentives.md 和 --all，输出来源文件/ref/blob→本地文件→旧关联单元→AI可选范围，标记未复查原始blob、未证明真实模型调用。test/knowledge-lineage-trace.test.mjs 回归 21迁入均存在、152旧单元中144为文件级本地关联、8个L0旧Atlas-only、21旧快照正文0本地、11白名单均存在、拒绝未知单元和越界文件路径。package.json 加入 npm run audit:knowledge-trace 和 npm run test:knowledge-lineage，完整npm test含此测试。
 
