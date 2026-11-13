@@ -404,3 +404,19 @@
 **不可忽视的集成阻断**：PR #23目前和最新`blix`的 merge base 为`3bc1f7d4befc4e11e21d9a67fabbd5c4d259b1e7`，相对blix前进158个提交、落后35个提交，GitHub报告`mergeable=false`。主干也修改过`knowledge/README.md`、`knowledge/mechanisms/wallet-roles-and-inventory.md`、`knowledge/mechanisms/market-price-mechanism-research.md`、`knowledge/references/source-coverage-v0.1.json`等共享知识位置。本轮没有强制合并或覆写分支；需做原始共同祖先/主干/PR的三方冲突审查并保护两边有价值新增研究，之后在已支持CI的环境重跑Node24完整、intelligence、安全、经济及Web测试。
 
 **下一项**：解决合并冲突、执行最新 SHA 正式测试；对一条真实2022费/Hook交易检查实际接收资产变化；用同一批真实任务对比无知识、旧11源、新11源的模型知识选择和专业错误率。未审152/65部分继续按原目录与信息价值深读，不把来源登记/静态覆盖视为全部知识已经验证。
+
+
+### 2026-11-13｜R-15：知识获取→承接→实际应用→反向追溯完整概念与已有资产收束
+
+**用户任务**：不要再限于P1/P2某个知识点，而应全面理解“来源如何发现、获取、继承、改造、合并、调用、验证、撤回，并从当前判断反查其原始出处”的完整知识生命过程。已核查本项目 `knowledge/MIGRATION.json`、`knowledge/references/source-coverage-v0.1.json`、`DOMAIN-MODEL.v1.json`、152单元路由、D12/AI知识调用源码、经济事件与资金图谱代码及测试，并回查旧Hermes证据链/钱包结构、qb-旧保留案例、meme-真源、ai-d知识维护规范。外部W3C PROV-O、OpenLineage、DVC、Google Skill Reach只作为概念/产品设计对照，不额外安装新服务。
+
+**真正新增的研究与归位**：
+- [完整知识生命周期与可逆谱系](../../knowledge/references/knowledge-lineage-lifecycle-20261113.md)：11类知识对象（问题、来源、观测、概念、主张、方法、案例、实现、决策、验收、修订）与不强制执行的来源发现/获取/版本/原意重建/跨源反证/吸收/归档/检索/程序应用/实测/反向修订；知识价值与当下代码落点独立。
+- 明确区别**出处溯源、证据溯源、加工溯源、承接溯源、执行溯源、修订影响溯源**。同一文档可支持多条具体主张，不因文档被复制或目录扫描而认为每一主张受证据支持。
+- 原位更新 `knowledge/README.md`、`knowledge/references/README.md`、`docs/project/knowledge-use.md`、`knowledge/ai/intent-knowledge-selection-and-reasoning.md` 的导航，继续以已有P1/P2专业来源核查和D01–D12原文件为知识真源，不复制历史项目全文。
+- 本分支已有 `scripts/audit-knowledge-trace.mjs` 与 `test/knowledge-lineage-trace.test.mjs`，本轮**没有新建重复工具**，而是说明其可用的`--all / --unit / --target`与限度。该代码从现有manifest做**文件级双向静态映射**：历史152单元/21迁入记录/21源快照索引/11个AI知识候选源；不联机校验每个上游blob、不逐主张核验、不测试模型实用或主网真实表现。
+- 代表案例已连通原始来源→拒绝旧错误→Blix已有代码/回归位置：Hermes“Fee Payer≠资助者”，qb-95钱包“零余额≠卖出”、Token转仓/接收方卖出只是摘要候选，旧meme价格结构≠真实成本、ai-d检索命中≠知识使用正确。不同对象的**来源已读/代码已有/合成测试/真实运行/经济事实**分开保留。
+
+**验收状态**：所有新增/修改知识正文已写入本PR #23分支；GitHub回读及相对链接/静态审计待独立核查。不能借用旧CI当本轮改动通过。PR #23仍Draft未合并，先前检出的 `mergeable=false` 共享知识文件冲突未修，不强制并入`blix`。原版产品、签名/交易、付费模型、真实RPC和Grok部署均未触动。
+
+**接下来仍未做好的实质性知识追溯**：152研究单元从原文段落到**具体主张**的逐项引用与反例；65参考资产的源码/测试/版本/Issue/评论完整审查；来源变更对下游代码/报告的自动影响追踪；知识选择→模型输出→实际链上结论的固定任务A/B。优先用单Mint“资金源→转仓→接收后卖出”做一次双向逐证据链追溯，不靠提高文件数量宣布专业知识已吸收完。
