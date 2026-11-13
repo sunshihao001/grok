@@ -241,7 +241,7 @@ async function pollWallets(emit) {
 }
 
 // A wallet's signatures since the last one seen (`lastSig`), newest first, a page of 50 at a time, up to `pages`.
-// `reached`: the list goes all the way back to `lastSig` (false: the older part is a gap). `fetch(opts)` is
+// `reached`: confirmed pagination boundary or previous `lastSig`; false means the older window is UNVERIFIED, not necessarily missing. `fetch(opts)` is
 // sol.signatures for the wallet; exported for the tests.
 export async function pageSignatures(fetch, { first, lastSig, pages }) {
   // A missing historical cursor is NOT proof that a bounded incremental scan reached its end.
@@ -285,7 +285,7 @@ async function pollOne(w) {
   // Both operations either commit or roll back together.
   checkpointWalletPage(db, { wallet: w.address, rows: all,
     priorAnchor: w.last_sig || null, first, reached, observedAt: now() });
-  if (!reached) miss(w.address, 1, `more than ${all.length} transactions since the last check; the oldest were skipped`);
+  if (!reached) miss(w.address, 1, `signature scan stopped without a verified history boundary (${all.length} observed); older events may be missing`);
   enqueue(w.address, all.filter(s => !s.err).map(s => ({
     sig: s.signature, t: (s.blockTime || 0) * 1000 || now(), quiet: first
   })));
