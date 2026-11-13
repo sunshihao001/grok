@@ -1,5 +1,7 @@
 # Blix 专业知识｜唯一运行主体的分类接收入口
 
+**知识关系结构已收束（2026-11-13）**：[ai-d完整概念库与专业术语差异](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/cross-layer-project-anchors.md#11-2026-11-13-体系收束从关键词集合走向可解释可验证的项目关系v02) ↔ [Blix七类能力/五种网络/六项业务目标的实际映射](../docs/project/cross-layer-anchor-map-20261113.md#7-2026-11-13-全面术语引入后的结构收束不是加更多标签v02) ↔ [原INTEGRATION-CROSSWALK的结构归位](INTEGRATION-CROSSWALK.md#2026-11-13结构收束-v02从知识分层到七类跨层能力五种逻辑视图)。**原模型只原位增加机器可读的关系视图，不新增D01–D12/十轴/十一关系，也不启用自动推理**。运行 npm run audit:knowledge-trace -- --axes 可静态核对。
+
 **2026-11-13｜知识进入代码后的跨层锚点：** [Blix多层锚点与变更影响实例](../docs/project/cross-layer-anchor-map-20261113.md)，对照[ai-d通用方法](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/cross-layer-project-anchors.md)。这里的锚点关联专业主张、数据契约、代码不变量、测试与真实验收；并非新专家制度或重复D01–D12知识体系。初版只映射少数源级已核的高价值例子，不宣称自动全仓传播或已经生产验收。
 
 **2026-11-13｜通用知识生命周期与业务整体重梳理**：以 [ai-d 九阶段知识形成与应用锚点](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/knowledge-lifecycle-nine-stages.md) 作为“规划→获取→接收→理解→关联→整合→转化→验证→进化”的跨项目知识工作视角；以 [Blix 全项目 V2.0 建设总蓝图](../docs/project/blix-ai-workbench-master-plan-v1-20261113.md) 为六大业务目标、已有专业资产、真实数据源/执行依赖和验收的当前总入口。**D01–D12、L0–L7、10轴11关系及已有知识来源保持不变；九阶段不再造九个目录，旧知识可以保留纯理论价值但工程状态必须另行验收。**
