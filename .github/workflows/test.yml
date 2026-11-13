@@ -2,7 +2,8 @@ name: tests
 
 on:
   push:
-    branches: [main]
+    # PR #23 remains Draft with conflicts; branch CI still needs to validate knowledge and evidence changes.
+    branches: [main, integration/blix-evidence-readonly-20261108]
   pull_request:
 
 jobs:
