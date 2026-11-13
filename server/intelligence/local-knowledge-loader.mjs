@@ -35,7 +35,7 @@ const SOURCES = Object.freeze([
     cues:['价格冲击','盘口','池深','cpmm','avwap','poc','做市','流动性陷阱','库存压力','供需机制','二次启动','上涨','下跌','资金净流入'] },
   { id:'ai-knowledge', path:'../../knowledge/ai/intent-knowledge-selection-and-reasoning.md',
     label:'knowledge/ai/intent-knowledge-selection-and-reasoning.md',
-    cues:['知识选择','知识检索','专家认知','提示词','意图','agent','模型评估','自主研究','skill','知识来源','专业资料','选错','路由','资料检索'] },
+    cues:['知识选择','知识检索','专家认知','提示词','意图','agent','模型评估','自主研究','skill','知识来源','专业资料','选错','路由','资料检索','知识追溯','知识承接','知识获取','知识形成','知识生命周期','来源追溯','知识融合','知识修订'] },
   { id:'source-reconciliation', path:'../../knowledge/references/p1-p2-knowledge-reconciliation-20261113.md',
     label:'knowledge/references/p1-p2-knowledge-reconciliation-20261113.md',
     cues:['来源对照','知识整合','旧知识冲突','全域审查','审计知识','知识修正','全部来源'] },
