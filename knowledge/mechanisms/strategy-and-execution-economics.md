@@ -155,3 +155,5 @@ Meme 跟单至少存在五个不同目标：
 - “同源、bundler、第一批买入”钱包可以有调查价值，但不等于追买可复制；也可以只用于库存风险、出货压力和其他Mint发现研究。
 
 **下一道实证门**：同一条实际钱包事件在原Blix记录、可观察信号、历史可用报价、纸面执行及完整失败样本中对齐；再与不跟随或其他基线比较，不用成功案例数替代净效果。
+
+**2026-11-13 成本术语精确修正**：上述“转入Token若成本来源未知”特指**真实取得成本未被本地链上证据覆盖**，不等于不能单独报告转入时的市场参考估值。Solana Foundation [Trading Portfolio](https://github.com/solana-foundation/trading-portfolio) 将外部转入按转入日价格估值，并在调用者明确指定的钱包组内进行成本归属；这是该项目的方法选择，不能把市场估值伪装为原始购买成本，也不能让Blix根据资金同源候选自动组成共享PnL的钱包组。未来字段应明确分开 `verifiedAcquisitionCost`、`estimatedTransferValue`、`costCoverage` 和 `walletGroupProvenance`，缺证据时仍保持 UNKNOWN。详见[来源核查8.1](../references/p1-p2-knowledge-reconciliation-20261113.md#81-钱包成本基础有三种不同对象不能只写转入成本未知)。
