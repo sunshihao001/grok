@@ -1,5 +1,10 @@
 # Blix 参考项目与未整体搬迁资产入口
 
+## 2026-11-13｜知识从原始来源到实际判断的完整追溯（总入口）
+
+[知识全链追溯：来源、概念、主张、方法、吸收/承接、代码应用、验收与修订](knowledge-lineage-lifecycle-20261113.md) 统一现有各台账不同状态的含义，并把Hermes、qb-、meme-、ai-d与Blix现有代码/测试的具体继承链反向追溯。参考资产目录已经登记不意味着全文核查；纯理论可以保留而不进入代码；代码存在/离线CI也不意味着模型或主网已经真实验证。
+
+
 ## 2026-11-13｜P1–P2原始来源对照、错误裁决与实际落地
 
 [当前完整来源—D01–D12—原位知识修正对照账](p1-p2-knowledge-reconciliation-20261113.md)：汇总 Hermes wallet role/structure/证据、qb-95钱包真实留存、meme-结构策略、ai-d方法、Why-Solana多跳/Dust、Token Finder图谱与校准、Solana Holder Analyzer、Trading Portfolio、Google Skill Reach及Solana官方RPC/Token-2022；逐项列出**来源、错误假设、实际Blix实现、未验约束**，不只做参考项目功能目录。
