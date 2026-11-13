@@ -103,3 +103,19 @@
 - **继续覆盖未核项目**：65参考资产、152单元中未逐一核查的仍保留未审；只有新资料改变事实、判断、实现或失败测试时再升级，而不是为了覆盖率无限加文件。
 
 **总裁决**：Blix只有一个产品主体、一个现有SQLite经济证据归档和现有专业知识树。来源目录继续保留历史，代码与测试决定已经落地的范围；AI检索不能把旧理论变成已证事实，也不能因为尚缺主网条件就否认当前可检验的离线建设。
+
+
+## 七｜2026-11-13 R-14：把已吸收的知识真正选对，并核对官方协议
+
+**实测知识选择缺口（静态小样本）**：对当前11个本地专题设计16条中文口语与专业混合问句，人工在运行前规定应命中的主要知识源。旧词面路由16条中9条至少漏一项预期领域。典型问题是 Token2022 transfer hook、pool/vault 是否是庄家持仓、交易所出金的归属、今日异动是不是历史回补、专业资料选错等。此前只把相关知识写进库里，不代表AI会在需要时选中。
+
+**实现修正**：原位扩大已有 `local-knowledge-loader.mjs` 的专业同义词和口语表达，不增加新专家/目录/搜索器；短英文缩写如 SOL、AI 采用词边界，避免 `console`、`main` 误触发。新增 `test/local-knowledge-loader.test.mjs` 的16条正例、3条负例。对更新后的GitHub文件重新读取并静态模拟同一套排序，16条均覆盖预期专业主题；这只是人工构造样本中的静态路由检验，**不是 Node24 CI 或真实模型A/B通过**，更不是全体用户问题的召回率。
+
+**官方事实纠偏**：
+- [Solana Versioned Transactions](https://solana.com/docs/core/transactions/versioned-transactions) 与 [RPC JSON Structures](https://solana.com/docs/rpc/json-structures)：legacy、v0、v1 均是现行格式；v1主网已启用，读取必须设置 `maxSupportedTransactionVersion: 1`；v1有 `transactionConfig` 且不使用ALT。本分支 `server/solana.js` 与 `server/wallets.js` getTransaction 已设为1，不能虚构一个“尚未打开v1读取”的BUG；但读取成功不证明解析完成。
+- [Token-2022 Transfer Fees](https://solana.com/docs/tokens/extensions/transfer-fees)：`TransferCheckedWithFee` 与 `TransferChecked` 均可含扣费，withheld fee使指令转出数量与可自由出售的接收库存不同。当前 `server/economic-events.mjs` 的Token事件分类仅包含 `transfer` 与 `transferChecked`，`transferCheckedWithFee` 可能被当 `OTHER`；**新增可复现的未实现测试候选**：交易原文保留但转账边漏入、净入账与手续费不一致。未经真实RPC和协议忠实fixture，不把该路径当成已验收。
+- [Google Skill Reach](https://github.com/google/skill-reach) 的误选/漏选/冗余和多轮路由评估对本项目有直接价值；现有16条自测不证明模型理解，下一步需要固定相同任务、模型、证据和预算，比较不加知识/旧路由/新路由。
+
+**历史知识适用边界**：152研究单元及65参考资产是已登记的原始资料覆盖，不代表152条经过独立验证的事实或65项可直接复用的算法。旧Hermes硬阈值、qb-的质量分/全退、meme-价格结构推断、RED-COHORT撤回数值、同Slot/同资金源/多跳同控推断必须保留不确定性。现有8篇领域原文R-13修订原位保存，不再另建专家库。
+
+**未完成**：PR #23 与最新blix存在共享知识文件合并冲突；新版知识路由的GitHub CI尚未确认运行；真实v1/Token-2022费/Hook解析、主网Mint、实际模型A/B和历史152/65未逐项核验仍未完成。不要把路由静态16/16当成产品已运行。
