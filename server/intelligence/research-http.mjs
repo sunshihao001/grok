@@ -4,6 +4,7 @@
 import { createServer } from 'node:http';
 import { runAiResearchTask } from './ai-workflow.mjs';
 import { discoverPulseInvestigation, validatePulseDiscoveryInput } from './pulse-discovery.mjs';
+import { summarizeInvestigationContinuation } from './investigation-continuation.mjs';
 
 const MINT = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
 const MAX_BODY = 5_000;
@@ -119,8 +120,20 @@ export function createResearchHttpServer({
           input, model, readEconomic, loadKnowledge, runResearch:runAiResearchTask,
         })
         : await runAiResearchTask({ ...input, model, readEconomic, loadKnowledge });
+      const output=req.url==='/discover'
+        ? {
+          ...result,
+          ...(result.investigation&&result.discovery?.selectedMint
+            ? { investigation:{
+              ...result.investigation,
+              continuation:summarizeInvestigationContinuation({
+                mint:result.discovery.selectedMint,investigation:result.investigation,
+              }),
+            } } : {}),
+        }
+        : { ...result, continuation:summarizeInvestigationContinuation({mint:input.mint,investigation:result}) };
       json(res, 200, {
-        ...result, sourceMode:'LOCAL_SQLITE_ONLY',
+        ...output, sourceMode:'LOCAL_SQLITE_ONLY',
         modelMode:'OPT_IN_SERVER_MODEL_API',
         verifiedMarketOpportunity:false, liveExecutionValidated:false,
       });
