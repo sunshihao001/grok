@@ -2,6 +2,10 @@
 // No new fetch, database, model, expert system or inferred wallet controller.
 // A trace explains where a statement came from; it is not proof that the
 // economic mechanism behind that statement is true on the complete chain.
+// Cross-layer contract BLX-K-INVENTORY-PROVENANCE:
+// a later wallet sell summary MUST remain separate from evidence that the
+// transferred inventory batch was actually sold; cost basis remains UNKNOWN.
+// Trace: docs/project/cross-layer-anchor-map-20261113.md; test/economic-claim-trace.test.mjs.
 const LIMIT=100;
 const KNOWLEDGE=Object.freeze([
   {unit:'D01-K07',path:'knowledge/foundations/solana-chain-and-market.md',
