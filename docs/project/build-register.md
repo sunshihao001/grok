@@ -4,6 +4,23 @@
 >
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
+## 2026-11-13｜R-20：专业知识进入 AI 调查规划（离线集成）
+
+**用户目标**：以前的 Blix/Hermes/qb-/meme-/ai-d 与参考项目专业知识，不只归档或在最后报告中引用，而要影响 AI 的实际研究任务、工具选择与下一次补查；保留原产品及既有知识层级，不新增一套并行专家制度。
+
+**旧瓶颈及源码**：`server/intelligence/local-knowledge-loader.mjs` 已有限11篇本地专业来源的按需短片段选择、原路径/内容SHA和撤回警示。但以前 `ai-workflow.mjs` 在读完 Mint 工具后才送知识到 `stage:interpret`，无法改变初步取证方法；新工作台此前也没有可查看的来源入口。
+
+**本次代码改变**：
+- 在 `runAiResearchTask` 的 `stage:plan` **之前加载知识**；收集有限的可调用现有读能力建议（仅 `mint-facts` / `mint-economic-evidence`），明确为参考建议而非权限。取得证据之后重新按缺口取知识，送 `stage:followup` / `stage:interpret`；原先最多2次工具调用及 Mint 白名单等安全边界保持。
+- 返回 `knowledgeSources`（兼容旧调用方）和新增 `knowledgeUse`（阶段、原文SHA/来源、专题、建议工具、`PRESENTED_TO_MODEL_NOT_VERIFIED_USED`）。这些只证明**内容传给模拟模型接口**，不是实际模型理解或正确应用的证明。
+- 在 `web/src/pages/Intelligence.tsx` 复用既有原文路径展示可折叠的 Hermes、qb-、meme-、ai-d、Blix 专业知识来源候选，并在复制任务时包含相关候选；前端明确标明**没有调用服务器知识检索、模型或交易**，不能把静态链接冒充真实AI调用轨迹。
+
+**新增离线测试**：在 `test/ai-workflow.test.mjs` 比较同一任务的有/无知识时选择不同允许工具、补查阶段的新知识选源、恶意“立即买入”段落不得扩权、加载器失效不阻断合法事实读取；`test/original-blix-preservation.test.mjs` 保留原导航、Coin 与只读边界并断言 UI 候选来源和预览标记。原767个Blix文件路径与既有28个不改字节指纹不因本次变更而降低保护。
+
+**尚缺真实运行**：没有 AI API 的授权运行、服务端结果API、真实 Mint 的长期全历史、跨币机会和动态UI真实`knowledgeUse`；模型质量/知识增益尚未A/B验收。下一项应在安全隔离与成本授权明确后，使用**已有** AI 工作流/读工具适配只读结果接口并把真实工具收据显示在UI；不为可视化凭空生成链上关系。
+
+**本轮 CI**：以本节提交后的最新commit与 Actions 的实测状态为准，不能引用旧绿色CI当新版本验收。
+
 ## 2026-11-13｜R-19：AI 可视化工作台接入原 Blix（仅扩展分支）
  
 **本轮范围**：沿用前序选定的 B「专业研究终端」布局，将此前独立的概念 HTML 转为原 Blix React 内的可用入口；仍保留原版 Discover、Pulse、Coin Chart、Bubble Map、Wallet、Tracker、AI Read 和交易面板。新增 `#/intelligence`（导航为 AI research）直接订阅现有 `usePulse` 状态，按原看板来源展示和检索候选，不生成伪 AI 机会评分。选择一个 Mint 后可跳转原 `#/coin/<mint>`，也可通过 `/assistant` 深链打开 PR #23 已有 AI Assistant 标签。页面输入自然语言目标后只生成带现有行情上下文的**可复制调查任务**，没有模型调用、订单提交或新的供应商读取。
