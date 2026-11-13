@@ -81,6 +81,8 @@ const summary={
   sourceContext:{
     historicalUnitRouterStatus:router.status,
     sourceCoverageDate:coverage.as_of,
+    recordedMigrationSourceRecheck:migrate.upstream_source_blob_check??null,
+    recordedHistoricalSnapshotSourceRecheck:snapshots.upstream_snapshot_blob_check??null,
     sourceRepoStates:coverage.repo_sources.map(x=>({
       repo:x.repo,treeFiles:x.tree_files,status:x.status,
     })),
