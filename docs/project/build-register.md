@@ -352,3 +352,30 @@
 2. P1：将现有 `web/src/pages/coin/BubbleMap.tsx` 的原图形交互与 `facts.network` 的签名/时序/证据关联展示打通，需要通过只读独立服务/安全鉴权（P0）而不是从原交易主服务借未审权限。
 3. P2：任务轮询/历史监控实际运行、费用与故障恢复、知识模型多轮选择的真实A/B评测、市场影响/策略样本外回测仍待真实输入与授权。当前快照比较是本地离线功能，不是已部署监控。
 4. 原版市场/交易页面及服务保留；GitHub PR #23/#24均为Draft未合并。不要用离线CI绿灯宣传真实主网或Model/交易服务已经上线。
+
+
+### 2026-11-13｜R-13：P1–P2所有高相关知识按原体系归位与来源反证（不宣称全65/152已审）
+
+**用户目标**：将上轮已实现的 P1–P2（钱包网络/资金/库存/跨Mint/时序/监控/策略/知识选择）相关专业知识重新检索、对照、修正并放回Blix原有体系。**不再造第二套专家制度、补齐标签架构或重写交易程序**。
+
+**实际检索来源及边界**：
+- 本仓旧D01–D12资料、已有六类专业知识目录、`knowledge/README.md`、旧 `legacy-knowledge-routing.v1.json` 与 PR #23 当前源代码/测试；不改152单元原始映射历史。
+- [Hermes role/structure/evidence/Skill4](https://github.com/sunshihao001/-)、[qb-原生95钱包留存](https://github.com/sunshihao001/qb-)、[meme-原真源与结构观察者门槛](https://github.com/sunshihao001/meme-)、[ai-d两领域源级结果](https://github.com/sunshihao001/ai-d)、[Why-Solana Dust/多跳](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over)；静态读取与旧源上下文一致性复核，不表示整个仓库逐行审查。
+- GitHub外部源：Token Finder `graph.ts/test/intel-graph.test.ts/calibration/replay.ts`、Solana Holder Analyzer `transfer-scan.ts`、Solana Foundation Trading Portfolio `pnl.ts`和成本测试、Google Skill Reach 路由研究；Solana官方RPC JSON、Transaction Introspection、Token-2022 TransferFee/Hook及getSignaturesForAddress。每项具体可吸收与反例写于 [统一源账](../../knowledge/references/p1-p2-knowledge-reconciliation-20261113.md)。
+
+**本次已写入而不止是对话输出**：
+1. 新增一份集中的[来源—事实—旧错误—D01–D12—代码边界—下轮验收账](../../knowledge/references/p1-p2-knowledge-reconciliation-20261113.md)。该文件是现有 `knowledge/references/` 中的审查记录，不替代原领域正文。
+2. 直接修订现有8份D01–D12专业正文：`foundations/solana-chain-and-market`、钱包/库存、资本组织、价格机制、异常群体、跟单执行、反证案例、AI知识与意图。对旧Hermes固定阈值、qb质量分/全退/Top10分母、meme结构策略成熟度、Dust/公共设施、Token-2022/交易v1、Token多跳gross、同地址跨Mint、历史回填及纸面收益作明确纠正，原文保留。
+3. 更新 `knowledge/README.md`、`knowledge/references/README.md`、`knowledge/INTEGRATION-CROSSWALK.md`、`docs/project/README.md`、`docs/project/knowledge-use.md`、`docs/project/knowledge-to-capability-integration-v0.1.md`；旧“未改业务源码”的说明限定为当时历史状态，不再混淆当前离线交付。
+4. `server/intelligence/local-knowledge-loader.mjs` 在原6项上增加多跳、关键钱包、市场价格机制、AI认知方法和本轮综合纠偏5项为**11个本地白名单候选**，仍最多按问题读取3份为默认；从文档带SHA与来源/撤回警示，不能让原文获得模型交易权限。检索旧章节时附带最新2026-11-13适用限制，避免“文档更新了但模型只读旧结论”。
+5. 增加 `test/p1-p2-knowledge-integrity.test.mjs`、`test/local-knowledge-loader.test.mjs` 的源路径、12域覆盖、11本地白名单、同义/专业词路由、现行修正保留测试，加入完整 `npm test` 与 `test:intelligence`。
+
+**已核验**：GitHub读取已确认所有源文件/更新目标存在、PR #23为 Draft 且head前进，未合并/部署/调用模型。**本轮最新提交未获得新的 Node test CI运行记录**；GitHub Actions 的test.yml只在PR事件/主分支push触发，且本轮连接器提交后只出现了Uptime push失败记录。现阶段严格记为 `CODE_AND_KNOWLEDGE_SUBMITTED / TEST_EXECUTION_NOT_CONFIRMED`，不借用旧 SHA `520b5a3` 的绿色结论。外部主网实跑/模型A/B也未完成。
+
+**未完成、不是知识整合可凭文字填满的部分**：
+- 所有参考资产与152旧单元的逐项源级覆盖，特别是未审商业内部算法与真实样本；来源清单不等于知识全核验。
+- 真实链上Token-2022费与复杂CPI的正确经济核算、公共基础设施/资金类型判定、钱包真正库存与成本。
+- Coin UI/只读研究服务真实连线、长历史监控/恢复、专业知识动态模型A/B、跨Mint群体样本外验证及跟单实际执行成本。
+- 需要在有运行权限的环境执行 **npm run test:intelligence、npm test、npm run test:evidence、npm run test:security、Web build**；如新路由出现误选和旧知识片段覆盖不足，先修检索/对照，不扩张统一prompt。
+
+**下一项优先**：先拿到本SHA的离线测试运行验收；再做同数据的“无知识→6源→11源”任务A/B与误归因分析，在此基础上再确定是否需要更多源码引用或知识路线。长期研究任务以后应按本R-13恢复，不重复做新的资料目录。
