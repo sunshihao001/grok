@@ -1366,14 +1366,15 @@
         "Never infer wallet controller or trading alpha from a conceptual link"
       ]
     },
-    "revision": "2026-11-13-typed-links-v1",
+    "revision": "2026-11-13-typed-links-and-interpretation-v2",
     "status": "CONCEPTUAL_CROSS_AXIS_GUIDANCE_NOT_RUNTIME_REASONING_ENGINE",
     "purpose": "Connect existing G/L/D/storage/evidence with conceptual, economic, execution and feedback relations without collapsing different evidence identities or creating mandatory pipeline stages.",
     "canonicalGuides": [
       "knowledge/references/knowledge-lineage-lifecycle-20261113.md",
       "knowledge/INTEGRATION-CROSSWALK.md",
       "knowledge/references/p1-p2-knowledge-reconciliation-20261113.md",
-      "docs/project/build-register.md"
+      "docs/project/build-register.md",
+      "docs/project/cross-layer-anchor-map-20261113.md"
     ],
     "independentAxes": [
       {
