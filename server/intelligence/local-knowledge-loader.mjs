@@ -7,42 +7,53 @@ import { createHash } from 'node:crypto';
 const SOURCES = Object.freeze([
   { id:'wallet-roles', path:'../../knowledge/mechanisms/wallet-roles-and-inventory.md',
     label:'knowledge/mechanisms/wallet-roles-and-inventory.md',
-    cues:['钱包','wallet','holder','持仓','角色','库存','转仓','transfer','接收','卖出','控盘','bundle'] },
+    cues:['钱包','wallet','holder','持仓','角色','库存','转仓','transfer','接收','卖出','控盘','bundle','地址','池地址','交易所','筹码','余额'] },
   { id:'capital-funding', path:'../../knowledge/mechanisms/capital-organization-and-incentives.md',
     label:'knowledge/mechanisms/capital-organization-and-incentives.md',
-    cues:['资金','fund','sol','共同','同源','出资','关联','操盘','控制','洗量','funding'] },
+    cues:['资金','fund','sol','共同','同源','出资','关联','操盘','控制','洗量','funding','出金','接力','资金来源','净流入'] },
   { id:'cohort-timing', path:'../../knowledge/methods/anomaly-and-cohort-discovery.md',
     label:'knowledge/methods/anomaly-and-cohort-discovery.md',
-    cues:['群体','同步','时间','hour','小时','异动','cohort','时序','协同','跨mint','监控','跨币'] },
+    cues:['群体','同步','时间','hour','小时','异动','cohort','时序','协同','跨mint','监控','跨币','同槽','一槽','新发生','回补','今日'] },
   { id:'execution', path:'../../knowledge/mechanisms/strategy-and-execution-economics.md',
     label:'knowledge/mechanisms/strategy-and-execution-economics.md',
-    cues:['跟单','策略','alpha','滑点','价格','流动性','成本','pnl','收益','止盈','回测','execution'] },
+    cues:['跟单','策略','alpha','滑点','价格','流动性','成本','pnl','收益','止盈','回测','execution','成交','可跟','报价'] },
   { id:'chain', path:'../../knowledge/foundations/solana-chain-and-market.md',
     label:'knowledge/foundations/solana-chain-and-market.md',
-    cues:['cpi','token-2022','owner','token account','rpc','指令','账户','wsol','fee payer','解析'] },
+    cues:['cpi','token-2022','owner','token account','rpc','指令','账户','wsol','fee payer','解析','token2022','transfer hook','手续费','pool','vault','池地址'] },
   { id:'validation', path:'../../knowledge/cases/independent-validation-and-failure-cases.md',
     label:'knowledge/cases/independent-validation-and-failure-cases.md',
-    cues:['反证','样本','验证','失败','偏差','回放','误报','漏报','完整性','风险','unknown'] },
+    cues:['反证','样本','验证','失败','偏差','回放','误报','漏报','完整性','风险','unknown','历史回补','回补','选错','错判','资料误用'] },
   // Existing primary source material; narrow cues avoid injecting every old book.
   { id:'multihop', path:'../../knowledge/references/multihop-funding-evidence-audit.md',
     label:'knowledge/references/multihop-funding-evidence-audit.md',
-    cues:['多跳','五跳','中转钱包','粉尘','dust','共享服务','bridge','隐蔽钱包','非holder','隐含资金'] },
+    cues:['多跳','五跳','中转钱包','粉尘','dust','共享服务','bridge','隐蔽钱包','非holder','隐含资金','接力','转给新钱包'] },
   { id:'key-wallet', path:'../../knowledge/methods/key-wallet-investigation-brief.md',
     label:'knowledge/methods/key-wallet-investigation-brief.md',
     cues:['关键钱包','早期买家','sniper','kol','bundler','钱包榜单','跟单钱包','能否跟随'] },
   { id:'market-mechanism', path:'../../knowledge/mechanisms/market-price-mechanism-research.md',
     label:'knowledge/mechanisms/market-price-mechanism-research.md',
-    cues:['价格冲击','盘口','池深','cpmm','avwap','poc','做市','流动性陷阱','库存压力','供需机制','二次启动'] },
+    cues:['价格冲击','盘口','池深','cpmm','avwap','poc','做市','流动性陷阱','库存压力','供需机制','二次启动','上涨','下跌','资金净流入'] },
   { id:'ai-knowledge', path:'../../knowledge/ai/intent-knowledge-selection-and-reasoning.md',
     label:'knowledge/ai/intent-knowledge-selection-and-reasoning.md',
-    cues:['知识选择','知识检索','专家认知','提示词','意图','agent','模型评估','自主研究','skill'] },
+    cues:['知识选择','知识检索','专家认知','提示词','意图','agent','模型评估','自主研究','skill','知识来源','专业资料','选错','路由','资料检索'] },
   { id:'source-reconciliation', path:'../../knowledge/references/p1-p2-knowledge-reconciliation-20261113.md',
     label:'knowledge/references/p1-p2-knowledge-reconciliation-20261113.md',
     cues:['来源对照','知识整合','旧知识冲突','全域审查','审计知识','知识修正','全部来源'] },
 ]);
 
+function cueMatches(goal,cue) {
+  // Short Latin terms (SOL, PnL, AI) must not match substrings of unrelated words
+  // such as console or main. Chinese cues remain direct phrase matches.
+  const term=cue.toLowerCase();
+  if (/^[a-z]{1,3}$/.test(term)) {
+    const escaped=term.replace(/[.*+?^${}()|[\]\\]/g,'\\function scoreTopic(topic,goal,evidence) {
+  let score = topic.cues.filter(x=>goal.includes(x.toLowerCase())).length * 2;');
+    return new RegExp('(^|[^a-z])'+escaped+'(?=$|[^a-z])').test(goal);
+  }
+  return goal.includes(term);
+}
 function scoreTopic(topic,goal,evidence) {
-  let score = topic.cues.filter(x=>goal.includes(x.toLowerCase())).length * 2;
+  let score = topic.cues.filter(x=>cueMatches(goal,x)).length * 2;
   const entries = Array.isArray(evidence) ? evidence : [];
   if (topic.id==='wallet-roles' && entries.some(x=>x.result?.facts?.network?.eventCount>0)) score+=2;
   if (topic.id==='capital-funding' && entries.some(x=>x.result?.facts?.network?.distributionCandidates?.length>0)) score+=2;
@@ -56,7 +67,7 @@ function extractSection(doc,goal,terms,maxChars) {
   const ranked=sections.map((content,i)=>{
     const header=content.split('\n')[0].toLowerCase();
     const weight=terms.filter(x=>header.includes(x.toLowerCase())).length*3 +
-      terms.filter(x=>goal.includes(x.toLowerCase()) && content.slice(0,1200).toLowerCase().includes(x.toLowerCase())).length;
+      terms.filter(x=>cueMatches(goal,x) && content.slice(0,1200).toLowerCase().includes(x.toLowerCase())).length;
     return {content,weight,i};
   }).sort((a,b)=>b.weight-a.weight || a.i-b.i);
   const chosen=ranked[0]?.content || doc;
