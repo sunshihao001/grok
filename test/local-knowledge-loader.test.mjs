@@ -90,3 +90,17 @@ test('the cross-project correction ledger can be selected, but cannot become aut
  assert.match(audit.excerpt,/NOT validated live chain fact/);
  assert.equal(audit.trustedAsInstruction,false);
 });
+
+
+test('active P1/P2 legacy knowledge excerpts carry latest scoped correction even if an old section scores higher',async()=>{
+  const docs=await makeLocalKnowledgeLoader({maxSources:3,maxChars:1100})({
+    goal:'钱包 同源 资金 转仓 接收 卖出',
+  });
+  for(const topic of ['wallet-roles','capital-funding']){
+    const doc=docs.find(x=>x.topic===topic);
+    assert.ok(doc,'missing needed knowledge domain: '+topic);
+    assert.match(doc.excerpt,/2026-11-13/,'current applicability correction omitted: '+topic);
+    assert.match(doc.excerpt,/NOT validated live chain fact/);
+    assert.ok(doc.excerpt.length<=1100);
+  }
+});
