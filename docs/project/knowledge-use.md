@@ -1,5 +1,8 @@
 # 按实际问题使用专业知识、AI研究与可证伪证据
 
+
+**多轴认知对齐（2026-11-13）**：从简单问题进入专业知识时，按实际问题选择 G目标、L知识深度、D专业领域及概念、经济事件、主张证据、数据可见时间、Blix代码运行、修订反馈等相关视角；不是每次调用固定十步。详见 [现有知识交叉表](../../knowledge/INTEGRATION-CROSSWALK.md#7-2026-11-13-关系型认知修正从层级清单到可审查的专业主张) 和 [现有DOMAIN-MODEL](../../knowledge/DOMAIN-MODEL.v1.json)；可只读执行 `npm run audit:knowledge-trace -- --axes`。其中 `semantic_match`、`observed_economic_event`、`supports`、`implemented_by`、`tested_by` 属于不同关系：概念相似不能证明同控，转账不能证明卖出，离线测试不能证明主网正确，知识被选中不能证明模型用对。遇到重要结论要反向追 `结论→原始签名/来源版本→推导条件/竞争解释→当前代码/测试→修订影响`，避免词面关联泛化为经济因果。
+
 **知识获取、承接和实际调用的唯一总入口（2026-11-13）**：[Blix知识全链追溯](../../knowledge/references/knowledge-lineage-lifecycle-20261113.md)；[详细术语、来源映射和双向查账附录](../../knowledge/references/knowledge-lineage-lifecycle-audit-20261113.md)。两个文档是同一研究的主文与附录，不取代原D01–D12、P1–P2核查或建设台账。`npm run audit:knowledge-trace` 可查旧源单元→本地承接→AI可选来源；不证明模型确实用上或用对，不要求所有普通问题走固定流程。
 
 **新认知入口**：[Hermes生框架、qb数据护照、meme反证与多对象经济过程](../../knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md)。根据任务需要用因果、过程挖掘、取证等问题视角生成竞争解释，未审来源保留UNKNOWN；不是新增固定专家、硬标签或运行时强制Prompt。
