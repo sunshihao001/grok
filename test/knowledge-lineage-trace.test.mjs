@@ -110,3 +110,57 @@ test('holistic source-to-ability guidance is discoverable from existing knowledg
    assert.ok(doc.includes(term),'lifecycle concept missing: '+term);
  }
 });
+
+
+test('existing Blix G/L/D ontology now exposes ten independent knowledge axes without altering historical units',()=>{
+  const all=run('--all');
+  const model=JSON.parse(readFileSync(new URL('../knowledge/DOMAIN-MODEL.v1.json',import.meta.url),'utf8'));
+  const a=run('--axes');
+  assert.equal(a.kind,'READ_ONLY_CROSS_AXIS_KNOWLEDGE_ALIGNMENT');
+  assert.equal(a.alignmentStatus,'CONCEPTUAL_CROSS_AXIS_GUIDANCE_NOT_RUNTIME_REASONING_ENGINE');
+  assert.equal(a.legacyAxes.knowledgeLayers,8);
+  assert.equal(a.legacyAxes.domains,12);
+  assert.equal(a.independentAxes.length,10);
+  assert.deepEqual(a.independentAxes.map(x=>x.id),[
+    'GOAL','DEPTH','DOMAIN','KNOWLEDGE_OBJECT','SEMANTIC','ECONOMIC',
+    'EVIDENCE','TIME','EXECUTION','EVOLUTION'
+  ]);
+  assert.equal(new Set(a.independentAxes.map(x=>x.id)).size,a.independentAxes.length);
+  assert.equal(a.linkKinds.length,11);
+  assert.equal(new Set(a.linkKinds.map(x=>x.kind)).size,a.linkKinds.length);
+  assert.equal(a.proofBoundaries.length,6);
+  assert.equal(all.counts.legacyUnits,152,'cross-axis guidance cannot reassign legacy D01–D12 units');
+  assert.equal(model.relations.length,15,'preserve original domain-specific links');
+  assert.equal(model.schema_version,'1.0','do not quietly change historical schema identity');
+  assert.match(a.limits.join(' '),/deployed or production correctness/);
+});
+test('semantic, evidence, economic and code relationships do not silently promote into common control or live proof',()=>{
+  const a=run('--axes');
+  const kinds=Object.fromEntries(a.linkKinds.map(x=>[x.kind,x]));
+  for(const kind of ['semantic_match','observed_economic_event','derived_from',
+    'supports','contradicts','applies_to','implemented_by','tested_by',
+    'selected_for_context','changes_decision','revised_from']){
+    assert.ok(kinds[kind]?.from && kinds[kind]?.to && kinds[kind]?.neverPromoteTo,
+      'missing typed relation limit '+kind);
+  }
+  assert.equal(kinds.semantic_match.neverPromoteTo,'ECONOMIC_COMMON_CONTROL');
+  assert.equal(kinds.tested_by.neverPromoteTo,'MAINNET_VALIDATED');
+  assert.equal(kinds.selected_for_context.neverPromoteTo,'APPLIED_CORRECTLY');
+  assert.ok(a.proofBoundaries.some(x=>x.forbidden==='SOLD_THE_TRANSFERRED_INVENTORY'));
+  assert.ok(a.proofBoundaries.some(x=>x.forbidden==='COMMON_CONTROLLER_CONFIRMED'));
+  assert.equal(a.sampleTask.mainnetStatus,'NOT_VERIFIED_BY_THIS_STRUCTURAL_MODEL');
+  assert.match(a.sampleTask.disallowedResult,/SAME_OPERATOR/);
+});
+test('cross-layer links stay anchored to existing source documents and can be read without tool/model network access',()=>{
+ const a=run('--axes');
+ for(const p of a.canonicalGuides){
+   assert.ok(/^(knowledge|docs)\/[a-zA-Z0-9/_-]+\.(md|json)$/.test(p),p);
+   assert.ok(existsSync(new URL('../'+p,import.meta.url)),p);
+ }
+ const crosswalk=readFileSync(new URL('../knowledge/INTEGRATION-CROSSWALK.md',import.meta.url),'utf8');
+ for(const term of ['semantic_match','derived_from','tested_by','changes_decision',
+   'observed_economic_event','知识越积越多','不允许越级']){
+   assert.ok(crosswalk.includes(term),'missing repair to knowledge crosswalk: '+term);
+ }
+ assert.match(crosswalk,/--axes/);
+});
