@@ -23,6 +23,12 @@ test('full original lineage is mapped without claiming historical snapshots or A
  assert.equal(r.counts.snapshotBodiesImported,0);
  assert.equal(r.counts.runtimeAllowlistedSources,11);
  assert.equal(r.counts.runtimeAllowlistedExisting,11);
+ assert.equal(r.sourceContext.recordedMigrationSourceRecheck.checked_entries,21);
+ assert.equal(r.sourceContext.recordedMigrationSourceRecheck.matched_entries,21);
+ assert.equal(r.sourceContext.recordedHistoricalSnapshotSourceRecheck.checked_entries,21);
+ assert.equal(r.sourceContext.recordedHistoricalSnapshotSourceRecheck.local_snapshot_bodies_present,0);
+ assert.equal(r.migrations?.[0]?.sourceBlobReverified,false,
+   'offline audit must not falsely claim it has fetched upstream in this invocation');
  assert.deepEqual(r.migrationMissing,[]);
  assert.deepEqual(r.brokenRuntimeSourcePaths,[]);
  assert.deepEqual(r.originalAtlasOnlyUnitIds,
