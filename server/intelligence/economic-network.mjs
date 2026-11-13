@@ -133,6 +133,7 @@ export function projectMintNetwork({ mint, recipients = [] } = {}) {
   if(unknownAmountEvents)warnings.push('RAW_TRANSFER_AMOUNT_UNKNOWN_FOR_SOME_EVENTS');
   warnings.push('Transfer graph does not establish ultimate controller, trade or current inventory.');
   warnings.push('Gross transfers across multiple hops may count the same circulating Token more than once; not independent demand or supply.');
+  warnings.push('Token-2022 transfer fees may make gross instruction amount differ from freely spendable recipient balance; withheld fee is not reconstructed here.');
   return {
     schemaVersion:'0.1',mint,provenance:'CAPTURED_LOCAL_INSTRUCTION_PROJECTION',
     coverage:'PARTIAL_ARCHIVED_SENDER_SAMPLE_NOT_COMPLETE_MINT_HISTORY',
