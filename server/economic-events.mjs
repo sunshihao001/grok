@@ -161,7 +161,9 @@ export function recipientCandidates(db, sender, mint = null, limit = 100) {
   if (!evidenceAvailable(db)) return { sender, mint, coverage: 'EVIDENCE_NOT_INITIALIZED',
     interpretation: 'Local evidence index unavailable, not a claim of no transfers', rows: [] };
   const rows = db.prepare(`SELECT i.sig, i.outer_i, i.inner_i, i.from_owner, i.to_owner, i.mint,
-     i.from_account, i.to_account, i.amount_raw, t.block_time, t.slot
+     i.from_account, i.to_account, i.amount_raw, t.block_time, t.slot,
+     t.sha256 AS archive_sha256, t.capture_source AS capture_source,
+     t.observed_at AS capture_observed_at_ms, t.commitment AS commitment
      FROM econ_instructions i JOIN econ_transactions t ON t.sig=i.sig
      WHERE t.status='RPC_OBSERVED' AND i.kind='TOKEN_TRANSFER' AND i.owner_conflict=0 AND i.from_owner=?
        AND i.to_owner IS NOT NULL AND i.to_owner!=i.from_owner
