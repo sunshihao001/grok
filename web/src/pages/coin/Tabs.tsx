@@ -48,7 +48,8 @@ export function CoinTabs({ mint, r, c, trades, onPaper, sideTrades = false, end 
   useEffect(() => { if (replayEpoch) { fomoPoll.refresh(); calloutsPoll.refresh(); } }, [replayEpoch, replayRev]);   // eslint-disable-line react-hooks/exhaustive-deps
   const setTab = (t: TabKey) => setTabState({ mint, tab: t });
   if ((fomo?.holders?.length || fomo?.totalHolders || 0) > 0) auto.current.known = true;
-  const picked: TabKey = pick?.mint === mint ? pick.tab : auto.current.known ? "known" : "holders";
+  const viaWorkspace = location.hash.split("?")[0] === "#/coin/" + mint + "/assistant";
+  const picked: TabKey = pick?.mint === mint ? pick.tab : viaWorkspace ? "copilot" : auto.current.known ? "known" : "holders";
   const tab: TabKey = sideTrades && picked === "trades" ? "holders" : picked;
   // The last answer that had rows, per coin: an answer caught between sources (an empty list for a moment) never
   // blanks a tab that was showing them.
