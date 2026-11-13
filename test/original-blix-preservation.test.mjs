@@ -65,3 +65,28 @@ test('Coin AI assistant is additive: original AI read, safety and trading entry 
   assert.match(assistant, /read-only, no trading/);
   assert.doesNotMatch(assistant, /fetch\s*\(/);
 });
+
+
+test('AI visual workspace is additive and keeps original market, chart and trading entry points', () => {
+  const main = fs.readFileSync(fileAt('web/src/main.tsx'), 'utf8');
+  const rail = fs.readFileSync(fileAt('web/src/shell/Rail.tsx'), 'utf8');
+  const workspace = fs.readFileSync(fileAt('web/src/pages/Intelligence.tsx'), 'utf8');
+  const tabs = fs.readFileSync(fileAt('web/src/pages/coin/Tabs.tsx'), 'utf8');
+
+  for (const entry of ['Pulse', 'Coins', 'Coin', 'AiPicks', 'Wallets', 'Tracker']) {
+    assert.ok(main.includes('const ' + entry + ' = page('), 'Original route component retained: ' + entry);
+  }
+  for (const route of ['coins', 'feed', 'narratives', 'tracker', 'ai-picks', 'account']) {
+    assert.ok(rail.includes('["' + route + '",'), 'Original navigation retained: ' + route);
+  }
+  assert.match(main, /const Intelligence = page\(/);
+  assert.match(main, /intelligence: Intelligence/);
+  assert.match(rail, /\["intelligence", "AI research"/);
+  assert.match(workspace, /selectObservedCandidates\(/);
+  assert.match(workspace, /usePulse\(s => s\.coins\)/);
+  assert.match(workspace, /coinHref \+ "\/assistant"/);
+  assert.match(tabs, /viaWorkspace \? "copilot"/);
+  assert.match(workspace, /模型尚未连接/);
+  assert.doesNotMatch(workspace, /\b(?:fetch|sendTransaction|signTransaction)\s*\(/);
+  assert.doesNotMatch(workspace, /\b(?:POST|api\/buy|api\/sell)\b/);
+});
