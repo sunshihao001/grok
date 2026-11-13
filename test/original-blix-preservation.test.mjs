@@ -87,6 +87,11 @@ test('AI visual workspace is additive and keeps original market, chart and tradi
   assert.match(workspace, /coinHref \+ "\/assistant"/);
   assert.match(tabs, /viaWorkspace \? "copilot"/);
   assert.match(workspace, /模型尚未连接/);
+  assert.match(workspace, /专业知识依据预览/);
+  assert.match(workspace, /KNOWLEDGE_CANDIDATES/);
+  assert.match(workspace, /key-wallet-investigation-brief/);
+  assert.match(workspace, /knowledge\/ai\/intent-knowledge-selection-and-reasoning/);
+  assert.match(workspace, /尚未运行服务器知识检索/);
   assert.doesNotMatch(workspace, /\b(?:fetch|sendTransaction|signTransaction)\s*\(/);
   assert.doesNotMatch(workspace, /\b(?:POST|api\/buy|api\/sell)\b/);
 });
