@@ -28,6 +28,8 @@
 
 **状态**：CROSS_LAYER_CORRECTION_RESEARCHED + SOURCE_CODE_BOUNDARY_REVIEWED + REMEDIATION_CANDIDATES_REGISTERED / NO_NEW_RUNTIME_VERIFICATION。
 
+**2026-11-13 R-31补充｜预防性纠偏，不只做事后复盘**：在[跨层锚点第12.5节](cross-layer-anchor-map-20261113.md#125-预防性纠偏对重要公共风险提前预演但不能把风险候选报成已发现bug)以FMEA思路检查高损失、跨模块、难察觉的潜在失效，登记源重连窗口、Pulse采样误用、Owner/库存归因、纸面收益错级、只读权限和纠偏本身膨胀六类**风险候选**；并在[ai-d通用知识第13.10节](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/cross-layer-project-anchors.md#1310-预测性纠偏与误差控制不只等错误发生后纠正)补足“已发生的反应性纠错/尚未发生的预防性纠偏”与停止边界。依据[ASQ FMEA](https://asq.org/quality-resources/fmea)，但未给无证据的缺陷虚构概率或将候选写成BUG。仍未运行真实源、未修改运行代码；验收必须在原数据源/解析所有者和真实业务反例中完成，不再扩建纠偏Agent/独立管理系统。
+
 ## 2026-11-13｜R-30：数据源责任纠偏——优先提高上游共同能力，不让AI替数据源补个例
 
 **用户明确要求**：“尽量不要直接做数据源应该做的，因为没有提高数据源。”此要求修正R0/R1实施焦点：下游单Mint报告和AI工作台可以检查事实与提出补查需求，但**不承担重复抓取全市场、为单币另建RPC签名游标、手工拼齐历史、把客户端时间当源端首次可见**。应把查到的缺口反馈给真正拥有该职责的原版Blix采集/持久化或外部供应商选择层。
