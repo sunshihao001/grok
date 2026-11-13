@@ -1,5 +1,8 @@
 # Blix 知识全链追溯：获取、原意重建、承接、融合、使用、反证与修订（2026-11-13）
 
+> **统一总入口**：本篇负责完整知识生命历程、概念归属、真实业务例子及旧台账优先关系；[细分术语与静态追溯附录](knowledge-lineage-lifecycle-audit-20261113.md)补充18项概念解释、152单元映射、双向查询和证据等级，不把附录当成新知识体系。
+
+
 > **用途**：对现有 Blix/Grok/Hermes/qb-/meme-/ai-d 的知识来源、判断形成、产品继承和实际验收做统一解释及可复查示例；不是新专家制度、新运行时状态机或“所有知识已验证”的声明。原始知识只维护原位置，本文件只提供**链路与裁决索引**。P1–P2 专业证据细目仍在 [现有专项](p1-p2-knowledge-reconciliation-20261113.md)，逐来源审阅进度仍在 [覆盖账](source-coverage-v0.1.json)，实际代码/CI及未结阻断以 [建设台账](../../docs/project/build-register.md) 为准。
 >
 > **本轮核查**：对照本仓 `MIGRATION.json`、`DOMAIN-MODEL.v1.json`、`legacy-knowledge-routing.v1.json`、`source-coverage-v0.1.json`、`local-knowledge-loader.mjs`、`economic-events.mjs`、`economic-network.mjs`、本地测试和 PR #23；并回读 [ai-d知识组织规范](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/organization-protocol.md)、[ai-d知识总入口](https://github.com/sunshihao001/ai-d/blob/main/knowledge/INDEX.md)、[Hermes证据链](https://github.com/sunshihao001/-/blob/main/design/phase1-skill-05-evidence-chain.md)、[Hermes钱包结构](https://github.com/sunshihao001/-/blob/main/design/phase1-skill-04-wallet-structure.md)、[qb-旧钱包事实](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/wallet_fact/wallet_fact_report.md)、[meme-真源地图](https://github.com/sunshihao001/meme-/blob/main/SOURCE_OF_TRUTH.md)。公开成熟参照：[W3C PROV-O](https://www.w3.org/TR/prov-o/)、[OpenLineage模型](https://github.com/OpenLineage/OpenLineage/blob/main/spec/OpenLineage.md)、[DVC版本机制](https://doc.dvc.org/user-guide)、[Google Skill Reach](https://github.com/google/skill-reach)。对外部代码与文档的观察只支持其公开设计/实现，不表示在Blix安装或完整运行。
