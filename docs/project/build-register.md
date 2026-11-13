@@ -453,3 +453,26 @@
 **验收与风险**：已提交GitHub并回读文档关键标题；本轮仅是概念/知识关系研究，不等于自动语义匹配引擎或主网实测。并发中的逐主张链上归档追溯代码修改在本轮并未全部验收，最新 Node24 CI 尚无可核实的完成记录，不借用旧CI冒充；PR #23仍Draft且 mergeable=false。近期Uptime失败没有检查Job，不能据此断言网站离线。
 
 **下一个最有价值的验证**：冻结一条真实Mint的共享资金→Token转仓→接收后卖出调查，比较单域解释与跨层解释在同一证据/时间/费用条件下减少了哪些误归因，是否多找到真正可复核的证据；再将有效的专业主张绑定到指令/原始RPC/代码版本和旧知识来源。失效的跨层联系降级，避免固定多层框架占据AI上下文。
+
+
+### 2026-11-13｜R-17：原知识模型的关系契约与原位回归修复
+
+**原问题定位**：先前 R-15/R-16 已经说明知识全生命周期、七类通俗研究视角和十种横向/纵向知识轴，且已在原交叉表写了跨领域解释。然而 `DOMAIN-MODEL.v1.json` 里仍只有旧 G/L/D/存放/证据轴，并未结构化说明“概念关联 ≠ 经济关系 ≠ 来源支持 ≠ 实现依赖 ≠ 测试通过”，导致这些词可能被AI、程序和后续研究混为单一种“关联”。当前工具只有文件级双向索引，不是逐主张的可信度引擎。**选择原位修复，不另建本体/知识图谱/专家制度。**
+
+**本轮具体改动**：
+- `knowledge/DOMAIN-MODEL.v1.json` 保留原 `schema_version:1.0`、G0–G4目标、8个L层、12个D域和15个原领域链接；新增明确版本的 `cross_axis_alignment`：十种正交观察轴（GOAL、DEPTH、DOMAIN、KNOWLEDGE_OBJECT、SEMANTIC、ECONOMIC、EVIDENCE、TIME、EXECUTION、EVOLUTION），11种**有方向和禁止升级界限**的关系，以及6组资金/库存/跨币/知识调用/CI的专业主张证据门槛。状态为 `CONCEPTUAL_CROSS_AXIS_GUIDANCE_NOT_RUNTIME_REASONING_ENGINE`。
+- `knowledge/INTEGRATION-CROSSWALK.md` 第7节把原七种通俗观察视角**多对多**对齐到十轴；进一步以Mint→Token转移→接收方后来卖出候选，横穿账户、经济机制、源码实现、证据、时间、AI/反馈，并明确共享资助、同槽、重复钱包、词面知识匹配均不能自动提升身份/盈利结论。
+- 直接修订原 `knowledge/README.md`、`docs/project/knowledge-use.md`、`knowledge/ai/intent-knowledge-selection-and-reasoning.md` 导航与AI适用性，要求以真正影响判断的**具体主张**为核心做有限关联，不要求每轮填10层或全域研究。原历史知识与旧版本原文不删除。
+- 复用 `scripts/audit-knowledge-trace.mjs` 增加 `--axes`，只读展示现有原模型的维度、关系、禁越级条件与示例；原 `--unit/--target/--all` 保留。给 `test/knowledge-lineage-trace.test.mjs` 增加静态模型与CLI契约测试，保护原8层/12域/152历史单元、链接与关系语义。
+- **真实CI发现并修复了一个旧文档断点**：首次支分支GitHub Node24全套533例中532过、1例失败，指出 `knowledge-lineage-lifecycle-audit-20261113.md` 缺少明确“原始来源”定义。已原位补充原始Git版本/原始RPC事实/作者解释/程序验收四类不同的证据对象，保留回归断言。修复后 [Node24 CI #43364041758](https://github.com/sunshihao001/grok/actions/runs/43364041758) 为 success；未为过绿删除断言。
+- 原 PR #23 `mergeable=false` 导致 `pull_request` Node CI 不触发，本分支只在已有 `.github/workflows/test.yml` 与 `audit.yml` 的 `push` 分支白名单中增列当前集成分支（主分支现有行为保留），使真正测试和Web/依赖审计可持续运行。已观察 [audit #43364153785](https://github.com/sunshihao001/grok/actions/runs/43364153785) 成功；最新提交的测试应再按实际run确认。Uptime无检查Job的失败不等于站点故障，不为绿灯改变健康探测。
+
+**静态审查**：从GitHub回读7个关键现有文件，解析 DOMAIN-MODEL JSON、核查10轴唯一性/11种边类型/6组约束/原15个关系与12域8层不变，确认三份导航与章节锚点一致、根README误写的字面 `\\n\\n` 已修复；结果STATIC_CHECK_PASS。此静态检查只证明结构一致，Node CI只证明既定可复现样本，不代表150多个旧主张全部认知、实际模型A/B、真实Mint主网全历史、控制权或盈利判断。
+
+**未闭合问题和优先顺序**：
+1. **已有PR合并冲突**：PR #23仍Draft、`mergeable=false`，共享知识文件在`blix`主干和本分支存在双向修改，合流需三方比较并保留双方新增内容；本轮不隐式合并/覆盖。
+2. **逐主张证据**：目前旧21迁入/152单元仍主要是文件级对应。高价值主张尚缺真正 `claim ↔ raw transaction/rpc ↔ inference ↔ implementation/test ↔ source version` 的完整端到端记录。
+3. **真实有效性**：需要一条真实Mint（A买入→Token转仓→B卖出候选→跨Mint资金可能接力）固定原始输入的证据对照，验证多层知识能否提高正确性、反例覆盖和合理补查；不能只比较文字长度。
+4. **模型与市场实测**：11个本地候选知识源的真实使用/错选记录及 Token-2022/CPI/公共设施/成本/多池仍待实际授权条件；不会让知识本身授权下单/模型费用/签名。
+
+**停止锚点**：今后只当跨层关联改变具体重要专业判断、可核查证据、运行实现或减少重大误关联时再扩展关系；如果只是更多关键词和分层图，没有真实测试价值则停止，不重写原历史知识。
