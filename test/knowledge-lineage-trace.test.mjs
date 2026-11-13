@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
+import {readFileSync} from 'node:fs';
 import {readFileSync,existsSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 
@@ -82,4 +83,25 @@ test('source-to-proof knowledge lifecycle stays linked from existing knowledge e
     assert.ok(existsSync(p),'missing original navigation: '+target);
     assert.match(readFileSync(p,'utf8'),/knowledge-lineage-lifecycle-20261113\.md/,target);
   }
+});
+
+
+test('holistic source-to-ability guidance is discoverable from existing knowledge navigation',()=>{
+ const audited='knowledge-lineage-lifecycle-audit-20261113.md';
+ for(const file of [
+   '../knowledge/README.md','../knowledge/references/README.md',
+   '../docs/project/knowledge-use.md',
+ ]){
+   assert.ok(readFileSync(new URL(file,import.meta.url),'utf8').includes(audited),
+     'existing knowledge entry must link lineage explanation: '+file);
+ }
+ const doc=readFileSync(new URL('../knowledge/references/'+audited,import.meta.url),'utf8');
+ for(const term of [
+   '获取 / Acquisition','承接 / Inheritance','证据归属 / Grounding',
+   '反证 / Falsification','检索与选择 / Retrieval',
+   '反馈与修订 / Revision','原始来源','W3C','OpenLineage',
+   'D05-K01','历史快照','无法','UNKNOWN'
+ ]){
+   assert.ok(doc.includes(term),'lifecycle concept missing: '+term);
+ }
 });
