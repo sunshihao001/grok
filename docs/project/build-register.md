@@ -4,6 +4,27 @@
 >
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
+## 2026-11-13｜R-29：锚点/映射等重要概念全量归位、收束到原知识模型与结构验证
+
+**用户明确要求**：将最新“锚点、映射、跨层互相连接/理解/验证、语义对齐、知识图谱、追溯、血缘、契约、不变量、保障论证、影响分析、数字线程、运行反馈”等研究**完整加入ai-d与Meme/Blix**，认真分析为什么本次回复比此前数月的局部研究更符合意图，并进行体系收束、结构修正、登记；不因新增重要认知又创设平行架构。
+
+**根因分析（假设，不冒充独立实证）**：此前经常从简单口语直接开发局部功能；把知识/业务/数据/工程/证据不同维度混写；看了大量成熟源码但未跨层落到真实代码与负例；只顺向总结，失败不能沿知识/数据依赖反向纠正；每出现一个问题便扩建新阶段或专家规则。用户反馈改善的关键可能是这次终于讨论**不同对象与关系语义、双向追溯、约束和真实验证**，而不是更多目录或固定提示词。也可能受任务目标逐渐清晰、已有上下文和外部素材积累影响，仍需实际开发任务对照验证。
+
+**本轮两个权威正本**：
+- ai-d：[跨层锚点与一致性方法 V0.2](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/cross-layer-project-anchors.md)，第11节已登记七类核心能力S1–S7、完整相关术语及重要区别、五逻辑网络N-G/N-K/N-D/N-C/N-V、成熟成品来源/适用边界、低价值研究风险与独立实验。README、知识INDEX与ACTIVE-RESEARCH-LEDGER原位更新；通用方法只在该仓维护。
+- Blix：[七类跨层能力×五种网络×六大业务结果的实际映射 V0.2](cross-layer-anchor-map-20261113.md)，覆盖O1–O6、G0–G4、K1–K9、D0–D9、D01–D12、L0–L7及原轴/关系、真实代码锚点/测试、来源与未通过项；概念不在此重复造新本体。V2总蓝图、[项目入口](README.md)、[专业知识入口](../../knowledge/README.md)、[原知识交叉表](../../knowledge/INTEGRATION-CROSSWALK.md)全部已增加明确导航。
+
+**具体结构修复（不只是写段报告）**：在已有 knowledge/DOMAIN-MODEL.v1.json::cross_axis_alignment **原位新增**七个interpretationCapabilities和五个networkViews，对应旧的十轴及现有十一种带证据边界的关系；原15个领域专业关系、152历史来源、schema_version及旧分类不变。scripts/audit-knowledge-trace.mjs原只读 --axes 输出现同时暴露这两类映射及局限；test/knowledge-lineage-trace.test.mjs新增结构兼容、基础术语覆盖与实际业务文档存在性测试。不安装图数据库、第三方运行时或自动影响追踪器，**机器检查的是静态映射自洽，不是实际知识/运行/市场结论可靠性**。
+
+**外部参考的真正适用位置**：NASA/OMG的需求到验证、W3C PROV来源与SHACL关系约束、NIST Digital Thread跨生命周期信息、Doorstop需求追溯、OpenMetadata/DataHub语义/数据血缘、OpenLineage运行事件、ArchUnit架构检查思想、ADR保留决策依据、OpenTelemetry稳定语义约束、pySHACL实际RDF验证等。全部登记于ai-d通用正本和Blix映射；工具语言/规模/许可证与原Blix不同，不能整套照搬。
+
+**真实边界**：尚无自动发现下游影响的代码、原版完整生产回归、持续运行Case、真实全链Mint资金闭环或样本外可跟随性与模型增益A/B。PR#23仍Draft且有冲突；旧自动化uptime失败另案，不能用离线CI成功掩盖。用户没有授权支付、交易、签名或发布；本轮无此类操作。
+
+**风险锚点与下一步**：已经建立知识→业务→源码→测试的静态关系并让现有检查工具审计它；下次不要继续扩大术语，优先选择真实Pulse首可见时点或Token库存归因的一个具体代码改动，对照“只查单文件”和“基于跨层关系双向回查”哪种真正减少遗漏、误依赖、返工和业务错误。若没有真实数据，保留阻断条件，先核实原归档与安全边界。不因本轮文档和映射数量宣称模型已变强。
+
+**本轮完成状态**：KNOWLEDGE_CONSOLIDATED + EXISTING_MODEL_EXTENDED + STATIC_READONLY_AUDIT_EXPOSED + NEW_COMPATIBILITY_TEST；业务链真实运行/价值证明仍NOT_VERIFIED，测试最终状态以后续最后提交SHA为准。
+
+
 ## 2026-11-13｜R-28：项目多层锚点与跨层一致性候选｜真实源码映射与首次代码级示范
 
 **用户确认的探索方向**：锚点不仅包括最终目标，也可以分布在专业知识、数据契约、设计判断、代码不变量、测试、运行和持续修正之间；重要的是关联、作用强度、触发条件、失败修正与改变后的双向影响，而不是锚点越多越好。上层ai-d已保存[通用研究](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/cross-layer-project-anchors.md)，与知识九阶段/P1–P8对齐，不重建专家/运行时。
