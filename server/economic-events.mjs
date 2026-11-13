@@ -94,7 +94,7 @@ export function decodeEvidence(tx) {
     const info = parsed?.info || {};
     const token = TOKEN.has(program) || ix.program === 'spl-token' || ix.program === 'spl-token-2022';
     const system = program === SYSTEM || ix.program === 'system';
-    const kind = token && ['transfer', 'transferChecked'].includes(parsed?.type) ? 'TOKEN_TRANSFER'
+    const kind = token && ['transfer', 'transferChecked', 'transferCheckedWithFee'].includes(parsed?.type) ? 'TOKEN_TRANSFER'
       : system && parsed?.type === 'transfer' ? 'SOL_TRANSFER' : 'OTHER';
     const from = kind === 'OTHER' ? null : (info.source ?? null);
     const to = kind === 'OTHER' ? null : (info.destination ?? null);
