@@ -5,6 +5,15 @@
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
 
+## 2026-11-14｜R-34：RPC实时流中断状态在原源层暴露，防止重连被误读为补回
+
+**发现与边界**：server/rpc-stream.js的重新订阅从tip继续，单靠连接状态`connected:true`不能证明中断期间消息已重放；这与原版engine.js有界发行补查、wallets.js签名轮询并不冲突。此项是**源连接状态语义**修正，不是已证实链上漏包或缺少补查。
+
+**已实施**：在现有server/rpc-stream.js的onStatus中为失败/重连增加`coverageGap`（since、reason、until、recovered:false），保留原connected/error；该字段表示此RPC流本身**尚未提供重放收据**，不是断言其他原版补查失效。test/intelligence-source-readiness.test.mjs加入FakeSocket重连正反测试。无平行数据采集器、无新AI历史补齐、无真实RPC、无交易/签名。
+
+**当前效果与待验证**：这只是已有上游回调的可观测状态，消费者尚未验证是否读取coverageGap，不能声称下游报告已正确降级或源端恢复完整。需按最新HEAD核查CI，真实供应商回放与跨模块受益UNKNOWN。下一步应先查看既有status消费者，避免为了传播一个字段新增并行状态系统。
+
+
 ## 2026-11-14｜R-33：纠偏实际工程试点——无旧锚点的钱包签名扫描错误判定“已覆盖”
 
 **目标与授权**：接续R-31/32“主动发现→定位负责层→修复→验证”，并继承R-30“数据源问题优先改善原采集层，不在AI报告私补数据”。本轮找到可由源码逻辑复现、可隔离修复的真正判断错误，而不是再扩纠偏术语。
