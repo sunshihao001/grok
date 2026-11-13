@@ -2,8 +2,9 @@
 // Existing SQLite -> bounded offline Mint evidence report. NEVER starts the Blix server,
 // contacts RPC, signs, trades, schedules work, or creates/migrates the input database.
 import fs from 'node:fs';
+import { createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
-import { recipientOutcomes } from '../server/economic-events.mjs';
+import { decodeEvidence, recipientOutcomes } from '../server/economic-events.mjs';
 
 const args = process.argv.slice(2);
 const allowed = new Set(['--db','--wallet','--mint','--hours']);
@@ -59,8 +60,39 @@ if (bad || !opts['--db'] || (opts['--wallet'] !== undefined && !validAddress(opt
         FROM econ_transactions t JOIN econ_instructions i ON i.sig=t.sig
         WHERE t.status='RPC_OBSERVED' AND (? IS NULL OR i.from_owner=?) AND i.mint=?`).get(wallet ?? null,wallet ?? null,mint).n
       : 0;
-    const recipients = observations.flatMap(result => result.rows).map(row => ({
+    // Verify the indexed transfer against the exact archived RPC bytes before
+    // exporting any claim. A stored SHA alone does not validate a mutable SQLite index.
+    // Never expose rpc_json to the model; export the digest and instruction identity.
+    const capturedTx = available ? db.prepare(`SELECT rpc_json, sha256, capture_source, commitment,
+      status FROM econ_transactions WHERE sig=?`) : null;
+    const verified = new Map();
+    const recipients = observations.flatMap(result => result.rows).map(row => {
+      let capture = verified.get(row.sig);
+      if (available && !capture) {
+        const record = capturedTx.get(row.sig);
+        if (!record || createHash('sha256').update(record.rpc_json).digest('hex') !== record.sha256) {
+          throw new Error('ARCHIVED_RPC_HASH_MISMATCH');
+        }
+        const rows = decodeEvidence(JSON.parse(record.rpc_json));
+        capture = { sha256: record.sha256, captureSource: record.capture_source,
+          commitment: record.commitment, status: record.status, rows };
+        verified.set(row.sig, capture);
+      }
+      if (capture) {
+        const matched = capture.rows.find(x => x.outer_i === row.outer_i && x.inner_i === row.inner_i);
+        if (!matched || matched.kind !== 'TOKEN_TRANSFER' || matched.owner_conflict ||
+            matched.mint !== row.mint || matched.from_owner !== row.from_owner ||
+            matched.to_owner !== row.to_owner || matched.amount_raw !== row.amount_raw ||
+            matched.from_account !== row.from_account || matched.to_account !== row.to_account) {
+          throw new Error('ARCHIVED_RPC_INDEX_MISMATCH');
+        }
+      }
+      return {
       signature: row.sig, outerI: row.outer_i, innerI: row.inner_i, mint: row.mint,
+      rpcSha256: capture?.sha256 ?? null, rpcHashVerified: Boolean(capture),
+      instructionVerifiedAgainstRpc: Boolean(capture),
+      captureSource: capture?.captureSource ?? 'UNKNOWN',
+      commitment: capture?.commitment ?? null,
       slot: row.slot, blockTime: row.block_time,
       fromAccount: row.from_account, toAccount: row.to_account,
       fromOwner: row.from_owner, toOwner: row.to_owner, amountRaw: row.amount_raw,
@@ -70,7 +102,8 @@ if (bad || !opts['--db'] || (opts['--wallet'] !== undefined && !validAddress(opt
         soldMint: x.sold_mint, sellSig: x.sell_sig,
         fundingSig: x.funding_sig, boughtMint: x.bought_mint, buySig: x.buy_sig,
       })),
-    }));
+    };
+    });
     console.log(JSON.stringify({
       mode: 'OFFLINE_READ_ONLY_SQLITE_MINT_REPORT',
       input: { wallet, mint, hours },
