@@ -196,3 +196,35 @@ solana.js 的 parseSwaps() 用钱包净 SOL/WSOL/USDC/USDT 和非报价代币变
 - 原作者历史背景：[docs/HOW-IT-WORKS.md](https://github.com/sunshihao001/grok/blob/blix/docs/HOW-IT-WORKS.md)；[docs/incident-2026-10-10-disk-full.md](https://github.com/sunshihao001/grok/blob/blix/docs/incident-2026-10-10-disk-full.md)
 
 **注意：索引是重新研究的定位入口，不是让未来模型一次全量读取全部文件。研究时按问题选择最有信息价值的路径。**
+
+
+## 14. 2026-11-13 补审｜交易机会优先：原版选币闭环 × AI 专业调查 × 可跟随性
+
+**用户目标纠偏**：最终同时需要「值得调查的代币」与「有实际交易机会的代币」，明确以后者为主；前者是来源之一和按需深度调查支撑，不把知识分类变成固定业务筛选关卡。本补审是 `blix` 及PR #23源码静态审查，**不是市场运行、策略有效性或盈利证明**。
+
+**锁定审查基线**：`blix@58bbff4ff8915c627ada820175cd96b8f1fd64a8`；PR #23 集成候选审查起点 `c58f612848f219008e5b5a6354f5d2559a1ef6b8`，仍Draft，`mergeable=false`。之前章节的2026-11-06快照只是历史结论，不覆盖本节源码更新。
+
+| 市场任务 | 原Blix复用位置/可见行为 | 证据与真正需要核验的事情 |
+|---|---|---|
+| 发现候选及初筛 | `Coins.tsx` Discover热榜、新币/已迁移池、mcap/liq/vol过滤；`Pulse.tsx` New Pairs/Final Stretch/Migrated、rugGuard；`engine.js` nursery/来源/信号/结果 | 数据源实际发现率与断流漏失、过滤前全集和过滤后样本都须留存；UI过滤不等于安全或正收益 |
+| 从大量新币选择值得研究的对象 | `triage.js` 快速规则+LLM slop/meh/maybe/promising；live buyers可覆盖低评分；`pulse.js` traction 排名与热度触发AI队列 | 拒绝只按叙事或LLM打分；需要看不同进入路径的成本、漏检和候选基数 |
+| 早期与趋势交易机会 | `early.js` 30/60/120/300s检查点、按时间70/30训练/测试、门限；`research.js` 借traction与经济/叙事事实作判断；`brain.js` pickGate/earlyPick/entryBlock/entry_watch/退出复盘 | `early.js`“unseen 30%”是源码策略而非外部复验：最终模型再用全部样本拟合，阈值来自训练样本；需要独立后续时间窗、明确候选全集及当时可用特征。LLM pWin为模型判断，不能直接当校准概率 |
+| 钱包跟随机会 | `wallets.js` smart money发现、钱包监控、wallet_trades；`WalletTracker.tsx`观察、快捷交易入口 | 上游钱包交易时间≠跟随者首次看到信号时间；旧交易解析同签名折叠、漏捕获与共享funders会产生误报 |
+| 交易可行性、报价与成本 | `brain.js` 默认固定每边3%成本、按mcap比例模拟出入；`rules.js` 规则网格及walkForward；`paper.js` 用户纸面台使用曲线/路由真实报价逻辑 | **两种纸面机制不可混称**：brain的固定成本/市值代理 ≠ 真实可成交报价、深度、滑点、延迟与失败；`rules.js`过历史价带不等于已进行全策略实盘验收 |
+| 反馈与历史反证 | `engine.js` Signals 15m/1h/6h/24h，`brain.js` outcomes/evidence/scorecard/playbook，`early.js`胜者发现 | 价格上涨幅度、触及2x先于-40%、纸面退出正收益、realized PnL是**四个不同标签**，不可互换；缺失报价/被淘汰候选可能形成幸存者偏差 |
+| AI扩展已有边界 | PR #23 `ai-workflow.mjs`仅一个指定Mint、最多两个已批准只读能力调用；`followability-replay.mjs`检查用户提供纸面收据的可跟随性；Coin助手仍预览未连模型 | 不能将单Mint工作流冒充全市场自主机会Agent；**复用现有followability门禁**，其目前不生成历史可执行报价或验证Alpha |
+
+**重要纠正**：
+1. 原版`brain.js:188-216`的 `pickGate` 已默认 `aiInGate=false`，注释记载历史126次候选中AI buy/avoid反向表现。样本和数值未独立复核，不能宣称现有策略胜过基准，但更不能把AI评分再次作为统一购买决策真值。
+2. `server/early.js:186-216`具有时序留出与门限检查，属于应复用的工程优势；仍需后续滚动时窗、特征时间可得性、样本缺失、selection bias、模型更新时点的外部复核。
+3. `server/brain.js:487-503`部分历史胜率分组以纸面收益倍数>1.15计“win”；`server/early.js:36-39`的WIN则是30分钟内「先到2x还是先跌40%」。不要在UI或AI中把这两套指标混成同一概率。
+4. React `web/src/main.tsx:193-205`已将旧 `signals/research/picks` 路由重定向到Pulse，`ai-picks`独立入口仍在；不能按源文件名认定旧Signals/Research在新UI可直接访问。
+5. 原版 `server/paper.js`的按曲线/路由报价纸面交易与`brain.js`固定3%代理应建立可复查对照，不以旧条件获胜替代“用户可在信号出现后复制”的证据。
+
+**下一项最高价值的单一工程验收（建议，尚未实施）**：
+- 冻结同一段历史市场时间窗，在原Discover/Pulse/early/triage/brain产生的**全候选集合**上，保留「被观察→被过滤→入研究队列→发出信号→首次可见→可得报价→纸面进/出→结果」各时间和来源；包含未入选和失败样本。
+- 在**原有**`brain`+ `rules`+ `paper`的数据契约上，以PR #23 `followability-replay`的明确时序/报价/费用/库存/缺失拒绝语义为门禁，比较至少三类来源：早期信号、traction趋势、钱包跟随；不新建第二个行情扫描器或交易引擎。
+- 必须分别报告「潜在机会候选率」「历史信号覆盖/延迟」「可成交纸面收据覆盖」「扣费用的结果分布」「实际未被证明之处」；以未入选的同窗口候选或简单规则为对照，以后续独立时窗为样本外。示例收据/静态CI不能替代历史市场收据或正期望。
+- 先选一个明确的失败反例：信号时点后无法获得有效报价，或已有候选价格上涨但真实卖出流动性不够。测试应**拒绝计算可交易收益**，而不是给出漂亮的价格倍数。成功后才评估AI按需调用钱包经济证据是否改善对照结果。
+
+**当前动作边界**：本节仅补充审查/执行约束；没有修改原Blix选币阈值、信号、主服务、订单、钱包、模型或付费调用，也没有替PR #23解决合并冲突。保持原版完整产品与只读独立研究环境的区别。
