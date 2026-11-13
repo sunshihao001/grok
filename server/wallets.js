@@ -244,7 +244,9 @@ async function pollWallets(emit) {
 // `reached`: the list goes all the way back to `lastSig` (false: the older part is a gap). `fetch(opts)` is
 // sol.signatures for the wallet; exported for the tests.
 export async function pageSignatures(fetch, { first, lastSig, pages }) {
-  let all = [], before, reached = first || !lastSig;
+  // A missing historical cursor is NOT proof that a bounded incremental scan reached its end.
+  // Only an actual short page or finding the previous anchor can establish this for non-first scans.
+  let all = [], before, reached = Boolean(first);
   let until = lastSig && !first ? lastSig : null, lostUntil = false;
   for (let p = 0; p < pages; p++) {
     let sigs;
