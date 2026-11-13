@@ -4,6 +4,24 @@
 >
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
+## 2026-11-13｜R-22：独立 AI 工作台接入“模型API × 旧知识 × 本地经济证据”可调用链
+
+**前提与取舍**：用户明确要求保留原版Blix并建设独立AI可视化工作台，接入历史专业知识、模型API和实际调查工具。本轮选择**单独的本机只读研究服务**，而不是将模型接进会交易/扫描/产生副作用的原 `server/server.js`。安全源审查发现：原 `/api/token/:mint` 的GET可能触发 `lookupMint`/`adoptMint`/`vet`，不因为HTTP GET就加入AI后端工具允许表。
+
+**完成的具体代码**：
+- `server/intelligence/chat-completion-model.mjs`：OpenAI-style Chat Completions 受限JSON模型适配（服务器持有API key，模型只获取单Mint/受限证据/最多3段专业知识，有限输出、30秒调用超时、错误正文不回传）。部署者可选择与该协议兼容的HTTPS供应商或本机模型URL；不是已测试所有提供商。
+- `server/intelligence/research-http.mjs`：127.0.0.1独立研究HTTP，健康检查、显式Origin/Host校验、JSON体/单Mint、每进程至多8个手动任务且单任务并发门禁、严格调用原`runAiResearchTask`。后端**只启用已存在SQLite** `mint-economic-evidence`的只读查询，不授权其他Mint、原版Token GET或交易。检索前/证据后仍复用11个已存在知识源和`knowledgeUse`。
+- `scripts/start-intelligence-workbench.mjs`与`npm run start:intelligence:readonly`：默认无需密钥启动仅`ready:false`的服务；只有配置现有数据库、API key、模型名并将`BLIX_AI_ENABLE_PAID_MODELS=I_ACCEPT_MODEL_API_CHARGES`显式设置才可提交付费调用。**本次没有填写用户密钥、调用真实模型API或自动付费**。
+- `web/src/pages/Intelligence.tsx`：本机可用时新增手动启动研究按钮，展示**实际**工具收据、Token转移钱包关系边、知识阶段来源、模型竞争解释与UNKNOWN；静态来源预览和实际来源调用分别展示。网页在非本机HTTP时不开放本地服务接口（未来需要认证HTTPS代理，不能暴露4547公网）。
+- `test/intelligence-workbench-http.test.mjs`：伪模型API、恶意知识越权、禁止外站Origin、单Mint非法输入、服务未配置拒绝、任务预算、归档收据与知识留痕。保留原Blix保护测试，将此前“禁止前端一切fetch”调整为只准向独立只读网关发起明确POST，交易调用仍禁。
+- [使用/成本/部署及安全限制](ai-readonly-local-workbench.md)写明本机运行方式与真实验证边界。
+
+**尚未达到的用户最终目标**：当前只是在**本地档案+显式配置的模型Chat Completions**上搭成一个可调用研究入口，没有跨Mint市场自主扫描、非Holder中间钱包完整链上补查、真正模型AB测试、历史持续调查保存、手机/远端认证部署、真实报价跟随性和投资机会验证。离线 HTTP 模拟通过≠已连接真实商用模型运行，也≠真实链上完整资金闭环。
+
+**验收来源**：`npm test`、`npm run test:security`、`npm run test:evidence`、`npm --prefix web run build`及Actions需匹配本节最后提交SHA；任何CI绿色只证明工程回归，不是供应商实跑或盈利证明。本节改动只位于新扩展、独立脚本、测试与文档，原Blix市场/交易/钱包核心文件仍保持保护SHA。
+
+**下一项业务价值检查**：在有合法历史档案且不触发原交易服务的前提下，给同一Mint提供可核的Swap、Token转账、接收方卖出事实，再进行“无AI/有AI知识”调查质量对照；若模型API无法兼容或真实调查没有增益，先修调用/数据覆盖，不追加更多知识层与UI。
+
 ## 2026-11-13｜R-21：AI扩展设计否证｜真实Mint×成熟开源产品×原版能力
 
 **本轮不改业务/模型/UI代码。** 用户要求质疑“B三栏AI工作台+加载知识”是否真是专业路线，不能以作者的初始创意代替产品选型。已完成[完整调查业务链对照与设计否证](blix-ai-investigation-product-comparison-20261113.md)，基于PR #23实际源码、原有真实三快照Mint研究、Million、PumpTrace、Pulse、dexterm、Bubblemaps V2官方功能与FlowLens的代表性源码/机制。不同来源不算独立链上复核；没有外部程序运行与模型效果测量。
