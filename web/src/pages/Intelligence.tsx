@@ -1,0 +1,210 @@
+// Optional AI research workspace over the EXISTING Blix Pulse board and Coin page.
+// No trading, independent chain attribution, model call or new provider request.
+// A market observation is NOT a verified profitable trading opportunity.
+import { useMemo, useState } from "react";
+import { usePulse, type ColKey } from "@/lib/pulse";
+import { Page, Panel, money } from "@/components/page";
+import { toast } from "@/components/ui/toast";
+import { selectObservedCandidates, type ObservedStage } from "./intelligence/candidates";
+
+const STAGES: { key: ObservedStage; label: string }[] = [
+  { key: "all", label: "所有观察" }, { key: "stretch", label: "临近迁移" },
+  { key: "migrated", label: "已迁移" }, { key: "new", label: "新币" },
+  { key: "running", label: "活跃" },
+];
+const STAGE_LABEL: Record<ColKey, string> = {
+  stretch: "Final stretch", migrated: "Migrated", new: "New pairs", running: "Running",
+};
+const PROMPTS = [
+  "调查当前候选的买入、Token 转移和接收钱包卖出链路，标注证据缺口。",
+  "判断这个代币是否具备信号之后的可成交机会，核查流动性、费用和退出条件。",
+  "比较资金组织、关联钱包与正常市场需求等竞争性解释，找出最值得核查的问题。",
+];
+const number = (n?: number | null) => n == null || !Number.isFinite(n) ? "未知" : Math.round(n).toLocaleString();
+const percent = (n?: number | null) => n == null || !Number.isFinite(n) ? "未知" : n.toFixed(1) + "%";
+const compact = (mint: string) => mint.length > 18 ? mint.slice(0, 7) + "…" + mint.slice(-6) : mint;
+
+export function Intelligence() {
+  const coins = usePulse(s => s.coins);
+  const cols = usePulse(s => s.cols);
+  const loaded = usePulse(s => s.loaded);
+  const restored = usePulse(s => s.restored);
+  const connected = usePulse(s => s.connected);
+  const polling = usePulse(s => s.polling);
+  const [stage, setStage] = useState<ObservedStage>("all");
+  const [search, setSearch] = useState("");
+  const [selectedMint, setSelectedMint] = useState<string | null>(null);
+  const [goal, setGoal] = useState(PROMPTS[1]);
+  const candidates = useMemo(() => selectObservedCandidates(coins, cols, stage, search), [coins, cols, stage, search]);
+  const selected = candidates.find(x => x.coin.mint === selectedMint) ?? candidates[0] ?? null;
+  const c = selected?.coin ?? null;
+  const coinHref = c ? "#/coin/" + encodeURIComponent(c.mint) : "";
+  const holderCount = c?.hl?.h ?? c?.holders;
+  const top10 = c?.hl?.t10 ?? c?.top10;
+  const devShare = c?.hl?.dev ?? c?.dev;
+  const windowVol = c?.vol ?? c?.liveVol;
+  const activity = c && (c.buys != null || c.sells != null)
+    ? number(c.buys) + " 买 / " + number(c.sells) + " 卖" : "未知";
+  const sourceState = loaded ? (connected ? "实时流连接中" : polling ? "轮询更新中" : "数据连接待核实")
+    : restored ? "历史缓存，可能过时" : "等待 Blix Pulse 数据";
+
+  async function copyTask() {
+    if (!c || !goal.trim()) return;
+    // These are Blix dashboard observations, not proof of independent on-chain facts.
+    const content = [
+      "BLIX AI RESEARCH TASK — READ ONLY / MODEL CALL NOT INITIATED",
+      "Goal: " + goal.trim(),
+      "Mint: " + c.mint,
+      "Token: " + (c.symbol || c.name || "unknown"),
+      "Blix Pulse market-board snapshot; source freshness and completeness NOT independently verified:",
+      "Board stage: " + STAGE_LABEL[selected!.stage],
+      "Market cap (reported USD): " + (c.mcap ?? "UNKNOWN"),
+      "Liquidity (reported USD): " + (c.liq ?? "UNKNOWN"),
+      "Volume (board window, USD): " + (windowVol ?? "UNKNOWN"),
+      "Buys / sells (board window): " + (c.buys ?? "UNKNOWN") + " / " + (c.sells ?? "UNKNOWN"),
+      "Holder count: " + (holderCount ?? "UNKNOWN"),
+      "Top-10 holder concentration (%): " + (top10 ?? "UNKNOWN"),
+      "Dev holding (%): " + (devShare ?? "UNKNOWN"),
+      "Original Blix AI label (unverified): " + (c.ai?.verdict || c.ai?.grade || "UNKNOWN"),
+      "Use permitted facts and professional knowledge. Separate observation, inference, alternative explanations and UNKNOWN.",
+      "Check quote availability, timestamp, liquidity, fees, slippage, exit completeness and signal-followability before calling anything tradable.",
+      "No live trades, signing, provider charges or automatic model API requests are authorized by this task.",
+    ].join("\n");
+    try {
+      await navigator.clipboard.writeText(content);
+      toast("已复制带当前 Blix 数据的研究任务；未调用 AI");
+    } catch {
+      toast("无法复制；请检查浏览器剪贴板权限");
+    }
+  }
+
+  return (
+    <Page title="AI 研究工作台" right={<span className="rounded-full border border-rule px-3 py-1.5 text-xs text-muted">只读预览 · 模型尚未连接</span>}>
+      <p className="text-sm text-ink-2">
+        基于 Blix 已有 Pulse 市场看板组织调查。列表是<strong>市场观察候选</strong>，不是 AI 选币结果、买入信号或盈利预测。
+      </p>
+      <div className="grid gap-3 xl:grid-cols-[minmax(230px,0.85fr)_minmax(340px,1.65fr)_minmax(265px,1fr)]">
+        <Panel title="市场观察" aside={sourceState}>
+          <div className="flex flex-wrap gap-1.5 border-b border-rule p-3">
+            {STAGES.map(s => (
+              <button key={s.key} type="button" aria-pressed={stage === s.key}
+                onClick={() => setStage(s.key)}
+                className={stage === s.key
+                  ? "rounded-full bg-accent px-3 py-1.5 text-xs font-semibold text-accent-ink"
+                  : "rounded-full border border-rule-2 px-3 py-1.5 text-xs text-muted hover:text-ink"}>
+                {s.label}
+              </button>
+            ))}
+          </div>
+          <div className="p-3">
+            <label className="sr-only" htmlFor="intelligence-coin-search">筛选代币</label>
+            <input id="intelligence-coin-search" value={search} onChange={e => setSearch(e.target.value)}
+              placeholder="搜索名称、代号或 Mint"
+              className="w-full rounded-control border border-rule-2 bg-paper px-3 py-2 text-sm text-ink outline-none focus:border-accent" />
+            <p className="mt-2 text-xs text-muted">当前显示 {candidates.length} 条 · 保留 Blix 看板顺序，不做隐性机会打分</p>
+          </div>
+          <div className="max-h-[min(66vh,760px)] overflow-y-auto border-t border-rule p-2">
+            {!candidates.length && <p className="p-5 text-sm text-muted">{loaded || restored ? "当前条件下没有观察候选。" : "等待市场数据，不生成模拟代币。"}</p>}
+            {candidates.map(({ coin, stage: stageName }) => (
+              <button key={coin.mint} type="button" aria-pressed={selected?.coin.mint === coin.mint}
+                onClick={() => setSelectedMint(coin.mint)}
+                className={selected?.coin.mint === coin.mint
+                  ? "mb-1 flex w-full min-w-0 items-start justify-between gap-2 rounded-control border border-accent/60 bg-accent/10 px-3 py-3 text-left"
+                  : "mb-1 flex w-full min-w-0 items-start justify-between gap-2 rounded-control border border-transparent px-3 py-3 text-left hover:bg-paper-3"}>
+                <span className="min-w-0">
+                  <strong className="block truncate text-sm text-ink">{coin.symbol || coin.name || compact(coin.mint)}</strong>
+                  <span className="block truncate text-xs text-muted">{STAGE_LABEL[stageName]} · {compact(coin.mint)}</span>
+                </span>
+                <span className="shrink-0 text-right">
+                  <strong className="block text-sm text-ink">{money(coin.mcap)}</strong>
+                  <span className="text-xs text-muted">市值</span>
+                </span>
+              </button>
+            ))}
+          </div>
+        </Panel>
+
+        <div className="flex min-w-0 flex-col gap-3">
+          <Panel title="行情与证据入口" aside={c ? "原生 Blix 数据" : "未选择代币"}>
+            {c ? (
+              <div className="space-y-4 p-4">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <h2 className="text-xl font-semibold">{c.symbol || c.name || "未知代币"}</h2>
+                    <p className="break-all font-mono text-xs text-muted">{c.mint}</p>
+                  </div>
+                  <span className="rounded-full border border-rule px-2.5 py-1 text-xs text-muted">{STAGE_LABEL[selected!.stage]}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                  {[
+                    ["市值", money(c.mcap)], ["流动性", money(c.liq)],
+                    ["观察窗口成交量", money(windowVol)], ["买卖活动", activity],
+                    ["Holder", number(holderCount)], ["Top 10 持仓", percent(top10)],
+                  ].map(([label, value]) => (
+                    <div key={label} className="rounded-control border border-rule bg-paper-3 px-3 py-3">
+                      <div className="text-xs text-muted">{label}</div>
+                      <div className="mt-1 break-words text-sm font-semibold text-ink">{value}</div>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <a href={coinHref} className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-accent-ink">打开原生 K 线与钱包图谱</a>
+                  <a href={coinHref + "/assistant"} className="rounded-full border border-rule-2 px-4 py-2 text-sm font-semibold text-ink hover:border-accent">前往 Coin AI 助手</a>
+                </div>
+                <p className="text-xs leading-relaxed text-muted">原版 Coin 页面已有 K 线、交易标记、Bubble Map、Holder 与交易面板，本扩展不重建它们。部分聚合数据、身份标签及时间覆盖仍需逐字段复核。</p>
+              </div>
+            ) : <div className="p-6 text-sm text-muted">请先等待 Blix 数据或选择代币。</div>}
+          </Panel>
+
+          <Panel title="机会研究与反证" aside="候选 ≠ 可成交机会">
+            <div className="grid gap-3 p-4 sm:grid-cols-2">
+              <div className="rounded-control border border-rule bg-paper-3 p-4">
+                <h3 className="text-sm font-semibold">已知的观察</h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-2">
+                  {c ? "Blix 当前记录：" + activity + "；Holder " + number(holderCount) + "；Top 10 " + percent(top10) + "。上述是界面来源数据，不等于独立验证。" : "暂无可引用的市场观察。"}
+                </p>
+                {c?.ai?.verdict && <p className="mt-2 text-xs text-muted">原 Blix AI 意见（未复核）：{c.ai.verdict}</p>}
+              </div>
+              <div className="rounded-control border border-rule bg-paper-3 p-4">
+                <h3 className="text-sm font-semibold">尚未验证的关键问题</h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-2">
+                  资金关系是否真实独立？是否有刷量、关联转仓或公共基础设施？信号出现之后是否还能以合理滑点成交并完整退出？
+                </p>
+              </div>
+            </div>
+            <p className="border-t border-rule px-4 py-3 text-xs text-muted">
+              本页没有新增推理、回测或交易执行。后续 AI 输出应记录数据来源、时间窗口、竞争解释与实际工具调用。
+            </p>
+          </Panel>
+        </div>
+
+        <Panel title="AI 研究助手" aside="任务准备">
+          <div className="space-y-4 p-4">
+            <div className="rounded-control border border-rule bg-paper-3 p-3 text-sm leading-relaxed text-ink-2">
+              你可以用普通语言提出研究目的。后续模型运行时会自主选择知识和工具；当前先生成带 Mint 与行情上下文的可核查任务。
+            </div>
+            <label htmlFor="intelligence-research-goal" className="block text-sm font-semibold">你希望 AI 研究什么？</label>
+            <textarea id="intelligence-research-goal" rows={6} maxLength={1600} value={goal}
+              onChange={e => setGoal(e.target.value)}
+              className="w-full resize-y rounded-control border border-rule-2 bg-paper px-3 py-3 text-sm text-ink outline-none focus:border-accent" />
+            <div className="flex flex-wrap gap-2">
+              {PROMPTS.map((prompt, i) => (
+                <button type="button" key={prompt} onClick={() => setGoal(prompt)}
+                  className="rounded-full border border-rule-2 px-3 py-1.5 text-xs text-ink-2 hover:border-accent">
+                  {["资金路径", "交易可行性", "竞争解释"][i]}
+                </button>
+              ))}
+            </div>
+            <button type="button" onClick={() => void copyTask()} disabled={!c || !goal.trim()}
+              className="w-full rounded-full bg-accent px-4 py-2.5 text-sm font-semibold text-accent-ink disabled:cursor-not-allowed disabled:opacity-40">
+              复制带数据的研究任务
+            </button>
+            <p className="text-xs leading-relaxed text-muted">
+              目前不会调用模型 API，不会发起链上操作、交易、签名或新的付费数据请求。接通模型前需增加受限工具适配、预算和来源追踪。
+            </p>
+          </div>
+        </Panel>
+      </div>
+    </Page>
+  );
+}
