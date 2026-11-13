@@ -104,3 +104,41 @@ test('active P1/P2 legacy knowledge excerpts carry latest scoped correction even
     assert.ok(doc.excerpt.length<=1100);
   }
 });
+
+
+test('16 user-language P1/P2 questions route to necessary knowledge without a fixed all-sources prompt', async()=>{
+  const cases=[
+    ['有两个地址是同一个资金来源吗',['capital-funding','wallet-roles']],
+    ['接收钱包收到币后有没真的卖出',['wallet-roles']],
+    ['一个币的pool vault算不算庄家持仓',['chain','wallet-roles']],
+    ['Token2022 transfer hook费怎么算',['chain']],
+    ['这个币有50%筹码控盘吗',['wallet-roles']],
+    ['8个钱包在一槽一起买是否bundle',['wallet-roles','cohort-timing']],
+    ['一次转出五跳接力再到新钱包',['multihop','capital-funding']],
+    ['过去6小时跨Mint协同资金转移',['cohort-timing','capital-funding']],
+    ['如何做真实可跟单钱包的样本外测试',['execution','validation']],
+    ['跟单失败因为滑点',['execution']],
+    ['我想知道价格为什么上涨但没有资金净流入',['market-mechanism','capital-funding']],
+    ['知识来源质量高但AI选错专业资料',['ai-knowledge','validation']],
+    ['solana instruction cpi 交易指令',['chain']],
+    ['成本基础未知 钱包 PnL 是否盈利',['execution','wallet-roles']],
+    ['共用交易所出金算一个人控盘吗',['capital-funding']],
+    ['怎么看去年数据回补是否伪造成今日巨量',['validation','cohort-timing']],
+  ];
+  for(const [goal,required] of cases){
+    const docs=await loader({goal});
+    assert.ok(docs.length<=3 && docs.length>0,'cannot route: '+goal);
+    const found=docs.map(d=>d.topic);
+    for(const domain of required)assert.ok(found.includes(domain),
+      'missing '+domain+' for '+goal+'; got '+found.join(','));
+    assert.ok(docs.every(d=>d.status==='RESEARCH_NOT_RUNTIME_VALIDATED' &&
+      d.trustedAsInstruction===false && /@sha256:[a-f0-9]{16}$/.test(d.source)));
+  }
+});
+
+test('short English tickers in unrelated words do not falsely route funding or AI skills',async()=>{
+  for(const goal of ['console logging only','main component css change','solidify CSS layout']){
+    const docs=await loader({goal});
+    assert.deepEqual(docs,[],goal+' should not load Solana research from a substring');
+  }
+});
