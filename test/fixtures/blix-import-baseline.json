@@ -789,7 +789,6 @@
     "server/market.js": "d7b61204539b09635bf80c046f36d052766d041d",
     "server/quality.js": "083e595e2c7bc01a73ebe2eb9cf0b7355b9fddea",
     "worker/index.js": "c4a0b4db89236b85ae257a8027ffe16b4244806f",
-    "web/src/main.tsx": "ef7584a26b9114b11efb840be52ab20b2ea669fa",
     "web/src/pages/Pulse.tsx": "e045e60d400db8e5f4a4cf48b930f22c0af29df4",
     "web/src/pages/Coins.tsx": "b2386ef95e6f9796c79e2464fe00f338b6906777",
     "web/src/pages/Coin.tsx": "42130c7b9994117d4ae1bf7868715c6dd51f4c58",
@@ -799,7 +798,8 @@
     "web/src/pages/Wallets.tsx": "4ea08920f9afb4c146a07704b045fb0fd989e0ce",
     "public/index.html": "fffdc8c7acbaab98ff9b89fe0e2ee97ec799403f",
     "public/mcp-tools.js": "27bbd7497bd097e27ccd4447ff96dccd516cbcc9",
-    "server/solana.js": "fd1a0ec35b2d831337bc3ad47153297b3455f988"
+    "server/solana.js": "fd1a0ec35b2d831337bc3ad47153297b3455f988",
+    "web/src/pages/coin/Chart.tsx": "5ac5d8ffedce24d57ae58fe528c4b331435ab0e4"
   },
   "reviewed_modified_original_modules": {
     "server/server.js": "Add owner-only evidence read routes; must retain legacy routing and full server source.",
@@ -811,6 +811,8 @@
     "package.json": "Add safe test scripts and static start gate while retaining all original scripts.",
     "test/wtrack.test.mjs": "Maintain legacy tracker behavior while adapting fixture signature checks.",
     "server/bubblemap.js": "Intentionally correct original funding provenance: only directly parsed positive System SOL transfer/createAccount may create funded graph edges; legacy cache must be revalidated, truncated history retained with cursor. Reviewed by test/bubble-funding-evidence.test.mjs and full original-module preservation suite.",
+    "web/src/main.tsx": "Intentionally add a lazy-loaded optional AI research route without removing original Pulse/Discover/Coin/Wallet/Tracker routes. Reviewed by the AI workspace additive-route regression test and original page preservation checks.",
+    "web/src/shell/Rail.tsx": "Intentionally add AI research navigation while preserving all original navigation targets; paired with lazy route and direct Coin assistant link, verified by the additive UI regression test.",
     "web/src/pages/coin/Tabs.tsx": "Intentionally add the optional Coin AI assistant tab from PR24 while retaining the original AI read, Safety, Trades, Holder and transaction UI. The preview cannot call an unauthorized live model or trade; verified by front-end build and original-preservation regression."
   },
   "validation_scope": "Paths and byte fingerprints are preservation/change-detection only; functionality, UI reachability, trading safety, network billing and production performance require separate tests. Legitimate enhancements can update baseline assertions after review."
