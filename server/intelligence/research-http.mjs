@@ -7,7 +7,7 @@ import { discoverPulseInvestigation, validatePulseDiscoveryInput } from './pulse
 import { summarizeInvestigationContinuation } from './investigation-continuation.mjs';
 
 const MINT = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
-const MAX_BODY = 5_000;
+const MAX_BODY = 12_000;
 const MAX_RESPONSE = 512_000;
 const DEFAULT_ORIGINS = Object.freeze([
   'http://127.0.0.1:4420', 'http://localhost:4420',
