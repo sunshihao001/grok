@@ -1,5 +1,8 @@
 # 按实际问题使用专业知识、AI研究与可证伪证据
 
+**知识来源与实际使用之间的追溯（2026-11-13）**：优先参考[Blix知识全生命周期及现有映射断点](../../knowledge/references/knowledge-lineage-lifecycle-audit-20261113.md)，再按问题进入下列专业知识；`npm run audit:knowledge-trace` 可只读查询旧单元→当前承接→AI白名单，**不代表模型真的已检索或正确使用**。
+
+
 **从回答反向追到原知识的唯一总链路**：[知识获取→版本固化→原意重建→专业主张与反证→承接→Blix现有代码/AI调用→验收与修订](../../knowledge/references/knowledge-lineage-lifecycle-20261113.md)。本说明区分来源、主张、方法、案例、程序、运行与决策的证据状态；具体P1–P2机制仍见原有 [知识核查账](../../knowledge/references/p1-p2-knowledge-reconciliation-20261113.md)。仅在重要复杂研究时按需追溯，不要求普通问答强制通过所有环节。
 
 
