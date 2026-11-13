@@ -1157,6 +1157,215 @@
     }
   ],
   "cross_axis_alignment": {
+    "interpretationCapabilities": [
+      {
+        "id": "S1",
+        "name": "DIRECTION_AND_DECISIONS",
+        "responsibility": "Keep human-confirmed goals, value and authorization distinct from AI proposals",
+        "axes": [
+          "GOAL",
+          "EVOLUTION",
+          "EVIDENCE"
+        ],
+        "terms": [
+          "Anchoring",
+          "Goal Alignment",
+          "Requirements Decomposition",
+          "ADR"
+        ]
+      },
+      {
+        "id": "S2",
+        "name": "STRUCTURE_AND_SEMANTICS",
+        "responsibility": "Separate entity, knowledge and context levels before connecting",
+        "axes": [
+          "DEPTH",
+          "DOMAIN",
+          "KNOWLEDGE_OBJECT",
+          "SEMANTIC",
+          "ECONOMIC"
+        ],
+        "terms": [
+          "Layering",
+          "Abstraction",
+          "Aggregation",
+          "Ontology",
+          "Bounded Context",
+          "MBSE",
+          "SysML"
+        ]
+      },
+      {
+        "id": "S3",
+        "name": "MAPPING_AND_ALIGNMENT",
+        "responsibility": "Use typed conditional and revisable links rather than keyword matches",
+        "axes": [
+          "SEMANTIC",
+          "KNOWLEDGE_OBJECT",
+          "EXECUTION"
+        ],
+        "terms": [
+          "Structural Mapping",
+          "Semantic Mapping",
+          "Relational Mapping",
+          "Cross-layer Mapping",
+          "Dynamic Mapping",
+          "Knowledge Graph",
+          "Alignment"
+        ]
+      },
+      {
+        "id": "S4",
+        "name": "TRACEABILITY_AND_PROVENANCE",
+        "responsibility": "Trace upstream sources and downstream consumers including actual run identity",
+        "axes": [
+          "GOAL",
+          "EVIDENCE",
+          "TIME",
+          "EXECUTION"
+        ],
+        "terms": [
+          "Bidirectional Traceability",
+          "Data Lineage",
+          "Provenance",
+          "Digital Thread",
+          "Dependency",
+          "OpenLineage"
+        ]
+      },
+      {
+        "id": "S5",
+        "name": "CONTRACTS_AND_INVARIANTS",
+        "responsibility": "Ensure source semantics and inference boundaries are not silently promoted",
+        "axes": [
+          "SEMANTIC",
+          "ECONOMIC",
+          "EXECUTION",
+          "EVIDENCE"
+        ],
+        "terms": [
+          "Data Contract",
+          "Semantic Contract",
+          "Invariant",
+          "Assertion",
+          "Constraint Propagation",
+          "Consistency",
+          "Coverage",
+          "SHACL",
+          "Architecture Tests"
+        ]
+      },
+      {
+        "id": "S6",
+        "name": "ASSURANCE_AND_FALSIFICATION",
+        "responsibility": "Match strength of claim to independent evidence and negative cases",
+        "axes": [
+          "EVIDENCE",
+          "ECONOMIC",
+          "TIME",
+          "EXECUTION"
+        ],
+        "terms": [
+          "Verification",
+          "Validation",
+          "Triangulation",
+          "Cross-checking",
+          "Statistical Cross-validation",
+          "Falsification",
+          "Assurance Case",
+          "Regression Testing"
+        ]
+      },
+      {
+        "id": "S7",
+        "name": "CHANGE_AND_FEEDBACK",
+        "responsibility": "Find true dependent consumers and revise only affected decisions/code/tests",
+        "axes": [
+          "EVOLUTION",
+          "GOAL",
+          "TIME",
+          "EXECUTION",
+          "EVIDENCE"
+        ],
+        "terms": [
+          "Impact Analysis",
+          "Change Propagation",
+          "Observability",
+          "Versioning",
+          "Drift Detection",
+          "Feedback Loop",
+          "Continuous Improvement",
+          "Rollback"
+        ]
+      }
+    ],
+    "networkViews": [
+      {
+        "id": "N-G",
+        "name": "GOAL_NETWORK",
+        "axes": [
+          "GOAL",
+          "EVOLUTION"
+        ],
+        "purpose": "WHY and user-authorized scope"
+      },
+      {
+        "id": "N-K",
+        "name": "KNOWLEDGE_NETWORK",
+        "axes": [
+          "DOMAIN",
+          "DEPTH",
+          "KNOWLEDGE_OBJECT",
+          "SEMANTIC",
+          "EVIDENCE"
+        ],
+        "purpose": "MECHANISMS, claims and competing explanations"
+      },
+      {
+        "id": "N-D",
+        "name": "DATA_FACT_NETWORK",
+        "axes": [
+          "ECONOMIC",
+          "TIME",
+          "EVIDENCE"
+        ],
+        "purpose": "Observed original sources, transformations and coverage"
+      },
+      {
+        "id": "N-C",
+        "name": "ENGINEERING_NETWORK",
+        "axes": [
+          "EXECUTION",
+          "GOAL",
+          "EVIDENCE"
+        ],
+        "purpose": "Implemented functions, tool boundaries and data contracts"
+      },
+      {
+        "id": "N-V",
+        "name": "VERIFICATION_FEEDBACK_NETWORK",
+        "axes": [
+          "EVIDENCE",
+          "EVOLUTION",
+          "EXECUTION"
+        ],
+        "purpose": "Tests, runtime receipts, limitations and revision"
+      }
+    ],
+    "placementDecision": {
+      "status": "CONCEPTUAL_CROSSWALK_ONLY_NOT_AUTOMATED_IMPACT_ANALYSIS",
+      "singleAuthority": "docs/project/cross-layer-anchor-map-20261113.md",
+      "crossDomainSource": "https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/cross-layer-project-anchors.md",
+      "existingAxesPreserved": true,
+      "existingTypedRelationsPreserved": true,
+      "newEngineRequired": false,
+      "rules": [
+        "Do not treat shared terminology as verified dependency",
+        "Do not treat static source index as runtime lineage",
+        "Do not treat synthetic CI as live market acceptance",
+        "Never infer wallet controller or trading alpha from a conceptual link"
+      ]
+    },
     "revision": "2026-11-13-typed-links-v1",
     "status": "CONCEPTUAL_CROSS_AXIS_GUIDANCE_NOT_RUNTIME_REASONING_ENGINE",
     "purpose": "Connect existing G/L/D/storage/evidence with conceptual, economic, execution and feedback relations without collapsing different evidence identities or creating mandatory pipeline stages.",
