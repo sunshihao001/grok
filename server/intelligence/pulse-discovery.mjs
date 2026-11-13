@@ -8,6 +8,10 @@ const MAX_CANDIDATES=12;
 const safeNumber=(n,max)=>typeof n==='number'&&Number.isFinite(n)&&n>=0&&n<=max?n:null;
 const safeText=(s,max)=>typeof s==='string'?s.slice(0,max):'';
 
+// Cross-layer contract BLX-D-PULSE-FRESHNESS:
+// browserRecordedAtMs only bounds client submission age; it does NOT attest
+// the source's first-available timestamp or completeness of market coverage.
+// Trace: docs/project/cross-layer-anchor-map-20261113.md; test/pulse-ai-discovery.test.mjs.
 export function validatePulseDiscoveryInput(value,now=Date.now()) {
   if(!value||typeof value!=='object'||Array.isArray(value)||
      Object.keys(value).some(x=>!['goal','candidates','browserRecordedAtMs','boardStatus'].includes(x))||
