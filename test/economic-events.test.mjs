@@ -48,6 +48,33 @@ test('Token-2022 transfer is identified by official program ID, without parsed p
  store(d,'token2022',t);
  assert.equal(recipientCandidates(d,A,M).rows[0]?.to_owner,B);d.close();
 });
+
+
+test('Token-2022 transferCheckedWithFee is retained as gross transfer while fee-adjusted inventory stays unknown',()=>{
+ const d=setup(),t=tx({
+   instructions:[{
+     programId:'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+     program:'spl-token-2022',
+     parsed:{type:'transferCheckedWithFee',info:{
+       source:'ATA_A',destination:'ATA_B',mint:M,
+       tokenAmount:{amount:'1000',decimals:6},
+       feeAmount:{amount:'50',decimals:6},
+     }},
+   }],
+   preTokenBalances:[bal(2,A,M,1000),bal(3,B,M,0)],
+   postTokenBalances:[bal(2,A,M,0),bal(3,B,M,950)],
+ });
+ store(d,'fee-2022',t);
+ const rows=recipientCandidates(d,A,M).rows;
+ assert.equal(rows.length,1,'fee instruction must not be silently OTHER');
+ assert.equal(rows[0].to_owner,B);
+ assert.equal(rows[0].amount_raw,'1000','index is gross instruction amount, not recipient free balance');
+ const raw=transactionEvidence(d,'fee-2022').instructions[0];
+ assert.equal(JSON.parse(raw.raw_json).parsed.info.feeAmount.amount,'50');
+ assert.equal(raw.kind,'TOKEN_TRANSFER');
+ d.close();
+});
+
 test('a missing owner on one balance is not a conflicting owner',()=>{
  const d=setup(), t=tx({instructions:[transfer('ATA_A','ATA_B',10)],
  preTokenBalances:[bal(2,A,M,10),{accountIndex:3,mint:M,uiTokenAmount:{amount:'0',decimals:6}}],
