@@ -2,7 +2,7 @@
 // research service. No client-side API keys, provider discovery or startup HTTP.
 const MAX_OUTPUT = 1100;
 const MAX_RESPONSE_BYTES = 128_000;
-const MAX_CONTEXT_BYTES = 16_000;
+const MAX_CONTEXT_BYTES = 24_000;
 const SAFE_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]']);
 
 function providerEndpoint(url) {
