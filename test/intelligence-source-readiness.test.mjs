@@ -106,3 +106,40 @@ test('unknown paths, unapproved args and invalid Mint never create a database',(
     assert.equal(out.status,2);
   }finally{rmSync(root,{recursive:true,force:true});}
 });
+
+
+test('RPC source status marks interrupted coverage unknown after reconnect rather than claiming replay',async()=>{
+  const { startRpcStream }=await import('../server/rpc-stream.js');
+  const statuses=[];
+  const sockets=[];
+  class FakeSocket {
+    constructor(){this.sent=[];sockets.push(this);}
+    send(msg){this.sent.push(msg);}
+    close(){}
+    open(){this.onopen?.();}
+    ack(){this.onmessage?.({data:JSON.stringify({id:1,result:123})});}
+    disconnect(){this.onclose?.();}
+  }
+  const stop=startRpcStream({url:()=> 'ws://test.invalid',request:{method:'logsSubscribe',params:[]},
+    WebSocketImpl:FakeSocket,onStatus:s=>statuses.push(s),silentMs:60000});
+  try {
+    sockets[0].open();sockets[0].ack();
+    assert.equal(statuses.at(-1).connected,true);
+    assert.equal(statuses.at(-1).coverageGap,undefined);
+    sockets[0].disconnect();
+    const down=statuses.at(-1);
+    assert.equal(down.connected,false);
+    assert.equal(down.coverageGap.recovered,false);
+    assert.equal(down.coverageGap.reason,'RPC connection closed');
+    assert.equal(typeof down.coverageGap.since,'number');
+    // No replay is claimed: the resumed connection only reports the interruption.
+    await new Promise(resolve=>setTimeout(resolve,3100));
+    assert.equal(sockets.length,2);
+    sockets[1].open();sockets[1].ack();
+    const resumed=statuses.at(-1);
+    assert.equal(resumed.connected,true);
+    assert.equal(resumed.coverageGap.recovered,false);
+    assert.equal(resumed.coverageGap.since,down.coverageGap.since);
+    assert.ok(resumed.coverageGap.until>=resumed.coverageGap.since);
+  } finally { stop(); }
+});
