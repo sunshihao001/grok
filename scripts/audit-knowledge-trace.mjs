@@ -134,6 +134,9 @@ else if(a.length===1&&a[0]==='--axes') {
     proofBoundaries:alignment.proofBoundaries,
     sampleTask:alignment.sampleTask,
     canonicalGuides:alignment.canonicalGuides,
+    interpretationCapabilities:alignment.interpretationCapabilities||[],
+    networkViews:alignment.networkViews||[],
+    placementDecision:alignment.placementDecision||null,
     limits:[
       'This is a declarative knowledge relation map, not a source-of-truth of observed market relationships.',
       'Conceptual link is not an RPC event; source provenance is not independent validation.',
