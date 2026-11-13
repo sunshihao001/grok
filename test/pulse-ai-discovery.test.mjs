@@ -148,6 +148,8 @@ test('loopback /discover route runs validated selection plus one bounded local a
   assert.equal(response.status,200);
   const body=await response.json();
   assert.equal(body.discovery.selectedMint,mintA);
+  assert.ok(body.discovery.knowledgeUse.some(x=>x.stage==='discover'&&x.source.includes('Hermes')));
+  assert.equal(body.discovery.knowledgeUse[0].outcome,'PRESENTED_TO_MODEL_NOT_VERIFIED_USED');
   assert.equal(body.investigation.evidence[0].capability,'mint-economic-evidence');
   assert.equal(body.investigation.evidence[0].result.facts.network.eventCount,1);
   assert.equal(body.investigation.continuation.stages.participation,
