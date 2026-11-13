@@ -64,7 +64,7 @@ if (bad || !opts['--db'] || (opts['--wallet'] !== undefined && !validAddress(opt
     // exporting any claim. A stored SHA alone does not validate a mutable SQLite index.
     // Never expose rpc_json to the model; export the digest and instruction identity.
     const capturedTx = available ? db.prepare(`SELECT rpc_json, sha256, capture_source, commitment,
-      status FROM econ_transactions WHERE sig=?`) : null;
+      status, observed_at FROM econ_transactions WHERE sig=?`) : null;
     const verified = new Map();
     const recipients = observations.flatMap(result => result.rows).map(row => {
       let capture = verified.get(row.sig);
@@ -75,7 +75,7 @@ if (bad || !opts['--db'] || (opts['--wallet'] !== undefined && !validAddress(opt
         }
         const rows = decodeEvidence(JSON.parse(record.rpc_json));
         capture = { sha256: record.sha256, captureSource: record.capture_source,
-          commitment: record.commitment, status: record.status, rows };
+          commitment: record.commitment, status: record.status, observedAtMs: record.observed_at, rows };
         verified.set(row.sig, capture);
       }
       if (capture) {
@@ -91,7 +91,7 @@ if (bad || !opts['--db'] || (opts['--wallet'] !== undefined && !validAddress(opt
       signature: row.sig, outerI: row.outer_i, innerI: row.inner_i, mint: row.mint,
       rpcSha256: capture?.sha256 ?? null, rpcHashVerified: Boolean(capture),
       instructionVerifiedAgainstRpc: Boolean(capture),
-      captureSource: capture?.captureSource ?? 'UNKNOWN',
+      captureSource: capture?.captureSource ?? 'UNKNOWN', capturedAtMs: capture?.observedAtMs ?? null,
       commitment: capture?.commitment ?? null,
       slot: row.slot, blockTime: row.block_time,
       fromAccount: row.from_account, toAccount: row.to_account,
