@@ -164,3 +164,37 @@ test('cross-layer links stay anchored to existing source documents and can be re
  }
  assert.match(crosswalk,/--axes/);
 });
+
+
+
+test('seven interpretation capabilities and five network views map onto existing axes without creating new ontology',()=>{
+ const a=run('--axes');
+ const oldAxes=new Set(a.independentAxes.map(x=>x.id));
+ const caps=a.interpretationCapabilities;
+ const views=a.networkViews;
+ assert.deepEqual(caps.map(x=>x.id),['S1','S2','S3','S4','S5','S6','S7']);
+ assert.deepEqual(views.map(x=>x.id),['N-G','N-K','N-D','N-C','N-V']);
+ for(const item of [...caps,...views]){
+   assert.ok(typeof item.name==='string'&&item.name.length>5,item.id);
+   assert.ok(Array.isArray(item.axes)&&item.axes.length>0,item.id);
+   assert.ok(item.axes.every(x=>oldAxes.has(x)),item.id+' introduced a parallel axis');
+ }
+ for(const term of ['Anchoring','Ontology','Semantic Mapping','Bidirectional Traceability',
+  'Data Lineage','Digital Thread','Invariant','Assurance Case',
+  'Impact Analysis','Observability']){
+   assert.ok(caps.some(x=>x.terms.includes(term)),'missing core concept '+term);
+ }
+ assert.equal(a.placementDecision.status,'CONCEPTUAL_CROSSWALK_ONLY_NOT_AUTOMATED_IMPACT_ANALYSIS');
+ assert.equal(a.placementDecision.newEngineRequired,false);
+ assert.equal(a.independentAxes.length,10);
+ assert.equal(a.linkKinds.length,11);
+ const path=new URL('../docs/project/cross-layer-anchor-map-20261113.md',import.meta.url);
+ assert.ok(existsSync(path),'Blix source mapping absent');
+ const doc=readFileSync(path,'utf8');
+ for(const label of ['S1 方向保持','S2 结构理解','S3 映射对齐',
+  'S4 双向追溯','S5 契约约束','S6 证据保障','S7 运行演化',
+  'N-G目标网络','N-K知识网络','N-D数据事实网络','N-C工程网络','N-V验证反馈网络']){
+   assert.ok(doc.includes(label),'missing mapped Blix role '+label);
+ }
+ assert.match(doc,/not|未验|未知/i,'mapped views must preserve verification limitations');
+});
