@@ -171,5 +171,16 @@
       "snapshot_path": "knowledge/legacy-snapshots/method/calibration.md",
       "source_url": "https://github.com/sunshihao001/qb-/blob/8377ad5611255df5cd4562666a826708575334f0/hermes_harness/16_reliability_calibration/README.md"
     }
-  ]
+  ],
+  "upstream_snapshot_blob_check": {
+    "as_of": "2026-11-13",
+    "method": "GitHub connector fetch_file(repo=source_repository,path=source_path,ref=source_commit); compare returned file SHA with recorded source_git_blob_sha",
+    "checked_entries": 21,
+    "matched_entries": 21,
+    "mismatched_entries": 0,
+    "unreadable_entries": 0,
+    "local_snapshot_bodies_present": 0,
+    "outcome": "UPSTREAM_SNAPSHOT_SOURCE_EXISTS_BUT_LOCAL_BODY_NOT_IMPORTED",
+    "limit": "Source-blob existence and identity check is not full-content semantic review. The snapshot manifest itself is imported; the 21 intended local snapshot body paths remain absent."
+  }
 }
