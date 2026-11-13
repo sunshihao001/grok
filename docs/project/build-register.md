@@ -388,3 +388,19 @@
 - **CI实况**：最新知识变更commit的GitHub check-runs为0、combined status pending，GitHub Actions只有\`uptime.yml\`的push失败记录（no web/Node/evidence/audit job）；本轮最新知识调用与整合测试 **TEST_EXECUTION_NOT_CONFIRMED**。不能沿用此前\`520b5a3\`的全绿CI为新SHA验收，也不能把无job的Uptime失败当网站一定离线。
 - **新发现的实际合并阻断**：GitHub [Draft PR #23](https://github.com/sunshihao001/grok/pull/23) 当前 \`mergeable=false, mergeable_state=dirty\`，与最新 \`blix\` 不可直接合并。Blix基线在此PR原base commit之后有更改，至少触及\`knowledge/README.md\`、\`knowledge/cases/independent-validation-and-failure-cases.md\`、\`knowledge/mechanisms/market-price-mechanism-research.md\`、\`knowledge/references/source-coverage-v0.1.json\` 等共享路径。**本轮未尝试强制更新基线、覆盖原版变化或合并PR**；具体冲突块仍需在三方对照中逐项消解，之后再执行CI。
 - **下一项优先**：在PR #23的旧分支成果与当下blix共享知识原文间做三方冲突裁决，保留两侧的新旧知识与来源；随后用Node24验证\`test:intelligence\`、全套Node/security/evidence和Web；待通过再做真实模型知识选择A/B及实际Mint/RPC专业调查。
+
+
+### 2026-11-13｜R-14：P1/P2全知识整合后的路由反例与协议修正
+
+**恢复状态/没有重复造档案**：R-13已完成 Hermes、qb-、meme-、ai-d、Why-Solana、Solana官方和代表性Github源码的本地知识核查及8份D01–D12原领域正文的原位纠正；入口为 `knowledge/references/p1-p2-knowledge-reconciliation-20261113.md`。本轮检查最新PR状态后不再创造第二套知识系统或重新复制152研究单元。旧来源和未审边界原样保留。
+
+**知识调用可观察缺口**：对当前11本地白名单研究专题，以预先设定应命中领域的16个用户口语/专业问题测试静态词面路由。旧配置9/16有至少一项预期领域漏选（Token2022/Hook、Pool/Vault、CEX出金同控、历史回补、资料误选等）；新配置静态复算16/16命中预期领域。新增 `test/local-knowledge-loader.test.mjs` 的16正例、3无关词误触发负例。按需选源及SHA来源标记保持，不常驻加载全部正文，不把未经主网验证的旧知识当真值。**16个小样本是规则/路由静态测试，不是模型A/B、真实误召回率或NodeCI通过**。
+
+**官方协议与可执行修正**：
+- Solana官方 https://solana.com/docs/core/transactions/versioned-transactions 与 https://solana.com/docs/rpc/json-structures 确认主网已启用v1；`getTransaction`必须选择maxSupportedTransactionVersion=1，v1使用transactionConfig不支持ALT。本分支`server/solana.js`和`server/wallets.js`已经显式配置1，避免重复报告不存在的v1 opt-in缺口；真实v1解析完整度仍未知。
+- https://solana.com/docs/tokens/extensions/transfer-fees 确认Token-2022的TransferCheckedWithFee/TransferChecked可能产生withheld fee。此前 `economic-events.mjs` 只识别transfer/transferChecked，本轮加入 `transferCheckedWithFee` 识别，并在 `test/economic-events.test.mjs` 加合成转账1000/扣费50/接收950的指令与余额对照。原RPC raw_json/feeAmount保存，报告中的`amountRaw`明确仍为**gross原始指令数量**；`economic-network.mjs`追加警告，不虚构net可卖库存。**Code submitted, current SHA GitHub Node24 CI未确认执行**；复杂Hook/CPI与真实2022协议交易仍待复核。
+- 来源对照账已更新这一事实修正；Google Skill Reach的技能选择漏选/误选/冗余标准用于之后真实模型比较，不以“已搜到资料”替代知识实际选用。
+
+**不可忽视的集成阻断**：PR #23目前和最新`blix`的 merge base 为`3bc1f7d4befc4e11e21d9a67fabbd5c4d259b1e7`，相对blix前进158个提交、落后35个提交，GitHub报告`mergeable=false`。主干也修改过`knowledge/README.md`、`knowledge/mechanisms/wallet-roles-and-inventory.md`、`knowledge/mechanisms/market-price-mechanism-research.md`、`knowledge/references/source-coverage-v0.1.json`等共享知识位置。本轮没有强制合并或覆写分支；需做原始共同祖先/主干/PR的三方冲突审查并保护两边有价值新增研究，之后在已支持CI的环境重跑Node24完整、intelligence、安全、经济及Web测试。
+
+**下一项**：解决合并冲突、执行最新 SHA 正式测试；对一条真实2022费/Hook交易检查实际接收资产变化；用同一批真实任务对比无知识、旧11源、新11源的模型知识选择和专业错误率。未审152/65部分继续按原目录与信息价值深读，不把来源登记/静态覆盖视为全部知识已经验证。
