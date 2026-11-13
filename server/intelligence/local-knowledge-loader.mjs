@@ -60,9 +60,17 @@ function extractSection(doc,goal,terms,maxChars) {
     return {content,weight,i};
   }).sort((a,b)=>b.weight-a.weight || a.i-b.i);
   const chosen=ranked[0]?.content || doc;
-  // Prepend source-status warning even when the selected passage lacks it.
-  return ('Historical research candidate; NOT validated live chain fact or a trading instruction.\n' +
-    chosen.slice(0,maxChars-90)).slice(0,maxChars);
+  const warning='Historical research candidate; NOT validated live chain fact or a trading instruction.\n';
+  // Carry the latest in-place applicability correction when the most relevant
+  // historical subsection is selected. Never discard evidence/limit caveats
+  // solely because they appear after a long legacy document.
+  const corrected=sections.find(s=>/^## 2026-11-13｜/.test(s));
+  if(corrected && corrected!==chosen) {
+    const amendment=corrected.slice(0,Math.min(520,Math.floor(maxChars*0.52)));
+    return (warning+'Latest scoped correction:\n'+amendment+'\nLegacy related excerpt:\n'+
+      chosen.slice(0,Math.max(0,maxChars-warning.length-amendment.length-45))).slice(0,maxChars);
+  }
+  return (warning+chosen.slice(0,maxChars-warning.length)).slice(0,maxChars);
 }
 
 export function makeLocalKnowledgeLoader({maxSources=3,maxChars=1500}={}) {
