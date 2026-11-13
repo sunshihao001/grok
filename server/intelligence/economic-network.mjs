@@ -36,6 +36,7 @@ export function projectMintNetwork({ mint, recipients = [] } = {}) {
       rpcHashVerified: row.rpcHashVerified === true,
       instructionVerifiedAgainstRpc: row.instructionVerifiedAgainstRpc === true,
       captureSource: row.captureSource ?? 'UNKNOWN', commitment: row.commitment ?? null,
+      capturedAtMs: Number.isSafeInteger(row.capturedAtMs) ? row.capturedAtMs : null,
       outerI: positioned ? row.outerI : null,
       innerI: positioned ? row.innerI : null, mint, fromOwner: row.fromOwner,
       toOwner: row.toOwner, fromAccount: row.fromAccount ?? null,
