@@ -1,5 +1,7 @@
 # Blix 专业知识｜唯一运行主体的分类接收入口
 
+**2026-11-13｜通用知识生命周期与业务整体重梳理**：以 [ai-d 九阶段知识形成与应用锚点](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/knowledge-lifecycle-nine-stages.md) 作为“规划→获取→接收→理解→关联→整合→转化→验证→进化”的跨项目知识工作视角；以 [Blix 全项目 V2.0 建设总蓝图](../docs/project/blix-ai-workbench-master-plan-v1-20261113.md) 为六大业务目标、已有专业资产、真实数据源/执行依赖和验收的当前总入口。**D01–D12、L0–L7、10轴11关系及已有知识来源保持不变；九阶段不再造九个目录，旧知识可以保留纯理论价值但工程状态必须另行验收。**
+
 **多层知识结构修正（2026-11-13）**：保留原 `G0–G4` 目标、`L0–L7` 深度、`D01–D12` 领域及6类存放目录，不把“概念—知识—经济事实—证据—工程—反馈”再建成另一套平行层级。具体的**10个相互独立的观察轴、11种带证据边界的关系、6种不允许越级的推断**见 [原 `DOMAIN-MODEL.v1.json` 的 `cross_axis_alignment`](DOMAIN-MODEL.v1.json) 与 [原知识交叉对应表第7节](INTEGRATION-CROSSWALK.md#7-2026-11-13-关系型认知修正从层级清单到可审查的专业主张)。`npm run audit:knowledge-trace -- --axes` 可检查这一结构；它只读且**不是**自动推理、模型验效或主网钱包身份确认。真正有价值的连接以可追查的**专业主张**为中心：谁提出、哪些数据支持/反驳、哪些条件成立、现有Blix哪里实现、哪次测试证明到何处、新证据如何纠正。旧152单元、21迁入、21快照索引与11候选源的事实身份不因此改变。
 
 **知识追溯的唯一总入口（2026-11-13）**：[知识从获取、理解、承接到实际判断的完整链路](references/knowledge-lineage-lifecycle-20261113.md)；[术语、静态来源映射与双向核查附录](references/knowledge-lineage-lifecycle-audit-20261113.md)。这两篇共同指回原有迁入、覆盖和代码台账，不是独立的新知识库。可运行 `npm run audit:knowledge-trace` 查看静态对应，但不能由索引推断模型已学会。
