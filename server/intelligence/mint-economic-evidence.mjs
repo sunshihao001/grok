@@ -1,6 +1,7 @@
 // Bounded adapter over PR #23's existing local SQLite Mint report.
 // Importing this module never starts a service, RPC, wallet or provider.
 import { projectMintNetwork } from './economic-network.mjs';
+import { traceEconomicClaims } from './economic-claim-trace.mjs';
 export const manifest = Object.freeze({
   id: 'mint-economic-evidence', version: '0.1', readonly: true,
   inputs: ['mint'], outputs: ['facts', 'sources', 'unknowns'],
@@ -44,6 +45,7 @@ export async function run({ mint, readEconomic, now = Date.now } = {}) {
   if (discovery.truncated) unknowns.push('Mint-first discovery was limited to a subset of sender candidates.');
   const localIndexMissing = report.evidence.indexedCoverage === 'LOCAL_EVIDENCE_OR_WALLET_SUMMARY_MISSING';
   if (localIndexMissing) unknowns.push('Required local economic evidence tables are missing; zero recipients does not establish no transfers.');
+  const network = projectMintNetwork({ mint, recipients });
   return {
     schemaVersion: '0.1', capability: manifest.id, mint,
     status: localIndexMissing ? 'UNAVAILABLE' : 'LOCAL_EVIDENCE_PARTIAL',
@@ -53,7 +55,7 @@ export async function run({ mint, readEconomic, now = Date.now } = {}) {
       coverage: report.evidence.indexedCoverage ?? 'UNKNOWN' }],
     facts: { knownSenderMintCaptures: report.evidence.knownSenderMintCaptures ?? 0,
       senderDiscovery: discovery, lifetimeHistoryComplete: false, recipients,
-      network: projectMintNetwork({ mint, recipients }) },
+      network, claimTrace: traceEconomicClaims({ mint, network }) },
     unknowns: [...new Set(unknowns)],
   };
 }
