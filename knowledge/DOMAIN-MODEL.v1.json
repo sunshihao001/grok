@@ -25,7 +25,12 @@
     "depth_axis": "L0治理横贯；L1链上事实；L2市场机制；L3经济主体/库存/行为；L4候选策略；L5执行和风险；L6实证反证横贯；L7单主体AI知识进化；L为知识层，非任务步骤",
     "domain_axis": "D01-D12是专业覆盖范围，保留152个原ID和来源；跨域关联不等于强制依赖",
     "storage_axis": "foundations / mechanisms / methods / cases / ai / references是原文主存放用途，可被多个领域交叉引用",
-    "evidence_axis": "来源/事实/供应商声明/推论/假说/离线测试/实际运行/失效与未知必须分开"
+    "evidence_axis": "来源/事实/供应商声明/推论/假说/离线测试/实际运行/失效与未知必须分开",
+    "conceptual_axis": "同义、相近、上下位和经济身份是不同语义关系；专业关键词连接研究问题但不直接证明链上同控",
+    "claim_relation_axis": "具体主张→源版本/交易证据/竞争解释/实现/测试/修订；不得用文档级映射代替逐主张证据",
+    "reality_axis": "Token、Token Account、Owner、Fee Payer、Pool、库存、Swap与经济主体是不同现实对象和事件",
+    "execution_axis": "输入数据→具体代码版本→执行记录→输出/证据/评估；代码存在与运行成功是不同状态",
+    "evolution_axis": "反证、新协议、历史回补与模型任务反馈只修订被证据影响的结论、方法和测试，保留原版本"
   },
   "goals": [
     {
@@ -1150,5 +1155,250 @@
       "independent_source": "ai-d / Blix original / linked original repositories",
       "must_check": "Read source, compare full-product reuse, safety/permission, deliver-and-readback; no automatic trading"
     }
-  ]
+  ],
+  "cross_axis_alignment": {
+    "revision": "2026-11-13-typed-links-v1",
+    "status": "CONCEPTUAL_CROSS_AXIS_GUIDANCE_NOT_RUNTIME_REASONING_ENGINE",
+    "purpose": "Connect existing G/L/D/storage/evidence with conceptual, economic, execution and feedback relations without collapsing different evidence identities or creating mandatory pipeline stages.",
+    "canonicalGuides": [
+      "knowledge/references/knowledge-lineage-lifecycle-20261113.md",
+      "knowledge/INTEGRATION-CROSSWALK.md",
+      "knowledge/references/p1-p2-knowledge-reconciliation-20261113.md",
+      "docs/project/build-register.md"
+    ],
+    "independentAxes": [
+      {
+        "id": "GOAL",
+        "existing": "G0-G4",
+        "entity": "USER_INTENT_OR_BUSINESS_GOAL",
+        "question": "Why and for whom? Whose permission?",
+        "mustNotInfer": "A model-proposed goal is user authorization"
+      },
+      {
+        "id": "DEPTH",
+        "existing": "L0-L7",
+        "entity": "KNOWLEDGE_DEPTH_OR_CROSS_CUTTING_VIEW",
+        "question": "What level of market explanation?",
+        "mustNotInfer": "Higher layer means stronger evidence"
+      },
+      {
+        "id": "DOMAIN",
+        "existing": "D01-D12",
+        "entity": "PROFESSIONAL_SPECIALTY",
+        "question": "Which specialty and competing disciplines matter?",
+        "mustNotInfer": "Same domain means same type of relationship"
+      },
+      {
+        "id": "KNOWLEDGE_OBJECT",
+        "existing": "SOURCE/OBSERVATION/CONCEPT/CLAIM/METHOD/CASE/IMPLEMENTATION/DECISION/EVALUATION/REVISION",
+        "entity": "DISTINCT_RESEARCH_ARTIFACT",
+        "question": "Is this a documented statement, method, observation, claim or tested output?",
+        "mustNotInfer": "Imported document means verified claim"
+      },
+      {
+        "id": "SEMANTIC",
+        "existing": "exactMatch/closeMatch/broader/narrower/related",
+        "entity": "TERM_AND_CONCEPT",
+        "question": "Which expressions truly refer to the same thing?",
+        "mustNotInfer": "Token Account, Owner, Fee Payer and economic controller are identical"
+      },
+      {
+        "id": "ECONOMIC",
+        "existing": "OBSERVED_TRANSFER/FUNDING_CANDIDATE/SWAP/INVENTORY/CONTROL_HYPOTHESIS",
+        "entity": "ONCHAIN_ACTION_OR_ECONOMIC_INTERPRETATION",
+        "question": "What exact event, balance, right or mechanism is represented?",
+        "mustNotInfer": "Any funding/transfer edge proves controller or sale"
+      },
+      {
+        "id": "EVIDENCE",
+        "existing": "source/author-claim/raw-observation/inference/hypothesis/offline-test/live-readonly/unknown",
+        "entity": "CLAIM_AND_PROOF",
+        "question": "Which source and evidence exactly supports or contradicts which claim?",
+        "mustNotInfer": "A hash or green CI confirms an economic hypothesis"
+      },
+      {
+        "id": "TIME",
+        "existing": "event/capture/first-available/decision/quote/outcome/source-version",
+        "entity": "TEMPORAL_BOUNDARY",
+        "question": "When did it happen, become knowable, become executable, and get revised?",
+        "mustNotInfer": "New archive visibility implies newly observed live market activity"
+      },
+      {
+        "id": "EXECUTION",
+        "existing": "Blix original UI/API/SQLite/AI-tools/test/authorized-runtime",
+        "entity": "PROGRAM_AND_RUN",
+        "question": "What code and which actual run produced the assertion?",
+        "mustNotInfer": "Source code present equals deployed and executed"
+      },
+      {
+        "id": "EVOLUTION",
+        "existing": "counterexample/monitoring/evaluation/supersession/reopen",
+        "entity": "CHANGE_AND_FEEDBACK",
+        "question": "What result changes a claim, code behavior or next question?",
+        "mustNotInfer": "More knowledge entries automatically improve performance"
+      }
+    ],
+    "linkKinds": [
+      {
+        "kind": "semantic_match",
+        "from": "CONCEPT",
+        "to": "CONCEPT",
+        "meaning": "Synonym, broader/narrower or adjacent term only",
+        "neverPromoteTo": "ECONOMIC_COMMON_CONTROL"
+      },
+      {
+        "kind": "observed_economic_event",
+        "from": "ONCHAIN_OBSERVATION",
+        "to": "ONCHAIN_OBSERVATION",
+        "meaning": "Explicit signature + instruction position + owners, asset and time; economic event rather than semantic similarity",
+        "neverPromoteTo": "SAME_CONTROLLER"
+      },
+      {
+        "kind": "derived_from",
+        "from": "CLAIM",
+        "to": "SOURCE_OR_OBSERVATION",
+        "meaning": "Claim derived from an identified source version with an explicit reasoning bridge",
+        "neverPromoteTo": "INDEPENDENTLY_VALIDATED"
+      },
+      {
+        "kind": "supports",
+        "from": "EVIDENCE",
+        "to": "CLAIM",
+        "meaning": "Evidence bears on exactly this claim under stated scope/coverage and does not subsume the whole source",
+        "neverPromoteTo": "CERTAIN_CAUSATION"
+      },
+      {
+        "kind": "contradicts",
+        "from": "EVIDENCE",
+        "to": "CLAIM",
+        "meaning": "A repeatable counterexample or mutually inconsistent source result challenges this claim",
+        "neverPromoteTo": "ALL_OTHER_CLAIMS_FALSE"
+      },
+      {
+        "kind": "applies_to",
+        "from": "METHOD_OR_CLAIM",
+        "to": "TASK_CONTEXT",
+        "meaning": "Applicability depends on source data, role, fees, provider/time and missing evidence",
+        "neverPromoteTo": "UNIVERSAL_RULE"
+      },
+      {
+        "kind": "implemented_by",
+        "from": "METHOD_OR_CLAIM",
+        "to": "CODE",
+        "meaning": "Specific algorithm, file/commit and input/output contract implements only the stated subset",
+        "neverPromoteTo": "PRODUCTION_VERIFIED"
+      },
+      {
+        "kind": "tested_by",
+        "from": "IMPLEMENTATION",
+        "to": "TEST_OR_RUN",
+        "meaning": "Which fixture and commit checks which observable outcome",
+        "neverPromoteTo": "MAINNET_VALIDATED"
+      },
+      {
+        "kind": "selected_for_context",
+        "from": "KNOWLEDGE_SOURCE",
+        "to": "AI_TASK",
+        "meaning": "Source selected/available to model with provenance and exclusions",
+        "neverPromoteTo": "APPLIED_CORRECTLY"
+      },
+      {
+        "kind": "changes_decision",
+        "from": "NEW_EVIDENCE_OR_EVALUATION",
+        "to": "CLAIM_OR_PRODUCT_DECISION",
+        "meaning": "Trace affected conclusion and update only justified scope after review",
+        "neverPromoteTo": "NEW_USER_AUTHORIZATION"
+      },
+      {
+        "kind": "revised_from",
+        "from": "REVISED_CLAIM",
+        "to": "PRIOR_CLAIM",
+        "meaning": "Keep old claim/version and reason for correction or withdrawal",
+        "neverPromoteTo": "ERASE_PROVENANCE"
+      }
+    ],
+    "proofBoundaries": [
+      {
+        "temptation": "Common direct funder or same block",
+        "licensed": "POSSIBLE_ASSOCIATION",
+        "needs": "Exclude shared services; verify direct funding, economic capacity, multiple independent events and control indicators",
+        "forbidden": "COMMON_CONTROLLER_CONFIRMED"
+      },
+      {
+        "temptation": "Token A -> B then B later sold",
+        "licensed": "TRANSFER_AND_SELL_SUMMARY_TEMPORAL_CANDIDATE",
+        "needs": "Complete inventory/provenance, verified swap side and time",
+        "forbidden": "SOLD_THE_TRANSFERRED_INVENTORY"
+      },
+      {
+        "temptation": "BigInt raw transfer total or multi-hop sum",
+        "licensed": "CAPTURED_GROSS_TOKEN_TRANSFER",
+        "needs": "Token-2022 fees, pool identity, complete holdings and net balance changes",
+        "forbidden": "INDEPENDENT_DEMAND_OR_CURRENT_SELLABLE_BALANCE"
+      },
+      {
+        "temptation": "Same address appears for two Mints",
+        "licensed": "CROSS_MINT_ADDRESS_OVERLAP",
+        "needs": "Asset consideration, transaction path and wallet identity coverage",
+        "forbidden": "SAME_CAPITAL_OR_ORGANIZED_GROUP"
+      },
+      {
+        "temptation": "Knowledge snippet returned by loader",
+        "licensed": "RETRIEVED_VERSIONED_CANDIDATE",
+        "needs": "Model trace and controlled task evaluation",
+        "forbidden": "MODEL_KNOWLEDGE_CORRECTLY_USED"
+      },
+      {
+        "temptation": "Node CI tests pass",
+        "licensed": "OFFLINE_TEST_FOR_FIXED_FIXTURES",
+        "needs": "Real archive replay, live read-only verification and independent evaluation",
+        "forbidden": "ALL_MAINNET_DATA_AND_MARKET_MECHANISM_VERIFIED"
+      }
+    ],
+    "sampleTask": {
+      "intent": "这几个钱包收币后卖出，是一组人吗？",
+      "scope": "ONE_SELECTED_MINT_READ_ONLY",
+      "connect": [
+        {
+          "axis": "GOAL",
+          "reference": "G2-MINT",
+          "question": "Which Mint, wallet set, observation window and permission?"
+        },
+        {
+          "axis": "SEMANTIC",
+          "reference": "Token Account / Owner / public service / economic controller",
+          "question": "Are these the same type of actor?"
+        },
+        {
+          "axis": "ECONOMIC",
+          "reference": "TOKEN_TRANSFER_AND_LATER_LOCAL_SELL_SUMMARY",
+          "question": "Which specific event and inventory change happened?"
+        },
+        {
+          "axis": "EVIDENCE",
+          "reference": "RPC SHA256 + signature + instruction position + source coverage",
+          "question": "Can archived raw facts reproduce the graph edge?"
+        },
+        {
+          "axis": "DOMAIN",
+          "reference": "D01/D04/D05/D06/D07/D10/D11",
+          "question": "What do protocol, wallet role, funding, inventory, timing and failure modes say?"
+        },
+        {
+          "axis": "EXECUTION",
+          "reference": "server/economic-events.mjs + server/intelligence/economic-network.mjs",
+          "question": "Which implementation and tests support the output?"
+        },
+        {
+          "axis": "EVOLUTION",
+          "reference": "new RPC verification or public-service counterexample",
+          "question": "Which limited claim needs revision?"
+        }
+      ],
+      "allowableResult": "OBSERVED_TRANSFER_PLUS_TEMPORAL_SELL_CANDIDATE_WITH_ALTERNATIVES",
+      "disallowedResult": "VERIFIED_SAME_OPERATOR_AND_PROFIT",
+      "mainnetStatus": "NOT_VERIFIED_BY_THIS_STRUCTURAL_MODEL"
+    },
+    "navigationRule": "Use the few relevant axes for a task; claims must remain reversible to source, evidence and the specific execution that created them. These relations are not model/tool grants."
+  }
 }
