@@ -3,6 +3,7 @@
 // independent of the trading terminal's authentication or GET semantics.
 import { createServer } from 'node:http';
 import { runAiResearchTask } from './ai-workflow.mjs';
+import { discoverPulseInvestigation, validatePulseDiscoveryInput } from './pulse-discovery.mjs';
 
 const MINT = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
 const MAX_BODY = 5_000;
@@ -25,7 +26,7 @@ const json = (res, code, payload) => {
   });
   res.end(body);
 };
-async function readBody(req) {
+async function readBody(req, route) {
   let bytes = 0;
   const parts = [];
   for await (const piece of req) {
@@ -36,6 +37,7 @@ async function readBody(req) {
   let data;
   try { data = JSON.parse(Buffer.concat(parts).toString('utf8')); }
   catch { throw new Error('REQUEST_NOT_JSON'); }
+  if (route === '/discover') return validatePulseDiscoveryInput(data);
   if (!data || typeof data !== 'object' || Array.isArray(data) ||
       Object.keys(data).some(x => !['goal','mint'].includes(x)) ||
       typeof data.goal !== 'string' || data.goal.trim().length < 2 ||
@@ -53,6 +55,8 @@ function errorCode(error) {
     'MODEL_PROVIDER_RESPONSE_TOO_LARGE','MODEL_PROVIDER_TIMEOUT',
     'MODEL_PLAN_INVALID','MODEL_TOOL_BUDGET_EXCEEDED','UNAUTHORIZED_TOOL',
     'MINT_NOT_PRESENT_IN_USER_GOAL','DUPLICATE_TOOL_REQUEST',
+    'DISCOVERY_INPUT_INVALID_OR_STALE','DISCOVERY_CANDIDATE_INVALID',
+    'DISCOVERY_MODEL_SELECTION_INVALID','DISCOVERY_MODEL_MINT_NOT_IN_SHORTLIST',
   ]).has(message) ? message : 'RESEARCH_FAILED';
 }
 
@@ -92,7 +96,7 @@ export function createResearchHttpServer({
         remainingTasks:Math.max(0,maxTasks-tasksStarted), busy });
       return;
     }
-    if (req.url !== '/research' || !['OPTIONS','POST'].includes(req.method)) {
+    if (!['/research','/discover'].includes(req.url) || !['OPTIONS','POST'].includes(req.method)) {
       json(res, 404, {error:'ROUTE_NOT_FOUND'});return;
     }
     if (!origin || !origins.has(origin)) {
@@ -106,11 +110,15 @@ export function createResearchHttpServer({
     if (busy) {json(res,429,{error:'RESEARCH_BUSY'});return;}
     if (tasksStarted >= maxTasks) {json(res,429,{error:'TASK_BUDGET_EXHAUSTED'});return;}
     let input;
-    try { input = await readBody(req); }
+    try { input = await readBody(req, req.url); }
     catch (error) {json(res,400,{error:errorCode(error)});return;}
     busy = true;tasksStarted++;
     try {
-      const result = await runAiResearchTask({ ...input, model, readEconomic, loadKnowledge });
+      const result = req.url === '/discover'
+        ? await discoverPulseInvestigation({
+          input, model, readEconomic, loadKnowledge, runResearch:runAiResearchTask,
+        })
+        : await runAiResearchTask({ ...input, model, readEconomic, loadKnowledge });
       json(res, 200, {
         ...result, sourceMode:'LOCAL_SQLITE_ONLY',
         modelMode:'OPT_IN_SERVER_MODEL_API',
