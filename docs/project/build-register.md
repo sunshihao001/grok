@@ -4,6 +4,27 @@
 >
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
+## 2026-11-13｜R-23：六环业务主线首次变成“自主候选选择 → 已有只读调查 → 后续证据状态”
+
+**用户明确的整体目标**：**自主发现市场机会 → 识别关键钱包 → 调查资金与库存 → 发现跨 Mint 联系 → 判断是否值得参与 → 持续观察和修正**。这是一条可分叉、可停止、按证据推进的业务闭环，**不是**每个Mint都必须按六个固定阶段运行，也不是交易机器人。
+
+**本轮可运行的真实增量**：
+- `server/intelligence/pulse-discovery.mjs` 新增 **`stage:'discover'`**：只从原Blix Pulse页面当前加载的至多12个市场候选里选择一个Mint/或不选；严格校验目标列表、字段、去重、网页记录时间和 live/polling 状态。用户浏览器记录的时间不等于报价供应商时间，已显式标记；禁止用缓存或12个候选宣称“全市场实时发现”。
+- **知识在市场选择前就生效**：复用原来的11源本地白名单知识加载器，给AI提供少量专业研究片段；`discovery.knowledgeUse`明确只证明“提供给模型”，不表示知识能验证机会，也不给AI扩权。
+- `server/intelligence/research-http.mjs` 增加 `POST /discover`：新入口仍需用户**手动**启动、原有Origin/Host/127.0.0.1门禁、同一按进程任务预算和受限模型密钥；模型Mint必须属于提交的候选列表。之后进入已经存在的`runAiResearchTask`，且仍仅可读已有离线SQLite经济档案；不授权新的原Blix业务GET、跨Mint任意抓取/下单/付款。
+- `server/intelligence/investigation-continuation.mjs` 对已有 `economic-network.mjs` 事实做**六环证据状态投影**，列出捕获的关键地址候选、接收方后续卖出摘要、跨Mint时间关系候选、无法定价的可参与性，以及建议继续观察的Owner。不能证明同控、卖出同一批Token、SOL资金来源、历史盈利；**没有实价/信号可得时间则明确跟单不可评估，没有监控服务则明确监控未运行**。
+- `web/src/pages/Intelligence.tsx` 增 “AI 从当前Pulse候选中自主选择并调查”按钮及候选选择理由、知识来源和六环证据状态；原单Mint调查入口保留。市场候选仍使用原版`usePulse`，不复制新市场扫描器/图谱/交易程序。
+- 新增 `test/pulse-ai-discovery.test.mjs`（7项）及 `test/investigation-continuation.test.mjs`（3项）：测试非法/过时/重复候选拒绝、未经允许Mint不可进入工具、可以不选、不良来源不能消耗预算、按需知识前置、受控模型HTTP及Six-stage的UNKNOWN、跨Mint时序候选非同控/非盈利。加入`npm test`与`test:intelligence`。
+- 原位更新[AI本机工作台运行说明](ai-readonly-local-workbench.md)，记录每个自主选择任务最多4次模型请求及为何未证明收益。
+
+**已接通的最短产品链**：原版Blix Pulse（**仅页面已观察候选**）→ 用户手动点击 → AI/知识选一个调查Mint → 原有单Mint本地经济档案只读 → Key Wallet/Token转移/后续卖出/跨Mint时间候选的**可复查线索与不确定性** → 网页显示与手动后续调查建议。
+
+**尚未接通，不能宣传为完整闭环**：从全市场持续主动扫描；完整历史RPC与非Holder多跳补查；确定Token库存与资产净额因果关系；跨Mint资金原始Lamports归属；历史实盘报价、信号可得时点和退出模拟；长期保存研究/证据状态；真正后台持续监控及新事实自动修正；真实商用模型API与主网完整验收；PR#23合并/部署。仅新增手动选择研究，**不能自称全自动投资系统**。
+
+**风险锚点和下一项最有价值的验证**：不要给每个六环阶段再造一个AI专家/独立服务；先用可复查的真实已捕获签名、覆盖日志与失败反例，验证**同一Mint的关键钱包召回→接收钱包真实卖出→跨币候选**，随后同一批候选对比原版Blix/确定性工具/AI知识三版本；不产生额外可靠事实便停止扩展UI。在上线任何周期自动研究前，应证明持续观察增益、供应商成本与请求权限边界。
+
+**证据标签**：`SOURCE_CODE_INTEGRATION + MOCK_MODEL_HTTP + OFFLINE_EVIDENCE_TEST`；不是`ALL_MARKET_SCAN`、`LIVE_AI_PROVIDER_VERIFIED`、`REAL_CHAIN_END_TO_END`、`ALPHA_PROVEN`。本轮最新源码与CI以最终提交SHA核对。
+
 ## 2026-11-13｜R-22：独立 AI 工作台接入“模型API × 旧知识 × 本地经济证据”可调用链
 
 **前提与取舍**：用户明确要求保留原版Blix并建设独立AI可视化工作台，接入历史专业知识、模型API和实际调查工具。本轮选择**单独的本机只读研究服务**，而不是将模型接进会交易/扫描/产生副作用的原 `server/server.js`。安全源审查发现：原 `/api/token/:mint` 的GET可能触发 `lookupMint`/`adoptMint`/`vet`，不因为HTTP GET就加入AI后端工具允许表。
