@@ -92,6 +92,12 @@ test('AI visual workspace is additive and keeps original market, chart and tradi
   assert.match(workspace, /key-wallet-investigation-brief/);
   assert.match(workspace, /knowledge\/ai\/intent-knowledge-selection-and-reasoning/);
   assert.match(workspace, /尚未运行服务器知识检索/);
-  assert.doesNotMatch(workspace, /\b(?:fetch|sendTransaction|signTransaction)\s*\(/);
-  assert.doesNotMatch(workspace, /\b(?:POST|api\/buy|api\/sell)\b/);
+  // Only opt-in localhost research POST is new; no trading/signer calls from UI.
+  assert.match(workspace, /SIDECAR_URL \\+ "\\/research"/);
+  assert.match(workspace, /method: "POST"/);
+  assert.match(workspace, /researchHealth\\?\\.ready/);
+  assert.match(workspace, /knowledgeUse/);
+  assert.match(workspace, /sourceMode/);
+  assert.doesNotMatch(workspace, /\\b(?:sendTransaction|signTransaction)\\s*\\(/);
+  assert.doesNotMatch(workspace, /\\bapi\\/(?:buy|sell|account|trade)\\b/);
 });
