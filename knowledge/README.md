@@ -1,5 +1,7 @@
 # Blix 专业知识｜唯一运行主体的分类接收入口
 
+**2026-11-13｜纠偏与反证新的权威入口：** [Blix全项目偏差类型、根因归属和实例验收](../docs/project/cross-layer-anchor-map-20261113.md#12-2026-11-13纠偏的专业扩写从修一处错到首个失效环节职责与全链结果-v03)对应[ai-d通用纠偏认识](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/cross-layer-project-anchors.md#13-2026-11-13纠偏能力的深层扩写纠错校准根因修复与学习v03)。按问题查原知识/原采集/原代码/真实反例，不能因为一次错误就否定完整理论、发明固定新流程或由AI侧复制上游源端。
+
 **知识关系结构已收束（2026-11-13）**：[ai-d完整概念库与专业术语差异](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/cross-layer-project-anchors.md#11-2026-11-13-体系收束从关键词集合走向可解释可验证的项目关系v02) ↔ [Blix七类能力/五种网络/六项业务目标的实际映射](../docs/project/cross-layer-anchor-map-20261113.md#7-2026-11-13-全面术语引入后的结构收束不是加更多标签v02) ↔ [原INTEGRATION-CROSSWALK的结构归位](INTEGRATION-CROSSWALK.md#2026-11-13结构收束-v02从知识分层到七类跨层能力五种逻辑视图)。**原模型只原位增加机器可读的关系视图，不新增D01–D12/十轴/十一关系，也不启用自动推理**。运行 npm run audit:knowledge-trace -- --axes 可静态核对。
 
 **2026-11-13｜知识进入代码后的跨层锚点：** [Blix多层锚点与变更影响实例](../docs/project/cross-layer-anchor-map-20261113.md)，对照[ai-d通用方法](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/cross-layer-project-anchors.md)。这里的锚点关联专业主张、数据契约、代码不变量、测试与真实验收；并非新专家制度或重复D01–D12知识体系。初版只映射少数源级已核的高价值例子，不宣称自动全仓传播或已经生产验收。
