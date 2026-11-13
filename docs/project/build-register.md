@@ -4,6 +4,24 @@
 >
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
+## 2026-11-13｜R-25：可靠性第二轮｜从小阶段列表升级为数据契约、源头验收与AI价值对照
+
+**本轮纠偏来源**：用户认可六大业务目标的43个前置小阶段，但要求再提升“靠谱与全面”。仅做详细清单仍可能只使架构复杂；必须把输入来源/时点/完整度、钱包经济归因、交易实际可跟随性、模型知识增益、恢复与权限放在同一可验收业务链。经过对当前PR#23、Blix原版数据/RPC/钱包/市场代码、Solana官方交易/Indexing协议及成熟开源项目源码的核对，把这些要求写入现有[六大业务结果的全前置能力与依赖审查](six-business-outcomes-dependency-audit-20261113.md)第13–18节。
+
+**不再冒充已完成**：当前AI从最多12个Pulse浏览器观察候选选择一个Mint，仍不是“采集、覆盖、时效独立可核的全市场发现”；本机浏览器Date.now不能代替提供方首可见；原版SQLite的市场表与钱包RPC档案不直接意味着完整同源数据链。Blob签名Hash验证不等于经济动作解释准确。Solana交易版本支持已有实现，真实重点是ALT/CPI/净资产/WSOL/Token-2022/Pool/LP解析与重放。
+
+**本轮真正增加的工程产物**：
+- scripts/audit-intelligence-source-readiness.mjs：只读已存在SQLite、仅一个Mint，查询tokens/snapshots/signals/early/feed_events与经济交易指令表；本地12条原始RPC抽样SHA256/形态检查、至多8个Owner签名窗口抽样，不建库、不联网、不调用模型、不读私钥。输出有限SOURCE_READINESS，不给完整市场或盈利认定。
+- test/intelligence-source-readiness.test.mjs：原文件字节hash不变、已捕获数据可读、表缺失/空数据降级UNKNOWN、RPC原始哈希损坏被识别、非法路径不创建数据；纳入npm test与npm run test:intelligence。
+- 新npm脚本：audit:data-readiness:offline，手动部署者指定已有SQLite与Mint；**不是自动后台采集或已连接真实主网运行**。
+
+**本轮进一步借鉴的成品**：Solana官方Transaction Introspection/Indexing；solana-foundation/trading-portfolio（hasUnpriced/historyTruncated/partial）、PumpTrace（游标/限额/恢复）、Million（未选/拒绝决策）、dexterm（每工具权限与拒绝日志，其AGPL代码不可直接搬用）、GeyserIndex（Fork确认/重放，当前无需改写完整Indexer）。这些成品分别解决不同约束，借鉴时要比较真实源码/边界/费用，不按功能数量堆砌。
+
+**优先级未被新理论扭转**：首先在被授权的既有Blix数据库副本上选择一枚真Mint/指定时间窗验证来源记录、签名与缺口；随后逐条原始交易还原从Token买入到转出/接收方卖出；必要时对照独立历史RPC后再扩跨Mint、可执行报价与前瞻模型对照。没有真实源数据可验证就先修最早断点，而非继续扩专家/UI。
+
+**证据边界**：新CLI为本地数据契约与离线合成数据库测试；本轮没有拿到真实Blix业务库、未调用任何付费模型或主网补查、未验证任何Alpha/控制归因；PR#23是否合并、最新CI须随最终SHA重新核对。此前uptime故障仍需独立追查。
+
+
 ## 2026-11-13｜R-24：六个业务结果补齐前置小阶段｜数据源到证据/机会/反馈的依赖审查
 
 **用户纠偏**：“自主发现→关键钱包→资金与库存→跨Mint→是否值得参与→持续观察”只是6个**业务结果**，并不包含实现前提；例如“自主发现”之前必须有数据源选择、接入、实时采集、历史补查、保存、标准化、去重、数据源/时点覆盖核查、候选形成和失败样本回馈。之前标作第一阶段“✅完成”，实际上只完成了**Blix前端Pulse已可见的最多12个候选中的AI选Mint**，并未实现或验证完整市场发现系统，不能再以终点按钮当阶段交付。
