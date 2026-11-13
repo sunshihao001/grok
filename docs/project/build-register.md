@@ -5,6 +5,23 @@
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
 
+## 2026-11-13｜R-32：纠偏机制第一次纠正自身错误诊断（已执行的跨模块复核）
+
+**原诊断的问题**：前面的数据源责任台账只看到了server/sources.js::pumpStream里有重连、无独立历史补查，于是容易把该文件缺口扩大成“原Blix发行补查能力缺失”，进而推动新建采集逻辑。**这是证据覆盖范围错误，属于知识/源码审查失效，而不是已证明的运行BUG。**
+
+**这轮新增的原仓源码事实**：
+- server/engine.js::fillLaunchGaps()由server/livetrades.js::onLiveCreate供给链上发行事件，和PumpPortal共同发现；engine.js::backfillLaunches()从pump.fun近期列表按最多8页启动、最多4页周期补查（45秒），429停止；server/engine.js::scanRecent()另查其他发行平台近期代币。**Blix已具备有界发行回补和多来源交叉发现**。
+- server/livetrades.js::loadState有2分钟内的状态恢复；这是恢复快照，不等于实时流断线期间所有交易补齐。
+- server/wallets.js::pollOne/pageSignatures已提供钱包交易签名轮询补查，并经wallet-signature-coverage.mjs记录原子游标、窗口与gap。不能提议AI再建一套钱包签名源。
+- server/rpc-stream.js对过期流从tip重连的行为仍成立，但“哪个具体钱包/市场事件因此漏掉、已有哪个补查组件能否弥补”需限定流种类和时间窗口，不能将不同发行、市场交易、钱包处理流混为一个事故。
+
+**已经修复的是项目错误判断**：在[多层锚点第11–12节](cross-layer-anchor-map-20261113.md)明确撤回“缺少发行补查本身”的宽泛假设；保留真正待验问题：**已有补查对源时点、原始交易、特定断流的历史完整性与可观测coverage能否提供独立收据**。此修订为DOCUMENT_DIAGNOSIS_CORRECTED / SOURCE_CODE_REVIEWED，不能谎称发现或修复了实际漏包问题。
+
+**新的可检验工作起点**：在R0权限范围和实际可取得的原版源证据内，选一个断流或历史不足场景，先对比engine现有补查、钱包轮询与不同RPC源的实际覆盖，再确认是否仍缺独立gap记录、重放或质量验收；必要修复只落在各自**既有**来源所有者。不在AI sidecar另造源。若现有机制已经足够，则保留观察而不增加代码。
+
+**纠偏是否有效的证据**：这轮已从狭窄文件观察纠正为跨模块实际代码事实并避免错误开发方向；真实漏包恢复效果仍UNKNOWN，尚无新增主网/模型/付费执行。今后每条源端缺陷候选在提修复前至少查完同责任链的现有补偿机制；不要求所有小bug执行复杂RCA。
+
+
 ## 2026-11-13｜R-31：纠偏概念全层扩写——定位源头，修责任层，防止过度纠偏
 
 **用户明确提出**：多个项目部位存在纠错需求，需要把“纠偏”作为完整能力打磨；它不限于改错文案或代码缺陷，涵盖目标、知识、来源、语义、采样、设计、程序、验收和AI任务选择。**总目标O1–O6不变，仍保留完整原Blix和只读扩展，不额外建设纠偏Agent。**
@@ -13,7 +30,7 @@
 - [ai-d第13节：偏差/修正/根因/CAPA/单环双环学习](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/cross-layer-project-anchors.md#13-2026-11-13纠偏能力的深层扩写纠错校准根因修复与学习v03)，作为跨项目方法来源。
 - [Blix多层锚点第12节：纠偏对象、归属、样例与验证](cross-layer-anchor-map-20261113.md#12-2026-11-13纠偏的专业扩写从修一处错到首个失效环节职责与全链结果-v03)，只在现有O1–O6/源/代码/测试中追查，不创建新的全仓映射引擎。
 
-**源码核对与风险优先级**：原版rpc-stream.js重连有从链头接续且跳过消息的明确实现取舍；sources.js PumpPortal WS已有重连但此代码中未看到持久gap补查；wallet-signature-coverage.mjs保留初次采样不足/历史不完整，economic-claim-trace.mjs明确sell摘要不能证明同批转入库存；pulse-discovery.mjs只处理有限浏览器候选；followability-replay.mjs可计算有严格来源的纸面收据但不证明真实盈利。**这些只是源可见事实与潜在错误传播路径，不证明供应商/真实市场实际漏包或已验证的具体资金错误**。见原映射中带证据等级的优先对象表。
+**源码核对与风险优先级**：原版rpc-stream.js重连有从链头接续且跳过消息的明确实现取舍；sources.js PumpPortal WS已有重连，**但不能只看此文件就推断Blix没有发行补查**：engine.js::backfillLaunches已有启动和周期有界近期列表回填，fillLaunchGaps通过livetrades.js交叉发现；钱包端wallets.js已有轮询补查，wallet-signature-coverage.mjs仍清楚记录初次采样不足/历史不完整，economic-claim-trace.mjs明确sell摘要不能证明同批转入库存；pulse-discovery.mjs只处理有限浏览器候选；followability-replay.mjs可计算有严格来源的纸面收据但不证明真实盈利。**这些只是源可见事实与潜在错误传播路径，不证明供应商/真实市场实际漏包或已验证的具体资金错误**。见原映射中带证据等级的优先对象表。
 
 **新增判断**：
 1. 错误分层：现象/真实根因/促成因素/错误传播/验收失败，不能见到一处不合预期就说“已确认八个BUG”。
@@ -35,7 +52,7 @@
 **用户明确要求**：“尽量不要直接做数据源应该做的，因为没有提高数据源。”此要求修正R0/R1实施焦点：下游单Mint报告和AI工作台可以检查事实与提出补查需求，但**不承担重复抓取全市场、为单币另建RPC签名游标、手工拼齐历史、把客户端时间当源端首次可见**。应把查到的缺口反馈给真正拥有该职责的原版Blix采集/持久化或外部供应商选择层。
 
 **本轮源级源码事实与候选改进**：
-- server/sources.js::pumpStream 使用PumpPortal WS，具有重连但在已核代码中尚看不到离线期间发行事件的持久缺口记录与历史补查；如果恢复后重新连接，也不等于遗漏已补回。供应商是否支持所需历史查询需要独立核实。
+- server/sources.js::pumpStream 使用PumpPortal WS和重连；经**跨文件二次核查**，原版server/engine.js::backfillLaunches（启动有界8页、每45秒有界4页的pump.fun近期列表查询，429停止）和fillLaunchGaps（livetrades链上create交叉发现）**已经提供部分发行补查**，server/livetrades.js也有短时间运行状态恢复。先测试它们是否满足指定断流/重启窗口，再讨论补充事件级缺口水位或供应商历史能力。不能再将“pumpStream文件中没有补查”误写为“整个Blix没有补查”。已有补查不代表全部交易事件、源首次可得时间和全市场覆盖完整。
 - server/rpc-stream.js在节点延迟时从tip重新订阅，代码原注释承认可能跳过旧消息；这是实时性/完整性取舍，不得让数据消费者误称全程覆盖。优先在对应源层补充可核缺口/恢复收据，再视供应商能力实施回填。
 - server/coverage.js聚合现有短时间实时交易候选与连接/创建状态，但“当前窗口的覆盖感知”不能代替独立全市场发行覆盖的实证。
 - server/economic-events.mjs保留局部原始RPC及哈希；server/wallet-signature-coverage.mjs已有原子页检查点、签名jobs和gap观察，应增强既有组件而不是为AI建立平行采集器。
