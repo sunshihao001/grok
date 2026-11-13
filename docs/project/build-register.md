@@ -379,3 +379,12 @@
 - 需要在有运行权限的环境执行 **npm run test:intelligence、npm test、npm run test:evidence、npm run test:security、Web build**；如新路由出现误选和旧知识片段覆盖不足，先修检索/对照，不扩张统一prompt。
 
 **下一项优先**：先拿到本SHA的离线测试运行验收；再做同数据的“无知识→6源→11源”任务A/B与误归因分析，在此基础上再确定是否需要更多源码引用或知识路线。长期研究任务以后应按本R-13恢复，不重复做新的资料目录。
+
+
+#### R-13 后验复核：来源与链接通过静态校验；最新CI缺席，PR合并存在冲突
+
+- **本轮独立GitHub读回**：8/8现行D01–D12原始知识领域文件均包含2026-11-13适用修正与来源账；6/6知识/项目入口链接该来源账；D01–D12全部在对照账；11个本地白名单专业源路径在当前树可见；15份本轮新增/改动的知识/导航文档中未发现新的相对链接断链。词面路由样例按工具源码模拟，覆盖钱包资金/多跳/关键钱包/价格机制/AI认知/跨项目来源/群体与无关输入，**非Node实际执行结果**。新增Node测试本身已写入并且在package脚本注册，但不能据此标为“测试通过”。
+- **范围未夸大**：\`knowledge/references/source-coverage-v0.1.json\` 记录本轮SOURCE_READ候选，保留原Hermes/qb-/meme-\`TREE_INVENTORIED_PARTIAL_DEEP_READING\`和\`exhaustive_content_review_completed=false\`；历史源目录并未整体完成逐项深审。
+- **CI实况**：最新知识变更commit的GitHub check-runs为0、combined status pending，GitHub Actions只有\`uptime.yml\`的push失败记录（no web/Node/evidence/audit job）；本轮最新知识调用与整合测试 **TEST_EXECUTION_NOT_CONFIRMED**。不能沿用此前\`520b5a3\`的全绿CI为新SHA验收，也不能把无job的Uptime失败当网站一定离线。
+- **新发现的实际合并阻断**：GitHub [Draft PR #23](https://github.com/sunshihao001/grok/pull/23) 当前 \`mergeable=false, mergeable_state=dirty\`，与最新 \`blix\` 不可直接合并。Blix基线在此PR原base commit之后有更改，至少触及\`knowledge/README.md\`、\`knowledge/cases/independent-validation-and-failure-cases.md\`、\`knowledge/mechanisms/market-price-mechanism-research.md\`、\`knowledge/references/source-coverage-v0.1.json\` 等共享路径。**本轮未尝试强制更新基线、覆盖原版变化或合并PR**；具体冲突块仍需在三方对照中逐项消解，之后再执行CI。
+- **下一项优先**：在PR #23的旧分支成果与当下blix共享知识原文间做三方冲突裁决，保留两侧的新旧知识与来源；随后用Node24验证\`test:intelligence\`、全套Node/security/evidence和Web；待通过再做真实模型知识选择A/B及实际Mint/RPC专业调查。
