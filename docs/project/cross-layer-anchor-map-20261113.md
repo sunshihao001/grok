@@ -1,4 +1,4 @@
-# Blix × AI 工作台｜多层锚点与跨层变更影响映射 V0.1
+# Blix × AI 工作台｜多层锚点与跨层变更影响映射 V0.2
 
 2026-11-13｜范围：**现有Blix产品＋PR #23只读AI扩展的少量高价值真实锚点**。来源：本分支源代码、现存合成测试与现有知识文档。**状态：ANCHOR_MAP_SOURCE_CHECKED；不是自动监控、全网链上实跑、已验证市场Alpha或新锚点运行框架。**
 
@@ -81,3 +81,93 @@
 - 只读范围：本轮规划映射不更改交易、账户、签名、部署、收费API或当前用户权限。
 
 **整个图谱的目标是减少犯错与返工，而不是让项目因锚点越来越多而失去开发速度。**
+
+
+## 7. 2026-11-13 全面术语引入后的结构收束：不是加更多标签（V0.2）
+
+**来源和权威分工**：新增的全部专业概念及各自边界以[ai-d通用七类核心能力/概念归位表](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/cross-layer-project-anchors.md#11-2026-11-13-体系收束从关键词集合走向可解释可验证的项目关系v02)为唯一跨领域理论入口；Blix只保留**适用业务、实际源码/数据/测试及剩余验收缺口**。继承已有G0–G4目标、O1–O6业务、K1–K9知识阶段、D0–D9共享工程前置、L0–L7深度、D01–D12专业领域、原DOMAIN-MODEL的十轴十一关系和INTEGRATION-CROSSWALK。绝不把这些指标互相取代，也不增建七个模块/九个Agent/五个新数据库。
+
+### 7.1 新概念的完整业务落点（七类能力统管全部术语）
+
+| 汇总能力 | 本次归位的所有关键概念/搜索入口 | 对齐现有Blix轴、专业知识、业务与代码位置 | 待修复/未证实 |
+|---|---|---|---|
+| **S1 方向保持** | 锚定Anchoring、Goal Alignment、需求分解Decomposition、需求管理、ADR、决策背景与取舍 | G0–G4及O1–O6；goal-map、V2总蓝图、build-register、原版保护测试；关联D0/D9 | 当前PR23 Draft冲突；业务最终价值和原版完整运行未验 |
+| **S2 结构理解** | 分层Layering、抽象Abstraction、聚合Aggregation、本体Ontology、领域模型、限界上下文Bounded Context、MBSE/SysML | DOMAIN-MODEL十轴及专业D01–D12/L0–L7；TokenAccount/Owner/Authority/Pool/经济实体分别解释；knowledge/README、wallet-roles-and-inventory、economic-events | 原Blix各个来源的真实字段/账户语义尚未统一实证 |
+| **S3 映射对齐** | 映射Mapping、结构/语义/关系/跨层/动态映射、Alignment、Linking、Knowledge Graph、实体消歧、语义对齐 | INTEGRATION-CROSSWALK、第1–6节已有主张级关系、economic-claim-trace关联专业知识与原始证据；O2/O3/O4 | 静态链接不是实际AI知识使用或经济主体归因 |
+| **S4 双向追溯** | 依赖Dependency、Traceability、Provenance、Data Lineage、Knowledge Lineage、Digital Thread、OpenLineage Run/Job/Dataset | D1–D5数据来源/采集/档案与D9验收；经济交易SHA256、钱包窗口、audit:data-readiness:offline、claim trace；O1–O5 | 真实sourceFirstAvailable和完整数据血缘未被可复查业务闭环验证 |
+| **S5 契约约束** | Data/Semantic Contract、不变量Invariant、Assertion、Constraint Propagation、Consistency/Coverage、SHACL、架构规则检查 | D2–D5数据/经济解析、D6工具权限、D9测试；BLX-D-PULSE-FRESHNESS、BLX-K-INVENTORY-PROVENANCE、BLX-C-READONLY和对应现有代码/测试 | 概念与注释不等于程序强制；需对每个真实接口建立有意义的负例 |
+| **S6 证据保障** | Verification/Validation、Cross-check、Statistical Cross-validation、Triangulation、Falsification、Claim–Argument–Evidence、Assurance Case、回归与负例、样本外 | D9验收及原Blix VS确定性解析VS AI的对照；O3资金身份、O5跟随性、O6修订；followability-replay及经济反例测试 | 仍缺真实Mint主链证据复核、前瞻样本外和真实模型增益；不可将静态/模拟“升级” |
+| **S7 运行演化** | Impact Analysis、Change Propagation、Observability、Versioning、Drift Detection、Feedback Loop、Continuous Improvement、Rollback、变更管理 | D8增量案件/恢复、D9 CI、O6监控与反馈；build-register与blix原历史组件 | 新AI Case长期监控NOT_RUNNING；无自动影响分析/线上漂移测量 |
+
+**术语没有遗漏，但不是每个词都成为新能力**：每个专业词至少被归入一个S类、已有轴及业务对应。没有独立实证的术语关系标为研究解释，不能在代码中当作事实/权限。七类统管的全部词和严格区别见ai-d主文第11节；此表专用于Blix落点。
+
+### 7.2 五种逻辑网络怎样共享一个业务事实
+
+| 逻辑网络 | 主对象/最重要关系 | 本仓已有位置 | 不能忽略的断点 |
+|---|---|---|---|
+| **N-G目标网络** | 用户目的→O1–O6业务结果→已确认权限与回退条件 | goal-map、V2蓝图、状态及建设台账 | O5实际参与机会优先，不能被无业务效用的新知识图吞并 |
+| **N-K知识网络** | D01–D12专业概念/机制→主张/反证→适用条件 | knowledge目录、DOMAIN-MODEL、INTEGRATION-CROSSWALK | 来源作者主张与官方事实、AI候选不同 |
+| **N-D数据事实网络** | Source→真实交易/Pool/钱包/时点→SQLite归档/转换/覆盖 | sources/engine/wallets、econ_transactions、econ_instructions、wallet_sig_windows | 采集、处理和first_available不足，不能证明全网实时覆盖 |
+| **N-C工程网络** | 业务需什么→现有函数/接口实现→明确权限和运行版本 | 原版Blix和server/intelligence；PR23集成候选 | 同名函数不代表实现同一业务语义，侧车只读不可自动访问交易GET |
+| **N-V验证反馈网络** | 主张→正反测试→真实历史/前瞻→修订/撤回 | test目录、CI、build-register、原知识修订日志 | 源码+合成测试不等于真实mainnet/持续运行/可盈利 |
+
+**五张网络是不同观察视图，不是新数据库。** 一项业务结论通过有语义的关系连接至原数据、知识、代码与检验结果；不为每个节点强制生成新JSON对象，也不因为两份文件都有“wallet”词语就建强依赖。
+
+### 7.3 六项业务结果对应的核心“锚点网络”
+
+| 六环业务结果 | 至少要连接的S类能力 | 最容易遗漏的上游与下游 | 阶段性可检验结果 |
+|---|---|---|---|
+| **O1 市场机会发现** | S1/S2/S3/S4/S5/S6/S7 | 多发射源+DEX覆盖、provider时点、市场候选分母、Pulse不超过12观察名单、被拒对象、后续报价；原版Triage/Early能力 | 同一源窗口的候选及未选记录、首可见、断流/延迟；未验证全覆盖就限制结论 |
+| **O2 关键钱包识别** | S2/S3/S4/S5/S6 | Holder与非Holder、Token Account/Owner/Pool/Vault、共享Funder、Wallet历史分页、动态角色；不是“钱包排行榜” | 每条角色关联有来源签名/字段和公共设施反例 |
+| **O3 资金与库存** | S2/S3/S4/S5/S6/S7 | Token-2022、inner CPI、SOL/WSOL、Swap+Transfer/LP、资金净额和同批库存不明；经济凭据→AI报告 | 原始签名与库存变化能局部复算，接收卖出与同批出货分开 |
+| **O4 跨Mint群体** | S2/S3/S4/S5/S6/S7 | 多跳跟踪、共享Hub、时点先后、资产批次/金额守恒、成员变化与重复经济主体解释 | 能重放路径且保留多个竞争解释；不凭同Slot/Jito直接认定同控 |
+| **O5 可参与性/跟单** | S1/S3/S4/S5/S6 | signal_first_available、历史路由报价、交易尺寸、池深、滑点/费用/退出失败、幸存者偏差 | 具备完整模拟收据才算纸面可评价，前瞻样本外与真实Alpha另验 |
+| **O6 监控/修订** | S1/S3/S4/S5/S6/S7 | 案件持久化、数据水位/重播、变化影响、重算、错误归因撤回与成本限额 | 真正第二次新市场事件触发同Case更新、不能把回填当新事实 |
+
+这张表**不是强制让每条AI调查走六次流程**；只是在计划某环或判断“是否完成”时检查它依赖的跨层能力是否已具备。重要新知识可以反向改变O1/O2的筛选问题，但重大业务目标和资金授权仍由用户决定。
+
+## 8. 三个跨层案例怎样落实而不膨胀架构
+
+### 案例A：Pulse时间字段变更
+
+如果有人改动browserRecordedAtMs或首次可见字段，要从BLX-D-PULSE-FRESHNESS向上检查O1发现/O5纸面可参与性，向下核对pulse-discovery.mjs、test/pulse-ai-discovery.test.mjs、followability-replay及来源数据时钟；断言是否仍能避免“事后可见当事先可用”。当前脚本仅核“浏览器观察输入”，**缺provider时点和真实市场宇宙**，所以下游真实验收不能标绿。
+
+### 案例B：Token转入后有卖出摘要
+
+如果更改economic-claim-trace.mjs的本地sell证据类型，追到wallet-roles-and-inventory的库存机制、econ_transactions源Hash、实际余额前后、claim trace离线测试，再检查跨Mint与可参与性输出是否抬升到“卖出同批/同控”。若无法重建库存批次，必须仍是UNKNOWN。这是**知识锚点约束结论而非强制每次新建钱包角色标签**。
+
+### 案例C：AI知识文件已更新但模型没用对
+
+若调整local-knowledge-loader或知识目录，沿K阶段的原来源→当前知识版本→提供给模型→实际工具选择→报告主张→真实反例和同预算对照检查。knowledgeUse=PRESENTED_TO_MODEL_NOT_VERIFIED_USED只能证明展示给模型，不等于模型已在决定时正确应用。此处应记录验证需求，不因关键词相同就自动给模型更大权限。
+
+## 9. 成熟成品与标准：全部登记但严格按场景选用
+
+| 参考来源 | 核实得到的有效机制 | 对Blix的当前判断 |
+|---|---|---|
+| [NASA Requirements Management](https://www.nasa.gov/reference/6-2-requirements-management/) / [OMG SysML v2](https://www.omg.org/sysml/sysmlv2/) | 需求→系统结构/行为/实现→验证的双向追溯与一致性 | 借鉴跨层关系，不引入完整系统工程工具 |
+| [NIST Digital Thread](https://www.nist.gov/) | 产品生命周期的信息连续/跨系统模型思路 | 理解从想法到实际运行的一条项目历史“线程”；目前属于类比借鉴 |
+| [W3C PROV-O](https://www.w3.org/TR/prov-o/) / [OpenLineage](https://github.com/OpenLineage/OpenLineage) | 来源实体/活动 + Run/Job/Dataset/Facet可验证处理链 | 最值得用于真实RPC归档与解析/结论来源，**静态知识路由不是运行事件** |
+| [Doorstop](https://github.com/doorstop-dev/doorstop) | 需求与测试可追溯、版本控制记录 | 借鉴检查方法；无需为每个函数创建需求YAML |
+| [OpenMetadata](https://github.com/open-metadata/OpenMetadata) / [DataHub](https://github.com/datahub-project/datahub) | 业务语义、元数据、字段级血缘、下游影响和可查询关系 | 当前原Blix数据链优先，可借鉴变更影响，不部署大型平台 |
+| [W3C SHACL](https://www.w3.org/TR/shacl/) / [pySHACL](https://github.com/RDFLib/pySHACL) | 图约束验证 | 可借鉴语义断言；没有RDF业务不急于引依赖 |
+| [ArchUnit](https://github.com/TNG/ArchUnit) | Java源码依赖与架构规则测试 | 借鉴架构回归思想，不将Java工具直接装入JS/TS |
+| [ADR](https://martinfowler.com/bliki/ArchitectureDecisionRecord.html) / [OpenTelemetry Stability](https://opentelemetry.io/docs/specs/otel/versioning-and-stability/) | 重大选择背景与结果记录、字段语义稳定 | Blix重要设计选择/字段契约才记录，不为每次小改造新文件 |
+
+上述是**源码/文档层借鉴**，不证明已部署这些成品、更不代表性能或商业价值已由它们验证。仓库及源码许可证仍需按实际移植对象核查；本轮没有移植第三方代码。
+
+## 10. 结构修正裁决与项目下一轮的真实验收
+
+**原位保留**：G0–G4、O1–O6、K1–K9、D0–D9、L0–L7、D01–D12、DOMAIN-MODEL十轴十一关系及已有152历史索引；知识源以原文件/旧知识登记保持，可视图通过本页和现有crosswalk关联。
+
+**明确不建**：S1–S7模块库、五套图数据库、自动“锚点推理”Agent、全文件标签网络、未得到源证据的同控图、零证据强推断、未经用户授权的付费模型或交易入口。
+
+**变更后的最低核查方法**：
+1. 说清具体变更服务哪个O1–O6，以及它对应的S类能力和现有文件。
+2. 查上游来源、主张、范围、时点与权限；列出直接依赖和“只是可能受影响”两类。
+3. 审已有代码/数据契约的实际行为、现有原版功能与关键负例；没实现的不能靠标注说已实现。
+4. 只修改有证据的受影响位置、做必要回归与真实场景复现，写明仍未解的UNKNOWN。
+5. 如果这套追溯增加的审查时间远超识别真正错误的价值，减少锚点；不为术语数量建新架构。
+
+**一项可证伪的下一轮实证**：选已知源时点或库存归因中的一个**真实Blix代码变化**，在同一版本/任务范围下，与“只看当前文件”方法对照，记录找到的真正下游、误报的伪依赖、新增反例、修复后的真实业务输出和工时成本。没有可接入真实历史数据时只能先完成源码与离线核验，并如实标记受阻。
+
+当前完成级别：NEW_KNOWLEDGE_ALIGNED + SOURCE_TO_CODE_MAPPING + NO_NEW_RUNTIME；不是动态影响分析已实现，也不是六项业务已完成。
