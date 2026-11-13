@@ -47,8 +47,28 @@ export async function discoverPulseInvestigation({input,model,readEconomic,loadK
   const candidate=validatePulseDiscoveryInput(input,now());
   if(typeof model!=='function'||typeof readEconomic!=='function'||typeof runResearch!=='function')
     throw Error('DISCOVERY_DEPENDENCIES_MISSING');
+  // Apply the existing whitelisted knowledge *before* choosing any token.
+  // Knowledge may suggest hypotheses, never claim a proven trader/market signal.
+  let planningKnowledge=[];
+  if(typeof loadKnowledge==='function') {
+    try {
+      const items=await loadKnowledge({goal:candidate.goal,evidence:[]});
+      if(Array.isArray(items))planningKnowledge=items.slice(0,3)
+        .filter(x=>typeof x?.source==='string'&&typeof x?.excerpt==='string')
+        .map(x=>({
+          source:x.source.slice(0,240),excerpt:x.excerpt.slice(0,1500),
+          topic:typeof x.topic==='string'?x.topic.slice(0,70):null,
+          status:typeof x.status==='string'?x.status.slice(0,75):'RESEARCH_NOT_RUNTIME_VALIDATED',
+          trustedAsInstruction:false,
+        }));
+    } catch {planningKnowledge=[];}
+  }
+  const knowledgeUse=planningKnowledge.map(k=>({
+    stage:'discover',source:k.source,topic:k.topic,sourceStatus:k.status,
+    outcome:'PRESENTED_TO_MODEL_NOT_VERIFIED_USED',
+  }));
   const proposal=await model({
-    stage:'discover',goal:candidate.goal,
+    stage:'discover',goal:candidate.goal,knowledge:planningKnowledge,
     candidates:candidate.candidates,
     marketSource:{source:candidate.source,sourceRecordedAtMs:candidate.sourceRecordedAtMs,
       sourceFreshness:candidate.sourceFreshness,marketCoverage:candidate.marketCoverage},
@@ -71,6 +91,7 @@ export async function discoverPulseInvestigation({input,model,readEconomic,loadK
     sourceRecordedAtMs:candidate.sourceRecordedAtMs,
     sourceFreshness:candidate.sourceFreshness,
     candidateCount:candidate.candidates.length,
+    knowledgeUse,
     selectedMint:selected?.mint??null,selectedObservation:selected??null,
     reason:proposal.reason.trim(),modelSelectionVerified:false,
     unknowns:[
