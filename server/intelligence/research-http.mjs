@@ -37,7 +37,7 @@ async function readBody(req, route) {
   let data;
   try { data = JSON.parse(Buffer.concat(parts).toString('utf8')); }
   catch { throw new Error('REQUEST_NOT_JSON'); }
-  if (route === '/discover') return validatePulseDiscoveryInput(data);
+  if (route === '/discover') { validatePulseDiscoveryInput(data); return data; }
   if (!data || typeof data !== 'object' || Array.isArray(data) ||
       Object.keys(data).some(x => !['goal','mint'].includes(x)) ||
       typeof data.goal !== 'string' || data.goal.trim().length < 2 ||
