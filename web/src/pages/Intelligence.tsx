@@ -70,6 +70,16 @@ type ResearchResult = {
   evidence: ResearchEvidence[];
   knowledgeUse: { stage: string; source: string; topic?: string; sourceStatus?: string; outcome: string; suggestedCapabilities?: string[] }[];
   unknowns: string[]; verifiedMarketOpportunity: false; sourceMode: string;
+  continuation?: {
+    stages: {market:string;keyWallets:string;capitalAndInventory:string;
+      crossMint:string;participation:string;monitoring:string};
+    keyWalletCandidates: {wallet:string;observedTransferCount:number;localSellSummaryCount:number;
+      addressClass:string; economicController:string}[];
+    crossMintCandidates: {otherMint:string;candidateFundingSignature:string;candidateBuySignature:string;status:string}[];
+    followability:{status:string;historicalNetPnl:string;outOfSampleAdvantage:string;decision:string};
+    watch:{status:string;suggestedWallets:string[];comparisonMethod:string};
+    limits:string[];
+  };
 };
 const SIDECAR_URL = typeof window !== "undefined" &&
   window.location.protocol === "http:" && /^(?:localhost|127\\.0\\.0\\.1)$/.test(window.location.hostname)
@@ -338,6 +348,47 @@ export function Intelligence() {
             <div className="space-y-4 p-4 text-sm">
               <p className="break-words font-semibold">{activeResearch.assessment?.summary || "模型未生成可用研究结论"}</p>
               <p className="text-xs text-muted">来源：{activeResearch.sourceMode}；结论级别：{activeResearch.assessment?.evidenceLevel || "MODEL_NOT_VERIFIED"}。不代表完整历史、交易控制权或盈利机会。</p>
+              {activeResearch.continuation && <div className="space-y-3 rounded-control border border-rule p-3">
+                <h3 className="font-semibold">六个业务环节的实际证据状态</h3>
+                {([
+                  ["市场观察",activeResearch.continuation.stages.market],
+                  ["关键钱包",activeResearch.continuation.stages.keyWallets],
+                  ["资金与库存",activeResearch.continuation.stages.capitalAndInventory],
+                  ["跨 Mint",activeResearch.continuation.stages.crossMint],
+                  ["可参与性",activeResearch.continuation.stages.participation],
+                  ["后续观察",activeResearch.continuation.stages.monitoring],
+                ] as const).map(([label,status])=><p key={label} className="text-xs">
+                  <strong>{label}：</strong><span className="break-all text-muted">{status}</span>
+                </p>)}
+                {!!activeResearch.continuation.keyWalletCandidates.length && <details>
+                  <summary className="cursor-pointer text-sm font-semibold">
+                    本地归档中的重点地址候选（{activeResearch.continuation.keyWalletCandidates.length}）
+                  </summary>
+                  {activeResearch.continuation.keyWalletCandidates.map(w=><p key={w.wallet}
+                    className="mt-2 break-all text-xs">
+                    {w.wallet} · 捕获事件 {w.observedTransferCount} · 后续卖出摘要 {w.localSellSummaryCount}
+                    · {w.addressClass} · 控制者未知
+                  </p>)}
+                </details>}
+                {!!activeResearch.continuation.crossMintCandidates.length && <details>
+                  <summary className="cursor-pointer text-sm font-semibold">
+                    跨币资金时序候选（{activeResearch.continuation.crossMintCandidates.length}）
+                  </summary>
+                  {activeResearch.continuation.crossMintCandidates.map((w,i)=><p key={i}
+                    className="mt-2 break-all text-xs">
+                    {compact(w.otherMint)} · 资金交易 {w.candidateFundingSignature} · 后续买入 {w.candidateBuySignature}
+                    · 未证明同一资金来源或共同控制
+                  </p>)}
+                </details>}
+                <p className="text-xs text-muted">
+                  跟单可行性：{activeResearch.continuation.followability.status}；
+                  没有可靠进出报价与费用收据，不产生收益判断。
+                </p>
+                <p className="text-xs text-muted">
+                  监控：{activeResearch.continuation.watch.status}。
+                  当前仅保留本次结果，尚未启动自主监听或跨会话持续调查。
+                </p>
+              </div>}
               {network && <div className="rounded-control border border-rule p-3">
                 <p className="font-semibold">已捕获的 Token 资金/转移关系：{network.eventCount} 条</p>
                 <p className="mt-1 text-xs text-muted">{network.coverage} {network.inputTruncated ? "· 样本截断" : ""}</p>
