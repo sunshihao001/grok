@@ -1,6 +1,6 @@
 {
   "schema_version": "0.1",
-  "as_of": "2026-11-07",
+  "as_of": "2026-11-13",
   "purpose": "Track completeness of source-repo understanding independently from Blix integration; tree inventory is not knowledge mastery.",
   "source_state_terms": {
     "TREE_INVENTORIED": "All paths and hash counts enumerated, content NOT all read",
@@ -523,6 +523,46 @@
         "independent model A/B and real trading advantage"
       ],
       "live_validation": "NOT_RUN"
+    },
+    {
+      "date": "2026-11-13",
+      "document": "knowledge/references/p1-p2-knowledge-reconciliation-20261113.md",
+      "kind": "P1_P2_WALLET_FUNDING_INVENTORY_COHORT_EXECUTION_AI_SOURCE_RECONCILIATION",
+      "evidence": "TARGETED_ORIGINAL_SOURCE_READ_AND_STATIC_GITHUB_CODE_CHECK_OFFLINE_CI_PREVIOUS_SHA_ONLY",
+      "verified_scope": "selected original Hermes/qb/meme/ai-d/Why-Solana + Token Finder graph/tests/replay + Solana Holder Analyzer + Trading Portfolio cost/tests + Skill Reach docs + official Solana protocol",
+      "updated_local_domains": [
+        "D01",
+        "D02",
+        "D03",
+        "D04",
+        "D05",
+        "D06",
+        "D07",
+        "D08",
+        "D09",
+        "D10",
+        "D11",
+        "D12"
+      ],
+      "runtime_code_added_or_updated": "existing PR23 optional local-knowledge-loader expanded from 6 to 11 bounded sources; no live model invocation",
+      "source_level_limit": "Do not promote tree inventory or selected source read to all repository content read or verified live market behaviour",
+      "tests": "new test/p1-p2-knowledge-integrity.test.mjs and local-knowledge-loader tests committed; no new GitHub Actions run for the latest commit confirmed",
+      "unreviewed": [
+        "all 65 reference assets and 152 legacy units have NOT been individually deep-read or live-validated",
+        "additional Hermes/qb-/meme- subfolders, private/closed-source business implementations",
+        "live Solana Token-2022/CPI/WSOL/LP archival completeness",
+        "model-based knowledge-selection A/B, monitor execution, copytrade out-of-sample performance"
+      ]
     }
-  ]
+  ],
+  "latest_targeted_reconciliation": {
+    "as_of": "2026-11-13",
+    "document": "knowledge/references/p1-p2-knowledge-reconciliation-20261113.md",
+    "applies_to": "existing Blix P1/P2 readonly knowledge navigation and offline research code",
+    "old_repo_tree_states_preserved": true,
+    "existing_external_review_statuses_preserved": true,
+    "exhaustive_content_review_completed": false,
+    "code_source_readback_verified": true,
+    "live_chain_or_model_ab_verified": false
+  }
 }
