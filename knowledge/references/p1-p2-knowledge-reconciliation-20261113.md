@@ -113,7 +113,7 @@
 
 **官方事实纠偏**：
 - [Solana Versioned Transactions](https://solana.com/docs/core/transactions/versioned-transactions) 与 [RPC JSON Structures](https://solana.com/docs/rpc/json-structures)：legacy、v0、v1 均是现行格式；v1主网已启用，读取必须设置 `maxSupportedTransactionVersion: 1`；v1有 `transactionConfig` 且不使用ALT。本分支 `server/solana.js` 与 `server/wallets.js` getTransaction 已设为1，不能虚构一个“尚未打开v1读取”的BUG；但读取成功不证明解析完成。
-- [Token-2022 Transfer Fees](https://solana.com/docs/tokens/extensions/transfer-fees)：`TransferCheckedWithFee` 与 `TransferChecked` 均可含扣费，withheld fee使指令转出数量与可自由出售的接收库存不同。当前 `server/economic-events.mjs` 的Token事件分类仅包含 `transfer` 与 `transferChecked`，`transferCheckedWithFee` 可能被当 `OTHER`；**新增可复现的未实现测试候选**：交易原文保留但转账边漏入、净入账与手续费不一致。未经真实RPC和协议忠实fixture，不把该路径当成已验收。
+- [Token-2022 Transfer Fees](https://solana.com/docs/tokens/extensions/transfer-fees)：`TransferCheckedWithFee` 与 `TransferChecked` 均可含扣费，withheld fee使指令转出数量与可自由出售的接收库存不同。源码审查曾发现 `server/economic-events.mjs` 的Token分类缺少 `transferCheckedWithFee`。现已追加这一类型的**候选解析修复和合成回归**：保留指令gross `amount_raw`、原始feeAmount及接收方Owner边，预期不再静默分类为 `OTHER`。**最新改动尚待本SHA Node24 CI执行，且未经过真实Token-2022主网交易核实**；withheld fee、可自由出售的净入账、Hook/CPI复杂事件依然不可由gross直接推断。
 - [Google Skill Reach](https://github.com/google/skill-reach) 的误选/漏选/冗余和多轮路由评估对本项目有直接价值；现有16条自测不证明模型理解，下一步需要固定相同任务、模型、证据和预算，比较不加知识/旧路由/新路由。
 
 **历史知识适用边界**：152研究单元及65参考资产是已登记的原始资料覆盖，不代表152条经过独立验证的事实或65项可直接复用的算法。旧Hermes硬阈值、qb-的质量分/全退、meme-价格结构推断、RED-COHORT撤回数值、同Slot/同资金源/多跳同控推断必须保留不确定性。现有8篇领域原文R-13修订原位保存，不再另建专家库。
