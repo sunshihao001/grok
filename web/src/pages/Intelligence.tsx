@@ -1,7 +1,7 @@
 // Optional AI research workspace over the EXISTING Blix Pulse board and Coin page.
-// No trading, independent chain attribution, model call or new provider request.
+// Optional local isolated research calls only after user action and operator opt-in.
 // A market observation is NOT a verified profitable trading opportunity.
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { usePulse, type ColKey } from "@/lib/pulse";
 import { Page, Panel, money } from "@/components/page";
 import { toast } from "@/components/ui/toast";
@@ -50,6 +50,20 @@ const KNOWLEDGE_CANDIDATES = [
     match: /AI|知识|思考|研究|意图|专家|检索/i },
 ] as const;
 const KNOWLEDGE_ROOT = "https://github.com/sunshihao001/grok/blob/integration/blix-evidence-readonly-20261108/";
+type ResearchHealth = { ready: boolean; dataSource: string; remainingTasks: number; busy: boolean };
+type EvidenceEdge = { fromOwner: string; toOwner: string; eventCount: number; observedRawTotal: string; localSellSummaryObserved: boolean; crossMintCandidateCount: number };
+type ResearchEvidence = { capability: string; error?: string; result?: { status: string; unknowns?: string[]; sources?: { provider: string; coverage?: string }[]; facts?: { network?: { eventCount: number; coverage: string; edges: EvidenceEdge[]; inputTruncated: boolean } } } };
+type ResearchResult = {
+  mint: string; status: string; error?: string; completedAt?: string;
+  assessment?: { summary: string; hypotheses: string[]; alternativeExplanations: string[]; nextChecks: string[]; evidenceLevel: string } | null;
+  calls: { capability: string; input: { mint: string } }[];
+  evidence: ResearchEvidence[];
+  knowledgeUse: { stage: string; source: string; topic?: string; sourceStatus?: string; outcome: string; suggestedCapabilities?: string[] }[];
+  unknowns: string[]; verifiedMarketOpportunity: false; sourceMode: string;
+};
+const SIDECAR_URL = typeof window !== "undefined" &&
+  window.location.protocol === "http:" && /^(?:localhost|127\\.0\\.0\\.1)$/.test(window.location.hostname)
+  ? "http://127.0.0.1:4547" : null;
 const number = (n?: number | null) => n == null || !Number.isFinite(n) ? "未知" : Math.round(n).toLocaleString();
 const percent = (n?: number | null) => n == null || !Number.isFinite(n) ? "未知" : n.toFixed(1) + "%";
 const compact = (mint: string) => mint.length > 18 ? mint.slice(0, 7) + "…" + mint.slice(-6) : mint;
@@ -65,6 +79,19 @@ export function Intelligence() {
   const [search, setSearch] = useState("");
   const [selectedMint, setSelectedMint] = useState<string | null>(null);
   const [goal, setGoal] = useState(PROMPTS[1]);
+  const [researchHealth, setResearchHealth] = useState<ResearchHealth | null>(null);
+  const [researchResult, setResearchResult] = useState<ResearchResult | null>(null);
+  const [researchBusy, setResearchBusy] = useState(false);
+  const [researchError, setResearchError] = useState("");
+  useEffect(() => {
+    if (!SIDECAR_URL) return;
+    const controller = new AbortController();
+    fetch(SIDECAR_URL + "/health", { signal: controller.signal, credentials: "omit" })
+      .then(r => r.ok ? r.json() : null)
+      .then(v => { if (!controller.signal.aborted) setResearchHealth(v); })
+      .catch(() => { if (!controller.signal.aborted) setResearchHealth(null); });
+    return () => controller.abort();
+  }, []);
   const candidateKnowledge = useMemo(() => KNOWLEDGE_CANDIDATES.filter(x => x.match.test(goal)).slice(0, 3), [goal]);
   const candidates = useMemo(() => selectObservedCandidates(coins, cols, stage, search), [coins, cols, stage, search]);
   const selected = candidates.find(x => x.coin.mint === selectedMint) ?? candidates[0] ?? null;
@@ -76,9 +103,39 @@ export function Intelligence() {
   const windowVol = c?.vol ?? c?.liveVol;
   const activity = c && (c.buys != null || c.sells != null)
     ? number(c.buys) + " 买 / " + number(c.sells) + " 卖" : "未知";
+  const activeResearch = c && researchResult?.mint === c.mint ? researchResult : null;
+  const network = activeResearch?.evidence.find(x => x.capability === "mint-economic-evidence")?.result?.facts?.network;
   const sourceState = loaded ? (connected ? "实时流连接中" : polling ? "轮询更新中" : "数据连接待核实")
     : restored ? "历史缓存，可能过时" : "等待 Blix Pulse 数据";
 
+  async function runLocalResearch() {
+    if (!SIDECAR_URL || !c || !goal.trim() || !researchHealth?.ready || researchBusy) return;
+    const mint = c.mint;
+    setResearchBusy(true);
+    setResearchError("");
+    setResearchResult(null);
+    try {
+      const response = await fetch(SIDECAR_URL + "/research", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        credentials: "omit", redirect: "error",
+        body: JSON.stringify({ mint, goal: goal.trim() }),
+        signal: AbortSignal.timeout(115_000),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(typeof data?.error === "string" ? data.error : "RESEARCH_REQUEST_FAILED");
+      if (!data || !Array.isArray(data.evidence) || !Array.isArray(data.knowledgeUse) || !Array.isArray(data.calls))
+        throw new Error("RESEARCH_RESULT_INVALID");
+      setResearchResult({ ...data, mint });
+      // A model response is a bounded research draft, not a trading recommendation.
+      toast("已收到本地只读调查结果；链上证据覆盖和模型解释仍需复核");
+    } catch (error) {
+      setResearchError(error instanceof Error ? error.message.slice(0, 160) : "RESEARCH_UNAVAILABLE");
+    } finally {
+      setResearchBusy(false);
+      fetch(SIDECAR_URL + "/health", { credentials: "omit" })
+        .then(r => r.ok ? r.json() : null).then(v => setResearchHealth(v)).catch(() => setResearchHealth(null));
+    }
+  }
   async function copyTask() {
     if (!c || !goal.trim()) return;
     // These are Blix dashboard observations, not proof of independent on-chain facts.
@@ -113,7 +170,9 @@ export function Intelligence() {
   }
 
   return (
-    <Page title="AI 研究工作台" right={<span className="rounded-full border border-rule px-3 py-1.5 text-xs text-muted">只读预览 · 模型尚未连接</span>}>
+    <Page title="AI 研究工作台" right={<span className="rounded-full border border-rule px-3 py-1.5 text-xs text-muted">
+      {researchHealth?.ready ? "本地研究服务可用 · 只读" : "本地模型尚未连接 · 只读预览"}
+    </span>}>
       <p className="text-sm text-ink-2">
         基于 Blix 已有 Pulse 市场看板组织调查。列表是<strong>市场观察候选</strong>，不是 AI 选币结果、买入信号或盈利预测。
       </p>
@@ -190,6 +249,54 @@ export function Intelligence() {
             ) : <div className="p-6 text-sm text-muted">请先等待 Blix 数据或选择代币。</div>}
           </Panel>
 
+          {activeResearch && <Panel title="本次模型研究 · 实际收据" aside={activeResearch.status}>
+            <div className="space-y-4 p-4 text-sm">
+              <p className="break-words font-semibold">{activeResearch.assessment?.summary || "模型未生成可用研究结论"}</p>
+              <p className="text-xs text-muted">来源：{activeResearch.sourceMode}；结论级别：{activeResearch.assessment?.evidenceLevel || "MODEL_NOT_VERIFIED"}。不代表完整历史、交易控制权或盈利机会。</p>
+              {network && <div className="rounded-control border border-rule p-3">
+                <p className="font-semibold">已捕获的 Token 资金/转移关系：{network.eventCount} 条</p>
+                <p className="mt-1 text-xs text-muted">{network.coverage} {network.inputTruncated ? "· 样本截断" : ""}</p>
+                <div className="mt-3 space-y-2">
+                  {network.edges.slice(0, 10).map((e,i) => (
+                    <div key={i} className="rounded-control bg-paper-3 p-2 text-xs">
+                      <div className="flex flex-wrap items-center gap-2 font-mono">
+                        <span title={e.fromOwner}>{compact(e.fromOwner)}</span><span>→</span>
+                        <span title={e.toOwner}>{compact(e.toOwner)}</span>
+                      </div>
+                      <p className="mt-1 text-muted">{e.eventCount} 次捕获转移 · 原始量 {e.observedRawTotal} ·
+                        {e.localSellSummaryObserved ? " 后续有本地卖出摘要（非同批库存证明）" : " 未见可确认卖出"} ·
+                        跨币候选 {e.crossMintCandidateCount}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>}
+              {!!activeResearch.assessment?.alternativeExplanations?.length && <div>
+                <p className="font-semibold">竞争解释</p>
+                <ul className="mt-1 list-disc pl-5">{activeResearch.assessment.alternativeExplanations.map((x,i)=><li key={i}>{x}</li>)}</ul>
+              </div>}
+              {!!activeResearch.assessment?.nextChecks?.length && <div>
+                <p className="font-semibold">下一步证据检查</p>
+                <ul className="mt-1 list-disc pl-5">{activeResearch.assessment.nextChecks.map((x,i)=><li key={i}>{x}</li>)}</ul>
+              </div>}
+              <details className="border-t border-rule pt-3">
+                <summary className="cursor-pointer font-semibold">真实工具调用（{activeResearch.evidence.length}）</summary>
+                <div className="mt-2 space-y-2">{activeResearch.evidence.map((e,i)=><p key={i} className="rounded-control bg-paper-3 p-2 text-xs">
+                  {e.capability} · {e.result?.status || e.error || "UNKNOWN"} · {e.result?.sources?.map(x=>x.provider).join(", ") || "无来源"}
+                </p>)}</div>
+              </details>
+              <details className="border-t border-rule pt-3">
+                <summary className="cursor-pointer font-semibold">提供给模型的知识来源（{activeResearch.knowledgeUse.length} 条阶段记录）</summary>
+                <div className="mt-2 space-y-2">{activeResearch.knowledgeUse.map((k,i)=><p key={i} className="break-all rounded-control bg-paper-3 p-2 text-xs">
+                  {k.stage} · {k.source} · {k.outcome}
+                </p>)}</div>
+                <p className="mt-2 text-xs text-muted">来源提供给模型不等于模型正确使用它。</p>
+              </details>
+              {!!activeResearch.unknowns?.length && <details className="border-t border-rule pt-3" open>
+                <summary className="cursor-pointer font-semibold">仍然未知（{activeResearch.unknowns.length}）</summary>
+                <ul className="mt-2 list-disc pl-5 text-xs">{activeResearch.unknowns.slice(0, 14).map((x,i)=><li key={i}>{x}</li>)}</ul>
+              </details>}
+            </div>
+          </Panel>}
           <Panel title="机会研究与反证" aside="候选 ≠ 可成交机会">
             <div className="grid gap-3 p-4 sm:grid-cols-2">
               <div className="rounded-control border border-rule bg-paper-3 p-4">
@@ -207,15 +314,15 @@ export function Intelligence() {
               </div>
             </div>
             <p className="border-t border-rule px-4 py-3 text-xs text-muted">
-              本页没有新增推理、回测或交易执行。后续 AI 输出应记录数据来源、时间窗口、竞争解释与实际工具调用。
+              市场观察来自原版 Blix；可选择本地只读模型研究（需要独立启用）。模型输出不能证明全链覆盖、盈利或真实成交。
             </p>
           </Panel>
         </div>
 
-        <Panel title="AI 研究助手" aside="任务准备">
+        <Panel title="AI 研究助手" aside="任务准备 / 本地只读调用">
           <div className="space-y-4 p-4">
             <div className="rounded-control border border-rule bg-paper-3 p-3 text-sm leading-relaxed text-ink-2">
-              你可以用普通语言提出研究目的。后续模型运行时会自主选择知识和工具；当前先生成带 Mint 与行情上下文的可核查任务。
+              你可以用普通语言提出研究目的。独立服务启用后，模型可按需读取专业知识与已捕获的本地 SQLite 经济证据；否则仍可复制任务。本机以外的网页暂不开放研究调用。
             </div>
             <label htmlFor="intelligence-research-goal" className="block text-sm font-semibold">你希望 AI 研究什么？</label>
             <textarea id="intelligence-research-goal" rows={6} maxLength={1600} value={goal}
@@ -250,12 +357,25 @@ export function Intelligence() {
                 真正的模型运行记录应显示实际读取的来源、版本、工具调用及判断，而非这些推荐链接。
               </p>
             </details>
+            <button type="button" onClick={() => void runLocalResearch()}
+              disabled={!c || !goal.trim() || !researchHealth?.ready || researchHealth.remainingTasks < 1 || researchBusy}
+              className="w-full rounded-full border border-accent px-4 py-2.5 text-sm font-semibold text-ink disabled:cursor-not-allowed disabled:opacity-40">
+              {researchBusy ? "正在执行只读调查…" : "运行本地 AI 证据研究"}
+            </button>
+            <p className="text-xs text-muted">
+              {SIDECAR_URL
+                ? researchHealth?.ready
+                  ? "独立只读服务已配置；本次进程剩余任务：" + researchHealth.remainingTasks + "。点击会调用已配置的模型 API，可能产生费用。"
+                  : "模型尚未连接：需在本机单独启动研究服务，并配置已有 SQLite、模型密钥和显式费用开关。"
+                : "当前不是本机 HTTP 页面；为避免公开页面绕过权限，请通过本机 Blix 页面使用研究服务。"}
+            </p>
+            {researchError && <p role="alert" className="rounded-control border border-rule p-2 text-xs text-ink">研究请求未完成：{researchError}</p>}
             <button type="button" onClick={() => void copyTask()} disabled={!c || !goal.trim()}
               className="w-full rounded-full bg-accent px-4 py-2.5 text-sm font-semibold text-accent-ink disabled:cursor-not-allowed disabled:opacity-40">
               复制带数据的研究任务
             </button>
             <p className="text-xs leading-relaxed text-muted">
-              目前不会调用模型 API，不会发起链上操作、交易、签名或新的付费数据请求。接通模型前需增加受限工具适配、预算和来源追踪。
+              本页不会自动调用模型。手动启动的独立研究只读本地既有归档，不向市场发送交易、签名或钱包指令；数据覆盖不等于全链。上方候选知识链接仍是静态预览，只有研究结果区才显示实际提供给模型的来源。
             </p>
           </div>
         </Panel>
