@@ -197,7 +197,8 @@ export function Intelligence() {
         setSearch("");
         setSelectedMint(data.discovery.selectedMint);
         if (data.investigation) setResearchResult({ ...data.investigation,
-          mint:data.discovery.selectedMint });
+          mint:data.discovery.selectedMint, sourceMode:data.sourceMode || "LOCAL_SQLITE_ONLY",
+          verifiedMarketOpportunity:false });
       }
       toast(data.discovery.selectedMint
         ? "AI 已选择一个候选 Mint 进行本地归档调查；尚未验证交易机会"
