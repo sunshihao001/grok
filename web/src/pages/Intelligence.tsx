@@ -51,6 +51,16 @@ const KNOWLEDGE_CANDIDATES = [
 ] as const;
 const KNOWLEDGE_ROOT = "https://github.com/sunshihao001/grok/blob/integration/blix-evidence-readonly-20261108/";
 type ResearchHealth = { ready: boolean; dataSource: string; remainingTasks: number; busy: boolean };
+type DiscoveryResult = {
+  status: string;
+  discovery: {
+    selectedMint: string | null; reason: string; candidateCount: number;
+    source: string; marketCoverage: string; sourceFreshness: string;
+    unknowns: string[]; modelSelectionVerified: false;
+  };
+  investigation: ResearchResult | null;
+  verifiedMarketOpportunity: false;
+};
 type EvidenceEdge = { fromOwner: string; toOwner: string; eventCount: number; observedRawTotal: string; localSellSummaryObserved: boolean; crossMintCandidateCount: number };
 type ResearchEvidence = { capability: string; error?: string; result?: { status: string; unknowns?: string[]; sources?: { provider: string; coverage?: string }[]; facts?: { network?: { eventCount: number; coverage: string; edges: EvidenceEdge[]; inputTruncated: boolean } } } };
 type ResearchResult = {
@@ -81,6 +91,7 @@ export function Intelligence() {
   const [goal, setGoal] = useState(PROMPTS[1]);
   const [researchHealth, setResearchHealth] = useState<ResearchHealth | null>(null);
   const [researchResult, setResearchResult] = useState<ResearchResult | null>(null);
+  const [discoveryResult, setDiscoveryResult] = useState<DiscoveryResult | null>(null);
   const [researchBusy, setResearchBusy] = useState(false);
   const [researchError, setResearchError] = useState("");
   useEffect(() => {
@@ -94,6 +105,10 @@ export function Intelligence() {
   }, []);
   const candidateKnowledge = useMemo(() => KNOWLEDGE_CANDIDATES.filter(x => x.match.test(goal)).slice(0, 3), [goal]);
   const candidates = useMemo(() => selectObservedCandidates(coins, cols, stage, search), [coins, cols, stage, search]);
+  // Independent of the visual filter: the AI may compare Pulse candidates the user
+  // has not explicitly opened. No provider data is fetched for this shortlist.
+  const discoveryCandidates = useMemo(() => selectObservedCandidates(coins, cols, "all", "", 12),
+    [coins, cols]);
   const selected = candidates.find(x => x.coin.mint === selectedMint) ?? candidates[0] ?? null;
   const c = selected?.coin ?? null;
   const coinHref = c ? "#/coin/" + encodeURIComponent(c.mint) : "";
@@ -114,6 +129,7 @@ export function Intelligence() {
     setResearchBusy(true);
     setResearchError("");
     setResearchResult(null);
+    setDiscoveryResult(null);
     try {
       const response = await fetch(SIDECAR_URL + "/research", {
         method: "POST", headers: { "Content-Type": "application/json" },
@@ -134,6 +150,55 @@ export function Intelligence() {
       setResearchBusy(false);
       fetch(SIDECAR_URL + "/health", { credentials: "omit" })
         .then(r => r.ok ? r.json() : null).then(v => setResearchHealth(v)).catch(() => setResearchHealth(null));
+    }
+  }
+  async function runPulseDiscovery() {
+    if (!SIDECAR_URL || !researchHealth?.ready || researchBusy || !goal.trim() ||
+        !loaded || !(connected || polling) || !discoveryCandidates.length) return;
+    const shortlist = discoveryCandidates.map(({coin,stage:observedStage}) => ({
+      mint:coin.mint, stage:observedStage, symbol:coin.symbol || "",
+      mcap:coin.mcap ?? null, liq:coin.liq ?? null,
+      vol:coin.vol ?? coin.liveVol ?? null,
+      buys:coin.buys ?? null, sells:coin.sells ?? null,
+      traders:coin.traders ?? null, chg1m:coin.chg1m ?? null,
+    }));
+    setResearchBusy(true);
+    setResearchError("");
+    setResearchResult(null);
+    setDiscoveryResult(null);
+    try {
+      const response = await fetch(SIDECAR_URL + "/discover", {
+        method: "POST", headers: { "Content-Type":"application/json" },
+        credentials:"omit", redirect:"error", signal:AbortSignal.timeout(150_000),
+        body:JSON.stringify({ goal:goal.trim(), candidates:shortlist,
+          boardStatus:"BLIX_PULSE_LIVE_OR_POLLING",
+          browserRecordedAtMs:Date.now() }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(typeof data?.error === "string" ? data.error : "DISCOVERY_REQUEST_FAILED");
+      if (!data?.discovery || typeof data.discovery.reason !== "string" ||
+          !data.discovery.source || !Array.isArray(data.discovery.unknowns))
+        throw new Error("DISCOVERY_RESULT_INVALID");
+      setDiscoveryResult(data);
+      if (data.discovery.selectedMint) {
+        // Switch to the selected object so the source graph and AI receipts can be viewed
+        // alongside the ORIGINAL Blix Coin page. This never adds a new Mint to Blix.
+        setStage("all");
+        setSearch("");
+        setSelectedMint(data.discovery.selectedMint);
+        if (data.investigation) setResearchResult({ ...data.investigation,
+          mint:data.discovery.selectedMint });
+      }
+      toast(data.discovery.selectedMint
+        ? "AI 已选择一个候选 Mint 进行本地归档调查；尚未验证交易机会"
+        : "AI 未选择调查对象；当前市场资料不足以支持进一步结论");
+    } catch(error) {
+      setResearchError(error instanceof Error ? error.message.slice(0,160) : "DISCOVERY_UNAVAILABLE");
+    } finally {
+      setResearchBusy(false);
+      fetch(SIDECAR_URL + "/health", {credentials:"omit"})
+        .then(r=>r.ok?r.json():null).then(v=>setResearchHealth(v))
+        .catch(()=>setResearchHealth(null));
     }
   }
   async function copyTask() {
@@ -249,6 +314,26 @@ export function Intelligence() {
             ) : <div className="p-6 text-sm text-muted">请先等待 Blix 数据或选择代币。</div>}
           </Panel>
 
+          {discoveryResult && <Panel title="AI 自主选择的调查对象" aside={discoveryResult.status}>
+            <div className="space-y-2 p-4 text-sm">
+              <p className="font-semibold">
+                {discoveryResult.discovery.selectedMint
+                  ? "调查 Mint：" + compact(discoveryResult.discovery.selectedMint)
+                  : "未找到足够依据选择调查对象"}
+              </p>
+              <p>{discoveryResult.discovery.reason}</p>
+              <p className="text-xs text-muted">
+                比较了 {discoveryResult.discovery.candidateCount} 个当前 Pulse 观察候选。
+                {discoveryResult.discovery.marketCoverage}。这只是模型选择的调查目标，不是买入信号。
+              </p>
+              <details><summary className="cursor-pointer text-xs font-semibold">来源与限制</summary>
+                <p className="mt-2 text-xs text-muted">{discoveryResult.discovery.sourceFreshness}</p>
+                <ul className="mt-1 list-disc pl-5 text-xs text-muted">
+                  {discoveryResult.discovery.unknowns.map((x,i)=><li key={i}>{x}</li>)}
+                </ul>
+              </details>
+            </div>
+          </Panel>}
           {activeResearch && <Panel title="本次模型研究 · 实际收据" aside={activeResearch.status}>
             <div className="space-y-4 p-4 text-sm">
               <p className="break-words font-semibold">{activeResearch.assessment?.summary || "模型未生成可用研究结论"}</p>
@@ -357,6 +442,17 @@ export function Intelligence() {
                 真正的模型运行记录应显示实际读取的来源、版本、工具调用及判断，而非这些推荐链接。
               </p>
             </details>
+            <button type="button" onClick={() => void runPulseDiscovery()}
+              disabled={!goal.trim() || !researchHealth?.ready || researchHealth.remainingTasks < 1 ||
+                researchBusy || !loaded || !(connected || polling) || !discoveryCandidates.length}
+              className="w-full rounded-full bg-accent px-4 py-2.5 text-sm font-semibold text-accent-ink disabled:cursor-not-allowed disabled:opacity-40">
+              {researchBusy ? "正在研究…" : "AI 从当前 Pulse 候选中自主选择并调查"}
+            </button>
+            <p className="text-xs leading-relaxed text-muted">
+              当前可比较 {discoveryCandidates.length} 个候选，来源为本浏览器显示的 Blix Pulse。
+              只在实时流或轮询可用时开放。模型会增加一次选取步骤，可能产生模型 API 费用，
+              但不会自动买卖、爬取全市场或宣称已发现盈利机会。
+            </p>
             <button type="button" onClick={() => void runLocalResearch()}
               disabled={!c || !goal.trim() || !researchHealth?.ready || researchHealth.remainingTasks < 1 || researchBusy}
               className="w-full rounded-full border border-accent px-4 py-2.5 text-sm font-semibold text-ink disabled:cursor-not-allowed disabled:opacity-40">
