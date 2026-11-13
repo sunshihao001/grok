@@ -4,6 +4,18 @@
 >
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
+## 2026-11-13｜R-19：AI 可视化工作台接入原 Blix（仅扩展分支）
+ 
+**本轮范围**：沿用前序选定的 B「专业研究终端」布局，将此前独立的概念 HTML 转为原 Blix React 内的可用入口；仍保留原版 Discover、Pulse、Coin Chart、Bubble Map、Wallet、Tracker、AI Read 和交易面板。新增 `#/intelligence`（导航为 AI research）直接订阅现有 `usePulse` 状态，按原看板来源展示和检索候选，不生成伪 AI 机会评分。选择一个 Mint 后可跳转原 `#/coin/<mint>`，也可通过 `/assistant` 深链打开 PR #23 已有 AI Assistant 标签。页面输入自然语言目标后只生成带现有行情上下文的**可复制调查任务**，没有模型调用、订单提交或新的供应商读取。
+ 
+**程序/知识边界**：本轮代码只负责导航、候选视图、可视化事实承接与研究任务准备；AI 自主知识选择和模型 API 真实接入尚未完成，不将前端筛选冒充完整选币智能。新页面的流动性/Holder/成交都是 Blix 看板来源观测，不足以证明可成交盈利机会。既有仓库专业知识与原版交易代码均未重构。
+ 
+**实际修改**：新增 `web/src/pages/Intelligence.tsx`、`web/src/pages/intelligence/candidates.ts`、`test/intelligence-ui-candidates.test.mjs`；在原 `web/src/main.tsx` 和 `web/src/shell/Rail.tsx` 加可选路由/导航，在 `web/src/pages/coin/Tabs.tsx` 增加仅影响外部深链的默认 AI 助手选中条件；对 `test/original-blix-preservation.test.mjs` 添加旧路由/导航/交易入口保留断言。原字节保护第一次因 main.tsx 有意扩展失败；显式将其与 Rail 记入 `reviewed_modified_original_modules`，保持所有767个原版路径以及28项**其余未修改核心文件**指纹门禁（其中新增原版 Coin Chart 作为等量未修改样本），并添加回归，不绕过原版保护。
+ 
+**验收状态**：在提交 `861cb262` 时，[Node24原有+新增候选+安全+经济证据测试](https://github.com/sunshihao001/grok/actions/runs/43375171291) 与 [审计](https://github.com/sunshihao001/grok/actions/runs/43375171288) 已通过；其后新增了真实 React 前端静态编译CI步骤，**需以最新 SHA 再确认构建结果**。原完整版 Blix 服务未启动、未部署、未访问主网或付费 AI；交互浏览器/生产环境未验收，PR #23 仍是冲突中的 Draft，不能称线上可用。
+ 
+**下一项**：检查前端构建并修复单点兼容问题，再验证 Blix 内 AI 研究工作台与 Coin 深链在受控 UI 中的交互。之后评估 PR #23 现有模型工作流与受限 API 适配，真实调用需经过费用/权限许可；不先扩建新扫描器。
+ 
 ## 2026-11-09｜原版保留 + 专业二次开发：已实施的工程保障（最新）
 
 **用户产品范围明确：原作者 Blix 全部功能都要保留。** 原版行情/行情图表、Discover/Pulse、Mint/Coin、Holder/Bubble Map、Wallet/Tracker、AI研究、账户、纸面与真实交易、通知、Web/Worker和运维组件均是产品目标，不是被只读研究替换的冗余功能。**安全运行授权**与**原版源代码完整保留**分别决定，不允许因临时禁止签名/交易/模型费用就静默移除原版。
