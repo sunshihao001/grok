@@ -31,7 +31,12 @@ export function projectMintNetwork({ mint, recipients = [] } = {}) {
     }
     const amount = raw(row.amountRaw);
     const event = {
-      eventId, signature: row.signature, outerI: positioned ? row.outerI : null,
+      eventId, signature: row.signature,
+      rpcSha256: /^[a-f0-9]{64}$/.test(row.rpcSha256 ?? '') ? row.rpcSha256 : null,
+      rpcHashVerified: row.rpcHashVerified === true,
+      instructionVerifiedAgainstRpc: row.instructionVerifiedAgainstRpc === true,
+      captureSource: row.captureSource ?? 'UNKNOWN', commitment: row.commitment ?? null,
+      outerI: positioned ? row.outerI : null,
       innerI: positioned ? row.innerI : null, mint, fromOwner: row.fromOwner,
       toOwner: row.toOwner, fromAccount: row.fromAccount ?? null,
       toAccount: row.toAccount ?? null, amountRaw: amount?.toString() ?? null,
