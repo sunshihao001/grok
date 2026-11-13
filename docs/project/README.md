@@ -6,6 +6,8 @@
 
 **快速进入Blix知识（2026-11-07）**：从一个普通市场问题开始，优先使用 [专业知识按任务调用表](../../knowledge/README.md#2026-11-07快速知识整合与按问题进入当前优先入口)；需要更深时再查 [六类目标与七条专业知识路由](../../knowledge/DOMAIN-MODEL.v1.json)、[参考项目独有目标与可复用认识](reference-driven-goal-model-v0.1.md)和[旧源审查覆盖](../../knowledge/references/source-coverage-v0.1.json)。已有旧知识不覆盖原Blix的真实业务事实；这里只完成知识定位与原文连接，不代表AI运行时知识自动生效。
 
+**2026-11-13 全面关系收束**：[ai-d七类跨层能力与完整专业术语](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/cross-layer-project-anchors.md#11-2026-11-13-体系收束从关键词集合走向可解释可验证的项目关系v02)由通用项目维护，[Blix业务×知识×数据×代码×验收锚点 V0.2](cross-layer-anchor-map-20261113.md)由本项目原位维护；[知识结构交叉表](../../knowledge/INTEGRATION-CROSSWALK.md)和npm run audit:knowledge-trace -- --axes只用已有模型显示七类能力与五种网络的对应。不是新系统架构或完成全部真实运行验收。
+
 ## 2026-11-13｜当前P1/P2知识与真实功能交付入口
 
 最新 [知识全域审查与矛盾裁决](../../knowledge/references/p1-p2-knowledge-reconciliation-20261113.md) 连接了旧Hermes/qb-/meme-/ai-d、Why-Solana、开源成品、Solana官方协议和当前代码/测试；[按问题实际使用](knowledge-use.md)解释如何调用，[建设台账](build-register.md)记录GitHub已验证状态与下一阻断。早期章节提及的“静态研究、未开发”是当时状态快照，**不能覆盖最新提交的事实**。
