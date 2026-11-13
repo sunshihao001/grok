@@ -1,11 +1,8 @@
 # Blix 专业知识｜唯一运行主体的分类接收入口
 
-**2026-11-13｜知识如何从来源变成可靠判断（新增总追溯入口）**：[知识全生命周期追溯：发现、获取、承接、关系、应用、验收、反向修订](references/knowledge-lineage-lifecycle-audit-20261113.md)。既有152路由、21迁入、21来源快照、11运行时白名单以不同证据等级联系，支持只读双向查源；不是新专家制度，不能把索引视为知识正确。运行 `npm run audit:knowledge-trace` 查看源与承接断点。
-
+**知识追溯的唯一总入口（2026-11-13）**：[知识从获取、理解、承接到实际判断的完整链路](references/knowledge-lineage-lifecycle-20261113.md)；[术语、静态来源映射与双向核查附录](references/knowledge-lineage-lifecycle-audit-20261113.md)。这两篇共同指回原有迁入、覆盖和代码台账，不是独立的新知识库。可运行 `npm run audit:knowledge-trace` 查看静态对应，但不能由索引推断模型已学会。
 
 > 建立于 2026-11-06。**这是已迁入资料的分类与检索入口，不是重新建立一个专家体系，也不是运行时AI已经掌握的证明。** 源文件旧版保留；本文仅管理Blix持有的副本、出处及使用方式。
-
-**全链知识追溯（2026-11-13，先看）**：[从知识发现、获取、原意重建、跨来源合成、承接、运行应用到验证/修订的完整关系与现有示例](references/knowledge-lineage-lifecycle-20261113.md)。它解释不同知识资产、版本、证据和代码如何互相追溯；不替代现有 [P1–P2 专业来源核查](references/p1-p2-knowledge-reconciliation-20261113.md)、[原始覆盖状态](references/source-coverage-v0.1.json) 或 [滚动建设台账](../docs/project/build-register.md)，不额外建立一套固定的专家/阶段制度。
 
 
 ## 2026-11-13｜最新 P1–P2 知识融合与现实能力对照（优先读）
