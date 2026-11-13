@@ -4,6 +4,20 @@
 >
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
+## 2026-11-13｜R-21：AI扩展设计否证｜真实Mint×成熟开源产品×原版能力
+
+**本轮不改业务/模型/UI代码。** 用户要求质疑“B三栏AI工作台+加载知识”是否真是专业路线，不能以作者的初始创意代替产品选型。已完成[完整调查业务链对照与设计否证](blix-ai-investigation-product-comparison-20261113.md)，基于PR #23实际源码、原有真实三快照Mint研究、Million、PumpTrace、Pulse、dexterm、Bubblemaps V2官方功能与FlowLens的代表性源码/机制。不同来源不算独立链上复核；没有外部程序运行与模型效果测量。
+
+**纠正原设计**：`#/intelligence`仍是市场候选/研究任务/静态知识预览，原版Coin/Bubble Map/Wallet/Brain更成熟；知识读取/引用不能解决原始历史缺口和经济动作还原；新界面未证明比原版更好。现阶段推荐**从原Coin、钱包或市场事件进入可继续的上下文调查**，只在多Mint调查的实际UI切换成本被验证后提升独立工作台，不先扩第二套图、数据库、扫描器或常驻Agent。
+
+**固定真实样本**：`EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump`的2026-11-01三份历史DEX/RugCheck归档可支持池库存/价格方向变化、池相关Holder排除的候选；**没有**对应完整Swap/LP/钱包A→B→卖出→下一Mint的可重放签名链。PR #23离线CPI/Token转移/跨Mint候选/纸面跟随性单测是另一种证据，禁止拼接成该真实Mint“完整调查成功”。
+
+**高价值源码风险**：原`wtrack.parseTransfer`会跳过有Swap的交易或多Token动作；`wallet_trades`汇总键`(sig,wallet,mint)`不能无损表达同签名多经济动作；`/api/token/:mint`的GET可能内部调用`lookupMint`/`adoptMint`/`vet`，所以本地HTTP GET allowlist ≠ “无副作用、无费用”保证。AI授权接入前要校核这些路径或隔离历史快照。
+
+**下一项可推翻的工程验收**：先获得上述真实Mint主池指定窗口内可核签名的Swap/LP/Owner原始事实，拿不到就明确停在市场结构候选；另在已有RPC归档的真实独立样本上单独验证钱包接收/后卖出/跨Mint候选。比较“原Blix / +确定性经济证据 / +按需AI知识”对同样输入的**遗漏、错误归因、可追溯性、成本与实际可跟随性**；无增益则停止扩AI界面。
+
+**状态**：`SOURCE_CODE_REVIEW + PRIOR_VENDOR_ARCHIVE_REPORT + DESIGN_HYPOTHESIS`。未实施UI/服务/外部软件，未联网运行主网调查、付费模型、交易或签名。研究文件提交的GitHub Actions结果需以同SHA验证；CI只证明文档/回归不破坏现存代码，不是设计效果验证。
+
 ## 2026-11-13｜R-20：专业知识进入 AI 调查规划（离线集成）
 
 **用户目标**：以前的 Blix/Hermes/qb-/meme-/ai-d 与参考项目专业知识，不只归档或在最后报告中引用，而要影响 AI 的实际研究任务、工具选择与下一次补查；保留原产品及既有知识层级，不新增一套并行专家制度。
