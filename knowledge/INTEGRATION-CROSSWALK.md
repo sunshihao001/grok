@@ -2,6 +2,26 @@
 
 > 2026-11-06 | 本文件严格依据 [Blix 原生体系](BLIX-NATIVE-ATLAS.md) → [旧 Grok 原体系](OLD-GROK-ATLAS.md) 的阅读顺序，之后才作接收裁决。**不变更业务代码、不安装Bot/依赖、不运行网络或交易。** 现在的结论是知识与功能的映射，不是已完成的AI主动调用。
 
+## 2026-11-13｜结构收束 V0.2：从知识分层到七类跨层能力、五种逻辑视图
+
+**原来的层级与关系不用推翻。** 原G0–G4目标、O1–O6业务、K1–K9知识生命周期、D0–D9工程依赖、L0–L7深度、D01–D12专业领域、10观察轴、11关系、旧152索引都保留。现在只在**同一个现有结构上**引入新的观察关系：七类认知责任S1–S7、五种项目逻辑视图N-G/N-K/N-D/N-C/N-V。权威内容按[Blix实际映射](../docs/project/cross-layer-anchor-map-20261113.md#7-2026-11-13-全面术语引入后的结构收束不是加更多标签v02)和[ai-d通用概念与严格区分](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/cross-layer-project-anchors.md#11-2026-11-13-体系收束从关键词集合走向可解释可验证的项目关系v02)分别维护，不复制成第二套本体。
+
+| 七项能力 | 在既有知识/业务结构中的落点 | 关键关系 |
+|---|---|---|
+| S1方向保持 | GOAL/EVOLUTION/EVIDENCE；G0–G4和O1–O6 | derives_from、requires、changes_decision |
+| S2结构理解 | DEPTH/DOMAIN/KNOWLEDGE_OBJECT/SEMANTIC/ECONOMIC；D01–D12 | broader/narrower、semantic_match、applies_to |
+| S3映射对齐 | SEMANTIC/KNOWLEDGE_OBJECT/EXECUTION | semantic_match、implemented_by；不能将近义误认同一身份 |
+| S4双向追溯 | GOAL/EVIDENCE/TIME/EXECUTION；D1–D5 | derived_from、observed_economic_event、tested_by |
+| S5契约约束 | SEMANTIC/ECONOMIC/EXECUTION/EVIDENCE；权限和数据边界 | applies_to、implemented_by、tested_by；禁止从UNKNOWN越级 |
+| S6证据保障 | EVIDENCE/ECONOMIC/TIME/EXECUTION；D9、O5 | supports、contradicts、tested_by |
+| S7运行演化 | EVOLUTION/GOAL/TIME/EXECUTION/EVIDENCE；O6 | revised_from、changes_decision |
+
+**五张网络只表达不同视图**：N-G目标、N-K知识、N-D数据事实、N-C工程、N-V验证反馈；跨图连接优先落在**能改变判断的具体主张**和“有实际输入/输出的运行收据”，不能凭文件提到同一关键词就建立强技术依赖。对一项变更只查有证据的上游/下游，未核消费者标REVIEW_CANDIDATE，不将推测写为DIRECT_IMPACT。
+
+**机器可读但仅静态**：原[DOMAIN-MODEL.v1.json](DOMAIN-MODEL.v1.json)的cross_axis_alignment原位补充interpretationCapabilities和networkViews，保留原十轴十一关系及schema_version，现有只读命令 npm run audit:knowledge-trace -- --axes 能报告这些结构；[知识追溯测试](../test/knowledge-lineage-trace.test.mjs)新增结构兼容与术语映射断言。**这只验证模型文件的内部一致性，不证明AI理解、实际动态影响分析或主网调查。**
+
+**知识增加却不提升价值的风险修正**：若新增锚点没有改善某个O1–O6目标的正确判断、遗漏提醒、真实数据或测试覆盖，就不继续扩术语/轴/表；借鉴Doorstop（需求追溯）、OpenMetadata/DataHub（语义与下游血缘）、OpenLineage（Run/Job/Dataset）、NASA/OMG（双向追溯）、W3C PROV/SHACL（来源与约束）、ADR（设计依据），按场景选择，不同时部署全套成品。详细外部依据和反例只在两个权威正本维护。
+
 ## 2026-11-13｜知识映射进入实际P1/P2产品后的纠正
 
 前文的2026-11-06快照只代表**当时**的静态知识整合；当前 Draft PR #23 已有若干可执行离线专业能力。新事实请优先读取 [P1/P2 12领域 × 源码 × 反例清单](references/p1-p2-knowledge-reconciliation-20261113.md)，再回原领域正文，不能将旧“尚未修改业务代码”当成现时结论。
