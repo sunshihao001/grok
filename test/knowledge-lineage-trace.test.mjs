@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
+import {readFileSync,existsSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 
 const cli=fileURLToPath(new URL('../scripts/audit-knowledge-trace.mjs',import.meta.url));
@@ -59,4 +60,26 @@ test('unknown unit and invalid target cannot escape read-only scope',()=>{
  assert.equal(badUnit.status,2);
  const pathTraversal=spawnSync(process.execPath,[cli,'--target','../../secret.json'],{encoding:'utf8'});
  assert.equal(pathTraversal.status,2);
+});
+
+
+test('source-to-proof knowledge lifecycle stays linked from existing knowledge entry points and records non-verified states',()=>{
+  const file=new URL('../knowledge/references/knowledge-lineage-lifecycle-20261113.md',import.meta.url);
+  const doc=readFileSync(file,'utf8');
+  for(const word of ['QUESTION','SOURCE','OBSERVATION','CONCEPT','CLAIM','METHOD','CASE',
+    'IMPLEMENTATION','DECISION','EVALUATION','REVISION','derived_from','tested_by',
+    'source-coverage-v0.1.json','scripts/audit-knowledge-trace.mjs',
+    'D04-K01','L0-K01','SOURCE_READ','OFFLINE_TEST']) {
+    assert.ok(doc.includes(word),'missing traceability concept or example: '+word);
+  }
+  assert.match(doc,/文件级可追溯/);
+  assert.match(doc,/不表示|不能宣称|不等于/);
+  for(const target of [
+    '../knowledge/README.md','../knowledge/references/README.md',
+    '../docs/project/knowledge-use.md','../knowledge/ai/intent-knowledge-selection-and-reasoning.md',
+  ]) {
+    const p=new URL(target,import.meta.url);
+    assert.ok(existsSync(p),'missing original navigation: '+target);
+    assert.match(readFileSync(p,'utf8'),/knowledge-lineage-lifecycle-20261113\.md/,target);
+  }
 });
