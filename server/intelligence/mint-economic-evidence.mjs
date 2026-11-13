@@ -22,6 +22,7 @@ export async function run({ mint, readEconomic, now = Date.now } = {}) {
     rpcSha256: row.rpcSha256 ?? null, rpcHashVerified: row.rpcHashVerified === true,
     instructionVerifiedAgainstRpc: row.instructionVerifiedAgainstRpc === true,
     captureSource: row.captureSource ?? 'UNKNOWN', commitment: row.commitment ?? null,
+    capturedAtMs: row.capturedAtMs ?? null,
     outerI: Number.isInteger(row.outerI) ? row.outerI : null,
     innerI: Number.isInteger(row.innerI) ? row.innerI : null,
     mint: row.mint ?? mint,
