@@ -1,5 +1,10 @@
 # Solana Meme × Blix｜项目目标锚点与认知深化图（V0.2）
 
+## 2026-11-14｜Synapse 源码纵深研究的新增纠偏
+
+依据 [Synapse 全分类机制纵深与 Blix 实际缺口](../../knowledge/references/synapse-cross-signal-mechanisms-20261114.md)，**纠正“Blix 没有钱包→Mint 入口”的推测**：engine.js 已连接 wallets.walletSignals，钱包买入可 adopt Mint、vet 并 raise 告警，且部分关联地址按 independent() 启发式折叠。真实增量不是复制钱包追踪，而是验证已有钱包信号如何进入 AI 深读和跨 Mint 调查，以及不同模块是否保留相同经济对象：research.js 对 followedWalletsBought 统计原始 distinct wallet，不能直接等同 walletSignals 的关系组数；wtrack.js 的 fromTx 在发现 Swap 后直接返回，有同笔 Swap+Transfer 漏记转仓的源码条件（待真实 fixture 验证）。外部跟单回测/样本外反证再次确认：钱包群体结构和高质量信号本身不等于可复制净收益。此前“钱包事件成为候选的另一条入口”应解释为**深化已有入口及跨模块升级**，不是从零新增。优先对照既有 Blix 与证据增强后的候选质量、钱包独立性、真实资金/库存与执行延迟；禁止只增加标签数或重建筛选器。
+
+
 ## 2026-11-14｜Synapse 全分类提取补充（覆盖而非选摘）
 
 前一节为**面向 Blix 当前业务决策的选用摘要**，并非对整个 Synapse 文档的知识覆盖范围判断。根据用户进一步指正，所有源类别已经按原名、原义和原市场范围完整登记在 [Synapse 全分类与深度延伸目录](../../knowledge/references/synapse-methodology-full-taxonomy-20261114.md)：14/14 链上信号、3/3 DEX 事件、3/3 买入形态、4/4 HyperLiquid 信号、5/5 行为标签，以及全部方法原则、噪音、产品/合规条目；另有 T01–T14 **我们提出的**研究方向。不能将上一节的 A/B/C 适配等级当作保留/删除知识的门槛：**研究范围完整开放，代码实现按已验证缺口审慎选择**。用户上传资料为转述笔记，未逐条核实原站，更不代表这些信号已经在 Blix 接入、有效或能带来交易收益。
