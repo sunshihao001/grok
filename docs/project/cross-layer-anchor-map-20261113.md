@@ -145,7 +145,7 @@
 | 参考来源 | 核实得到的有效机制 | 对Blix的当前判断 |
 |---|---|---|
 | [NASA Requirements Management](https://www.nasa.gov/reference/6-2-requirements-management/) / [OMG SysML v2](https://www.omg.org/sysml/sysmlv2/) | 需求→系统结构/行为/实现→验证的双向追溯与一致性 | 借鉴跨层关系，不引入完整系统工程工具 |
-| [NIST Digital Thread](https://www.nist.gov/) | 产品生命周期的信息连续/跨系统模型思路 | 理解从想法到实际运行的一条项目历史“线程”；目前属于类比借鉴 |
+| [NIST Digital Thread](https://www.nist.gov/programs-projects/digital-thread-smart-manufacturing) | 产品生命周期的信息连续/跨系统模型思路 | 理解从想法到实际运行的一条项目历史“线程”；目前属于类比借鉴 |
 | [W3C PROV-O](https://www.w3.org/TR/prov-o/) / [OpenLineage](https://github.com/OpenLineage/OpenLineage) | 来源实体/活动 + Run/Job/Dataset/Facet可验证处理链 | 最值得用于真实RPC归档与解析/结论来源，**静态知识路由不是运行事件** |
 | [Doorstop](https://github.com/doorstop-dev/doorstop) | 需求与测试可追溯、版本控制记录 | 借鉴检查方法；无需为每个函数创建需求YAML |
 | [OpenMetadata](https://github.com/open-metadata/OpenMetadata) / [DataHub](https://github.com/datahub-project/datahub) | 业务语义、元数据、字段级血缘、下游影响和可查询关系 | 当前原Blix数据链优先，可借鉴变更影响，不部署大型平台 |
