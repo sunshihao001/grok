@@ -57,6 +57,7 @@ type DiscoveryResult = {
     selectedMint: string | null; reason: string; candidateCount: number;
     source: string; marketCoverage: string; sourceFreshness: string;
     unknowns: string[]; modelSelectionVerified: false;
+    knowledgeUse?: {stage:string;source:string;topic?:string;outcome:string}[];
   };
   investigation: ResearchResult | null;
   verifiedMarketOpportunity: false;
@@ -337,6 +338,14 @@ export function Intelligence() {
                 比较了 {discoveryResult.discovery.candidateCount} 个当前 Pulse 观察候选。
                 {discoveryResult.discovery.marketCoverage}。这只是模型选择的调查目标，不是买入信号。
               </p>
+              {!!discoveryResult.discovery.knowledgeUse?.length && <details>
+                <summary className="cursor-pointer text-xs font-semibold">
+                  选取 Mint 时提供的专业知识（{discoveryResult.discovery.knowledgeUse.length}）
+                </summary>
+                {discoveryResult.discovery.knowledgeUse.map((k,i)=><p key={i} className="mt-2 break-all text-xs text-muted">
+                  {k.source} · {k.outcome}
+                </p>)}
+              </details>}
               <details><summary className="cursor-pointer text-xs font-semibold">来源与限制</summary>
                 <p className="mt-2 text-xs text-muted">{discoveryResult.discovery.sourceFreshness}</p>
                 <ul className="mt-1 list-disc pl-5 text-xs text-muted">
