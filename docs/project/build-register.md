@@ -5,6 +5,21 @@
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
 
+## 2026-11-14｜R-33：纠偏实际工程试点——无旧锚点的钱包签名扫描错误判定“已覆盖”
+
+**目标与授权**：接续R-31/32“主动发现→定位负责层→修复→验证”，并继承R-30“数据源问题优先改善原采集层，不在AI报告私补数据”。本轮找到可由源码逻辑复现、可隔离修复的真正判断错误，而不是再扩纠偏术语。
+
+**被证实的代码逻辑缺陷**：原server/wallets.js::pageSignatures在first=false且lastSig=null时把reached初始化为true。若扫描RPC签名每页均满50条，因pages预算耗尽、没有观察到旧锚点或短页时，函数仍返回reached=true；下游checkpointWalletPage可能记录INCREMENTAL_ANCHOR_REACHED，误导“当前窗口已追溯到边界”，虽walletSignatureCoverage.historyComplete仍保持false。复现条件并不证明真实RPC历史曾发生特定漏包，只证明逻辑存在过度确认。
+
+**修复在正确责任层**：wallets.js::pageSignatures改为首次采样以外默认reached=false，直到实际遇到短页或显式旧锚点；已存在wallet-signature-coverage.mjs继续承担窗口、缺口/风险与游标的唯一记录。原miss日志从“the oldest were skipped”的确定陈述改为“older events may be missing”的正确不确定性，避免纠偏误报。未更改外部供应商、AI sidecar、新建游标、交易/签名入口或数据库结构。
+
+**离线验收**：test/wallet-evidence-chain.test.mjs新增正反测试：无锚点增量扫描连续两满页（page budget）必须reached=false；短页自然结束和旧锚点场景仍true。既有test/wallet-signature-coverage.test.mjs已有reached=false持久化与historical risk测试。GitHub Actions测试/审计状态需核最后分支HEAD；本登记不预判真实主网覆盖。
+
+**跨层影响**：O2关键钱包、O3资金Token经济链、O4跨Mint、S4血缘/来源、S5覆盖契约、S6测试、S7纠偏与防复发。通过源层共同函数影响所有钱包用户；下游报告不再直接复写RPC采集逻辑。
+
+**仍未知**：无真实RPC/网络重放，本轮不能证明供应商实际遗漏率或补查完整性，也没有增加签名源头本身提供的事件数量。纠正的是**检测到不足时不错误报“已完整”**，属于更可靠的源数据覆盖评价，而非承诺填补历史数据。
+
+
 ## 2026-11-13｜R-32：纠偏机制第一次纠正自身错误诊断（已执行的跨模块复核）
 
 **原诊断的问题**：前面的数据源责任台账只看到了server/sources.js::pumpStream里有重连、无独立历史补查，于是容易把该文件缺口扩大成“原Blix发行补查能力缺失”，进而推动新建采集逻辑。**这是证据覆盖范围错误，属于知识/源码审查失效，而不是已证明的运行BUG。**
