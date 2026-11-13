@@ -42,14 +42,11 @@ const SOURCES = Object.freeze([
 ]);
 
 function cueMatches(goal,cue) {
-  // Short Latin terms (SOL, PnL, AI) must not match substrings of unrelated words
-  // such as console or main. Chinese cues remain direct phrase matches.
+  // Only alphabetic short Latin cues need word boundaries; all cues are
+  // trusted in-repo literals, not user-provided regular expressions.
   const term=cue.toLowerCase();
-  if (/^[a-z]{1,3}$/.test(term)) {
-    const escaped=term.replace(/[.*+?^${}()|[\]\\]/g,'\\function scoreTopic(topic,goal,evidence) {
-  let score = topic.cues.filter(x=>goal.includes(x.toLowerCase())).length * 2;');
-    return new RegExp('(^|[^a-z])'+escaped+'(?=$|[^a-z])').test(goal);
-  }
+  if (/^[a-z]{1,3}$/.test(term))
+    return new RegExp('(^|[^a-z])'+term+'(?=$|[^a-z])').test(goal);
   return goal.includes(term);
 }
 function scoreTopic(topic,goal,evidence) {
