@@ -31,6 +31,25 @@ if (bad || !opts['--db'] || (opts['--wallet'] !== undefined && !validAddress(opt
     const has = name => Boolean(db.prepare("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?").get(name));
     const available = ['econ_transactions','econ_instructions','wallet_trades'].every(has);
     const wallet = opts['--wallet'], mint = opts['--mint'];
+    // Match the ORIGINAL Research raw-address metric on existing local rows;
+    // deliberately do not import wallets.js, start a server or infer controller groups.
+    const watchlistReady = has('wallet_trades') && has('wallets') &&
+      ['wallet','mint','side'].every(col => db.prepare('PRAGMA table_info(wallet_trades)').all().some(x => x.name === col)) &&
+      ['address','watching'].every(col => db.prepare('PRAGMA table_info(wallets)').all().some(x => x.name === col));
+    const rawTrackedBuyers = watchlistReady ? db.prepare(
+      `SELECT COUNT(DISTINCT wt.wallet) n FROM wallet_trades wt JOIN wallets w ON w.address=wt.wallet
+        WHERE wt.mint=? AND wt.side='buy' AND w.watching=1`).get(mint).n : null;
+    const trackedWalletActivity = {
+      rawTrackedBuyerAddressCount: rawTrackedBuyers,
+      countDefinition: 'ORIGINAL_RESEARCH_DISTINCT_TRACKED_BUYER_WALLET_ADDRESS',
+      observationWindow: 'ALL_LOCALLY_STORED_WALLET_TRADE_ROWS_NO_TIME_CUTOFF',
+      evidenceStatus: watchlistReady ? 'LOCAL_WATCHLIST_AND_TRADE_SUMMARIES_OBSERVED' : 'UNKNOWN_WATCHLIST_OR_TRADE_SCHEMA_MISSING',
+      relatedHeuristicGroupCount: null, independentEconomicControllerCount: null,
+      groupingStatus: 'NOT_COMPUTED_BY_OFFLINE_READER',
+      coverage: 'PARTIAL_LOCAL_LEDGER_NOT_COMPLETE_ADDRESS_HISTORY',
+    };
+    const sameSignatureBuy = has('wallet_trades') ? db.prepare(
+      `SELECT 1 FROM wallet_trades WHERE sig=? AND wallet=? AND mint=? AND side='buy' LIMIT 1`) : null;
     // Mint-first discovery is bounded and uses only locally indexed, successful RPC transfers.
     // The selected senders are observed token-account owners, not proven traders or controllers.
     // Sender count alone lets busy AMM/service addresses crowd out known local wallet
@@ -89,6 +108,11 @@ if (bad || !opts['--db'] || (opts['--wallet'] !== undefined && !validAddress(opt
       }
       return {
       signature: row.sig, outerI: row.outer_i, innerI: row.inner_i, mint: row.mint,
+      // The sender's locally stored swap BUY summary and a separate, archived
+      // Token transfer instruction may coexist in one signature. Never sum
+      // them as two purchases or treat transfer as an observed sale.
+      sameSignatureSenderBuySummaryObserved: Boolean(sameSignatureBuy?.get(row.sig,row.from_owner,row.mint)),
+      sameSignatureInterpretation: 'LOCAL_BUY_SUMMARY_AND_INSTRUCTION_ARE_DISTINCT_EVENTS_NOT_INVENTORY_PROVENANCE',
       rpcSha256: capture?.sha256 ?? null, rpcHashVerified: Boolean(capture),
       instructionVerifiedAgainstRpc: Boolean(capture),
       captureSource: capture?.captureSource ?? 'UNKNOWN', capturedAtMs: capture?.observedAtMs ?? null,
@@ -108,6 +132,7 @@ if (bad || !opts['--db'] || (opts['--wallet'] !== undefined && !validAddress(opt
       mode: 'OFFLINE_READ_ONLY_SQLITE_MINT_REPORT',
       input: { wallet, mint, hours },
       evidence: { source: 'EXISTING_LOCAL_SQLITE', knownSenderMintCaptures: captured,
+        trackedWalletActivity,
         walletSignatureWindow: window, lifetimeHistoryComplete: false,
         indexedCoverage: coverage,
         senderDiscovery: { method: wallet ? 'EXPLICIT_SENDER' : 'BOUNDED_LOCAL_TOKEN_TRANSFER_OWNER_INDEX',
@@ -126,6 +151,8 @@ if (bad || !opts['--db'] || (opts['--wallet'] !== undefined && !validAddress(opt
         'Observed later sells do not prove transferred-inventory provenance',
         'Cross-Mint temporal paths do not establish SOL provenance or common control',
         'Empty results mean NOT_OBSERVED_IN_CAPTURED_WINDOW, never confirmed inactivity',
+        'Tracked buyer count is raw watched addresses over locally stored rows; related groups and economic controllers are UNKNOWN',
+        'Same-signature buy summary and Token transfer are different ledger facts; neither proves same-inventory sale',
       ],
     }, null, 2));
   } catch (e) {
