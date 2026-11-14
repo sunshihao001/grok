@@ -5,6 +5,27 @@
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
 
+## 2026-11-14｜R-35：钱包群组归因与同笔转仓的跨模块契约实测
+
+**本轮根据用户确认的工作起点**：对照 Synapse 全分类研究，针对 Blix walletSignals、Research、WTrack 与 PR #23 经济证据的两处实际语义问题，在已有责任层进行有限修改/离线验收，**没有新增市场扫描器、RPC 数据源、AI Bot、交易入口**。经济归因以真实事件和当前覆盖为限。
+
+**C1｜钱包数量与群组归因已做源码级纠正 + 回归测试**：
+- 原 `server/wallets.js::walletSignals` 对 `independent()` 启发式关系分组使用“独立钱包”口径，且将 90 秒内同步买入说成“通常意味着同一操作者或复制机器人”。两个判断均超过证据：clusters() 的同币同期交易、共同手续费付款人不能直接确定经济主体。
+- 在**现有 walletSignals** 原位改为：记录原始地址数与启发式关系组数；真实独立经济主体为 `UNKNOWN`；同期买入仅为时间事实，既不能证明同控，也不能证明相互独立需求。现有安全门禁和不安全代币提示保留，原本监控事件触发逻辑不变；保留代币符号的 `$` 显示。
+- 新增 `test/wallet-signal-interpretation.test.mjs`，三合成钱包 A/B/C 中 A、B 共享第三方手续费付款人，C 单独买入；相同 Mint 上 `COUNT(DISTINCT wallet)=3`，现有 `independent()` 启发式组数为 2，测试要求告警不声称共同控制、不夸大独立需求，并维持不安全资产警示。此**不是**确认 A/B 由同一个人控制。
+
+**C2｜同笔 Swap+Token Transfer：源侧证据存在，旧 WTrack 摘要有视图边界**：
+- 直接沿用现有 `test/wallet-evidence-chain.test.mjs` 的合成“Pool→A 1000、A→B 400、A 净增 600”交易，确认 `wtrack.parseTransfer(tx,A)` 对该混合动作返回 `null`，而 `wallets.readTx` 通过现有 `economic-events.mjs` 原始 RPC 存档仍可将 A→B 的 400 单位指令作为 `recipientCandidates` 追踪。**旧 WTrack 当前视图不显示不能当作链上没有转仓**。
+- 原本 `wtrack.js::fromTx` 检测 Swap 就直接返回，确有“混合交易不进入普通转账馈送”的源码条件；本轮未莽撞放开这道保护（可能把 DEX 资金池腿误标普通钱包转账），**没有宣称已经修复其 UI/馈送覆盖**。应在原 WTrack 责任层先设计与历史结构兼容且可区分交易池的安全增量，或通过已有 PR #23 经济调查面板提供指令级事实，不另建源采集器。
+- `server/research.js` 仍统计原始钱包地址数，尚未使用上述关系组口径；现已用独立测试量化两者不同，但**未修改原 Research 受保护逻辑**。下次应明确 API 字段语义或经原版保留回归后做针对性衔接，不假装全产品统计一致性已完成。
+
+**CI 实际核验（代码 HEAD `97068d589658e9610361bd2a1c44289fa47f7650`）**：
+- [Node24 测试流水线 #43532644105](https://github.com/sunshihao001/grok/actions/runs/43532644105)：**564/564 全部通过、20/20 安全通过、90/90 经济证据专项通过**，同时跑过静态前端构建。
+- [独立审计 #43532644125](https://github.com/sunshihao001/grok/actions/runs/43532644125)：**PASS**。此前两个 CI 失败来自本轮测试标题 `$` 字符的替换错误，已修正并经仓库回读、最终 CI 重新确认。不能把中途失败隐去，亦不能把外部网站 uptime 测试失败混作本代码回归。
+- **未实施**：原版 Blix 全服务启动、真实 RPC/钱包历史回放、云环境部署、模型费用、交易、签名、付款、独立利润证明；PR #23 仍 Draft 且未合并。
+
+**下一项高价值验收**：冻结同一 Mint 的观察时点与钱包名单，比较原版 Early/Triage/Research/Wallet 信号与证据增强版本的发现结果；先确定 source/consumer 字段语义、混合动作在 WTrack UI 的安全显示契约，保持原有数据源唯一。若增强只增加标签与文件而无纠错或机会发现增量，停止扩建。
+
 ## 2026-11-14｜R-34：RPC实时流中断状态在原源层暴露，防止重连被误读为补回
 
 **发现与边界**：server/rpc-stream.js的重新订阅从tip继续，单靠连接状态`connected:true`不能证明中断期间消息已重放；这与原版engine.js有界发行补查、wallets.js签名轮询并不冲突。此项是**源连接状态语义**修正，不是已证实链上漏包或缺少补查。
