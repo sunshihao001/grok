@@ -729,7 +729,7 @@ export async function walletSignals(event, raise, adopt, vet) {
       ? " Buys occurred within 90 seconds; timing alone does not establish common control or independent demand." : "";
     const linked = groups < buyers.length
       ? ` ${buyers.length - groups} addresses are grouped by co-trades or shared fee payer; that is not proof of common control.` : "";
-    raise(tk, "smart", ok ? `${groups} tracked-wallet groups bought ${tk.symbol}` : `${groups} tracked-wallet groups bought ${tk.symbol} (failed safety)`,
+    raise(tk, "smart", ok ? `${groups} tracked-wallet groups bought $${tk.symbol}` : `${groups} tracked-wallet groups bought $${tk.symbol} (failed safety)`,
       `${buyers.length} tracked wallet addresses bought in the last 2 hours (${groups} heuristic groups; independent economic actors UNKNOWN): ${names}.${linked}${burst} Followed-wallet activity alone is not a safety check or trade recommendation.${safety}`, 0, mark);
   }
 }
