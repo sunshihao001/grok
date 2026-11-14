@@ -5,6 +5,25 @@
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
 
+## 2026-11-14｜R-38：GMGN/Million/Synapse机会研究进入同候选离线A/B验收
+
+**用户目标**：不再只做成熟项目名称/标签的抽象结合，而是让GMGN Wallet Radar、Million双向发现、Synapse分发/资金行为等与原Blix发现和Paper在**同一个真实业务目标**下产生可比较、可验收的差异。优先确认是否比原版早发现值得研究或可参与的Mint，而不是增加评分。前轮[原Blix参考产品再整合](https://github.com/sunshihao001/grok/blob/blix/docs/project/reference-driven-goal-model-v0.1.md#13-2026-11-14gmgn--既有成熟产品--blix机会优先全局再整合v04)仍是知识主真源；本轮新增**实际离线验收程序**，不另做交易终端/扫描器。
+
+**真实历史样本**：[2026-11-01三次供应商归档复查](single-mint-audit.md)的`EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump`。主要PumpSwap池三次报价分别`0.0008148/0.0007653/0.0007819`美元，流动性约`$91,059/$88,619/$89,628`，Orca旁池仅约48美元，头部Token Account的Owner与主要AMM池地址精确匹配。**专业分析可提出库存方向、LP与公共设施假设，但既有档案没有逐笔真实Swap/LP、候选全集和当时可执行报价，因此无法评价真实A/B挑币率或收益。** 不把合成第二Mint混进这份真实归档。
+
+**代码成果（现有PR#23集成分支）**：
+1. 在 `server/intelligence/pulse-discovery.mjs` 的旧输入校验和发现回执加入 `candidateDigestSha256`，涵盖标准化Pulse候选数组及顺序、目标、browser时点、boardStatus；**仅证明两回执采用完全相同的浏览器输入，不证明提供方数据首次可见/完整性**。
+2. 新纯函数 `server/intelligence/opportunity-read-comparison.mjs::compareObservedInvestigations` 只接受已有 `snapshot/baseline/enhanced` 调查回执，可选固定时点带源线索/纸面收据；验证A/B候选哈希和时点一致、不得选未经原始候选授权的Mint；有`firstAvailableAtMs`且晚于冻结浏览器时点的增量证据被拒；时间未知保持UNKNOWN。复用原 `followability-replay`，即便收据算正收益也不变成实盘Alpha。报告原样输出 `modelBenefitEstablished:false`、`NOT_REAL_MARKET_ADVANTAGE`，不可凭模型选中不同Mint称提高质量。
+3. `test/opportunity-read-comparison.test.mjs` 使用**两种脚本mock模型**比较完全相同的两Mint合成Pulse输入：A只看市场资料，B收到标记为`SYNTHETIC_TEST_ONLY`的GMGN/Million式研究线索，允许Mint选择发生变化，但不得生成已确认市场优势。负例包含更改内容同数量哈希、增量晚到、未知首可见时点、外部Mint注入、坏缓存板、纸面假阳性。
+4. 额外独立CLI `scripts/audit-opportunity-comparison-offline.mjs --input EXISTING_FROZEN_A_B.json` 只读有界本地JSON并输出详细对照报告；`test/offline-opportunity-comparison-cli.test.mjs` 确保输入SHA不变、缺文件不创建、非法输入拒绝。npm脚本`audit:opportunity-a-b:offline`可用于将来Grok云电脑真实离线历史的安全对照，但目前不会自己生成真实A/B回执或从外部抓全市场。
+5. 以上测试已加入`package.json`原有`test`、`test:intelligence`，未改原版`research.js`、`brain.js`、`wtrack.js`、交易/钱包/签名代码，也未使用收费接口。
+
+**已验收**：在增加第一个对照测试后的代码提交`3aac4ff5b688ca783ef6c8c1b89047fcffd92494`，[GitHub Node24 CI #43542355930](https://github.com/sunshihao001/grok/actions/runs/43542355930) **571/571综合、20/20安全、91/91经济证据、前端构建PASS**；[独立审计 #43542355842](https://github.com/sunshihao001/grok/actions/runs/43542355842) PASS。**后加CLI与本记录的最终SHA必须分别回看最新CI，不能沿用较早的绿灯**。Uptime原外部远程健康流程出现失败，不能把它混为对照测试用例失败或忽略为上线验收成功。
+
+**仍未实现/未验的工作**：①Blix原版完整候选Universe的历史留存与遗漏；②从钱包而非Pulse新增的Mint必须另作来源覆盖/时点对照；③全市场实时数据、GMGN/OKX真实接口和模型A/B；④真实交易信号首次对人可见时间；⑤真实双边可成交报价/失败/退出；⑥样本外收益与真正的回访学习；⑦PR#23与blix基线仍有合并冲突、未合并。下一次要**先获取同一真实观察窗口的候选和来源时间档案**并验证历史覆盖，而不是继续堆合成正收益测试。
+
+[同Mint真实证据及离线对照详细报告](blix-ai-investigation-product-comparison-20261113.md#10-2026-11-14gmgnmillionsynapse-与原-blix-同批候选的首次离线-ab-验收)。
+
 ## 2026-11-14｜R-37：GMGN与历史成熟项目重新梳理的知识承接（不重造代码）
 
 **本轮依据用户提出的“GMGN这些有用的项目与之前看过的项目结合重新梳理”进行源级复核。** 原位成果位于**另一个分支**（本PR的base `blix`）：[参考成品逆向目标体系新增第13节](https://github.com/sunshihao001/grok/blob/blix/docs/project/reference-driven-goal-model-v0.1.md#13-2026-11-14gmgn--既有成熟产品--blix机会优先全局再整合v04)。2026-11-14 已再次检查当前PR #23仍Draft/open/未合并/mergeable=false；**本PR工作树没有因链接自动包含那份blix知识修订，不应声称已合并**。
