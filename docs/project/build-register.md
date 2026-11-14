@@ -5,6 +5,30 @@
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
 
+## 2026-11-14｜R-39：到期前取回真实DEX/RugCheck原档，发现第二枚同批Mint并校验机会假象
+
+**为什么从R-38调整研究入口**：R-38已有对同一浏览器Pulse候选的合成AI A/B和严密的时点/Hash检查，再重复合成“B选中好币”只会空转。此前文档认为真实样本只有一个BNB，不足构成双币比较；**2026-11-14实际取回GitHub Actions原始ZIP后发现第一批同时包含第二枚SIS真实Mint**。这恢复了一个此前未利用的实证市场对照，但**并没有恢复原版Blix的真正两币候选队列、模型回执或市场优势**。
+
+**数据恢复**：
+- 从PR#16历史Actions [run 41266389009](https://github.com/sunshihao001/grok/actions/runs/41266389009)取回artifact `13067198705`，ZIP SHA256 `afeb32206d063a2f1e2ab68dbc35f736a1caa3fe093f8ecb13691171ced05053`（GitHub报2026-12-01到期），含BNB、SIS的DEX原始JSON；复核原始JSON SHA分别 `240dca2d3df8cfbf9e0f09d806d61b2ae6040abc07bcebc4b9dd3e07f3d09897`、`5cdeb33076e1df0a2efc24c1c3daf6b4cce4c3832ac131ddaf4f5ab105dbf7b4`。
+- 从[run 41268982018](https://github.com/sunshihao001/grok/actions/runs/41268982018)和[run 41269179918](https://github.com/sunshihao001/grok/actions/runs/41269179918)取回artifact `13068437092`、`13068576712`，含BNB两次DEX和RugCheck原始JSON；GitHub报2026-11-15 03:23:32和03:26:31 UTC到期；全部源JSON SHA与旧归档报告相符。
+- 本次会话已生成**完整17个原归档成员、三个原始ZIP、manifest SHA与双Mint有界Case**的下载包 `blix-20261101-original-market-snapshots-preserved-20261114.zip`（复合SHA256 `b8ade9d33bfc16cbbb43c78fa49415490f1860e08548bae06d4853ce2325bcf8`）。**该文件是ChatGPT本轮下载产物，尚未作为二进制文件永久提交GitHub**；在GitHub档案到期前下载到安全长期位置很重要。完整哈希表与原始业务区别见[单Mint审查新增真实双Mint来源段](single-mint-audit.md)。
+
+**真正多币同次供应商观察的事实**（首次获取时间分别为2026-11-01 02:44:23.396和02:44:23.526 UTC）：
+- BNB `EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump`：5个配对，主PumpSwap池报价`0.0008148` USD、流动性`$91,059.46`；Orca池`$47.83`、报价`0.0008145`。三次快照延续原研究，对Pool/Holder身份校核有用，非主网Swap验收。
+- SIS `FdKdpz11GsTofLaNiddrhxrsE4APZYSSfLFqQ9YKpump`：7个配对，主PumpSwap池`0.0005512` USD、流动性`$64,871.47`；Orca池`0.0004137` USD、`$52.31`。Orca报价较主池约低24.9456%，而流动性约小`1240×`，不能称实际套利；另有四池无可用报价/流动性。
+- 同源两币能说明**“池数多”与“流动性好”、不同池展示价差与“可执行收益”均不是同一判断**；但没有原Blix的完整发现/拒绝名单、源最早可见、实时双边路由报价/延迟、GMGN Radar真实历史导出，也没有真钱收益。
+
+**离线程序交付（仅增加源数据fixture和检验，不造新市场引擎）**：
+- `test/fixtures/public-provider-two-mints-20261101.json`：原ZIP+原始JSON哈希、两个Mint首次来源时间、主池/旁池原始数值、覆盖边界与UNKNOWN，全部为原档复算，不标伪“Blix Pulse已发现”。
+- `test/public-provider-two-mint-history.test.mjs`：确认同批双Mint与来源而非原Blix Pulse名单；重算池深比及SIS近25%**展示**价差不构成可执行套利；通过既有 `followability-replay` 验证无首次可见时间/报价的真实样本为`UNKNOWN_SIGNAL_AVAILABILITY` / `MISSING_ENTRY_EXECUTION`。
+- 两项测试已加入现有`package.json`的综合与`test:intelligence`脚本；未更改原版发现、Research、真实下单、API源或自动筛币。
+- [包含新测试的提交c5e7778](https://github.com/sunshihao001/grok/actions/runs/43545133023)已有Node24综合CI PASS，独立[audit](https://github.com/sunshihao001/grok/actions/runs/43545133009) PASS；**后续证据文档/台账更新至最新HEAD时需按对应SHA重新查**，不能以旧绿灯证明未来提交。
+
+**下一项真正能回答“专业增强发现优势了吗”的数据要求**：至少一次真实 Blix Pulse/Wallet 信号窗口中的**候选全集与拒绝理由、原始来源事件/捕获/浏览器首次可见时点、两版本同预算模型回执及延迟后真实可得报价**。没有这些条件时，R-38 A/B只证明合成输入条件下两种研究方案可以改变选择；R-39仅证明实际供应商两币市场结构存在分歧并能避免错误套利推断。**真实市场优势与净可跟随性仍未建立。**
+
+**风险锚点**：这轮真实数据对过去“只有一个Mint”的认识做了修正，但没有推翻“真实A/B不可验”的结论。**若下一轮没有获取带真实首次可见时间和候选基线的源记录，不再无限增加类似合成A/B和模型分数**，优先保存源证据并寻找真正基线。
+
 ## 2026-11-14｜R-38：GMGN/Million/Synapse机会研究进入同候选离线A/B验收
 
 **用户目标**：不再只做成熟项目名称/标签的抽象结合，而是让GMGN Wallet Radar、Million双向发现、Synapse分发/资金行为等与原Blix发现和Paper在**同一个真实业务目标**下产生可比较、可验收的差异。优先确认是否比原版早发现值得研究或可参与的Mint，而不是增加评分。前轮[原Blix参考产品再整合](https://github.com/sunshihao001/grok/blob/blix/docs/project/reference-driven-goal-model-v0.1.md#13-2026-11-14gmgn--既有成熟产品--blix机会优先全局再整合v04)仍是知识主真源；本轮新增**实际离线验收程序**，不另做交易终端/扫描器。
