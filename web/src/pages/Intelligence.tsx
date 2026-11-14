@@ -63,7 +63,11 @@ type DiscoveryResult = {
   verifiedMarketOpportunity: false;
 };
 type EvidenceEdge = { fromOwner: string; toOwner: string; eventCount: number; observedRawTotal: string; localSellSummaryObserved: boolean; crossMintCandidateCount: number };
-type ResearchEvidence = { capability: string; error?: string; result?: { status: string; unknowns?: string[]; sources?: { provider: string; coverage?: string }[]; facts?: { network?: { eventCount: number; coverage: string; edges: EvidenceEdge[]; inputTruncated: boolean } } } };
+type ResearchEvidence = { capability: string; error?: string; result?: { status: string; unknowns?: string[]; sources?: { provider: string; coverage?: string }[]; facts?: {
+  network?: { eventCount: number; coverage: string; edges: EvidenceEdge[]; inputTruncated: boolean };
+  trackedWalletActivity?: { rawTrackedBuyerAddressCount: number | null; relatedHeuristicGroupCount: number | null; independentEconomicControllerCount: number | null; observationWindow: string; evidenceStatus: string };
+  recipients?: { signature: string | null; fromOwner: string | null; toOwner: string | null; sameSignatureSenderBuySummaryObserved?: boolean }[];
+} } };
 type ResearchResult = {
   mint: string; status: string; error?: string; completedAt?: string;
   assessment?: { summary: string; hypotheses: string[]; alternativeExplanations: string[]; nextChecks: string[]; evidenceLevel: string } | null;
@@ -130,7 +134,10 @@ export function Intelligence() {
   const activity = c && (c.buys != null || c.sells != null)
     ? number(c.buys) + " 买 / " + number(c.sells) + " 卖" : "未知";
   const activeResearch = c && researchResult?.mint === c.mint ? researchResult : null;
-  const network = activeResearch?.evidence.find(x => x.capability === "mint-economic-evidence")?.result?.facts?.network;
+  const economicFacts = activeResearch?.evidence.find(x => x.capability === "mint-economic-evidence")?.result?.facts;
+  const network = economicFacts?.network;
+  const trackedWalletActivity = economicFacts?.trackedWalletActivity;
+  const combinedBuyTransfers = economicFacts?.recipients?.filter(x => x.sameSignatureSenderBuySummaryObserved).slice(0, 8) || [];
   const sourceState = loaded ? (connected ? "实时流连接中" : polling ? "轮询更新中" : "数据连接待核实")
     : restored ? "历史缓存，可能过时" : "等待 Blix Pulse 数据";
 
@@ -358,6 +365,16 @@ export function Intelligence() {
             <div className="space-y-4 p-4 text-sm">
               <p className="break-words font-semibold">{activeResearch.assessment?.summary || "模型未生成可用研究结论"}</p>
               <p className="text-xs text-muted">来源：{activeResearch.sourceMode}；结论级别：{activeResearch.assessment?.evidenceLevel || "MODEL_NOT_VERIFIED"}。不代表完整历史、交易控制权或盈利机会。</p>
+              {trackedWalletActivity && <div className="rounded-control border border-rule p-3">
+                <p className="font-semibold">跟踪钱包买入地址统计 · 原版 Research 同口径</p>
+                <p className="mt-1 text-xs">本地历史买入地址：{trackedWalletActivity.rawTrackedBuyerAddressCount ?? "UNKNOWN"}；启发式关系组：UNKNOWN；独立经济控制者：UNKNOWN。</p>
+                <p className="mt-1 text-xs text-muted">{trackedWalletActivity.evidenceStatus} · {trackedWalletActivity.observationWindow}。这是已有钱包账本中被跟踪的不同地址数，不是独立聪明钱人数，也不代表完整链上历史。</p>
+              </div>}
+              {!!combinedBuyTransfers.length && <div className="rounded-control border border-rule p-3">
+                <p className="font-semibold">同笔买入摘要＋Token 转移指令 · 已捕获候选</p>
+                <p className="mt-1 text-xs text-muted">同一签名内的买入摘要和转账是不同事实。旧 WTrack 简化转账列表可能不显示混合交易；这里不将转账记为卖出，也不证明后续卖出的是这批库存。</p>
+                {combinedBuyTransfers.map((x,i)=><p key={i} className="mt-2 break-all font-mono text-xs">{x.signature} · {x.fromOwner} → {x.toOwner}</p>)}
+              </div>}
               {activeResearch.continuation && <div className="space-y-3 rounded-control border border-rule p-3">
                 <h3 className="font-semibold">六个业务环节的实际证据状态</h3>
                 {([
