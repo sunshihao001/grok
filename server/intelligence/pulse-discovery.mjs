@@ -1,4 +1,5 @@
 // An opt-in AI-selected investigation from Blix's EXISTING Pulse board snapshot.
+import { createHash } from 'node:crypto';
 // The browser provides a bounded observation shortlist; it is not a market-wide
 // source, a verified feed or a claim that an opportunity can be traded.
 // The model can ONLY select a Mint already present in the validated shortlist.
@@ -37,8 +38,12 @@ export function validatePulseDiscoveryInput(value,now=Date.now()) {
       chg1m:typeof c.chg1m==='number'&&Number.isFinite(c.chg1m)&&Math.abs(c.chg1m)<=100000?c.chg1m:null,
     });
   }
+  const candidateDigestSha256=createHash('sha256').update(JSON.stringify({
+    goal:value.goal.trim(),browserRecordedAtMs:value.browserRecordedAtMs,
+    boardStatus:value.boardStatus,candidates,
+  })).digest('hex');
   return {
-    goal:value.goal.trim(),candidates,
+    goal:value.goal.trim(),candidates,candidateDigestSha256,
     source:'USER_BROWSER_BLIX_PULSE_SNAPSHOT_UNVERIFIED',
     sourceRecordedAtMs:value.browserRecordedAtMs,
     sourceFreshness:'CLIENT_RECORDED_AT_NOT_INDEPENDENT_PROVIDER_TIMESTAMP',
@@ -95,6 +100,7 @@ export async function discoverPulseInvestigation({input,model,readEconomic,loadK
     sourceRecordedAtMs:candidate.sourceRecordedAtMs,
     sourceFreshness:candidate.sourceFreshness,
     candidateCount:candidate.candidates.length,
+    candidateDigestSha256:candidate.candidateDigestSha256,
     knowledgeUse,
     selectedMint:selected?.mint??null,selectedObservation:selected??null,
     reason:proposal.reason.trim(),modelSelectionVerified:false,
