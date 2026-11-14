@@ -143,3 +143,25 @@ test('RPC source status marks interrupted coverage unknown after reconnect rathe
     assert.ok(resumed.coverageGap.until>=resumed.coverageGap.since);
   } finally { stop(); }
 });
+
+test('Mint-specific preflight reads only existing indexed rows and cannot create or modify an archive', async () => {
+  const { probeExistingEconomicMint } = await import('../server/intelligence/offline-economic-reader.mjs');
+  const root=mkdtempSync(join(tmpdir(),'blix-mint-preflight-')),file=join(root,'existing.sqlite');
+  const other='4p7SeR6361WJ4T4icgsYTnzAUzfA5NwM4CwYD9kMBjuK';
+  try {
+    const absentPath=join(root,'absent.sqlite');
+    assert.equal((await probeExistingEconomicMint({databasePath:absentPath,mint})).ready,false);
+    assert.equal(existsSync(absentPath),false);
+    assert.equal((await probeExistingEconomicMint({databasePath:absentPath,mint:'invalid'})).status,'INVALID_MINT_SCOPE');
+    const db=new DatabaseSync(file);
+    db.exec('CREATE TABLE econ_instructions(mint TEXT); CREATE TABLE wallet_trades(mint TEXT)');
+    db.prepare('INSERT INTO econ_instructions(mint) VALUES(?)').run(mint);
+    db.close();
+    const before=digest(file);
+    assert.deepEqual(await probeExistingEconomicMint({databasePath:file,mint}),
+      {ready:true,status:'MINT_PRESENT_IN_LOCAL_INDEX_HISTORY_UNVERIFIED'});
+    assert.deepEqual(await probeExistingEconomicMint({databasePath:file,mint:other}),
+      {ready:false,status:'MINT_NOT_INDEXED_IN_EXISTING_ARCHIVE'});
+    assert.equal(digest(file),before,'read-only Mint preflight must not mutate SQLite');
+  } finally {rmSync(root,{recursive:true,force:true});}
+});
