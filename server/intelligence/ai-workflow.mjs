@@ -118,7 +118,8 @@ function mergeKnowledge(before, after) {
  *     invoked before planning AND after observations (not as an authorization source).
  * Never calls trading, accounts, notifications, external HTTP or background jobs.
  */
-export async function runAiResearchTask({ goal, mint, model, read, readEconomic, loadKnowledge, now = Date.now,
+export async function runAiResearchTask({ goal, mint, model, read, readEconomic, loadKnowledge,
+  marketObservation, now = Date.now,
   capabilities = listCapabilities, execute = runCapability } = {}) {
   if (typeof goal !== 'string' || !goal.trim() || goal.length > MAX_GOAL_LENGTH) throw new Error('INVALID_RESEARCH_GOAL');
   if (typeof model !== 'function') return { status: 'MODEL_NOT_CONFIGURED', goal, calls: [], evidence: [], assessment: null };
