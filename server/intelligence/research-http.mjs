@@ -127,7 +127,10 @@ export function createResearchHttpServer({
       json(res,415,{error:'JSON_ONLY'});return;
     }
     const source = await readiness();
-    if (!source.ready) {json(res,503,{error:'RESEARCH_NOT_CONFIGURED', archiveStatus:source.archiveStatus});return;}
+    if (!source.ready) {
+      json(res,503,{error:'RESEARCH_NOT_CONFIGURED',
+        ...(sourceReadiness ? {archiveStatus:source.archiveStatus} : {})});return;
+    }
     if (busy) {json(res,429,{error:'RESEARCH_BUSY'});return;}
     if (tasksStarted >= maxTasks) {json(res,429,{error:'TASK_BUDGET_EXHAUSTED'});return;}
     let input;
