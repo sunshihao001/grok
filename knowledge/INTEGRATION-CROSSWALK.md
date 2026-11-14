@@ -334,3 +334,22 @@
 - **真正需要A/B的是实际使用效果**：原Blix事实基线 vs 有限相关知识 vs 多层关联解释，比较事实误报/漏报、完整历史、关键未知发现、补查是否有用、时间和费用。模型写得更长不是成功。
 
 **验证入口**：`npm run audit:knowledge-trace -- --axes` 输出当前结构轴、关系类型和禁止越级的校验口径；旧 `--unit` / `--target` 保留文件级双向来源核查。这个工具不会自动推断同控或运行真实模型。所有可证伪结果继续登记在现有 [建设台账](../docs/project/build-register.md)，不另开“层级项目”。
+
+
+## 2026-11-14｜旧 Grok × Hermes 的“纠偏机制”源码复核：不是重复移植整套工作流
+
+**取证基线**：旧Grok `sunshihao001/grok@main` [fa10e491](https://github.com/sunshihao001/grok/tree/fa10e491c0692eaa9f9b1538b1fab0d9e9fc170a)；旧Hermes `sunshihao001/-@main` [2bf694b3](https://github.com/sunshihao001/-/tree/2bf694b37cce25b4a3c9364298b784039f3ecc84)。以下区分**源码实现、文档约定、历史运行报告、Blix是否已有机制**，与旧快照/卡片/本文件现有纵深知识不重复复制。
+
+| 重要纠偏能力 | 旧原项目中可核对的具体机制 | 对当前Blix的可复用判断与不应继承项 |
+|---|---|---|
+| **判断时点校准/防前视** | [Grok research.py](https://github.com/sunshihao001/grok/blob/fa10e491c0692eaa9f9b1538b1fab0d9e9fc170a/src/solana_meme_os/research.py) `evaluate_observations` 拒绝缺source_ref、缺观察/可得时间以及决策时点尚不可得的资料；[test_research.py](https://github.com/sunshihao001/grok/blob/fa10e491c0692eaa9f9b1538b1fab0d9e9fc170a/tests/test_research.py)有合成负例 | 作为O1/O5最早可见与可跟随性契约反例；先对照已有followability-replay与source-readiness，不另写一套交易时钟检查器；此处验证输入一致性而非真实供应商时效 |
+| **观察状态隔离及可恢复监控** | [Grok monitor.py](https://github.com/sunshihao001/grok/blob/fa10e491c0692eaa9f9b1538b1fab0d9e9fc170a/src/solana_meme_os/monitor.py) 要求live与fixture不共用状态、live不能过时或未来、只接受新时点，原子替换状态并附带source/ref；[test_monitor.py](https://github.com/sunshihao001/grok/blob/fa10e491c0692eaa9f9b1538b1fab0d9e9fc170a/tests/test_monitor.py)核部分边界 | 用于O6监控与恢复负例；Blix当前已有原生source/SQLite/签名游标，不搬Python monitor，也不把原子写文件误认为全网漏包已补全 |
+| **问题表征、竞争解释与反证** | [Grok knowledge/method.md](https://github.com/sunshihao001/grok/blob/fa10e491c0692eaa9f9b1538b1fab0d9e9fc170a/knowledge/method.md) 把“Top10集中上升”与“庄家吸筹”拆开，并要求竞争假说、新证据判别、证据不足不升级结论；[knowledge.py](https://github.com/sunshihao001/grok/blob/fa10e491c0692eaa9f9b1538b1fab0d9e9fc170a/src/solana_meme_os/knowledge.py)输出来源绑定的追问而非交易信号 | 继承到O2–O4知识选择与AI只读解释；并与现有owner/库存批次UNKNOWN检查对应，不把15历史卡片当封闭机制全集 |
+| **来源缺失责任与业务降级** | [Hermes missing_data_policy.md](https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/docs/missing_data_policy.md) 区分严重度、source_skill/source_command/recovery_action/decision_impact；[phase_state.py](https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/skills/common/phase_state.py)保存阶段与恢复入口 | 将“缺什么/谁负责补/何时重审/影响哪个业务主张”沿现有Blix源/解析/AI层传递，不复制固定S01–S07流水线或并行钱包游标 |
+| **测试错误归因，而不是错误修业务代码** | [Hermes pytest_failure_attribution.md](https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/reports/pytest_failure_attribution.md)记录多模块共用`run`导入导致整套pytest假失败，原报告将错误归于测试隔离并安排修正；[pytest_baseline_after_fixes.md](https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/reports/pytest_baseline_after_fixes.md)记录13 passed | 属于跨层纠偏RCA的正例：先区分测试环境/源/解析/逻辑/业务，不因CI红即篡改钱包判断。历史报告不是我们本轮重新执行pytest |
+| **契约与实现互相校验（旧负例）** | [Hermes handoff contract](https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/docs/cross_skill_handoff_contract.md)要求保留`counter_evidence`与`missing_fields`；但[meme-evidence-chain/run.py](https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/skills/meme-evidence-chain/scripts/run.py)当前计算时`counter_evidence_count:0`为常量、基础`counter_evidence:[]`未被填入，`calculate_confidence`由0.8基数及固定加减得出，未见样本校准 | **不能搬旧置信度、旧控制者阈值或反证完整性主张**；把“宣称有反证但实际输出空/数值置信度未经校准”作为数据契约与报告反例测试的候选 |
+| **门控过度保守也需纠偏** | [Hermes历史batch 4币分析](https://github.com/sunshihao001/-/blob/2bf694b37cce25b4a3c9364298b784039f3ecc84/reports/batch_20260526T123011Z_need_more_data_analysis.md)记录4币都NEED_MORE_DATA，并将候选原因列为SM证据空、行为UNKNOWN、结构风险高、门控阈值；不能单凭此证明市场实际没有机会 | 对O5同时检查“证据不足/规则太严/上游解析不足/来源缺失”几个竞争解释，不能为减少UNKNOWN放松真实风险，也不能用全部UNKNOWN冒充慎重有效 |
+
+**此次跨项目收束的真正新增认识**：Grok的**意图/证据时间/反证**与Hermes的**交接责任/状态恢复/失效归因**构成互补；Blix已有的源/经济/知识/AI能力应沿现有S1–S7、O1–O6和单一数据源责任实现，不引入旧Hermes硬编码S01–S07阶段、3终端审批制、未校准分数或交易接口。尤其应以**文档契约→实际源码→测试负例→可观察输出→反向修订主张**检验旧参考，而不止把旧文档当权威。
+
+**证据等级与下一步**：本轮为旧Grok/Hermes **历史源码+文档+离线测试存在性+历史报告审查**，未重新运行完整旧Hermes、未验证其2026-05历史批次链上真实性、未证明旧评分模型有效；不是Blix上线效果。后续优先在现有Blix evidence/AI只读报告测试上审“反证字段真有内容还是仅存在结构”“缺失源责任是否传给下游”“真实可得时点是否被满足”，只对确有缺口的位置做有限修复。
