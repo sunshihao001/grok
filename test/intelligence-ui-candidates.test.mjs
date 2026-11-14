@@ -65,3 +65,17 @@ test("Coin deep-link, manual read-only research and client address gate use the 
   assert.ok(workspace.includes("127\\.0\\.0\\.1"));
   assert.ok(!workspace.includes("127\\\\.0\\\\.0\\\\.1"), "no double escaping the localhost IP regex");
 });
+
+test("Intelligence has a model-free exact-Mint archive path independent of paid AI readiness", () => {
+  const ui = fs.readFileSync(new URL("../web/src/pages/Intelligence.tsx", import.meta.url), "utf8");
+  assert.ok(ui.includes("async function runLocalInspection()"));
+  assert.ok(ui.includes('SIDECAR_URL + "/inspect"'));
+  assert.ok(ui.includes("JSON.stringify({mint})"));
+  assert.ok(ui.includes("researchHealth?.inspectionReady"));
+  assert.ok(ui.includes("researchHealth.remainingInspections === 0"));
+  assert.ok(ui.includes('data.mint !== mint || data.modelMode !== "NOT_USED"'));
+  assert.ok(ui.includes("免费查看指定 Mint 的本地经济证据（不使用AI）"));
+  assert.ok(ui.includes("activeResearch.modelMode === \"NOT_USED\""));
+  assert.ok(ui.includes("async function runLocalResearch()"));
+  assert.ok(ui.includes('SIDECAR_URL + "/research"'));
+});
