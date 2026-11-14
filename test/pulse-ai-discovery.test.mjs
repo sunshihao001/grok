@@ -91,6 +91,9 @@ test('AI discovers only from a submitted market shortlist, then uses the existin
   assert.deepEqual(calls,['discover']);
   assert.equal(research.length,1);
   assert.equal(research[0].mint,mintB);
+  assert.equal(research[0].marketObservation.selectedMint,mintB);
+  assert.equal(research[0].marketObservation.source,'USER_BROWSER_BLIX_PULSE_SNAPSHOT_UNVERIFIED');
+  assert.equal(research[0].marketObservation.sourceRecordedAtMs,observedAt);
 });
 
 test('model may decline an unhelpful shortlist without falsely claiming a trade opportunity',async()=>{
@@ -136,8 +139,13 @@ test('Chat Completions discover stage sends only the limited shortlist',async()=
 test('loopback /discover route runs validated selection plus one bounded local archive investigation',async t=>{
   const stages=[],mints=[];
   const base=await start(t,{allowedOrigins:['http://localhost:4420'],maxTasks:1,
-    model:async ({stage,candidates})=>{
+    model:async ({stage,candidates,evidenceAnchors})=>{
       stages.push(stage);
+      if(stage==='interpret'){
+        assert.equal(evidenceAnchors.length,6);
+        assert.equal(evidenceAnchors[0].status,'SUBMITTED_PULSE_BROWSER_OBSERVATION_NOT_SOURCE_VERIFIED');
+        assert.equal(evidenceAnchors[4].status,'NOT_EVALUABLE_WITHOUT_FOLLOWER_VISIBLE_SIGNAL_AND_QUOTES');
+      }
       if(stage==='discover'){assert.equal(candidates.length,2);
         return {mint:mintA,reason:'Interesting observed market activity for investigation'};}
       if(stage==='plan')return {calls:[{capability:'mint-economic-evidence',input:{mint:mintA}}]};
