@@ -46,7 +46,7 @@
 2. **KNOWLEDGE/CLAIM** 专业解释、竞争假说和反例：属于对应D领域及L深度，注明适用场景与不可推断范围。
 3. **DATA_FACT** 可复查Signature/原始行情和时间覆盖：必须有来源、哈希/字段、时点、缺口，不能靠文本生成。
 4. **IMPLEMENTATION** Blix原版或PR23的具体模块/输入输出/权限：详见[产品扩展层](../docs/project/intelligence-layer.md)，知识文档本身不启用代码。
-5. **VERIFICATION** 某提交的离线测试、历史回放、联网只读、前瞻影子及运维：事实以[工程建设台账](../docs/project/build-register.md)为准，不将绿色CI冒充主网可交易盈利。
+5. **VERIFICATION** 某提交的离线测试、历史回放、联网只读（`CONNECTED_READONLY_RUNTIME`）、前瞻影子及运维：事实以[工程建设台账](../docs/project/build-register.md)为准，不将绿色CI冒充主网可交易盈利。
 
 **正确的使用路径**：用户问题→对应G目标和O结果→Blix现有市场/钱包/归档事实→按需求查1–3个D主述与原始证据→明确竞争解释/缺失与下一项信息价值→只读报告、必要回放→新证据修订。不是固定让每个币经过12领域，也不是把11主题加载器当全部知识库。
 
