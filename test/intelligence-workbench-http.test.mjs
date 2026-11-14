@@ -275,3 +275,58 @@ test('manual Mint archive preflight rejects unindexed Mint before paid-model cal
   health=await (await fetch(base+'/health')).json();
   assert.equal(health.remainingTasks,0);
 });
+
+test('model-free Mint inspect uses existing archive evidence without model setup or consuming AI task budget', async t => {
+  let reads=0, mintChecks=0;
+  const missingMint='4p7SeR6361WJ4T4icgsYTnzAUzfA5NwM4CwYD9kMBjuK';
+  const base=await start(t,{
+    model:null,
+    readEconomic:async () => {reads++;return observedRecord;},
+    sourceReadiness:async () => ({ready:true,status:'EXISTING_ARCHIVE_SCHEMA_READABLE'}),
+    mintReadiness:async m => {mintChecks++;return {
+      ready:m===mint,status:m===mint?'MINT_PRESENT_IN_LOCAL_INDEX_HISTORY_UNVERIFIED':'MINT_NOT_INDEXED_IN_EXISTING_ARCHIVE',
+    };},
+    maxTasks:1,maxInspections:1,
+  });
+  const inspect=(body,orig=origin)=>fetch(base+'/inspect',{
+    method:'POST',headers:{Origin:orig,'Content-Type':'application/json'},
+    body:JSON.stringify(body),
+  });
+  let health=await (await fetch(base+'/health')).json();
+  assert.equal(health.ready,false,'model is not configured');
+  assert.equal(health.inspectionReady,true,'local archive does not need a model');
+  assert.equal(health.remainingTasks,1);
+  assert.equal(health.remainingInspections,1);
+  let response=await inspect({mint},'https://attacker.example');
+  assert.equal(response.status,403);
+  response=await inspect({mint,goal:'unexpected AI plan'});
+  assert.equal(response.status,400,'inspection must not accept model-controlled scope');
+  response=await inspect({mint:missingMint});
+  assert.equal(response.status,422,'a missing local Mint cannot pass archive preflight');
+  assert.equal((await response.json()).error,'MINT_LOCAL_EVIDENCE_UNAVAILABLE');
+  assert.equal(reads,0);
+  response=await inspect({mint},'http://localhost:4421');
+  assert.equal(response.status,200,'original Blix web can manually inspect existing Mint');
+  const data=await response.json();
+  assert.equal(data.mint,mint);
+  assert.equal(data.modelMode,'NOT_USED');
+  assert.equal(data.sourceMode,'LOCAL_SQLITE_ONLY');
+  assert.equal(data.verifiedMarketOpportunity,false);
+  assert.equal(data.liveExecutionValidated,false);
+  assert.equal(data.assessment,null);
+  assert.deepEqual(data.calls,[]);
+  assert.deepEqual(data.knowledgeUse,[]);
+  assert.equal(data.evidence[0].input.mint,mint);
+  assert.equal(data.evidence[0].result.facts.network.eventCount,1);
+  assert.equal(data.continuation.mint,mint);
+  assert.equal(data.continuation.watch.status,'NOT_RUNNING_NO_AUTONOMOUS_WATCHER');
+  assert.equal(reads,1);
+  assert.equal(mintChecks,2);
+  health=await (await fetch(base+'/health')).json();
+  assert.equal(health.remainingTasks,1,'a free evidence lookup does not consume model tasks');
+  assert.equal(health.remainingInspections,0);
+  response=await inspect({mint});
+  assert.equal(response.status,429,'bounded deterministic inspections prevent unlimited local reads');
+  response=await post(base,{mint,goal:'研究这枚Mint'});
+  assert.equal(response.status,503,'AI endpoint remains disabled without explicit model config');
+});
