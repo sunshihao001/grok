@@ -29,3 +29,20 @@ export function selectObservedCandidates(
   }
   return result;
 }
+
+// A Coin deep link is an explicit user choice, NOT a Pulse market observation.
+// Never fall back to another coin when its Mint is not in the visible shortlist.
+export function resolveResearchTarget(
+  candidates: ObservedCandidate[],
+  selectedMint: string | null,
+  explicitMint: string | null,
+): { mint: string | null; observed: ObservedCandidate | null; evidenceSource: string } {
+  if (explicitMint) {
+    const observed = candidates.find(x => x.coin.mint === explicitMint) ?? null;
+    return { mint: explicitMint, observed,
+      evidenceSource: observed ? "USER_MINT_WITH_PULSE_OBSERVATION" : "USER_MINT_LOCAL_ARCHIVE_ONLY" };
+  }
+  const observed = candidates.find(x => x.coin.mint === selectedMint) ?? candidates[0] ?? null;
+  return { mint: observed?.coin.mint ?? null, observed,
+    evidenceSource: observed ? "PULSE_OBSERVED" : "NO_MINT_SELECTED" };
+}
