@@ -322,7 +322,7 @@ Russell 与 Wefald（1991）提出元推理的规范性研究思路：评估进�
 | 认知工作 | 需要从知识体系取什么 | AI应该过滤什么 | 运行代码与真实边界 |
 |---|---|---|---|
 | 意图升级 | G0/G2/O1–O6以及“机会优先、调查独立、原版保留”的目标 | 把一次异常调查偷换成自动交易；只研究最熟悉的D领域 | `ai-workflow.mjs`只接受已获许可的单Mint任务 |
-| 知识发现/理解 | 完整历史52? **不预设全量数量**；保留L0–L7、D01–D12、原152映射和所有未读来源清单 | README摘要代替作者原理；知识未能落到问题或反例 | `local-knowledge-loader.mjs`当前仅11白名单候选专题、最多3份片段 |
+| 知识发现/理解 | 完整历史与未读来源（不以文件数代替理解）；保留L0–L7、D01–D12、原152映射和所有未读来源清单 | README摘要代替作者原理；知识未能落到问题或反例 | `local-knowledge-loader.mjs`当前仅11白名单候选专题、最多3份片段 |
 | 复杂问题关系 | 观察事实→经济机制假说→行业术语/竞争解释→需要的证据；Hermes反向生成问题、qb数据护照、meme失败判据 | 多个同源说法伪互证，词相近=同控，Synapse转述=官网事实 | 知识来源hash及`knowledgeUse`仅证明曾提供材料 |
 | 工具与推断权限 | 本地SQLite已授权档案、明确Mint、只读能力白名单、成本预算与风险 | 模型要求任意地址/RPC/SQL/交易、未授权模型付费、缺表仍先花钱 | `research-http.mjs`/`offline-economic-reader.mjs`健康门禁；真实模型API未验 |
 | 分层成果 | 可复查市场候选、关键钱包、局部经济事件、两种优先级、UNKNOWN和下一项取证 | 把Token转移当卖出、把纸面Pnl当实盘、把局部档案叫全网观察 | `mint-economic-evidence.mjs`/`economic-claim-trace.mjs`/`followability-replay.mjs`局部工具 |
