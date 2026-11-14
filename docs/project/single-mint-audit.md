@@ -96,3 +96,46 @@ RugCheck内的`markets[0].liquidityAAccount.owner`也与该PumpSwap池地址一�
 5. **下一项最具信息价值的核查**：不用新造Blix市场终端，选择这个PumpSwap池在02:44→03:26的**实际Solana Swap与LP事件签名**进行只读归因；如能核明Swap带来主要资产变动，“净交易方向”推断增强；如LP变动解释大部分则修正；若发现钱包间直接资金/Token接力才进入群体目标推断。这也是本轮研究的**停止边界**：凭三份提供方快照不能继续凭推理得出交易者身份、资金闭环或预测Alpha。
 
 **方法总结**：此前的“不同市场参与者目标”和“不同专家目的”不再停留在概念罗列；本次真实源揭示了市场参与者可能采取的不同经济行为，同时告诉我们**不同假设需要不同的可观察证据**。这次是三个真实快照的离线重读与计算（`ARCHIVED_VENDOR_SNAPSHOTS_REPLAYED`），**不是**`REAL_TX_SEQUENCE_RECONSTRUCTED`、`BLIX_PRODUCT_RUNNING`、`MODEL_AB_VERIFIED`或`TRADING_ALPHA_PROVEN`。
+
+## 2026-11-14｜从即将到期的 GitHub Actions 重新取回原始数据：同次供应商观察中的两枚真实 Mint
+
+> 2026-11-14 重新执行**实际文件下载、ZIP解包、JSON哈希复算**，而不是依据旧报告推测。有新的、此前总目标对照忽略的事实：首次 [GitHub Actions run 41266389009](https://github.com/sunshihao001/grok/actions/runs/41266389009) 的 ZIP 不仅含 BNB，还含 **SIS**，在同一自动任务中约 **0.13 秒**间隔读取 DEX Screener。两枚都是真实历史供应商查询对象；**没有证据称它们属于原版 Blix Pulse 实际候选名单**，不能把供应商同批数据冒充真正 A/B 模型选币或全市场行情。
+
+### 归档逐项重新获取和核验（原始资料取回，非主网重放）
+
+| GitHub Actions run / artifact | GitHub记录过期时间 UTC | 2026-11-14实际ZIP SHA256 | ZIP内来源原JSON SHA256 |
+|---|---|---|---|
+| [41266389009 / 13067198705](https://github.com/sunshihao001/grok/actions/runs/41266389009) | 2026-12-01 02:44:23 | \`afeb32206d063a2f1e2ab68dbc35f736a1caa3fe093f8ecb13691171ced05053\` | BNB DEX \`240dca2d3df8cfbf9e0f09d806d61b2ae6040abc07bcebc4b9dd3e07f3d09897\`; SIS DEX \`5cdeb33076e1df0a2efc24c1c3daf6b4cce4c3832ac131ddaf4f5ab105dbf7b4\` |
+| [41268982018 / 13068437092](https://github.com/sunshihao001/grok/actions/runs/41268982018) | **2026-11-15 03:23:32** | \`e6ed61dbf11591f0e4ef2e7b9f8f42ad9cd1ecd1041963ce7920300afd0531c3\` | BNB DEX \`a7f941d5f2caca8c9ebff9b908b4a58dfa1009150ed55e986cb222fcd81e4de9\`; RugCheck \`9671b8edf008772892035b22eb952b205409bc2125cb0f8fa16db5dd1178de0c\` |
+| [41269179918 / 13068576712](https://github.com/sunshihao001/grok/actions/runs/41269179918) | **2026-11-15 03:26:31** | \`f49e7c5fd5c7a8f9162f307d29d63b36bb4a2d97d244075b10cec71450767be0\` | BNB DEX \`07178b1ab4be4fdc57ef2f89c7ee425abaa3e53dbb8ffaaf9a8b14fc330dfbd0\`; RugCheck \`d6baa59b89cbbfc8f4489253e35457415a2e53e8e2076da40179733ba6137054\` |
+
+**文件留存**：三份原始 ZIP、其内17个原始归档文件与SHA清单已打包到本轮ChatGPT产生的文件 \`blix-20261101-original-market-snapshots-preserved-20261114.zip\`；完整复合ZIP SHA256为 \`b8ade9d33bfc16cbbb43c78fa49415490f1860e08548bae06d4853ce2325bcf8\`。**本GitHub文档只保存可复核的来源索引与关键事实，不要把它说成已经把所有原始ZIP永久上传到了GitHub。** 原GitHub Actions artifact会依到期规则清理；需下载本轮备份包以便长期完整重放。
+
+### 相同历史任务的双Mint，实际观察到什么
+
+| 2026-11-01 UTC约02:44:23 | BNB · \`EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump\` | SIS · \`FdKdpz11GsTofLaNiddrhxrsE4APZYSSfLFqQ9YKpump\` |
+|---|---:|---:|
+| 来源 \`retrieved_at\` | 02:44:23.396196 | 02:44:23.526475 |
+| DEX Screener返回的配对数 | 5 | 7 |
+| 主要PumpSwap池的Token价格USD | \`0.0008148\` | \`0.0005512\` |
+| 主要PumpSwap流动性USD | \`91,059.46\` | \`64,871.47\` |
+| Orca旁池价格USD | \`0.0008145\` | \`0.0004137\` |
+| Orca旁池流动性USD | \`47.83\` | \`52.31\` |
+| 主要/旁池美元流动性倍数 | 约\`1,904×\` | 约\`1,240×\` |
+| Orca相对主池**展示价格**差 | 约\`−0.0368%\` | 约\`−24.9456%\` |
+| 价格或流动性缺失的其他配对数 | 3 | 4 |
+| 后续03:23、03:26真实快照 | **有**（BNB三时点，另有RugCheck两次） | **没有** |
+
+**三种显著不同的分析结果**：
+1. 单看“哪个Mint有更多交易池”会偏向SIS（7 vs 5），但这与有足够交易深度的市场数、交易机会和安全性不是同一指标。
+2. SIS的Orca展示价比其PumpSwap低约25%，貌似大幅套利；**Orca池仅约52美元**，而报价不同源时钟、实际可成交路由、池状态和费用均未核实，因此**不能称为实际套利或可跟随盈利**。即使实时价差存在，也需要订单规模下的买卖双边有效报价。
+3. BNB三时点价格及池储备变化允许提出卖压/LP/缓存不同步的竞争假说；后来两次RugCheck原始档显示最大Token Account \`BYonfuCMtQL9rLeYLhLar7Jon87Nwj7PyurLFj6sNx3i\` 的Owner为主池 \`81jgrpTMsQWc1rGWXutyYWW27ruiAtehUZwLydcHHWDB\`，其\`markets\`及\`knownAccounts\`同样标为Pump Fun AMM，不能把该Holder误当成私人鲸鱼。**SIS没有此时间点的RugCheck档案，不能据此宣称其安全或风险相反。**
+
+### 和“原版 Blix vs GMGN/Million/AI增强”测试如何真实对齐
+
+- 这次终于得到**同一实际供应商观察批次中的两个真实Mint**，所以可以对照**市场字段解释和多池错误机会判断**，并用 \`test/fixtures/public-provider-two-mints-20261101.json\`（只含由原档复算的有限事实）及 \`test/public-provider-two-mint-history.test.mjs\` 复现拒绝把展示价差当已验证套利的边界。
+- **仍然没有**当时完整Blix候选 Universe、过滤记录、原Blix信号首次对人可见、GMGN Radar历史钱包群体、独立真实区块交易/LP、双边尺寸化报价和完整跟单失败样本。这意味着原R-38的**同候选AI A/B算法或真正交易收益优势并未被这批真实数据验证**。
+- 下一次应寻找/保存**真正具Blix Pulse或Wallet首次可见时间的同批候选和排除记录**，再使用已有A/B只读比较器；不能把本轮“供应商两枚Mint”强行填成假Pulse截图，不能把随时间变化的滚动24h交易量差分为短间隔买卖额。
+
+**证据状态**：DOWNLOADED_SOURCE_ZIPS + VERIFIED_MEMBER_SHA256 + HISTORICAL_TWO_MINT_SAME_VENDOR_RUN + OFFLINE_TEST_FIXTURE；**不是** BLIX_REAL_A_B / CHAIN_VERIFIED_SWAPS / EXECUTABLE_ARBITRAGE / LIVE_MODEL / ALPHA_PROVEN。
+
