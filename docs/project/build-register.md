@@ -5,6 +5,20 @@
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
 
+## 2026-11-14｜R-46：Meme多路线知识图谱和三重闭环（ai-d方法→Blix原位映射）
+
+**需求**：R-42/R-45已完成知识归位与业务主线纠偏，本轮要解决“知识与业务都在，但如何按语义连接多入口、不同领域、数据/代码/测试、失败反馈并闭合”的跨层缺口。首先回读独立[ai-d K1–K9](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/knowledge-lifecycle-nine-stages.md)、[ai-d S1–S7/五视图/双向追溯](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/cross-layer-project-anchors.md)，以及本仓既有10轴11关系、D01–D12、O1–O6与PR#23代码。没有新建平行知识系统、数据源、Bot或交易层。
+
+**具体改变（PR#23现有集成分支）**：
+
+1. 原位更新`knowledge/DOMAIN-MODEL.v1.json`的现有`cross_axis_alignment`：追加`businessRouteGraph`，其中**14个已有认知概念的承接说明（映射到原S类/轴/归属）、6个既有业务结果O1–O6、4个自然入口（MARKET_FIRST/MINT_FIRST/WALLET_FIRST/CROSS_MINT_FIRST）、16条**条件性业务交接边（含O2→O5机会评价接力）、**5个反馈回路**、K1–K9与原维护位置的对应，以及清晰的UNKNOWN/授权/同控/实测边界。既有10轴11关系、12领域和历史152单位未改；此图不是实际链上关联图。
+2. `scripts/audit-knowledge-trace.mjs`在旧`--axes/--unit/--target/--all`不变的前提下新增**`--routes`**：检查O1–O6唯一性、领域和现有源码引用存在、S类/十轴引用、四入口路径及可选支路、所有条件交接、反馈回路首尾闭合、K1–K9与文件引用、未验和权限边界。校验失败时退出2；不会联网、运行AI或交易。已给`test/knowledge-lineage-trace.test.mjs`追加两条静态回归。
+3. 原位扩写`docs/project/cross-layer-anchor-map-20261113.md`的**V0.5多路线与知识闭环**说明：14类概念分工，业务关系Mermaid图，四入口具体职责，知识/业务/工程三重闭环，失败逆向追责、一份Mint的概念越级反例与实际验收门槛；`knowledge/INTEGRATION-CROSSWALK.md`和`knowledge/README.md`补导航。原业务、来源、领域主述未被复制。
+
+**真实检查的分级状态**：初次新增测试时，在先于V0.5文档的提交`14e5291`上，CI `43591010132`发生一项**测试文字与尚未写入的文档顺序不一致**（找不到「多路线」），其他测试通过；随后实际补上V0.5关系文档的提交`de896ae58`，其[Node24完整回归`43591180982`](https://github.com/sunshihao001/grok/actions/runs/43591180982)已显示SUCCESS（涵盖`--routes`路径检查），同一SHA的[前端构建`43591184448`](https://github.com/sunshihao001/grok/actions/runs/43591184448)及[audit`43591184451`](https://github.com/sunshihao001/grok/actions/runs/43591184451)SUCCESS。**后续两次知识导航提交的最终HEAD完整CI应重新复核**；本轮全部成果是静态图关系/文件与CI，未经真实Mint、实跑模型、真实交易机会、长期Case监控或部署。独立Uptime失败依然存在，不与代码测试合并为成功信号。
+
+**风险锚点与下一次行动**：目前闭环只证明原位结构可自洽，不证明事实/AI/交易业务已经闭合。应停止增加更多概念图：先取得许可合法、原始签名/CPI/Owner/可见时点完整的真实Mint归档，沿任一入口跑`Coin→Intelligence→/inspect`并真实触发跨O2/O3/O5的反馈，记录哪个事实改变了哪个判断；无合法源则明确UNAVAILABLE，接着按源责任修复而不在AI侧补采。若后续实测发现多路图对业务帮助不大，应删减其静态负担而非扩成自动Agent。
+
 ## 2026-11-14｜R-45：工作重心转换为 Meme 机会发现与按需专业调查
 
 **用户纠偏**：先前围绕知识生命周期、概念、层级、证据关系研究过多，容易将“建知识体系”误当 Blix AI扩展的主要交付目标。现确定**完整Blix市场终端+机会优先筛选+AI按需专业调查**为工作重心；异常Mint研究继续保留，但其价值和可参与交易机会价值分别评估。D01–D12/L0–L7/K1–K9属于知识/方法支援，**不是每个Mint必经筛选层或必须开发的模块数**。
