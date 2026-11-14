@@ -2067,6 +2067,14 @@
           "minimumHandoff": "quote timestamp+pool+cost+outcome/counterexample",
           "result": "REVISE_TRADE_READINESS",
           "relation": "CONDITIONAL_BUSINESS_HANDOFF_NOT_INFERRED_ECONOMIC_EDGE"
+        },
+        {
+          "from": "O2",
+          "to": "O5",
+          "condition": "钱包早买或角色行为成为可复制性或风险候选",
+          "minimumHandoff": "wallet event+first-available+address identity limitations+market state",
+          "result": "FOLLOWABILITY_HYPOTHESIS_ONLY",
+          "relation": "CONDITIONAL_BUSINESS_HANDOFF_NOT_INFERRED_ECONOMIC_EDGE"
         }
       ],
       "feedbackLoops": [
