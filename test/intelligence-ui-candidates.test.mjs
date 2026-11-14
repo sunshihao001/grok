@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import fs from "node:fs";
 import { selectObservedCandidates } from "../web/src/pages/intelligence/candidates.ts";
 
 const coins = {
@@ -21,4 +22,14 @@ test("stage filtering, query and missing rows do not change source labels", () =
 test("bounded shortlist and deduplication avoid multiplying one coin across stages", () => {
   assert.equal(selectObservedCandidates(coins, cols, "all", "", 1).length, 1);
   assert.equal(new Set(selectObservedCandidates(coins, cols, "all").map(x => x.coin.mint)).size, 3);
+});
+
+test("research workspace distinguishes tracked wallet address counts from related actors and mixed transfers", () => {
+  const ui = fs.readFileSync(new URL("../web/src/pages/Intelligence.tsx", import.meta.url), "utf8");
+  assert.match(ui, /rawTrackedBuyerAddressCount/);
+  assert.match(ui, /relatedHeuristicGroupCount/);
+  assert.match(ui, /independentEconomicControllerCount/);
+  assert.match(ui, /原版 Research 同口径/);
+  assert.match(ui, /旧 WTrack 简化转账列表可能不显示混合交易/);
+  assert.match(ui, /这里不将转账记为卖出/);
 });
