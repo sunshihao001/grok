@@ -42,6 +42,9 @@ const post=(base,body)=>fetch(base+'/discover',{method:'POST',
 test('Pulse input strictly bounds candidates and preserves unavailable market fields as UNKNOWN',()=>{
   const clean=validatePulseDiscoveryInput(input,observedAt);
   assert.equal(clean.candidates.length,2);
+  assert.match(clean.candidateDigestSha256,/^[a-f0-9]{64}$/);
+  assert.notEqual(clean.candidateDigestSha256,
+    validatePulseDiscoveryInput({...input,candidates:[...input.candidates].reverse()},observedAt).candidateDigestSha256);
   assert.equal(clean.source,'USER_BROWSER_BLIX_PULSE_SNAPSHOT_UNVERIFIED');
   assert.equal(clean.marketCoverage,'ONLY_SUBMITTED_BLIX_CANDIDATES_NOT_ALL_SOLANA');
   assert.equal(clean.candidates[0].liq,20000);
@@ -81,6 +84,7 @@ test('AI discovers only from a submitted market shortlist, then uses the existin
   });
   assert.equal(result.status,'INVESTIGATION_DRAFT_ONLY');
   assert.equal(result.discovery.selectedMint,mintB);
+  assert.equal(result.discovery.candidateDigestSha256,validatePulseDiscoveryInput(input,observedAt).candidateDigestSha256);
   assert.equal(result.investigation.status,'DRAFT_WITH_INCOMPLETE_EVIDENCE');
   assert.equal(result.discovery.modelSelectionVerified,false);
   assert.equal(result.verifiedMarketOpportunity,false);
