@@ -81,6 +81,13 @@ type ResearchResult = {
     keyWalletCandidates: {wallet:string;observedTransferCount:number;localSellSummaryCount:number;
       addressClass:string; economicController:string}[];
     crossMintCandidates: {otherMint:string;candidateFundingSignature:string;candidateBuySignature:string;status:string}[];
+    anchors?:{
+      researchPriority:{status:string;observedTransferEvents:number;localClaimTraces:number; evaluatedAsInvestigationCandidate:boolean};
+      tradeReadiness:{status:string;verifiedMarketOpportunity:boolean;liveExecutionValidated:boolean};
+      evidenceLineage:{pulseBrowserObservationPresent:boolean;sourceFirstAvailableAtMs:number|null; independentMainnetVerification:boolean;historyComplete:boolean};
+      knowledgeContext:{providedRecordCount:number;modelApplicationVerified:boolean};
+      nextEvidence:{anchor:string;domains:string[];status:string;missing:string;nextReadOnlyCheck:string}[];
+    };
     followability:{status:string;historicalNetPnl:string;outOfSampleAdvantage:string;decision:string};
     watch:{status:string;suggestedWallets:string[];comparisonMethod:string};
     limits:string[];
@@ -474,6 +481,30 @@ export function Intelligence() {
               </div>}
               {activeResearch.continuation && <div className="space-y-3 rounded-control border border-rule p-3">
                 <h3 className="font-semibold">六个业务环节的实际证据状态</h3>
+                {activeResearch.continuation.anchors && <div className="space-y-2 rounded-control border border-rule bg-paper-3 p-3">
+                  <p className="font-semibold">目标锚点：调查价值 ≠ 实际交易机会</p>
+                  <p className="text-xs"><strong>调查：</strong>{activeResearch.continuation.anchors.researchPriority.status}
+                    （已捕获转移 {activeResearch.continuation.anchors.researchPriority.observedTransferEvents} 条；未替用户作研究价值排序）</p>
+                  <p className="text-xs"><strong>交易可参与性：</strong>{activeResearch.continuation.anchors.tradeReadiness.status}
+                    （缺信号首次可得时间及入场/退出可用报价，不能推断盈利）</p>
+                  <p className="text-xs text-muted">市场来源：{activeResearch.continuation.anchors.evidenceLineage.pulseBrowserObservationPresent
+                    ? "仅收到当前 Pulse 浏览器观察；未独立核实数据商首次可得时间"
+                    : "本次没有附带 Pulse 市场观察；本地归档不等于市场行情"}。
+                    主网独立验证：未完成；历史覆盖：不完整。
+                  </p>
+                  <details><summary className="cursor-pointer text-xs font-semibold">
+                    知识转化后的可核查子目标（{activeResearch.continuation.anchors.nextEvidence.length}）
+                  </summary>
+                    {activeResearch.continuation.anchors.nextEvidence.map(x => <div key={x.anchor} className="mt-2 border-t border-rule pt-2 text-xs">
+                      <p className="font-semibold">{x.anchor} · {x.domains.join(" / ")}</p>
+                      <p className="mt-1 text-muted">目前状态：{x.status}</p>
+                      <p className="mt-1 text-muted">证据缺口：{x.missing}</p>
+                      <p className="mt-1">{x.nextReadOnlyCheck}</p>
+                    </div>)}
+                  </details>
+                  <p className="text-xs text-muted">这些是已知事实触发的补查方向，不是 AI 已使用知识的证明；
+                    本次模型知识提供记录 {activeResearch.continuation.anchors.knowledgeContext.providedRecordCount} 条，实际判断增益仍需同源对照。</p>
+                </div>}
                 {([
                   ["市场观察",activeResearch.continuation.stages.market],
                   ["关键钱包",activeResearch.continuation.stages.keyWallets],
