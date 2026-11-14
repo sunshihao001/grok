@@ -5,6 +5,33 @@
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
 
+## 2026-11-14｜R-42：十二领域专业知识原位归拢 + 扩展成品合同 + 本机AI来源修复
+
+**本轮用户目标**：把分散在L0–L7/D01–D12、旧Grok/Hermes/qb-/meme-、65参考、GMGN/OKX/Synapse/ai-d中的专业知识整理清楚并归回正确位置，然后判断完整原版Blix上的AI扩展怎样走到可运行成品。**不是**新建概念层级、专家制度、第二套数据源或以整理文件数判定业务完成。
+
+### 1. 已进行的实际知识修订（直接修改原文件，而不只是新增目录）
+
+- [knowledge/README.md](../../knowledge/README.md)现在列出**12/12现有专业领域的唯一主述责任**：专业问题、知识深度、目标/业务、完整来源、当前代码/证据等级。G0–G4、L0–L7、D01–D12、K1–K9、O1–O6与D0–D9按不同用途保持独立，没有增加第13领域或额外运行Agent。
+- 八份既有**主述正文**都补入“2026-11-14｜全域归位”：`foundations/solana-chain-and-market.md`（D01/D02/D10）；`mechanisms/market-price-mechanism-research.md`（D03）；`mechanisms/wallet-roles-and-inventory.md`（D04/D06）；`mechanisms/capital-organization-and-incentives.md`（D05）；`methods/anomaly-and-cohort-discovery.md`（D07）；`mechanisms/strategy-and-execution-economics.md`（D08/D09）；`cases/independent-validation-and-failure-cases.md`（D11）；`ai/intent-knowledge-selection-and-reasoning.md`（D12）。每份不是只登记名称，而是阐述需要区分的经济对象/错误推断、市场行为与反证、源级责任、原版模块、已测试边界与待验缺口。
+- [外部参考入口](../../knowledge/references/README.md)、[跨知识结构表](../../knowledge/INTEGRATION-CROSSWALK.md)、[实际任务调用](knowledge-use.md)、[能力地图](capability-map.md)、[交付判断](delivery.md)及[项目入口](README.md)指向现有主述，不另建平行“知识真源”。**原始来源与独有反例保留**：Synapse笔记14/14信号、3+3 DEX、4+5 HL、5原则/4噪音及跨市场研究仍以`USER_PARAPHRASE`标记；GMGN Wallet Radar/First70/PnL/Copyability/参数在原项目对照完整保留；152旧知识ID/65历史参考/未读仓树继续跟踪`NOT_REVIEWED`和`mapped_unverified`。
+- 新增的`test/p1-p2-knowledge-integrity.test.mjs`静态回归核对12个领域都指向现存的八份专业正文、历史原始资料未丢失、完整来源与成品验收引用仍在；**静态完整引用不等于逐条专业命题的独立实证**。
+
+### 2. 扩展成品发展（不重复原版Blix）
+
+[单一扩展层](intelligence-layer.md)现已加入明确的**三条真实用户路径**（Pulse发现/交易价值、Coin单Mint、Wallet跨币监控）、`research_priority`与`trade_readiness`两个不同结果，以及P0-A/P0-B/P0-C、P1-A/P1-B/P1-C、P2-A/P2-B的**输入依赖、组件责任、最低验收、失败/停止条件**。明确三种交付层次：可演示本地V0.1、真实只读Mint V0.2、前瞻机会评价/Case持续监控V1候选。原版采集/报价/钱包/交易代码保留，AI仅用按需只读工具解释已有事实。
+
+**检查源码时发现具体P0-B阻断**：`webapp.js`的原版React端口4421，而`research-http.mjs`默认允许来源仅4420和5173；本机4421用户运行AI研究会被Origin拒绝。已在`research-http.mjs`默认allowlist**最小增加 `http://127.0.0.1:4421`与`http://localhost:4421`**，保持loopback/Host/Origin严格门禁、无交易或费用变更；`test/intelligence-workbench-http.test.mjs`新增真实HTTP+伪模型验证两种4421来源允许、外部网站403、返回只读标志，不调用收费模型。变更提交`1946a6e7` / `a5d4bdab`。**尚需按最终HEAD复核GitHub CI，不把源码修改当验收。**
+
+**另一个已确认但未解决的P0-B断点**：Coin深链接能够传Mint/goal，但`Intelligence.tsx`的`selected=candidates.find(...)??candidates[0]`意味着指定Mint**不在Pulse当前观察名单**时可能回退到另一枚币。下一轮应把“用户显式指定Mint只查已授权本地归档”与“Pulse观察候选”分开建页面状态/合同，绝不合成一个伪造的市场币；测试必须确保指定Mint不被替换、无归档直报`UNAVAILABLE`、研究不会凭GET触发原版未知副作用。
+
+### 3. 交付状态与最短后续任务
+
+- **已核实过**：原版Blix封网容器冷启动/再次启动/HTTP/SQLite完整性；知识与部分经济/模型工具离线CI；现有PR#23草稿分支可逆更新。上述运行成果与真实联网市场完全不同。
+- **本轮尚未做**：逐条全文深读65个参考及全部152历史映射；Synapse官网阈值实证；GMGN付费API；Coin任意Mint的完整交互修复；真实提供方first-available/完整RPC资金链；真实模型费用调用；云电脑部署；自动交易/盈利实证。
+- **下一项高价值建设**：P0-B Coin显式Mint不依赖Pulse候选的只读UI/HTTP/SQLite接通→P0-C 使用有授权、现成真实归档校对Blix原源覆盖与首可得时间→P1-A 单Mint实际买→转→接收卖出/资金跨Mint可复查报告。若现有数据库缺真实经济表，先找原版采集/授权数据源负责的位置，不能让AI另建一个“补采事实层”。
+
+**风险锚点**：如新的知识文档无法改变知识选取/专业判读/实际源码验收，则停止增加分类；如新的代码只让界面看起来可以研究而Mint身份或来源不一致，必须拒绝报告，而不是假装成品。当前`npm start`仍默认fail-close，隔离容器成功不准用作生产解锁凭据。
+
 ## 2026-11-14｜R-41：原版Blix真正隔离冷启动、重启与首个数据库初始化缺陷修复
 
 **业务起点**：上一轮已经完成Coin→Intelligence导航，但不是原版Blix可运行验收。本轮从既有PR#23的实际 `npm start` 和 `server/server.js` 出发，**先测试安全门禁，再在外网彻底隔离的容器中运行原版完整服务**。不改变原版交易/账户功能语义，不运行真实钱包、RPC、收费AI或生产部署。
