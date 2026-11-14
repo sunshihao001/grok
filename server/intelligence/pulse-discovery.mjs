@@ -117,6 +117,11 @@ export async function discoverPulseInvestigation({input,model,readEconomic,loadK
   const investigation=await runResearch({
     goal:candidate.goal, mint:selected.mint,
     model,readEconomic,loadKnowledge,
+    // Preserve only validated client-source provenance for the selected Mint.
+    // Do not promote browser-recorded time to provider first-available time.
+    marketObservation:{selectedMint:selected.mint,source:candidate.source,
+      sourceRecordedAtMs:candidate.sourceRecordedAtMs,
+      marketCoverage:candidate.marketCoverage,sourceFreshness:candidate.sourceFreshness},
   });
   return{status:'INVESTIGATION_DRAFT_ONLY',discovery,investigation,
     verifiedMarketOpportunity:false,liveExecutionValidated:false};
