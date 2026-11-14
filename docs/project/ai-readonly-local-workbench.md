@@ -31,7 +31,9 @@ Blix React /#/intelligence （已有Pulse观察候选）
 npm run start:intelligence:readonly
 ```
 
-查看 `http://127.0.0.1:4547/health` 返回 `ready:false`：这代表没有同时完成只读归档和人工许可的模型配置，**不是故障**。
+查看 `http://127.0.0.1:4547/health` 返回 `ready:false`：这代表没有同时完成只读归档和人工许可的模型配置，**不是故障**。服务端目前还有一个**不涉及网络或模型付费的启动前置检查**：部署者配置 `BLIX_AI_DB_PATH` 后，使用 Node SQLite `readOnly:true`、`PRAGMA query_only=ON` 检查文件确实存在，并核对 `econ_transactions`、`econ_instructions`、`wallet_trades` 的必要字段。若文件不存在、不是 SQLite 或表结构不满足，`/health` 返回 `ready:false` 和不包含本地路径的 `archiveStatus`；`/research`/`/discover` 在调用任何收费模型或消耗任务配额之前直接返回 503。
+
+即使 `ready:true` 也**只表示该模型调用已配置且现有归档结构可读**，不保证某个 Mint 有交易、钱包历史完整、外部模型 API 真实可达或利润可验证。未配置模型时启动本机服务仍为安全健康检查，不会请求模型。此修复是**独立 AI 服务**的保障，**没有**将原版 `npm start` 变成只读或安全隔离运行；原版完整服务中的交易、钱包与自动模型费用风险继续由 `read-only-audit.mjs --gate` 拦截，不能以设置确认环境变量冒充安全认证。
 
 **只有部署者已明确同意支付模型API费用并准备好了密钥与已有数据库，才自行配置环境变量**（以下是示意，密钥不应写在仓库、网页或命令历史中）：
 
