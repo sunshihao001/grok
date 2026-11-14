@@ -84,10 +84,11 @@ test('goal anchors turn locally observed economic mechanisms into bounded next e
   assert.equal(direct.anchors.tradeReadiness.liveExecutionValidated,false);
   assert.equal(direct.anchors.knowledgeContext.providedRecordCount,1);
   assert.equal(direct.anchors.knowledgeContext.modelApplicationVerified,false);
-  assert.equal(direct.anchors.nextEvidence.length,5);
-  assert.equal(direct.anchors.nextEvidence[2].status,'TEMPORAL_CANDIDATES_UNPROVEN_FUND_REUSE');
-  assert.equal(direct.anchors.nextEvidence[3].anchor,'G4_TRADE_PARTICIPATION');
-  assert.ok(direct.anchors.nextEvidence[3].missing.includes('ENTRY_EXIT_QUOTES'));
+  assert.equal(direct.anchors.nextEvidence.length,6);
+  assert.equal(direct.anchors.nextEvidence[3].status,'TEMPORAL_CANDIDATES_UNPROVEN_FUND_REUSE');
+  assert.equal(direct.anchors.nextEvidence[4].anchor,'O5_OPPORTUNITY_AND_FOLLOWABILITY');
+  assert.ok(direct.anchors.nextEvidence[4].missing.includes('ENTRY_EXIT_QUOTES'));
+  assert.deepEqual(direct.anchors.nextEvidence.map(x=>x.anchor.slice(0,2)),['O1','O2','O3','O4','O5','O6']);
   const pulse=summarizeInvestigationContinuation({mint,investigation,marketObservation:{
     selectedMint:mint,source:'USER_BROWSER_BLIX_PULSE_SNAPSHOT_UNVERIFIED',
     sourceRecordedAtMs:1770000000000,
@@ -111,8 +112,8 @@ test('empty or unindexed evidence does not create research candidates, AI benefi
   assert.equal(result.anchors.researchPriority.status,'INSUFFICIENT_CAPTURED_EVIDENCE_TO_PRIORITIZE');
   assert.equal(result.anchors.tradeReadiness.status,'NOT_EVALUABLE_WITHOUT_SIGNAL_AND_EXECUTION_RECEIPTS');
   assert.equal(result.anchors.knowledgeContext.providedRecordCount,0);
-  assert.equal(result.anchors.nextEvidence[1].status,'NO_TRANSFER_EVIDENCE_IN_CAPTURED_SAMPLE');
-  assert.equal(result.anchors.nextEvidence[2].status,'NO_CROSS_MINT_PATH_CONFIRMED');
+  assert.equal(result.anchors.nextEvidence[2].status,'NO_TRANSFER_EVIDENCE_IN_CAPTURED_SAMPLE');
+  assert.equal(result.anchors.nextEvidence[3].status,'NO_CROSS_MINT_PATH_CONFIRMED');
   assert.equal(result.anchors.evidenceLineage.anyArchivedInstructionVerified,false);
   assert.equal(result.followability.historicalNetPnl,'UNKNOWN');
   assert.equal(result.watch.status,'NOT_RUNNING_NO_AUTONOMOUS_WATCHER');
