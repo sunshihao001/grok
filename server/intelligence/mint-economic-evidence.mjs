@@ -18,8 +18,22 @@ export async function run({ mint, readEconomic, now = Date.now } = {}) {
     throw new Error('OFFLINE_EVIDENCE_CONTRACT_MISMATCH');
   }
   const discovery = report.evidence.senderDiscovery || {};
+  const localTracked = report.evidence.trackedWalletActivity;
+  const rawCount = localTracked?.rawTrackedBuyerAddressCount;
+  const trackedWalletActivity = {
+    rawTrackedBuyerAddressCount: Number.isSafeInteger(rawCount) && rawCount >= 0 ? rawCount : null,
+    countDefinition: 'ORIGINAL_RESEARCH_DISTINCT_TRACKED_BUYER_WALLET_ADDRESS',
+    observationWindow: 'ALL_LOCALLY_STORED_WALLET_TRADE_ROWS_NO_TIME_CUTOFF',
+    evidenceStatus: Number.isSafeInteger(rawCount) && rawCount >= 0
+      ? 'LOCAL_WATCHLIST_AND_TRADE_SUMMARIES_OBSERVED' : 'UNKNOWN_WATCHLIST_OR_TRADE_SCHEMA_MISSING',
+    relatedHeuristicGroupCount: null, independentEconomicControllerCount: null,
+    groupingStatus: 'NOT_COMPUTED_BY_OFFLINE_READER',
+    coverage: 'PARTIAL_LOCAL_LEDGER_NOT_COMPLETE_ADDRESS_HISTORY',
+  };
   const recipients = report.recipients.slice(0, 200).map((row) => ({
     signature: row.signature ?? null,
+    sameSignatureSenderBuySummaryObserved: row.sameSignatureSenderBuySummaryObserved === true,
+    sameSignatureInterpretation: 'LOCAL_BUY_SUMMARY_AND_INSTRUCTION_ARE_DISTINCT_EVENTS_NOT_INVENTORY_PROVENANCE',
     rpcSha256: row.rpcSha256 ?? null, rpcHashVerified: row.rpcHashVerified === true,
     instructionVerifiedAgainstRpc: row.instructionVerifiedAgainstRpc === true,
     captureSource: row.captureSource ?? 'UNKNOWN', commitment: row.commitment ?? null,
@@ -39,6 +53,8 @@ export async function run({ mint, readEconomic, now = Date.now } = {}) {
     'Only captured local RPC history is visible; lifetime wallet history is not complete.',
     'Observed addresses may be pools, routers or public services, not unique controllers.',
     'A later sell does not prove that transferred tokens were the sold inventory.',
+    'Tracked-wallet buyer count is a raw address count, not independent actors; related group count is not computed in this offline reader.',
+    'Same-signature buy summary and Token transfer are distinct ledger facts, not two purchases or proof of inventory sale.',
     'Cross-Mint temporal paths do not prove capital provenance or common control.',
     ...(Array.isArray(report.limitations) ? report.limitations.slice(0, 12) : []),
   ];
@@ -54,6 +70,7 @@ export async function run({ mint, readEconomic, now = Date.now } = {}) {
     sources: [{ provider: 'EXISTING_LOCAL_SQLITE', method: 'OFFLINE_READ_ONLY_REPORT',
       coverage: report.evidence.indexedCoverage ?? 'UNKNOWN' }],
     facts: { knownSenderMintCaptures: report.evidence.knownSenderMintCaptures ?? 0,
+      trackedWalletActivity,
       senderDiscovery: discovery, lifetimeHistoryComplete: false, recipients,
       network, claimTrace: traceEconomicClaims({ mint, network }) },
     unknowns: [...new Set(unknowns)],
