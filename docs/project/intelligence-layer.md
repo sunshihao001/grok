@@ -30,6 +30,19 @@
 
 **2026-11-14 R-44｜本地零模型经济证据检查已实现并通过 CI。** P0-B不再依赖先配置收费模型才能查看已保存的经济证据：在原Intelligence页面点击`免费查看指定 Mint 的本地经济证据（不使用AI）`，现有独立loopback 4547提供`POST /inspect`，只接受`{mint}`，重用`mint-economic-evidence`与原有SQLite只读CLI。健康状态`inspectionReady`单独于原AI`ready`；无模型时，`/research`仍不可用，`/inspect`保留Mint索引预检、Origin/Host、独立检查次数和无归档UNKNOWN。**实测等级**：GitHub Node24中真实临时SQLite + HTTP + 原工作台进程启动回归通过（样本合成，验证了文件哈希不变）；原版Blix整站在完全封网容器内启动另有独立验收。**尚未完成**用户实际浏览器全程点击和同一真实Mint的来源时点/原始RPC事实联调。因此P0-B的本地技术链路提升到`OFFLINE_SQLITE_HTTP_AND_PROCESS_TESTED`，P0-C仍是`UNVERIFIED_CONNECTED_RUNTIME`，不把这一轮冒充真实市场覆盖。详细见[本地研究工作台](ai-readonly-local-workbench.md)和[建设台账R-44](build-register.md)。
  
+### 2026-11-14｜R-47：从静态业务锚点到报告内可检查的知识→证据子目标
+
+R-46已有O1–O6/四入口/多路径概念图；本轮**不是再增一张图**，而是把知识第一次落实到实际`Coin → Intelligence → /inspect、/research 或 /discover → continuation`的已有报告中：`server/intelligence/investigation-continuation.mjs`依实际SQLite捕获事件生成六个**O1–O6原编号**的`anchors.nextEvidence`，包含对应D领域、当前事实状态、缺少的证据与只读补查建议；`Intelligence.tsx`直接展示。建议不是已执行任务，不会请求额外RPC/模型/下单，也不是把12个领域编码为固定选币过滤器。
+
+- O1市场：仅`/discover`经过校验的浏览器Pulse候选可声明有浏览器观察；Coin指定Mint/`/inspect`不再虚称属于Pulse；提供者首可得时间仍UNKNOWN。
+- O2钱包：Token Account/Owner/公共设施分类缺口；O3经济与库存：已存Signature、CPI/Token-2022、买转卖区别与同批成本缺口。
+- O4跨Mint：时间关系候选不能等同SOL/WSOL同源资金；O5机会：研究价值与交易可参与性分开，缺信号后买卖报价绝不产生净收益结论。
+- O6修订：Case watcher仍未运行，只提出重开对照迟到回补/新增事实与有知识/无知识公平比较。
+
+**新增对外只读收据**：`continuation.anchors.researchPriority`（局部经济证据是否足以开始审阅，**不做价值排名**）、`tradeReadiness`（未有可执行报价前不可评价）、`evidenceLineage`（浏览器市场观察与本地归档严格区分）、`knowledgeContext`（加载知识≠模型用对）、`nextEvidence`（O1–O6逐项可证伪的下次取证）。`test/investigation-continuation.test.mjs`、`test/pulse-ai-discovery.test.mjs`、`test/intelligence-workbench-http.test.mjs`及UI契约测试覆盖合成报告；CI只能证明代码/离线HTTP，不证明市场端到端、主网源完整或AI能力增益。
+
+**下一次验收原则**：冻结**同一真实来源**的Mint、签名、时间与完整性，至少产生一项会修订另一O目标判断的事实（例如：接收钱包被证实为池→O2身份修正→O3库存解释改变→O5风险重评）；若数据不足，直接保持UNKNOWN并追溯原Blix源级缺口。不是为完成所有O节点而强行调查全部领域。
+
 ### 3. 从现状到成品：按实际依赖交付，而不是再造系统
 
 | 交付包 | 要完成的具体用户路径 | 依赖/负责组件（不复制已有能力） | 通过标准与止损条件 | 状态 |
