@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { usePulse, type ColKey } from "@/lib/pulse";
 import { Page, Panel, money } from "@/components/page";
 import { toast } from "@/components/ui/toast";
-import { selectObservedCandidates, type ObservedStage } from "./intelligence/candidates";
+import { selectObservedCandidates, resolveResearchTarget, type ObservedStage } from "./intelligence/candidates";
 
 const STAGES: { key: ObservedStage; label: string }[] = [
   { key: "all", label: "所有观察" }, { key: "stretch", label: "临近迁移" },
@@ -87,7 +87,7 @@ type ResearchResult = {
   };
 };
 const SIDECAR_URL = typeof window !== "undefined" &&
-  window.location.protocol === "http:" && /^(?:localhost|127\\.0\\.0\\.1)$/.test(window.location.hostname)
+  window.location.protocol === "http:" && /^(?:localhost|127\.0\.0\.1)$/.test(window.location.hostname)
   ? "http://127.0.0.1:4547" : null;
 const number = (n?: number | null) => n == null || !Number.isFinite(n) ? "未知" : Math.round(n).toLocaleString();
 const percent = (n?: number | null) => n == null || !Number.isFinite(n) ? "未知" : n.toFixed(1) + "%";
@@ -103,24 +103,33 @@ export function Intelligence() {
   const [stage, setStage] = useState<ObservedStage>("all");
   const [search, setSearch] = useState("");
   const [selectedMint, setSelectedMint] = useState<string | null>(null);
+  const [explicitMint, setExplicitMint] = useState<string | null>(null);
   const [goal, setGoal] = useState(PROMPTS[1]);
   const [researchHealth, setResearchHealth] = useState<ResearchHealth | null>(null);
   const [researchResult, setResearchResult] = useState<ResearchResult | null>(null);
   const [discoveryResult, setDiscoveryResult] = useState<DiscoveryResult | null>(null);
   const [researchBusy, setResearchBusy] = useState(false);
   const [researchError, setResearchError] = useState("");
-  // Coin deep-link: preselect only an already-observed Pulse candidate.
-  // A deep link never fabricates market data or starts a paid model request.
+  // Coin deep-link: preserve the user's exact Mint even when Pulse did not index it.
+  // Hash navigation never invents market observations or triggers a model request.
   useEffect(() => {
-    const hash = window.location.hash;
-    const match = /^#\/intelligence\/([1-9A-HJ-NP-Za-km-z]{32,44})(?:\?(.*))?$/.exec(hash);
-    if (!match) return;
-    const mint = match[1];
-    setStage("all");
-    setSearch(mint);
-    setSelectedMint(mint);
-    const requestedGoal = new URLSearchParams(match[2] || "").get("goal");
-    if (requestedGoal && requestedGoal.trim() && requestedGoal.length <= 1600) setGoal(requestedGoal);
+    const syncCoinLink = () => {
+      const match = /^#\/intelligence\/([1-9A-HJ-NP-Za-km-z]{32,44})(?:\?(.*))?$/.exec(window.location.hash);
+      if (!match) { setExplicitMint(null); return; }
+      const mint = match[1];
+      setExplicitMint(mint);
+      setStage("all");
+      setSearch(mint);
+      setSelectedMint(mint);
+      setResearchResult(null);
+      setDiscoveryResult(null);
+      setResearchError("");
+      const requestedGoal = new URLSearchParams(match[2] || "").get("goal");
+      if (requestedGoal && requestedGoal.trim() && requestedGoal.length <= 1600) setGoal(requestedGoal);
+    };
+    syncCoinLink();
+    window.addEventListener("hashchange", syncCoinLink);
+    return () => window.removeEventListener("hashchange", syncCoinLink);
   }, []);
 
   useEffect(() => {
@@ -138,8 +147,11 @@ export function Intelligence() {
   // has not explicitly opened. No provider data is fetched for this shortlist.
   const discoveryCandidates = useMemo(() => selectObservedCandidates(coins, cols, "all", "", 12),
     [coins, cols]);
-  const selected = candidates.find(x => x.coin.mint === selectedMint) ?? candidates[0] ?? null;
+  const target = resolveResearchTarget(candidates, selectedMint, explicitMint);
+  const selected = target.observed;
   const c = selected?.coin ?? null;
+  const researchMint = target.mint;
+  const manualArchiveOnly = target.evidenceSource === "USER_MINT_LOCAL_ARCHIVE_ONLY";
   const coinHref = c ? "#/coin/" + encodeURIComponent(c.mint) : "";
   const holderCount = c?.hl?.h ?? c?.holders;
   const top10 = c?.hl?.t10 ?? c?.top10;
@@ -147,7 +159,7 @@ export function Intelligence() {
   const windowVol = c?.vol ?? c?.liveVol;
   const activity = c && (c.buys != null || c.sells != null)
     ? number(c.buys) + " 买 / " + number(c.sells) + " 卖" : "未知";
-  const activeResearch = c && researchResult?.mint === c.mint ? researchResult : null;
+  const activeResearch = researchMint && researchResult?.mint === researchMint ? researchResult : null;
   const economicFacts = activeResearch?.evidence.find(x => x.capability === "mint-economic-evidence")?.result?.facts;
   const network = economicFacts?.network;
   const trackedWalletActivity = economicFacts?.trackedWalletActivity;
@@ -156,8 +168,8 @@ export function Intelligence() {
     : restored ? "历史缓存，可能过时" : "等待 Blix Pulse 数据";
 
   async function runLocalResearch() {
-    if (!SIDECAR_URL || !c || !goal.trim() || !researchHealth?.ready || researchBusy) return;
-    const mint = c.mint;
+    if (!SIDECAR_URL || !researchMint || !goal.trim() || !researchHealth?.ready || researchBusy) return;
+    const mint = researchMint;
     setResearchBusy(true);
     setResearchError("");
     setResearchResult(null);
@@ -217,6 +229,7 @@ export function Intelligence() {
         // alongside the ORIGINAL Blix Coin page. This never adds a new Mint to Blix.
         setStage("all");
         setSearch("");
+        setExplicitMint(null);
         setSelectedMint(data.discovery.selectedMint);
         if (data.investigation) setResearchResult({ ...data.investigation,
           mint:data.discovery.selectedMint, sourceMode:data.sourceMode || "LOCAL_SQLITE_ONLY",
@@ -235,23 +248,25 @@ export function Intelligence() {
     }
   }
   async function copyTask() {
-    if (!c || !goal.trim()) return;
+    if (!researchMint || !goal.trim()) return;
     // These are Blix dashboard observations, not proof of independent on-chain facts.
     const content = [
       "BLIX AI RESEARCH TASK — READ ONLY / MODEL CALL NOT INITIATED",
       "Goal: " + goal.trim(),
-      "Mint: " + c.mint,
-      "Token: " + (c.symbol || c.name || "unknown"),
-      "Blix Pulse market-board snapshot; source freshness and completeness NOT independently verified:",
-      "Board stage: " + STAGE_LABEL[selected!.stage],
-      "Market cap (reported USD): " + (c.mcap ?? "UNKNOWN"),
-      "Liquidity (reported USD): " + (c.liq ?? "UNKNOWN"),
-      "Volume (board window, USD): " + (windowVol ?? "UNKNOWN"),
-      "Buys / sells (board window): " + (c.buys ?? "UNKNOWN") + " / " + (c.sells ?? "UNKNOWN"),
-      "Holder count: " + (holderCount ?? "UNKNOWN"),
-      "Top-10 holder concentration (%): " + (top10 ?? "UNKNOWN"),
-      "Dev holding (%): " + (devShare ?? "UNKNOWN"),
-      "Original Blix AI label (unverified): " + (c.ai?.verdict || c.ai?.grade || "UNKNOWN"),
+      "Mint: " + researchMint,
+      "Token: " + (c?.symbol || c?.name || "UNKNOWN_NOT_OBSERVED_IN_PULSE"),
+      ...(c && selected ? [
+        "Blix Pulse market-board snapshot; source freshness and completeness NOT independently verified:",
+        "Board stage: " + STAGE_LABEL[selected.stage],
+        "Market cap (reported USD): " + (c.mcap ?? "UNKNOWN"),
+        "Liquidity (reported USD): " + (c.liq ?? "UNKNOWN"),
+        "Volume (board window, USD): " + (windowVol ?? "UNKNOWN"),
+        "Buys / sells (board window): " + (c.buys ?? "UNKNOWN") + " / " + (c.sells ?? "UNKNOWN"),
+        "Holder count: " + (holderCount ?? "UNKNOWN"),
+        "Top-10 holder concentration (%): " + (top10 ?? "UNKNOWN"),
+        "Dev holding (%): " + (devShare ?? "UNKNOWN"),
+        "Original Blix AI label (unverified): " + (c.ai?.verdict || c.ai?.grade || "UNKNOWN"),
+      ] : ["Pulse market snapshot: NOT_OBSERVED_FOR_SPECIFIED_MINT; prices, liquidity, activity and holders UNKNOWN."]),
       "Historical knowledge references to consider (CLIENT PREVIEW ONLY; not actually retrieved or applied):",
       ...candidateKnowledge.map(x => x.heritage + " | " + x.path),
       "During server-side research, retrieve source-labelled knowledge before tool planning and refresh after evidence.",
@@ -279,7 +294,8 @@ export function Intelligence() {
           <div className="flex flex-wrap gap-1.5 border-b border-rule p-3">
             {STAGES.map(s => (
               <button key={s.key} type="button" aria-pressed={stage === s.key}
-                onClick={() => setStage(s.key)}
+                onClick={() => { setStage(s.key); if (explicitMint) { setExplicitMint(null); setSearch(""); setSelectedMint(null); }
+                  setResearchResult(null); setDiscoveryResult(null); }}
                 className={stage === s.key
                   ? "rounded-full bg-accent px-3 py-1.5 text-xs font-semibold text-accent-ink"
                   : "rounded-full border border-rule-2 px-3 py-1.5 text-xs text-muted hover:text-ink"}>
@@ -289,16 +305,23 @@ export function Intelligence() {
           </div>
           <div className="p-3">
             <label className="sr-only" htmlFor="intelligence-coin-search">筛选代币</label>
-            <input id="intelligence-coin-search" value={search} onChange={e => setSearch(e.target.value)}
+            <input id="intelligence-coin-search" value={search} onChange={e => {
+              setSearch(e.target.value); setExplicitMint(null); setSelectedMint(null);
+              setResearchResult(null); setDiscoveryResult(null);
+            }}
               placeholder="搜索名称、代号或 Mint"
               className="w-full rounded-control border border-rule-2 bg-paper px-3 py-2 text-sm text-ink outline-none focus:border-accent" />
             <p className="mt-2 text-xs text-muted">当前显示 {candidates.length} 条 · 保留 Blix 看板顺序，不做隐性机会打分</p>
+            {explicitMint && <p role="status" className="mt-2 break-all text-xs text-ink">
+              用户指定 Mint：{explicitMint} · {manualArchiveOnly ? "未在当前 Pulse 观察列表，行情未知；仅允许查本地归档" : "Pulse 有该 Mint 的观察记录"}
+            </p>}
           </div>
           <div className="max-h-[min(66vh,760px)] overflow-y-auto border-t border-rule p-2">
             {!candidates.length && <p className="p-5 text-sm text-muted">{loaded || restored ? "当前条件下没有观察候选。" : "等待市场数据，不生成模拟代币。"}</p>}
             {candidates.map(({ coin, stage: stageName }) => (
               <button key={coin.mint} type="button" aria-pressed={selected?.coin.mint === coin.mint}
-                onClick={() => setSelectedMint(coin.mint)}
+                onClick={() => { setExplicitMint(null); setSelectedMint(coin.mint);
+                  setResearchResult(null); setDiscoveryResult(null); }}
                 className={selected?.coin.mint === coin.mint
                   ? "mb-1 flex w-full min-w-0 items-start justify-between gap-2 rounded-control border border-accent/60 bg-accent/10 px-3 py-3 text-left"
                   : "mb-1 flex w-full min-w-0 items-start justify-between gap-2 rounded-control border border-transparent px-3 py-3 text-left hover:bg-paper-3"}>
@@ -343,6 +366,15 @@ export function Intelligence() {
                   <a href={coinHref + "/assistant"} className="rounded-full border border-rule-2 px-4 py-2 text-sm font-semibold text-ink hover:border-accent">前往 Coin AI 助手</a>
                 </div>
                 <p className="text-xs leading-relaxed text-muted">原版 Coin 页面已有 K 线、交易标记、Bubble Map、Holder 与交易面板，本扩展不重建它们。部分聚合数据、身份标签及时间覆盖仍需逐字段复核。</p>
+              </div>
+            ) : manualArchiveOnly && researchMint ? (
+              <div className="space-y-2 p-4" role="status">
+                <h2 className="text-base font-semibold text-ink">用户指定的 Mint · 本地归档调查</h2>
+                <p className="break-all font-mono text-xs text-muted">{researchMint}</p>
+                <p className="text-xs leading-relaxed text-muted">
+                  此 Mint 不在当前 Pulse 观察候选中，因此不显示价格、市值、流动性、Holder 或真实首次可得时间。
+                  研究仅限现有本地 SQLite 经济记录；未归档时服务将明确拒绝，不会为该 Mint 付费调用模型。
+                </p>
               </div>
             ) : <div className="p-6 text-sm text-muted">请先等待 Blix 数据或选择代币。</div>}
           </Panel>
@@ -546,9 +578,9 @@ export function Intelligence() {
               但不会自动买卖、爬取全市场或宣称已发现盈利机会。
             </p>
             <button type="button" onClick={() => void runLocalResearch()}
-              disabled={!c || !goal.trim() || !researchHealth?.ready || researchHealth.remainingTasks < 1 || researchBusy}
+              disabled={!researchMint || !goal.trim() || !researchHealth?.ready || researchHealth.remainingTasks < 1 || researchBusy}
               className="w-full rounded-full border border-accent px-4 py-2.5 text-sm font-semibold text-ink disabled:cursor-not-allowed disabled:opacity-40">
-              {researchBusy ? "正在执行只读调查…" : "运行本地 AI 证据研究"}
+              {researchBusy ? "正在执行只读调查…" : manualArchiveOnly ? "调查指定 Mint 的本地经济归档" : "运行本地 AI 证据研究"}
             </button>
             <p className="text-xs text-muted">
               {SIDECAR_URL
@@ -558,7 +590,7 @@ export function Intelligence() {
                 : "当前不是本机 HTTP 页面；为避免公开页面绕过权限，请通过本机 Blix 页面使用研究服务。"}
             </p>
             {researchError && <p role="alert" className="rounded-control border border-rule p-2 text-xs text-ink">研究请求未完成：{researchError}</p>}
-            <button type="button" onClick={() => void copyTask()} disabled={!c || !goal.trim()}
+            <button type="button" onClick={() => void copyTask()} disabled={!researchMint || !goal.trim()}
               className="w-full rounded-full bg-accent px-4 py-2.5 text-sm font-semibold text-accent-ink disabled:cursor-not-allowed disabled:opacity-40">
               复制带数据的研究任务
             </button>
