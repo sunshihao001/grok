@@ -1,11 +1,53 @@
 # 按实际问题使用专业知识、AI研究与可证伪证据
 
+**2026-11-14｜知识应用目标纠偏**：本页负责 **Meme业务调查时怎样取用现有知识**，不定义另一套市场筛选层级。项目当前以真实潜在交易机会发现为优先，以值得调查的Mint为支持；原Blix市场/钱包/AI/纸面能力是产品主体。要回答“找哪些币”时先检查真实市场候选及来源覆盖；要回答“为何异常”再用D01–D07的专业机制；要回答“能否参与”独立核实D03/D08/D09/D11的时效、流动性、成本、退出和样本外反例。D12负责按需选择知识与只读工具，**不生成真实交易事实、不默认下单**。业务对照及源码边界见 [总蓝图当前纠偏](blix-ai-workbench-master-plan-v1-20261113.md#2026-11-14工作重心纠偏从通用知识系统转为-meme-机会发现与专业调查)。旧知识生命周期用于获取/审查/纠错，不能再反客为主成为产品交付目标。
+
+
+
+
+**多轴认知对齐（2026-11-13）**：从简单问题进入专业知识时，按实际问题选择 G目标、L知识深度、D专业领域及概念、经济事件、主张证据、数据可见时间、Blix代码运行、修订反馈等相关视角；不是每次调用固定十步。详见 [现有知识交叉表](../../knowledge/INTEGRATION-CROSSWALK.md#7-2026-11-13-关系型认知修正从层级清单到可审查的专业主张) 和 [现有DOMAIN-MODEL](../../knowledge/DOMAIN-MODEL.v1.json)；可只读执行 `npm run audit:knowledge-trace -- --axes`。其中 `semantic_match`、`observed_economic_event`、`supports`、`implemented_by`、`tested_by` 属于不同关系：概念相似不能证明同控，转账不能证明卖出，离线测试不能证明主网正确，知识被选中不能证明模型用对。遇到重要结论要反向追 `结论→原始签名/来源版本→推导条件/竞争解释→当前代码/测试→修订影响`，避免词面关联泛化为经济因果。
+
+**知识获取、承接和实际调用的唯一总入口（2026-11-13）**：[Blix知识全链追溯](../../knowledge/references/knowledge-lineage-lifecycle-20261113.md)；[详细术语、来源映射和双向查账附录](../../knowledge/references/knowledge-lineage-lifecycle-audit-20261113.md)。两个文档是同一研究的主文与附录，不取代原D01–D12、P1–P2核查或建设台账。`npm run audit:knowledge-trace` 可查旧源单元→本地承接→AI可选来源；不证明模型确实用上或用对，不要求所有普通问题走固定流程。
+
 **新认知入口**：[Hermes生框架、qb数据护照、meme反证与多对象经济过程](../../knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md)。根据任务需要用因果、过程挖掘、取证等问题视角生成竞争解释，未审来源保留UNKNOWN；不是新增固定专家、硬标签或运行时强制Prompt。
 
 
 **主体认识优先入口**：先看[主体能力与旧知识内化深审 V0.2](blix-knowledge-activation-ceiling-v0.2.md)（按业务判断上限、旧方法适用、不能继承的规则），再按需回查下述来源。
 
 **主体认识优先入口（原基准）**：[Blix 已有业务能力 × 旧 Grok 专业知识继承基准](blix-heritage-capability-baseline-v0.1.md)。面对实际业务先定位 Blix 已有 UI/数据/逻辑，再按需要调用 PR #14 的原专业正文或 Hermes/qb-/meme- 的机制，不全文搬迁、不把旧历史程序当作已在 Blix 运行。
+
+## 2026-11-14｜从完整专业知识主述进入实际问题：选择、过滤、报告与验收
+
+**优先入口**：[十二领域的唯一主述与全来源归位表](../../knowledge/README.md#2026-11-14全域专业归位总入口十二领域主述参考来源知识身份与产品验收)。历史Hermes/qb-/meme-与Synapse、GMGN、Pulse/Million/HoldTech等原始知识不再由本页各写一套简化定义：原文保留在`knowledge/methods/`及`references/`，专业主张在对应D01–D12正文，通用AI九阶段以`ai-d`为真源，代码/运行事实以`build-register.md`为准。
+
+| 用户实际表达 | 优先主述和原始事实 | AI如何升级问题与过滤 | 当下可实现的输出边界 |
+|---|---|---|---|
+| “看看现在有哪些币可能值得参与” | 原Blix Pulse/Triage/Quality/Early + D02/D03/D08/D09/D10/D11 | 先源时点、覆盖、未选样本，再分`research_priority`/指定规模下的`trade_readiness`，必要时转钱包/资金研究 | 当前AI只是最多12浏览器候选调查选择；没有全市场同源增益或实际净收益证明 |
+| “这币庄家在哪里、哪些钱包联动” | 现有Coin/Holder/BubbleMap + D01/D04/D05/D06/D07/D10/D11 | 从账户身份→资金可行性→Token/Swap/LP→竞争解释，不把同Slot、共同Fee Payer或平台标签当同控 | 局部原始交易/转仓图；私人控制、完整历史或同批卖出UNKNOWN |
+| “A买入转给B，B把币卖了吗” | 已捕获签名、指令位置/余额前后 + D01/D04/D06/D11 | Swap、Transfer、接收者后续卖出各自成事实；只在可对账的库存批次和对价下升级判断 | 当前`economic-claim-trace`有局部转账事实与本地卖出摘要，不能确证同批 |
+| “这组钱包以前买别的币吗，能不能跟” | 原Blix钱包事件 + D05/D07/D08/D09/D10 | 先区分地址重合、真实资金接力、共享设施，再区别钱包PnL和跟随者净可执行 | 跨Mint时间候选与纸面否决；不能当策略Alpha或真实交易指令 |
+| “模型是不是使用了以前研究的知识” | D12、原11来源白名单、K1–K9与具体模型工具轨迹 | 核哪段原文确实被提供/使用，何处改变了工具选择、假说或错误；比较无知识/有知识同任务同预算 | 目前可列知识来源hash/阶段，但没有真实模型独立A/B增益证明 |
+
+**不靠写更长报告提升判断**：一个有价值的案例最少可回查对象/窗口/来源→原始事实→具体主张/竞争解释→业务结果与限制→当前代码和测试→新事实修订。若真正需要新领域，先追原资料、给出现有D领域不能容纳的理由；不因词面不同新增第13领域。单次任务可跳过不相关知识，没有证据时可以输出`UNKNOWN`或拒绝进一步调用。
+
+**成品交付位置**：[扩展产品成品化/验收主线](intelligence-layer.md#2026-11-14成品化实施主线知识已经归位之后)。知识整理属于K6；真实模型用对是K7/K8；市场长期效果和自动回访是O5/O6。三者的状态不混淆。
+
+## 2026-11-13｜当前P1/P2知识如何真实调用、怎样不误用
+
+最新原始来源、冲突与能力核查见 [P1/P2全域知识对照账](../../knowledge/references/p1-p2-knowledge-reconciliation-20261113.md)。**历史章节中的“没有Blix运行时代码变更”仅针对其写作时点**；现在Draft PR #23已有只读离线工具、专业图谱、快照审查、纸面可跟随性审核与按需知识装载。但**尚未连接Coin页真实模型/API与主网全历史**。
+
+| 问题场景 | 先用的事实与知识 | 当前可执行 | 不能自动下的结论 |
+|---|---|---|---|
+| 一个Mint的关键钱包、转仓与接收卖出 | [D01协议](../../knowledge/foundations/solana-chain-and-market.md)、[D04钱包库存](../../knowledge/mechanisms/wallet-roles-and-inventory.md) | `npm run inspect:network-offline -- --db EXISTING.sqlite --mint MINT` 的本地原始转账/图谱 | 转账=卖出、接收方售出原转入Token、地址=同一操作者 |
+| 同源/多跳/跨Mint群体 | [D05资金来源](../../knowledge/mechanisms/capital-organization-and-incentives.md)、[多跳审计](../../knowledge/references/multihop-funding-evidence-audit.md) | 离线相同地址重合、不同签名与指令位置、资料回补对比 | Pool/交易所共享服务=控制群体、跨Mint地址重合=资金真实流向 |
+| 市场异动/6小时转账激增 | [D03价格机制](../../knowledge/mechanisms/market-price-mechanism-research.md)、[D07群体](../../knowledge/methods/anomaly-and-cohort-discovery.md) | 两份本地快照新可见/丢出样本/数据修订分开 | 新入库=刚链上转账，或曾撤回的论文数字=实证预测 |
+| 看中某个高收益钱包想跟单 | [D08/D09成本与策略](../../knowledge/mechanisms/strategy-and-execution-economics.md)、[D11反证](../../knowledge/cases/independent-validation-and-failure-cases.md) | `npm run audit:followability-offline -- --input PAPER_RECEIPTS.json` | 旧成交价=跟随可成交价，纸面收益=样本外Alpha |
+| AI要学会如何研究 | [D12知识与意图](../../knowledge/ai/intent-knowledge-selection-and-reasoning.md) | `local-knowledge-loader.mjs` 受限源选择 + `ai-workflow.mjs` 离线模拟 | 已阅读/已注册152项=AI已掌握或真实调用正确 |
+
+**最低使用原则**：先区分来源主张、原始链上事实、离线测试和未证实解释；Token Account、Owner、fee payer、Pool、Vault、私钥控制、经济收益权逐层审查；对同一Mint要求签名、Slot、外内指令位置、金额原始单位、事件/获取/首次可见时间与历史覆盖。未知是准确状态，不是默认忽略所有异常。
+
+**知识路由不是强制执行顺序**：模型根据普通问题可探索新领域，既有Dxx与受限11源仅为当前检索入口；资料中包含旧规则、撤回数值、过时假说时不允许直接注入产品判断。正确性由同任务无知识/有知识的证据、反例、工具费用及模型A/B验证。新增资料若不能改变专业问题、代码或误报，不继续为凑数量加规则。
+
 
 ## 通用 ai-d 完整能力的接入入口（2026-11-06）
 

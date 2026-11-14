@@ -140,3 +140,41 @@ Meme 跟单至少存在五个不同目标：
 - OKX 只读分析接口：`okx-dex-market` 的 wallet PnL / token / signal / wallet activity 是候选输入，仍需核查单位、时间及覆盖。
 
 **本篇的关键产出不是一套交易参数，而是将每条钱包/结构信号转成可审计的“跟随者可复制性问题”。**
+
+
+## 2026-11-13｜D08/D09：从领先钱包收益到可复制跟单的分层验收
+
+这轮结合[知识来源对照](../references/p1-p2-knowledge-reconciliation-20261113.md)、[Trading Portfolio成本覆盖测试](https://github.com/solana-foundation/trading-portfolio/blob/main/tests/portfolio-pnl-basis.test.ts)、[Token Finder校准回放](https://github.com/Danialsafarli/token-finder/blob/master/src/calibration/replay.ts)及旧meme-结构观察者定位，确认**钱包盈利、观察到这笔盈利、跟随者能获得正净收益是三种不同命题**。
+
+**目前实际可运行的只是离线研究门槛**：`server/intelligence/followability-replay.mjs`、`scripts/audit-followability-offline.mjs`接受明确纸面成交收据，检验链上event vs follower首次可见、买入/卖出quote有效期、成交延迟、手续费和滑点标记、完整退出与转仓未知。缺失/过期/事后提前入场/仅部分卖出时返回不可评估类别；条件齐全时用原始数量做算术，但永远标 `PAPER_SCENARIO_CALCULATED_NOT_LIVE`，不会下单或证明收益优势。
+
+**知识纠偏**：
+- 转入Token若成本来源未知，不能按其他钱包已知买入价自动摊平；`currentBalance`、`costBasis` 和 `realizedPnl` 仍 UNKNOWN。
+- 模拟成交收据是输入假设，不是确定会成交；优先费、账户租金、市场冲击、真实成交失败、报价变动、私有执行路径、供应商费用另须独立覆盖。
+- 样本外测试需保留所有未选/失败/归零Mint及错过机会的机会分母，冻结观察时点、策略版本和模型，不能事后选赢家。
+- “同源、bundler、第一批买入”钱包可以有调查价值，但不等于追买可复制；也可以只用于库存风险、出货压力和其他Mint发现研究。
+
+**下一道实证门**：同一条实际钱包事件在原Blix记录、可观察信号、历史可用报价、纸面执行及完整失败样本中对齐；再与不跟随或其他基线比较，不用成功案例数替代净效果。
+
+**2026-11-13 成本术语精确修正**：上述“转入Token若成本来源未知”特指**真实取得成本未被本地链上证据覆盖**，不等于不能单独报告转入时的市场参考估值。Solana Foundation [Trading Portfolio](https://github.com/solana-foundation/trading-portfolio) 将外部转入按转入日价格估值，并在调用者明确指定的钱包组内进行成本归属；这是该项目的方法选择，不能把市场估值伪装为原始购买成本，也不能让Blix根据资金同源候选自动组成共享PnL的钱包组。未来字段应明确分开 `verifiedAcquisitionCost`、`estimatedTransferValue`、`costCoverage` 和 `walletGroupProvenance`，缺证据时仍保持 UNKNOWN。详见[来源核查8.1](../references/p1-p2-knowledge-reconciliation-20261113.md#81-钱包成本基础有三种不同对象不能只写转入成本未知)。
+
+## 2026-11-14｜知识转化到实际O5子目标的语义边界（PR #23）
+
+已在原`server/intelligence/investigation-continuation.mjs`的只读报告`anchors.tradeReadiness`和`anchors.nextEvidence[O5_OPPORTUNITY_AND_FOLLOWABILITY]`落实D08/D09的关键反例：**存在本地Token转移或跨Mint时间候选，不足以评价信号之后的进出场净收益**。该收据按现有事实公开缺少的信号首次可得、有效报价、对应池深度、指定金额、费用、延迟和退出条件；`Intelligence.tsx`会展示，不把价格涨幅、钱包历史收益或观察到的买卖摘要升格成交易就绪结论。它不代替原`server/quote.js`、`server/paper.js`和`followability-replay.mjs`的真实条件验证。**当前状态：离线可检的缺口指示；无真实报价/信号同窗证据，机会优先排序和可盈利性仍未验。**
+
+## 2026-11-14｜全域归位：D08机会机制、D09跟单/执行经济的统一专业判断
+
+**两个独立问题**：`research_priority`是一个异常为什么值得深入研究；`trade_readiness`是在**给定信号可见时点、资金量、Pool和退出约束**下，是否有足够证据评价参与。二者可相互影响，但不能合并为一个“聪明钱评分”。GMGN Wallet Score、Copy Trade、Million Copyability、原Blix Paper与旧meme-的结构研究均可提供问题和参数候选，不能提供未经市场实证的稳赚结论。
+
+| 判断环节 | 不可缺失的专业知识 | 过滤后可能输出 |
+|---|---|---|
+| 机会类型 | 新币早期、迁移前后、钱包先动/跨币反复、库存变化、独立需求、流动性结构；机制假说及失败条件 | 值得调查、待观察、证据不全、暂不研究 |
+| 钱包表现 | 自身已实现/未实现PnL、成本来源、Token转入而未买入、提前时间差、持仓中位节奏、集中度、刷量/KOL等可能性 | 钱包自身历史表现与**外部跟单可复制性**分开 |
+| 信号时序 | 链事件、数据商观察、Blix接收、模型首次可用、用户看见、下单报价、模拟成交与结果成熟时间 | 首可得时间UNKNOWN时，不得填造“提前发现” |
+| 执行参数 | 订单规模、池储备/路由、报价TTL、滑点、优先费/Jito与反MEV、重试/失败/部分成交、订单延迟、最大持有风险和卖出深度 | 只读参数情景、不可跟随、需要补报价、可进入有限纸面模拟 |
+| 退出与净表现 | 入/出场有效报价、Token-2022、Gas、费、LP撤出、价格冲击、退出失败、绝对/相对净收益 | 纸面可评价或UNKNOWN，不把未来OHLC高点作为实得卖价 |
+| 效果验证 | 同一市场样本宇宙、原版Blix规则与知识增强公平对照、已拒/已错过/无法成交币、样本外时间隔离 | “有真实增益/没有增益/样本不足”，不可从有趣案例推Alpha |
+
+**GMGN实操参数正确归位**：固定/比例跟随、单次/总额限制、池流动性与市值/币龄、交易源钱包金额、加仓频率、独立止盈止损、滑点/优先费/防MEV、失败/重试是**执行经济与样本选择变量**，不是必须在Blix造一个新交易机器人。原版交易与Paper源码继续保留，扩展暂不获真实签名和自动交易权限。官方展示盈利与钱包自身盈利也不能当跟随者可实现净利润。
+
+**当前已实现且不能夸大的部分**：`server/intelligence/followability-replay.mjs`会拒绝缺少当时信号/买卖报价/费用条件的纸面记录，部分反例已CI通过；原版Blix `quality.js`/`quote.js`/`brain.js`有现成市场/价格与策略基础。但**没有真实同时间可执行入出价、实际成交失败率、样本外AI增益**。在这三个前提没有补齐前，不能宣称“AI已发现盈利代币”或“高分钱包可以跟”。关联：[参考成品机会判断](../../docs/project/reference-driven-goal-model-v0.1.md#13-2026-11-14gmgn--既有成熟产品--blix机会优先全局再整合v04)、[P1/P2知识边界](../references/p1-p2-knowledge-reconciliation-20261113.md)。

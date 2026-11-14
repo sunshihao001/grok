@@ -2,7 +2,8 @@ name: tests
 
 on:
   push:
-    branches: [main]
+    # PR #23 remains Draft with conflicts; branch CI still needs to validate knowledge and evidence changes.
+    branches: [main, integration/blix-evidence-readonly-20261108]
   pull_request:
 
 jobs:
@@ -15,3 +16,11 @@ jobs:
           node-version: 24
       - run: npm test
       - run: npm run test:security
+        if: ${{ !cancelled() }}
+      - run: npm run test:evidence
+        if: ${{ !cancelled() }}
+      # Static frontend compilation only; never start the trading-capable Blix server.
+      - run: npm ci --prefix web --ignore-scripts --no-audit --no-fund
+        if: ${{ !cancelled() }}
+      - run: npm --prefix web run build
+        if: ${{ !cancelled() }}

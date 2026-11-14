@@ -2,6 +2,17 @@
 
 > 2026-11-06。目标主体：`sunshihao001/grok@blix`。研究方式：静态阅读本分支源码/旧Grok、ai-d及 Million、PumpTrace、Pulse、HoldTech、PumpGrok、OKX、pumpwatch 的公开源码或原作者文档，并对照2025–2026 Agent Skills、Context Engineering、Agent Memory/SkillsBench 研究。**未运行主体、未安装/合并参考代码、未部署Bot、未接入付费数据或链上实测。此文是实施决策，不是完成证明。**
 
+## 2026-11-13｜从2026-11-06蓝图进入已测试的局部产品能力
+
+本文件原始蓝图是**当时的静态决策**，不能拿“尚未改造运行时代码”否定后续已完成的离线工程。最新 [P1/P2源→现成程序→知识纠偏→验收清单](../../knowledge/references/p1-p2-knowledge-reconciliation-20261113.md) 已将来源知识作用于：
+- `server/intelligence/economic-network.mjs`：保留每笔签名/outer/inner的Token转账、BigInt raw流入/流出与unknown，不宣称经济控制和库存。
+- `economic-snapshot-review.mjs`：区分历史新可见、样本遗漏和原证据修订，并展示跨Mint同钱包候选，不声称在线持续监控。
+- `local-knowledge-loader.mjs`：现有本地研究11个白名单专题，按自然语言需求挑选少量有路径、内容hash、撤回限制的来源，不会自动扩权或证明知识被正确理解。
+- `followability-replay.mjs`：先验证信号首次可见、报价时效、纸面成交、费用与完整退出，才能算模拟情景，不代表真实市场执行收益。
+
+**仍需要真正验收**：真实链上经济完整性（复杂CPI/Token-2022/LP/WSOL）、Pool/服务钱包分类、Coin/BubbleMap交互、长期任务恢复、真实模型知识选择A/B、策略样本外效果和运行成本。运行CI与研究知识适用性是两张独立账，详见 [build-register](build-register.md)。不因蓝图已写和知识登记数量宣称系统完成。
+
+
 ## 2026-11-06｜重要修订：参考项目研究不得由 Blix 的已知缺口预先裁剪
 
 本文件原本以“参考产品能向 Blix 贡献什么”为入口，只适合作为**第二阶段的产品融合决策**。最新用户反馈指出：如果从当前页面、接口或单个问题倒推需要读哪些参考源码，就会遗漏项目独有的专业问题、设计理由、数据组织、失败经验、历史决策和未知机制。因此新的研究入口优先参见 [参考项目独立知识研究与试读结果](../../knowledge/references/README.md)。

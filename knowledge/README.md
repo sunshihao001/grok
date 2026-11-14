@@ -1,5 +1,81 @@
 # Blix 专业知识｜唯一运行主体的分类接收入口
 
+**2026-11-14｜多路线关系闭环入口**：知识原文继续由本目录12领域/八份主述承接；关系图的业务入口与交接见[Blix多路线图谱与三重闭环V0.5](../docs/project/cross-layer-anchor-map-20261113.md#2026-11-14多路线概念承接知识业务工程三重闭环v05)，结构检查可用`npm run audit:knowledge-trace -- --routes`。该命令只检查概念/业务条件路径、文件引用与反馈回路，不进行链上钱包归因、实时行情或交易机会验证。跨领域通用K1–K9/S1–S7仍以ai-d为权威，具体知识应用回到当前Blix的O1–O6业务。
+
+## 2026-11-14｜领域知识服务 Meme 业务，而非替代业务筛选
+
+**知识定位纠偏**：本目录的 D01–D12/L0–L7、旧152单元、原始Hermes/qb-/meme-/Synapse/GMGN/OKX/Why-Solana等专业材料**完整保留**；它们并不是Blix产品要依次运行的“知识过滤器”。现行**业务优先**：原Blix从市场和钱包发现Mint→按不同目的筛选“值得调查”和“潜在实际交易机会”（机会优先）→需要时调用协议、经济资金、库存、价格、策略、执行、数据质量知识→原始事实核对与竞争解释→必要时只读模拟、监控与修订。可直接从指定Mint或钱包切入，不强制从市场广筛开始。
+
+**业务映射真源**：[Blix项目目标](../docs/project/goal-map.md#2026-11-14工作重心纠偏知识是支援meme市场机会是业务主线)与[现有 AI 工作台总体规划中“D01–D12→Meme业务”对照](../docs/project/blix-ai-workbench-master-plan-v1-20261113.md#2026-11-14工作重心纠偏从通用知识系统转为-meme-机会发现与专业调查)。**专业主述真源**仍是下方各领域原文件，来源/状态继续用已有 `MIGRATION.json` 和 `references/`，运行事实继续用 `docs/project/build-register.md`。这里不产生第二份知识主张，不把参照工具的标签或作者利润陈述提升为真实交易优势。
+
+**筛选所需知识按需选择**：行情/生命周期通常看D02、D03、D10；钱包→Mint与群体资金看D01、D04–D07；机会和执行约束看D03、D08、D09、D11；AI理解和反证看D11、D12。**这些是可变的交叉引用而非固定任务规则**。若当前参考资料不能提供原始数据，不让模型替代供应商完成行情、资金、报价或余额的事实采集。
+
+
+
+## 2026-11-14｜全域专业归位总入口：十二领域主述、参考来源、知识身份与产品验收
+
+**目标**：将当前分散于旧Grok、Hermes、qb-、meme-、Why-Solana、Synapse、GMGN/OKX及其他成熟项目的知识，按照现有 `G0–G4目标 / L0–L7深度 / D01–D12领域 / K1–K9知识演化 / D0–D9工程 / O1–O6业务` **原位归属**。下表是“哪份正文负责阐述哪类专业知识”的**唯一主述导航**，不是新本体、新运行时规则或再次简写覆盖原文。跨域知识允许引用多个主述位置；原始来源和未知研究必须继续保存，不能为消除重复而丢失反例。
+
+### 一、D01–D12专业知识完整归属：一处主述，多处证据
+
+| 领域 / 知识深度 | 主述正文（新知识优先补这里） | 必须理解的原理、问题和过滤 | 来源与代码事实怎样分开 |
+|---|---|---|---|
+| **D01 Solana链上事实 · L1** | [协议、市场与来源基础](foundations/solana-chain-and-market.md#2026-11-14全域归位d01-协议事实d02-发行生命周期d10-数据可信度当前主述) | Signature、Slot、版本、ALT、外内CPI、Token2022、TokenAccount/Owner/Authority/Fee Payer、SOL/WSOL、Swap/Transfer/LP及净额；拒绝身份或经济动作越级 | [官方协议与P1/P2反证](references/p1-p2-knowledge-reconciliation-20261113.md)；`economic-events.mjs`只是已捕获子集 |
+| **D02 发行与生命周期 · L2** | [协议、市场与来源基础](foundations/solana-chain-and-market.md) | 发行平台、曲线、毕业、迁移、池/LP、权限、Creator历史；“有Token”“有报价”“能出售”分开 | 原`engine/coin/creator`；Pulse、pumpwatch、PumpTrace原来源另存 |
+| **D03 市场微观结构 · L2** | [价格形成与市场机制](mechanisms/market-price-mechanism-research.md#2026-11-14全域归位d03-市场微观结构的完整判断并关联d02d06d08d09) | 价格、池深、真实买卖对价、做市/刷量、库存卖压、薄池报价；FCZ/POC/AVWAP只是观察结构 | meme-理论与Blix `quote/pumpswap/quality`；不得直接复制为Alpha |
+| **D04 钱包行为与角色 · L3** | [钱包角色与库存](mechanisms/wallet-roles-and-inventory.md#2026-11-14全域归位d04-钱包角色--d06-筹码库存的多维判断) | Sniper/Bundler/KOL/Dev/Transfer-in/服务钱包、First70、长期角色变化、真实买卖；分开标签、地址与控制者 | Hermes/qb/GMGN角色源；原`wallets/wtrack`，扩展仅局部 |
+| **D05 资金网络与经济主体 · L3** | [资本组织与激励](mechanisms/capital-organization-and-incentives.md#2026-11-14全域归位d05-资本组织资金来源和经济主体的证据阶梯) | 入金、Fee Payer、公共Hub、多跳/Dust、跨Mint地址重合、协调行为、经济受益/控制，必须按证据阶梯判断 | Why-Solana/Hermes/Million/Synapse；Token转移图≠完整SOL资金图 |
+| **D06 筹码与库存 · L3** | [钱包角色与库存](mechanisms/wallet-roles-and-inventory.md) | 供应量分母、Pool/Vault/Token账户、可卖资产、转仓、LP、同批成本、接收后卖出摘要；不能以转账当卖出 | qb/GMGN/Holder工具与`economic-claim-trace.mjs`；库存批次仍待真验 |
+| **D07 市场时序/群体 · L3** | [异常与群体发现](methods/anomaly-and-cohort-discovery.md#2026-11-14全域归位d07-事件群体时序与跨mint演化的知识主述) | 6/12h、同Slot/Jito、分发push/领取pull、群体更替、回填与真实新活动、跨币时序；先基线后假说 | Synapse完整信号在来源目录；原`coverage/wallets`与快照审查各有范围 |
+| **D08 机会假说与策略 · L4** | [策略与执行经济](mechanisms/strategy-and-execution-economics.md#2026-11-14全域归位d08机会机制d09跟单执行经济的统一专业判断) | 钱包先动与信息优势、机制/风险条件、研究优先级vs交易准备度、信号可见时点、样本选择 | 原`triage/research/early/brain`已存在；GMGN/Million作者演示不等于策略收益 |
+| **D09 可执行性与风险 · L5** | [策略与执行经济](mechanisms/strategy-and-execution-economics.md) | 真实买卖报价/规模、手续费、滑点、优先费、MEV、失败成交、卖出深度、止损/退出、净收益 | `followability-replay.mjs`只有纸面验收；原版交易能力保留但不获AI交易授权 |
+| **D10 来源/可靠性 · L0/L1横贯** | [协议、市场与来源基础](foundations/solana-chain-and-market.md) | 市场全集、供应商字段/权限、断流/429、游标、首次可见、存档哈希、缓存、跨源语义、缺样 | `sources/db/coverage`和[来源覆盖账](references/source-coverage-v0.1.json)不证明全市场在线覆盖 |
+| **D11 实证与反证 · L6** | [独立检验与失败案例](cases/independent-validation-and-failure-cases.md#2026-11-14全域归位d11-证据保障反证与效果检验的统一解释) | 负例、未入选样本、幸存者偏差、真实签名/供应商回放、样本外、风险与实际测试分级 | 原始样本与CI/运行收据独立；RED-COHORT撤回数值不得重用 |
+| **D12 AI推理/知识进化 · L7** | [意图与知识使用](ai/intent-knowledge-selection-and-reasoning.md#2026-11-14全域归位d12-从零散知识到主动专业判断的实际职责) | 从口语意图发现未知、选择知识/工具、竞争解释、反证、修正、停机/成本；K1–K9不变成9个Bot | ai-d为跨领域方法真源，`local-knowledge-loader`仅11主题候选；真实模型增益未验 |
+
+**各领域不是封闭分工**：如“新钱包接收后卖出”至少贯通D01、D04、D05、D06、D07、D09、D10、D11、D12；主事实先找D01和原始签名，资金解释转到D05，库存问题到D06，是否适合跟随到D08/D09。每个领域明确自己**承担哪种推断/过滤责任**，不复制同一来源全文到十二份文档。
+
+### 二、已有参考与历史知识应当存哪里、如何使用
+
+| 资产类别 | 保留的独特知识范围（不是功能名表） | 来源主存放与下游连接 | 当前证据位置 |
+|---|---|---|---|
+| 原版Blix | 市场采集/初筛/数据持久化、钱包发现与反向Mint、Pulse、价格/质量、Paper、交易、原AI、网页与运维 | [原生能力全图](BLIX-NATIVE-ATLAS.md)、[产品能力表](../docs/project/capability-map.md)，各D主述引本体源码 | 源码已读；隔离冷启动/重启已验，不等于联网市场 |
+| 旧Grok及PR#14 | L0–L7、D01–D12、152历史映射、22专家视角、原65参考资产、历史判断/反例 | [历史主册](foundations/legacy-grok-domain-core.md)、[原Grok地图](OLD-GROK-ATLAS.md)、[迁入表](MIGRATION.json)及[DOMAIN-MODEL](DOMAIN-MODEL.v1.json) | 历史研究状态保留，不能把索引记为已逐条实证 |
+| Hermes | 钱包/同源/筹码/角色、资金的经济职能、00c/00d/00e多维与反向生问题、历史自纠偏 | [Hermes原文](methods/hermes-multidimensional-reasoning-original.md)、[纵深研究](methods/hermes-reverse-discovery-deep-study-20261106.md)、D04–D07正文 | 原仓树/部分关键文件深读，不是264文件全部深审 |
+| qb- | 单Mint关键钱包矩阵、95钱包历史报告、分母/数据护照、角色与`full_exit`语义反例 | [P1/P2源级对照](references/p1-p2-knowledge-reconciliation-20261113.md)，D04/D06/D10/D11 | 原项目大量文件未逐项审阅，特定旧样本仅限原时间窗 |
+| meme- | FCZ/POC/AVWAP、深洗、二次启动/死亡盘、机制失败判据、价格≠成本 | [D03主述](mechanisms/market-price-mechanism-research.md)、[D08/D09主述](mechanisms/strategy-and-execution-economics.md)、[Hermes×meme深读](methods/hermes-reverse-discovery-deep-study-20261106.md) | 理论与原模型不得直接变交易规则 |
+| Synapse笔记 | **14/14链上信号、3/3 DEX事件、3/3买入形态、4/4 HyperLiquid主信号、5/5标签、5原则、4去噪与产品合规**；14项我们提出的延伸研究 | [保留全部原始转述分类](references/synapse-methodology-full-taxonomy-20261114.md)、[跨信号研究](references/synapse-cross-signal-mechanisms-20261114.md)；按对象引用D01–D11 | **USER_PARAPHRASE**，HyperLiquid不自动迁至Solana，未验证供应商内部阈值 |
+| GMGN / OKX | 多Mint/Wallet Radar、First70、动态钱包角色与评分、PnL vs copyability、跟单执行参数、只读market skills和独立wallet/trade边界 | [GMGN与参考全景](../docs/project/reference-driven-goal-model-v0.1.md#13-2026-11-14gmgn--既有成熟产品--blix机会优先全局再整合v04)，D04/D05/D08/D09 | 官方/公开Skill语义与Blix真实接入、费用/参数、收益验收必须分开 |
+| Pulse、Million、HoldTech、PumpTrace、Why-Solana | 全发行样本/失效记录，钱包↔Mint联动，Holder/同槽与公共服务反例，Creator历史与回填，多跳及样本偏差 | [外部来源入口](references/README.md)、[深度研究与未读范围](references/source-knowledge-deep-study-v0.1.md)、[来源覆盖清单](references/source-coverage-v0.1.json) | 已审部分源码/反例，不把README当实跑 |
+| Cielo、Nansen、Arkham、Bubblemaps、pumpwatch、PumpGrok及剩余参考 | 通知/钱包历史、实体解释、关系图可视化、发行总体、有限Agent与任务收据；未审仍需完整保留 | [原65资产索引](https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/system/gpt-meme-project-index.v1.json)、[参考项目全景](../docs/project/reference-driven-goal-model-v0.1.md)、[覆盖清单](references/source-coverage-v0.1.json) | 部分未深入/未运行/商业闭源，不以命名数量冒充完成 |
+| ai-d通用认知 | 普通表达→专家问题表征→知识获取/原理理解/跨源关系→实施→验收→原位修订；七类跨层能力与九阶段 | [ai-d知识九阶段](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/knowledge-lifecycle-nine-stages.md)、[Blix D12专项](ai/intent-knowledge-selection-and-reasoning.md) | 通用认知与AI运行时学会/使用正确是两件事 |
+
+**历史原文归档原则**：原`methods/hermes-*`、`actor-economic-mechanisms-deep-study.md`、`legacy-grok-domain-core.md`、完整Synapse分类及`references`中的研究报告不删、不压缩替代；主述正文只写已理解的机制、适用条件、具体反证和使用边界。没有研究完的旧资料留在[来源覆盖账](references/source-coverage-v0.1.json)而非标“已归并已读”。
+
+### 三、从知识到项目应用：五种身份不得混同
+
+1. **SOURCE** 原始资料或供应商声称：保留原名、原文与版本；转述标明转述。
+2. **KNOWLEDGE/CLAIM** 专业解释、竞争假说和反例：属于对应D领域及L深度，注明适用场景与不可推断范围。
+3. **DATA_FACT** 可复查Signature/原始行情和时间覆盖：必须有来源、哈希/字段、时点、缺口，不能靠文本生成。
+4. **IMPLEMENTATION** Blix原版或PR23的具体模块/输入输出/权限：详见[产品扩展层](../docs/project/intelligence-layer.md)，知识文档本身不启用代码。
+5. **VERIFICATION** 某提交的离线测试、历史回放、联网只读（`CONNECTED_READONLY_RUNTIME`）、前瞻影子及运维：事实以[工程建设台账](../docs/project/build-register.md)为准，不将绿色CI冒充主网可交易盈利。
+
+**正确的使用路径**：用户问题→对应G目标和O结果→Blix现有市场/钱包/归档事实→按需求查1–3个D主述与原始证据→明确竞争解释/缺失与下一项信息价值→只读报告、必要回放→新证据修订。不是固定让每个币经过12领域，也不是把11主题加载器当全部知识库。
+
+**当前不足**：以上实现了知识**主述责任与引用归位**，没有把65个参考成品/152历史单元逐条重读、更没有把全部知识转成运行时可用规则。成品发展不靠继续扩标签，转到[扩展层成品路径](../docs/project/intelligence-layer.md#2026-11-14成品化实施主线知识已经归位之后)与[当前运行台账](../docs/project/build-register.md)进行分级验收。
+
+**2026-11-13｜纠偏与反证新的权威入口：** [Blix全项目偏差类型、根因归属和实例验收](../docs/project/cross-layer-anchor-map-20261113.md#12-2026-11-13纠偏的专业扩写从修一处错到首个失效环节职责与全链结果-v03)对应[ai-d通用纠偏认识](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/cross-layer-project-anchors.md#13-2026-11-13纠偏能力的深层扩写纠错校准根因修复与学习v03)。按问题查原知识/原采集/原代码/真实反例，不能因为一次错误就否定完整理论、发明固定新流程或由AI侧复制上游源端。
+
+**知识关系结构已收束（2026-11-13）**：[ai-d完整概念库与专业术语差异](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/cross-layer-project-anchors.md#11-2026-11-13-体系收束从关键词集合走向可解释可验证的项目关系v02) ↔ [Blix七类能力/五种网络/六项业务目标的实际映射](../docs/project/cross-layer-anchor-map-20261113.md#7-2026-11-13-全面术语引入后的结构收束不是加更多标签v02) ↔ [原INTEGRATION-CROSSWALK的结构归位](INTEGRATION-CROSSWALK.md#2026-11-13结构收束-v02从知识分层到七类跨层能力五种逻辑视图)。**原模型只原位增加机器可读的关系视图，不新增D01–D12/十轴/十一关系，也不启用自动推理**。运行 npm run audit:knowledge-trace -- --axes 可静态核对。
+
+**2026-11-13｜知识进入代码后的跨层锚点：** [Blix多层锚点与变更影响实例](../docs/project/cross-layer-anchor-map-20261113.md)，对照[ai-d通用方法](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/cross-layer-project-anchors.md)。这里的锚点关联专业主张、数据契约、代码不变量、测试与真实验收；并非新专家制度或重复D01–D12知识体系。初版只映射少数源级已核的高价值例子，不宣称自动全仓传播或已经生产验收。
+
+**2026-11-13｜通用知识生命周期与业务整体重梳理**：以 [ai-d 九阶段知识形成与应用锚点](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/knowledge-lifecycle-nine-stages.md) 作为“规划→获取→接收→理解→关联→整合→转化→验证→进化”的跨项目知识工作视角；以 [Blix 全项目 V2.0 建设总蓝图](../docs/project/blix-ai-workbench-master-plan-v1-20261113.md) 为六大业务目标、已有专业资产、真实数据源/执行依赖和验收的当前总入口。**D01–D12、L0–L7、10轴11关系及已有知识来源保持不变；九阶段不再造九个目录，旧知识可以保留纯理论价值但工程状态必须另行验收。**
+
+**多层知识结构修正（2026-11-13）**：保留原 `G0–G4` 目标、`L0–L7` 深度、`D01–D12` 领域及6类存放目录，不把“概念—知识—经济事实—证据—工程—反馈”再建成另一套平行层级。具体的**10个相互独立的观察轴、11种带证据边界的关系、6种不允许越级的推断**见 [原 `DOMAIN-MODEL.v1.json` 的 `cross_axis_alignment`](DOMAIN-MODEL.v1.json) 与 [原知识交叉对应表第7节](INTEGRATION-CROSSWALK.md#7-2026-11-13-关系型认知修正从层级清单到可审查的专业主张)。`npm run audit:knowledge-trace -- --axes` 可检查这一结构；它只读且**不是**自动推理、模型验效或主网钱包身份确认。真正有价值的连接以可追查的**专业主张**为中心：谁提出、哪些数据支持/反驳、哪些条件成立、现有Blix哪里实现、哪次测试证明到何处、新证据如何纠正。旧152单元、21迁入、21快照索引与11候选源的事实身份不因此改变。
+
+**知识追溯的唯一总入口（2026-11-13）**：[知识从获取、理解、承接到实际判断的完整链路](references/knowledge-lineage-lifecycle-20261113.md)；[术语、静态来源映射与双向核查附录](references/knowledge-lineage-lifecycle-audit-20261113.md)。这两篇共同指回原有迁入、覆盖和代码台账，不是独立的新知识库。可运行 `npm run audit:knowledge-trace` 查看静态对应，但不能由索引推断模型已学会。
+
 > 建立于 2026-11-06。**这是已迁入资料的分类与检索入口，不是重新建立一个专家体系，也不是运行时AI已经掌握的证明。** 源文件旧版保留；本文仅管理Blix持有的副本、出处及使用方式。
 
 
@@ -32,6 +108,19 @@
 
 
 **连续理论与证据依赖补审（2026-11-09）**：进一步定向核查旧Hermes 10–14从钱包角色→同源关系→Sybil/Wash/协调→证据链→行动Gate的原推导，以及meme-的Spring/SOS/LPS完整时序和qb-的原判定样本。**新的认识**不是多贴三个风险标签，而是多个标签可能由同一笔交易、同一供应商快照或同一价格序列派生，不能充当多份独立验证；交易禁止与只读研究停止也不是一个决定。已原位修订[钱包与协同机制](mechanisms/wallet-roles-and-inventory.md)、[价格形成与阶段序列](mechanisms/market-price-mechanism-research.md)、[反证/判断治理](cases/independent-validation-and-failure-cases.md)，并在[来源覆盖台账](references/source-coverage-v0.1.json)中登记定向审阅状态、未证事项和风险锚点；[ai-d跨领域评测](https://github.com/sunshihao001/ai-d/blob/main/evaluation/first-cross-domain-tests.md)增加非独立证据的失败场景。**均为静态知识修订，尚未实测模型或Blix运行时收益。**
+
+## 2026-11-13｜最新 P1–P2 知识融合与现实能力对照（优先读）
+
+**新的单一入口**：[P1–P2专业知识全域核查、矛盾修正与代码对应](references/p1-p2-knowledge-reconciliation-20261113.md)。已核对本地D01–D12、Hermes/qb-/meme-/ai-d/Why-Solana与代表性GitHub源码、Solana官方协议；原有152单元和65参考资产的未审状态不被改成完成。
+
+这一次不只归档：已经在**原领域文件**追加当前知识修正（[链上/协议](foundations/solana-chain-and-market.md)、[钱包与库存](mechanisms/wallet-roles-and-inventory.md)、[资金](mechanisms/capital-organization-and-incentives.md)、[价格机制](mechanisms/market-price-mechanism-research.md)、[时序群体](methods/anomaly-and-cohort-discovery.md)、[跟单与执行](mechanisms/strategy-and-execution-economics.md)、[反证](cases/independent-validation-and-failure-cases.md)、[AI知识选择](ai/intent-knowledge-selection-and-reasoning.md)）；旧研究原文和历史版本仍保留。
+
+**现行代码状态**：Draft [PR #23](https://github.com/sunshihao001/grok/pull/23) 已有离线 Token Transfer事件/钱包流入流出、跨Mint同地址与快照差、纸面跟单有效性审核，以及受限本地知识选择。它们是**代码+离线回归**，而不是“主网全历史、共同控制、盈利优势、动态监控或Coin页真实AI代理已完成”。最新GitHub CI详见[建设台账](../docs/project/build-register.md)。
+
+**快速使用**：真实问题先定位现有Blix数据与原始交易 → 依据问题选择相关领域专业知识 → 检查事实分母、时间、覆盖、反例 → 用确定性代码计算可证明事实 → 模型仅解释竞争机制与下一次补查。不要把所有原文塞入AI提示词；当前 `local-knowledge-loader.mjs` 有受限的**11个候选专题**，实际一次只会选少数源，检索准确率尚待真实模型A/B确认。
+
+**重大纠偏**：同源/同Slot≠同控，Token转移≠卖出，转账总量≠真实独立新增需求，跨Mint重复地址≠资金闭环，历史回填≠最新市场行为，纸面模拟≠可实现Alpha。原问题仍有研究价值，但要查到可证伪交易与竞争解释后才能提升判断。
+
 
 ## 2026-11-07｜跨市场与AI双循环的整体机制研究（先于局部知识调用）
 

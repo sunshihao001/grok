@@ -272,5 +272,15 @@
       "ref": "https://github.com/sunshihao001/grok/tree/main/knowledge/legacy-snapshots",
       "status": "MANIFEST_INDEXED_21_SNAPSHOT_BODIES_NOT_YET_COPIED_OR_SEMANTICALLY_REVIEWED"
     }
-  ]
+  ],
+  "upstream_source_blob_check": {
+    "as_of": "2026-11-13",
+    "method": "GitHub connector fetch_file(repo=source_repo,path=source_path,ref=source_ref); compare returned file SHA with recorded source_blob_sha",
+    "checked_entries": 21,
+    "matched_entries": 21,
+    "mismatched_entries": 0,
+    "unreadable_entries": 0,
+    "outcome": "SOURCE_IDENTITY_RECONFIRMED_NOT_CLAIM_VERIFIED",
+    "limit": "Confirms source files existed at queried refs with recorded blob SHA. Original source review depth, copied-target byte equality, licenses and real market claims were NOT verified. Branch refs may change in future."
+  }
 }

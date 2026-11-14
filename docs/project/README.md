@@ -1,5 +1,7 @@
 # Solana Meme｜Blix 产品主体全局入口（V0.1）
 
+**2026-11-14｜专业知识全域归位与产品化入口：** 所有D01–D12专业机制、错误过滤、主述责任与原始来源由[现有knowledge主索引](../../knowledge/README.md#2026-11-14全域专业归位总入口十二领域主述参考来源知识身份与产品验收)统管；历史65参考/152单元及Synapse完整分类没有删减或假称全部已读。扩展如何从现有React/SQLite/AI sidecar走到真实成品以[单一扩展层实际交付合同](intelligence-layer.md#2026-11-14成品化实施主线知识已经归位之后)为准。最新工程状态见[建设台账](build-register.md)，旧章节仅为历史阶段记录。
+
 ## 2026-11-09｜当前产品定位（覆盖下方历史阶段性描述）
 
 **确定目标：完整保留原作者 Blix 产品 + 持续优化原有功能 + 在同一产品内增加专业调查与认知能力。** 这不是只读版替换工程，也不是用 Meme 研究系统覆盖原作者的交易终端。Pulse/Discover、行情图表、Coin、Wallet Tracker、Journal、原有AI、账户、纸面/真实交易、通知、Web/UI及部署组件都要作为**原版保留资产**。原版允许未来通过正常回归持续改进，不能把“保留”误解成代码永久禁止修改。
@@ -20,6 +22,15 @@
 **目标体系深化（2026-11-07）**：[《参考项目主要目标 × Blix多层目标建设 V0.1》](reference-driven-goal-model-v0.1.md) 已对照 Blix、Pulse、Million、PumpTrace、HoldTech、PumpGrok、OKX、GMGN、Cielo、Nansen、Arkham、Bubblemaps、pumpwatch、Why-Solana 及历史Hermes/qb-/meme-；把原作者目标、已经检查的业务来源、我们要建设的市场价值、不同参与者/专家视角和现阶段真实差距联系起来。不是所有参考功能已集成，也不是多建固定专家或多套产品。
 
 **快速进入Blix知识（2026-11-07）**：从一个普通市场问题开始，优先使用 [专业知识按任务调用表](../../knowledge/README.md#2026-11-07快速知识整合与按问题进入当前优先入口)；需要更深时再查 [六类目标与七条专业知识路由](../../knowledge/DOMAIN-MODEL.v1.json)、[参考项目独有目标与可复用认识](reference-driven-goal-model-v0.1.md)和[旧源审查覆盖](../../knowledge/references/source-coverage-v0.1.json)。已有旧知识不覆盖原Blix的真实业务事实；这里只完成知识定位与原文连接，不代表AI运行时知识自动生效。
+
+**2026-11-13 全面关系收束**：[ai-d七类跨层能力与完整专业术语](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/cross-layer-project-anchors.md#11-2026-11-13-体系收束从关键词集合走向可解释可验证的项目关系v02)由通用项目维护，[Blix业务×知识×数据×代码×验收锚点 V0.2](cross-layer-anchor-map-20261113.md)由本项目原位维护；[知识结构交叉表](../../knowledge/INTEGRATION-CROSSWALK.md)和npm run audit:knowledge-trace -- --axes只用已有模型显示七类能力与五种网络的对应。不是新系统架构或完成全部真实运行验收。
+
+## 2026-11-13｜当前P1/P2知识与真实功能交付入口
+
+最新 [知识全域审查与矛盾裁决](../../knowledge/references/p1-p2-knowledge-reconciliation-20261113.md) 连接了旧Hermes/qb-/meme-/ai-d、Why-Solana、开源成品、Solana官方协议和当前代码/测试；[按问题实际使用](knowledge-use.md)解释如何调用，[建设台账](build-register.md)记录GitHub已验证状态与下一阻断。早期章节提及的“静态研究、未开发”是当时状态快照，**不能覆盖最新提交的事实**。
+
+现有 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23) 中 P1/P2 离线源码包括经济转账图、快照/跨Mint地址候选、已归档SQLite只读调查、专业知识受限选择与纸面跟单可行性审核；原版 Blix 保留。**真实RPC全历史、公共服务分类、仓位成本、自动持续监控、Coin→正式模型执行和策略收益尚未验收**。本入口只是恢复知识和工作状态，不代表已经部署或合并。
+
 
 ## 为什么建设？
 从“找可跟单盈利钱包”逐渐扩展为“全市场发现、单 Mint 资金与库存调查、跨 Mint 群体演化、经济机制与潜在机会研究”。原赚钱/跟单兴趣没有被删，而是归入更大的研究目标。用户只需简单表达想法；AI 应主动研究、做产品/UX/工程/测试、验证、解释未知、推演更优方向。用户保留重要价值选择与风险授权。

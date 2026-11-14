@@ -4,6 +4,8 @@ import { db, q, json, logEvent } from "./db.js";
 import { settings } from "./settings.js";
 import { rpcStreamAllowed, noteRpcBytes, keyUrls, keyFree, heliusFetch } from './heliuskeys.js';
 import * as sol from "./solana.js";
+import { persistEvidence, transactionEvidence, walletProcessing, setWalletProcessing, retryableWalletProcessing } from "./economic-events.mjs";
+import { checkpointWalletPage, pendingWalletSignatures } from "./wallet-signature-coverage.mjs";
 import * as src from "./sources.js";
 import { handleOf } from "./fomo.js";
 import { exitState, onCurve } from "./quality.js";
@@ -156,26 +158,58 @@ const tradeHooks = [];
 export const onStoredTrade = (fn) => tradeHooks.push(fn);
 export async function readTx(w, job, emit, fetched = null) {
   const key = `${w.address}:${job.sig}`;
-  if (readSigs.has(key) || db.prepare("SELECT 1 FROM wallet_trades WHERE sig = ? AND wallet = ?").get(job.sig, w.address)) return;
-  const tx = fetched || await sol.transaction(job.sig);
+  if (readSigs.has(key)) return;
+  // The live feed can pre-populate wallet_trades. It does not prove that the
+  // transaction was captured OR processed by this reader. Keep per-wallet state.
+  if (walletProcessing(db, job.sig, w.address)?.state === "COMPLETE") {
+    readSigs.add(key);
+    return;
+  }
+  // A previous attempt may have captured RPC before a downstream failure.
+  // Prefer that immutable local evidence to an unnecessary fresh RPC call.
+  const tx = fetched || transactionEvidence(db, job.sig)?.rpc || await sol.transaction(job.sig);
   if (!tx) throw new Error("transaction not available yet");
-  readSigs.add(key);
-  if (readSigs.size > 20000) for (const k of [...readSigs].slice(0, 5000)) readSigs.delete(k);
-  for (const fn of txHooks) { try { fn(w, tx, job); } catch {} }
-  const price = await solPrice();
-  for (const sw of sol.parseSwaps(tx, w.address)) {
-    const usd = sw.usd ?? sw.sol * price;
-    const k0 = tx.transaction.message.accountKeys[0];
-    const payer = typeof k0 === "string" ? k0 : k0?.pubkey;
-    const t = sw.t || job.t;
-    const r = db.prepare("INSERT OR IGNORE INTO wallet_trades (sig, wallet, mint, side, tokens, sol, usd, t, payer) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
-      .run(job.sig, w.address, sw.mint, sw.side, sw.tokens, sw.sol, usd, t, payer || null);
-    if (!r.changes || w.scan) continue;
-    db.prepare("UPDATE wallets SET last_trade = MAX(COALESCE(last_trade, 0), ?) WHERE address = ?").run(t, w.address);
-    const event = { wallet: w, trade: { ...sw, t, usd, sig: job.sig }, lagMs: now() - t };
-    for (const fn of tradeHooks) { try { fn(event); } catch (e) { logEvent("error", `wallet trade subscriber: ${e.message}`); } }
-    if (!job.quiet) lag.set(w.address, Math.round((lag.get(w.address) ?? now() - t) * 0.6 + (now() - t) * 0.4));
-    if (!job.quiet && now() - t < 30 * MIN) emit?.(event);
+  persistEvidence(db, job.sig, tx, Date.now(), { captureSource: 'WALLET_RPC', commitment: 'confirmed' });
+  setWalletProcessing(db, job.sig, w.address, "CAPTURED");
+  try {
+    // Transfer hooks can fail independently of raw capture. Do not claim the
+    // signature was fully processed when a hook silently threw.
+    let hookError = null;
+    for (const fn of txHooks) {
+      try { fn(w, tx, job); }
+      catch (e) {
+        if (!hookError) hookError = e;
+        logEvent("error", `wallet transaction hook ${job.sig}: ${e?.message || String(e)}`);
+      }
+    }
+    const swaps = sol.parseSwaps(tx, w.address);
+    // No swap = no conversion price required. Transfer-only retries stay offline.
+    if (swaps.length) {
+      const price = await solPrice();
+      for (const sw of swaps) {
+        const usd = sw.usd ?? sw.sol * price;
+        const k0 = tx.transaction.message.accountKeys[0];
+        const payer = typeof k0 === "string" ? k0 : k0?.pubkey;
+        const t = sw.t || job.t;
+        const r = db.prepare("INSERT OR IGNORE INTO wallet_trades (sig, wallet, mint, side, tokens, sol, usd, t, payer) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
+          .run(job.sig, w.address, sw.mint, sw.side, sw.tokens, sw.sol, usd, t, payer || null);
+        if (!r.changes || w.scan) continue;
+        db.prepare("UPDATE wallets SET last_trade = MAX(COALESCE(last_trade, 0), ?) WHERE address = ?").run(t, w.address);
+        const event = { wallet: w, trade: { ...sw, t, usd, sig: job.sig }, lagMs: now() - t };
+        for (const fn of tradeHooks) { try { fn(event); } catch (e) { logEvent("error", `wallet trade subscriber: ${e.message}`); } }
+        if (!job.quiet) lag.set(w.address, Math.round((lag.get(w.address) ?? now() - t) * 0.6 + (now() - t) * 0.4));
+        if (!job.quiet && now() - t < 30 * MIN) emit?.(event);
+      }
+    }
+    if (hookError) throw hookError;
+    setWalletProcessing(db, job.sig, w.address, "COMPLETE");
+    // This cache is a performance optimization, not the durable success flag.
+    readSigs.add(key);
+    if (readSigs.size > 20000) for (const k of [...readSigs].slice(0, 5000)) readSigs.delete(k);
+  } catch (e) {
+    try { setWalletProcessing(db, job.sig, w.address, "RETRY_REQUIRED", e); }
+    catch (stateError) { logEvent("error", `wallet retry state: ${stateError.message}`); }
+    throw e;
   }
 }
 
@@ -195,15 +229,24 @@ async function pollWallets(emit) {
     pauseBots();
   } finally {
     polling = false;
+    // Persistent, bounded retry for already-captured transactions, including
+    // work lost from an in-memory queue after restart. No extra RPC is needed.
+    try {
+      for (const x of retryableWalletProcessing(db)) enqueue(x.wallet, [{
+        sig: x.sig, t: x.block_time ? x.block_time * 1000 : now(), quiet: true,
+      }]);
+    } catch (e) { logEvent("error", `wallet retry queue: ${e.message}`); }
     drain(emit).catch((e) => logEvent("error", `wallet reader: ${e.message}`));
   }
 }
 
 // A wallet's signatures since the last one seen (`lastSig`), newest first, a page of 50 at a time, up to `pages`.
-// `reached`: the list goes all the way back to `lastSig` (false: the older part is a gap). `fetch(opts)` is
+// `reached`: confirmed pagination boundary or previous `lastSig`; false means the older window is UNVERIFIED, not necessarily missing. `fetch(opts)` is
 // sol.signatures for the wallet; exported for the tests.
 export async function pageSignatures(fetch, { first, lastSig, pages }) {
-  let all = [], before, reached = first || !lastSig;
+  // A missing historical cursor is NOT proof that a bounded incremental scan reached its end.
+  // Only an actual short page or finding the previous anchor can establish this for non-first scans.
+  let all = [], before, reached = Boolean(first);
   let until = lastSig && !first ? lastSig : null, lostUntil = false;
   for (let p = 0; p < pages; p++) {
     let sigs;
@@ -230,12 +273,22 @@ export async function pageSignatures(fetch, { first, lastSig, pages }) {
 }
 
 async function pollOne(w) {
+  // First resume durable *discovered* jobs (the reader has a separate durable
+  // CAPTURED/RETRY_REQUIRED/COMPLETE state). Recovery also survives RPC failure.
+  enqueue(w.address, pendingWalletSignatures(db, w.address).map(j => ({
+    sig: j.sig, t: j.t || now(), quiet: Boolean(j.quiet)
+  })));
   const first = !w.backfilled;
-  const { all, reached } = await pageSignatures((o) => sol.signatures(w.address, o), { first, lastSig: w.last_sig, pages: first ? 1 : settings.rpcUrl ? 8 : 3 });
-  db.prepare("UPDATE wallets SET last_poll = ?, last_sig = COALESCE(?, last_sig), backfilled = 1 WHERE address = ?").run(now(), all[0]?.signature || null, w.address);
-  // More activity than we could page through since the last look: the older part is a known gap.
-  if (!reached) miss(w.address, 1, `more than ${all.length} transactions since the last check; the oldest were skipped`);
-  enqueue(w.address, all.filter((s) => !s.err).map((s) => ({ sig: s.signature, t: (s.blockTime || 0) * 1000 || now(), quiet: first })));
+  const { all, reached } = await pageSignatures((o) => sol.signatures(w.address, o),
+    { first, lastSig: w.last_sig, pages: first ? 1 : settings.rpcUrl ? 8 : 3 });
+  // Persist ALL returned signatures before advancing the next poll's anchor.
+  // Both operations either commit or roll back together.
+  checkpointWalletPage(db, { wallet: w.address, rows: all,
+    priorAnchor: w.last_sig || null, first, reached, observedAt: now() });
+  if (!reached) miss(w.address, 1, `signature scan stopped without a verified history boundary (${all.length} observed); older events may be missing`);
+  enqueue(w.address, all.filter(s => !s.err).map(s => ({
+    sig: s.signature, t: (s.blockTime || 0) * 1000 || now(), quiet: first
+  })));
 }
 
 // ---------- live streams ----------
@@ -666,15 +719,18 @@ export async function walletSignals(event, raise, adopt, vet) {
   const buyers = db.prepare(`SELECT wt.wallet, MIN(wt.t) t FROM wallet_trades wt JOIN wallets w ON w.address = wt.wallet
     WHERE wt.mint = ? AND wt.side = 'buy' AND wt.t > ? AND w.watching = 1 AND wt.sol >= 0.1 GROUP BY wt.wallet`).all(trade.mint, now() - 2 * 60 * MIN)
     .filter((b) => !isBot(b.wallet));
-  // Linked wallets count once: several wallets of one operator buying together is not confirmation.
-  const actors = independent(buyers.map((b) => b.wallet));
-  if (actors >= 2 && cool("smart", 6 * 60 * MIN)) {
+  // Co-trading and shared fee payers define HEURISTIC address groups, not proven
+  // independent economic actors or common controllers. Keep address and group counts separate.
+  const groups = independent(buyers.map((b) => b.wallet));
+  if (groups >= 2 && cool("smart", 6 * 60 * MIN)) {
     const names = buyers.map((b) => nameOf(db.prepare("SELECT * FROM wallets WHERE address = ?").get(b.wallet))).slice(0, 4).join(", ");
     const ts = buyers.map((b) => b.t).sort((a, b) => a - b);
-    const burst = buyers.length >= 3 && ts[ts.length - 1] - ts[0] < 90_000 ? " They all bought within 90 seconds, which usually means one operator or copy-bots rather than separate decisions." : "";
-    const linked = actors < buyers.length ? ` ${buyers.length - actors} of them move together with another and are counted as one.` : "";
-    raise(tk, "smart", ok ? `${actors} followed wallets bought $${tk.symbol}` : `${actors} followed wallets bought $${tk.symbol} (failed safety)`,
-      `${buyers.length} wallets you follow bought in the last 2 hours (${actors} independent): ${names}.${linked}${burst} Followed-wallet buying is a heuristic, not a safety check.${safety}`, 0, mark);
+    const burst = buyers.length >= 3 && ts[ts.length - 1] - ts[0] < 90_000
+      ? " Buys occurred within 90 seconds; timing alone does not establish common control or independent demand." : "";
+    const linked = groups < buyers.length
+      ? ` ${buyers.length - groups} addresses are grouped by co-trades or shared fee payer; that is not proof of common control.` : "";
+    raise(tk, "smart", ok ? `${groups} tracked-wallet groups bought $${tk.symbol}` : `${groups} tracked-wallet groups bought $${tk.symbol} (failed safety)`,
+      `${buyers.length} tracked wallet addresses bought in the last 2 hours (${groups} heuristic groups; independent economic actors UNKNOWN): ${names}.${linked}${burst} Followed-wallet activity alone is not a safety check or trade recommendation.${safety}`, 0, mark);
   }
 }
 // " Trades on Fomo as @handle." when the wallet is a known Fomo trader.
