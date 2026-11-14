@@ -3,6 +3,13 @@
 > **当前实现形态：独立的 opt-in 本机服务 + 已有 Blix React Intelligence UI + 已有 PR#23 单Mint离线经济证据工具。**
 > 模型 API 已有真实 HTTP 适配代码，但仓库、CI 和此次建设**没有运行任何收费模型**，也没有绑定用户密钥/数据。实际云端模型与真实市场端到端效果 **NOT VERIFIED**。这是受控研究入口，不是机器人交易、全市场自主扫描或已经证明盈利的策略。
 
+## 2026-11-14｜Coin指定任意Mint的本地只读路径（PR#23当前实施）
+
+- 原版Coin助手通过\`#/intelligence/:mint?goal=...\`传入**用户明确选择的Mint**。即使此Mint没有出现在当前Pulse列表，也不会回退到其它代币；前端只显示其原始地址和**Pulse行情UNKNOWN**，不能编造市值、Holder或数据源。
+- 仅当用户主动点“调查指定 Mint 的本地经济归档”、本机4547的\`/health\`已配置、且显式模型费用开关已开启时才准备请求；网页本机地址\`localhost\`与\`127.0.0.1\`均可使用，服务默认允许原版本地4421 React来源和已登记的开发来源，仍禁止陌生Origin/Host、公网访问或交易功能。
+- **付费模型之前第二次独立预检**：\`probeExistingEconomicMint\`在指定的**现有SQLite**文件以\`readOnly:true\`和\`PRAGMA query_only=ON\`检查\`econ_instructions\`或\`wallet_trades\`中此Mint有无索引行；如果没有则HTTP返回\`422 MINT_LOCAL_EVIDENCE_UNAVAILABLE\`及\`MINT_NOT_INDEXED_IN_EXISTING_ARCHIVE\`，**不调用模型、不消耗任务额度、不创建或修改数据库**。没有本地行只代表当前归档未见，不代表链上无活动或完整覆盖。
+- 上述功能由真实HTTP+伪模型、临时SQLite不可变哈希、Mint不串币单元测试和React build验证。**仍未独立完成真实浏览器操作+真实主网归档+真实收费模型的完整E2E**；后续应优先使用经许可现成归档，不能靠AI补造数据或擅自开启真钱/收费服务。
+
 ## 一、什么已经接通
 
 ```
