@@ -56,3 +56,46 @@ test('eleven optional runtime knowledge sources are local whitelisted readable f
  assert.match(loader,/trustedAsInstruction:false/);
  assert.match(loader,/RETRACTED NUMERICAL FINDINGS/);
 });
+
+test('all twelve professional domains have one existing main narrative and retain complete source coverage', () => {
+  const model = JSON.parse(read('knowledge/DOMAIN-MODEL.v1.json'));
+  assert.equal(model.layers.length, 8);
+  assert.equal(model.domains.length, 12);
+  const main = read('knowledge/README.md');
+  const routes = {
+    D01: 'knowledge/foundations/solana-chain-and-market.md',
+    D02: 'knowledge/foundations/solana-chain-and-market.md',
+    D03: 'knowledge/mechanisms/market-price-mechanism-research.md',
+    D04: 'knowledge/mechanisms/wallet-roles-and-inventory.md',
+    D05: 'knowledge/mechanisms/capital-organization-and-incentives.md',
+    D06: 'knowledge/mechanisms/wallet-roles-and-inventory.md',
+    D07: 'knowledge/methods/anomaly-and-cohort-discovery.md',
+    D08: 'knowledge/mechanisms/strategy-and-execution-economics.md',
+    D09: 'knowledge/mechanisms/strategy-and-execution-economics.md',
+    D10: 'knowledge/foundations/solana-chain-and-market.md',
+    D11: 'knowledge/cases/independent-validation-and-failure-cases.md',
+    D12: 'knowledge/ai/intent-knowledge-selection-and-reasoning.md',
+  };
+  assert.deepEqual(Object.keys(routes), model.domains.map(x => x.id));
+  for (const [domain, file] of Object.entries(routes)) {
+    assert.ok(existsSync(resolve(root, file)), domain + ' lost its current professional narrative');
+    assert.ok(main.includes(file.replace('knowledge/', '')), domain + ' missing from main knowledge index');
+    assert.match(read(file), /2026-11-14｜全域归位：/, domain + ' missing in-place professional synthesis');
+  }
+  for (const retained of [
+    'knowledge/references/synapse-methodology-full-taxonomy-20261114.md',
+    'knowledge/references/source-coverage-v0.1.json',
+    'knowledge/methods/hermes-multidimensional-reasoning-original.md',
+    'knowledge/methods/hermes-reverse-discovery-original.md',
+    'knowledge/foundations/legacy-grok-domain-core.md',
+    'knowledge/ai/intent-knowledge-selection-and-reasoning.md',
+  ]) assert.ok(existsSync(resolve(root, retained)), 'do not lose source provenance: ' + retained);
+  for (const token of ['14/14', '65', '152', 'USER_PARAPHRASE', 'CONNECTED_READONLY_RUNTIME']) {
+    assert.ok(main.includes(token), 'missing source/evidence distinction: ' + token);
+  }
+  const build = read('docs/project/intelligence-layer.md');
+  for (const token of ['P0-A', 'P0-B', 'P0-C', 'P1-A', 'P1-B', 'P1-C', 'P2-A', 'P2-B']) {
+    assert.ok(build.includes(token), 'missing product acceptance contract: ' + token);
+  }
+  assert.match(build, /NOT_DEPLOYED/);
+});
