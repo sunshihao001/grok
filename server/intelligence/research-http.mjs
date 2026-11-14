@@ -211,6 +211,7 @@ export function createResearchHttpServer({
               ...result.investigation,
               continuation:summarizeInvestigationContinuation({
                 mint:result.discovery.selectedMint,investigation:result.investigation,
+                 marketObservation:result.discovery,
               }),
             } } : {}),
         }
