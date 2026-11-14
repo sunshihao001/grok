@@ -65,12 +65,14 @@ function errorCode(error) {
 
 export function createResearchHttpServer({
   model = null, readEconomic = null, loadKnowledge = null, sourceReadiness = null,
+  mintReadiness = null,
   allowedOrigins = DEFAULT_ORIGINS, maxTasks = 8,
 } = {}) {
   if (!Array.isArray(allowedOrigins) || !allowedOrigins.length ||
       allowedOrigins.some(x => typeof x !== 'string' || !/^https?:\/\/[^/]+$/.test(x)) ||
       !Number.isInteger(maxTasks) || maxTasks < 1 || maxTasks > 100 ||
-      (sourceReadiness !== null && typeof sourceReadiness !== 'function')) {
+      (sourceReadiness !== null && typeof sourceReadiness !== 'function') ||
+      (mintReadiness !== null && typeof mintReadiness !== 'function')) {
     throw new Error('RESEARCH_SERVER_CONFIGURATION_INVALID');
   }
   const origins = new Set(allowedOrigins);
@@ -138,6 +140,19 @@ export function createResearchHttpServer({
     let input;
     try { input = await readBody(req, req.url); }
     catch (error) {json(res,400,{error:errorCode(error)});return;}
+    // A manually specified Mint may be absent from this PARTICULAR local archive.
+    // Stop before consuming the model budget; do not call it to invent missing facts.
+    if (req.url === '/research' && mintReadiness) {
+      let archive;
+      try { archive = await mintReadiness(input.mint); }
+      catch { json(res,503,{error:'MINT_ARCHIVE_PREFLIGHT_FAILED'});return; }
+      if (archive?.ready !== true) {
+        json(res,422,{error:'MINT_LOCAL_EVIDENCE_UNAVAILABLE',mint:input.mint,
+          archiveStatus:typeof archive?.status === 'string'
+            ? archive.status.slice(0,80) : 'MINT_ARCHIVE_PREFLIGHT_UNAVAILABLE'});
+        return;
+      }
+    }
     busy = true;tasksStarted++;
     try {
       const result = req.url === '/discover'
