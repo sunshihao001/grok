@@ -719,15 +719,18 @@ export async function walletSignals(event, raise, adopt, vet) {
   const buyers = db.prepare(`SELECT wt.wallet, MIN(wt.t) t FROM wallet_trades wt JOIN wallets w ON w.address = wt.wallet
     WHERE wt.mint = ? AND wt.side = 'buy' AND wt.t > ? AND w.watching = 1 AND wt.sol >= 0.1 GROUP BY wt.wallet`).all(trade.mint, now() - 2 * 60 * MIN)
     .filter((b) => !isBot(b.wallet));
-  // Linked wallets count once: several wallets of one operator buying together is not confirmation.
-  const actors = independent(buyers.map((b) => b.wallet));
-  if (actors >= 2 && cool("smart", 6 * 60 * MIN)) {
+  // Co-trading and shared fee payers define HEURISTIC address groups, not proven
+  // independent economic actors or common controllers. Keep address and group counts separate.
+  const groups = independent(buyers.map((b) => b.wallet));
+  if (groups >= 2 && cool("smart", 6 * 60 * MIN)) {
     const names = buyers.map((b) => nameOf(db.prepare("SELECT * FROM wallets WHERE address = ?").get(b.wallet))).slice(0, 4).join(", ");
     const ts = buyers.map((b) => b.t).sort((a, b) => a - b);
-    const burst = buyers.length >= 3 && ts[ts.length - 1] - ts[0] < 90_000 ? " They all bought within 90 seconds, which usually means one operator or copy-bots rather than separate decisions." : "";
-    const linked = actors < buyers.length ? ` ${buyers.length - actors} of them move together with another and are counted as one.` : "";
-    raise(tk, "smart", ok ? `${actors} followed wallets bought $${tk.symbol}` : `${actors} followed wallets bought $${tk.symbol} (failed safety)`,
-      `${buyers.length} wallets you follow bought in the last 2 hours (${actors} independent): ${names}.${linked}${burst} Followed-wallet buying is a heuristic, not a safety check.${safety}`, 0, mark);
+    const burst = buyers.length >= 3 && ts[ts.length - 1] - ts[0] < 90_000
+      ? " Buys occurred within 90 seconds; timing alone does not establish common control or independent demand." : "";
+    const linked = groups < buyers.length
+      ? ` ${buyers.length - groups} addresses are grouped by co-trades or shared fee payer; that is not proof of common control.` : "";
+    raise(tk, "smart", ok ? `${groups} tracked-wallet groups bought ${tk.symbol}` : `${groups} tracked-wallet groups bought ${tk.symbol} (failed safety)`,
+      `${buyers.length} tracked wallet addresses bought in the last 2 hours (${groups} heuristic groups; independent economic actors UNKNOWN): ${names}.${linked}${burst} Followed-wallet activity alone is not a safety check or trade recommendation.${safety}`, 0, mark);
   }
 }
 // " Trades on Fomo as @handle." when the wallet is a known Fomo trader.
