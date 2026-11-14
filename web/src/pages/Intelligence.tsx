@@ -182,7 +182,11 @@ export function Intelligence() {
         signal: AbortSignal.timeout(115_000),
       });
       const data = await response.json();
-      if (!response.ok) throw new Error(typeof data?.error === "string" ? data.error : "RESEARCH_REQUEST_FAILED");
+      if (!response.ok) {
+        if (data?.error === "MINT_LOCAL_EVIDENCE_UNAVAILABLE")
+          throw new Error("指定 Mint 未出现在当前本地经济归档索引中；没有调用模型，也不能推断链上无交易。");
+        throw new Error(typeof data?.error === "string" ? data.error : "RESEARCH_REQUEST_FAILED");
+      }
       if (!data || !Array.isArray(data.evidence) || !Array.isArray(data.knowledgeUse) || !Array.isArray(data.calls))
         throw new Error("RESEARCH_RESULT_INVALID");
       setResearchResult({ ...data, mint });
