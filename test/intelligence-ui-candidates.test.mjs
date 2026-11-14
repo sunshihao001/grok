@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import fs from "node:fs";
-import { selectObservedCandidates } from "../web/src/pages/intelligence/candidates.ts";
+import { selectObservedCandidates, resolveResearchTarget } from "../web/src/pages/intelligence/candidates.ts";
 
 const coins = {
   "aaa": { mint: "aaa", name: "Alpha", symbol: "ALP", born: 1 },
@@ -34,14 +34,34 @@ test("research workspace distinguishes tracked wallet address counts from relate
   assert.match(ui, /这里不将转账记为卖出/);
 });
 
-test("Coin to Intelligence deep link stays within existing Pulse and requires a manual model action", () => {
+test("user Coin Mint stays the target even if Pulse has no matching candidate", () => {
+  const observed = selectObservedCandidates(coins, cols, "all");
+  const selected = resolveResearchTarget(observed, "aaa", "explicit-mint-not-seen");
+  assert.equal(selected.mint, "explicit-mint-not-seen");
+  assert.equal(selected.observed, null);
+  assert.equal(selected.evidenceSource, "USER_MINT_LOCAL_ARCHIVE_ONLY");
+  const known = resolveResearchTarget(observed, "aaa", "ccc");
+  assert.equal(known.mint, "ccc");
+  assert.equal(known.observed?.coin.mint, "ccc");
+  const empty = resolveResearchTarget([], null, null);
+  assert.equal(empty.mint, null);
+  assert.equal(empty.observed, null);
+  assert.equal(resolveResearchTarget(observed, "aaa", null).mint, "aaa");
+});
+
+test("Coin deep-link, manual read-only research and client address gate use the exact Mint", () => {
   const coin = fs.readFileSync(new URL("../web/src/pages/coin/AiCopilot.tsx", import.meta.url), "utf8");
   const workspace = fs.readFileSync(new URL("../web/src/pages/Intelligence.tsx", import.meta.url), "utf8");
   assert.ok(coin.includes('"#/intelligence/" + encodeURIComponent(mint)'));
   assert.ok(coin.includes("encodeURIComponent(question.trim())"));
-  assert.ok(workspace.includes("setSearch(mint)"));
-  assert.ok(workspace.includes("setSelectedMint(mint)"));
-  assert.ok(workspace.includes("selected = candidates.find"));
+  assert.ok(workspace.includes("setExplicitMint(mint)"));
+  assert.ok(workspace.includes("window.addEventListener(\"hashchange\", syncCoinLink)"));
+  assert.ok(workspace.includes("resolveResearchTarget(candidates, selectedMint, explicitMint)"));
+  assert.ok(workspace.includes("const mint = researchMint;"));
+  assert.ok(workspace.includes("researchResult?.mint === researchMint"));
+  assert.ok(workspace.includes("NOT_OBSERVED_FOR_SPECIFIED_MINT"));
+  assert.ok(workspace.includes("disabled={!researchMint || !goal.trim()"));
   assert.ok(workspace.includes("onClick={() => void runLocalResearch()}"));
-  assert.ok(workspace.includes("disabled={!c || !goal.trim()"));
+  assert.ok(workspace.includes("127\\.0\\.0\\.1"));
+  assert.ok(!workspace.includes("127\\\\.0\\\\.0\\\\.1"), "no double escaping the localhost IP regex");
 });
