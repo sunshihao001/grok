@@ -21,9 +21,9 @@
 | 位置 | 已有可用的具体实现 | 限制和成品缺口 |
 |---|---|---|
 | 原版`server/` + `web/` | 原Pulse/Feed/市场与钱包触发、质量/Research/AI/Chart/交易/账户；SQLite；全新SQLite在**完全封网**Docker内可冷启、复启、HTTP health/pulse/UI通过，原代码保留 | 默认`npm start`因钱包/费用风险安全门禁仍会fail-close；真实市场源/网络/云端部署未验收 |
-| `CoinAiCopilot` → `#/intelligence/:mint?goal=...` | 已有明确的Mint+问题深链接，不自动跑模型、无签名/支付 | 当前Intelligence `selected=candidates.find(...)`仍需Pulse已观察候选；不是任意Mint真正打开分析的闭环 |
+| `CoinAiCopilot` → `#/intelligence/:mint?goal=...` | 已有Mint+问题深链；用户指定Mint始终优先，不在Pulse则显示“本地归档模式”，不自动调用模型 | 真实浏览器交互与真实数据/模型端到端仍未验收 |
 | `Intelligence.tsx` + `pulse-discovery.mjs` | 用户触发从当前Pulse最多12观察候选中选一个Mint或拒绝，服务端校验候选；知识先于选择读取 | 浏览器提交时间不等于provider first-available；无完整源市场总体、同源未入选分母与实时机会率 |
-| `start-intelligence-workbench.mjs` + `research-http.mjs` | 独立loopback 4547 HTTP，显式模型/SQLite配置和预检、任务/工具预算、Origin/Host校验；不导入原服务器 | 原版React本地端口4421已加入`DEFAULT_ORIGINS`，并新增恶意Origin拒绝测试（commit `a5d4bdab`）；远程浏览器不能直接访问loopback，尚无安全HTTPS认证代理 |
+| `start-intelligence-workbench.mjs` + `research-http.mjs` | 独立4547 HTTP，模型与SQLite显式配置、Origin/Host/loopback与额度限制 | 已加入原版React 4421默认来源、127.0.0.1浏览器匹配修复、无索引Mint的付费前置阻断；仍无公网安全HTTPS代理 |
 | `local-knowledge-loader.mjs` + `ai-workflow.mjs` | 11个来源候选、默认3份知识片段、来源hash、至多2个单Mint只读能力；模型计划不能授权新工具 | 没有真实模型任务A/B证明选得对/用得对；模型API费必须独立授权与控制 |
 | `offline-economic-reader.mjs` + `economic-claim-trace.mjs` | 读取**已有**SQLite经济表，局部转账/指令来源/接收者/卖出摘要与历史覆盖，不新建源 | 仅对归档证据成立；完整SOL资金路径、Swap+LP净对价、同批库存/成本和跨Mint资金闭环未真验 |
 | `followability-replay.mjs` + `investigation-continuation.mjs` | 拒绝过期/不合格纸面报价及不完整退出；局部钱包状态与下一步关注建议 | 真实可交易报价/退出、可复制净收益和长期Case Watcher未运行，`NOT_RUNNING_NO_AUTONOMOUS_WATCHER`必须保留 |
@@ -33,7 +33,7 @@
 | 交付包 | 要完成的具体用户路径 | 依赖/负责组件（不复制已有能力） | 通过标准与止损条件 | 状态 |
 |---|---|---|---|---|
 | **P0-A 基座安全启动** | 全新Blix可以在隔离条件下真正启动/重启并提供网页/API | 原版`server/db/people`、原始web构建、测试与安全门禁 | 封网容器首次/重启成功，SQLite完整，`npm start`无授权fail-close；不等于联网安全 | **AIRGAP_RUNTIME_VERIFIED** |
-| **P0-B 本地Coin→AI入口可用** | 任何合法Mint从Coin跳入AI页，不强制属于当前Pulse短名单；对“无本地归档”给明确状态，不错选另一枚币 | Coin路由、Intelligence、Research HTTP Origins、SQLite reader | 用本机4421与4547做不收费HTTP集成；目标Mint必须始终一致；伪模型+已保存测试样本；恶意Origin/越权拒绝 | **PARTIAL / 4421 Origin已修，任意Mint入口仍有限制** |
+| **P0-B 本地Coin→AI入口可用** | 用户指定合法Mint不依赖当前Pulse观察列表，目标不误选，无索引归档在模型调用前拒绝 | Coin UI、Intelligence、4547 HTTP、SQLite索引预检 | 浏览器构建+单元/HTTP伪模型+只读SQLite测试，真实浏览器/真实数据联调仍需做 | **CODE_AND_OFFLINE_HTTP_TESTED / 真实E2E待验** |
 | **P0-C 数据语义联通** | 从原Blix现有来源观察Mint→按时点归档→AI使用相同Mint与来源 | `sources/engine/coverage/db`为源职责；`intelligence`只读解释 | 先锁定用户授权的市场/SQLite；记录源时间、覆盖和缺失；模型不替数据源补采 | **UNVERIFIED_CONNECTED_RUNTIME** |
 | **P1-A 一枚真实Mint完整经济纵切** | 买入→Token转仓→接收地址实际卖出摘要→潜在跨Mint资金事件 | 既有`economic-events`、`wallet-signature-coverage`、`economic-network`、局部历史补查 | 每个能确认的动作能回查签名/指令/净额；同批库存/资金不能确认就UNKNOWN；与原版行为/历史差异明确 | **OFFLINE_PARTIAL_ONLY** |
 | **P1-B 两种优先级与机会评价** | 原Pulse/Wallet候选能分开解释研究价值和可参与性；信号可得后做只读成交模拟 | 原`triage/quality/research/quote/Paper`和`followability-replay` | 真实观察时点+指定金额下入/出报价+费用/滑点/不可成交样本，缺则阻止“盈利已验证” | **KNOWLEDGE_AND_PAPER_ONLY** |
@@ -57,9 +57,11 @@
 
 ### 5. 本轮建设裁决与下一次执行起点
 
-**P0-B已经修复一处实测前的接口差异**：原版Blix网页`4421`现列入sidecar的受控默认Origin，新增伪模型HTTP与恶意网站拒绝回归；**仍需解决Coin指定Mint不在当前Pulse短名单时被错误回退为其它候选的可见性问题**。要保留“浏览器未观察到该币”的事实，仅允许显式用户指定Mint走受控本地归档查询，不能虚构候选行情。之后以已有真实Mint SQLite进行P0-C/P1-A；真实模型API的费用需要另行许可。
+**P0-B已完成本轮代码与不收费HTTP验收**：Coin显式指定Mint不再回退到另一个Pulse候选；没有对应Pulse行情时只显示该Mint、行情未知，不造市值/Holder；本机127.0.0.1网页正则和原版4421来源已修；实际启动脚本也包含4421来源。收费模型调用之前按指定Mint查询**现有本地索引**，无记录返回422 `MINT_LOCAL_EVIDENCE_UNAVAILABLE`、额度不消耗且不证明全链无交易。源码和伪模型HTTP已测，**没有**在用户浏览器用真实SQLite+真实模型完成整条业务链。下一轮应找有完整签名的合法现存归档，联调P0-C/P1-A，模型供应商费用仍须明确许可。
 
 **禁止的假成品路线**：全量注入152单元/安装全部GMGN Skills/造第二个扫描引擎/绕过原版安全门禁/自动签名交易/在无可得报价时生成收益结果。真实发布和外部模型供应商的任何费用仍需明确权限。工程每轮最新状态只更新[建设台账](build-register.md)，本节保持相对稳定的产品验收合同。
+
+**2026-11-14 P0-B验收范围**：`intelligence-ui-candidates.test.mjs`验证指定Mint优先与不回退；`intelligence-workbench-http.test.mjs`通过真实本地HTTP+伪模型验证422无费用/额度消耗以及正确Mint调用；`intelligence-source-readiness.test.mjs`以真实临时SQLite验证只读预检与未归档状态。所有结论只属于代码/离线验证，不能扩大为真实行情、收费模型或公网认证验收。
 
 ## 产品边界
 - **Blix 本体**：原有市场发现、UI、SQLite、钱包观察和事件历史；不复制其已经成熟的同类实现。
