@@ -11,6 +11,8 @@ const MAX_BODY = 12_000;
 const MAX_RESPONSE = 512_000;
 const DEFAULT_ORIGINS = Object.freeze([
   'http://127.0.0.1:4420', 'http://localhost:4420',
+  // Original Blix React UI is served on 4421 by server/webapp.js.
+  'http://127.0.0.1:4421', 'http://localhost:4421',
   'http://127.0.0.1:5173', 'http://localhost:5173',
 ]);
 const json = (res, code, payload) => {
