@@ -80,6 +80,15 @@ test("Intelligence has a model-free exact-Mint archive path independent of paid 
   assert.ok(ui.includes('SIDECAR_URL + "/research"'));
 });
 
+test("existing Intelligence UI renders both research and trade anchors with inspectable evidence checks",()=>{
+  const ui=fs.readFileSync(new URL("../web/src/pages/Intelligence.tsx",import.meta.url),"utf8");
+  assert.match(ui,/目标锚点：调查价值 ≠ 实际交易机会/);
+  assert.match(ui,/activeResearch\.continuation\.anchors\.researchPriority\.status/);
+  assert.match(ui,/activeResearch\.continuation\.anchors\.tradeReadiness\.status/);
+  assert.match(ui,/activeResearch\.continuation\.anchors\.nextEvidence\.map/);
+  assert.match(ui,/knowledgeContext\.providedRecordCount/);
+});
+
 test("AI research receipt cannot silently attach another Mint's evidence to the selected coin", () => {
   const mint = "EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump";
   const other = "4p7SeR6361WJ4T4icgsYTnzAUzfA5NwM4CwYD9kMBjuK";
