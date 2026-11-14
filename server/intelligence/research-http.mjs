@@ -3,6 +3,7 @@
 // independent of the trading terminal's authentication or GET semantics.
 import { createServer } from 'node:http';
 import { runAiResearchTask } from './ai-workflow.mjs';
+import { runCapability } from './index.mjs';
 import { discoverPulseInvestigation, validatePulseDiscoveryInput } from './pulse-discovery.mjs';
 import { summarizeInvestigationContinuation } from './investigation-continuation.mjs';
 
@@ -41,6 +42,13 @@ async function readBody(req, route) {
   try { data = JSON.parse(Buffer.concat(parts).toString('utf8')); }
   catch { throw new Error('REQUEST_NOT_JSON'); }
   if (route === '/discover') { validatePulseDiscoveryInput(data); return data; }
+  // Deterministic Mint inspection has NO goal, model or provider-side side effects.
+  if (route === '/inspect') {
+    if (!data || typeof data !== 'object' || Array.isArray(data) ||
+        Object.keys(data).length !== 1 || typeof data.mint !== 'string' ||
+        !MINT.test(data.mint)) throw new Error('REQUEST_INVALID_SCOPE');
+    return { mint: data.mint };
+  }
   if (!data || typeof data !== 'object' || Array.isArray(data) ||
       Object.keys(data).some(x => !['goal','mint'].includes(x)) ||
       typeof data.goal !== 'string' || data.goal.trim().length < 2 ||
@@ -66,23 +74,23 @@ function errorCode(error) {
 export function createResearchHttpServer({
   model = null, readEconomic = null, loadKnowledge = null, sourceReadiness = null,
   mintReadiness = null,
-  allowedOrigins = DEFAULT_ORIGINS, maxTasks = 8,
+  allowedOrigins = DEFAULT_ORIGINS, maxTasks = 8, maxInspections = 24,
 } = {}) {
   if (!Array.isArray(allowedOrigins) || !allowedOrigins.length ||
       allowedOrigins.some(x => typeof x !== 'string' || !/^https?:\/\/[^/]+$/.test(x)) ||
       !Number.isInteger(maxTasks) || maxTasks < 1 || maxTasks > 100 ||
+      !Number.isInteger(maxInspections) || maxInspections < 1 || maxInspections > 100 ||
       (sourceReadiness !== null && typeof sourceReadiness !== 'function') ||
       (mintReadiness !== null && typeof mintReadiness !== 'function')) {
     throw new Error('RESEARCH_SERVER_CONFIGURATION_INVALID');
   }
   const origins = new Set(allowedOrigins);
-  let tasksStarted = 0, busy = false;
-  // Unlike function-presence checks, production startup explicitly probes the
-  // existing SQLite archive. A broken path or missing schema must never enable
-  // a paid-model request and then fail only after billing begins.
-  const readiness = async () => {
-    if (typeof model !== 'function' || typeof readEconomic !== 'function')
-      return { ready: false, archiveStatus: 'MODEL_OR_READER_NOT_CONFIGURED' };
+  let tasksStarted = 0, inspectionsStarted = 0, busy = false;
+  // Archive inspection is a separate, zero-model workflow. Even when the
+  // operator has not enabled a paid model, they may inspect an EXISTING archive.
+  const archiveReadiness = async () => {
+    if (typeof readEconomic !== 'function')
+      return { ready: false, archiveStatus: 'READER_NOT_CONFIGURED' };
     if (!sourceReadiness)
       return { ready: true, archiveStatus: 'ARCHIVE_PREFLIGHT_NOT_CONFIGURED_FOR_INJECTED_READER' };
     try {
@@ -94,6 +102,11 @@ export function createResearchHttpServer({
     } catch {
       return { ready: false, archiveStatus: 'ARCHIVE_READINESS_PROBE_FAILED' };
     }
+  };
+  const readiness = async () => {
+    if (typeof model !== 'function')
+      return { ready: false, archiveStatus: 'MODEL_OR_READER_NOT_CONFIGURED' };
+    return archiveReadiness();
   };
   const server = createServer(async (req, res) => {
     const remote = req.socket.remoteAddress || '';
@@ -114,13 +127,17 @@ export function createResearchHttpServer({
     }
     if (req.url === '/health' && req.method === 'GET') {
       const status = await readiness();
+      const archive = await archiveReadiness();
       json(res, 200, { service:'blix-research-readonly', ...status,
+        inspectionReady:archive.ready,
+        inspectionArchiveStatus:archive.archiveStatus,
+        remainingInspections:Math.max(0,maxInspections-inspectionsStarted),
         dataSource:'EXISTING_LOCAL_SQLITE_ONLY',
         providerEnabled:typeof model === 'function',
         remainingTasks:Math.max(0,maxTasks-tasksStarted), busy });
       return;
     }
-    if (!['/research','/discover'].includes(req.url) || !['OPTIONS','POST'].includes(req.method)) {
+    if (!['/research','/discover','/inspect'].includes(req.url) || !['OPTIONS','POST'].includes(req.method)) {
       json(res, 404, {error:'ROUTE_NOT_FOUND'});return;
     }
     if (!origin || !origins.has(origin)) {
@@ -130,19 +147,22 @@ export function createResearchHttpServer({
     if (!(req.headers['content-type'] || '').toLowerCase().startsWith('application/json')) {
       json(res,415,{error:'JSON_ONLY'});return;
     }
-    const source = await readiness();
+    const inspecting = req.url === '/inspect';
+    const source = inspecting ? await archiveReadiness() : await readiness();
     if (!source.ready) {
-      json(res,503,{error:'RESEARCH_NOT_CONFIGURED',
+      json(res,503,{error:inspecting?'INSPECTION_NOT_CONFIGURED':'RESEARCH_NOT_CONFIGURED',
         ...(sourceReadiness ? {archiveStatus:source.archiveStatus} : {})});return;
     }
     if (busy) {json(res,429,{error:'RESEARCH_BUSY'});return;}
-    if (tasksStarted >= maxTasks) {json(res,429,{error:'TASK_BUDGET_EXHAUSTED'});return;}
+    if (inspecting ? inspectionsStarted >= maxInspections : tasksStarted >= maxTasks) {
+      json(res,429,{error:inspecting?'INSPECTION_BUDGET_EXHAUSTED':'TASK_BUDGET_EXHAUSTED'});return;
+    }
     let input;
     try { input = await readBody(req, req.url); }
     catch (error) {json(res,400,{error:errorCode(error)});return;}
     // A manually specified Mint may be absent from this PARTICULAR local archive.
     // Stop before consuming the model budget; do not call it to invent missing facts.
-    if (req.url === '/research' && mintReadiness) {
+    if ((req.url === '/research' || inspecting) && mintReadiness) {
       let archive;
       try { archive = await mintReadiness(input.mint); }
       catch { json(res,503,{error:'MINT_ARCHIVE_PREFLIGHT_FAILED'});return; }
@@ -153,8 +173,31 @@ export function createResearchHttpServer({
         return;
       }
     }
-    busy = true;tasksStarted++;
+    busy = true;
+    if (inspecting) inspectionsStarted++; else tasksStarted++;
     try {
+      if (inspecting) {
+        // Reuse the existing approved capability, never the original Blix GET
+        // route (which may mutate caches) or an arbitrary user-supplied SQL query.
+        const result = await runCapability('mint-economic-evidence', {
+          mint:input.mint, readEconomic,
+        });
+        if (result?.mint !== input.mint || !Array.isArray(result?.unknowns) ||
+            !result.facts || typeof result.facts !== 'object')
+          throw new Error('INSPECTION_EVIDENCE_CONTRACT_MISMATCH');
+        const evidence = [{capability:'mint-economic-evidence',input:{mint:input.mint},result}];
+        const continuation = summarizeInvestigationContinuation({
+          mint:input.mint, investigation:{evidence},
+        });
+        json(res,200,{
+          mint:input.mint, status:result.status, assessment:null,
+          calls:[], evidence, knowledgeUse:[], unknowns:result.unknowns,
+          continuation, sourceMode:'LOCAL_SQLITE_ONLY',
+          modelMode:'NOT_USED', verifiedMarketOpportunity:false,
+          liveExecutionValidated:false,
+        });
+        return;
+      }
       const result = req.url === '/discover'
         ? await discoverPulseInvestigation({
           input, model, readEconomic, loadKnowledge, runResearch:runAiResearchTask,
