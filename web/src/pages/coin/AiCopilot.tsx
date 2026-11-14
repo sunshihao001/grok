@@ -114,6 +114,11 @@ export function CoinAiCopilot({ mint, token, coin }: Props) {
           independently verify the chain or run a new model. Connect the approved agent endpoint
           only after model permission, server isolation and full integration tests.
         </p>
+        <a href={"#/intelligence?mint=" + encodeURIComponent(mint) + "&goal=" + encodeURIComponent(question.trim())}
+          aria-label="Open this Mint in the read-only AI investigation workspace"
+          className="rounded-full border border-rule-2 px-4 py-2 text-sm font-semibold text-ink hover:bg-paper-3">
+          Open read-only AI workspace
+        </a>
         <button type="button" onClick={copyTask} disabled={!question.trim()}
           className="shrink-0 rounded-full bg-accent px-4 py-2 text-sm font-semibold text-accent-ink disabled:opacity-50">
           Copy research task
