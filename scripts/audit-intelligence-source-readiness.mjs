@@ -80,14 +80,23 @@ if(invalid||typeof opts['--db']!=='string'||!MINT.test(opts['--mint']||'')){
           +'SELECT from_owner wallet FROM econ_instructions WHERE mint=? AND from_owner IS NOT NULL '
           +'UNION SELECT to_owner wallet FROM econ_instructions WHERE mint=? AND to_owner IS NOT NULL'
           +') ORDER BY wallet LIMIT 8').all(mint,mint);
-        const lookup=db.prepare('SELECT anchor_reached,gaps_seen FROM wallet_sig_windows WHERE wallet=?');
-        let known=0,anchorNotReached=0,withGaps=0;
+        const tracksInitialSample=has('wallet_sig_windows','ever_initial_sample');
+        const lookup=db.prepare('SELECT anchor_reached,gaps_seen'
+          +(tracksInitialSample?',ever_initial_sample':'')
+          +' FROM wallet_sig_windows WHERE wallet=?');
+        let known=0,anchorNotReached=0,withGaps=0,initialSamples=0,unresolvedRisk=0;
         for(const row of owners){
           const w=lookup.get(row.wallet);
-          if(w){known++;if(!w.anchor_reached)anchorNotReached++;if(w.gaps_seen)withGaps++;}
+          if(w){known++;if(!w.anchor_reached)anchorNotReached++;if(w.gaps_seen)withGaps++;
+            if(tracksInitialSample&&w.ever_initial_sample)initialSamples++;
+            if(w.gaps_seen||(tracksInitialSample&&w.ever_initial_sample))unresolvedRisk++;}
         }
         windows={sampledOwnerCount:owners.length,ownersWithSignatureWindow:known,
-          anchorNotReached,withGaps,sampleMayBeTruncated:owners.length===8,
+          anchorNotReached,withGaps,
+          everInitialSampleOwners:tracksInitialSample?initialSamples:null,
+          initialSampleFlagAvailable:tracksInitialSample,
+          unresolvedHistoricalRiskOwners:tracksInitialSample?unresolvedRisk:null,
+          sampleMayBeTruncated:owners.length===8,
           lifetimeHistoryComplete:false};
       }
     }
@@ -140,6 +149,7 @@ if(invalid||typeof opts['--db']!=='string'||!MINT.test(opts['--mint']||'')){
         'No local record means UNKNOWN outside this file, not no on-chain activity.',
         'Capture time and browser display time do not prove the first tradable signal time.',
         'An indexed transfer does not prove complete wallet assets or funder control.',
+        'An initial wallet signature sample is not a lifetime backfill; anchor_reached only describes the current incremental scan.',
         'Sample hash matches do not prove correctness of all parsed economic actions.',
       ],
       next:'Compare one Mint and bounded slot/time window against original source delivery logs, retained RPC signatures, and independent replay.',
