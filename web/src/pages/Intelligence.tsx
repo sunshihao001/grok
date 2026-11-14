@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { usePulse, type ColKey } from "@/lib/pulse";
 import { Page, Panel, money } from "@/components/page";
 import { toast } from "@/components/ui/toast";
-import { selectObservedCandidates, resolveResearchTarget, type ObservedStage } from "./intelligence/candidates";
+import { selectObservedCandidates, resolveResearchTarget, validateMintResearchReceipt, validatePulseSelectionReceipt, type ObservedStage } from "./intelligence/candidates";
 
 const STAGES: { key: ObservedStage; label: string }[] = [
   { key: "all", label: "所有观察" }, { key: "stretch", label: "临近迁移" },
@@ -228,8 +228,8 @@ export function Intelligence() {
           throw new Error("指定 Mint 未出现在当前本地经济归档索引中；没有调用模型，也不能推断链上无交易。");
         throw new Error(typeof data?.error === "string" ? data.error : "RESEARCH_REQUEST_FAILED");
       }
-      if (!data || !Array.isArray(data.evidence) || !Array.isArray(data.knowledgeUse) || !Array.isArray(data.calls))
-        throw new Error("RESEARCH_RESULT_INVALID");
+      if (!validateMintResearchReceipt(data, mint))
+        throw new Error("RESEARCH_RESULT_MINT_OR_EVIDENCE_MISMATCH");
       setResearchResult({ ...data, mint });
       // A model response is a bounded research draft, not a trading recommendation.
       toast("已收到本地只读调查结果；链上证据覆盖和模型解释仍需复核");
@@ -265,7 +265,8 @@ export function Intelligence() {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(typeof data?.error === "string" ? data.error : "DISCOVERY_REQUEST_FAILED");
-      if (!data?.discovery || typeof data.discovery.reason !== "string" ||
+      if (!validatePulseSelectionReceipt(data, shortlist.map(item => item.mint)) ||
+          typeof data.discovery.reason !== "string" ||
           !data.discovery.source || !Array.isArray(data.discovery.unknowns))
         throw new Error("DISCOVERY_RESULT_INVALID");
       setDiscoveryResult(data);
