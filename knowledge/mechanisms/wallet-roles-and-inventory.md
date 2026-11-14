@@ -295,3 +295,19 @@ Million整套服务适合钱包发现→订阅→后续活动→资金关系，�
 - **群体生命周期**：新钱包接收、旧钱包消失、跨Mint重复地址均可能来自池/共享服务、快照样本限制、历史回补或实际不同经济主体；需另查同窗资金边和反证。
 
 **还未完成**：公共池/路由/托管实际分类、群体经济控制归因、跨Mint SOL资金闭环、Token-2022可动用库存、真正成本和已实现P&L，以及原BubbleMap与新图谱的前端联动。按“地址类型/关系类型/证据签名/时间覆盖/竞争解释”显示，不对UNKNOWN强行填标签。
+
+## 2026-11-14｜全域归位：D04 钱包角色 × D06 筹码库存的多维判断
+
+**钱包不是一种永恒身份标签。** 一条地址记录要同时回答“是谁/是什么账户”“做了什么”“什么时刻”“属于哪个Mint/Pool/市场阶段”“资金或Token从哪里来”“哪些只是供应商标签”。GMGN Wallet Radar/First70、Insider/Sniper/Bundler、Wallet Score、持仓和钱包详情是重要的问题来源，不等于被AI核实的共同私钥控制或真实可跟收益。完整外部定义见 [GMGN×成品专项](../../docs/project/reference-driven-goal-model-v0.1.md#13-2026-11-14gmgn--既有成熟产品--blix机会优先全局再整合v04)。
+
+| 独立观察维度 | 应保留的角色或事件区分 | 不能过滤成的错误事实 |
+|---|---|---|
+| 身份/权限 | TokenAccount、Owner、Authority、Fee Payer、池/Vault/Router/CEX/托管、Creator/Dev、可归属私人钱包 | 一个Token Account、池地址或标签=一个独立资金控制者 |
+| 进入市场方式 | First70早买、狙击、Bundle候选、独立买入、接收转入、新创建/新活跃、KOL营销关联、跟踪钱包触发的新Mint | 同Slot=Jito Bundle；收到Token=DEX买入；新收录=新钱包 |
+| 交易行为 | 多次加仓、部分卖出、完整卖出候选、转仓、LP变化、领币/分发、被动做市与刷量候选 | `full_exit`/余额归零自动等于Swap卖出；同时买卖即同控 |
+| 筹码/库存 | 当前Token余额、转移gross与owner净变、初始发行/池/LP库存、受益权、实际可卖量、批次成本和未知转入成本 | Top10跟踪钱包比例=总供应集中度；转入后另有卖出摘要=出售该批筹码 |
+| 历史与可复制性 | 钱包自己的已实现/未实现PnL、7D/30D观测窗口、持仓中位时间、交易频率、信号传播延迟、个人可执行窗口 | “优秀历史钱包”直接转为“适合外部跟单”的钱包 |
+
+**标准输出不要只有好/坏钱包标签**：候选地址列表（发现源/角色/证据签名/时间窗/覆盖）、已见买卖与转仓、当前可核库存、竞争角色解释、未捕获地址/缺失历史、`research_priority`和`trade_readiness`的不同判断。池/公共服务可作为事实保留并从“独立私人买家”分母剔除，不应把相关真实经济事件从原始数据永久删除。
+
+**原版与扩展边界**：原Blix `wallets.js`已有钱包买入触发Mint、启发式`independent()`去重；`research.js`按`COUNT(DISTINCT wallet)`统计原始买家，二者分母不同。原`wtrack.js`混合Swap+Transfer摘要有遗漏条件；扩展`economic-events.mjs`和`economic-claim-trace.mjs`允许局部原文指令追溯，但真实库存同批来源、Dev真实控制、完整分类准确率仍UNKNOWN。关键对照详见 [跨信号源码复核](../references/synapse-cross-signal-mechanisms-20261114.md) 与 [P1/P2知识实证边界](../references/p1-p2-knowledge-reconciliation-20261113.md)。
