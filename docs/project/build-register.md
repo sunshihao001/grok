@@ -5,6 +5,23 @@
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
 
+## 2026-11-14｜R-43：Coin指定Mint不串币、AI入口可用与未归档收费前阻断
+
+**承接 R-42 的P0-B**：原版Coin → Intelligence导航虽已可传Mint及问题，但原 `Intelligence.tsx` 逻辑在指定Mint不在Pulse可见候选时 `selected=candidates.find(...)??candidates[0]`，导致目标消失甚至回退到另一枚币；`SIDECAR_URL`对`127.0.0.1`使用了错误转义的RegExp；本机sidecar实际启动配置`BLIX_AI_ALLOWED_ORIGINS`默认未包含原版4421（此前仅修了HTTP模块默认值）。另外，旧sidecar只做SQLite结构预检，无法在调用可能收费的模型之前辨识当前Mint没有归档记录。
+
+**本轮实改并且保留原版Blix所有业务代码**：
+
+1. 原位扩充`web/src/pages/intelligence/candidates.ts`的`resolveResearchTarget`：**用户明确指定Mint的优先级高于Pulse候选**；同一Mint若在Pulse列表有原观察则显示观察来源，无则`USER_MINT_LOCAL_ARCHIVE_ONLY`，不虚构代币行情、不回退成另外的币。未指定Mint时保持原Pulse选择逻辑，不改变其榜单顺序。
+2. `Intelligence.tsx`通过hash/路由和明确任务状态分别管理选中Mint、已知市场数据和已有AI回执；`runLocalResearch`与`copyTask`绑定实际`researchMint`，市场未观察时仍能对指定Mint发起**用户手动**的已授权只读调查请求、展示无行情状态。用户切换市场过滤/列表时清理显式指定状态及旧回执；`127.0.0.1`浏览器hostname正则由错误双反斜线修为正确单反斜线，避免无故禁用本机4547。
+3. `scripts/start-intelligence-workbench.mjs`也将`http://127.0.0.1:4421`和`http://localhost:4421`补进**实际启动脚本的默认Origin**，保留`research-http.mjs`的loopback、Host、Origin和额度门禁。不是允许远程公网、签名、交易或模型自动启动。
+4. `offline-economic-reader.mjs`新增`probeExistingEconomicMint`，在**指定的现有**SQLite只读打开、`query_only`、索引查`econ_instructions`/`wallet_trades`目标Mint是否留存；`research-http.mjs`在`/research`模型/任务额度前调用（仅实际服务被显式配置时）。未索引返回HTTP 422 `MINT_LOCAL_EVIDENCE_UNAVAILABLE`及受限状态字符串，前端显示本地未收录，不谎称全链无交易；数据库缺失、结构错、非法Mint仍拒绝，不创建数据库。该门禁只适用于**已有本地证据**，不是全链完备判定。
+5. 回归：`test/intelligence-ui-candidates.test.mjs`真实调用`resolveResearchTarget`确保不串币，检查手动按钮与localhost正则；`test/intelligence-source-readiness.test.mjs`临时真实SQLite以文件哈希确认Mint级预检无写入；`test/intelligence-workbench-http.test.mjs`真实HTTP+注入伪模型确认缺Mint返回422，模型调用0、任务额度不减；存在Mint才在正确地址执行授权的模型模拟和SQLite报告。**没有用真钱、网络供应商、真实收费模型、交易或签名**。
+
+**验收级别**：现有Node回归、HTTP注入伪模型及前端构建是**CODE/OFFLINE_MOCK_HTTP**证据；原版Blix独立封网冷启动是此前R-41证明。二者均不等于用户当前浏览器真实交互、已授权市场联网、生产云电脑或完整链上资金/库存实测。本轮没有触发既有`npm start`安全门禁覆盖，也未将整个Blix宣称为只读模式。PR#23继续Draft未合并；按每次最新HEAD检查GitHub Actions并保留独立Uptime失败。
+
+**下一项工程入口**：P0-C/P1-A：确认一份已获授权、含同一Mint实际`econ_transactions`和`econ_instructions`/钱包历史的现有SQLite快照，与原Blix源消息的时间/池/Token账户对齐。再走一次`Coin→Intelligence→本地4547→只读归档→报告`真实浏览器E2E；无真实归档时，正确的成果是精确报不可用，不是模拟链上业务成功。真实供应商/模型费用及目标运行机器仍需明确授权与条件。
+
+
 ## 2026-11-14｜R-42：十二领域专业知识原位归拢 + 扩展成品合同 + 本机AI来源修复
 
 **本轮用户目标**：把分散在L0–L7/D01–D12、旧Grok/Hermes/qb-/meme-、65参考、GMGN/OKX/Synapse/ai-d中的专业知识整理清楚并归回正确位置，然后判断完整原版Blix上的AI扩展怎样走到可运行成品。**不是**新建概念层级、专家制度、第二套数据源或以整理文件数判定业务完成。
