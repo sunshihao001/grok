@@ -1,5 +1,10 @@
 # Blix 参考项目与未整体搬迁资产入口
 
+## 2026-11-14｜GMGN与成熟参考项目机会优先的全局再梳理
+
+[现有参考目标体系第13节（V0.4）](../../docs/project/reference-driven-goal-model-v0.1.md#13-2026-11-14gmgn--既有成熟产品--blix机会优先全局再整合v04)将GMGN官方 Wallet Radar、First70、Insider/Sniper、钱包Score/Style、跟单参数，与OKX/Million/Pulse/PumpTrace/HoldTech/Synapse及Nansen/Arkham/Bubblemaps/Cielo、旧Hermes/qb-/meme-等统一比较。**原项目知识覆盖不受当前代码适配限制；产品实施仍按真实缺口/增量价值选取**。最重要的新联系：多Mint共同持仓/交易不等于同控；钱包赚钱不等于用户可复制；卖出与转仓应由指令级证据核验。旧65项来源目录及之前全部Synapse分级原位保留，未重做另一套标签库或硬编码AI工作流。
+
+
 ## 2026-11-14｜Synapse 全分类纵深第二轮：机制与 Blix 源码断点
 
 [Synapse 全分类跨信号机制研究与可证伪反例](synapse-cross-signal-mechanisms-20261114.md)继承前轮全部源分类，以 **M1–M6 六组经济机制**做多对多关联（不是新强制软件层），并对照 Million 源码、公开链上样本/论文、实盘失败复盘与 Solana 官方语义。最重要的 **Blix SOURCE_READ 纠偏**：原版 walletSignals→Mint→vet 已存在；实质待核处是 research AI 的原始钱包计数与 walletSignals 启发式独立组数不一致，以及 wtrack 对同笔 Swap+Transfer 跳过转账解析的漏项条件。三项合成反例已执行算术/去重断言，**不是主网实测或策略盈利证明**。优先修现有链路的证据语义和端到端验收，不重复建设市场/钱包筛选器。
