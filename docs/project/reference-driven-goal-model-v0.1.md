@@ -274,3 +274,116 @@
 **G2六种用途的共同能力**因而增加：看得见/看不见什么；为什么如此；现有经济解释何时被新事实改变；哪些被跳过的对象可能推翻当前判断；某个结构在当时是否有足够可得信息及可执行条件。不是六个新模块；它们共享原Blix数据/报告事实，按不同用户目标输出不同的倾向性结论。
 
 **目前优先实证问题**：对同一发行窗口，追溯发生→被源捕获→nursery/active→AI排队/取消→评级/未评级→后续事实/机会；然后围绕已归档Mint复核真实Swap/LP，对应市场与观察两个机制。若无法获得数据，则把数据缺口与可替代方案明确列出，不能凭长报告补出“未选中对象”的历史结果。尚未改业务代码、做独立模型A/B或Blix线上监控验收。
+
+## 13. 2026-11-14｜GMGN × 既有成熟产品 × Blix机会优先：全局再整合（V0.4）
+
+> **本节为原有 G0–G4、多参与者 G2、D01–D12 及外部产品完整来源目录的**原位升级**，不是第十三个专家领域、新总评分器、新交易软件或代替前面内容。本文重启点来自用户：“把GMGN这些有用的项目和类似之前看过的项目再进行结合，重新梳理一遍”。保持：**实际可参与的交易机会发现优先、深度调查支撑、Blix原版完整保留、AI依授权主动研究、当前仅只读/离线**。
+>
+> **证据分层**：\`OFFICIAL_FEATURE\`=产品官方文档/README（可说明作者声称做什么，不证明实时效果）；\`SOURCE_READ\`=本轮重新打开仓库真实 README 或 Skill 原始文件；\`BLIX_SOURCE_READ/CI_PRIOR\`=Blix仓库实际代码和此前明确SHA的离线CI；\`USER_PARAPHRASE\`=上传的 Synapse 方法笔记，不能当官网全文；\`INFERENCE\`=本项目跨产品研究提出的机制和产品建议；\`UNKNOWN\`=未运行平台/市场/AI效能测试或接口实际鉴权。2026-11-14 当前 PR #23 仍 Draft、未合并且 mergeable=false；PR #24 仍独立 Draft。主研究记录在 blix，PR #23 的工程进展在其独立 [build-register.md](https://github.com/sunshihao001/grok/blob/integration/blix-evidence-readonly-20261108/docs/project/build-register.md)；**不要把两个分支的文件默认为已经合并**。
+
+### 13.1 产品重新定位：五个不同问题，不能让任一外部产品替代总目标
+
+| 用户实际问题 | 推荐参照的产品逻辑 | Blix 现有基础 | 最有价值的增量，不是再做同类页面 |
+|---|---|---|---|
+| **哪些 Mint 刚刚值得关注？** | GMGN New Pair/Trending/Discover、OKX New Token Screening、Pulse生命周期/负例、pumpwatch发行全集 | Discover/Pulse、engine/triage/early/research/quality/brain | 比较“原版发现到的全候选、被拒候选、后来的结果”，增加来源覆盖和事件可见时点核查；钱包触发候选入口**已经**存在 |
+| **什么钱包/群体在买，为什么？** | GMGN Wallet Radar/First70/Insider/Sniper/Bundler、Million Wallet↔Mint、HoldTech holder overlap、Nansen 标签 | wallets/wtrack/bubblemap/holders/walletSignals | 关联地址数 vs 启发式组数 vs 真实经济主体分别呈现；从Mint发现钱包、从钱包关联其他Mint；公共服务和跟风是竞争解释 |
+| **Token 从哪里来，是否转仓后卖出？** | Synapse 14 类信号和 DEX Visor、PumpTrace Creator/直接转移、Bubblemaps Time Travel/Magic Nodes、Hermes/qb- | 钱包汇总、Bubble Map；PR#23原始RPC归档/指令级 Token 转移/后续卖出摘要 | 把Swap、转移、接收者后续卖出分列；交易事件身份按签名+指令去重；未掌握同批库存与资金去向时明确 UNKNOWN |
+| **好钱包能不能跟，参数该怎么选？** | GMGN wallet-score（Track Record vs Copyability）、GMGN Copy Trade 参数、Million followability/跳过决策、OKX Wallet Analysis | 原 Wallet PnL/Paper/Brain/Track Record，PR#23 followability-replay 纸面收据 | 钱包胜率/历史利润≠用户在收到信号后的净可成交收益；以信号首次可见→买入/卖出报价→延迟、滑点、池深、费用、失败状态检验；只模拟和讨论，不实际跟单 |
+| **这次推论怎样随着新证据更新？** | Cielo 自选地址事件、Pulse 历史档案、PumpTrace 游标/回补、Million Decision Log/Shadow、Arkham实体网络 | Journal/SQLite/Health/AI Research；PR#23调查继续状态是只读快照 | 对“为什么选/为什么跳过/什么时候才知道”提供可追溯理由；持续监听、历史恢复、实时业绩尚需真正验证，不能用一次AI文案替代 |
+
+**裁决**：GMGN的“交易终端产品体验”、Million的“钱包-代币双向发现和跳过理由”、Pulse的“市场记忆”、PumpTrace/Hermes/qb-的“证据化行为调查”、Synapse的“行为信号与时间轴”、OKX的“已包装只读工具调用”、Nansen/Arkham/Bubblemaps的“成熟交互”、meme-/Why-Solana的“机制与反证”，在同一Blix里可**按问题互相支持而不互相接管**。\`research_priority\` 与 \`trade_readiness\` 是两个待对照的**分析结果维度**，不是要求第二套程序化硬过滤，且不代表PR#23已有生产字段。
+
+### 13.2 GMGN 专项逆向：重新恢复完整业务知识，而不只是复制“聪明钱”标签
+
+| GMGN 原产品能力与官方来源 | 应恢复的专业问题与内部分支 | 现有项目对应位置 / 避免的错用 |
+|---|---|---|
+| **GMGN Discover、New Pair、Trending**；[Quick Start](https://docs.gmgn.ai/index/quick-start.md) | 按发现渠道、代币生命周期、市场活动、交易量/持仓变化、叙事信息发现Mint；观察信号出现在趋势之前还是之后；未选中样本去哪了 | 原版 Pulse/Discover/Early/Triage 已在做，重点对比来源Universe、到达时点、被拒记录，不能再建一份市场扫描器 |
+| **GMGN Wallet Radar**；[官方文档](https://docs.gmgn.ai/index/wallet-radar.md) | 多Mint共同交易/共同持仓→反向发现高利润/早期入场地址；\`Most Bought\`、\`Highest Profit\`、\`Earliest Bought\`、\`Shared Holdings\`；文档支持最多10个Mint同时研究 | Million \`Wallet↔Mint\`、qb-关键钱包矩阵、Blix钱包关联图；**跨币重复地址≠同一个团伙**，需钱包角色、资金源和不同市场阶段对照。Radar报告结束需要“何时快照/跟踪列表更新” |
+| **GMGN Insider/Sniper/First70**；[官方文档](https://docs.gmgn.ai/index/insider-traders-snipers-first-70-buyers.md) | \`first 70 buyers\`、发射初期狙击、未见公开买入但持币的潜在Insider、初始持仓/后续加仓/部分卖出/转出、总供应分母；官方明确其持仓状态非实时保证，\`Sell Part\`部分语义存在转移与卖出难辨 | 与 Synapse S03/S07/S10、HoldTech同槽、新鲜地址、Hermes筹码库存相联；以PR#23指令级转账解决**有证据的可分部分**，不能把GMGN \`insider\` 标签当法律内幕事实 |
+| **GMGN Token Skill**；[公开Skill源码](https://github.com/GMGNAI/gmgn-skills/blob/main/skills/gmgn-token/SKILL.md) | \`smart_degen\`、\`renowned\`、\`fresh_wallet\`、\`dev\`、\`sniper\`、\`rat_trader\`、\`bundler\`、\`transfer_in\`、\`dex_bot\`、\`bluechip_owner\`；同一个钱包可有多角色、且角色随时间变动 | Blix Holder/钱包标签扩展的**问题表征**；强行把所有来源标签汇总相加会重复计分。\`bundler\`标签不自动证明 **Jito Bundle** 的具体提交/原子交易关系；需原交易或Bundle来源独立核实 |
+| **GMGN钱包详情、历史收益与节奏**；[官方钱包页](https://docs.gmgn.ai/index/wallet-detail-page.md) | 7D/30D PnL、已实现/未实现、平均成本/持有时长、交易次数、\`Sold > Bought\`、\`Didn’t buy\`（转入候选）、10秒买卖机器人/吸引跟随者的模式 | Blix Wallet/Track Record + Hermes/qb；必须区分钱包自身盈亏、转入资产导致的错误成本、快进快出使跟随者赶不上 |
+| **GMGN wallet-score / wallet-style**；[评分Skill源码](https://github.com/GMGNAI/gmgn-skills/blob/main/skills/gmgn-wallet-score/SKILL.md)、[风格源码](https://github.com/GMGNAI/gmgn-skills/blob/main/skills/gmgn-wallet-style/SKILL.md) | 关键独立问题：\`track-record\`（钱包本身战绩） vs \`copy-tradeability\`（跟单者能获得多少）；包括速度、延迟、滑点/费、回测代理、Dev声誉；以**中位数可复制窗口**替代简单平均持仓时长作为节奏描述候选 | 对接 Million copyability、Blix PR#23只读 followability replay；其评分加权/阈值为作者启发式、回测是近似，未复现本市场优势；**不直接迁移其数字阈值或买入建议** |
+| **GMGN Copy Trade参数**；[官方操作说明](https://docs.gmgn.ai/index/copy-trade-copy-smart-money-automatically-earn-sol.md) | 固定金额/最大跟随额、比例跟卖/独立止盈止损、下单频率、创建时间、池流动性、市值上限/下限、源钱包金额、交易平台、加仓次数、优先费、Anti-MEV、滑点、失败/重试；文档Lightning低确认可能逆序/重组/重复 | **把参数作为只读演练维度**，先比较信号时效、池容量、复制延迟与费用，别在Blix附加新的交易执行器。收费与产品参数可能随时间变动，必须使用实际版本；禁用真实签名/买卖 |
+| **GMGN Agent Skills / API**；[官方技能入口](https://gmgn.ai/ai)、[公开Skills仓](https://github.com/GMGNAI/gmgn-skills) | 已包装Token、市场、钱包、持仓、交易员、监控、风险调查工具；学它的**任务级组合和字段语义**，非先安装所有Skills或默认开启Trading | 优先现有Blix/OKX只读能力。GMGN付费/API配置**不是初期依赖**；历史项目暂不充值使用GMGN，公开文档及源码足以做这一轮业务语义研究 |
+| **X Tracker、SnipeX、新闻/社交**；[完整官方目录](https://docs.gmgn.ai/index/llms.txt) | 传播/项目公告/X变化与链上入场是否在时间上相关？如何发现新Mint合约、区分广告或营销推动与独立需求？ | Blix Social/Research/Narratives已有候选；AI可调用相关知识与事实做交叉解释，不能靠社交热度或KOL标签单独证明有收益 |
+
+**GMGN真正能提升本项目的三个产品认知**：
+- **跨 Mint 的不同价值**：共享持仓、最早买入、买入频率和已实现盈利回答的是**不同问题**。同一批“同时买入”可以是协同、同一服务、跟风或相同策略；**谁先发现某Mint** 与 **谁具备可复制节奏**可能是不同钱包。
+- **Wallet Score 不是一个单值**：历史稳定盈利、是否具备信息优势、跟随者看到信号后的净可成交性、是否可能是制造跟单行情的Dev/刷子，都应分开思考。强行做“大综合聪明钱分数”会丢掉关键区分。
+- **参数是经济条件，不只是按钮**：例如固定金额/最大金额改变订单冲击；市值、流动性和币龄门槛改变样本选择；优先费与滑点改变净收益；Lightning更快也存在重新组织/确认风险。观察到交易不等于能按钱包成交价复制。**无需提供真实资金参数、无需运行订单即可先做有效模拟和方法反证。**
+
+### 13.3 完整成熟参考图：原项目贡献的“不同能力”，不是再拼装十几套程序
+
+**核心产品层（全部已复核指定README/页面；没有全部独立部署）**
+
+| 来源 | 研究对象与已查资料 | 影响哪个业务判断 | 组合时的反证/迁移条件 |
+|---|---|---|---|
+| [Blix原版](https://github.com/blixvip/blixtrade) + 本仓原版保护测试 | 市场、钱包、价格/安全、AI、Paper、界面/数据 | **唯一既定产品主体** | 已有项目不能重复实现；React实际入口、原版保护manifest及数据源故障需核 |
+| [GMGN](https://docs.gmgn.ai/index/llms.txt) + [gmgn-skills](https://github.com/GMGNAI/gmgn-skills) | 交易终端场景、Wallet Radar、First70、钱包标签/节奏、Copyability、参数 | 从“钱包标签”升级为“是否可跟随”“关联 Mint 是怎样发现的” | 官方营销与Skill规则不等于验证收益/控制权；访问、费率和授权另验 |
+| [OKX OnchainOS](https://github.com/okx/onchainos-skills) | \`okx-dex-market\` 只读Token Research/New Tokens/Wallet Analysis/Smart Money；独立 \`okx-agentic-wallet\` | 现成调查任务与专业数据接口语义，减少AI自己发明API | 严格将只读市场研究与签名/付费/交易Skill隔离；需要真实数据时再评估权限/费用 |
+| [Million](https://github.com/Kelows/million) | Wallet↔Mint动态发现、Copy/Consensus/Ladder、影子机会、跳过理由、可复制性 | 钱包动态扩展、群体信号、前瞻可复制性、失败反馈 | 源码启发式 owner/group≠同控，Shadow/Paper不是真实成交；原版已有钱包触发需查增量 |
+| [Pulse](https://github.com/nirholas/pulse) | 全发行生命周期、失败市场、周期快照、名单出现记录、钱包评分、PGlite/Postgres | 分母与全市场负例，市场“首次看见” vs 事实发生 | 源码仅选择性永久保存部分trade；旧事件归入新时间桶风险不能外推为实测误差率 |
+| [PumpTrace](https://github.com/AntC215/Pumptrace) | Creator已验证历史、直接关系、钱包简报、游标回补、持仓与风险 | 开发者历史、来源证据强弱、对象级监控与状态改变 | Creator关联≠同控；其历史恢复做法可参考，不能重建PR23已归档的相同事件 |
+| [HoldTech](https://github.com/co-numina/holdtech) | 同slot/同资助、钱包“年龄”、Holder质量、Gini/HHI、跨Mint overlap | 表面分散持仓 vs 资金集中组织 | 本项目历史源码审查已发现账户年龄/持仓时间、公共Fee Payer等对象定义风险；不能用评分当控制事实 |
+| [Synapse用户笔记](../../knowledge/references/synapse-methodology-full-taxonomy-20261114.md) + [纵深研究](../../knowledge/references/synapse-cross-signal-mechanisms-20261114.md) | **14个链上信号、DEX三事件/三形态、Hyperliquid四主信号/五标签、五原则、四噪音**全量保留；跨信号的资金/库存/时间图 | 从“异常标签”转为资金托管→注资→分发→真实买卖→卖出压力的经济过程候选 | 笔记为用户转述，未逐条验证站点/阈值；HL永续不硬迁移pump.fun；任何低当前适用项继续保留研究资格 |
+| [Cielo](https://docs.cielo.finance/wallet-tracking/my-wallets) | 钱包自选追踪、交易类型/阈值过滤、首次交易事件、通知 | 何种钱包/资产变化值得通知和再次调查 | 未测试通知覆盖/延迟，不能当完整本地资金史 |
+| [Nansen](https://academy.nansen.ai/en/help/articles/9214978-solana-on-nansen) | Wallet labels/Smart Money/Token God Mode/Wallet Profiler、时序观察 | 地址角色、资金方向、钱包历史/当前画像 | 标签是来源归因；Solana免费UI≠API免费，免费需注册，付费Pro功能另议 |
+| [Arkham](https://codex.arkm.com/the-intelligence-platform) | 实体标签、对手方、地址关系及跨链图 | 地址网络解释、关系证据可见性 | 平台Entity不是Token Account Owner的协议字段，控制权可能UNKNOWN |
+| [Bubblemaps V2](https://bubblemaps.io/v2) | Holder气泡、Time Travel、Magic Nodes、连接扩展 | 资金/Holder变化的视觉解释与历史演化 | Blix已有Bubble Map；关系连通≠同控，优先增量证据说明而非复制整套图 |
+| [pumpwatch](https://github.com/cinder-security/pumpwatch) | 冻结发行样本、发行者工业化模式、可复算统计 | 新币市场背景、常态异常与“错过候选”分母 | 作者窗口/样本选择有限；高频发行不直接说明恶意或盈利 |
+| [PumpGrok](https://github.com/swcstudiospace/PumpGrok) | Skill/票据/风险否决/纸面任务收据 | AI的职责与只读任务边界 | README \`scout pipeline\`未实现；不照搬十席专家组织、未验证的自动任务链 |
+| [OnchainRadar历史参考](https://app.onchainradar.ai/hyperliquid/positions) | 历史研究聚焦Smart Wallet/Team Wallet/Wallet Flow/持仓/清算/TWAP | 跨产品“资金/仓位快照＋行为事件＋持续复查”问题意识 | 本轮目标页面工具访问失败；**只保留先前研究假说，不以本轮不能访问的页面断言现行功能** |
+
+**既有研究与专业方法资产，仍同等保留**：
+- [Hermes](https://github.com/sunshihao001/-) ：钱包角色、原始资助/共同来源、库存/可卖筹码、异常与反证的知识推理；有设计完成/尚未实现的区分。
+- [qb-](https://github.com/sunshihao001/qb-)：单 Mint 关键地址矩阵、转仓、Owner/Token Account 语义、历史95钱包报告的分母；不能把被跟踪钱包余额占比误叫全供应占比。
+- [meme-](https://github.com/sunshihao001/meme-)：FCZ/POC/AVWAP/阶段与二次启动的价格结构问题、失败形态；成本中枢假说不等于真实庄家成本。
+- [Why-Solana](https://github.com/sunshihao001/Why-Solana-Memecoins-Are-Over)：多跳、Dust≠资金支持、共享服务与同控区分、结构信号可被观察≠能够样本外盈利。
+- [ai-d](https://github.com/sunshihao001/ai-d)：普通语言目标恢复、关键未知发现、来源选择、专业知识按需调用、矛盾/竞争解释与可检验交付，不是另一个交易算法。
+- **协议与数据源候选**：Solana官方交易/Token-2022、Pump协议、Raydium/PumpSwap/Jupiter、Jito、FnZero/Carbon/Helius/Bitquery/DEX Screener/RugCheck；它们承担原始交易事实、机制、历史深度或报价功能，**只能依据实证缺口再决定引入，不让AI程序逐例重复数据供应商的工作**。
+- **其余资料没有删除**：[历史65项参考总目录](https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/system/gpt-meme-project-index.v1.json)仍保留 MELT、RED-COHORT、Carbon、Solana Microscope、Axiom/Photon、QuantBloc、CoinGlass 等完整候选及当时来源状态。\`HISTORICAL_NAMED_ONLY\` 不能因现在列名便升级到已核源码。\`RED-COHORT\` 早期部分定量结论已被撤回，不能继续当因果/收益实证。
+
+### 13.4 跨产品发现的四个新组合问题（INFERENCE），不是“更多标签”
+
+| 跨来源关系 | 新的专业问题 | 为什么与实际机会有关 | 可推翻它的反证 |
+|---|---|---|---|
+| GMGN Wallet Radar × Million Wallet↔Mint × qb/Hermes 关键钱包 | **“哪种跨币重复”才说明可迁移的早期发现能力？** 同时交易多个热门币可能只是机器人/市场共因 | 可能更早从地址发现未在榜单的 Mint | 随机同交易频率匹配钱包也有同样重复；历史赢家筛选产生幸存者偏差 |
+| GMGN First70/Bundler/Transfer-in × Synapse S03/S07/S10 × PR23经济证据 | **筹码由多个地址持有、转出和卖出时，谁真正增加了可卖供应？** | 识别看似分散、实际有可观察库存接力的风险；保护跟随者 | 交易属于池/服务/空投，转仓没有真实卖出；历史窗口漏采或同一笔双计 |
+| GMGN wallet-score/Median Copy Window × Million Copyability × Blix Paper × OKX Wallet Analysis | **“优秀钱包”与“适合我们跟单的钱包”是否是两类人？** | 直接影响跟单候选、行情时效、费用后净结果 | 原领先者收益已在信号公布前实现，传播延迟/滑点后无利润；大额无法卖出 |
+| Pulse/pumpwatch负例 × Blix早期筛选 × Nansen标签 × Cielo事件订阅 | **信号看似有效是否来自“只看已进入榜单/已追踪地址”的选择偏差？** | 帮助减少被错过的机会与假阳性，验证全市场召回 | 不同数据源观察全集不同，真实时间顺序或资金流中断、标签事后补全导致预测失效 |
+
+**更深一层的对象划分**：钱包可以买入、卖出、接收或转出；一个钱包还可能是程序、池、交易所、委托钱包或团队服务；同一经济动作可能多次触发标签。**交易动作、资产余额、钱包关系、资金来源、市场流动性、行为模式、可交易结果**必须可以互相连接，但不必强行合为同一个评分。AI的价值在于在特定任务下选择哪些联系能够改变判断，并指出哪些尚不可得。
+
+### 13.5 三种真实使用方式：每条都可以从用户当前页面直接进入
+
+**场景 A：AI挑选有交易机会的Mint（优先）。** 从原Blix New/Running/FinalStretch/Migrated/Pulse已知候选和已有钱包活动进入；AI按候选目标依次获取必要的**当时可见**市场、风险、钱包及行为证据；发现明确市场机会前，明确价格/流动性/资金结构和跟随延迟的冲突。最终给出：\`当前值得观察 / 需要补查 / 暂不适合参与 / 可进入只读纸面比较\` 及原因；不是直接命令下单。**比较 A 原版 Blix vs B 参考知识按需增强** 的提前量/漏检/成本/安全否决。这里“按需获取”不是必须先通过14个固定阈值。
+
+**场景 B：在 Blix 打开某 Mint → AI专业扩展调查。** 结合原Coin/Holder/Bubble Map/Wallet、PR23指令级转移、GMGN的First70/Insider问题、PumpTrace Creator历史、HoldTech库存风险、Synapse Distribution/Claim/CoordinatedWithdrawal。显示重要地址、可观察来源、从Pool买入到A转B、B后续卖出以及未知；**不能因B卖出就断定卖的那批Token来自A**。若市场池深不足，可以仍然“值得研究”但“没有目前可交易证据”。
+
+**场景 C：寻找可以跟的钱包 → 反向发现 Mint 并复盘。** 候选可来自GMGN Wallet Radar思路、原Blix跟踪钱包、Million发现、用户指定、旧qb与Hermes方法；区别7D/30D PnL、样本数、持仓中位节奏、是否开发者/刷量/狙击/共享平台、首次可见时点，模拟跟随者下单规模、流动性、费用和退出。形成“观察/只读模拟/排除”而非单个成功率排名；定期复核高质量钱包是否行为变型或转仓给新地址。**目前没有真实钱包跟随盈利验收。**
+
+### 13.6 交付与源码承接：改变之前的错误优先级，不预设新架构
+
+| 负责位置 | 已有/已验证到哪一步 | 应优先深化什么（不重复数据源） | 禁止偷换成 |
+|---|---|---|---|
+| **Blix原版 \`server/engine.js\`, \`early.js\`, \`triage.js\`, \`quality.js\`, \`research.js\`, \`brain.js\`, Wallet/Track Record/Paper** | 源码已有发现→初筛→研究/钱包告警→风险→纸面跟踪的路径；原版保护测试覆盖关键文件 | 原版成为 A 对照；先对所有入选/被拒候选留样本与时点；不要先动受保护的原版Research | “全系统还缺候选发现，重新写一套GMGN扫描器” |
+| **PR#23原事件/经济证据与只读报告** | 原始 RPC、指令位置、转入接收者、局部卖出候选；已用合成 mixed Swap+Transfer 检查 WTrack 摘要边界，原地址数 vs 关系组不等于同控；CI仅按指定SHA有效 | 用现有原始证据供 AI 解释GMGN/Synapse行为分类；进一步检验混合动作源语义、池/公用设施过滤和历史窗口 | “真实接收者卖出的就是刚转入的库存”“任何外部钱包图已经确证共控” |
+| **PR#23 \`server/intelligence/ai-workflow.mjs\`、\`Intelligence.tsx\`、\`followability-replay.mjs\`** | 具只读模型任务及本地取证契约；先前本地SQLite离线案例验收；真实模型/API和市场优势未完整验证 | 不增加全量固定Agent链，让模型按问题调用已有可用数据、知识与证据；单任务标注研究理由、机会可行性与必要反证 | “AI会思考，所以自然拥有实时外部数据/资金追踪/预测优势” |
+| **外部 GMGN / OKX / Helius /其它数据商** | 已核公开功能及部分Skill/源码，**未用付费 GMGN 或真实交易授权** | 能解决真实缺失字段时单独做源语义、准确率、限流、费用和许可比较；OKX只读工作流可先做候选接口契约对照 | “平台叫smart就独立同控”“已经打开文档=已接入可运行” |
+| **知识根源与历史参考** | 本文前12节＋Synapse全分类原目录＋65源索引/D01–D12仍在 | 在真实任务中按需取对应原文、源码、反例，反馈差异到原目录 | “把研究越拆越细、文件越建越多就是能力提升” |
+
+**下一次验收的最短可交付改动**（业务价值排序，不构成机械强制流程）：
+
+1. **同一候选全集的发现时点对照**：记录原Blix从何处发现、什么时候首次可见、有没有进入AI队列、拒绝理由及随后24h结果；用GMGN Wallet Radar/Million的**多Mint-钱包反查**思路只读补充解释，不能拿后来的盈利钱包回写过去的发现。
+2. **用同一 Mint 做“两个不同结果”验收**：研究价值 vs 交易就绪。已有Synapse/GMGN钱包行为与原风险/池报价在冲突时允许结论分叉；示例“异常筹码集中但池太浅”只应提升调查、不应提升买入。
+3. **按钱包历史战绩与可跟随性分开评估**：先检查原 Paper 和 PR23 纸面收据数据的费用、延迟与卖出完整性；缺入场和退出的**实际可得报价**时维持未验证，不产生净收益承诺。
+4. **只在证明有真实增量时把旧知识变成按钮/代码**：如果现有Blix已经提供数据与地图，则AI引用并核对即可；如果是源头漏交易/价格/Pool/账户归属，则回到对应原源职责修复，不在AI报告里补数据。
+
+**本节已完成**：重新阅读 GMGN官方多Mint/First70/Copy Trade 文档与公开 Skills、OKX Skills、Pulse/Million/HoldTech/PumpTrace/pumpwatch/PumpGrok及旧 Hermes/meme-原始项目关键文件，结合既有 Blix 实际源码和PR23工程状态，完成跨项目“功能→经济机制→具体判断→Blix承接→验证缺口”原位映射。**未做**：重新审完65项资产、各平台真实登陆/付费API数据、GMGN/OKX实测对照、真实Mint全签名/同批库存、前瞻策略收益、实盘、系统部署。这是研究与认知合成，不是功能/盈利验收。
+
+### 13.7 本轮直接核对的主要资料（固定定位）
+
+- GMGN：[Quick Start](https://docs.gmgn.ai/index/quick-start.md)、[Wallet Radar](https://docs.gmgn.ai/index/wallet-radar.md)、[Insider/Sniper/First70](https://docs.gmgn.ai/index/insider-traders-snipers-first-70-buyers.md)、[Copy Trade参数](https://docs.gmgn.ai/index/copy-trade-copy-smart-money-automatically-earn-sol.md)、[Wallet detail](https://docs.gmgn.ai/index/wallet-detail-page.md)、[gmgn-token](https://github.com/GMGNAI/gmgn-skills/blob/main/skills/gmgn-token/SKILL.md)、[gmgn-wallet-score](https://github.com/GMGNAI/gmgn-skills/blob/main/skills/gmgn-wallet-score/SKILL.md)、[gmgn-wallet-style](https://github.com/GMGNAI/gmgn-skills/blob/main/skills/gmgn-wallet-style/SKILL.md)。
+- 开源原始源码/设计：[OKX Skills](https://github.com/okx/onchainos-skills)、[Million](https://github.com/Kelows/million)、[Pulse](https://github.com/nirholas/pulse)、[PumpTrace](https://github.com/AntC215/Pumptrace)、[HoldTech](https://github.com/co-numina/holdtech)、[pumpwatch](https://github.com/cinder-security/pumpwatch)、[PumpGrok](https://github.com/swcstudiospace/PumpGrok)、[Hermes](https://github.com/sunshihao001/-)、[meme-](https://github.com/sunshihao001/meme-)；qb-沿用此前已明确路径的[关键钱包样本](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/wallet_fact/wallet_fact_report.md)，本轮未重新打开其全仓根目录。
+- 服务方产品文档：[Cielo](https://docs.cielo.finance/readme)、[Nansen Solana](https://academy.nansen.ai/en/help/articles/9214978-solana-on-nansen)、[Arkham平台](https://codex.arkm.com/the-intelligence-platform)、[Bubblemaps V2](https://bubblemaps.io/v2)；Synapse原站未完成方法细节的独立核验，严格区分用户转述内容。
+- 本项目已核：[原Blix全主体源码审查](whole-product-cross-layer-audit-v0.1.md)、[先前业务对照](blix-ai-investigation-product-comparison-20261113.md)、[Synapse完整分类](../../knowledge/references/synapse-methodology-full-taxonomy-20261114.md)、[当前目标图](goal-map.md)、[PR#23 R-35/R-36](https://github.com/sunshihao001/grok/blob/integration/blix-evidence-readonly-20261108/docs/project/build-register.md)。
