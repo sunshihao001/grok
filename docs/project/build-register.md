@@ -5,6 +5,28 @@
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
 
+## 2026-11-14｜R-44：不用付费模型也能从Coin进入真实SQLite只读经济证据检查
+
+**本轮切入点**：用户要求继续把已整理的专业知识发展成可运行的Blix AI扩展。检查最新PR#23后发现R-43已独立完成“指定Coin Mint不回退Pulse、缺Mint索引在模型调用前拒绝”等P0-B工作，因此本轮**不重复R-43**，改为解决**当前有真实本地归档但没配置收费模型就完全无法使用经济调查页面**的成品障碍。完成一个真正允许用户先读事实、再按需启动AI的增量功能，而非另一套采集/推理引擎。
+
+### 已交付的运行能力
+
+1. **`server/intelligence/research-http.mjs`**：新增`POST /inspect`，JSON仅允许`{mint}`；同原研究服务的loopback、Host、Origin、body长度、Mint合法性、单任务互斥与SQLite来源/指定Mint预检。无索引返回HTTP422`MINT_LOCAL_EVIDENCE_UNAVAILABLE`、无现成Schema返回503；明确“本地无记录不等于链上无交易”。新接口**无需`model`/API key/AI费开关**，只调用现有白名单`runCapability('mint-economic-evidence')`，读取原`makeOfflineEconomicReader`（现有`inspect-economic-mint.mjs`只读CLI），用现有`summarizeInvestigationContinuation`给六业务环节/UNKNOWN状态；不请求外部行情、RPC、不启动原版服务器、不签名交易。返回`modelMode:'NOT_USED'`、`verifiedMarketOpportunity:false`、`liveExecutionValidated:false`。
+2. **`/health`将两个能力就绪分开**：原`ready`仍要求显式配置模型+现有归档；新增`inspectionReady`只要求现有已授权归档可读，`remainingInspections`默认24次/进程，**不消耗原`maxTasks`模型任务配额**。不因零费用就允许无限查询；保留原HTTP安全规则和收费模型严格opt-in。
+3. **`web/src/pages/Intelligence.tsx`**：在原Blix AI工作台加入**“免费查看指定 Mint 的本地经济证据（不使用AI）”**按钮；始终绑定R-43的`researchMint`而非“当前列表其他币”；显示本地交易与地址、局部卖出摘要、六环状态及未知；无模型时仍能使用；真实模型调用保留原独立按钮与显式费用前提。无证据的Mint不能临时创造市场价格或补采交易。
+4. **真实HTTP/SQLite进程验收**：`test/intelligence-workbench-http.test.mjs`加入无模型的Origin拒绝、额外字段拒绝、错Mint预检、独立配额、免费检查不消耗模型额度；新`test/intelligence-inspect-sqlite-http.test.mjs`两项测试，一是实文件`persistEvidence`→只读经济CLI→HTTP `/inspect`检查签名/地址/卖出摘要，二是**实际启动生产用`scripts/start-intelligence-workbench.mjs`进程**且仅设本地SQLite、不设模型，验证`/inspect`返回、`/research`为503、无交易/模型请求、SQLite SHA前后一致。另在`intelligence-ui-candidates.test.mjs`加免费路径页面回归，并将新SQLite验收列入`npm test`、`test:evidence`、`test:intelligence`。
+5. **文档原位维护**：用户操作前提/权限/真实资料局限见`ai-readonly-local-workbench.md`；产品路线见`intelligence-layer.md`。没有新增专业知识领域/数据源/真实交易模块。
+
+### 可复查验收与准确证据边界
+
+- 包含真实进程启动和临时SQLite链路的 [综合Node24测试 #43570966620](https://github.com/sunshihao001/grok/actions/runs/43570966620) **SUCCESS**，对应 [前端构建 #43570966614](https://github.com/sunshihao001/grok/actions/runs/43570966614) **SUCCESS**、[audit #43570966671](https://github.com/sunshihao001/grok/actions/runs/43570966671) **SUCCESS**（这些指向当时经过验证的提交；最新HEAD应另行复查）。
+- 测试环境**是真实本地HTTP+真实Node子进程+真实SQLite文件**，里面的交易数据是**SYNTHETIC**且在测试文件中明确标记；不是用户浏览器真正交互、真实Solana历史RPC、真实成功/失败成交或AI模型效果实证。此前封网Docker原版Blix启动验收与这个sidecar独立运行验收不能合并成已接入主网整套产品。
+- `/inspect`不需要收费模型，而不是宣称所有市场数据都“免费”：用户仍需**已经存在、许可可用**且满足Schema的SQLite归档。没有归档就只能报告不可用；没有当时可用报价与首次可见时间，不能评级为可交易盈利机会。公网/远程认证仍未完成、PR#23仍Draft未部署、原版`npm start`安全门禁继续存在，外部Uptime独立失败。
+
+### 下一项最有价值的工程缺口
+
+**P0-C / P1-A 真实资料贯通**：查找已授权且带原始Solana `getTransaction` 签名/CPI的实际Mint归档，不把仅DEX Screener/RugCheck供应商市场快照说成链上经济交易；用已有`audit-intelligence-source-readiness.mjs`按`mint/source/first_seen/observed_at/slot`比较原Blix与经济存档的语义/覆盖，再走一次真浏览器`Coin→Intelligence→4547→报告`。只有在有真实原文和可核验时点后，才能检验接收卖出、钱包群体和交易价值。**不要再做第三次同类合成测试替代真实市场进度**。如需要联网供应商、收费模型或目标云电脑，必须核实许可、配额和运行隔离；禁止未经授权交易/签名。
+
 ## 2026-11-14｜R-43：Coin指定Mint不串币、AI入口可用与未归档收费前阻断
 
 **承接 R-42 的P0-B**：原版Coin → Intelligence导航虽已可传Mint及问题，但原 `Intelligence.tsx` 逻辑在指定Mint不在Pulse可见候选时 `selected=candidates.find(...)??candidates[0]`，导致目标消失甚至回退到另一枚币；`SIDECAR_URL`对`127.0.0.1`使用了错误转义的RegExp；本机sidecar实际启动配置`BLIX_AI_ALLOWED_ORIGINS`默认未包含原版4421（此前仅修了HTTP模块默认值）。另外，旧sidecar只做SQLite结构预检，无法在调用可能收费的模型之前辨识当前Mint没有归档记录。
