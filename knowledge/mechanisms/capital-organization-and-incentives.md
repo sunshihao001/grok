@@ -369,3 +369,21 @@ Jito bundles 可由最多五笔交易组成，按序原子执行，并按账户�
 5. **已有实现边界**：`economic-network.mjs` 当前主要是**单Mint Token Transfer投影**；`economic-snapshot-review.mjs` 是本地快照差与跨Mint同地址候选。原Blix `bubble-funding-evidence.mjs` 有直接SOL/fee payer证据区分，但并未自动与新图融合成统一归因真值。
 
 当前专业判断优先输出“观察到何种转账/候选群体、可能的普通解释、缺哪一条资金证据”，不直接输出确定同控、庄家或资金流入另一Mint的结论。上述机制各有不同观察和反证价值，**不是全面否定异常协同的可能性**。
+
+## 2026-11-14｜全域归位：D05 资本组织、资金来源和经济主体的证据阶梯
+
+本领域研究的是**可观察的经济关系如何支持或反驳资本组织假说**，不是“图上两点相连”或一个固定“庄家分数”。旧Hermes提供同源、回流、筹码和角色变化的问题模型；qb-提供单Mint钱包事实护照；Why-Solana提供多跳、Dust与资金可行性反例；Million提供Wallet↔Mint反向发现。Synapse用户笔记S03 Fresh cluster、S09 Stablecoin funding、S07 Distribution、S08 Claim、S10 Coordinated withdrawal及F01–F04是有条件的候选事件分类，不是已经验收的经济主体识别器。
+
+**五种不可混的边**：
+
+1. `OBSERVED_SOL_OR_SPL_TRANSFER`：签名、指令、金额、发送/接收Owner与资产的可复查流动；可能是Dust、手续费、服务转账或有意义入金。
+2. `FUNDING_CAPACITY_CANDIDATE`：到账资产在随后时间、金额、费用条件下**可能**支持买入；Fee Payer、公共CEX充值、同Slot并不自动是出资证据。
+3. `CROSS_MINT_ADDRESS_OVERLAP`：同地址出现在多个币；不是卖A的收益购买B，更不是同一个集团。
+4. `COORDINATION_HYPOTHESIS`：相近时间/出资/买卖/库存变化支持协同行为候选，必须对比共享路由、相同外部刺激、普通跟风、链上批次执行。
+5. `ECONOMIC_CONTROL_OR_PROFIT_HYPOTHESIS`：真正控制库存、承担收益风险/费用或从LP、Creator fee获利的主体关系；可能因托管、私钥、CEX账内行为不可识别，默认不作确定宣称。
+
+**完整经济过程的分析问题**：最早资本如何进入→有无真实Swap对价→被分发/领取给谁→钱包接收后是否另有卖出→实际池余额/LP是否改变→收入是否重新部署到其它Mint→成员/角色如何变化。只有事件签名和资产净变化能支持相应事实，不能由这条叙事代替链上证据。多跳Token gross不累计为新增市场需求，重复经过同一Token的A→B→C须另报净额与库存。
+
+**经济激励并行**：Creator费、LP费用、做市手续费、营销服务、抢先执行、做空/对冲（若产品支持）与代币升值是不同收益函数；发现“资本组织”不等于证明其目的是拉盘或其行为可复制。跨市场CEX/HyperLiquid/稳定币相关知识保留在 [Synapse全分类来源目录](../references/synapse-methodology-full-taxonomy-20261114.md)，没有Solana对应事件和权限时不得迁入现货识别规则。
+
+**当前工程边界**：原`bubblemap.js`、`wallets.js`与扩展`economic-network.mjs`已可给出部分地址/Token转移候选；尚不是完整SOL funding与库存/经济控制证明。下一项真正可验的递进是同一真实Mint中逐笔核对“买→转→接收钱包卖出摘要→跨Mint资金路径”，并在同批Token或资金对价缺失时保持UNKNOWN，而不是制造确定性控制者分数。反证详见 [多跳审查](../references/multihop-funding-evidence-audit.md) 和 [源级矛盾账](../references/p1-p2-knowledge-reconciliation-20261113.md)。
