@@ -104,3 +104,41 @@
 - 真实Mint历史：[单Mint三时点证据核查](single-mint-audit.md)；[跨模块来源与失败反例](mint-cross-module-evidence-audit-v0.2.md)；[全主体与交易机会审查](whole-product-cross-layer-audit-v0.1.md)。
 - 本地知识来源/实际接入：[knowledge/README.md](../../knowledge/README.md)；[来源覆盖](../../knowledge/references/source-coverage-v0.1.json)；[知识全链追溯](../../knowledge/references/knowledge-lineage-lifecycle-20261113.md)；[建设台账](build-register.md)。
 - 外部原始实现：Million、PumpTrace、Pulse、dexterm、FlowLens上述官方GitHub仓库指定文件；Bubblemaps [V2](https://wiki.bubblemaps.io/bubblemaps-v2/how-does-it-work)、[Magic Nodes](https://wiki.bubblemaps.io/bubblemaps-v2/magic-nodes)、[Time Travel](https://wiki.bubblemaps.io/bubblemaps-v2/time-travel)。外部资料适用性/当前付费功能与许可证仍需按未来使用方式分别复核。
+
+## 10. 2026-11-14｜GMGN/Million/Synapse 与原 Blix 同批候选的首次离线 A/B 验收
+
+> **目标恢复**：用户希望 GMGN 等成熟项目的研究能真正改变 Blix 选币与跟单结果，而不再只产生一份参考清单。本轮从“都有哪些功能”转到**同一输入/同一时点下原版A与知识增强B能否作出可追查的不同判断**。不连接GMGN、OKX付费API，不下单、不签名，不重写原版 Blix 筛选/交易引擎。
+
+### 10.1 使用了哪一个真实业务问题和哪批真实数据？
+
+核心问题：“已观察到某个代币池价格和储备方向变化，并出现钱包研究线索，它是调查候选、交易机会，还是观察到的数据不足？” 已有历史真实 Mint：`EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump`；复核来源为[三份2026-11-01真实DEX Screener/RugCheck供应商归档及SHA](single-mint-audit.md)。三时点主池报价：02:44 UTC `0.0008148` 美元、03:23 `0.0007653`、03:26 `0.0007819`；主池美元流动性约9.1万美元、8.86万美元、8.96万美元；另一Orca旁池不足48美元。最大Holder的Owner与PumpSwap池地址吻合，首先应解释为**池相关设施候选，而不是私人鲸鱼**。
+
+在**真实档案可支持的层级**上：
+
+| 同一个真实 Mint / 历史观察截点 | 原版Blix可用市场事实（A） | GMGN×Synapse×Hermes×Million专业知识按需增强（B） | 已经改变什么？ |
+|---|---|---|---|
+| 02:44→03:23价格与两端储备 | 市场价格跌约6.075%、Token储备增加、SOL储备减少 | 用卖压/LP调整/手续费/缓存不同步等竞争机制解释同一事实；明确需真实Swap+LP签名 | **调查问题更具体**，但没有发现谁卖或谁控制；不能直接宣称有可交易Alpha |
+| 03:23→03:26方向反转 | 价格回升约2.169%，Token储备下降、SOL储备增加 | 可提出短时交易方向切换、筹码库存与做市/LP假说；GMGN式多钱包筛查需真实交易记录 | **更明确的待核经济机制**，不等于确认资金组织 |
+| 主池/旁池与头部持仓 | 五个供应商交易对、主要池约9万美元流动性、Orca旁池不足48美元 | 将Holder Owner与AMM池地址相互校对，排除“最大Holder一定是私人庄家”的错误推断；从GMGN/Holder分类视角提出实际订单深度问题 | **降低潜在身份误归因**，不能凭池差价认定可套利 |
+| 是否适合在当时跟单 | 已见行情变化但没有当时首次可见触发时间及双边可成交报价 | Million/GMGN wallet-score提问：是否来得及入场、滑点/优先费/可卖规模/跟随窗口；调用既有PR23 followability gate | **交易可行性保持 UNKNOWN**，没有模拟收益或主网利润证据 |
+
+这份真实历史数据中**没有**完整、来源一致且时点冻结的两个 Mint 候选全集；也**没有**可重放的池Swap/LP逐笔指令、GMGN钱包Radar历史列表或当时真实跟单报价。因此它**不能**用于声称“模型B比模型A更早挑中赢家/提升收益”，也不能拿别的合成Mint补作真实候选。
+
+### 10.2 同输入的 A/B 测试：现有可运行代码，明确仅合成对照
+
+已在**PR #23 集成分支**新增 [`opportunity-read-comparison.mjs`](https://github.com/sunshihao001/grok/blob/integration/blix-evidence-readonly-20261108/server/intelligence/opportunity-read-comparison.mjs) 和 [`test/opportunity-read-comparison.test.mjs`](https://github.com/sunshihao001/grok/blob/integration/blix-evidence-readonly-20261108/test/opportunity-read-comparison.test.mjs)，复用 `validatePulseDiscoveryInput` 和 `evaluatePaperFollowabilityCases`，**不创建第二个Market数据层**。
+
+- A 与 B 在测试中都调用原`discoverPulseInvestigation`，接收**同一份冻结浏览器Pulse候选数组**；A只有市场数据，B仅增加标记`SYNTHETIC_TEST_ONLY`的GMGN/Million式钱包研究线索。
+- 原发现回执新增 `candidateDigestSha256`，由实际标准化候选、任务目标、提交时间和boardStatus计算。**A/B的双方回执必须与冻结输入摘要完全一致**；候选数、时间和Mint相同但内容不同也会拒绝。此摘要只是浏览器数据一致性校验，**不能**证明上游源时钟或覆盖质量。
+- A选择合成测试Mint A、B选择合成测试Mint B只是脚本化`mock model`，检查“知识改变候选选择会被准确记录”；**不是已运行真实LLM，也不是AI自主选出更好代币**。
+- 增强证据若`firstAvailableAtMs`晚于冻结截点，会返回`A_B_LOOKAHEAD_EVIDENCE_AFTER_FROZEN_SNAPSHOT`；时间未知单独记账、不补写成当时已知。注入候选集合外Mint/变更候选摘要/接受缓存boardStatus则拒绝。
+- 可选纸面收据直接调用已有`followability-replay`，即使有正收益算术也只显示`PAPER_SCENARIO_CALCULATED_NOT_LIVE`，`outOfSamplePerformance=NOT_ESTABLISHED`、`liveTradeResults=NOT_MEASURED`。**没有按一分钟K线编造入出成交。**
+- 报告只给出“同源候选选择是否改变”和“不确定性”，不输出伪交易收益或超出原范围的GMGN/钱包新发现；Wallet Radar从Pulse之外发现的新Mint必须使用独立**扩展候选来源覆盖**对照，不能暗中算作这轮A/B的成功。
+
+### 10.3 结果与工程裁决
+
+本轮首次可量化的成果是**受控选择差异、同批输入哈希、事后证据阻断、未入选候选范围保护和纸面交易边界**；没有建立“真实市场 A/B 的召回率提升”“真实成本后净收益增益”“GMGN与OKX现成接口已经调用”。这不是学术抽象：它是未来任何模型/钱包筛选提升主张必须遵守的最短离线核对合同，且直接复用Blix已保存的数据对象和只读业务模块。它也纠正此前“AI选了不同的Mint就已经提升交易机会”的隐含假设。
+
+**下一步必须使用有真实时间与完整来源的连续候选档案**：记录每一候选当时被Blix观察/过滤/提升到AI/首次可见、钱包资金线索在此时之前是否已知、后续真实行情与纸面报价/退出条件、所有拒绝或漏选对象，使用相同模型预算/采集范围做A/B。若上游数据不具备完整候选Universe或时间，则先改善数据源本身的观察账与样本覆盖，不能用模拟生成无来源的赢家。
+
+**状态**：本节写入前已有对照代码及离线测试提交；其对应的CI必须按最新提交SHA核实。真实三快照为**此前经过归档回读的供应商历史事实**，本轮未重新下载原始ZIP；运行测试是**SYNTHETIC_OFFLINE_COMPARISON**，非实盘或主网原始交易序列的复现。
