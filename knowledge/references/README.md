@@ -1,5 +1,16 @@
 # Blix 参考项目与未整体搬迁资产入口
 
+## 2026-11-14｜外部参考统一归属：保留原始范围，不把作者简介直接搬成运行规则
+
+当前Blix的[全域主述归位表](../README.md#2026-11-14全域专业归位总入口十二领域主述参考来源知识身份与产品验收)将每个专业问题交给D01–D12已有主文件；**本目录继续保存参考项目的原始证据、完整分类、来源差异、作者历史、源码反例、未读范围与跨源矛盾**。例如：
+
+- Synapse全分类（14链上/3DEX事件/3买入形态/4HL主信号/5标签/5方法原则/4噪音及产品合规）在[原始转述清单](synapse-methodology-full-taxonomy-20261114.md)完整保留，跨信号机制在[第二轮](synapse-cross-signal-mechanisms-20261114.md)；分别引用D01/D04/D05/D06/D07/D09/D11，而不是复制整套表到每个领域或认定已接入。
+- GMGN/OKX/Pulse/Million/HoldTech/PumpTrace/Cielo/Nansen/Arkham/Bubblemaps等成熟产品的目标、公开文档与部分源码，统一从[外部成品目标与业务比较](../../docs/project/reference-driven-goal-model-v0.1.md)及[覆盖状态清单](source-coverage-v0.1.json)恢复；对应经济知识回D主述，完整作者目标/市场条件保留此处引用。GMGN钱包历史PnL不等于Copyability，也不等于Blix已经买通付费API。
+- Hermes/qb-/meme-/Why-Solana的特定源码、样本、旧规则失效与可迁移机制见[P1/P2对照](p1-p2-knowledge-reconciliation-20261113.md)、[独立来源纵深](source-knowledge-deep-study-v0.1.md)；旧主仓原文和未审目录不得丢失。研究点有价值但尚不能落在Blix代码时，继续作为知识或反证，而不是删除/硬改。
+- 对每项来源继续区分`TREE_INVENTORIED`、`CONTENT_READ`、`DEEP_CONCEPT_STUDIED`、`OFFLINE_TESTED`、`CONNECTED_READONLY_RUNTIME`。完整源码树或多个相互引用的报告不是多份独立经济实证；用户转述、论文撤回、商业闭源不能因归位而“洗成”已核链上事实。
+
+**扩展落地与运行状态**只在[产品扩展层](../../docs/project/intelligence-layer.md)及[工程台账](../../docs/project/build-register.md)，本来源目录不负责批准交易权限、替代数据提供方或报告成品验收。
+
 ## 2026-11-14｜GMGN与成熟参考项目机会优先的全局再梳理
 
 [现有参考目标体系第13节（V0.4）](../../docs/project/reference-driven-goal-model-v0.1.md#13-2026-11-14gmgn--既有成熟产品--blix机会优先全局再整合v04)将GMGN官方 Wallet Radar、First70、Insider/Sniper、钱包Score/Style、跟单参数，与OKX/Million/Pulse/PumpTrace/HoldTech/Synapse及Nansen/Arkham/Bubblemaps/Cielo、旧Hermes/qb-/meme-等统一比较。**原项目知识覆盖不受当前代码适配限制；产品实施仍按真实缺口/增量价值选取**。最重要的新联系：多Mint共同持仓/交易不等于同控；钱包赚钱不等于用户可复制；卖出与转仓应由指令级证据核验。旧65项来源目录及之前全部Synapse分级原位保留，未重做另一套标签库或硬编码AI工作流。
