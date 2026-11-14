@@ -137,3 +137,33 @@ test('unconfigured research server never reads the archive or calls a model',asy
   assert.equal(response.status,503);
   assert.deepEqual(await response.json(),{error:'RESEARCH_NOT_CONFIGURED'});
 });
+
+test('archive schema readiness is checked before any model requests or task budget', async t => {
+  let modelCalls = 0, archiveReads = 0, sourceReady = false;
+  const base = await start(t, {
+    allowedOrigins: [origin], maxTasks: 1,
+    model: async () => { modelCalls++; return { calls: [], followup: false }; },
+    readEconomic: async () => { archiveReads++; return observedRecord; },
+    sourceReadiness: async () => ({
+      ready: sourceReady,
+      status: sourceReady ? 'EXISTING_ARCHIVE_SCHEMA_READABLE' : 'ECONOMIC_ARCHIVE_SCHEMA_UNAVAILABLE',
+    }),
+  });
+  let health = await (await fetch(base + '/health')).json();
+  assert.equal(health.ready, false);
+  assert.equal(health.archiveStatus, 'ECONOMIC_ARCHIVE_SCHEMA_UNAVAILABLE');
+  let response = await post(base, { goal: '调查当前Mint经济事实', mint });
+  assert.equal(response.status, 503, 'do not enter model or use up quota when archive is absent');
+  assert.deepEqual(await response.json(), {
+    error: 'RESEARCH_NOT_CONFIGURED', archiveStatus: 'ECONOMIC_ARCHIVE_SCHEMA_UNAVAILABLE',
+  });
+  assert.equal(modelCalls, 0);
+  assert.equal(archiveReads, 0);
+  health = await (await fetch(base + '/health')).json();
+  assert.equal(health.remainingTasks, 1);
+  sourceReady = true;
+  health = await (await fetch(base + '/health')).json();
+  assert.equal(health.ready, true);
+  assert.equal(health.archiveStatus, 'EXISTING_ARCHIVE_SCHEMA_READABLE');
+  assert.equal(health.remainingTasks, 1);
+});
