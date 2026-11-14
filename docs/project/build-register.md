@@ -5,6 +5,22 @@
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
 
+## 2026-11-14｜R-41：原版Blix真正隔离冷启动、重启与首个数据库初始化缺陷修复
+
+**业务起点**：上一轮已经完成Coin→Intelligence导航，但不是原版Blix可运行验收。本轮从既有PR#23的实际 `npm start` 和 `server/server.js` 出发，**先测试安全门禁，再在外网彻底隔离的容器中运行原版完整服务**。不改变原版交易/账户功能语义，不运行真实钱包、RPC、收费AI或生产部署。
+
+**首先修正上一轮引入的测试错误**：`test/intelligence-ui-candidates.test.mjs` 中深链接回归测试错误转义正则使完整Node测试在`52f270a`失败（前端构建和独立审计当时成功，不能冒充全CI成功）；`110b0469`改为直接验证实际文字及手动触发按钮，恢复绿灯。
+
+**启动安全与实际验收路径**：
+1. `test/read-only-audit.test.mjs` 现在在独立临时`RADAR_DATA`下真实执行`npm run --silent start`，清除原版危险运行确认环境变量，并断言在任何原版`server.js`模块导入/SQLite创建前以退出码2被拦截。`package.json`已将此测试加进默认完整`npm test`。这证明**缺授权时默认启动失败关闭**，不是服务安全认证。
+2. 新增`scripts/verify-blix-airgap-boot.sh`及`.github/workflows/blix-airgap-boot.yml`。GitHub Actions先构建原Blix React，随后在`node:24-bookworm-slim`临时容器内运行**原版`server/server.js`**；参数 `--network none`、`--read-only`、`--cap-drop ALL`、`no-new-privileges`、资源上限、无Secrets、只读源码挂载和唯一临时`/data`数据库目录。容器只向内部loopback开放4420/4421，不映射公网端口。**这是离线诊断，不是允许用户关闭生产门禁**。
+3. 首次真正冷启动暴露原版缺陷：`server/people.js`在Fomo模块完成建表前 eager `db.prepare('SELECT ... FROM fomo_traders')`，全新SQLite产生`ERR_SQLITE_ERROR: no such table: fomo_traders`，服务器立即退出。修复提交`0982817db62a63d4ca945800b7e2baff1d3d2c43`：保留各Fomo模块表的既有所有权，将次级头像来源SQL改为**首次查询时才编译**，某个可选表仍未初始化时独立跳过该来源、继续读取其它来源；不在AI层造库。新`test/people-cold-start.test.mjs`在真实独立Node子进程、全新SQLite中验证缺表不崩溃、其它来源随后建表后可读取，纳入完整测试。
+4. 进一步将离线启动测试升级为**在同一个临时SQLite上冷启动→停止→第二次启动**，两次均真实HTTP检查`/api/health`、`/api/pulse`、React`/ `（4421）；关闭后执行SQLite`PRAGMA integrity_check`。 [双轮复启GitHub Actions #43550153919](https://github.com/sunshihao001/grok/actions/runs/43550153919) **SUCCESS**，原始日志包含 `BLIX_AIRGAP_BOOT_CYCLE_OK cycle=1`、`cycle=2`和`BLIX_AIRGAP_RESTART_SQLITE_INTEGRITY_OK`；此前首次成功在线CI [#43549973968](https://github.com/sunshihao001/grok/actions/runs/43549973968)。这不是实时行情源联网验证。
+
+**证据边界与下一阻塞**：原版服务现已在完全封网容器里真实启动、可HTTP访问并重启，**不是**经过授权的联网只读运行模式；网络关闭也意味着无法检验PumpPortal/DEX/Helius/GMGN真实性、模型API、资产交易或实际机会收益。独立只读AI sidecar依旧需有真实`econ_transactions`归档与受许可模型配置；测试通过不代表Coin页面已经把AI结果直接嵌入原版面板。PR#23仍Draft/open、未部署，外部Uptime的失败与隔离启动不同。
+
+**下一个真实任务**：先在用户确定的机器上核实Grok云电脑的Node24、磁盘持久化、端口/网络出口和只读权限边界；让原版市场数据源以可核费用/额度运行并保留首次观察时点与断流证据，随后用相同Mint联调原Blix→SQLite经济归档→本地AI服务→结果。禁止把沙箱运行直接当生产联网安全批准，也不另造第二套数据采集器。
+
 ## 2026-11-14｜R-40：PR23与blix无损研究合并 + 本地AI服务数据就绪门禁
 
 **任务与交付目标**：承接R39“距离实际运行差什么”的P0阻塞，先消除累计 PR#23 与最新 `blix` 的 Git 合并冲突；然后修复现有**独立只读AI服务**把“已构造SQLite读取函数”误报为“已有可用本地SQLite”的真实启动就绪缺陷。保留原版Blix市场、账户、真实交易与Paper全部源码和本地风险拦截，不默默解锁原版完整运行或开启付费模型。
