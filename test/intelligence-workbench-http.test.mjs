@@ -319,6 +319,13 @@ test('model-free Mint inspect uses existing archive evidence without model setup
   assert.equal(data.evidence[0].input.mint,mint);
   assert.equal(data.evidence[0].result.facts.network.eventCount,1);
   assert.equal(data.continuation.mint,mint);
+  assert.equal(data.continuation.stages.market,'NO_PULSE_MARKET_OBSERVATION_IN_THIS_RECEIPT');
+  assert.equal(data.continuation.anchors.evidenceLineage.pulseBrowserObservationPresent,false);
+  assert.equal(data.continuation.anchors.researchPriority.observedTransferEvents,1);
+  assert.equal(data.continuation.anchors.tradeReadiness.status,
+    'NOT_EVALUABLE_WITHOUT_SIGNAL_AND_EXECUTION_RECEIPTS');
+  assert.equal(data.continuation.anchors.knowledgeContext.providedRecordCount,0);
+  assert.equal(data.continuation.anchors.nextEvidence.length,5);
   assert.equal(data.continuation.watch.status,'NOT_RUNNING_NO_AUTONOMOUS_WATCHER');
   assert.equal(reads,1);
   assert.equal(mintChecks,2);
