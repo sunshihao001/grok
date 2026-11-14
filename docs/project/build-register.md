@@ -5,6 +5,23 @@
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
 
+## 2026-11-14｜R-36：原版 Research 钱包数语义与同签名交易证据进入 AI 工作台
+
+**起点与责任边界**：承接 R-35 的两个已验证边界：原版 `research.js::gather` 统计 `COUNT(DISTINCT wt.wallet)`（当前 watching=1、side=buy、同 Mint、无历史时窗），不是独立经济主体；`wtrack.parseTransfer` 对「同笔买入+独立 Token 转移」无法提供完整单动作摘要，但 PR #23 的 `economic-events.mjs` 已归档指令级转移。**本轮不解除受保护的 `server/research.js` 文件校验，不改原交易/签名/付款代码，不新建 RPC 采集器或数据库。**
+
+**实际增量（已提交到 PR #23 现有集成分支）**：
+
+1. `scripts/inspect-economic-mint.mjs` 使用已有 SQLite 只读文件和现存 `wallet_trades`、`wallets` 表，在表结构可用时执行与原版 Research 相同条件的**不同跟踪买入地址计数**，并记录时间口径 `ALL_LOCALLY_STORED_WALLET_TRADE_ROWS_NO_TIME_CUTOFF`；表缺失返回 null / UNKNOWN，启发式关系组与独立经济主体都保持 null / UNKNOWN。这个报告不进入原版 Research 的评级逻辑，也不是改写用户跟踪名单。
+2. 通过同一份已保存的 `econ_transactions/econ_instructions` RPC 指令与 `wallet_trades` 摘要，逐条给已核转移事件新增 `sameSignatureSenderBuySummaryObserved`。它的含义是「发出方同笔签名有本地买入摘要，且另有 Token 转移指令」，**不**代表这两个动作可以相加、不代表转仓=卖出、更不证明后续卖出的就是这批库存。RPC 完整性、Owner 和指令位置仍由原经济证据链负责。
+3. 现有 `server/intelligence/mint-economic-evidence.mjs` 向模型/调用方传递源标记的 `facts.trackedWalletActivity` 与每条 `facts.recipients` 的同签名标记，同时增加不确定性说明。没有新增 Agent 工具或授权。
+4. 现有 `web/src/pages/Intelligence.tsx` AI 研究收据界面（**非原 WTrack 页**）展示原始地址数、关系组及真实控制者未知，以及同笔买入摘要与 Token 转移候选，清楚提醒旧 WTrack 简化列表可能不显示混合交易。原版 Pulse、Research、WTrack 和交易入口保留。
+5. `test/offline-mint-report.test.mjs` 使用 3 个地址、2 个 watched、重复买入、合成「Pool→A 买入并 A→B 转移」fixture 验证：原始跟踪地址数为 2，组数 UNKNOWN；归档指令 A→B 400 单位仍可发现，同笔买入标记为真；同一 Pool 转移不被标为 A 买入；AI 证据适配透传且 SQLite 前后 SHA256 不变。此前缺表时的 UNKNOWN 与只读测试继续保持。
+6. `test/intelligence-ui-candidates.test.mjs` 增加静态 UI 审查，保障新语义文字及同签名混合事件提示不丢失。前端应再由独立 Node24 CI 的 TypeScript/Vite 编译验收；静态匹配并非界面实操测试。
+
+**已验证层级（在本段写入前）**：包含离线 Mint 新增测试的代码提交 `b8900820c29d233d2ebfea6362adb829e98e02de` 已通过 [Node24 综合 CI](https://github.com/sunshihao001/grok/actions/runs/43536813708) 和 [审计](https://github.com/sunshihao001/grok/actions/runs/43536813668)。**后续 UI/静态测试头提交 `c8596e8064f25752c1468cf9c349b4a049cc5739` 的 CI 在本段落写入时还没有可核验结果，不能沿用旧绿灯冒充最终 HEAD 通过。** Uptime 外部服务检查失败属于既有独立事项。
+
+**尚未完成与下一步验收**：真正原版 `research.js` 的深读提示词仍只接收 legacy raw count，AI 研究工作台通过独立能力追加语义，不等于原版已经换算关系组。WTrack 原有普通交易列表尚未接入已捕获混合交易的只读注释，且本轮**没有开放其原过滤条件**以防将池/路由交换腿误写成普通转仓。下一项应在不破坏原版保留基线下核对 UI 数据契约，选择受控 Mint 的**同一触发时刻**，对照原版候选与现有专业解释的误报/漏报以及可执行成本；主网历史、实盘盈利仍 UNKNOWN。
+
 ## 2026-11-14｜R-35：钱包群组归因与同笔转仓的跨模块契约实测
 
 **本轮根据用户确认的工作起点**：对照 Synapse 全分类研究，针对 Blix walletSignals、Research、WTrack 与 PR #23 经济证据的两处实际语义问题，在已有责任层进行有限修改/离线验收，**没有新增市场扫描器、RPC 数据源、AI Bot、交易入口**。经济归因以真实事件和当前覆盖为限。
