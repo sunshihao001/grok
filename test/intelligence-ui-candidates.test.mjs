@@ -37,12 +37,11 @@ test("research workspace distinguishes tracked wallet address counts from relate
 test("Coin to Intelligence deep link stays within existing Pulse and requires a manual model action", () => {
   const coin = fs.readFileSync(new URL("../web/src/pages/coin/AiCopilot.tsx", import.meta.url), "utf8");
   const workspace = fs.readFileSync(new URL("../web/src/pages/Intelligence.tsx", import.meta.url), "utf8");
-  assert.match(coin, /#\\/intelligence\\//);
-  assert.match(coin, /encodeURIComponent\\(mint\\)/);
-  assert.match(coin, /encodeURIComponent\\(question\\.trim\\(\\)\\)/);
-  assert.match(workspace, /setSearch\\(mint\\)/);
-  assert.match(workspace, /setSelectedMint\\(mint\\)/);
-  assert.match(workspace, /selected = candidates\\.find/);
-  assert.match(workspace, /onClick=\\{\\(\\) => void runLocalResearch\\(\\)\\}/);
-  assert.match(workspace, /disabled=\\{!c \\|\\| !goal\\.trim\\(\\)/);
+  assert.ok(coin.includes('"#/intelligence/" + encodeURIComponent(mint)'));
+  assert.ok(coin.includes("encodeURIComponent(question.trim())"));
+  assert.ok(workspace.includes("setSearch(mint)"));
+  assert.ok(workspace.includes("setSelectedMint(mint)"));
+  assert.ok(workspace.includes("selected = candidates.find"));
+  assert.ok(workspace.includes("onClick={() => void runLocalResearch()}"));
+  assert.ok(workspace.includes("disabled={!c || !goal.trim()"));
 });
