@@ -210,3 +210,31 @@ test('real opt-in local AI service starts isolated and reports unconfigured inst
     if(!exited)await Promise.race([once(child,'exit'),new Promise(resolve=>setTimeout(resolve,2500))]);
   }
 });
+
+test('original Blix 4421 React origin may request the existing read-only loopback service', async t => {
+  let modelCalls = 0;
+  const base = await start(t, {
+    maxTasks: 2,
+    model: async ({ stage }) => {
+      modelCalls++;
+      if (stage === 'plan') return { calls: [{ capability: 'mint-economic-evidence', input: { mint } }] };
+      return { summary: 'Only local archived evidence is available',
+        hypotheses: [], alternativeExplanations: [], nextChecks: [] };
+    },
+    readEconomic: async () => observedRecord,
+    loadKnowledge: async () => knowledge,
+  });
+  const body = { goal: '调查已有Mint，禁止交易与签名', mint };
+  let response = await post(base, body, 'https://attacker.example');
+  assert.equal(response.status, 403, 'non-local website still rejected');
+  assert.equal(modelCalls, 0);
+  for (const trustedOrigin of ['http://127.0.0.1:4421', 'http://localhost:4421']) {
+    response = await post(base, body, trustedOrigin);
+    assert.equal(response.status, 200, 'actual original React origin is allowed');
+    assert.equal(response.headers.get('access-control-allow-origin'), trustedOrigin);
+    const result = await response.json();
+    assert.equal(result.liveExecutionValidated, false);
+    assert.equal(result.sourceMode, 'LOCAL_SQLITE_ONLY');
+  }
+  assert.equal(modelCalls, 4, 'two bounded fake research calls; no paid model');
+});
