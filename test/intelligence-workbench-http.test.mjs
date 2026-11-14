@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { once } from 'node:events';
+import { spawn } from 'node:child_process';
+import { createServer as createTcpServer } from 'node:net';
 import { makeChatCompletionModel } from '../server/intelligence/chat-completion-model.mjs';
 import { createResearchHttpServer } from '../server/intelligence/research-http.mjs';
 
@@ -166,4 +168,45 @@ test('archive schema readiness is checked before any model requests or task budg
   assert.equal(health.ready, true);
   assert.equal(health.archiveStatus, 'EXISTING_ARCHIVE_SCHEMA_READABLE');
   assert.equal(health.remainingTasks, 1);
+});
+
+test('real opt-in local AI service starts isolated and reports unconfigured instead of spending',async()=>{
+  const s=createTcpServer();
+  s.listen(0,'127.0.0.1');
+  await once(s,'listening');
+  const port=s.address().port;
+  await new Promise(resolve=>s.close(resolve));
+  const script=new URL('../scripts/start-intelligence-workbench.mjs',import.meta.url).pathname;
+  const child=spawn(process.execPath,['--no-warnings',script],{
+    env:{...process.env,BLIX_AI_PORT:String(port),
+      BLIX_AI_ENABLE_PAID_MODELS:'',BLIX_AI_API_KEY:'',BLIX_AI_MODEL:'',
+      BLIX_AI_DB_PATH:'/nonexistent-blix-archive-for-test.sqlite'},
+    stdio:['ignore','pipe','pipe'],
+  });
+  try{
+    await Promise.race([
+      once(child.stdout,'data'),
+      once(child,'exit').then(([code])=>{throw Error('LOCAL_STARTUP_EXITED_'+code);}),
+      new Promise((_,reject)=>setTimeout(()=>reject(Error('LOCAL_STARTUP_TIMEOUT')),10000)),
+    ]);
+    const base='http://127.0.0.1:'+port;
+    const health=await (await fetch(base+'/health')).json();
+    assert.equal(health.ready,false);
+    assert.equal(health.providerEnabled,false);
+    assert.equal(health.archiveStatus,'MODEL_OR_READER_NOT_CONFIGURED');
+    assert.equal(health.remainingTasks,8);
+    const attempt=await fetch(base+'/research',{
+      method:'POST',
+      headers:{Origin:'http://localhost:4420','Content-Type':'application/json'},
+      body:JSON.stringify({goal:'Investigate this Mint read-only',mint}),
+    });
+    assert.equal(attempt.status,503);
+    assert.equal((await attempt.json()).error,'RESEARCH_NOT_CONFIGURED');
+    const prohibited=await fetch(base+'/api/account/buy');
+    assert.equal(prohibited.status,404,'isolated AI service must not expose original account trading routes');
+  } finally {
+    const exited=child.exitCode!==null;
+    if(!exited)child.kill('SIGTERM');
+    if(!exited)await Promise.race([once(child,'exit'),new Promise(resolve=>setTimeout(resolve,2500))]);
+  }
 });
