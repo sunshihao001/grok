@@ -3,6 +3,19 @@
 > **当前实现形态：独立的 opt-in 本机服务 + 已有 Blix React Intelligence UI + 已有 PR#23 单Mint离线经济证据工具。**
 > 模型 API 已有真实 HTTP 适配代码，但仓库、CI 和此次建设**没有运行任何收费模型**，也没有绑定用户密钥/数据。实际云端模型与真实市场端到端效果 **NOT VERIFIED**。这是受控研究入口，不是机器人交易、全市场自主扫描或已经证明盈利的策略。
 
+## 2026-11-14｜R-44：已有经济归档可零模型费用直接检查（不等于主网实证）
+
+**新成品入口：** `Intelligence`页面增加`免费查看指定 Mint 的本地经济证据（不使用AI）`。本地`http://127.0.0.1:4547/inspect`只能由已批准的原Blix`4421`等loopback网页，在**手动点击后**以JSON `{"mint":"..."}` 提交；不要求`goal`、API key、AI供应商、收费确认，也不导入原版账户或交易服务器。与原`/research`/`/discover`是三个不同责任：`/inspect` = **确定性已归档事实投影**；`/research` = 经授权的模型解释；`/discover` = 当前Pulse浏览器候选选择，均不是盈利预测。
+
+**实际运行配置：** 需Node 24.16+、一份**已经存在且授权读取**的Blix SQLite经济归档，包含`econ_transactions`、`econ_instructions`、`wallet_trades`必要结构。`BLIX_AI_DB_PATH=/absolute/path/to/existing.sqlite npm run start:intelligence:readonly`仅启动本机4547监听，不启动原Blix、交易/账户/RPC或付费模型。默认`BLIX_AI_ENABLE_PAID_MODELS`未显式许可时，`/health`应显示`ready:false`、`inspectionReady:true`（**仅当现有经济Schema可读**）和`providerEnabled:false`。网页用户可先查看本地证据，再决定是否另行授权AI模型。未经授权、模型未配置时`/research`仍返回503。**只读运行并不代表用户当前机器已完成真实联网数据采集或云端部署。**
+
+**独立配额与拒绝条件：** `/inspect`要求合法Mint、只含Mint的JSON、批准的Origin、正确loopback Host、服务器进程限定次数（默认24）与单任务互斥；错Mint或SQLite没有该Mint索引返回`MINT_LOCAL_EVIDENCE_UNAVAILABLE`，不调用模型/不消耗模型任务数、不把无索引冒充链上零活动。保留原`/research`的8次模型任务默认限额和后台供应商费用开关。无模型时仍可由已有的`mint-economic-evidence`只读能力读取过去捕获的Token转移及接收钱包卖出摘要；这些证据仍是`CAPTURED_LOCAL_ARCHIVE_NOT_FULL_CHAIN_VERIFIED`，不是该批筹码确已卖出、完整SOL归因或交易优势。
+
+**本轮真实测试等级：** 一是Loopback真实HTTP/注入伪证据检测Origin、非法JSON、错误Mint、配额/不消耗模型任务；二是真正临时SQLite `persistEvidence` → `makeOfflineEconomicReader`子进程CLI → `/inspect` JSON回执，校验签名、sender/receiver、局部卖出摘要、UNKNOWN、文件SHA前后不变；三是独立启动真正`scripts/start-intelligence-workbench.mjs`进程，未配置模型但配置SQLite时仍能`/inspect`，`/research`继续503。**所有测试样本明示SYNTHETIC**，不宣称验证真实市场、真实浏览器用户操作、免费数据源配额或真钱订单。
+
+**下一项最有价值的实施依赖：** 需要可获得且获授权的真实Mint经济归档/原始Solana签名，核对原版Blix`source/coverage`与AI读出的**同一Mint、同一时间、同一来源**；之后再做真浏览器 Coin→Intelligence→4547 的端到端用例。现在没有凭空制造主网数据或在AI sidecar中建设第二套采集。
+
+
 ## 2026-11-14｜Coin指定任意Mint的本地只读路径（PR#23当前实施）
 
 - 原版Coin助手通过\`#/intelligence/:mint?goal=...\`传入**用户明确选择的Mint**。即使此Mint没有出现在当前Pulse列表，也不会回退到其它代币；前端只显示其原始地址和**Pulse行情UNKNOWN**，不能编造市值、Holder或数据源。
