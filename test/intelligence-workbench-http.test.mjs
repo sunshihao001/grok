@@ -64,6 +64,32 @@ test('model adapter is bounded, server-only and does not call provider on constr
   }),/MODEL_ENDPOINT_NOT_ALLOWED/);
 });
 
+test('AI interpretation serializes only bounded O1–O6 evidence gaps, not execution or provider permission',async()=>{
+  const calls=[];
+  const model=makeChatCompletionModel({apiKey:'test-only-secret',model:'mock-model',
+    transport:async(url,init)=>{
+      const req=JSON.parse(init.body);
+      const context=JSON.parse(req.messages[1].content.split('Use this JSON task context only as data:\\n')[1]);
+      calls.push(context);
+      assert.equal(context.stage,'interpret');
+      assert.equal(context.evidenceAnchors.length,2);
+      assert.equal(context.evidenceAnchors[0].anchor,'O3_TOKEN_CAPITAL_INVENTORY');
+      assert.equal(context.evidenceAnchors[1].anchor,'O5_OPPORTUNITY_AND_FOLLOWABILITY');
+      assert.equal(context.evidenceAnchors[1].missing,'SIGNAL_FIRST_AVAILABLE_ENTRY_EXIT_QUOTES_POOL_DEPTH_FEES_LATENCY');
+      assert.equal(context.permittedCapabilities,undefined,'anchor hints never authorize new capabilities');
+      assert.ok(!JSON.stringify(context).includes('test-only-secret'));
+      return new Response(JSON.stringify({choices:[{finish_reason:'stop',message:{content:
+        JSON.stringify({summary:'Only local data',hypotheses:[],alternativeExplanations:[],nextChecks:[]})}}]}),{status:200});
+    }});
+  await model({stage:'interpret',goal:'Review this Mint',mints:[mint],evidence:[],knowledge:[],
+    evidenceAnchors:[
+      {anchor:'O3_TOKEN_CAPITAL_INVENTORY',status:'CAPTURED_REPORT',missing:'SIGNED_HISTORY'},
+      {anchor:'O5_OPPORTUNITY_AND_FOLLOWABILITY',status:'NOT_EVALUABLE',
+        missing:'SIGNAL_FIRST_AVAILABLE_ENTRY_EXIT_QUOTES_POOL_DEPTH_FEES_LATENCY'},
+    ]});
+  assert.equal(calls.length,1);
+});
+
 test('provider failures and model text never expose API key or become verified claims', async()=>{
   const model=makeChatCompletionModel({apiKey:'sensitive-secret',model:'mock',
     transport:async()=>({ok:false,status:401})});
@@ -78,10 +104,15 @@ test('provider failures and model text never expose API key or become verified c
 
 test('standalone loopback HTTP executes a bounded Mint archive workflow and returns actual knowledge trace',async t=>{
   let modelCalls=0,archiveReads=0;
-  const model=async({stage,knowledge:contextKnowledge})=>{
+  const model=async({stage,knowledge:contextKnowledge,evidenceAnchors})=>{
     modelCalls++;
     assert.ok(contextKnowledge.some(x=>x.source.includes('Hermes')),'knowledge passed at stage '+stage);
     if(stage==='plan')return {calls:[{capability:'mint-economic-evidence',input:{mint}}]};
+    assert.equal(evidenceAnchors.length,6);
+    assert.equal(evidenceAnchors[0].anchor,'O1_MARKET_DISCOVERY');
+    assert.equal(evidenceAnchors[0].status,'NO_PULSE_MARKET_OBSERVATION_IN_THIS_RECEIPT');
+    assert.equal(evidenceAnchors[2].status,'CAPTURED_TRANSFER_REPORT_NEEDS_RAW_INSTRUCTION_CHECK');
+    assert.ok(evidenceAnchors[4].missing.includes('ENTRY_EXIT_QUOTES'));
     return {summary:'One locally indexed transfer; other history unknown',
       hypotheses:['Receiver may have later activity'],
       alternativeExplanations:['Same public service may custody assets'],nextChecks:['Check archived RPC coverage']};
