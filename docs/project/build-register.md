@@ -5,6 +5,21 @@
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
 
+## 2026-11-14｜R-47：将现有知识按O1–O6转成真实可见的证据缺口与AI取证问题（不新建目标层）
+
+**起点与纠偏**：用户要求“以积累知识进行真实转换，按子部锚点推进整体及别的锚点”。R-46已在原`DOMAIN-MODEL.v1.json`明确G0–G4目标层、O1–O6业务成果、四入口/条件交接与S1–S7方法。**本轮不是再画一次图**：直接审查`investigation-continuation.mjs`发现报告六阶段虽有状态，但不能具体说明哪条专业知识对应缺失哪种事实；更严重的是任意Coin指定Mint/`/inspect`也返回“用户提交或选择Pulse观察”，混淆本地档案与市场事实。初稿尝试使用G1–G5名称，核对现有原图后立即统一改为原业务O1–O6，避免重复目标体系。
+
+**实际代码交付**：
+
+1. `server/intelligence/investigation-continuation.mjs`在已有`stages`/钱包/跨Mint/纸面证据之外新增`anchors`。其中`researchPriority`与`tradeReadiness`严格分开；前者只说明是否有可供审阅的**局部证据**而不对Token打研究价值分数；后者在缺信号首可得/进出场报价时必为不可评价。保留`evidenceLineage`的本地历史范围和Pulse浏览器来源差别、`knowledgeContext`的“已提供≠实际使用/增益”及六项`nextEvidence`：O1时间与覆盖；O2钱包Owner和公共设施；O3签名/指令/库存；O4真实SOL/WSOL资金路径；O5交易可参与性与退出报价；O6新事件/迟到回补及知识对照。它们是**只读建议**，没有新增RPC、市场数据源、交易权限或强制流程。
+2. `server/intelligence/research-http.mjs`仅为`/discover`传入由原`validatePulseDiscoveryInput`校验的`marketObservation`。手动`/research`和`/inspect`保持`NO_PULSE_MARKET_OBSERVATION_IN_THIS_RECEIPT`，即使本地有转账，也不假装具备行情/实时来源/可复制利润。
+3. `server/intelligence/pulse-discovery.mjs`把被选中Mint的**有限来源证明**传给后续AI任务；`ai-workflow.mjs`根据已经执行的局部只读工具事实算出六项证据缺口后交给模型`interpret`；`chat-completion-model.mjs`只传短`{anchor,status,missing}`，遵守24KB模型上下文预算、工具/成本/权限与事实界限。模型可综合推理，不新增固定Agent或篡改原Blix来源。
+4. `web/src/pages/Intelligence.tsx`在现有调查收据展示研究值/交易准备度的独立状态、Pulse来源是否存在、六个可展开子目标和知识实际提供记录。修改测试`test/investigation-continuation.test.mjs`、`test/pulse-ai-discovery.test.mjs`、`test/intelligence-workbench-http.test.mjs`及原UI契约，涵盖正确/错误Mint、归档签名、空档案、跨Mint候选、伪来源、模型收到了缺口提示以及不会升级为真实交易信号。D08/D09、D12原领域正文和产品说明已原位增加与运行代码的连接。
+
+**独立验收与已知失败**：`8f85212cd`旧一轮锚点UI/HTTP代码的[Node24完整测试43592248525](https://github.com/sunshihao001/grok/actions/runs/43592248525)通过；模型适用补充过程曾在`a61e00ed`触发一条测试代码错误：解析模型上下文时把真实换行误写为字面`\\n`，当时602项通过、1项失败；已在`9470fc39`修复，该提交[完整测试43592623759](https://github.com/sunshihao001/grok/actions/runs/43592623759)成功。承接Pulse来源后的`449a5289`已有[完整测试43592650490](https://github.com/sunshihao001/grok/actions/runs/43592650490)、[前端构建43592650437](https://github.com/sunshihao001/grok/actions/runs/43592650437)、[审计43592650492](https://github.com/sunshihao001/grok/actions/runs/43592650492)成功；**此后其他文档提交产生的新HEAD也需按SHA单独核查**。独立Uptime仍失败，不能写“全部工作流绿色”。这证明**实际代码+伪模型/合成SQLite+CI**，不是已在真实Meme市场上找到可赚钱币，也不是用户原机完整UI与授权主网数据源实跑。
+
+**整体锚点影响**：本轮减少“图上O1–O6闭合”与“运行时实际不知道下一步查什么”的断层，但尚未把任何真实Mint引入当前会话的可授权本地SQLite。下一轮最值得做**冻结同一真实Mint及其source timestamp/原始签名/Owner、一次新证据反证造成O2→O3→O5判断实际修订**；若合法档案不足，保持UNKNOWN和原版源责任，不在AI层重造数据来源。G0经济价值的成功仍取决于同批机会候选、真实可参与报价与样本外对照，不因O子目标/知识被显示就宣布达成。
+
 ## 2026-11-14｜R-46：Meme多路线知识图谱和三重闭环（ai-d方法→Blix原位映射）
 
 **需求**：R-42/R-45已完成知识归位与业务主线纠偏，本轮要解决“知识与业务都在，但如何按语义连接多入口、不同领域、数据/代码/测试、失败反馈并闭合”的跨层缺口。首先回读独立[ai-d K1–K9](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/knowledge-lifecycle-nine-stages.md)、[ai-d S1–S7/五视图/双向追溯](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/cross-layer-project-anchors.md)，以及本仓既有10轴11关系、D01–D12、O1–O6与PR#23代码。没有新建平行知识系统、数据源、Bot或交易层。
