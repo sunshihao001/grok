@@ -238,3 +238,40 @@ test('original Blix 4421 React origin may request the existing read-only loopbac
   }
   assert.equal(modelCalls, 4, 'two bounded fake research calls; no paid model');
 });
+
+test('manual Mint archive preflight rejects unindexed Mint before paid-model calls or task budget', async t => {
+  let modelCalls=0,archiveReads=0,preflights=0;
+  const missingMint='4p7SeR6361WJ4T4icgsYTnzAUzfA5NwM4CwYD9kMBjuK';
+  const model=async({stage})=>{
+    modelCalls++;
+    if(stage==='plan') return {calls:[{capability:'mint-economic-evidence',input:{mint}}]};
+    return {summary:'Only local indexed observations are presented',
+      hypotheses:[],alternativeExplanations:[],nextChecks:[]};
+  };
+  const base=await start(t,{model,readEconomic:async()=>{archiveReads++;return observedRecord;},
+    loadKnowledge:async()=>knowledge,allowedOrigins:[origin],maxTasks:1,
+    mintReadiness:async selectedMint=>{
+      preflights++;
+      return selectedMint===mint
+        ? {ready:true,status:'MINT_PRESENT_IN_LOCAL_INDEX_HISTORY_UNVERIFIED'}
+        : {ready:false,status:'MINT_NOT_INDEXED_IN_EXISTING_ARCHIVE'};
+    }});
+  let response=await post(base,{mint:missingMint,goal:'调查当前指定Mint的本地数据'});
+  assert.equal(response.status,422);
+  assert.deepEqual(await response.json(),{error:'MINT_LOCAL_EVIDENCE_UNAVAILABLE',mint:missingMint,
+    archiveStatus:'MINT_NOT_INDEXED_IN_EXISTING_ARCHIVE'});
+  assert.equal(modelCalls,0);
+  assert.equal(archiveReads,0);
+  assert.equal(preflights,1);
+  let health=await (await fetch(base+'/health')).json();
+  assert.equal(health.remainingTasks,1,'missing Mint must not consume task budget');
+  response=await post(base,{mint,goal:'调查有本地归档的Mint'});
+  assert.equal(response.status,200);
+  const result=await response.json();
+  assert.equal(result.evidence[0].input.mint,mint);
+  assert.equal(result.evidence[0].result.mint,mint);
+  assert.equal(modelCalls,2);
+  assert.equal(archiveReads,1);
+  health=await (await fetch(base+'/health')).json();
+  assert.equal(health.remainingTasks,0);
+});
