@@ -28,6 +28,8 @@
 | `offline-economic-reader.mjs` + `economic-claim-trace.mjs` | 读取**已有**SQLite经济表，局部转账/指令来源/接收者/卖出摘要与历史覆盖，不新建源 | 仅对归档证据成立；完整SOL资金路径、Swap+LP净对价、同批库存/成本和跨Mint资金闭环未真验 |
 | `followability-replay.mjs` + `investigation-continuation.mjs` | 拒绝过期/不合格纸面报价及不完整退出；局部钱包状态与下一步关注建议 | 真实可交易报价/退出、可复制净收益和长期Case Watcher未运行，`NOT_RUNNING_NO_AUTONOMOUS_WATCHER`必须保留 |
 
+**2026-11-14 R-44｜本地零模型经济证据检查已实现并通过 CI。** P0-B不再依赖先配置收费模型才能查看已保存的经济证据：在原Intelligence页面点击`免费查看指定 Mint 的本地经济证据（不使用AI）`，现有独立loopback 4547提供`POST /inspect`，只接受`{mint}`，重用`mint-economic-evidence`与原有SQLite只读CLI。健康状态`inspectionReady`单独于原AI`ready`；无模型时，`/research`仍不可用，`/inspect`保留Mint索引预检、Origin/Host、独立检查次数和无归档UNKNOWN。**实测等级**：GitHub Node24中真实临时SQLite + HTTP + 原工作台进程启动回归通过（样本合成，验证了文件哈希不变）；原版Blix整站在完全封网容器内启动另有独立验收。**尚未完成**用户实际浏览器全程点击和同一真实Mint的来源时点/原始RPC事实联调。因此P0-B的本地技术链路提升到`OFFLINE_SQLITE_HTTP_AND_PROCESS_TESTED`，P0-C仍是`UNVERIFIED_CONNECTED_RUNTIME`，不把这一轮冒充真实市场覆盖。详细见[本地研究工作台](ai-readonly-local-workbench.md)和[建设台账R-44](build-register.md)。
+ 
 ### 3. 从现状到成品：按实际依赖交付，而不是再造系统
 
 | 交付包 | 要完成的具体用户路径 | 依赖/负责组件（不复制已有能力） | 通过标准与止损条件 | 状态 |
