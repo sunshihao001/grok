@@ -5,6 +5,22 @@
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
 
+## 2026-11-14｜R-37：GMGN与历史成熟项目重新梳理的知识承接（不重造代码）
+
+**本轮依据用户提出的“GMGN这些有用的项目与之前看过的项目结合重新梳理”进行源级复核。** 原位成果位于**另一个分支**（本PR的base `blix`）：[参考成品逆向目标体系新增第13节](https://github.com/sunshihao001/grok/blob/blix/docs/project/reference-driven-goal-model-v0.1.md#13-2026-11-14gmgn--既有成熟产品--blix机会优先全局再整合v04)。2026-11-14 已再次检查当前PR #23仍Draft/open/未合并/mergeable=false；**本PR工作树没有因链接自动包含那份blix知识修订，不应声称已合并**。
+
+**新增研究结论与工程连接**：
+- GMGN官方 [Wallet Radar](https://docs.gmgn.ai/index/wallet-radar.md)可从多个Mint查重复交易、较早买入、共同持有与历史利润，最贴近现有 [Million](https://github.com/Kelows/million) Token↔Wallet 双向发现与本项目跨币群体入口；但重叠地址/共Slot/同源付款均不代表同控。
+- GMGN [wallet-score](https://github.com/GMGNAI/gmgn-skills/blob/main/skills/gmgn-wallet-score/SKILL.md)区分钱包历史Track Record与跟单者可获得的Copyability，涉及跟随延迟、滑点、费用、持仓节奏；对应原Blix Paper/Track Record、PR23 followability-replay及Million的copyability，不将供应商评分当实盘Alpha。
+- GMGN [First70/Insider](https://docs.gmgn.ai/index/insider-traders-snipers-first-70-buyers.md)明确存在部分持仓/卖出与转仓状态难辨的限制。R35/R36已在现有PR23经济档案层做了可复核的Swap+Transfer说明，避免在AI层重新计算源交易。
+- [OKX OnchainOS](https://github.com/okx/onchainos-skills)、[PumpTrace](https://github.com/AntC215/Pumptrace)、[Pulse](https://github.com/nirholas/pulse)、[HoldTech](https://github.com/co-numina/holdtech)以及Synapse用户原笔记、Nansen/Cielo/Arkham/Bubblemaps/pumpwatch/PumpGrok、旧Hermes/qb-/meme-均已按“业务结果→不同专业机制→现有Blix承接→证据/成本/授权差距”在blix文档中重新对照。**历史65项候选目录仍是全量来源索引，不表示本次65项都再次独立核验**。
+
+**不会因此改造的部分**：原Blix已存在的市场发现/Wallet/BubbleMap/Risk/Paper与PR23只读经济采集、原版受保护Research；不拉GMGN付费源/交易钱包、不复制第二套筛币或UI、不把供应商标签堆成“庄家分数”。
+
+**下一次真实增量验收入口**：以同一批有完整发现时点与拒绝理由的Mint，对照原版Blix，观察“多Mint→钱包候选→Mint反查”的新发现和真/伪独立群体，对已到手行情做只读费用/时效/退出判定；计入失败样本/旧盲点，只有超越原版基线时才建议接入独立自动化能力。原来的“研究优先级 vs 交易机会”保留可并存输出，**尚无真实市场优势验证**。
+
+**状态**：SOURCE_REVIEW + DOC_COMMITTED(blix) + PR_REGISTER_POINTER；本项没有新增生产代码、API实跑、付费或真实订单，**不能引用此前CI证明本轮研究改善交易收益**。
+
 ## 2026-11-14｜R-36：原版 Research 钱包数语义与同签名交易证据进入 AI 工作台
 
 **起点与责任边界**：承接 R-35 的两个已验证边界：原版 `research.js::gather` 统计 `COUNT(DISTINCT wt.wallet)`（当前 watching=1、side=buy、同 Mint、无历史时窗），不是独立经济主体；`wtrack.parseTransfer` 对「同笔买入+独立 Token 转移」无法提供完整单动作摘要，但 PR #23 的 `economic-events.mjs` 已归档指令级转移。**本轮不解除受保护的 `server/research.js` 文件校验，不改原交易/签名/付款代码，不新建 RPC 采集器或数据库。**
