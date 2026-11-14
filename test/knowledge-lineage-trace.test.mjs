@@ -198,3 +198,63 @@ test('seven interpretation capabilities and five network views map onto existing
  }
  assert.match(doc,/not|未验|未知/i,'mapped views must preserve verification limitations');
 });
+
+
+test('Meme multipath relation map closes six business results, knowledge bridges and feedback without market authority',()=>{
+ const r=run('--routes');
+ assert.equal(r.kind,'READ_ONLY_MEME_MULTI_ROUTE_GRAPH_AUDIT');
+ assert.equal(r.staticGraphChecked,true);
+ assert.equal(r.runtimeMarketClosureVerified,false);
+ assert.equal(r.actualAIUseVerified,false);
+ assert.equal(r.followabilityVerified,false);
+ assert.equal(r.counts.outcomes,6);
+ assert.equal(r.counts.entryRoutes,4);
+ assert.equal(r.counts.feedbackLoops,5);
+ assert.equal(r.counts.knowledgeStages,9);
+ assert.equal(r.counts.concepts,14);
+ assert.ok(r.counts.handoffs>=15);
+ assert.equal(r.counts.brokenPaths,0);
+ assert.deepEqual(r.businessOutcomes.map(x=>x.id),['O1','O2','O3','O4','O5','O6']);
+ assert.deepEqual(r.entryRoutes.map(x=>x.id),
+   ['MARKET_FIRST','MINT_FIRST','WALLET_FIRST','CROSS_MINT_FIRST']);
+ assert.deepEqual(r.knowledgeLifecycle.map(x=>x.id),Array.from({length:9},(_,i)=>'K'+(i+1)));
+ assert.ok(r.stopBoundaries.some(x=>x.includes('No real archive')));
+ assert.match(r.status,/DECLARATIVE/);
+ assert.ok(r.limitations.some(x=>/not observed wallet relations/.test(x)));
+ for(const outcome of r.businessOutcomes){
+   assert.ok(outcome.domainRefs.length>=4,outcome.id+' must have domain support');
+   assert.ok(outcome.codeRefs.length>=2,outcome.id+' must name real owners');
+   assert.ok(outcome.verification.includes('UNVERIFIED')||outcome.verification.includes('NOT_RUNNING'),
+    outcome.id+' has not earned live market acceptance');
+ }
+});
+
+test('graph is actually multipath and bidirectional for business review, not a fixed D01-D12 stage sequence',()=>{
+ const r=run('--routes');
+ const pairs=new Set(r.handoffs.map(x=>x.from+'->'+x.to));
+ for(const needed of ['O1->O5','O2->O1','O2->O3','O3->O2','O3->O4',
+   'O4->O1','O4->O5','O5->O3','O5->O6','O6->O1','O6->O3','O6->O5']){
+   assert.ok(pairs.has(needed),'missing cross-route review/feedback '+needed);
+ }
+ for(const loop of r.feedbackLoops){
+   assert.equal(loop.path[0],loop.path.at(-1),loop.id);
+   for(let i=1;i<loop.path.length;i++){
+     assert.ok(pairs.has(loop.path[i-1]+'->'+loop.path[i]),
+       loop.id+' has missing graph handoff');
+   }
+ }
+ const axisModel=JSON.parse(readFileSync(new URL('../knowledge/DOMAIN-MODEL.v1.json',import.meta.url),'utf8'));
+ assert.equal(axisModel.domains.length,12);
+ assert.equal(axisModel.cross_axis_alignment.independentAxes.length,10);
+ assert.equal(axisModel.cross_axis_alignment.linkKinds.length,11);
+ assert.equal(axisModel.cross_axis_alignment.placementDecision.newEngineRequired,false);
+ for(const edge of r.handoffs){
+   assert.equal(edge.relation,'CONDITIONAL_BUSINESS_HANDOFF_NOT_INFERRED_ECONOMIC_EDGE');
+   assert.ok(edge.minimumHandoff&&edge.result&&edge.condition);
+ }
+ const graphDoc=readFileSync(new URL('../docs/project/cross-layer-anchor-map-20261113.md',import.meta.url),'utf8');
+ for(const required of ['多路线','知识闭环','业务闭环','工程闭环','MARKET_FIRST','WALLET_FIRST',
+   'MINT_FIRST','CROSS_MINT_FIRST','K1','K9','O1','O6','不等于','UNKNOWN']){
+   assert.ok(graphDoc.includes(required),'business-to-knowledge graph narrative missing '+required);
+ }
+});
