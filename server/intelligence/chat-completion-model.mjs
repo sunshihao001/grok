@@ -49,6 +49,10 @@ function promptFor(stage, context) {
     usedCalls: context.usedCalls || [],
     knowledge, knowledgeToolHints: context.knowledgeToolHints || [],
     evidence,
+    // Short, deterministic O1–O6 missing-proof cues come from observed archive
+    // coverage; they are NOT new facts, tool permissions or model instructions.
+    ...(stage==='interpret' ? {evidenceAnchors:(context.evidenceAnchors||[])
+      .slice(0,6).map(x=>({anchor:x.anchor,status:x.status,missing:x.missing}))} : {}),
   };
   const json = JSON.stringify(scope);
   if (Buffer.byteLength(json, 'utf8') > MAX_CONTEXT_BYTES) {
@@ -64,6 +68,7 @@ const RULES = [
   'Tool parameters must contain only the single authorized Mint from mints. In discover stage select only an observed candidate Mint.',
   'Financial claims require source evidence; unknown chain history is UNKNOWN, not proof of absence.',
   'A Token transfer plus later sell does not prove sold inventory provenance, common wallet controller, or executable profit.',
+  'EvidenceAnchors are bounded missing-proof research cues; never treat them as verified facts, executed checks, or trading signals.',
   'Do not request transactions, signing, funding, order placement, API-key disclosures, web fetches, or paid provider actions.',
 ].join(' ');
 
