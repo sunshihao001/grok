@@ -135,6 +135,8 @@
 - 可选纸面收据直接调用已有`followability-replay`，即使有正收益算术也只显示`PAPER_SCENARIO_CALCULATED_NOT_LIVE`，`outOfSamplePerformance=NOT_ESTABLISHED`、`liveTradeResults=NOT_MEASURED`。**没有按一分钟K线编造入出成交。**
 - 报告只给出“同源候选选择是否改变”和“不确定性”，不输出伪交易收益或超出原范围的GMGN/钱包新发现；Wallet Radar从Pulse之外发现的新Mint必须使用独立**扩展候选来源覆盖**对照，不能暗中算作这轮A/B的成功。
 
+**新增可重复执行的离线 CLI**：`npm run audit:opportunity-a-b:offline -- --input EXISTING_FROZEN_A_B.json`（等价 `node scripts/audit-opportunity-comparison-offline.mjs --input ...`），输入 JSON 必须为 `{snapshot, baseline, enhanced, supportingEvidence?, paperReceipts?}`，其中 baseline/enhanced 为此前 `discoverPulseInvestigation` 的原始回执、各带一致 `candidateDigestSha256`；输入文件必须已存在且不超过1MiB。只读取该文件并向 stdout 输出对照报告；**不联网、不打开支付/交易模块、不读写数据库、不启动本地模型服务**。新增CLI[源码](https://github.com/sunshihao001/grok/blob/integration/blix-evidence-readonly-20261108/scripts/audit-opportunity-comparison-offline.mjs)及[输入不变/不一致拒绝测试](https://github.com/sunshihao001/grok/blob/integration/blix-evidence-readonly-20261108/test/offline-opportunity-comparison-cli.test.mjs)。此命令并不自行生成真实A/B模型回执或获取历史市场数据；测试中钱包信号和两Mint均为脚本化样本。
+
 ### 10.3 结果与工程裁决
 
 本轮首次可量化的成果是**受控选择差异、同批输入哈希、事后证据阻断、未入选候选范围保护和纸面交易边界**；没有建立“真实市场 A/B 的召回率提升”“真实成本后净收益增益”“GMGN与OKX现成接口已经调用”。这不是学术抽象：它是未来任何模型/钱包筛选提升主张必须遵守的最短离线核对合同，且直接复用Blix已保存的数据对象和只读业务模块。它也纠正此前“AI选了不同的Mint就已经提升交易机会”的隐含假设。
