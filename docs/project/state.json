@@ -1,8 +1,8 @@
 {
   "schema_version": "0.1",
-  "date": "2026-11-06",
+  "date": "2026-11-09",
   "branch": "blix",
-  "purpose": "project_knowledge_and_goal_orientation_not_runtime",
+  "purpose": "full_original_blix_product_preserved_plus_professional_second_stage_extension; this file documents project state, not runtime certification",
   "sources": [
     {
       "id": "BLIX",
@@ -48,7 +48,7 @@
     {
       "id": "G1-MARKET",
       "level": "strategy",
-      "text": "持续演化的Solana Meme市场智能产品",
+      "text": "完整Blix成熟终端基础上的Solana Meme市场情报、调查与专业机制扩展（原版能力全部保留）",
       "authority": "user",
       "status": "USER_CONFIRMED"
     },
@@ -92,7 +92,7 @@
     {
       "id": "G3-BLIX",
       "level": "implementation",
-      "text": "blix分支作为当前产品建设主体",
+      "text": "现有Blix完整产品作为二次开发的唯一主体，保留原版全功能，允许正常维护与专业扩展",
       "status": "USER_CONFIRMED",
       "authority": "user"
     },
@@ -126,6 +126,13 @@
       "text": "Blix 全主体只读研究：业务与UI→API→代码→事实/存储→工程/权限→可靠性/整合判断",
       "status": "USER_DIRECTED_STATIC_RESEARCH_ONLY",
       "authority": "user"
+    },
+    {
+      "id": "G2-ORIGINAL-BLIX",
+      "level": "capability",
+      "text": "完整继承并维护原版Blix所有市场、Pulse、Coin、钱包、AI、图表、账户、纸面和真实交易、UI与运维能力，不把研究环境的只读限制当成永久产品删减",
+      "authority": "user",
+      "status": "USER_CONFIRMED"
     }
   ],
   "links": [
@@ -213,18 +220,29 @@
       "G4-STUDY",
       "G2-MECHANISM",
       "informs"
+    ],
+    [
+      "G2-ORIGINAL-BLIX",
+      "G1-MARKET",
+      "implements"
+    ],
+    [
+      "G3-BLIX",
+      "G2-ORIGINAL-BLIX",
+      "preserves"
     ]
   ],
   "decision": {
     "id": "D-BLIX-2026-11-06",
-    "choice": "blix current branch is selected product base",
+    "choice": "Preserve full imported Blix product and all original user capabilities; perform compatible professional extensions and regular maintenance on its existing foundation",
     "status": "USER_CONFIRMED",
     "live_state": "NOT_VERIFIED",
     "revisit_if": [
-      "只读隔离无法可靠实现",
-      "关键经济事实覆盖不足而无法有限补全",
-      "持续改造比整用成熟能力显著更昂贵"
-    ]
+      "具体新增专业能力无法以安全兼容的方式复用现有功能时，重新比较实现方法（不默默删除原版）",
+      "运行模式无法隔离真实交易、签名和费用时，暂停相应真实运行路径并调整隔离方案",
+      "成熟成品能以更少成本扩展既有Blix时，优先改用复用方案（保留原版功能）"
+    ],
+    "current_product_definition": "Preserve all original Blix product capabilities plus added professional Solana Meme intelligence; read-only isolation applies only to currently unauthorized research/testing workflows"
   },
   "next": [
     {
@@ -286,23 +304,24 @@
     "server_runtime": "BLOCKED_PENDING_READ_ONLY_ISOLATION"
   },
   "current_policy": {
-    "date": "2026-11-06",
-    "source": "USER_DIRECTION_THIS_TURN",
-    "mode": "READ_ONLY_STATIC_WHOLE_PRODUCT_RESEARCH",
+    "date": "2026-11-09",
+    "source": "USER_CONFIRMED_2026_11_09_FULL_ORIGINAL_PRESERVATION",
+    "mode": "GITHUB_BRANCH_REVERSIBLE_BUILD_AND_OFFLINE_TEST_ALLOWED",
     "goal_anchor": "docs/project/goal-map.md",
-    "status": "PROVISIONAL_REVISABLE_ANCHORS",
+    "status": "PRODUCT_PRESERVATION_AND_ENHANCEMENT_CONTINUING_LIVE_NOT_VERIFIED",
     "paused": [
-      "BLIX_RUNTIME",
-      "NETWORKED_MINT_TEST",
-      "INSTALL_DEPS",
-      "CODE_CHANGES",
+      "UNISOLATED_BLIX_RUNTIME",
+      "NETWORKED_MINT_TEST_WITH_UNREVIEWED_COST",
+      "UNREVIEWED_DEPENDENCY_INSTALLATION",
       "MODEL_OR_PAID_PROVIDER_ACTIVATION",
       "CLOUD_DEPLOY",
       "TRADE",
       "SIGN",
-      "PAY"
+      "PAY",
+      "AUTOCLAIM"
     ],
-    "completion": "Business/UI to APIs, code, source evidence, history, operations and integration decision map; gaps and UNKNOWN explicit"
+    "completion": "Preserve original product and UX; advance reversible professional feature integration, source-differential checks, offline regression and gated real-data acceptance; research and runtime verified separately",
+    "history_note": "Earlier 2026-11-06 static-only state remains documented below and in historical project reports, but is not the permanent Blix product direction."
   },
   "whole_product_review": {
     "date": "2026-11-06",
@@ -526,5 +545,85 @@
     "runtime": "NOT_RUN",
     "ai_ab": "NOT_TESTED",
     "business_code_changed": false
+  },
+  "original_product_preservation": {
+    "decided_at": "2026-11-09",
+    "user_confirmation": "USER_CONFIRMED",
+    "source_snapshot": "e2c69d42dcdae7690f9d47e0d0e7e8257ed48326",
+    "origin_commit_label": "Blix full snapshot, imported 2026-11-06; original product not replaced",
+    "product_scope": [
+      "Discover/Pulse/new launches",
+      "Coin/token/holder/bubblemap",
+      "Charts/market data",
+      "Wallet tracking/Smart Money",
+      "AI research/signals",
+      "Paper and real trading capabilities",
+      "Accounts/hosted wallet/Vault",
+      "Alerts/history/Journal",
+      "Web/classic UI and worker",
+      "Deployment/maintenance"
+    ],
+    "maintenance_allowed": true,
+    "extension_model": "IN_PLACE_COMPATIBLE_ADDITIONS_AND_REVIEWED_FIXES",
+    "deletion_policy": "NO_UNREVIEWED_REMOVAL_OR_REPLACEMENT_OF_ORIGINAL_CAPABILITIES",
+    "runtime_safety": "PRESERVE_SOURCE_BUT_DO_NOT_ACTIVATE_UNAUTHORIZED_SIGNING_TRADING_CLAIMS_BILLING_OR_DEPLOYMENT",
+    "reference": "docs/project/README.md",
+    "presence_verified": "767/767 source paths from imported snapshot present in PR #23 candidate CI",
+    "unchanged_core_verified": "28/28 selected original market/UI/trade/AI/core modules byte-identical in PR #23 candidate CI",
+    "regression_test": "test/original-blix-preservation.test.mjs in Draft PR #23",
+    "full_functional_runtime_accepted": false
+  },
+  "independent_workstreams": {
+    "product_base": {
+      "status": "SOURCE_PRESENT_PRESERVED_NOT_TARGET_LIVE_VERIFIED",
+      "ref": "blix",
+      "evidence": "Imported source snapshot and core-module content comparison"
+    },
+    "original_maintenance": {
+      "status": "IN_PROGRESS",
+      "candidate": "PR #23 WTrack fixes and upstream parity checks",
+      "live": "NOT_VERIFIED"
+    },
+    "economic_intelligence_extension": {
+      "status": "DRAFT_OFFLINE_CI_VERIFIED",
+      "candidate": "Draft PR #23 directly targets blix (cumulative #18 and #22 ancestry), NOT_MERGED",
+      "ci": {
+        "sha": "bae4fec049be8b5dd14522e104291b0ee969dc6c",
+        "url": "https://github.com/sunshihao001/grok/actions/runs/42537815318",
+        "all_tests": "452/452",
+        "security": "20/20",
+        "evidence": "42/42",
+        "audit": "https://github.com/sunshihao001/grok/actions/runs/42537815434",
+        "scope": "PULL_REQUEST_CI_OFFLINE_NOT_LIVE"
+      },
+      "target_branch": "blix",
+      "mergeable_pr_as_checked": "CLEAN_NO_CONFLICT_NOT_MERGED"
+    },
+    "domain_knowledge": {
+      "status": "SOURCE_INDEXED_AND_PARTIALLY_STUDIED_NOT_FULL_RUNTIME_ACTIVATION",
+      "sources": "knowledge/MIGRATION.json",
+      "note": "Unverified research ideas and mapped units are not proven findings",
+      "latest_source_study": {
+        "as_of": "2026-11-09",
+        "topic": "Cohort inclusion and survivorship versus forward label maturity/censoring",
+        "status": "PINNED_SOURCE_READ+INDEPENDENT_JSON_AGGREGATE_REPRODUCED+SYNTHETIC_SQL_BRANCH_REPRODUCED",
+        "source_index": "knowledge/references/source-coverage-v0.1.json",
+        "full_study": "knowledge/references/source-knowledge-deep-study-v0.1.md#14",
+        "evidence": [
+          "Why-Solana original input JSONs reproduced 32/2740, 6/171, 11/11, p=5.513070808628306e-22",
+          "ian dataset 6h no candles prematurely sets 24h/3d to zero and labeled=1 in original code"
+        ],
+        "known_limits": [
+          "Not live/independent model A/B",
+          "Not original Python end-to-end nor full parquet recompute",
+          "Original Blix market engine and trading code untouched"
+        ],
+        "next_validation": "Same frozen Blix market cohort: launch observed, selected, research queued, rated, matured outcome, price missing vs negative; avoid labeling absent as unsuccessful"
+      }
+    },
+    "read_only_target_runtime": {
+      "status": "NOT_LIVE_VERIFIED",
+      "notes": "Existing legacy server has signing/trading/auto-claim/billing; gated startup is not a sandbox"
+    }
   }
 }

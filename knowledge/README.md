@@ -15,6 +15,36 @@
 > 建立于 2026-11-06。**这是已迁入资料的分类与检索入口，不是重新建立一个专家体系，也不是运行时AI已经掌握的证明。** 源文件旧版保留；本文仅管理Blix持有的副本、出处及使用方式。
 
 
+
+## 2026-11-09｜新增知识进展：从“观察选择有偏”追到真实数据的标签生成与后验可识别边界
+
+这次不是增加一套统计学知识目录，也不改动Blix原版产品功能。前几轮已经发现Blix市场入选、AI评级及参考项目的选择性观察；**本轮专门补上被忽略的“结果如何被写成真值”**。对照[Why-Solana可复算的样本偏差](https://github.com/searadacunha/Why-Solana-Memecoins-Are-Over/tree/070d2a6e6dcb89efe18d01091a8040eb323e1099)、[CryptoBot迁移幸存者审计](https://github.com/elalamiimed/CryptoBot/blob/1be592d71020738510b25e3bed7a2f5def13ff0a/reports/cohort_survivorship_20260927/FINDING.md)及[ian05012原始采集与标签源码](https://github.com/ian05012/solana-memecoin-dataset/tree/7070d00e1e4492f8604d988549d91785cc5f43f7/scripts)，找到一个具体的源级分叉：**6小时无K线可直接写入尚未到期的24小时、3天负标签，之后常规队列不会重访**。已用同条件离线SQL分支复算，未运行外部采集产品或真实Solana交易。
+
+这一认识已经不是孤立的“幸存者偏差”提示，而是贯穿四条业务的专业约束：**发行总体是什么；Mint/钱包如何被采入、排除和深查；结果是否成熟或缺失；统计能回答市场的什么问题**。尤其要区分：研究样本内经济机制、全市场普遍性、可执行交易收益三个不同命题，不让一个结果数字替代三者。
+
+- **完整知识研究和来源限制**：[跨项目深研第14节](references/source-knowledge-deep-study-v0.1.md#14-2026-11-09-新增跨项目实证样本入选--结果成熟--数据缺失如何共同制造市场规律)。
+- **已经修订的专业正文**：[D11 失败样本与可迁移性](cases/independent-validation-and-failure-cases.md#2026-11-09知识反证案例先挑赢家再标结果研究结论何时不能迁移到真实市场)、[D03 价格高点与实际可执行收益](mechanisms/market-price-mechanism-research.md#2026-11-09价格结构研究的新边界最大后验高价不是可执行收益)。
+- **来源已登记**：[按原仓与版本核验的来源覆盖](references/source-coverage-v0.1.json)；这是新读到的代码/研究案例，**不是AI运行时知识已激活、真实收益或模型识别率提升证明**。现有原Blix Pulse、钱包、AI、账户和交易业务保持原样。
+- **下一项高信息价值验证**：用Blix现有已存发行/AI评级/历史结果的一个冻结时间窗，检查**入选/未入选、结果未成熟、缺价格、确认负结果**的不同分母；若原始发行分母无法可靠恢复，停止夸称总体效能，优先复用成熟来源而非自己发明一个统计答案。
+
+## 2026-11-09｜旧项目的纯知识已开始进入专业正文（不等于运行时激活）
+
+**本次修订的是原知识本身，而非又建参考索引或功能标签。** 过去“独立深读参考项目→迁入Blix能力”遗漏了无需立即形成程序的纯理论、概念与研究方法。本轮保留旧Hermes/meme-/qb-原稿，修正其不可靠的概率/标签推论，将四条有独立价值的知识脉络直接写进原有专业正文：
+
+| 旧原始研究中的独立认识 | Blix 已修订的唯一专业正文 | 不照搬的历史部分 |
+|---|---|---|
+| Hermes“量什么/能伪/能算/本质”的字段反推、统计行为分析 | [方法：观测语义、可复现性与经济解释](methods/hermes-feature-to-market-structure.md#2026-11-09纯知识转化字段审查可制造性与观察边界) | “两秒同步=同控”“同一交易所出金=庄家”等未经校准判别；未经证据支持的数值阈值 |
+| Hermes五力模型 + Gate认识论 | [机制：调查价值、交易价值、承接/扩散/库存和决策时效](mechanisms/wallet-roles-and-inventory.md#2026-11-09纯知识转化候选研究价值与交易价值不是一个目标) | 把比喻式五力公式当价格/收益方程；把缺数据一律BLOCK套进只读研究 |
+| meme-AVWAP锚点、FCZ、积累/派发语义 | [机制：成本锚点是市场代理、事前与事后认识分离](mechanisms/market-price-mechanism-research.md#2026-11-09纯知识转化成本锚与观察时点不把-k-线当链上身份) | 将POC/AVWAP自动称为特定主控人的真实成本；按未来上涨回填当下预测 |
+| qb-判断治理、校准、自欺审计 + meme-反证方法 | [案例与认识论：任务完成、判断有据、实际改善是三个独立命题](cases/independent-validation-and-failure-cases.md#2026-11-09纯知识转化判断是否值得相信与任务是否结束是两个问题) | 文档完成=功能运行、dry-run通过=真实可靠、只积累正确例而不记录失败 |
+
+**纯知识允许暂时没有产品落点**：原始来源、未使用概念及新问题保持可检索；按问题真正需要时，可供AI理解和跨行业推理，但不因它没有代码接口就删除，也不默认全量注入系统提示词。见 [来源覆盖与这批语义转换记录](references/source-coverage-v0.1.json)、[ai-d对纯理论吸收的通用方法](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/organization-protocol.md)。
+
+**下一步不是再增加知识分类**：检验一轮真实调查问题是否能够正确选用上述知识，主动发现新经济问题、区别观测/因果/决策与缺数据、避免错误阈值，并与不加载旧知识的分析对照。**这些专业正文已被实际修改，但并未让Blix当前运行时AI自动读到，也没有测得模型提升。**
+
+
+**连续理论与证据依赖补审（2026-11-09）**：进一步定向核查旧Hermes 10–14从钱包角色→同源关系→Sybil/Wash/协调→证据链→行动Gate的原推导，以及meme-的Spring/SOS/LPS完整时序和qb-的原判定样本。**新的认识**不是多贴三个风险标签，而是多个标签可能由同一笔交易、同一供应商快照或同一价格序列派生，不能充当多份独立验证；交易禁止与只读研究停止也不是一个决定。已原位修订[钱包与协同机制](mechanisms/wallet-roles-and-inventory.md)、[价格形成与阶段序列](mechanisms/market-price-mechanism-research.md)、[反证/判断治理](cases/independent-validation-and-failure-cases.md)，并在[来源覆盖台账](references/source-coverage-v0.1.json)中登记定向审阅状态、未证事项和风险锚点；[ai-d跨领域评测](https://github.com/sunshihao001/ai-d/blob/main/evaluation/first-cross-domain-tests.md)增加非独立证据的失败场景。**均为静态知识修订，尚未实测模型或Blix运行时收益。**
+
 ## 2026-11-13｜最新 P1–P2 知识融合与现实能力对照（优先读）
 
 **新的单一入口**：[P1–P2专业知识全域核查、矛盾修正与代码对应](references/p1-p2-knowledge-reconciliation-20261113.md)。已核对本地D01–D12、Hermes/qb-/meme-/ai-d/Why-Solana与代表性GitHub源码、Solana官方协议；原有152单元和65参考资产的未审状态不被改成完成。

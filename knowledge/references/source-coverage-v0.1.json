@@ -1,6 +1,6 @@
 {
   "schema_version": "0.1",
-  "as_of": "2026-11-13",
+  "as_of": "2026-11-14",
   "purpose": "Track completeness of source-repo understanding independently from Blix integration; tree inventory is not knowledge mastery.",
   "source_state_terms": {
     "TREE_INVENTORIED": "All paths and hash counts enumerated, content NOT all read",
@@ -350,6 +350,47 @@
       ],
       "status": "SELECTED_SOURCE_READ_NOT_COMPLETE",
       "review_scope": "ORIGINAL_GOAL_AND_TARGETED_CODE_NO_FULL_RUN"
+    },
+    {
+      "repo": "ian05012/solana-memecoin-dataset",
+      "commit": "7070d00e1e4492f8604d988549d91785cc5f43f7",
+      "read_paths": [
+        "README.md",
+        "scripts/collect.py",
+        "scripts/gmgn_client.py",
+        "scripts/label_returns.py"
+      ],
+      "status": "TARGETED_SOURCE_READ_NO_DATASET_FULL_RECOMPUTE",
+      "issue": "70:30 graduated/hot supplier discovery; six-hour no-candle branch prelabels 24h and 3d at zero; snapshots repeat per mint; no prospective outcome validation"
+    },
+    {
+      "repo": "elalamiimed/CryptoBot",
+      "commit": "1be592d71020738510b25e3bed7a2f5def13ff0a",
+      "read_paths": [
+        "reports/cohort_survivorship_20260927/FINDING.md",
+        "reports/cohort_representative_20260927/cohort_representative.json"
+      ],
+      "status": "TARGETED_RESEARCH_ARTIFACT_READ_NO_REEXECUTION",
+      "issue": "41,470 migrated-only labelled Mint survivors; within-sample price peak cannot be used as all-launch executable return"
+    },
+    {
+      "repo": "searadacunha/Why-Solana-Memecoins-Are-Over",
+      "commit": "070d2a6e6dcb89efe18d01091a8040eb323e1099",
+      "read_paths": [
+        "code/a4_selection_bias.py",
+        "data/adverse/a4_selection_bias.json",
+        "data/ancrage/symboles.json",
+        "data/cibles/cibles.json",
+        "data/trace_cohorte/t0_cohorte.json"
+      ],
+      "status": "ORIGINAL_JSON_INPUTS_FETCHED_AND_ORIGINAL_FORMULAE_INDEPENDENTLY_RECOMPUTED",
+      "issue": "Original fixed JSONs confirm 2740/32, 171/6, 11/11 with exact reported iid reference probability; author Python not executed end to end",
+      "source_input_blob_shas": {
+        "data/ancrage/symboles.json": "8b28b082bf69715c7b55f93194868a10e31586b7",
+        "data/cibles/cibles.json": "3846eb1fa059205600edfa6889d50ba5760b9655",
+        "data/trace_cohorte/t0_cohorte.json": "96dfc26728863ff6010d8188aeb273a79456a780",
+        "data/adverse/a4_selection_bias.json": "b1878388573e75aedbdb5f5ae4bd08d1d9715309"
+      }
     }
   ],
   "independent_knowledge_topics": [
@@ -525,6 +566,81 @@
       "live_validation": "NOT_RUN"
     },
     {
+      "date": "2026-11-09",
+      "kind": "LEGACY_PURE_THEORY_SEMANTIC_TRANSFORM_20261109",
+      "document": "knowledge/README.md#2026-11-09旧项目的纯知识已开始进入专业正文不等于运行时激活",
+      "evidence": "ORIGINAL_SOURCE_FILES_READ+QUALIFIED_INTERPRETATION_WRITTEN_IN_EXISTING_KNOWLEDGE",
+      "changed_existing_knowledge": [
+        "knowledge/methods/hermes-feature-to-market-structure.md",
+        "knowledge/mechanisms/market-price-mechanism-research.md",
+        "knowledge/mechanisms/wallet-roles-and-inventory.md",
+        "knowledge/cases/independent-validation-and-failure-cases.md"
+      ],
+      "source_items_reviewed": 9,
+      "unresolved": [
+        "full legacy-repo concept-by-concept coverage",
+        "AI on-demand retrieval and actual Blix execution",
+        "independent model task uplift",
+        "empirical validation of historical strategy claims"
+      ],
+      "warning": "Semantic transformation and document commits do not prove full knowledge acquisition or operational capabilities.",
+      "live_validation": "NOT_RUN"
+    },
+    {
+      "date": "2026-11-09",
+      "kind": "OLD_KNOWLEDGE_RELATIONS_SEMANTIC_RECOVERY_20261109",
+      "source_read_items": 16,
+      "changes": [
+        "knowledge/mechanisms/wallet-roles-and-inventory.md",
+        "knowledge/cases/independent-validation-and-failure-cases.md",
+        "knowledge/mechanisms/market-price-mechanism-research.md",
+        "ai-d:evaluation/first-cross-domain-tests.md"
+      ],
+      "insights": [
+        "role/funding/Sybil-wash-coordination are different propositions connected by evidence",
+        "multiple derived indicators from one source cannot be counted as independent observations",
+        "price stage labels require time order and observable-at-time discipline",
+        "qb judgment governance files include skeleton benchmark, not independently verified performance"
+      ],
+      "not_done": [
+        "full legacy text semantic review",
+        "real Solana signatures reconstruction",
+        "Blix runtime domain knowledge retrieval",
+        "controlled multi-model experiment"
+      ],
+      "research_value_anchor": "Continue only when tracing original source changes a question, correction, falsification, or product result. Do not count migrated files or length as progress.",
+      "status": "SOURCE_READ_STATIC_CROSS_CHECK_ONLY",
+      "next": "Compare fixed historical QB Mint plus Blix existing API outputs with on-demand original knowledge in an authorized read-only, safely controlled setting; first prove source lineage and event coverage."
+    },
+    {
+      "date": "2026-11-09",
+      "kind": "SELECTED_COHORT_FORWARD_LABEL_MATURITY_AND_EVIDENCE_MISSINGNESS",
+      "document": "knowledge/references/source-knowledge-deep-study-v0.1.md#14-2026-11-09-新增跨项目实证样本入选--结果成熟--数据缺失如何共同制造市场规律",
+      "scope": "Blix launch/research/rated sample, Million buyer shortlist, HoldTech top holders, PumpTrace cap; new external issuer cohort and forward label code",
+      "source_commits": {
+        "ian05012/solana-memecoin-dataset": "7070d00e1e4492f8604d988549d91785cc5f43f7",
+        "elalamiimed/CryptoBot": "1be592d71020738510b25e3bed7a2f5def13ff0a",
+        "searadacunha/Why-Solana-Memecoins-Are-Over": "070d2a6e6dcb89efe18d01091a8040eb323e1099"
+      },
+      "artifacts": [
+        "Why-Solana count 32/2740 =1.1679% neutral, 11/11 selected; derived factor 85.62 is descriptive not performance",
+        "ian no-candles 6h+1s => 24h/3d labels zero and labeled=1; later input never revisited by WHERE labeled=0 (replayed simplified SQL branch)",
+        "CryptoBot 41,470 labels all migrated; peak theoretical winner rate cannot be compared to executable rate without harmonizing frame and outcome",
+        "Independent full-source JSON recompute verified 2740/32,171/6,11/11 and p=5.513070808628306e-22 exactly matches published artifact; no full Python execution"
+      ],
+      "source_level_check": "PASSED_PINNED_ORIGINAL_SOURCE_JSON_FETCHED+INDEPENDENT_RECOMPUTATION_OF_PUBLISHED_AGGREGATES+SOURCE_BRANCH_SQL_REPRO",
+      "incomplete": [
+        "Full source repositories not exhaustively read",
+        "Blix live launch vs rated vs unreviewed denominator not reconstructed",
+        "No independent AI method A/B and no mainnet chain validation",
+        "No measured model accuracy or real trading advantage",
+        "Original author Python A4 script not run end-to-end; matched its formula using source JSON via isolated JS",
+        "Published large parquet and MELT raw dataset not reexecuted"
+      ],
+      "decision": "Continue knowledge in original domain sections, not build new specialist taxonomy; next useful result is one frozen whole-Mint cohort selection/label maturation audit before changing scoring",
+      "risk_anchor": "Do not repeat generic bias warnings; only continue if new source identifies a decision-changing source path or frozen cohort test"
+    },
+    {
       "date": "2026-11-13",
       "document": "knowledge/references/p1-p2-knowledge-reconciliation-20261113.md",
       "kind": "P1_P2_WALLET_FUNDING_INVENTORY_COHORT_EXECUTION_AI_SOURCE_RECONCILIATION",
@@ -553,6 +669,194 @@
         "live Solana Token-2022/CPI/WSOL/LP archival completeness",
         "model-based knowledge-selection A/B, monitor execution, copytrade out-of-sample performance"
       ]
+    }
+  ],
+  "pure_theory_transformations": [
+    {
+      "repository": "sunshihao001/-",
+      "source": "learning/01-04-基础理论/04-链上本质思维工具箱.md",
+      "blob": "a581d38e405501067230e311b05c259b27d8875f",
+      "target": "knowledge/methods/hermes-feature-to-market-structure.md",
+      "finding": "Field observation semantics, spoofability and reproducibility; unsupported correlation/threshold claims corrected.",
+      "status": "SOURCE_READ_SEMANTICALLY_TRANSFORMED_NOT_RUNTIME_VALIDATED"
+    },
+    {
+      "repository": "sunshihao001/-",
+      "source": "learning/GMGN字段组合五力模型理论总结.txt",
+      "blob": "7b26b0a9f692ee241b2f7fdaeddc381b750fdbbb",
+      "target": "knowledge/mechanisms/wallet-roles-and-inventory.md",
+      "finding": "Five forces as independent economic inquiry dimensions; distinguish research interest from trading value.",
+      "status": "SOURCE_READ_SEMANTICALLY_TRANSFORMED_NOT_RUNTIME_VALIDATED"
+    },
+    {
+      "repository": "sunshihao001/-",
+      "source": "learning/16-Gate决策框架理论基石.md",
+      "blob": "225167423183bfaca2a46a00fe3295036f34b1d7",
+      "target": "knowledge/mechanisms/wallet-roles-and-inventory.md",
+      "finding": "Observation vs decision, evidence TTL vs decision TTL; mandatory missing→BLOCK not universal.",
+      "status": "SOURCE_READ_SEMANTICALLY_TRANSFORMED_NOT_RUNTIME_VALIDATED"
+    },
+    {
+      "repository": "sunshihao001/meme-",
+      "source": "06_资料吸收/资料吸收_AVWAP锚点选择_v0.1.md",
+      "blob": "8f5b48ee7b9fe11762cf4a84e8c02fe0fbf6bee5",
+      "target": "knowledge/mechanisms/market-price-mechanism-research.md",
+      "finding": "Anchor choice and historical observations are market cost proxies, not identified wallet cost.",
+      "status": "SOURCE_READ_SEMANTICALLY_TRANSFORMED_NOT_RUNTIME_VALIDATED"
+    },
+    {
+      "repository": "sunshihao001/meme-",
+      "source": "06_资料吸收/资料吸收_AccumulationRange_第一控盘区_v0.1.md",
+      "blob": "4b89d573cfe7a5f16d8982b82904bc07f5863324",
+      "target": "knowledge/mechanisms/market-price-mechanism-research.md",
+      "finding": "Past-stage classification vs ex-ante detection; retrospective confirmation can leak future information.",
+      "status": "SOURCE_READ_SEMANTICALLY_TRANSFORMED_NOT_RUNTIME_VALIDATED"
+    },
+    {
+      "repository": "sunshihao001/meme-",
+      "source": "09_规则与回测/反证实验设计_v0.1.md",
+      "blob": "21c321922254eaeececf8fb48957b858c0a3bc4b",
+      "target": "knowledge/cases/independent-validation-and-failure-cases.md",
+      "finding": "Explicit falsification conditions and failed/omitted observation cohorts, not only positive cases.",
+      "status": "SOURCE_READ_SEMANTICALLY_TRANSFORMED_NOT_RUNTIME_VALIDATED"
+    },
+    {
+      "repository": "sunshihao001/qb-",
+      "source": "hermes_harness/15_judgment_governance/README.md",
+      "blob": "f17421786c23f46beb89e658e02eff8a4aba8873",
+      "target": "knowledge/cases/independent-validation-and-failure-cases.md",
+      "finding": "Execution completion vs evidence-backed judgment quality vs benefit.",
+      "status": "SOURCE_READ_SEMANTICALLY_TRANSFORMED_NOT_RUNTIME_VALIDATED"
+    },
+    {
+      "repository": "sunshihao001/qb-",
+      "source": "hermes_harness/16_reliability_calibration/README.md",
+      "blob": "143f89e1ec3c4920aaea4b5d8286c0a1090c596c",
+      "target": "knowledge/cases/independent-validation-and-failure-cases.md",
+      "finding": "Dry-run calibration success is not real-world reliability improvement.",
+      "status": "SOURCE_READ_SEMANTICALLY_TRANSFORMED_NOT_RUNTIME_VALIDATED"
+    },
+    {
+      "repository": "sunshihao001/qb-",
+      "source": "hermes_harness/22_anti_self_deception/document_only_audit.md",
+      "blob": "27bafe4f573f4e81ce83307b448ea037f9f9aa6a",
+      "target": "knowledge/cases/independent-validation-and-failure-cases.md",
+      "finding": "Documents not equivalent to implemented or executed functionality.",
+      "status": "SOURCE_READ_SEMANTICALLY_TRANSFORMED_NOT_RUNTIME_VALIDATED"
+    }
+  ],
+  "source_knowledge_relation_checks": [
+    {
+      "repo": "sunshihao001/-",
+      "source": "learning/10.md",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Wallet roles as time-indexed behavior, not real-world identity.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/-",
+      "source": "learning/11.md",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Funding similarity as edge candidate with alternative public service explanations.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/-",
+      "source": "learning/12.md",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Sybil, wash trading, coordinated behavior are distinct claims.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/-",
+      "source": "learning/13.md",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Multi-skill agreement may draw from identical upstream observations.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/-",
+      "source": "learning/14.md",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Trading gate is action constraint, not independent research eligibility.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/meme-",
+      "source": "03_语义概念/核心术语表_v0.1.md",
+      "depth": "SELECTED_SOURCE_SECTIONS_READ",
+      "importance": "Terms as context-dependent sequence and failure criteria.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/meme-",
+      "source": "06_资料吸收/资料吸收_Wyckoff_Spring_Test_LPS_v0.1.md",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Spring/SOS/LPS temporal context, not named actor identification.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/meme-",
+      "source": "04_风险管理/结构风险评分模型_v0.1.md",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Multiple scores may derive from same market time series.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/meme-",
+      "source": "09_规则与回测/策略成熟度质疑审计与商业诊断_v0.1.md",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Counterexamples and marginal gain vs simple baseline, historical numeric ratings not proof.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/qb-",
+      "source": "hermes_harness/15_judgment_governance/templates/judgment_governance_state_template.json",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Judgment realness, evidence, independence, cost and memory review are distinct.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/qb-",
+      "source": "hermes_harness/15_judgment_governance/benchmark_cases/fake_closure_dry_run_as_real_completion.json",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Concrete fake-closure counterexample.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/qb-",
+      "source": "hermes_harness/21_judgment_benchmark/README.md",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Benchmark directory is self-described skeleton.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/qb-",
+      "source": "hermes_harness/21_judgment_benchmark/benchmark_cases/bench_v2_001.json",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Expected result is fixture, not executed benchmark.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/qb-",
+      "source": "hermes_harness/21_judgment_benchmark/benchmark_cases/bench_v2_003.json",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Process artifact is expected case, not run evidence.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/qb-",
+      "source": "hermes_harness/16_reliability_calibration/templates/reliability_calibration_state_template.json",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Calibration state schema initial false does not report completed run.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
+    },
+    {
+      "repo": "sunshihao001/qb-",
+      "source": "hermes_harness/22_anti_self_deception/dry_run_vs_real_run_audit.md",
+      "depth": "FULL_SOURCE_READ",
+      "importance": "Dry-run not real-world reliability.",
+      "status": "SOURCE_READ_KNOWLEDGE_RELATION_CHECKED_NO_RUNTIME_VALIDATION"
     }
   ],
   "latest_targeted_reconciliation": {

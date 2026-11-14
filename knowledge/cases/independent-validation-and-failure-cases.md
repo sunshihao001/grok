@@ -114,6 +114,82 @@
 - `src/solana_meme_os/monitor.py`：只读状态观察原型，尚未证明其具备稳定行情接入与盈利能力。
 
 
+## 2026-11-09｜纯知识转化：判断是否值得相信，与任务是否结束是两个问题
+
+> 来源包括 [qb-/Hermes 判断治理](https://github.com/sunshihao001/qb-/blob/main/hermes_harness/15_judgment_governance/README.md)（blob f17421786c23f46beb89e658e02eff8a4aba8873）、[可靠性校准](https://github.com/sunshihao001/qb-/blob/main/hermes_harness/16_reliability_calibration/README.md)（blob 143f89e1ec3c4920aaea4b5d8286c0a1090c596c）、[防文档即完成审计](https://github.com/sunshihao001/qb-/blob/main/hermes_harness/22_anti_self_deception/document_only_audit.md)（blob 27bafe4f573f4e81ce83307b448ea037f9f9aa6a）及[meme-反证方法](https://github.com/sunshihao001/meme-/blob/main/09_规则与回测/反证实验设计_v0.1.md)。这些都是可独立吸收的**知识与判断方法**，不要求复制原Harness结构。
+
+### 三种不同的“完成”不能相互替代
+
+**任务完成**：文件已写入、代码已合并、测试执行结束，是工作状态事实；**判断被充分支持**：问题、来源、证据及竞争解释能支持特定结论，是认识上的条件；**结果已改善**：同等任务下实际减少误报、漏报、用户指挥次数或产生可靠新发现，是对照验证后的效果。旧qb的judgment governance与anti-self-deception区分这些层次：一个任务流能走到最终状态，并不证明这次运行值得进行、判断有依据或记忆值得留存。
+
+**真正能迁移的不是22个子目录，而是用失败结果修正判断的思想**。例如旧qb记录“95条钱包摘要/4个候选同源组”，只证明数据文件里有这些项目，不能推出95笔真实Swap均已重建或已确认4个同控主体。Blix迁入一份知识文件同样只证明它保存了内容，不证明AI实际运用它。
+
+### 失败样本不是附属材料
+
+meme-的反证思想可用来检查任何“专业发现”：
+- 正例：结构候选出现且后续证据支持提出的可观察机制。
+- 反例：结构候选出现，但原签名/库存/实际交易显示所推断机制不成立。
+- 漏报：模型未发现某关系，但留出证据确实证明该关系存在。
+- 不可判定：上游资料缺失或观测定义不一致，不能因无数据就算成负例。
+
+**一个新的风险**：过度保守也是失败模式。只要无法证明最终身份就全部拒绝继续调查，会漏掉确有价值的候选关系；相反，未经核验就给“庄家”标签又产生误报。正确目标是同时评估**证据正确性、候选发现力和补证信息价值**。
+
+### 对 ai-d / Blix 的双重意义
+
+对 Blix：将上述认识用于专业调查报告、独立核验、错误归因复盘、旧知识失效修订；保留实际市场样本与具体版本时点。对 ai-d：将“文档写完≠模型学会”“对照得分高≠真实可靠”“想出了很多解释≠真正发现新机制”作为通用AI自检问题。旧qb的校准文档明确说明dry-run只是证明校准流程能走通，不证明真实可靠性提升。**此节是知识研究与来源审查，不等于Blix已经具备可运行的失败追踪系统。**
+
+
+## 2026-11-09｜知识推断关系审计：多项一致不等于独立证据
+
+**原始理论来源**：[Hermes 13 多信号融合/Evidence Chain](https://github.com/sunshihao001/-/blob/main/learning/13.md)（blob `f192a8fb138d6632b74a04e3a0becb9220824a66`），[14 Trade Gate 与 Downgrade](https://github.com/sunshihao001/-/blob/main/learning/14.md)（blob `31f3c483e36a4a33168293c1687082d273d64fae`），[meme-复杂策略成熟度审计](https://github.com/sunshihao001/meme-/blob/main/09_规则与回测/策略成熟度质疑审计与商业诊断_v0.1.md)（blob `ca3771516dcf13f1dbe0a7fd7a4b79d4c57c92ce`），[qb-判断治理](https://github.com/sunshihao001/qb-/blob/main/hermes_harness/15_judgment_governance/README.md)（blob `f17421786c23f46beb89e658e02eff8a4aba8873`）。跨学科方法参照 [NIST对自相关测量不宜使用独立样本公式的说明](https://www.nist.gov/programs-projects/uncertainty-analysis-autocorrelated-measurement-data) 与 [Solana getTransaction 的原始账本结构](https://solana.com/docs/rpc/http/gettransaction)。这些参考并非直接证明链上检测器的统计增益。
+
+### 1. 什么可能在知识迁移时被误当成了“独立证据”？
+
+旧Hermes 13篇把“多个Skill一致”列为置信度的来源。但三个Skill可能全部读取同一个GMGN聚合快照、同一笔Swap或同一组资金边；它们**是同一观察的不同变换**。共识不是新增的独立观察。meme-风险项如 failed_reclaim、bull_trap、death_market 等可能都由同一段价格跌回锚点计算出来；如果给每个名称再累计一次风险分，会产生**同源证据重复加权**。
+
+| 可观察原始事实 | 可能派生的多个名称 | 正确的知识解释 |
+|---|---|---|
+| 同一笔地址A给B的资金候选转移 | 同funding、关联群体、资金接力风险 | 可以形成三个不同问题，但默认仍只是一条未确认的原始边；需要后续真实签名/时间/对价才能证明不同主张 |
+| 同一段价格序列发生下跌后反弹失败 | failed_reclaim、bull_trap、death_market 候选 | 多种模型可能同时描述形态，不等于存在三个独立市场失败原因；同一时窗/锚点的派生依赖应能追溯 |
+| 同一供应商的holder_count和top10占比 | 多钱包分散、筹码集中、Sybil风险 | 分母、Token Account/Owner、公用池或CEX分布可能共同影响全部指标；须找独立的链上/历史反证 |
+
+原教材强调支持、反证、missing和downgrade同时记录，这是值得保留的知识；需要补充 **claim → derived field → primitive observation/provider → sampling window** 的依赖关系，避免“名称多=证据强”。对于两个真正独立的新观察，支持关系可以加强，但必须先弄清它们是否共享原始来源、共因或误差。
+
+### 2. 判定动作与市场解释的损失函数不同
+
+原 Hermes 14篇为研究/纸面执行分出 BLOCK、WATCH、PAPER_ONLY、NEED_MORE_DATA。它解释了**约束行动**的重要性；但若把“交易不宜继续”直接复制为“研究不宜继续”，便会遗漏风险高却研究价值高的市场样本。只读研究可用 INVESTIGATE/NEED_EVIDENCE/UNDECIDABLE 等语义描述进度（仅文字示范，**不新建枚举/API**），而不能套用历史交易Gate给市场身份判定。
+
+**过度肯定和过度保守必须一起检查**：四个同源候选组的跨组桥接未获链上时序确认，不能称已确认资金接力；但因此完全不调查桥接地址，也会漏掉一个有信息价值的线索。失败记录应同时覆盖误报、漏报、过度故事化、过度拒绝、历史信息泄漏、来源重复加权。
+
+### 3. 如何验证该知识是否真的影响 Blix？
+
+以冻结的旧qb- 4TKY 资料做相同任务的对照：一组仅看到同源组和风险标签，另一组加上原始证据依赖与Hermes/meme-反证要求。独立验收应查：能否发现跨组桥接；能否指出61条边未给金额时间；会否把同一数据变换当不同证据；是否避免把“全退出”当已见Swap；能否提出下一项高价值只读补查。不能因为结果文字更丰富就判定AI变强。**本轮是来源审查与知识修订，没有执行模型A/B、链上签名复算或Blix运行时验收。**
+
+
+### 4. qb-判断基准比README更有价值，但不能冒充真实验证
+
+本轮又向下读了 [qb-判断治理模板](https://github.com/sunshihao001/qb-/blob/main/hermes_harness/15_judgment_governance/templates/judgment_governance_state_template.json)（blob `62905b4a4d2863ab79f338b6e0092a7c94f2fd1d`），以及 [fake closure样本](https://github.com/sunshihao001/qb-/blob/main/hermes_harness/15_judgment_governance/benchmark_cases/fake_closure_dry_run_as_real_completion.json)（`60455e789690c60a421e7a613e5a74aaad1b7c2d`）、[benchmark 001](https://github.com/sunshihao001/qb-/blob/main/hermes_harness/21_judgment_benchmark/benchmark_cases/bench_v2_001.json)（`c531c65e07cde839ca9a70d56b30cea2c1dd22ca`）和 [可靠性状态模板](https://github.com/sunshihao001/qb-/blob/main/hermes_harness/16_reliability_calibration/templates/reliability_calibration_state_template.json)（`39ba0714f14eb8af5af7a82064554c80e16ff1c6`）。
+
+- **实质知识**：纠错不仅是在最后说UNKNOWN；原模板对问题真实性、根因、证据充分性、真正独立的验证、认知成本、可撤回性、记忆过时与后续偏差修正提出不同的审查问题。对普通AI项目可用于检验“复杂度是否值得”和“知识是否因历史错误影响下一次研究”。
+- **具体例子**：fake_closure样本列明正确处理需要真实执行证据、独立验证、验证可失败、dry-run单独标记；不接受文件存在/模型自述作为系统已完成。
+- **证据级别**：原`21_judgment_benchmark/README.md`明确称其为**benchmark skeleton**。样本`bench.v2.001`只包含任务名称及预期判别，不能把它视为模型已通过真实回归。状态模板`overall_passed=false`是初始内容，不是一次真实测试输出；预设`evidence_sufficiency.threshold=0.7`也不是跨任务已校准的专业证据阈值。
+
+**Blix迁移修正**：保留上述判断思维，不复制整套Hormes Harness的空模板与固定自评分数；把`模型是否发现正确的新问题`、`工具是否提供真正新来源`、`产品是否实现并通过独立反例`分别检查。**本轮只审阅了原数据/模板，未执行这些benchmark。**
+
+
+## 2026-11-09｜知识反证案例：先挑赢家、再标结果，研究结论何时不能迁移到真实市场？
+
+> 该案例承接 D11“先冻结观察对象、失败样本、时间窗”，不新增独立验证框架。来源和详细反证见[跨项目深入研究第14节](../references/source-knowledge-deep-study-v0.1.md#14-2026-11-09-新增跨项目实证样本入选--结果成熟--数据缺失如何共同制造市场规律)。
+
+**原始具体证据**：Why-Solana 的[源脚本与公开 JSON](https://github.com/searadacunha/Why-Solana-Memecoins-Are-Over/blob/070d2a6e6dcb89efe18d01091a8040eb323e1099/code/a4_selection_bias.py)测得中性基准2,740个发行中的32个毕业（1.168%），历史作者选中11个案例11/11毕业；前者是基准发行抽样框，后者已由结果挑选。CryptoBot 对MELT标签[复查](https://github.com/elalamiimed/CryptoBot/blob/1be592d71020738510b25e3bed7a2f5def13ff0a/reports/cohort_survivorship_20260927/FINDING.md)发现41,470个带标签币全有迁移后记录；因此该标签样本的内部关联不能自动推出所有新币的盈利概率。**这些数据是不同作者、不同时间/定义的证据，不能合并计算一个全市场胜率。**
+
+**此前认知容易漏掉的一层**：即使事前没有“挑赢家”，结果计算时也可能再次选择。ian05012 [`label_returns.py`](https://github.com/ian05012/solana-memecoin-dataset/blob/7070d00e1e4492f8604d988549d91785cc5f43f7/scripts/label_returns.py)将“6小时取不到任何K线”直接写入24h和3d未来结果的零标签，并设`labeled=1`。离线SQL分支已复算：即便以后有价格，常规未标注查询也不会回访。这揭示**缺价格数据、未满观察期、确认失败和真实可交易结果**是四个不同状态。
+
+**可以立即改变的专业判断**：调查一个币是否异常时，不必因为其样本不具代表性就停止；研究全市场胜率、币种“普遍规律”、钱包策略优越性时，必须知道被过滤的分母、未到结果期限者和仅在幸存币上计算出的指标。这里应输出“只适用于被观察到的样本”，而非一律驳回研究或强行计算校准概率。
+
+**可反驳的后续问题**：同一天、同发行阶段的未入选币若被低成本抽取少量复核，其资金来源、钱包重复出现率和最终结果是否显著不同？若相同，则某些选择偏差担忧可能被降低；若不同，应追查是市场机制、观测渠道还是标签成熟差异。**未用Blix真实运行做上述对照**；研究的完成标准是能观察到影响结论的差异，而不是增加第N份理论报告。
+
+
 ## 2026-11-13｜D11：P1–P2 离线反例已建，真实世界基准尚缺
 
 [专业来源与代码对应表](../references/p1-p2-knowledge-reconciliation-20261113.md)与当前 Draft PR #23 的 `test/economic-network.test.mjs`、`test/economic-snapshot-review.test.mjs`、`test/local-knowledge-loader.test.mjs`、`test/followability-replay.test.mjs` 已将部分旧知识转为**可自动重复的程序反例**：同一指令重复、不同CPI、BigInt原始金额、同一卖出签名去重、未分类公共服务、一对多分发不等于同控、局部空数据、历史回补/更正、跨Mint同地址、知识来源SHA/旧结果撤回、信号可见时间/报价过期/部分退出/负面模拟回放。

@@ -92,3 +92,24 @@ Blix `holders.js`/`holderslive.js`/`coin.js` 和 Bubble Map 对池、Owner和Hol
 **当前优先相邻专题**：Million 的原始钱包指标/PnL、发现逻辑、Owner边关系及部署副作用；PumpTrace 的历史交易/Creator身份、角色证据、风险分数公式、Backfill持久化；对照Blix的单Mint事实、Wallet与连续事件口径。之后将Pulse、HoldTech、OKX、pumpwatch和历史Hermes/qb-/meme-同等纳入，防止把单一钱包聚类误当全项目研究。
 
 > 资料与源码来自各自原仓库，均为只读静态分析；新的机制/问题链是本项目的分析推论，未成为可运行功能或实证Alpha。
+
+
+## 8. 2026-11-08｜旧 qb- 真正的跨组桥接：Hermes×meme-×Blix 联动核查（SOURCE_READ）
+
+**原始文件静态对账（不是链上RPC或已运行产品）**：在 qb- 保存的单Mint `4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump` 样本中，交叉连接同源组成员与其它组的来源地址，发现此前按组标签阅读会忽略的两跳资金来源候选。**发现候选拓扑，不是证实资金实际两跳或同一控制人。**
+
+| 原始证据 | 文件和固定blob | 重新计算的结果及边界 |
+|---|---|---|
+| 同源组拓扑 | [same_source_groups.json](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/structure_analysis/wallet_fact/same_source_groups.json), blob fab7d4a8c0d7fbb5130e685ac704fe171793c277 | 4组、10个不同组成员；SSG-0004的成员 8GKDFc1yfJh6kSgfrav9dzFRLPFRdHXPcCzePCyLadW2 同时是SSG-0002的 source_address。候选连接是 is6MTR... → 8GKDF... → {3q35m..., 7t2W...}。 |
+| 资金边出处 | [fund_flow_edges.csv](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/structure_analysis/wallet_fact/fund_flow_edges.csv), blob 933cc98caccb97a85699eaa9e67c92e442f15d9d | 61条边均为 pre_buy_funding_candidate；61/61条金额与时间都是unknown，资产写SOL/USDC unknown。桥接的上游边在CSV中，但缺独立原始交易签名、金额、方向与时序验证。旧数值confidence=0.6不可解释为校准概率。 |
+| 全退出语义 | [wallet_trade_normalized.json](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/wallet_data/normalized/wallet_trade_normalized.json), blob 2542f53cba26a652171e737adefd2359042f47fe | 95条摘要中54条is_full_exit=true，其中4条sell_count=0；另有4条is_full_exit=true但buy_count=0且卖出多笔。余额清零/供应商标记“全退出”不等于已确认Swap卖出或真实经济仓位结束，可能有来源遗漏、转移或不同字段语义，原因UNKNOWN。 |
+| 跨币重复性 | [address_history.json](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/structure_analysis/wallet_fact/address_history.json), blob 1eac9c1ed01837f0cb33d975fdde381b669d6dc4 | 95/95个钱包记录 appeared_token_count=1；61个有非空repeated_source_addresses。该字段名不证明跨Mint的重复资金来源已观察到，必须检查构造代码/历史。 |
+| 占位与实际覆盖 | [目录治理manifest](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/manifest/token_output_manifest.json), blob 1c730168f127fbeeb4fce00813b3e1ee01d57c94 | 9个新增路径为created_placeholder，其中Token转移、资金流和回流文件都是record_count=0/status=placeholder_contract_only。这不是链上已确认没有相关行为，也不是旧项目已实现无损交易补查。 |
+
+**如何复现**：逐组取 member_addresses 与其它组 source_address 做交集；CSV按表头统计 amount/transfer_time 是否unknown；95条record筛 is_full_exit且sell_count=0 / buy_count=0；检查 appeared_token_count 与manifest中created_placeholder操作。所有都是源文件的确定性条件复算，不需网络交易。
+
+**跨项目认知合成**：Hermes 00d/00e的“反向生成”让研究目标从统计四组转为检查组与组之间的桥接节点；qb-说明候选图可以形成嵌套路径，但真实转账事实不足；meme-反证思想要求提前规定如何降级“接力出货”的解释——若原指令表明是公共服务、时序不支持连续传递、没有Token卖出而仅转移/余额不明，就不能称组织性出货。反之若原始签名确认具体SOL/Token转移顺序、接收方Swap和库存变化，可提升为可观察的行为序列候选，**仍不能据此确认最终受益人与控制权**。
+
+**对Blix的直接影响**：现有Bubble Map的funded边不能自动替qb- 61条缺失金额/时间的候选边补证；其fee payer fallback及历史截断负缓存可能将服务者/漏史误当资金事实。专业调查必须能区分vendor-source候选、具体链上资产转移、fee payer-only、历史覆盖不完整；能发现“组成员同时是另一组上游”的桥接路径，但不把图上的可达性偷换成经济同控。用同一Mint贯通发现→钱包→转移→库存→跨Mint才能检验价值，未新增该运行功能。
+
+**下一轮联合验证**：在授权只读、来源可用条件下，优先核查这条桥接的两段原始签名、交易时间/资产/金额以及Token接收和卖出；并与Blix现有Coin、Holder、Bubble Map、Wallet Tracker及旧meme的失败对照保持同样时间截点。直到签名和时序可证实，仅保留可追踪的候选关系和明确UNKNOWN。此结果不改变Blix主体，也不新增知识架构。
