@@ -200,7 +200,7 @@ export async function runAiResearchTask({ goal, mint, model, read, readEconomic,
     // Present evidence-specific O1–O6 questions to the model AFTER factual reads,
     // not as extra model authority or a mandatory multi-agent screening pipeline.
     const evidenceAnchors=summarizeInvestigationContinuation({
-      mint:mints[0],investigation:{evidence,knowledgeUse:usedKnowledge},
+      mint:mints[0],investigation:{evidence,knowledgeUse:usedKnowledge},marketObservation,
     }).anchors.nextEvidence.map(item=>({
       anchor:item.anchor,status:item.status,missing:item.missing,
     }));
