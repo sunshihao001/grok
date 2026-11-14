@@ -31,6 +31,14 @@ test('wallet signals retain raw address count, heuristic group count and non-con
   insert.run('synthetic-buy-B', B, MINT, 'buy', 100, 0.3, 30, t + 4_000, C);
   insert.run('synthetic-buy-C', C, MINT, 'buy', 100, 0.3, 30, t + 9_000, null);
 
+  // Mirror research.js's raw address query: it must never be described as
+  // a proven number of independent economic actors.
+  const rawAddresses = db.prepare(
+    "SELECT COUNT(DISTINCT wt.wallet) n FROM wallet_trades wt JOIN wallets w ON w.address = wt.wallet WHERE wt.mint = ? AND wt.side = 'buy' AND w.watching = 1"
+  ).get(MINT).n;
+  assert.equal(rawAddresses, 3);
+  assert.equal(wallets.independent([A, B, C]), 2);
+
   const token = { mint: MINT, symbol: 'TEST', pair: 'synthetic-pool',
     asset_class: 'meme', safety_score: 88, score: 70, mcap: 40_000, price: 0.001 };
   const calls = [];
