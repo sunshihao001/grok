@@ -165,7 +165,7 @@ test('loopback /discover route runs validated selection plus one bounded local a
   assert.equal(body.investigation.continuation.anchors.evidenceLineage.sourceFirstAvailableAtMs,null);
   assert.equal(body.investigation.continuation.anchors.researchPriority.observedTransferEvents,1);
   assert.equal(body.investigation.continuation.anchors.tradeReadiness.verifiedMarketOpportunity,false);
-  assert.equal(body.investigation.continuation.anchors.nextEvidence[0].anchor,'G1_MARKET_DISCOVERY');
+  assert.equal(body.investigation.continuation.anchors.nextEvidence[0].anchor,'O1_MARKET_DISCOVERY');
   assert.ok(body.investigation.knowledgeUse.some(x=>x.source==='Hermes@sha256:known'));
   assert.deepEqual(stages,['discover','plan','interpret']);
   assert.deepEqual(mints,[mintA]);
