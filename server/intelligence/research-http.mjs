@@ -62,17 +62,35 @@ function errorCode(error) {
 }
 
 export function createResearchHttpServer({
-  model = null, readEconomic = null, loadKnowledge = null,
+  model = null, readEconomic = null, loadKnowledge = null, sourceReadiness = null,
   allowedOrigins = DEFAULT_ORIGINS, maxTasks = 8,
 } = {}) {
   if (!Array.isArray(allowedOrigins) || !allowedOrigins.length ||
       allowedOrigins.some(x => typeof x !== 'string' || !/^https?:\/\/[^/]+$/.test(x)) ||
-      !Number.isInteger(maxTasks) || maxTasks < 1 || maxTasks > 100) {
+      !Number.isInteger(maxTasks) || maxTasks < 1 || maxTasks > 100 ||
+      (sourceReadiness !== null && typeof sourceReadiness !== 'function')) {
     throw new Error('RESEARCH_SERVER_CONFIGURATION_INVALID');
   }
   const origins = new Set(allowedOrigins);
   let tasksStarted = 0, busy = false;
-  const ready = () => typeof model === 'function' && typeof readEconomic === 'function';
+  // Unlike function-presence checks, production startup explicitly probes the
+  // existing SQLite archive. A broken path or missing schema must never enable
+  // a paid-model request and then fail only after billing begins.
+  const readiness = async () => {
+    if (typeof model !== 'function' || typeof readEconomic !== 'function')
+      return { ready: false, archiveStatus: 'MODEL_OR_READER_NOT_CONFIGURED' };
+    if (!sourceReadiness)
+      return { ready: true, archiveStatus: 'ARCHIVE_PREFLIGHT_NOT_CONFIGURED_FOR_INJECTED_READER' };
+    try {
+      const result = await sourceReadiness();
+      return {
+        ready: result?.ready === true,
+        archiveStatus: typeof result?.status === 'string' ? result.status.slice(0, 80) : 'ARCHIVE_READINESS_UNKNOWN',
+      };
+    } catch {
+      return { ready: false, archiveStatus: 'ARCHIVE_READINESS_PROBE_FAILED' };
+    }
+  };
   const server = createServer(async (req, res) => {
     const remote = req.socket.remoteAddress || '';
     if (!['127.0.0.1','::1','::ffff:127.0.0.1'].includes(remote)) {
@@ -91,7 +109,8 @@ export function createResearchHttpServer({
       res.setHeader('Vary','Origin');
     }
     if (req.url === '/health' && req.method === 'GET') {
-      json(res, 200, { service:'blix-research-readonly', ready:ready(),
+      const status = await readiness();
+      json(res, 200, { service:'blix-research-readonly', ...status,
         dataSource:'EXISTING_LOCAL_SQLITE_ONLY',
         providerEnabled:typeof model === 'function',
         remainingTasks:Math.max(0,maxTasks-tasksStarted), busy });
@@ -107,7 +126,8 @@ export function createResearchHttpServer({
     if (!(req.headers['content-type'] || '').toLowerCase().startsWith('application/json')) {
       json(res,415,{error:'JSON_ONLY'});return;
     }
-    if (!ready()) {json(res,503,{error:'RESEARCH_NOT_CONFIGURED'});return;}
+    const source = await readiness();
+    if (!source.ready) {json(res,503,{error:'RESEARCH_NOT_CONFIGURED', archiveStatus:source.archiveStatus});return;}
     if (busy) {json(res,429,{error:'RESEARCH_BUSY'});return;}
     if (tasksStarted >= maxTasks) {json(res,429,{error:'TASK_BUDGET_EXHAUSTED'});return;}
     let input;
