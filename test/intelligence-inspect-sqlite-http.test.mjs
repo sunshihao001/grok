@@ -3,12 +3,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { once } from 'node:events';
+import { spawn } from 'node:child_process';
+import { createServer as createTcpServer } from 'node:net';
 import { DatabaseSync } from 'node:sqlite';
 import { mkdtempSync,readFileSync,rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
-import { persistEvidence } from '../server/economic-events.mjs';
+import { initEvidence,persistEvidence } from '../server/economic-events.mjs';
 import { createResearchHttpServer } from '../server/intelligence/research-http.mjs';
 import { makeOfflineEconomicReader,probeExistingEconomicArchive,probeExistingEconomicMint }
   from '../server/intelligence/offline-economic-reader.mjs';
@@ -90,4 +92,66 @@ test('no-model Blix Mint inspection reads a real disposable SQLite file through 
   assert.equal(remaining.remainingTasks,1,'no paid model task was consumed');
   assert.equal(remaining.remainingInspections,1);
   assert.equal(digest(file),hashBefore,'SQLite bytes must remain unchanged');
+});
+
+test('actual opt-in workbench process offers model-free local inspection using configured SQLite', async t=>{
+  const root=mkdtempSync(join(tmpdir(),'blix-workbench-process-inspect-'));
+  t.after(()=>rmSync(root,{recursive:true,force:true}));
+  const file=join(root,'archive.sqlite');
+  const db=new DatabaseSync(file);
+  initEvidence(db);
+  db.exec('CREATE TABLE wallet_trades(sig TEXT,wallet TEXT,mint TEXT,side TEXT,sol REAL,t INTEGER)');
+  // A locally recorded wallet summary is not an RPC transaction or proof
+  // of any token transfer. The no-model endpoint must preserve that distinction.
+  db.prepare('INSERT INTO wallet_trades(sig,wallet,mint,side,sol,t) VALUES(?,?,?,?,?,?)')
+    .run('synthetic-wallet-summary',fromOwner,mint,'buy',0.5,1700000000000);
+  db.close();
+  const before=digest(file);
+  const sock=createTcpServer();
+  sock.listen(0,'127.0.0.1');
+  await once(sock,'listening');
+  const port=sock.address().port;
+  await new Promise(resolve=>sock.close(resolve));
+  const script=new URL('../scripts/start-intelligence-workbench.mjs',import.meta.url).pathname;
+  const child=spawn(process.execPath,['--no-warnings',script],{
+    env:{...process.env,
+      BLIX_AI_PORT:String(port),BLIX_AI_DB_PATH:file,
+      BLIX_AI_API_KEY:'',BLIX_AI_MODEL:'',BLIX_AI_ENABLE_PAID_MODELS:'',
+      BLIX_AI_ALLOWED_ORIGINS:'http://localhost:4421'},
+    stdio:['ignore','pipe','pipe'],
+  });
+  try {
+    await Promise.race([
+      once(child.stdout,'data'),
+      once(child,'exit').then(([code])=>{throw Error('MODEL_FREE_WORKBENCH_EXITED_'+code);}),
+      new Promise((_,reject)=>setTimeout(()=>reject(Error('MODEL_FREE_WORKBENCH_START_TIMEOUT')),10000)),
+    ]);
+    const base='http://127.0.0.1:'+port;
+    const health=await (await fetch(base+'/health')).json();
+    assert.equal(health.ready,false,'paid model stays disabled');
+    assert.equal(health.inspectionReady,true,'existing data can be inspected');
+    assert.equal(health.providerEnabled,false);
+    assert.equal(health.remainingTasks,8);
+    const response=await fetch(base+'/inspect',{
+      method:'POST',headers:{Origin:'http://localhost:4421','Content-Type':'application/json'},
+      body:JSON.stringify({mint}),
+    });
+    assert.equal(response.status,200);
+    const data=await response.json();
+    assert.equal(data.mint,mint);
+    assert.equal(data.modelMode,'NOT_USED');
+    assert.equal(data.verifiedMarketOpportunity,false);
+    assert.equal(data.evidence[0].result.facts.network.eventCount,0,
+      'wallet trade summary must not be promoted into a captured transfer');
+    assert.equal(data.evidence[0].result.facts.trackedWalletActivity.independentEconomicControllerCount,null);
+    assert.equal(digest(file),before,'production entry must not modify provided SQLite');
+    const paid=await fetch(base+'/research',{
+      method:'POST',headers:{Origin:'http://localhost:4421','Content-Type':'application/json'},
+      body:JSON.stringify({mint,goal:'研究这个Mint'}),
+    });
+    assert.equal(paid.status,503,'research remains blocked without explicit paid-model opt-in');
+  } finally {
+    if(child.exitCode===null){child.kill('SIGTERM');
+      await Promise.race([once(child,'exit'),new Promise(resolve=>setTimeout(resolve,2500))]);}
+  }
 });
