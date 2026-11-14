@@ -21,6 +21,7 @@ export function compareObservedInvestigations({
     if (!discovery || discovery.sourceRecordedAtMs !== clean.sourceRecordedAtMs ||
       discovery.marketCoverage !== clean.marketCoverage ||
       discovery.candidateCount !== clean.candidates.length ||
+      discovery.candidateDigestSha256 !== clean.candidateDigestSha256 ||
       !(discovery.selectedMint === null || population.has(discovery.selectedMint))) {
       throw Error('A_B_' + label + '_POPULATION_OR_TIME_MISMATCH');
     }
@@ -66,13 +67,14 @@ export function compareObservedInvestigations({
     schemaVersion: '0.1', kind: 'OFFLINE_SAME_SNAPSHOT_A_B_INVESTIGATION_AUDIT',
     input: {
       observedMintCount: clean.candidates.length, snapshotRecordedAtMs: clean.sourceRecordedAtMs,
+      candidateDigestSha256: clean.candidateDigestSha256,
       marketCoverage: clean.marketCoverage, sourceFreshness: clean.sourceFreshness,
       comparisonPopulation: 'SAME_SUBMITTED_PULSE_MINTS_NOT_MARKET_UNIVERSE',
     },
     baseline: a, enhanced: b,
     selection: {
       changed: a.selectedMint !== b.selectedMint,
-      sameSnapshotCandidatePopulation: true,
+      sameSnapshotCandidatePopulation: true, // Verified by matching both saved receipt digests.
       newMintDiscoveredOutsideOriginalPulse: false,
       modelBenefitEstablished: false,
     },
@@ -90,6 +92,7 @@ export function compareObservedInvestigations({
     unresolved: [
       'Browser snapshot only covers at most 12 submitted Blix Pulse Mints; no market-wide recall measured.',
       'Client-recorded observation time is not provider first-available or follower-visible signal time.',
+      'Equality of browser-input digests does not establish equal model/API cost or external data coverage.',
       'Different model selections are not an accuracy, alpha or execution-quality improvement.',
       'Actual independent wallet controllers, complete historical coverage and real entry/exit quotes remain unverified.',
       'Enrichment found outside the frozen population requires a separate wallet-led discovery evaluation, not this matched-universe A/B.',
