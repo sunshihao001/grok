@@ -68,6 +68,21 @@
 **下一项工程入口**：P0-C/P1-A：确认一份已获授权、含同一Mint实际`econ_transactions`和`econ_instructions`/钱包历史的现有SQLite快照，与原Blix源消息的时间/池/Token账户对齐。再走一次`Coin→Intelligence→本地4547→只读归档→报告`真实浏览器E2E；无真实归档时，正确的成果是精确报不可用，不是模拟链上业务成功。真实供应商/模型费用及目标运行机器仍需明确授权与条件。
 
 
+## 2026-11-14｜R-43：AI研究结果Mint身份校验与候选防替换
+
+**执行起点已变化**：重新核查PR#23最新源码时，上一轮R-42记录的Coin指定Mint未在Pulse短名单时错误回退问题，已由并行进展修复：`web/src/pages/intelligence/candidates.ts`的`resolveResearchTarget`优先保留显式Mint，`Intelligence.tsx`已有手动`/inspect`、`/research`和“未归档不调用模型”的只读路径，服务端`mintReadiness`在模型费用/预算前拒绝缺失Mint。因此本轮**没有重复开发该功能**，转向检查下一处真实证据链漏洞。
+
+**新发现**：`Intelligence.tsx`的模型`/research`结果原本只检查`evidence/knowledgeUse/calls`是数组，随后`setResearchResult({...data,mint})`把请求Mint直接写入结果。若服务端返回或未来适配器错误地携带其它Mint的工具输入/事实，页面会把不相干证据展示在当前Mint下；`/discover`也未在前端复核返回选择属于**实际提交的12币短名单**。服务端有自身的Mint校验，但界面是独立边界，不应以信任假设代替验收。
+
+**本轮实际代码**：
+
+1. `web/src/pages/intelligence/candidates.ts`新增`validateMintResearchReceipt`：检查模型研究的Mint（若声明）、所有工具调用输入、每条证据输入和实际返回结果都属于**用户指定Mint**；不允许把`verifiedMarketOpportunity:true`或`liveExecutionValidated:true`显示成已验结果；无证据的研究计划仍可作为无验证草稿。
+2. 同文件新增`validatePulseSelectionReceipt`：候选数量必须匹配浏览器提交数量，模型选出的Mint必须属于**这次实际提交的短名单**，无选中时不得附带其它Mint调查；如有调查结果，复用逐笔Mint校验。
+3. `web/src/pages/Intelligence.tsx`将两个校验放在`setResearchResult`、`setDiscoveryResult`前；拒绝跨Mint错误归属，不增加外部API、付费模型、交易或后台采集。
+4. `test/intelligence-ui-candidates.test.mjs`新增伪造另一Mint工具输入/返回、错选非短名单Mint、错误候选数量、错误收益标志、合法无证据/拒绝候选等回归；在最终HEAD上的CI状态必须独立核实。
+
+**验收性质**：本轮只加固前端**结果归属一致性**，不能证明本地经济档案完整、真实机会或主网数据来源正确。下一项最有价值的真实进展仍是选择一个可核验的真实SQLite Mint，完成Coin→/inspect→/research→本地经济签名→模型知识使用的同Mint回放和负例，而不是再扩知识索引。PR仍Draft，原Blix启动安全门禁继续有效。
+
 ## 2026-11-14｜R-42：十二领域专业知识原位归拢 + 扩展成品合同 + 本机AI来源修复
 
 **本轮用户目标**：把分散在L0–L7/D01–D12、旧Grok/Hermes/qb-/meme-、65参考、GMGN/OKX/Synapse/ai-d中的专业知识整理清楚并归回正确位置，然后判断完整原版Blix上的AI扩展怎样走到可运行成品。**不是**新建概念层级、专家制度、第二套数据源或以整理文件数判定业务完成。
