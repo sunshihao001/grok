@@ -165,3 +165,30 @@ test('Mint-specific preflight reads only existing indexed rows and cannot create
     assert.equal(digest(file),before,'read-only Mint preflight must not mutate SQLite');
   } finally {rmSync(root,{recursive:true,force:true});}
 });
+
+test('incremental anchor success cannot erase historical initial-sample risk in Mint audit',()=>{
+  const root=mkdtempSync(join(tmpdir(),'blix-wallet-initial-')),file=join(root,'source.sqlite');
+  try {
+    const db=new DatabaseSync(file);
+    db.exec('CREATE TABLE econ_transactions(sig TEXT PRIMARY KEY,rpc_json TEXT,sha256 TEXT,status TEXT,observed_at INTEGER,slot INTEGER);'
+      +'CREATE TABLE econ_instructions(sig TEXT,mint TEXT,kind TEXT,from_owner TEXT,to_owner TEXT,owner_conflict INTEGER);'
+      +'CREATE TABLE wallet_sig_windows(wallet TEXT PRIMARY KEY,anchor_reached INTEGER,gaps_seen INTEGER,checked_at_ms INTEGER,ever_initial_sample INTEGER);');
+    const raw=JSON.stringify({transaction:{signatures:['synthetic-only']},meta:{err:null}});
+    db.prepare('INSERT INTO econ_transactions VALUES(?,?,?,?,?,?)')
+      .run('synthetic-only',raw,createHash('sha256').update(raw).digest('hex'),'RPC_OBSERVED',100,12);
+    db.prepare('INSERT INTO econ_instructions VALUES(?,?,?,?,?,?)')
+      .run('synthetic-only',mint,'TOKEN_TRANSFER',wallet,receiver,0);
+    db.prepare('INSERT INTO wallet_sig_windows VALUES(?,?,?,?,?)').run(wallet,1,0,3000,1);
+    db.prepare('INSERT INTO wallet_sig_windows VALUES(?,?,?,?,?)').run(receiver,1,0,3000,0);
+    db.close();
+    const before=digest(file);
+    const result=JSON.parse(execFileSync(process.execPath,[script,'--db',file,'--mint',mint],{encoding:'utf8'}));
+    assert.equal(digest(file),before);
+    assert.equal(result.chain.walletSignatureWindows.ownersWithSignatureWindow,2);
+    assert.equal(result.chain.walletSignatureWindows.anchorNotReached,0);
+    assert.equal(result.chain.walletSignatureWindows.withGaps,0);
+    assert.equal(result.chain.walletSignatureWindows.everInitialSampleOwners,1);
+    assert.equal(result.chain.walletSignatureWindows.unresolvedHistoricalRiskOwners,1);
+    assert.equal(result.chain.walletSignatureWindows.lifetimeHistoryComplete,false);
+  } finally {rmSync(root,{recursive:true,force:true});}
+});
