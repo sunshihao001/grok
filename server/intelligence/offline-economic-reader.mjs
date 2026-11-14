@@ -46,6 +46,33 @@ export async function probeExistingEconomicArchive({ databasePath } = {}) {
   finally { try { db?.close(); } catch { /* already read-only; do not mask status */ } }
 }
 
+/**
+ * Fast, fee-free per-Mint preflight for explicit Coin research.
+ * A missing indexed row means "not present in this archive", NEVER "no chain activity".
+ * It is intentionally separate from global schema readiness and never opens writable.
+ */
+export async function probeExistingEconomicMint({ databasePath, mint } = {}) {
+  if (typeof mint !== 'string' || !MINT.test(mint))
+    return { ready: false, status: 'INVALID_MINT_SCOPE' };
+  if (typeof databasePath !== 'string' || !databasePath.trim())
+    return { ready: false, status: 'ARCHIVE_PATH_NOT_CONFIGURED' };
+  try {
+    const file = await stat(databasePath);
+    if (!file.isFile()) return { ready: false, status: 'EXISTING_ARCHIVE_NOT_A_FILE' };
+  } catch { return { ready: false, status: 'EXISTING_ARCHIVE_NOT_FOUND' }; }
+  let db;
+  try {
+    db = new DatabaseSync(databasePath, { readOnly: true });
+    db.exec('PRAGMA query_only=ON');
+    const indexed = db.prepare('SELECT 1 FROM econ_instructions WHERE mint=? LIMIT 1').get(mint);
+    const summarized = db.prepare('SELECT 1 FROM wallet_trades WHERE mint=? LIMIT 1').get(mint);
+    return indexed || summarized
+      ? { ready: true, status: 'MINT_PRESENT_IN_LOCAL_INDEX_HISTORY_UNVERIFIED' }
+      : { ready: false, status: 'MINT_NOT_INDEXED_IN_EXISTING_ARCHIVE' };
+  } catch { return { ready: false, status: 'MINT_ARCHIVE_PREFLIGHT_UNAVAILABLE' }; }
+  finally { try { db?.close(); } catch { /* no write-capable handle */ } }
+}
+
 export function makeOfflineEconomicReader({ databasePath, timeoutMs = 20000 } = {}) {
   if (typeof databasePath !== 'string' || !databasePath.trim()) {
     throw new Error('EXISTING_DATABASE_PATH_REQUIRED');
