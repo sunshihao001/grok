@@ -5,6 +5,28 @@
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
 
+## 2026-11-14｜R-40：PR23与blix无损研究合并 + 本地AI服务数据就绪门禁
+
+**任务与交付目标**：承接R39“距离实际运行差什么”的P0阻塞，先消除累计 PR#23 与最新 `blix` 的 Git 合并冲突；然后修复现有**独立只读AI服务**把“已构造SQLite读取函数”误报为“已有可用本地SQLite”的真实启动就绪缺陷。保留原版Blix市场、账户、真实交易与Paper全部源码和本地风险拦截，不默默解锁原版完整运行或开启付费模型。
+
+**已经实做的集成冲突修复**：
+- 核对 GitHub `blix`、PR#23 与共同祖先 `3bc1f7d4` 的三方差异：当前 `blix` 相比PR#23主要多20个项目/知识文档改动，无原版运行核心差异。不能把其中8份双方新写的材料直接一边覆盖另一边。
+- 使用三方逐行合并保留双方新增标题/段落，另以**按键、按来源项联合**的JSON合并 `knowledge/references/source-coverage-v0.1.json`，保留blix原11个外部参考、8轮旧研究、PR23新P1/P2调查记录以及来源覆盖字段；新增Synapse全分类及GMGN总览保留，未重写业务源码。
+- 由现有PR#23提交 `9305637c` 与最新`blix` `1560528a` 创建双亲 `70932df9d5f11bb46731c9e00efcf7704bf7f547` 作为**同一PR23集成分支的普通快进更新**，没有合并草稿PR到正式`blix`。经GitHub最新核实：PR#23 `mergeable:true`、base SHA `1560528a`、Draft、open、未合并，比较 `behind:0`。该SHA [完整CI](https://github.com/sunshihao001/grok/actions/runs/43547571970)、[前端构建](https://github.com/sunshihao001/grok/actions/runs/43547572029)、[独立审计](https://github.com/sunshihao001/grok/actions/runs/43547571984) 均已PASS；外部Uptime仍失败，未混入成功项目。
+
+**本地AI服务的真实运行阻塞与代码修复**：
+- **错误入口**：`research-http.mjs` 旧 `ready()=typeof model==='function'&&typeof readEconomic==='function'`，即使 `BLIX_AI_DB_PATH` 指向不存在的文件或缺表的SQLite，仍可能显示健康就绪；点击研究后才在工具处失败，可能产生之前可避免的收费模型调用与任务预算消耗。
+- **修正确切责任层**：`offline-economic-reader.mjs::probeExistingEconomicArchive` 在Node内建SQLite中以 `readOnly:true`、`PRAGMA query_only=ON` 核对**已有**文件与 `econ_transactions`/`econ_instructions`/`wallet_trades` 必要字段。永不创建数据库/启动原Blix/RPC。生产启动脚本 `scripts/start-intelligence-workbench.mjs` 将其接到 `createResearchHttpServer` 的可选 `sourceReadiness`。真实本机 `/health` 在无文件/缺schema时返回 `ready:false` 与不含机密路径的状态；`/research`和`/discover`在模型与任务预算之前拒绝，保持原有非预检调用方的兼容返回契约。
+- **严格能力边界**：`ready:true` 只能证明模型函数已配置且**经济归档Schema可读**，不证明该Mint有数据、历史完整、模型API可达或交易盈利；任何缺源依然要保留UNKNOWN。原版 `npm start` 带真实交易/钱包与自动AI副作用，由 `scripts/read-only-audit.mjs --gate` 禁止不经风险认可启动；本轮**没有**改变原版运行安全策略、没有启动原版服务、没有授权支付，也不宣称已取得原版“全功能只读安全模式”。
+
+**验收**：
+- `test/ai-economic-workflow.test.mjs` 新增SQLite不存在/表缺失/已有归档三组实际文件/表结构检查，并比对前后SHA，严格无文件创建或修改。
+- `test/intelligence-workbench-http.test.mjs` 新增受控伪模型测试：缺归档预检→HTTP503/健康非就绪、模型零调用、预算不消耗，模拟归档恢复后状态变就绪；另以子进程真启 `scripts/start-intelligence-workbench.mjs`，确认默认不开模型/交易原版HTTP路由，健康非就绪、研究拒绝。
+- 中间提交 `fea1a174` / `85906615` 的CI出现旧测试中 `RESEARCH_NOT_CONFIGURED` 响应结构变化，**已通过** `648cba584b8ad0425948a22177aea61878bec1cf` 保留原调用方错误响应合同，同时在正式预检调用时返回具体`archiveStatus`；不掩盖中间回归。
+- **本登记提交后最新 CI必须重新查最终 HEAD**，不能把已通过合并CI或代码修改的旧SHA当作真实运行验收。现有所有研究HTTP测试、GitHub CI均属**隔离本机模拟/文件测试**，仍未部署、联网调用真实AI、启动原版市场服务器或完成用户环境端到端。
+
+**剩余阻塞与下一轮最短动作**：R0 当前P0“原版Blix安全市场服务启动”尚未完成，需要明确目标机器/真实配置、在无签名/无收费行为的隔离环境对源码与自动后台路由实测；Coin→真正Agent调用仍只在Intelligence页面接通，Coin Copilot仍为复制任务；若没有真实RPC事件归档，预检即使通过也不能算真实Mint调查。下一轮先用受控启动/健康/原版UI全流程实测与一份真实已授权SQLite，而不是再扩GMGN知识分类。
+
 ## 2026-11-14｜R-39：到期前取回真实DEX/RugCheck原档，发现第二枚同批Mint并校验机会假象
 
 **为什么从R-38调整研究入口**：R-38已有对同一浏览器Pulse候选的合成AI A/B和严密的时点/Hash检查，再重复合成“B选中好币”只会空转。此前文档认为真实样本只有一个BNB，不足构成双币比较；**2026-11-14实际取回GitHub Actions原始ZIP后发现第一批同时包含第二枚SIS真实Mint**。这恢复了一个此前未利用的实证市场对照，但**并没有恢复原版Blix的真正两币候选队列、模型回执或市场优势**。
