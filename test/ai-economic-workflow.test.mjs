@@ -8,7 +8,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { persistEvidence } from '../server/economic-events.mjs';
 import { runAiResearchTask } from '../server/intelligence/ai-workflow.mjs';
 import { runCapability } from '../server/intelligence/index.mjs';
-import { makeOfflineEconomicReader } from '../server/intelligence/offline-economic-reader.mjs';
+import { makeOfflineEconomicReader, probeExistingEconomicArchive } from '../server/intelligence/offline-economic-reader.mjs';
 
 const M = 'GTNHLKQWKZHaHpd6PjfMgfFZUDEuCviwXMwYbCcepump';
 const A = '4p7SeR6361WJ4T4icgsYTnzAUzfA5NwM4CwYD9kMBjuK';
@@ -186,4 +186,29 @@ test('an empty but indexed local archive remains partial and cannot establish co
   assert.equal(output.facts.lifetimeHistoryComplete,false);
   assert.equal(output.facts.recipients.length,0);
   assert.ok(output.unknowns.some(x=>/subset/.test(x)));
+});
+
+test('local existing archive preflight checks real SQLite schema without opening a new file',async()=>{
+  const root=fs.mkdtempSync(path.join(os.tmpdir(),'blix-probe-'));
+  const absent=path.join(root,'missing.sqlite'),wrong=path.join(root,'wrong.sqlite');
+  const good=path.join(root,'existing.sqlite');
+  try {
+    let status=await probeExistingEconomicArchive({databasePath:absent});
+    assert.deepEqual(status,{ready:false,status:'EXISTING_ARCHIVE_NOT_FOUND'});
+    assert.equal(fs.existsSync(absent),false,'preflight must never create a missing SQLite');
+    const db=new DatabaseSync(wrong);
+    db.exec('CREATE TABLE unrelated(note TEXT)');
+    db.close();
+    const oldWrong=hash(wrong);
+    status=await probeExistingEconomicArchive({databasePath:wrong});
+    assert.deepEqual(status,{ready:false,status:'ECONOMIC_ARCHIVE_SCHEMA_UNAVAILABLE'});
+    assert.equal(hash(wrong),oldWrong,'missing schema preflight cannot mutate SQLite');
+    seededArchive(good);
+    const before=hash(good);
+    status=await probeExistingEconomicArchive({databasePath:good});
+    assert.equal(status.ready,true);
+    assert.equal(status.status,'EXISTING_ARCHIVE_SCHEMA_READABLE');
+    assert.equal(status.coverage,'SCHEMA_ONLY_MINT_CONTENT_AND_HISTORY_NOT_VERIFIED');
+    assert.equal(hash(good),before,'successful preflight must not change bytes either');
+  }finally{fs.rmSync(root,{recursive:true,force:true});}
 });
