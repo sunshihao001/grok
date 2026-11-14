@@ -64,37 +64,45 @@ export function summarizeInvestigationContinuation({mint,investigation,marketObs
   // Evidence-to-next-check map: converts existing D01–D12 knowledge into
   // falsifiable data requests. It does not select coins, assign AI scores,
   // infer controllers, request providers or run a model.
+  // Align with the EXISTING O1–O6 outcome IDs in businessRouteGraph, rather
+  // than inventing a second G1–G5 goal hierarchy. S1–S7 are support methods.
   const nextEvidence=[
-    {anchor:'G1_MARKET_DISCOVERY',domains:['D02','D03','D10'],
+    {anchor:'O1_MARKET_DISCOVERY',domains:['D02','D03','D07','D10','D11'],
       status:marketStatus,
       missing:'SOURCE_FIRST_AVAILABLE_SIGNAL_TIME_AND_COMPLETE_MARKET_COVERAGE',
       nextReadOnlyCheck:hasPulseObservation
         ? 'Compare the submitted browser snapshot with provider-origin timestamps and the original Blix opportunity candidate universe.'
-        : 'Inspect the existing Blix Pulse/Discover observations for this exact Mint; no market appearance is established by the local SQLite archive.'},
-    {anchor:'G2_MINT_WALLET_INVENTORY',domains:['D01','D04','D05','D06','D11'],
+        : 'Inspect existing Blix Pulse/Discover observations for this exact Mint; the local SQLite archive does not establish market appearance.'},
+    {anchor:'O2_WALLET_ROLES',domains:['D01','D04','D05','D07','D10'],
+      status:watches.length?'CAPTURED_OWNER_ADDRESS_CANDIDATES_NOT_ECONOMIC_ACTORS':'NO_RESOLVED_WALLET_ROLES_IN_CAPTURED_SAMPLE',
+      missing:'ACCOUNT_OWNER_AUTHORITY_AND_POOL_ROUTER_CEX_CLASSIFICATION',
+      nextReadOnlyCheck:watches.length
+        ? 'Resolve Token Account versus Owner and screen pools, routers, shared services and custody before suggesting related wallets or controllers.'
+        : 'Check the existing source wallet and owner coverage before interpreting a missing wallet list as no participants.'},
+    {anchor:'O3_TOKEN_CAPITAL_INVENTORY',domains:['D01','D05','D06','D10','D11'],
       status:events.length
         ? archivedSignatureVerified?'SOME_ARCHIVED_INSTRUCTIONS_CHECKED_NOT_FULL_HISTORY':'CAPTURED_TRANSFER_REPORT_NEEDS_RAW_INSTRUCTION_CHECK'
         : 'NO_TRANSFER_EVIDENCE_IN_CAPTURED_SAMPLE',
       missing:events.length
-        ? 'FULL_SIGNED_HISTORY_PUBLIC_INFRASTRUCTURE_CLASSIFICATION_AND_TOKEN_INVENTORY_PROVENANCE'
+        ? 'FULL_SIGNED_HISTORY_COST_BASIS_AND_TRANSFERRED_INVENTORY_PROVENANCE'
         : 'ARCHIVED_RAW_TRANSACTION_AND_OWNER_RESOLUTION_COVERAGE',
       nextReadOnlyCheck:events.length
-        ? 'Recheck raw signatures, Token Account owners, CPI/Token-2022 and pool/router/CEX alternatives before interpreting transfers, sells or control.'
+        ? 'Recheck raw signatures, CPI and Token-2022 instruction positions; separate buy, transfer, recipient sell summary, actual remaining inventory and costs.'
         : 'Check completeness of the existing Mint economic archive and sender discovery before inferring absence of transfers.'},
-    {anchor:'G3_CROSS_MINT_COORDINATION',domains:['D05','D07','D11'],
+    {anchor:'O4_CROSS_MINT_GROUP',domains:['D04','D05','D06','D07','D10','D11'],
       status:paths.length?'TEMPORAL_CANDIDATES_UNPROVEN_FUND_REUSE':'NO_CROSS_MINT_PATH_CONFIRMED',
       missing:'SIGNED_SOL_WSOL_FUND_FLOW_AND_INDEPENDENT_CONTROL_EVIDENCE',
       nextReadOnlyCheck:paths.length
         ? 'Check each funding and buy signature against SOL/WSOL changes, intermediate wallets and shared-service counterexamples.'
-        : 'Do not interpret a missing local cross-Mint path as proof that the group never moved funds.'},
-    {anchor:'G4_TRADE_PARTICIPATION',domains:['D03','D08','D09','D11'],
+        : 'No cross-Mint path is proven from this bounded archive; revisit only if wallet/transfer evidence warrants it.'},
+    {anchor:'O5_OPPORTUNITY_AND_FOLLOWABILITY',domains:['D03','D06','D08','D09','D10','D11'],
       status:'NOT_EVALUABLE_WITHOUT_FOLLOWER_VISIBLE_SIGNAL_AND_QUOTES',
       missing:'SIGNAL_FIRST_AVAILABLE_ENTRY_EXIT_QUOTES_POOL_DEPTH_FEES_LATENCY',
-      nextReadOnlyCheck:'Use original Blix/Paper read-only receipts from the signal-visible time, executable entry/exit quotes, size, fees, failures and exit liquidity; otherwise keep net outcome UNKNOWN.'},
-    {anchor:'G5_AI_KNOWLEDGE_EFFECT',domains:['D11','D12'],
-      status:knowledgeRecords.length?'KNOWLEDGE_PRESENTED_TO_MODEL_NOT_CAUSAL_BENEFIT':'NO_KNOWLEDGE_USE_EVIDENCE_IN_THIS_RECEIPT',
-      missing:'SAME_INPUT_TOOL_BUDGET_NO_KNOWLEDGE_VS_RELEVANT_KNOWLEDGE_COMPARISON',
-      nextReadOnlyCheck:'Compare the same Mint and source evidence with/without selected knowledge; count changed tool choices, corrected errors and new falsifiable questions, not just longer prose.'},
+      nextReadOnlyCheck:'Use original Blix/Paper read-only receipts from signal-visible time, executable entry/exit quotes, size, fees, failures and exit liquidity; otherwise keep net outcome UNKNOWN.'},
+    {anchor:'O6_CASE_MONITORING_AND_REVISION',domains:['D07','D10','D11','D12'],
+      status:'NOT_RUNNING_NO_AUTONOMOUS_WATCHER',
+      missing:'PERSISTENT_CASE_NEW_VS_BACKFILLED_EVENT_COMPARISON_AND_KNOWLEDGE_EFFECT_EVALUATION',
+      nextReadOnlyCheck:'Reopen the same Mint after a new archive snapshot and distinguish new events from delayed backfill; evaluate relevant AI knowledge against the same-input no-knowledge baseline. No watcher is running.'},
   ];
   const anchors={
     researchPriority:{
