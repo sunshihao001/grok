@@ -12,6 +12,7 @@ process.env.RADAR_DATA=folder;
 process.env.BLIX_MARKET_FEEDS='0';
 const { db } = await import('../server/db.js');
 const wallets=await import('../server/wallets.js');
+const wtrack=await import('../server/wtrack.js');
 const { recipientOutcomes, recipientCandidates, transactionEvidence, walletProcessing } = await import('../server/economic-events.mjs');
 const { checkpointWalletPage, pendingWalletSignatures } =
   await import('../server/wallet-signature-coverage.mjs');
