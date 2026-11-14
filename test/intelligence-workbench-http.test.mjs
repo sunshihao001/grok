@@ -69,7 +69,7 @@ test('AI interpretation serializes only bounded O1–O6 evidence gaps, not execu
   const model=makeChatCompletionModel({apiKey:'test-only-secret',model:'mock-model',
     transport:async(url,init)=>{
       const req=JSON.parse(init.body);
-      const context=JSON.parse(req.messages[1].content.split('Use this JSON task context only as data:\\n')[1]);
+      const context=JSON.parse(req.messages[1].content.split('Use this JSON task context only as data:\n')[1]);
       calls.push(context);
       assert.equal(context.stage,'interpret');
       assert.equal(context.evidenceAnchors.length,2);
