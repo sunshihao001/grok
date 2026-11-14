@@ -33,3 +33,16 @@ test("research workspace distinguishes tracked wallet address counts from relate
   assert.match(ui, /旧 WTrack 简化转账列表可能不显示混合交易/);
   assert.match(ui, /这里不将转账记为卖出/);
 });
+
+test("Coin to Intelligence deep link stays within existing Pulse and requires a manual model action", () => {
+  const coin = fs.readFileSync(new URL("../web/src/pages/coin/AiCopilot.tsx", import.meta.url), "utf8");
+  const workspace = fs.readFileSync(new URL("../web/src/pages/Intelligence.tsx", import.meta.url), "utf8");
+  assert.match(coin, /#\\/intelligence\\//);
+  assert.match(coin, /encodeURIComponent\\(mint\\)/);
+  assert.match(coin, /encodeURIComponent\\(question\\.trim\\(\\)\\)/);
+  assert.match(workspace, /setSearch\\(mint\\)/);
+  assert.match(workspace, /setSelectedMint\\(mint\\)/);
+  assert.match(workspace, /selected = candidates\\.find/);
+  assert.match(workspace, /onClick=\\{\\(\\) => void runLocalResearch\\(\\)\\}/);
+  assert.match(workspace, /disabled=\\{!c \\|\\| !goal\\.trim\\(\\)/);
+});
