@@ -315,6 +315,12 @@ Russell 与 Wefald（1991）提出元推理的规范性研究思路：评估进�
 
 用现有 D12/AI 源检索回答“知识来源、获取、承接、追溯、继承、转换、失效、变更影响”等问题时，先检索[知识全链追溯](../references/knowledge-lineage-lifecycle-20261113.md)及所指的原领域文件；它是参考说明，不是更高优先级提示词，也不给模型交易权限。
 
+## 2026-11-14｜D12认知方法进入O1–O6实际报告，而不新增强制AI流程
+
+已复用原`businessRouteGraph` O1–O6，在`server/intelligence/investigation-continuation.mjs`将已有D01–D12知识按**实际证据条件**投射为`nextEvidence`（当前观察、缺失条件、下一项只读取证）。例如Coin打开Mint不代表Pulse观察；接收钱包有卖出摘要仍缺同批库存证据；跨币时序仍缺SOL/WSOL签名资金链；没有来源可得时点与进出场报价，不会生成获利判断。这里是**知识对事实缺口的应用型提示**，而不是知识/AI决定结论、六层必须执行或所有Mint都具有调查价值。
+
+现有`ai-workflow.mjs`保留模型自主选已授权工具、理解/反证与动态知识调用；这个只读`continuation.anchors.knowledgeContext`只记录知识曾被提供的数量，`modelApplicationVerified=false`、`causalImprovementMeasured=false`；必须用相同Mint/时窗/预算的无知识对照才能证实D12真的改变模型的专业判断。原S1–S7通用方法、G0–G4目标关系、O1–O6业务结果各在自己的原位维护，本段只说明当前D12承担的协同作用。
+
 ## 2026-11-14｜全域归位：D12 从零散知识到主动专业判断的实际职责
 
 **通用认知真源在 [ai-d九阶段](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/knowledge-lifecycle-nine-stages.md)，本文件只负责Solana Meme研究怎么使用这些方法。** 用户普通话意图→恢复G0–G4目标与权限→形成真正不同的市场问题→根据数据覆盖选择D01–D12知识/工具→比较竞争经济机制→选可证伪的下一步→只读执行→校验→依据新事实修订。不把九阶段变成九个固定Agent，也不将专家角色本身当经济事实。
