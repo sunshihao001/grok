@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import fs from "node:fs";
-import { selectObservedCandidates, resolveResearchTarget } from "../web/src/pages/intelligence/candidates.ts";
+import { selectObservedCandidates, resolveResearchTarget, validateMintResearchReceipt, validatePulseSelectionReceipt } from "../web/src/pages/intelligence/candidates.ts";
 
 const coins = {
   "aaa": { mint: "aaa", name: "Alpha", symbol: "ALP", born: 1 },
@@ -78,4 +78,42 @@ test("Intelligence has a model-free exact-Mint archive path independent of paid 
   assert.ok(ui.includes("activeResearch.modelMode === \"NOT_USED\""));
   assert.ok(ui.includes("async function runLocalResearch()"));
   assert.ok(ui.includes('SIDECAR_URL + "/research"'));
+});
+
+test("AI research receipt cannot silently attach another Mint's evidence to the selected coin", () => {
+  const mint = "EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump";
+  const other = "4p7SeR6361WJ4T4icgsYTnzAUzfA5NwM4CwYD9kMBjuK";
+  const valid = { calls:[{capability:"mint-economic-evidence",input:{mint}}],
+    evidence:[{capability:"mint-economic-evidence",input:{mint},
+      result:{mint,status:"OBSERVED_UNVERIFIED"}}],knowledgeUse:[],
+    verifiedMarketOpportunity:false,liveExecutionValidated:false };
+  assert.equal(validateMintResearchReceipt(valid,mint),true);
+  assert.equal(validateMintResearchReceipt({...valid,mint:other},mint),false);
+  assert.equal(validateMintResearchReceipt({...valid,evidence:[{...valid.evidence[0],input:{mint:other}}]},mint),false);
+  assert.equal(validateMintResearchReceipt({...valid,evidence:[{...valid.evidence[0],
+    result:{mint:other,status:"OBSERVED_UNVERIFIED"}}]},mint),false);
+  assert.equal(validateMintResearchReceipt({...valid,calls:[{capability:"mint-facts",input:{mint:other}}]},mint),false);
+  assert.equal(validateMintResearchReceipt({...valid,verifiedMarketOpportunity:true},mint),false);
+  assert.equal(validateMintResearchReceipt({...valid,liveExecutionValidated:true},mint),false);
+  assert.equal(validateMintResearchReceipt({calls:[],evidence:[],knowledgeUse:[]},mint),true,
+    "a no-evidence model plan can be shown as a non-verified draft");
+  const workspace = fs.readFileSync(new URL("../web/src/pages/Intelligence.tsx", import.meta.url), "utf8");
+  assert.match(workspace,/validateMintResearchReceipt\(data, mint\)/);
+  assert.match(workspace,/RESEARCH_RESULT_MINT_OR_EVIDENCE_MISMATCH/);
+});
+
+test("Pulse discovery cannot substitute a Mint outside the actual submitted shortlist", () => {
+  const mint = "EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump";
+  const other = "4p7SeR6361WJ4T4icgsYTnzAUzfA5NwM4CwYD9kMBjuK";
+  const base = {discovery:{selectedMint:mint,candidateCount:1},
+    investigation:{calls:[],evidence:[],knowledgeUse:[]},verifiedMarketOpportunity:false};
+  assert.equal(validatePulseSelectionReceipt(base,[mint]),true);
+  assert.equal(validatePulseSelectionReceipt({...base,discovery:{...base.discovery,selectedMint:other}},[mint]),false);
+  assert.equal(validatePulseSelectionReceipt({...base,discovery:{...base.discovery,candidateCount:2}},[mint]),false);
+  assert.equal(validatePulseSelectionReceipt({...base,discovery:{selectedMint:null,candidateCount:1},investigation:null},[mint]),true);
+  assert.equal(validatePulseSelectionReceipt({...base,discovery:{selectedMint:null,candidateCount:1}},[mint]),false);
+  assert.equal(validatePulseSelectionReceipt({...base,investigation:{...base.investigation,
+    evidence:[{input:{mint:other},result:{mint:other}}]}},[mint]),false);
+  const workspace = fs.readFileSync(new URL("../web/src/pages/Intelligence.tsx", import.meta.url), "utf8");
+  assert.match(workspace,/validatePulseSelectionReceipt\(data, shortlist\.map\(item => item\.mint\)\)/);
 });
