@@ -145,3 +145,19 @@ Solana 的 `getTransaction` 可能涉及版本化消息、Address Lookup Table�
 - **下一项检验**：同一真实Mint比较raw/jsonParsed、CPI、Owner、Token-2022 fee/Hook、多池、SOL/WSOL和来源时点；通过前所有真实价格影响、完整余额、经济控制权仍为UNKNOWN。
 
 本节是对历史知识的**现行适用修正**，不修改旧章节的历史身份。部署/真实模型API/主网确认均未因CI通过而自动完成。
+
+## 2026-11-14｜全域归位：D01 协议事实、D02 发行生命周期、D10 数据可信度（当前主述）
+
+**知识对象分开**：协议可以证明账户、签名、指令、余额与程序行为；市场阶段描述发行、曲线、迁移与池；数据源描述何时、通过什么接口、以什么覆盖范围观察上述对象。一个原版Blix页面显示了报价不等于同步观察到完整链上成交。此处是专业事实语义的主述；研究资料原文仍留在 `knowledge/references/`，运行代码/测试状态在 `docs/project/build-register.md`。
+
+| 专业域 | 需要保持完整的知识链 | 过滤时必须保留的不同结果 | 原Blix/扩展承接 |
+|---|---|---|---|
+| **D01** 链上事实 | Signature→Slot/确认状态→消息账户/ALT→顶层与inner CPI→Token/Token-2022→TokenAccount/Owner/Authority/Fee Payer→资产净变化→Swap/Transfer/LP/系统SOL与WSOL→费用；失败交易亦独立标记 | 可核实的转账/调用、局部成交候选、身份不可识别、未取得指令数据；不把一笔多动作交易重复计为多个经济买盘 | 原 `solana.js`、`holders.js`；扩展 `economic-events.mjs`、`economic-claim-trace.mjs` |
+| **D02** 生命周期 | 发射平台/权限→曲线可买卖与储备→接近毕业→迁移/新池→多池价差与深度→Creator/Dev历史、LP与代币权限变化 | “Token存在”“有报价”“实际可卖”“已迁移”“安全”是五种不同命题；事件来源错误不能靠AI重命名修复 | 原 `engine.js`、`launchlab.js`、`creator.js`、`coin.js` |
+| **D10** 数据可靠性 | 来源权限和字段→WS/API/RPC原始消息→事件与获取/首可得时钟→原始保存/hash→去重、缓存、游标、断流与回补→版本/来源冲突→覆盖水位→消费端质量状态 | 未捕获≠不存在，首次本地收录≠最早市场可得，来源健康≠全历史完成，归档覆盖≠市场全集；保留 UNKNOWN/UNCOVERED | 原 `sources.js`、`livetrades.js`、`coverage.js`、`db.js`；扩展 `wallet-signature-coverage.mjs`、`scripts/audit-intelligence-source-readiness.mjs` |
+
+**专业过滤条件**：先确定对象类型、具体市场阶段、数据提供方、链上/供应商时间、账户身份、池和原始单位，再使用结果；无须为了“完整”给每个Mint抓全历史，但不应把只捕获几笔的局部样本称为全链。Token-2022 转账费用和Hook的用户可用金额与原始transfer金额可能不同；一笔交易包含Swap+Transfer+LP时以签名/指令位置/owner净额核对，而不是按标签相加。**本句是审查规则，不是宣称所有协议变体已由现代码支持。**
+
+**从外部知识归位**：Synapse的S06/S12/S13属于跨市场事件研究，S07 Push、S08 Pull可帮助区分Token移动的指令语义；其14信号、DEX/HyperLiquid和噪音分类的**完整原始转述**仍见 [全分类保留目录](../references/synapse-methodology-full-taxonomy-20261114.md)，不能直接当Solana协议事实。Pulse、pumpwatch用于发行全集/失败样本，PumpTrace用于Creator/历史，Solana官方协议与FnZero/Carbon解析器用于校准真实指令，GMGN/OKX只提供各自字段与产品语义（需核权限）。独立详细差异见 [跨项目对照](../references/p1-p2-knowledge-reconciliation-20261113.md)。
+
+**运行边界与待验**：当前已通过原版Blix在完全封网容器中的新SQLite冷启动/二次重启/HTTP健康与Pulse返回，不是联网市场覆盖；尚缺一段**真实市场同一Mint**的来源原文、source-first-available、断流与补查、完整链上签名和多池对账。资料可检索、解析有离线测试和现场市场可靠运行属于不同等级。
