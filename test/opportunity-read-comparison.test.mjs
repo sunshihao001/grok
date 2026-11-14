@@ -49,6 +49,7 @@ test('same Pulse snapshot A/B preserves the Mint universe and exposes change wit
   assert.deepEqual([report.baseline.selectedMint,report.enhanced.selectedMint],[M1,M2]);
   assert.equal(report.selection.changed,true);
   assert.equal(report.input.observedMintCount,2);
+  assert.match(report.input.candidateDigestSha256,/^[a-f0-9]{64}$/);
   assert.equal(report.selection.sameSnapshotCandidatePopulation,true);
   assert.equal(report.selection.newMintDiscoveredOutsideOriginalPulse,false);
   assert.equal(report.supportingEvidence.firstAvailableUnknown,1);
@@ -70,7 +71,8 @@ test('changed candidate population, mismatched clock and injected Mint are not A
   const changed={...b,discovery:{...b.discovery,candidateCount:3}};
   const shifted={...b,discovery:{...b.discovery,sourceRecordedAtMs:frozen+1000}};
   const outside={...b,discovery:{...b.discovery,selectedMint:M3}};
-  for(const enhanced of [changed,shifted,outside])
+  const fakeSameCount={...b,discovery:{...b.discovery,candidateDigestSha256:'0'.repeat(64)}};
+  for(const enhanced of [changed,shifted,outside,fakeSameCount])
     assert.throws(()=>compareObservedInvestigations({snapshot,baseline:a,enhanced}),
       /ENHANCED_POPULATION_OR_TIME_MISMATCH/);
   assert.throws(()=>compareObservedInvestigations({snapshot:{...snapshot,
