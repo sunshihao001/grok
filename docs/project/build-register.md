@@ -968,3 +968,16 @@
 **优先顺序修正**：R-18主表的「全候选→纸面收据对照」是衡量机会真实性的重要验证目标，**不是要求先把所有层级改为硬编码**。下一项先审查现有Blix模型提供者与PR #23 AI工作流接法，选择最少接口改动使模型能在授权只读范围调用原生发现与研究能力；先用相同任务测「不用专业知识/按需知识」的调查差异，真实反馈再决定是否补市场机会工具或可跟随性数据。模型是否值得继续查、是否形成交易机会候选由其推理，最终市场有效性仍需独立的时间/成本/样本外证据验证。原版交易功能保留但不默认启用、下单或扣费。
 
 **本项状态**：本次仅原位修订项目协作与产品审查目标；尚未实现新AI连接、交易机会Agent、真实API运行或策略回测。不能把「AI具有推理能力」视作已经具有数据权限、持久记忆或正确预测。
+
+
+### 2026-11-14｜R-19：钱包历史初次采样风险在Mint来源审计中丢失（只读修复）
+
+**核查当前状态**：2026-11-14读取最新 `blix@1560528a`、PR #23 `31f5fa3d`（open/Draft、mergeable=true）、PR #24 `434425cc`（open/Draft、mergeable=true），本轮仅在现有 PR #23 集成候选分支可逆提交，未合并。先前报告的 `wallet_sig_windows` 多行无序读取风险被源码否证：`server/wallet-signature-coverage.mjs` 的真实表定义为 `wallet TEXT PRIMARY KEY`，写入为 `ON CONFLICT(wallet) DO UPDATE`，不存在正常schema下同钱包多条窗口。此前 `test/intelligence-source-readiness.test.mjs` 的简化夹具没有模拟主键，不能把夹具的宽松约束当作生产缺陷。
+
+**真正的缺口**：同一来源审计脚本 `scripts/audit-intelligence-source-readiness.mjs` 只统计 `anchor_reached` 与 `gaps_seen`，忽略生产写入中持续保留的 `ever_initial_sample`。`walletSignatureCoverage()` 已明确把 `gaps_seen || ever_initial_sample` 作为 `unresolvedHistoricalRisk`；一个首次观察钱包即使随后增量扫描锚点达到、无断流，也不代表历史生命周期已覆盖。旧审计在 `anchorNotReached=0,withGaps=0` 时看不到这一额外历史风险。它没有声称 `lifetimeHistoryComplete=true`，因此是**诊断信息丢失**而不是已证实的错误资金统计或市场归因。
+
+**修复**：只修改已有脚本和测试；如存在 `ever_initial_sample` 列，输出 `everInitialSampleOwners`、`unresolvedHistoricalRiskOwners`，用并集避免双重计数；旧/部分schema下返回 `null` 并保留原字段，维持现有只读查询与8个Owner采样上限。增加一个双钱包合成反例：钱包A `anchor_reached=1,gaps_seen=0,ever_initial_sample=1`，钱包B为0，断言 `unresolvedHistoricalRiskOwners=1`，原SQLite字节未改；没有RPC、付费模型或服务器运行。**本轮代码已提交；Node24 CI结果须按本次提交SHA核实，不能借用旧绿色。**
+
+**证据与边界**：生产 `server/wallet-signature-coverage.mjs` 主键/UPSERT/初始采样标志及 `walletSignatureCoverage()` 的风险口径；`scripts/audit-intelligence-source-readiness.mjs` 原只读报告与 `test/intelligence-source-readiness.test.mjs` 合成夹具。未验证真实Mint完整历史、初次采样实际漏掉多少签名、AI是否读取此字段、经济资金关联是否改变。审计只检查本地已捕获Mint及最多8个Owner，不证明其他钱包不存在。
+
+**下一项高价值阻断**：以生产schema而非简化夹具测试首轮采样→增量锚点到达→真实历史回补是否清除风险（当前标志单调保留，不能靠单次anchor清除）；再固定同一Mint调查的历史签名覆盖与买入→Token转仓→接收卖出证据对照。若本次CI红，优先修复回归，不扩建第二套采集器。
