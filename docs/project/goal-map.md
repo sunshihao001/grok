@@ -1,5 +1,10 @@
 # Solana Meme × Blix｜项目目标锚点与认知深化图（V0.2）
 
+## 2026-11-14｜GMGN×成熟参考项目机会优先再整合
+
+已在原[参考成品逆向目标体系第13节](reference-driven-goal-model-v0.1.md#13-2026-11-14gmgn--既有成熟产品--blix机会优先全局再整合v04)完成 **GMGN Wallet Radar / First70 / Insider-Sniper-Bundler / Wallet Score 与可复制性 / Copy Trade参数** × OKX / Million / Pulse / Synapse / HoldTech / PumpTrace / Nansen / Arkham / Bubblemaps / Cielo / pumpwatch / PumpGrok × 旧 Hermes / qb- / meme- / Why-Solana 及原65参考资产的全局重新映射。原先只提少数“钱包资金异常信号”的视角不足以表达GMGN的跨Mint反查和历史盈利 **vs** 实际可跟随性。**纠正为：原Blix机会发现优先，钱包/资金图支持筛选与反证，AI按任务选择已有能力；同一Mint的研究价值和交易可行性分别判断，不能以标签数/地址数代理收益。** 当前仅完成来源复核和知识/设计修正，未接GMGN付费API、未修改交易或证明市场优势。PR#23独立集成分支未与本分支知识文件自动合并。
+
+
 ## 2026-11-14｜Synapse 源码纵深研究的新增纠偏
 
 依据 [Synapse 全分类机制纵深与 Blix 实际缺口](../../knowledge/references/synapse-cross-signal-mechanisms-20261114.md)，**纠正“Blix 没有钱包→Mint 入口”的推测**：engine.js 已连接 wallets.walletSignals，钱包买入可 adopt Mint、vet 并 raise 告警，且部分关联地址按 independent() 启发式折叠。真实增量不是复制钱包追踪，而是验证已有钱包信号如何进入 AI 深读和跨 Mint 调查，以及不同模块是否保留相同经济对象：research.js 对 followedWalletsBought 统计原始 distinct wallet，不能直接等同 walletSignals 的关系组数；wtrack.js 的 fromTx 在发现 Swap 后直接返回，有同笔 Swap+Transfer 漏记转仓的源码条件（待真实 fixture 验证）。外部跟单回测/样本外反证再次确认：钱包群体结构和高质量信号本身不等于可复制净收益。此前“钱包事件成为候选的另一条入口”应解释为**深化已有入口及跨模块升级**，不是从零新增。优先对照既有 Blix 与证据增强后的候选质量、钱包独立性、真实资金/库存与执行延迟；禁止只增加标签数或重建筛选器。
