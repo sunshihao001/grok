@@ -3,7 +3,7 @@
 // network automatically; no API requests occur until a person runs a task.
 import { makeChatCompletionModel } from '../server/intelligence/chat-completion-model.mjs';
 import { createResearchHttpServer } from '../server/intelligence/research-http.mjs';
-import { makeOfflineEconomicReader } from '../server/intelligence/offline-economic-reader.mjs';
+import { makeOfflineEconomicReader, probeExistingEconomicArchive } from '../server/intelligence/offline-economic-reader.mjs';
 import { makeLocalKnowledgeLoader } from '../server/intelligence/local-knowledge-loader.mjs';
 
 const env = process.env;
@@ -27,6 +27,8 @@ const origins = (env.BLIX_AI_ALLOWED_ORIGINS ||
   .split(',').map(x=>x.trim()).filter(Boolean);
 const server = createResearchHttpServer({
   model, readEconomic, allowedOrigins:origins, maxTasks,
+  sourceReadiness: env.BLIX_AI_DB_PATH
+    ? () => probeExistingEconomicArchive({ databasePath:env.BLIX_AI_DB_PATH }) : null,
   loadKnowledge:makeLocalKnowledgeLoader(),
 });
 server.listen(port,'127.0.0.1',()=>{
