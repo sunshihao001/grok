@@ -109,6 +109,20 @@ export function Intelligence() {
   const [discoveryResult, setDiscoveryResult] = useState<DiscoveryResult | null>(null);
   const [researchBusy, setResearchBusy] = useState(false);
   const [researchError, setResearchError] = useState("");
+  // Coin deep-link: preselect only an already-observed Pulse candidate.
+  // A deep link never fabricates market data or starts a paid model request.
+  useEffect(() => {
+    const hash = window.location.hash;
+    const match = /^#\/intelligence\/([1-9A-HJ-NP-Za-km-z]{32,44})(?:\?(.*))?$/.exec(hash);
+    if (!match) return;
+    const mint = match[1];
+    setStage("all");
+    setSearch(mint);
+    setSelectedMint(mint);
+    const requestedGoal = new URLSearchParams(match[2] || "").get("goal");
+    if (requestedGoal && requestedGoal.trim() && requestedGoal.length <= 1600) setGoal(requestedGoal);
+  }, []);
+
   useEffect(() => {
     if (!SIDECAR_URL) return;
     const controller = new AbortController();
