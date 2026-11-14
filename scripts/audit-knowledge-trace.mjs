@@ -114,7 +114,7 @@ const summary={
 };
 const a=process.argv.slice(2);
 let result;
-if(a.length===0)result={...summary,example:'--unit D05-K01 | --target knowledge/mechanisms/wallet-roles-and-inventory.md | --axes | --all'};
+if(a.length===0)result={...summary,example:'--unit D05-K01 | --target knowledge/mechanisms/wallet-roles-and-inventory.md | --axes | --routes | --all'};
 else if(a.length===1&&a[0]==='--all')
   result={...summary,migrations:entries,units,historicalSnapshotSources:snapRecords,aiRuntimeAllowlist:runtimeRecords};
 else if(a.length===1&&a[0]==='--axes') {
@@ -145,6 +145,101 @@ else if(a.length===1&&a[0]==='--axes') {
     ],
   };
 }
+else if(a.length===1&&a[0]==='--routes') {
+  // Static referential closure only: these are business/concept handoffs,
+  // never permission, runtime orchestration, wallet control or market Alpha.
+  const g=domainModel.cross_axis_alignment.businessRouteGraph;
+  if(!g){console.error('MEME_ROUTE_GRAPH_MISSING');process.exit(2)}
+  const errors=[];
+  const unique=(arr,label,key='id')=>{
+    const ids=arr.map(x=>x[key]);
+    if(new Set(ids).size!==ids.length)errors.push(label+'_DUPLICATE_ID');
+    return new Set(ids);
+  };
+  const outcomes=unique(g.businessOutcomes,'OUTCOME');
+  const conceptIds=unique(g.conceptCarriers,'CONCEPT');
+  const routes=unique(g.entryRoutes,'ENTRY');
+  const loops=unique(g.feedbackLoops,'FEEDBACK');
+  const knownDomains=new Set(domainModel.domains.map(x=>x.id));
+  const caps=new Set((domainModel.cross_axis_alignment.interpretationCapabilities||[]).map(x=>x.id));
+  const axes=new Set(domainModel.cross_axis_alignment.independentAxes.map(x=>x.id));
+  const requiredOutcomes=['O1','O2','O3','O4','O5','O6'];
+  for(const id of requiredOutcomes)if(!outcomes.has(id))errors.push('MISSING_'+id);
+  if(outcomes.size!==requiredOutcomes.length)errors.push('UNEXPECTED_BUSINESS_OUTCOME');
+  const requiredPaths=[];
+  for(const x of g.businessOutcomes){
+    if(!x.domainRefs?.length||x.domainRefs.some(id=>!knownDomains.has(id)))errors.push(x.id+'_BAD_DOMAINS');
+    if(!x.capabilityRefs?.length||x.capabilityRefs.some(id=>!caps.has(id)))errors.push(x.id+'_BAD_CAPABILITIES');
+    if(!x.codeRefs?.length)errors.push(x.id+'_MISSING_IMPLEMENTATION_REFERENCE');
+    requiredPaths.push(...(x.codeRefs||[]));
+    if(!x.output||!x.verification)errors.push(x.id+'_MISSING_OUTPUT_OR_LIMIT');
+  }
+  for(const x of g.conceptCarriers){
+    if(!caps.has(x.supportCapability)||!axes.has(x.axis))errors.push(x.id+'_MISALIGNED_EXISTING_AXIS');
+    if(!x.meaning||!x.neverAssume||!x.canonicalPath)errors.push(x.id+'_MISSING_SEMANTIC_LIMIT');
+    requiredPaths.push(x.canonicalPath);
+  }
+  for(const id of ['S1','S2','S3','S4','S5','S6','S7'])
+    if(!g.conceptCarriers.some(x=>x.supportCapability===id))errors.push('MISSING_CONCEPT_CARRIER_'+id);
+  if(g.handoffs.some(x=>x.relation!=='CONDITIONAL_BUSINESS_HANDOFF_NOT_INFERRED_ECONOMIC_EDGE'))
+    errors.push('BUSINESS_HANDOFF_MASQUERADES_AS_ONCHAIN_EVIDENCE');
+  const edges=unique(g.handoffs.map((x,i)=>({...x,id:x.from+'->'+x.to})),'HANDOFF');
+  for(const x of g.handoffs){
+    if(!outcomes.has(x.from)||!outcomes.has(x.to)||!x.minimumHandoff||!x.condition||!x.result)
+      errors.push('INVALID_HANDOFF_'+x.from+'_'+x.to);
+  }
+  const checkPath=(id,path,loop=false)=>{
+    if(!Array.isArray(path)||path.length<2)errors.push(id+'_PATH_TOO_SHORT');
+    else{
+      if(loop&&path[0]!==path.at(-1))errors.push(id+'_NOT_CLOSED');
+      for(const node of path)if(!outcomes.has(node))errors.push(id+'_UNKNOWN_NODE_'+node);
+      for(let i=1;i<path.length;i++)
+        if(!edges.has(path[i-1]+'->'+path[i]))errors.push(id+'_MISSING_HANDOFF_'+path[i-1]+'_'+path[i]);
+    }
+  };
+  for(const r of g.entryRoutes){
+    checkPath(r.id,r.path);
+    if(!r.entry||!r.gate)errors.push(r.id+'_MISSING_ENTRY_OR_STOP');
+    for(const detour of r.optionalDetours||[])checkPath(r.id+'_DETOUR',detour.split('→'));
+  }
+  for(const l of g.feedbackLoops){
+    checkPath(l.id,l.path,true);
+    if(!l.reopenWhen||!l.change)errors.push(l.id+'_MISSING_FEEDBACK_TRIGGER');
+  }
+  const life=unique(g.knowledgeLifecycle,'LIFECYCLE');
+  for(let i=1;i<=9;i++){
+    const id='K'+i;
+    if(!life.has(id))errors.push('MISSING_'+id);
+  }
+  for(const k of g.knowledgeLifecycle){
+    if(!caps.has(k.supportCapability)||!k.role||!k.failureOrCorrection)errors.push(k.id+'_MISSING_KNOWLEDGE_BRIDGE');
+    requiredPaths.push(k.canonicalPath);
+  }
+  if(!g.stopBoundaries?.length||!/NOT_|UNVERIFIED|DECLARATIVE/.test(g.status||''))errors.push('LIMITS_OR_DECLARATIVE_STATUS_MISSING');
+  requiredPaths.push(g.sourceOfTruth);
+  const badPaths=Array.from(new Set(requiredPaths.filter(p=>!fileExists(p))));
+  if(badPaths.length)errors.push('BROKEN_REFERENCED_PATHS');
+  // Route inventory must connect every O node, not merely list orphan domains.
+  const touched=new Set([...g.entryRoutes.flatMap(x=>x.path),...g.feedbackLoops.flatMap(x=>x.path)]);
+  for(const id of requiredOutcomes)if(!touched.has(id))errors.push('UNREACHABLE_OUTCOME_'+id);
+  if(errors.length){console.error('MEME_ROUTE_GRAPH_INVALID '+JSON.stringify({errors,badPaths}));process.exit(2)}
+  result={
+    kind:'READ_ONLY_MEME_MULTI_ROUTE_GRAPH_AUDIT',
+    status:g.status,revision:g.revision,sourceOfTruth:g.sourceOfTruth,
+    counts:{outcomes:outcomes.size,concepts:conceptIds.size,entryRoutes:routes.size,
+      handoffs:edges.size,feedbackLoops:loops.size,knowledgeStages:life.size,brokenPaths:badPaths.length},
+    businessOutcomes:g.businessOutcomes,conceptCarriers:g.conceptCarriers,
+    entryRoutes:g.entryRoutes,handoffs:g.handoffs,feedbackLoops:g.feedbackLoops,
+    knowledgeLifecycle:g.knowledgeLifecycle,stopBoundaries:g.stopBoundaries,
+    staticGraphChecked:true,
+    runtimeMarketClosureVerified:false,actualAIUseVerified:false,followabilityVerified:false,
+    limitations:[
+      'Graph edges are conditional conceptual handoffs, not observed wallet relations, market events or authorization.',
+      'This validates existing file references and graph connectivity, not model execution or economic source completeness.',
+      'Historical/real-time case quality, data-provider first availability, execution quotes and business benefit remain separate tests.'
+    ]
+  };
+}
 else if(a.length===2&&a[0]==='--unit') {
   const unit=units.find(x=>x.id===a[1]);
   if(!unit){console.error('UNKNOWN_LEGACY_UNIT');process.exit(2)}
@@ -162,7 +257,7 @@ else if(a.length===2&&a[0]==='--unit') {
     aiWhitelisted:loaderSet.has(target),aiActuallyUsed:'NOT_CHECKED',
     limitations:summary.limitations};
 }else{
-  console.error('Usage: node scripts/audit-knowledge-trace.mjs [--axes | --all | --unit D05-K01 | --target knowledge/path.md]');
+  console.error('Usage: node scripts/audit-knowledge-trace.mjs [--axes | --routes | --all | --unit D05-K01 | --target knowledge/path.md]');
   process.exit(2);
 }
 console.log(JSON.stringify(result,null,2));
