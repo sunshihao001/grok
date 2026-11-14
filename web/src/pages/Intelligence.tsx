@@ -50,7 +50,7 @@ const KNOWLEDGE_CANDIDATES = [
     match: /AI|知识|思考|研究|意图|专家|检索/i },
 ] as const;
 const KNOWLEDGE_ROOT = "https://github.com/sunshihao001/grok/blob/integration/blix-evidence-readonly-20261108/";
-type ResearchHealth = { ready: boolean; dataSource: string; remainingTasks: number; busy: boolean };
+type ResearchHealth = { ready: boolean; inspectionReady?: boolean; remainingInspections?: number; dataSource: string; remainingTasks: number; busy: boolean };
 type DiscoveryResult = {
   status: string;
   discovery: {
@@ -69,7 +69,7 @@ type ResearchEvidence = { capability: string; error?: string; result?: { status:
   recipients?: { signature: string | null; fromOwner: string | null; toOwner: string | null; sameSignatureSenderBuySummaryObserved?: boolean }[];
 } } };
 type ResearchResult = {
-  mint: string; status: string; error?: string; completedAt?: string;
+  mint: string; status: string; error?: string; completedAt?: string; modelMode?: string;
   assessment?: { summary: string; hypotheses: string[]; alternativeExplanations: string[]; nextChecks: string[]; evidenceLevel: string } | null;
   calls: { capability: string; input: { mint: string } }[];
   evidence: ResearchEvidence[];
@@ -166,6 +166,47 @@ export function Intelligence() {
   const combinedBuyTransfers = economicFacts?.recipients?.filter(x => x.sameSignatureSenderBuySummaryObserved).slice(0, 8) || [];
   const sourceState = loaded ? (connected ? "实时流连接中" : polling ? "轮询更新中" : "数据连接待核实")
     : restored ? "历史缓存，可能过时" : "等待 Blix Pulse 数据";
+
+  async function runLocalInspection() {
+    if (!SIDECAR_URL || !researchMint || !researchHealth?.inspectionReady ||
+        researchHealth.remainingInspections === 0 || researchBusy) return;
+    // Free, deterministic view of the EXISTING local economic archive. No AI
+    // model, trading endpoint, RPC, or browser-provided market facts are used.
+    const mint = researchMint;
+    setResearchBusy(true);
+    setResearchError("");
+    setResearchResult(null);
+    setDiscoveryResult(null);
+    try {
+      const response = await fetch(SIDECAR_URL + "/inspect", {
+        method: "POST", headers: {"Content-Type":"application/json"},
+        credentials: "omit", redirect: "error",
+        body: JSON.stringify({mint}),
+        signal: AbortSignal.timeout(45_000),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        if (data?.error === "MINT_LOCAL_EVIDENCE_UNAVAILABLE")
+          throw new Error("指定 Mint 未保存在当前本地经济归档；这不代表链上没有交易。");
+        throw new Error(typeof data?.error === "string" ? data.error : "LOCAL_INSPECTION_FAILED");
+      }
+      if (!data || data.mint !== mint || data.modelMode !== "NOT_USED" ||
+          !Array.isArray(data.evidence) || !Array.isArray(data.unknowns) ||
+          !data.evidence.some((entry: ResearchEvidence) =>
+            entry.capability === "mint-economic-evidence" && entry.result?.facts)) {
+        throw new Error("LOCAL_INSPECTION_RESULT_INVALID");
+      }
+      setResearchResult(data as ResearchResult);
+      toast("已读取指定 Mint 的本地经济归档；未调用模型，历史覆盖仍需核查");
+    } catch(error) {
+      setResearchError(error instanceof Error ? error.message.slice(0,160) : "LOCAL_INSPECTION_UNAVAILABLE");
+    } finally {
+      setResearchBusy(false);
+      fetch(SIDECAR_URL + "/health", {credentials:"omit"})
+        .then(r => r.ok ? r.json() : null).then(v => setResearchHealth(v))
+        .catch(() => setResearchHealth(null));
+    }
+  }
 
   async function runLocalResearch() {
     if (!SIDECAR_URL || !researchMint || !goal.trim() || !researchHealth?.ready || researchBusy) return;
@@ -288,7 +329,8 @@ export function Intelligence() {
 
   return (
     <Page title="AI 研究工作台" right={<span className="rounded-full border border-rule px-3 py-1.5 text-xs text-muted">
-      {researchHealth?.ready ? "本地研究服务可用 · 只读" : "本地模型尚未连接 · 只读预览"}
+      {researchHealth?.ready ? "本地AI研究可用 · 只读" :
+        researchHealth?.inspectionReady ? "本地经济证据可查看 · 无需模型" : "本地只读预览"}
     </span>}>
       <p className="text-sm text-ink-2">
         基于 Blix 已有 Pulse 市场看板组织调查。列表是<strong>市场观察候选</strong>，不是 AI 选币结果、买入信号或盈利预测。
@@ -411,10 +453,14 @@ export function Intelligence() {
               </details>
             </div>
           </Panel>}
-          {activeResearch && <Panel title="本次模型研究 · 实际收据" aside={activeResearch.status}>
+          {activeResearch && <Panel title={activeResearch.modelMode === "NOT_USED" ? "本地经济证据 · 未使用AI模型" : "本次模型研究 · 实际收据"} aside={activeResearch.status}>
             <div className="space-y-4 p-4 text-sm">
-              <p className="break-words font-semibold">{activeResearch.assessment?.summary || "模型未生成可用研究结论"}</p>
-              <p className="text-xs text-muted">来源：{activeResearch.sourceMode}；结论级别：{activeResearch.assessment?.evidenceLevel || "MODEL_NOT_VERIFIED"}。不代表完整历史、交易控制权或盈利机会。</p>
+              <p className="break-words font-semibold">{activeResearch.modelMode === "NOT_USED"
+                ? "已读取现有本地SQLite的经济证据；以下都是局部归档事实，不是模型解释。"
+                : activeResearch.assessment?.summary || "模型未生成可用研究结论"}</p>
+              <p className="text-xs text-muted">来源：{activeResearch.sourceMode}；结论级别：{activeResearch.modelMode === "NOT_USED"
+                ? "CAPTURED_LOCAL_ARCHIVE_NOT_FULL_CHAIN_VERIFIED"
+                : activeResearch.assessment?.evidenceLevel || "MODEL_NOT_VERIFIED"}。不代表完整历史、交易控制权或盈利机会。</p>
               {trackedWalletActivity && <div className="rounded-control border border-rule p-3">
                 <p className="font-semibold">跟踪钱包买入地址统计 · 原版 Research 同口径</p>
                 <p className="mt-1 text-xs">本地历史买入地址：{trackedWalletActivity.rawTrackedBuyerAddressCount ?? "UNKNOWN"}；启发式关系组：UNKNOWN；独立经济控制者：UNKNOWN。</p>
@@ -497,13 +543,13 @@ export function Intelligence() {
                   {e.capability} · {e.result?.status || e.error || "UNKNOWN"} · {e.result?.sources?.map(x=>x.provider).join(", ") || "无来源"}
                 </p>)}</div>
               </details>
-              <details className="border-t border-rule pt-3">
+              {activeResearch.modelMode !== "NOT_USED" && <details className="border-t border-rule pt-3">
                 <summary className="cursor-pointer font-semibold">提供给模型的知识来源（{activeResearch.knowledgeUse.length} 条阶段记录）</summary>
                 <div className="mt-2 space-y-2">{activeResearch.knowledgeUse.map((k,i)=><p key={i} className="break-all rounded-control bg-paper-3 p-2 text-xs">
                   {k.stage} · {k.source} · {k.outcome}
                 </p>)}</div>
                 <p className="mt-2 text-xs text-muted">来源提供给模型不等于模型正确使用它。</p>
-              </details>
+              </details>}
               {!!activeResearch.unknowns?.length && <details className="border-t border-rule pt-3" open>
                 <summary className="cursor-pointer font-semibold">仍然未知（{activeResearch.unknowns.length}）</summary>
                 <ul className="mt-2 list-disc pl-5 text-xs">{activeResearch.unknowns.slice(0, 14).map((x,i)=><li key={i}>{x}</li>)}</ul>
@@ -580,6 +626,18 @@ export function Intelligence() {
               当前可比较 {discoveryCandidates.length} 个候选，来源为本浏览器显示的 Blix Pulse。
               只在实时流或轮询可用时开放。模型会增加一次选取步骤，可能产生模型 API 费用，
               但不会自动买卖、爬取全市场或宣称已发现盈利机会。
+            </p>
+            <button type="button" onClick={() => void runLocalInspection()}
+              disabled={!researchMint || !researchHealth?.inspectionReady ||
+                researchHealth.remainingInspections === 0 || researchBusy}
+              className="w-full rounded-full border border-rule-2 px-4 py-2.5 text-sm font-semibold text-ink hover:border-accent disabled:cursor-not-allowed disabled:opacity-40">
+              {researchBusy ? "正在检查本地证据…" : "免费查看指定 Mint 的本地经济证据（不使用AI）"}
+            </button>
+            <p className="text-xs leading-relaxed text-muted">
+              直接读取已经存在的本地SQLite，不需要模型密钥、费用开关或Pulse行情；不能发现尚未归档的交易。
+              {researchHealth?.inspectionReady
+                ? " 本次进程剩余证据检查次数：" + (researchHealth.remainingInspections ?? "未知") + "。"
+                : " 当前尚未连接可读的经济归档。"}
             </p>
             <button type="button" onClick={() => void runLocalResearch()}
               disabled={!researchMint || !goal.trim() || !researchHealth?.ready || researchHealth.remainingTasks < 1 || researchBusy}
