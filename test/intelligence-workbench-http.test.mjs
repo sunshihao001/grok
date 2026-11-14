@@ -325,7 +325,7 @@ test('model-free Mint inspect uses existing archive evidence without model setup
   assert.equal(data.continuation.anchors.tradeReadiness.status,
     'NOT_EVALUABLE_WITHOUT_SIGNAL_AND_EXECUTION_RECEIPTS');
   assert.equal(data.continuation.anchors.knowledgeContext.providedRecordCount,0);
-  assert.equal(data.continuation.anchors.nextEvidence.length,5);
+  assert.equal(data.continuation.anchors.nextEvidence.length,6);
   assert.equal(data.continuation.watch.status,'NOT_RUNNING_NO_AUTONOMOUS_WATCHER');
   assert.equal(reads,1);
   assert.equal(mintChecks,2);
