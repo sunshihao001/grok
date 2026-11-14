@@ -86,6 +86,10 @@ test('full read-only economic chain survives a post-capture failure and keeps ca
   const edges=recipientCandidates(db,A,M).rows;
   assert.equal(edges.length,1);assert.equal(edges[0].to_owner,B);
   assert.equal(edges[0].amount_raw,'400000000');
+  // The legacy WTrack net-balance transfer summarizer cannot represent this
+  // combined swap + outward transfer. A null WTrack summary MUST NOT be
+  // treated as negative evidence: the captured instruction proves A -> B.
+  assert.equal(wtrack.parseTransfer(first,A),null);
   assert.equal(recipientOutcomes(db,A,M).rows[0].sellObservation,'NOT_OBSERVED_IN_CAPTURED_WINDOW');
   // Retry without passing fetched tx; it must replay from SQLite and finish without network.
   await wallets.readTx({address:A},{sig:'buy-and-transfer',t:second*1000,quiet:false},()=>{});
