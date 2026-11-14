@@ -169,3 +169,62 @@ test('Mint-only discovery keeps a locally evidenced wallet visible when many unc
     fs.rmSync(root, { recursive: true, force: true });
   }
 });
+
+test('read-only Mint report separates raw tracked buyers from UNKNOWN groups and matches same-signature buy+transfer', async () => {
+  const root=fs.mkdtempSync(path.join(os.tmpdir(),'blix-mixed-wallet-'));
+  const file=path.join(root,'mixed.sqlite');
+  const C='9VQ3dtwAxUAxNPdD86ExhC1XsL1hiUcqEvzS4sAhUU1A';
+  const POOL='4p7SeR6361WJ4T4icgsYTnzAUzfA5NwM4CwYD9kMBjuM';
+  try {
+    const db=new DatabaseSync(file);
+    db.exec('CREATE TABLE wallets(address TEXT PRIMARY KEY,watching INTEGER)');
+    db.exec('CREATE TABLE wallet_trades(sig TEXT,wallet TEXT,mint TEXT,side TEXT,sol REAL,t INTEGER)');
+    const watch=db.prepare('INSERT INTO wallets VALUES (?,?)');
+    for (const w of [A,B]) watch.run(w,1);
+    watch.run(C,0);
+    const buy=db.prepare('INSERT INTO wallet_trades VALUES (?,?,?,?,?,?)');
+    buy.run('mixed-buy-transfer',A,M,'buy',1,1700000000000);
+    buy.run('second-local-buy',A,M,'buy',0.2,1700000001000);
+    buy.run('other-local-buy',B,M,'buy',0.5,1700000002000);
+    buy.run('not-watched-buy',C,M,'buy',0.5,1700000003000);
+    const transfer=(source,destination,amount)=>({
+      programId:TOKEN,parsed:{type:'transferChecked',info:{
+        source,destination,mint:M,tokenAmount:{amount:String(amount),decimals:6}
+      }}
+    });
+    persistEvidence(db,'mixed-buy-transfer',{
+      slot:200,blockTime:1700000000,
+      transaction:{signatures:['mixed-buy-transfer'],message:{
+        accountKeys:[A,B,'ATA_A','ATA_B','ATA_POOL',POOL,TOKEN],
+        instructions:[{programId:'ROUTER',data:'opaque'},transfer('ATA_A','ATA_B',400000000)]
+      }},
+      meta:{err:null,fee:5000,preBalances:[5e9,1e9,0,0,0,1e9,0],
+        postBalances:[4e9-5000,1e9,0,0,0,2e9,0],
+        preTokenBalances:[bal(2,A,0),bal(3,B,0),bal(4,POOL,1000000000)],
+        postTokenBalances:[bal(2,A,600000000),bal(3,B,400000000),bal(4,POOL,0)],
+        innerInstructions:[{index:0,instructions:[transfer('ATA_POOL','ATA_A',1000000000)]}]
+      }
+    });
+    db.close();
+    const before=hash(file);
+    const report=JSON.parse(execFileSync(process.execPath,mintArgs(file),{encoding:'utf8',timeout:15000}));
+    const activity=report.evidence.trackedWalletActivity;
+    assert.equal(activity.rawTrackedBuyerAddressCount,2,'count DISTINCT watched addresses, not buys or recipients');
+    assert.equal(activity.relatedHeuristicGroupCount,null,'do not invent heuristic grouping in offline reader');
+    assert.equal(activity.independentEconomicControllerCount,null);
+    assert.equal(activity.observationWindow,'ALL_LOCALLY_STORED_WALLET_TRADE_ROWS_NO_TIME_CUTOFF');
+    const move=report.recipients.find(r=>r.fromOwner===A && r.toOwner===B);
+    assert.ok(move,'archived instruction must identify transfer A to B despite the same-signature local buy');
+    assert.equal(move.amountRaw,'400000000','transfer amount is not the A net-inventory balance');
+    assert.equal(move.sameSignatureSenderBuySummaryObserved,true);
+    assert.equal(move.sameSignatureInterpretation,'LOCAL_BUY_SUMMARY_AND_INSTRUCTION_ARE_DISTINCT_EVENTS_NOT_INVENTORY_PROVENANCE');
+    assert.equal(report.recipients.find(r=>r.fromOwner===POOL)?.sameSignatureSenderBuySummaryObserved,false);
+    const {runCapability}=await import('../server/intelligence/index.mjs');
+    const normalized=await runCapability('mint-economic-evidence',{mint:M,readEconomic:async()=>report});
+    assert.equal(normalized.facts.trackedWalletActivity.rawTrackedBuyerAddressCount,2);
+    assert.equal(normalized.facts.trackedWalletActivity.relatedHeuristicGroupCount,null);
+    assert.equal(normalized.facts.recipients.find(r=>r.fromOwner===A && r.toOwner===B)?.sameSignatureSenderBuySummaryObserved,true);
+    assert.ok(normalized.unknowns.some(x=>/not independent actors/i.test(x)));
+    assert.equal(hash(file),before,'both offline readers preserve input SQLite bytes exactly');
+  } finally {fs.rmSync(root,{recursive:true,force:true});}
+});
