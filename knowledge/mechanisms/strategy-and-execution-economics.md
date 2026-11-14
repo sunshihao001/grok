@@ -158,6 +158,10 @@ Meme 跟单至少存在五个不同目标：
 
 **2026-11-13 成本术语精确修正**：上述“转入Token若成本来源未知”特指**真实取得成本未被本地链上证据覆盖**，不等于不能单独报告转入时的市场参考估值。Solana Foundation [Trading Portfolio](https://github.com/solana-foundation/trading-portfolio) 将外部转入按转入日价格估值，并在调用者明确指定的钱包组内进行成本归属；这是该项目的方法选择，不能把市场估值伪装为原始购买成本，也不能让Blix根据资金同源候选自动组成共享PnL的钱包组。未来字段应明确分开 `verifiedAcquisitionCost`、`estimatedTransferValue`、`costCoverage` 和 `walletGroupProvenance`，缺证据时仍保持 UNKNOWN。详见[来源核查8.1](../references/p1-p2-knowledge-reconciliation-20261113.md#81-钱包成本基础有三种不同对象不能只写转入成本未知)。
 
+## 2026-11-14｜知识转化到实际O5子目标的语义边界（PR #23）
+
+已在原`server/intelligence/investigation-continuation.mjs`的只读报告`anchors.tradeReadiness`和`anchors.nextEvidence[O5_OPPORTUNITY_AND_FOLLOWABILITY]`落实D08/D09的关键反例：**存在本地Token转移或跨Mint时间候选，不足以评价信号之后的进出场净收益**。该收据按现有事实公开缺少的信号首次可得、有效报价、对应池深度、指定金额、费用、延迟和退出条件；`Intelligence.tsx`会展示，不把价格涨幅、钱包历史收益或观察到的买卖摘要升格成交易就绪结论。它不代替原`server/quote.js`、`server/paper.js`和`followability-replay.mjs`的真实条件验证。**当前状态：离线可检的缺口指示；无真实报价/信号同窗证据，机会优先排序和可盈利性仍未验。**
+
 ## 2026-11-14｜全域归位：D08机会机制、D09跟单/执行经济的统一专业判断
 
 **两个独立问题**：`research_priority`是一个异常为什么值得深入研究；`trade_readiness`是在**给定信号可见时点、资金量、Pool和退出约束**下，是否有足够证据评价参与。二者可相互影响，但不能合并为一个“聪明钱评分”。GMGN Wallet Score、Copy Trade、Million Copyability、原Blix Paper与旧meme-的结构研究均可提供问题和参数候选，不能提供未经市场实证的稳赚结论。
