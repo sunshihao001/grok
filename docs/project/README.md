@@ -66,3 +66,20 @@ flowchart LR
 
 ## 版本与边界
 本导航不会自动同步 GPT 记忆、ai-d Draft PR、Grok Bot 云电脑或主分支。它能帮助 AI 恢复项目，**不能单凭文件存在证明 AI 已掌握专业知识**；需要真实问题和对照测试。
+
+
+## 2026-11-15｜最新 Agent Runtime 架构认知
+
+本项目新增统一基线：[Agent Runtime 策略与三平台研究](agent-runtime-strategy-20261115.md)。
+
+**核心修正：Blix 是当前建设基础，不再等同于整个 AI 系统的唯一主体。** AI Agent 负责理解目标、研究、工具选择、反证、复盘；Agent Runtime 负责长期运行、Memory、Skill、Browser、Terminal、MCP、Subagent、Cron 等；Blix 负责现有成熟的 Meme 业务、数据、UI、API、MCP 和运行经验；Evidence/Core 与 Case/Opportunity 负责事实追踪和业务判断对象。
+
+当前 Runtime 候选的最新判断：
+- **Hermes Agent（NousResearch）**：最高优先验证的长期自有 Runtime 候选。其官方能力与本项目需要的 Context/Memory/Skill/MCP/Solana/长期任务闭环高度匹配，但仍是**待真实任务验收的假设**。
+- **Muse**：成熟的产品化个人 AI + Secure VM，适合作为真实产品对照和能力参考，不预设为系统上层。
+- **Grok Bot**：成熟的持久 Cloud Computer / Bot / Skills / Routines / MCP 产品，也是本项目历史运行经验的重要来源；未来可以作为外部能力，但不再锁死为唯一主体。
+
+下一阶段不靠继续理论争论决定架构，而是用同一真实 Solana Meme 调查任务对三者进行受控比较，再决定是否让 Hermes 成为主 Runtime。测试标准包括目标理解、自主性、工具选择、链上调查深度、反证、证据纪律、Memory、Skill形成、Case形成、长任务、成本、安全和可维护性。
+
+**注意：旧 Hermes 与 NousResearch Hermes Agent 不是同一个项目。** 旧 Hermes 属于历史专业知识资产；NousResearch Hermes Agent 是当前研究的通用 Agent Runtime。
+
