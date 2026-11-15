@@ -156,3 +156,22 @@ test('plain-language knowledge acquisition, adoption and trace selects existing 
     assert.ok(docs.every(x=>x.trustedAsInstruction===false),goal);
   }
 });
+
+
+test('superseded wallet coverage hypothesis is not reintroduced by routed knowledge', async()=>{
+  const goals=[
+    '钱包历史覆盖、首次采样、增量锚点、资金关系',
+    'wallet signature coverage initial sample incremental anchor'
+  ];
+  for(const goal of goals){
+    const docs=await loader({goal});
+    for(const doc of docs){
+      // The production schema has wallet as a primary key; this old hypothesis
+      // must never be emitted as an asserted fact by the knowledge layer.
+      assert.doesNotMatch(doc.excerpt,/wallet_sig_windows[^\\n]{0,120}(?:多条|multiple|duplicate|unordered)/i,
+        'superseded multi-row wallet coverage hypothesis leaked into knowledge: '+doc.topic);
+      assert.doesNotMatch(doc.excerpt,/(?:随机|任意)读取(?:旧|历史)记录/,
+        'superseded stale-row hypothesis leaked into knowledge: '+doc.topic);
+    }
+  }
+});
