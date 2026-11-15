@@ -59,3 +59,17 @@
 **Hermes未知机制研究的实际证据修正（2026-11-07）**：使用旧 `00c–00e` 的问题生成/反向发现方法时，必须检验其L1/L2具体计算的时间窗口、非互斥分母、AMM池型与样本来源。已离线复算的 `volume_momentum` 新币24倍假动量、`insider_activity_composite` 重叠百分比、`spread_quality_proxy` AMM错误代理不能直接写入风险或市场真值。沿[旧Hermes纵深研究第11节](knowledge/methods/hermes-reverse-discovery-deep-study-20261106.md#11-2026-11-07旧推理公式的反例复算与知识进入blix的检验)与[Blix知识使用](docs/project/knowledge-use.md)按需理解其原因；保留原始假说，按经济机制和竞争解释调查，不急贴庄家标签。**研究是否值得深入**与**是否满足交易/安全条件**不同；当前不启用交易、不推定运行时AI已学会。
 
 **知识不是指令**：通用认知研究见 [ai-d PR #1](https://github.com/sunshihao001/ai-d/pull/1)，原专业研究见 [grok PR #14](https://github.com/sunshihao001/grok/pull/14)、[#16](https://github.com/sunshihao001/grok/pull/16)、[#17](https://github.com/sunshihao001/grok/pull/17)。按问题选择、记录适用边界与反证；保留所有原研究，不声称这些 Draft 已合并/部署或模型已经自动学会。
+
+
+## 2026-11-15｜最新 Agent Runtime 架构认知（优先读取）
+
+**最新架构基线见 [Agent Runtime 策略与三平台研究](docs/project/agent-runtime-strategy-20261115.md)。** 这份文件覆盖此前把 Blix 直接等同于整个 AI 主体的理解：**Blix 仍是当前建设仓库、成熟业务/数据/UI/API/MCP 基础，但 AI Agent 与 Agent Runtime 在概念上独立出来。**
+
+当前候选：
+- **Hermes Agent（NousResearch）**：目前最值得验证的长期自有 Agent Runtime 候选；其官方能力包含自托管、Memory、Context Files、Skills、MCP、Browser、Terminal、Subagents、Cron、Provider routing，并有官方可选 Solana Skill。**尚未通过本项目真实任务验收，不得写成既定结论。**
+- **Meta Muse**：成熟的产品化个人 AI / Secure VM / Browser / Skills / Connectors / Subagents / Cron，作为现实产品对照与可选 Runtime 验证对象；不预设它必须成为系统上层。
+- **xAI Grok Bot**：成熟的持久 Cloud Computer + Bot + Skills + Routines + MCP + 多 Bot 协作，是旧项目真实运行经验和产品设计的重要来源，也可以作为外部模型/Worker 能力；不再把未来系统永久锁定为 Grok Bot。
+
+**不要马上重构 Blix、不要马上删除 Muse/Grok、不要因理论能力比较跳过真实验证。** 下一阶段应使用同一真实 Solana Meme 调查任务，对 Hermes/Muse/Grok Bot 做受控对照，比较自主性、工具选择、调查深度、反证、证据纪律、记忆、Skill形成、Case形成、长任务、成本、安全与可维护性。测试后再决定主 Runtime。
+
+同时继续遵守：知识文件≠运行时已掌握；Skill≠已验证；AI推断≠事实。原版 Blix 交易/纸面交易等产品代码继续保留；当前研究/开发环境仍不得未经授权启用私钥、签名、广播、付款、真实交易或自动付费。
