@@ -5,8 +5,8 @@ import { makeLocalBlixReader } from "../server/intelligence/local-reader.mjs";
 
 const mint = "EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump";
 
-test("one allowlisted capability is visible; no implicit execution", async () => {
-  assert.deepEqual(listCapabilities().map((x) => x.id), ["mint-facts"]);
+test("two allowlisted capabilities are visible; no implicit execution", async () => {
+  assert.deepEqual(listCapabilities().map((x) => x.id), ["mint-facts", "mint-economic-evidence"]);
   await assert.rejects(() => runCapability("../server/accounts.js", { mint }), /Unknown or unauthorized/);
 });
 

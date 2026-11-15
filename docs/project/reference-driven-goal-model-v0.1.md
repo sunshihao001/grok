@@ -387,3 +387,89 @@
 - 开源原始源码/设计：[OKX Skills](https://github.com/okx/onchainos-skills)、[Million](https://github.com/Kelows/million)、[Pulse](https://github.com/nirholas/pulse)、[PumpTrace](https://github.com/AntC215/Pumptrace)、[HoldTech](https://github.com/co-numina/holdtech)、[pumpwatch](https://github.com/cinder-security/pumpwatch)、[PumpGrok](https://github.com/swcstudiospace/PumpGrok)、[Hermes](https://github.com/sunshihao001/-)、[meme-](https://github.com/sunshihao001/meme-)；qb-沿用此前已明确路径的[关键钱包样本](https://github.com/sunshihao001/qb-/blob/main/data/source_wallet_bot/live/4TKYts6M7Y1RzW6xbHo92anF2LBrRMiFFsANoTr9pump/wallet_fact/wallet_fact_report.md)，本轮未重新打开其全仓根目录。
 - 服务方产品文档：[Cielo](https://docs.cielo.finance/readme)、[Nansen Solana](https://academy.nansen.ai/en/help/articles/9214978-solana-on-nansen)、[Arkham平台](https://codex.arkm.com/the-intelligence-platform)、[Bubblemaps V2](https://bubblemaps.io/v2)；Synapse原站未完成方法细节的独立核验，严格区分用户转述内容。
 - 本项目已核：[原Blix全主体源码审查](whole-product-cross-layer-audit-v0.1.md)、[先前业务对照](blix-ai-investigation-product-comparison-20261113.md)、[Synapse完整分类](../../knowledge/references/synapse-methodology-full-taxonomy-20261114.md)、[当前目标图](goal-map.md)、[PR#23 R-35/R-36](https://github.com/sunshihao001/grok/blob/integration/blix-evidence-readonly-20261108/docs/project/build-register.md)。
+
+## 14. 2026-11-14｜半自动市场智能目标升级（V0.5）
+
+> **目标升级，不是运行验收。** 用户希望在完整原版 Blix 内，从“打开Mint后问AI”发展为**半自动、事件驱动、可持续的Meme市场智能研究与机会评估**：只需给目标、关注范围及必要授权，系统能自行观察、初筛、选择性补查、调用专业知识与现成工具、保留证据和反证、只读模拟、对重要变化提醒并接受人工决定。实际交易、签名、资金管理、自动跟单和新增付费权限不在本次授权内。继承既有G0–G4、O1–O6、D01–D12、L0–L7和K1–K9，不将知识层级机械变成选币流水线或新增多个Agent编制。
+
+### 14.1 上位目标与人机边界
+
+| 原目标 | 新增/深化内容 | 不应误解为 |
+|---|---|---|
+| G0 用户价值 | 普通口语交代任务，AI替人持续观察和研究；重要取舍/资金操作由人决定 | 用户需要逐步点每个币或学会编程 |
+| G1 产品定位 | **Blix半自动Meme市场智能研究与机会决策**；Intelligence是工作台入口，AI协同引擎是内部能力 | 再建一套交易终端、浏览器插件或独立知识系统 |
+| G2 六业务 | 市场/钱包双向发现、单Mint钱包/资金调查、跨Mint群体变化、机制解释、机会可跟随性、持续观察与复盘保持完整 | 必须按六个阶段对每个Mint挨个执行 |
+| G3 专业判断 | 分开给出调查价值与机会可参与性；事实由只读工具/可靠数据给出，AI按需选知识、决定补查、竞争解释、反证 | 模型或平台标签可以生成链上事实和确定盈利结论 |
+| G4 验收 | 真实首次可见时间、候选母集、跳过理由、暂停/恢复、预算、证据链、只读模拟、后续复盘与AI增益对照 | 离线代码通过、读到知识、12个浏览器候选选中1个便是半自动成品 |
+
+**默认自动化的对象**：已授权的只读数据查询、低成本筛选、按预算补查、变化检测和研究报告。**默认人工决定的对象**：扩大付费/运行范围、交易签名/买卖/付款、向外发布或部署、改动高风险规则。将来如研究逐笔人工确认的交易票据，须独立设计审批与执行隔离；原版 Blix 交易功能保留，但不向新增AI研究工作流开放。
+
+### 14.2 参考成品提供的真正半自动机制
+
+| 来源与核查入口 | 机制 | 迁移到Blix的决策 |
+|---|---|---|
+| [Million机会服务](https://github.com/Kelows/million/blob/main/apps/api/src/opportunities/opportunities.service.ts)、[Mint反找钱包](https://github.com/Kelows/million/blob/main/apps/api/src/discovery/discovery.service.ts) | 钱包买入触发候选，Mint发现新钱包；过滤、拒绝理由、决策日志及Shadow对照 | 复用原Blix walletSignals→adopt→vet、Wallet/Pulse/Brain；补全候选母集/被拒样本/影子复盘，不复制其交易引擎或把地址簇认作同控 |
+| [Pulse周期任务](https://github.com/nirholas/pulse/blob/main/src/collector/scheduler.ts) | 多源事件和快照、生命周期、来源故障与周期任务 | 借观察时钟、负样本、覆盖/故障口径，不搭第二套行情采集器 |
+| [PumpTrace回补管理](https://github.com/AntC215/Pumptrace/blob/main/src/modules/backfill-manager.mjs)、[观察任务](https://github.com/AntC215/Pumptrace/blob/main/src/modules/watchlists/worker.mjs) | 游标、队列、暂停恢复、限流、重要变化重检 | 优先复用PR23已有经济交易归档/重试/检查点，新增对象级Case接续而非重复状态机 |
+| [GMGN Wallet Radar](https://docs.gmgn.ai/index/wallet-radar)、[钱包评分](https://github.com/GMGNAI/gmgn-skills/blob/main/skills/gmgn-wallet-score/SKILL.md) | 多Mint反查钱包；钱包自身成绩与跟单可行性分开 | 保留钱包角色/持仓/资金与复制延迟/容量两个不同问题，不照搬未实证权重及实际Swap技能 |
+| [OKX OnchainOS只读技能](https://github.com/okx/onchainos-skills/tree/main/skills/okx-dex-market) | Token、钱包、榜单、Smart Money、Meme流事件的结构化工具 | 只在现有Blix数据缺口确实需要且获许可时适配；研究与交易Skills隔离 |
+| [HoldTech](https://github.com/co-numina/holdtech)、[PumpGrok](https://github.com/swcstudiospace/PumpGrok)、[旧Hermes](https://github.com/sunshihao001/-) | Mint页面自动检测与分析、风险否决与任务票据、Skill交接及恢复 | 复用原Coin/Intelligence和有限服务能力；避免复制Chrome插件、十席Bot和固定七步工作流 |
+| Cielo/Nansen/Arkham/Bubblemaps、Synapse、旧Grok/qb-/meme-/Why-Solana | 对象订阅、关系与时序可视化、专业机制、反证 | 保持原作者功能与历史证据来源，不因参考项目被收录就视作已接入API或获得真实经济归因 |
+
+### 14.3 同一引擎的四类半自动使用方式
+
+**入口A：指定Mint/Wallet/Group。** 用户打开原Coin/Wallet或输入简短目标，系统对目标自动选有限的只读查询、专业知识和反证；缺数据或额度不足则记录UNKNOWN并可恢复，不让用户逐步指挥。
+
+**入口B：市场/钱包事件自动发现。** 原Blix新发、迁移、异动、已观察钱包买卖、资金或库存变化进入同一候选集合，事件与来源去重；先运行确定性安全/时效/流动性检查，再由AI按信息价值决定研究哪些对象、哪些不选。允许“没有值得调查/提醒的对象”。
+
+**入口C：持久观察与重要变化。** 用户开启Mint、钱包或群体Watch后，新交易、新接收钱包卖出、跨Mint资金候选、流动性变化或反证更新才能触发再分析；要有去重/限频/配额/故障暂停与恢复。未开启外发通知时只留本地Case，不擅自发送。
+
+**入口D：只读机会演练与影子研究。** 冻结当时可见信号、报价、滑点、延迟、费用和退出约束，跟踪已选和未选对象；对比同一候选全集、同样时间/成本的原Blix和AI增强，不得用未来高点倒填信号。用户保留继续深查、观察、忽略与停止的决策权。
+
+这些是**可选入口和运行自主程度**，不是四个必须顺序执行的开发阶段。原有交互式AI调研是起点，不是半自动目标的全部。
+
+### 14.4 三重业务闭环：发现、调查、反馈
+
+~~~text
+原Blix市场事件 ─┐
+原Blix钱包事件 ─┼─> 去重的Mint/Wallet/Group候选与首可见时间
+已关注对象新证据┘                   |
+                                 v
+               数据质量+低成本确定性初筛
+                                 |
+                     AI决定是否值得补查
+                                 |
+             选择专业知识/原有工具/竞争解释
+                                 |
+              +------------------+-------------------+
+              |                                      |
+       Investigation Value                    Opportunity Viability
+        调查价值/持续研究                      可参与性/只读演练
+              +------------------+-------------------+
+                                 |
+                  新事实→复核→纠偏→修订下一次选择
+~~~
+
+- **发现循环**：钱包找Mint、Mint找钱包、市场事件找Mint、旧Case找新Mint；不能把同源市场事件重复投票，也不能把共享服务当共同控制。
+- **调查循环**：D01–D12和旧Hermes/Grok/qb/meme的知识以“适用条件→需要什么证据→哪项现有工具→竞争解释→可推翻条件”参与任务，不把全文和固定层级一口气交给模型。
+- **反馈循环**：保存未入选却后来大涨的对象、入选后失败的对象、事实被反证和数据源断流的Case；区分判断错误、观察延迟、漏采、执行成本和外部市场变化。
+
+### 14.5 一个可交付的半自动Case与告警契约
+
+最少保存：task/case ID、目标Mint/钱包/群体、入口与触发事件、事件发生时刻、供应商首次可知时刻（不可得则UNKNOWN）、链上签名与资产/Pool/Owner语义、来源及归档覆盖、被选/跳过原因、模型/知识/工具版本、权限预算、调查价值、机会可参与性、竞争解释与缺失字段、下一次重查条件、Case暂停/恢复及后续结果。
+
+**仅实质高价值新候选触发机会提醒**；消息应包含Mint、信号时间、可核查证据、资金/钱包、流动性/执行限制、竞争解释、失败风险与UNKNOWN。无可靠候选不推送常规“机会报告”。普通健康/离线故障状态与机会通知分开。外发渠道在用户单独授权前不启用。
+
+### 14.6 现有代码承接、验证门槛与最短实施顺序
+
+| 新目标 | 现有可见底座 | 尚需真实验收 |
+|---|---|---|
+| 自动候选 | 原Blix engine/triage/early/walletSignals、PR23 Pulse有限选题 | 当前浏览器最多12币不是全市场自主发现；须核对候选母集/被拒/第一可见时间 |
+| 模型按需研究 | PR23 intelligence/index、ai-workflow、知识加载、Mint事实与本地经济报告 | 仅有限白名单能力；需有许可的真实Mint归档、正确的读接口安全隔离、UI→事实→模型→报告验收 |
+| 对象级持续任务 | 原Tracker/SQLite/Journal、PR23经济ledger与检查点 | 独立AI Case的持久任务、增量触发、配额、重开/监控、告警仍未证实上线 |
+| 只读机会评价 | 原Brain/Paper、PR23 followability-replay | 有效的实际首次可见、当时入/出报价、成本与退出流动性；不能把纸面算术当真实盈利 |
+| AI增益与纠偏 | 现有测试/案例/旧专业知识 | 同样本同成本对照：及时性、漏/误选、研究覆盖、误归因、净可参与性、每次研究的模型/API支出 |
+
+**首先要完成的最短真实闭环**：一条已获授权的真实Blix市场/钱包事件 → 自动进入候选 → 只读工具和知识选择 → 证据化调查与两个独立价值判断 → 本地可重开的Case卡片 → 新事实引起复核。若数据/模型/运行条件不足，停在明确的不可用状态，优先修现有来源事实链，不能用更多AI文本代替真实数据。完成这条再扩大自动订阅、通知和多Mint研究规模。
+
+**来源与状态说明**：本节是目标和设计决定，外部项目只核查了列出的README/代表性源码；本轮未安装它们，也未执行交易、真实模型调用或全市场数据采集。PR23/PR24仍需按最新状态核对；不把本节文档更新视为产品已经上线。

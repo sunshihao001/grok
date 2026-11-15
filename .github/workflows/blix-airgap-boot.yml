@@ -1,0 +1,38 @@
+name: blix-airgap-original-boot
+
+# Tests original Blix boot and web/API availability without deploying anything.
+# The Docker container has --network none, no secrets, read-only source/root,
+# and a disposable writable /data only. Not a production safety certificate.
+on:
+  push:
+    branches: [integration/blix-evidence-readonly-20261108]
+    paths:
+      - "scripts/verify-blix-airgap-boot.sh"
+      - ".github/workflows/blix-airgap-boot.yml"
+      - "server/**"
+      - "web/**"
+      - "package.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: blix-airgap-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  isolated-boot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Build original Blix React front end without install scripts
+        run: |
+          npm ci --prefix web --ignore-scripts --no-audit --no-fund
+          npm --prefix web run build
+      - name: Start original Blix only inside network-disabled container
+        run: sh scripts/verify-blix-airgap-boot.sh

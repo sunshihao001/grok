@@ -7,10 +7,13 @@ db.exec(`CREATE TABLE IF NOT EXISTS people_pics (handle TEXT PRIMARY KEY COLLATE
 const put = db.prepare("INSERT INTO people_pics (handle, pic, t) VALUES (?, ?, ?) ON CONFLICT(handle) DO UPDATE SET pic = excluded.pic, t = excluded.t WHERE excluded.pic != people_pics.pic");
 const get = db.prepare("SELECT pic FROM people_pics WHERE handle = ?");
 // The other places a picture may already be on record, newest first.
+// Fomo sources create their tables in their own modules, which may not have
+// initialized when this shared picture helper is first imported. Compile only
+// at lookup time; db.js caches successful prepares for later calls.
 const elsewhere = [
-  db.prepare("SELECT pic FROM fomo_board WHERE handle = ? COLLATE NOCASE AND pic IS NOT NULL AND pic != '' ORDER BY day DESC LIMIT 1"),
-  db.prepare("SELECT json_extract(data, '$.pic') AS pic FROM fomo_profiles WHERE handle = ? COLLATE NOCASE AND json_extract(data, '$.pic') IS NOT NULL LIMIT 1"),
-  db.prepare("SELECT avatar AS pic FROM fomo_traders WHERE handle = ? COLLATE NOCASE AND avatar IS NOT NULL AND avatar != '' LIMIT 1"),
+  "SELECT pic FROM fomo_board WHERE handle = ? COLLATE NOCASE AND pic IS NOT NULL AND pic != '' ORDER BY day DESC LIMIT 1",
+  "SELECT json_extract(data, '$.pic') AS pic FROM fomo_profiles WHERE handle = ? COLLATE NOCASE AND json_extract(data, '$.pic') IS NOT NULL LIMIT 1",
+  "SELECT avatar AS pic FROM fomo_traders WHERE handle = ? COLLATE NOCASE AND avatar IS NOT NULL AND avatar != '' LIMIT 1",
 ];
 const cache = new Map();   // handle (lower) -> pic | null, the last looked up
 const MAX = 5000;
@@ -31,10 +34,13 @@ export function knownPic(handle) {
   const k = handle.toLowerCase();
   if (cache.has(k)) return cache.get(k);
   let pic = null;
-  try {
-    pic = get.get(handle)?.pic || null;
-    for (const q of elsewhere) { if (pic) break; pic = q.get(handle)?.pic || null; }
-  } catch { pic = null; }
+  try { pic = get.get(handle)?.pic || null; } catch { /* local picture table unavailable */ }
+  for (const sql of elsewhere) {
+    if (pic) break;
+    // An optional source table can be absent on a brand-new installation.
+    // Do not let its failure prevent checking later, already-created sources.
+    try { pic = db.prepare(sql).get(handle)?.pic || null; } catch { /* source not initialized */ }
+  }
   cache.set(k, pic);
   if (cache.size > MAX) cache.delete(cache.keys().next().value);
   return pic;

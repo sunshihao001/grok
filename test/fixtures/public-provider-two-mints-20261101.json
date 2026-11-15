@@ -1,0 +1,70 @@
+{
+  "provenance": "HISTORICAL_PUBLIC_VENDOR_RAW_RECALCULATED_NOT_BLIX_CANDIDATE_OR_CHAIN_PROOF",
+  "originalActionRun": 41266389009,
+  "originalArtifactId": 13067198705,
+  "originalZipSha256": "afeb32206d063a2f1e2ab68dbc35f736a1caa3fe093f8ecb13691171ced05053",
+  "rawSnapshotKind": "DEX_SCREENER_TOKEN_PAIRS",
+  "signalFirstAvailableAtMs": null,
+  "marketCoverage": "TWO_EXPLICIT_TOKEN_QUERIES_NOT_A_COMPLETE_BLIX_PULSE_BOARD",
+  "snapshots": [
+    {
+      "mint": "EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump",
+      "symbol": "BNB",
+      "retrievedAt": "2026-11-01T02:44:23.396196+00:00",
+      "providerRawSha256": "240dca2d3df8cfbf9e0f09d806d61b2ae6040abc07bcebc4b9dd3e07f3d09897",
+      "pairCount": 5,
+      "main": {
+        "dex": "pumpswap",
+        "pool": "81jgrpTMsQWc1rGWXutyYWW27ruiAtehUZwLydcHHWDB",
+        "priceUsd": 0.0008148,
+        "liquidityUsd": 91059.46,
+        "tokenReserve": 57331535,
+        "quoteSolReserve": 465.47
+      },
+      "thin": {
+        "dex": "orca",
+        "pool": "928nCu9kYMYAji9mcZ4w3Jc6B5MUDXea84NJ9NG2s29g",
+        "priceUsd": 0.0008145,
+        "liquidityUsd": 47.83
+      },
+      "otherPoolObservations": {
+        "unpriced": 3
+      }
+    },
+    {
+      "mint": "FdKdpz11GsTofLaNiddrhxrsE4APZYSSfLFqQ9YKpump",
+      "symbol": "SIS",
+      "retrievedAt": "2026-11-01T02:44:23.526475+00:00",
+      "providerRawSha256": "5cdeb33076e1df0a2efc24c1c3daf6b4cce4c3832ac131ddaf4f5ab105dbf7b4",
+      "pairCount": 7,
+      "main": {
+        "dex": "pumpswap",
+        "pool": "Ht4GxW1pL2SfamcfC3qcZEcjDHpE55TtjUjnKVs2nhxr",
+        "priceUsd": 0.0005512,
+        "liquidityUsd": 64871.47,
+        "tokenReserve": 60650551,
+        "quoteSolReserve": 330.005483
+      },
+      "thin": {
+        "dex": "orca",
+        "pool": "GUNzmujSmYh9CXAKPh612QDnAFfVpkNk5qZ55JcnvmXg",
+        "priceUsd": 0.0004137,
+        "liquidityUsd": 52.31
+      },
+      "otherPoolObservations": {
+        "unpriced": 4,
+        "pricedVeryThinCount": 1,
+        "pricedVeryThinLiquidityUsd": 4.33
+      }
+    }
+  ],
+  "limitations": [
+    "NO_BLIX_PULSE_UNIVERSE_OR_FILTER_REJECTION_LOG",
+    "NO_PROVIDER_FIRST_AVAILABLE_TIMESTAMP",
+    "NO_CHAIN_VERIFIED_TRADES_LP_OR_WALLET_FUNDING",
+    "NO_TIME_SYNCHRONOUS_ORDER_SIZE_QUOTE_OR_EXIT",
+    "NO_REAL_GMGN_WALLET_RADAR_HISTORICAL_EXPORT",
+    "NO_REAL_MODEL_A_B_SELECTION_OR_ECONOMIC_ADVANTAGE_MEASURED",
+    "CROSS_POOL_MID_PRICE_DIFFERENCE_NOT_ARBITRAGE"
+  ]
+}

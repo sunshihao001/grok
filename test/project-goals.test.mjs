@@ -16,8 +16,8 @@ test('user decision is distinguished from production verification', () => {
   assert.equal(state.branch,'blix');
   assert.equal(state.decision.status,'USER_CONFIRMED');
   assert.equal(state.decision.live_state,'NOT_VERIFIED');
-  assert.equal(state.next.find(t => t.id === 'SAFE').status, 'STATIC_AUDIT_BLOCKED');
-  assert.equal(state.next.find(t => t.id === 'MINT').status, 'NOT_RUN');
+  assert.equal(state.next.find(t => t.id === 'SAFE').status, 'STATIC_AUDIT_ONLY_NO_RUNTIME');
+  assert.equal(state.next.find(t => t.id === 'MINT').status, 'PAUSED_UNTIL_USER_AUTHORIZES_EXECUTION');
   assert.equal(state.audit.live_data_test, 'NOT_RUN');
 });
 test('both independent AI and historical market references remain', () => {

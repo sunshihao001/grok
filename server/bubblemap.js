@@ -1,4 +1,5 @@
 import { heliusFetch as fetch } from "./heliuskeys.js";
+import { initBubbleFundingCache, traceWalletFunding, verifiedFunder, shouldRefreshFunding } from "./bubble-funding-evidence.mjs";
 import { canEnrich } from './coin-screen.js';
 // Bubble maps (the coin page's Bubble map tab): the coin's biggest holders as bubbles sized by their share,
 // joined when the wallets are connected. Built fresh on every read from three sources, so it follows the coin:
@@ -7,9 +8,10 @@ import { canEnrich } from './coin-screen.js';
 //  2. RugCheck's insider networks (api.rugcheck.xyz/v1/tokens/<mint>/insiders/graph, free, no key): wallets
 //     that sent the coin or SOL to each other, intermediaries included. Read again every RC_TTL while someone
 //     has the tab open;
-//  3. Blix's own funder trace: each top holder's first funder (the SOL that opened the wallet), read on the
-//     Helius key that has room. A wallet's first funder never changes, so each is read once and kept in
-//     radar.db; only new top holders cost anything. Holders funded by the same wallet, or one by another, join.
+//  3. Blix's bounded earliest-tx funding investigation: only an explicit, successful SOL
+//     transfer/createAccount instruction can become a candidate funded edge. A fee payer is
+//     never a funder without an independent transfer; partial RPC history stays UNKNOWN.
+//     Legacy cache entries are not verified and are retraced before joining holders.
 //
 // Wallets that bought in the launch block with the dev (tag "bundle") join the dev. Known exchange hot wallets
 // fund thousands of strangers, so they never join anyone; the pool never joins anyone either.
@@ -49,21 +51,29 @@ const EXCHANGES = new Map([
   ["FWznbcNXWQuHTawe9RxvQ2LdCENssh12dsznf4RiouN5", "Kraken"], ["u6PJ8DtQuPFnfmwHbGFULQ4u4EgjDiyYKjVEsynXq2w", "Gate"],
 ]);
 
-// First funders, kept for good ("" = traced, nothing usable: history too long or self-funded).
-db.exec("CREATE TABLE IF NOT EXISTS bubble_funders (wallet TEXT PRIMARY KEY, funder TEXT NOT NULL, t INTEGER NOT NULL)");
-const getF = db.prepare("SELECT funder FROM bubble_funders WHERE wallet = ?");
+// One migrated cache, with a distinct evidence status and provenance per wallet.
+// Old rows are UNVERIFIED_LEGACY, not silently promoted to DIRECT_SOL_OBSERVED.
+initBubbleFundingCache(db);
+const getF = db.prepare("SELECT funder,status,t,signature,payer,cursor FROM bubble_funders WHERE wallet = ?");
 // How many traced wallets a funder opened, all coins together: a wallet that funds strangers by the dozen is a
 // service (an exchange or bridge Blix has no name for), and sharing it says nothing about who owns a wallet.
-const fundedN = db.prepare("SELECT count(*) AS n FROM bubble_funders WHERE funder = ?");
+const fundedN = db.prepare("SELECT count(*) AS n FROM bubble_funders WHERE funder = ? AND status='DIRECT_SOL_OBSERVED'");
 const HUB = 8;
 const DISTRIBUTOR = 6;          // holders one outside wallet sent to before it counts as a distributor, not a link
-const putF = db.prepare("INSERT OR REPLACE INTO bubble_funders (wallet, funder, t) VALUES (?, ?, ?)");
+const putF = db.prepare(`INSERT INTO bubble_funders (wallet,funder,t,status,signature,payer,cursor)
+  VALUES (?,?,?,?,?,?,?) ON CONFLICT(wallet) DO UPDATE SET
+  funder=excluded.funder,t=excluded.t,status=excluded.status,
+  signature=excluded.signature,payer=excluded.payer,cursor=excluded.cursor`);
 
 export const bubbleStats = { reads: 0, rugcheck: { ok: 0, failed: 0, lastError: null }, traced: 0, day: "", today: 0, lastError: null };
 const rc = new Map();          // mint -> { t, nets, error, busy, seen }
 const trace = new Map();       // mint -> { t, busy, done, total }
 
-const funderOf = (w) => getF.get(w)?.funder;   // undefined: not traced yet; "": traced, no funder found
+const funderOf = (w) => {
+  const row = getF.get(w);
+  if (!row || row.status === 'UNVERIFIED_LEGACY') return undefined;
+  return verifiedFunder(row) || '';   // "" means no verified direct funding, NOT no funding.
+};
 
 // RugCheck's networks for a coin: the cached answer at once, a fresh read started when it is old.
 function rugNets(mint) {
@@ -104,36 +114,24 @@ async function call(method, params, mint) {
   }
 }
 
-// The SOL that opened a wallet: the sender of the first transfer into it in its oldest transaction (else that
-// transaction's fee payer, when it is someone else). "" when the history is too long to walk or shows no one.
-async function readFunder(wallet, mint) {
-  let before, oldest = null;
-  for (let page = 0; page < PAGES; page++) {
-    const sigs = await call("getSignaturesForAddress", [wallet, { limit: 1000, ...(before ? { before } : {}) }], mint);
-    if (!sigs?.length) break;
-    oldest = sigs[sigs.length - 1].signature;
-    if (sigs.length < 1000) { before = null; break; }
-    before = oldest;
-  }
-  if (!oldest || before) return "";
-  const tx = await call("getTransaction", [oldest, { maxSupportedTransactionVersion: 0, encoding: "jsonParsed", commitment: "confirmed" }], mint);
-  const ixs = [...(tx?.transaction?.message?.instructions || []), ...(tx?.meta?.innerInstructions || []).flatMap((x) => x.instructions || [])];
-  for (const ix of ixs) {
-    const info = ix?.parsed?.info;
-    if (ix?.program !== "system" || !info) continue;
-    const to = info.destination || info.newAccount, from = info.source;
-    if (to === wallet && from && from !== wallet) return from;
-  }
-  const payer = tx?.transaction?.message?.accountKeys?.[0];
-  const key = typeof payer === "string" ? payer : payer?.pubkey;
-  return key && key !== wallet ? key : "";
+// Page by the existing budget; a truncated scan can resume from its durable cursor.
+// Never infer economic funding from the fee payer when no direct transfer is observed.
+async function readFunder(wallet, mint, prior = null) {
+  return traceWalletFunding(wallet, {
+    page: before => call('getSignaturesForAddress', [wallet, { limit: 1000, ...(before ? { before } : {}) }], mint),
+    transaction: signature => call('getTransaction', [signature, { maxSupportedTransactionVersion: 0, encoding: 'jsonParsed', commitment: 'confirmed' }], mint),
+    cursor: prior?.status === 'HISTORY_TRUNCATED' ? prior.cursor : null,
+    lastSignature: prior?.status === 'HISTORY_TRUNCATED' ? prior.signature : null,
+    retrySignature: prior?.status === 'EARLIEST_TX_UNAVAILABLE' ? prior.signature : null,
+    maxPages: PAGES,
+  });
 }
 
 // Trace the coin's top holders Blix has not traced yet, two at a time (the key's 10 calls a second are shared).
 function traceNew(mint, wallets) {
   let s = trace.get(mint);
   if (s && (s.busy || now() - s.t < TRACE_EVERY)) return s;
-  const todo = wallets.filter((w) => funderOf(w) === undefined);
+  const todo = wallets.filter((w) => shouldRefreshFunding(getF.get(w), now()));
   if (!s) { s = { t: 0, busy: false, done: 0, total: 0 }; trace.set(mint, s); }
   s.t = now();
   if (!todo.length) return s;
@@ -148,7 +146,12 @@ function traceNew(mint, wallets) {
   Promise.all(Array.from({ length: 2 }, async () => {
     while (next < list.length && canEnrich(mint)) {
       const w = list[next++];
-      try { putF.run(w, await readFunder(w, mint), now()); bubbleStats.traced++; } catch (e) { bubbleStats.lastError = e.message; s.failed++; }
+      try {
+        const result = await readFunder(w, mint, getF.get(w));
+        putF.run(w, result.funder || '', now(), result.status,
+          result.signature || null, result.payer || null, result.cursor || null);
+        bubbleStats.traced++;
+      } catch (e) { bubbleStats.lastError = e.message; s.failed++; }
       s.done++;
     }
   })).finally(() => { s.busy = false; s.t = now(); });
@@ -202,8 +205,10 @@ function buildMap(mint) {
   }
   const tr = traceNew(mint, nodes.filter((n) => n.kind === "holder").slice(0, TRACE_TOP).map((n) => n.w));
 
-  // One graph over every wallet the sources name. Edge kinds: "transfer" (RugCheck), "funded" (first funder),
-  // "launch" (bought in the dev's launch block). Edges are stored both ways with their real direction.
+  // One graph over wallets the sources name. "funded" only means an observed direct
+  // native SOL instruction in the earliest accessible transaction; "transfer" means a
+  // RugCheck edge; "launch" and "block" are weaker co-occurrence candidates.
+  // Connectivity is not proof that these wallets share an economic controller.
   const holderAt = new Map(nodes.map((n, i) => [n.w, i]));
   const shut = new Set([...EXCHANGES.keys(), ...nodes.filter((n) => n.kind !== "holder").map((n) => n.w)]);
   const adj = new Map();
@@ -225,6 +230,13 @@ function buildMap(mint) {
   for (const n of nodes) { const f = n.kind === "holder" ? funderOf(n.w) : null; if (f) localF.set(f, (localF.get(f) || 0) + 1); }
   for (const n of nodes) {
     if (n.kind !== "holder") continue;
+    const proof = getF.get(n.w);
+    n.fundingEvidence = {
+      status: proof?.status || 'NOT_TRACED',
+      signature: proof?.signature || null,
+      feePayer: proof?.payer || null,
+      historyCursor: proof?.status === 'HISTORY_TRUNCATED' ? proof.cursor : null,
+    };
     const f = funderOf(n.w);
     if (f === undefined) continue;
     n.funder = f || "";
@@ -253,8 +265,8 @@ function buildMap(mint) {
   // A wallet outside the holders that sent the coin or SOL to many of them is a distributor (an airdrop or rewards
   // wallet, a bot's relay, a launchpad's fee wallet): receiving from it says nothing about who owns a wallet. One
   // sent "API" to 111 of its top holders and the map drew a single 67% cluster (2026-10-10). No line passes
-  // through one; it is listed on its own. Counted on transfer links only: one wallet that opened several holders
-  // (a first funder) is still a cluster.
+  // through one; it is listed on its own. This filter currently counts RugCheck transfer links,
+  // while verified direct SOL funder hubs use the HUB rule above: neither proves common control.
   const distributors = [];
   for (const [w, m] of adj) {
     if (holderAt.has(w)) continue;
@@ -309,10 +321,16 @@ function buildMap(mint) {
     .sort((a, b) => b.pct - a.pct);
   clusters.forEach((c, k) => { for (const i of c.members) nodes[i].cluster = k; });
 
-  const traced = nodes.filter((n) => n.funder != null).length;
-  const outNodes = nodes.map(({ funder, hub, ...n }) => ({ ...n, via: funder && EXCHANGES.get(funder) || (hub ? `a wallet that funded ${hub} others` : null), traced: funder != null, untraceable: funder === "" }));
+  const confirmedTrace = status => ['DIRECT_SOL_OBSERVED','FEE_PAYER_ONLY','NO_DIRECT_SOL_IN_EARLIEST_TX'].includes(status);
+  const traced = nodes.filter(n => confirmedTrace(n.fundingEvidence?.status)).length;
+  const outNodes = nodes.map(({ funder, hub, ...n }) => ({
+    ...n, via: funder && EXCHANGES.get(funder) || (hub ? `a wallet with ${hub} verified direct-funding links` : null),
+    traced: confirmedTrace(n.fundingEvidence?.status),
+    untraceable: n.fundingEvidence != null && n.fundingEvidence.status !== 'DIRECT_SOL_OBSERVED',
+  }));
   return {
     mint, t: now(),
+    interpretation: 'WALLET_GRAPH_CONNECTIVITY_CANDIDATES_NOT_COMMON_CONTROL',
     nodes: outNodes,
     links: links.map(({ a, b, hops, kinds, dir, via }) => ({ a, b, hops, kinds, dir, via: via.slice(0, 3) })),
     clusters,
@@ -324,7 +342,8 @@ function buildMap(mint) {
       people: nodes.filter((n) => n.person).length,
       holders: fallback?.list && read === fallback.list ? "largest 20 (chain)" : page?.info?.source || page?.holders?.source || null, holderCount: page?.info?.holders ?? page?.holders?.count ?? null,
       rugcheck: { t: r.t || null, busy: r.busy, error: r.error, networks: (r.nets || []).length, wallets: rcWallets },
-      trace: { error: tr.failed ? bubbleStats.lastError : null, traced: nodes.filter((n) => n.kind === "holder").slice(0, TRACE_TOP).filter((n) => n.funder != null).length, of: Math.min(TRACE_TOP, nodes.filter((n) => n.kind === "holder").length), busy: tr.busy, done: tr.done, total: tr.total, resting: !activeUrl() },
+      trace: { evidenceGranularity: 'EARLIEST_VISIBLE_TRANSACTION_INSTRUCTION_NOT_FEE_PAYER', fullWalletHistory: false,
+        error: tr.failed ? bubbleStats.lastError : null, traced: nodes.filter((n) => n.kind === "holder").slice(0, TRACE_TOP).filter((n) => confirmedTrace(n.fundingEvidence?.status)).length, of: Math.min(TRACE_TOP, nodes.filter((n) => n.kind === "holder").length), busy: tr.busy, done: tr.done, total: tr.total, resting: !activeUrl() },
     },
   };
 }

@@ -31,7 +31,7 @@ function AccountIcon({ className }: SVGProps<SVGSVGElement>) {
   return <AccountAvatar me={me} className={cn(className, "size-5 ring-1 ring-rule-2")} />;
 }
 const MAIN: Item[] = [["coins", "Discover", NavIcon.discover], ["", "Pulse", NavIcon.pulse], ["feed", "Feed", NavIcon.feed], ["narratives", "Narratives", NavIcon.narratives],
-  ["traders", "Top wallets", NavIcon.traders], ["tracker", "Tracker", NavIcon.tracker], ["launch", "Create", NavIcon.launch], ["ai-picks", "AI early picks", NavIcon.picks], ["account", "Portfolio", AccountIcon]];
+  ["traders", "Top wallets", NavIcon.traders], ["tracker", "Tracker", NavIcon.tracker], ["launch", "Create", NavIcon.launch], ["ai-picks", "AI early picks", NavIcon.picks], ["intelligence", "AI research", NavIcon.picks], ["account", "Portfolio", AccountIcon]];
 const MORE: Item[] = [["health", "Health", NavIcon.health], ["api", "API", NavIcon.api], ["mcp", "MCP", NavIcon.mcp], ["settings", "Settings", NavIcon.settings]];
 // Every page, for anything that needs a page's name (main.tsx).
 export const NAV: { group: string; items: Item[] }[] = [{ group: "Main", items: MAIN }, { group: "More", items: MORE }];

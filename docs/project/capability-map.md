@@ -19,5 +19,19 @@
 
 **参考资产可提供五种价值**：业务功能、算法方法、工程设计、专业经济解释、失败教训。跨语言可调用服务不等于必须翻译源码；若数据口径或许可不兼容，先标明阻断。完整参考范围仍指向原 [65项资产登记](https://github.com/sunshihao001/grok/blob/knowledge/whole-spectrum-20261030-v1/knowledge/system/gpt-meme-project-index.v1.json)，后续新增项目应补充来源而不是删掉旧条目。
 
+## 2026-11-14｜能力地图的当前解释：原版与AI扩展各尽其责
+
+[专业知识D01–D12主述](../../knowledge/README.md#2026-11-14全域专业归位总入口十二领域主述参考来源知识身份与产品验收)已统一每种市场事实/资金/策略/AI领域的知识责任；[扩展产品成品路线](intelligence-layer.md#2026-11-14成品化实施主线知识已经归位之后)负责将源码和真实验收挂到现有业务入口。历史“仅`mint-facts`且未接UI”是2026-11-06截面：当前PR23已有`mint-economic-evidence`、知识加载、`ai-workflow`、本地HTTP/SQLite预检、Intelligence页面和Coin深链接；没有完成主网单Mint/交易机会/长期监控运行。
+
+| 分工责任 | 已存在能力 | 优先验收与不得重做 |
+|---|---|---|
+| **原版Blix市场数据与初筛** | `engine`、`sources`、`early`、`triage`、`quality`、`research`、`brain`、`wallets`和Pulse | 先同源候选/被拒/首可得/断流事实，不另造AI扫描器 |
+| **原版证据与存储** | 原SQLite、钱包/交易历史、部分Holder/Pool/BubbleMap | 同一个Mint/时窗核数据完整与角色语义；源端缺口原位置修 |
+| **专业AI只读** | `server/intelligence`、本地HTTP、有限知识/工具、经济索引只读 | 只在明确Mint/权限/预算下按需调用，不签名、交易、自动收费 |
+| **用户操作界面** | Coin→Intelligence深链、原Wallet/原图表与AI工作台 | 处理不在Pulse看板中的任意Mint、不误选；本机4421/4547可交互 |
+| **实证与成品效果** | 原版/扩展离线回归、隔离冷启与重启、纸面拒绝不当交易 | 实Mint端到端、模型对照、真实时效/报价、Case长期修订及远端授权运维 |
+
+**保留原则**：交易、账户、原AI、Paper、部署功能是原版产品资产，不能为AI研究权限隔离而删除。AI模型无权越过原版启动门禁、调用不安全GET的隐含副作用、任意付费外部源或凭知识文本创建交易指令。
+
 ## 扩展层实际落点（2026-11-06）
 当前只增加 **一个** 统一扩展层 [server/intelligence](../../server/intelligence/index.mjs)；第一个能力为 Mint/Holder 事实读取，详见 [渐进式整合说明](intelligence-layer.md)。已具备按需加载入口、allowlist、来源与 UNKNOWN、独立单测；**尚未接入运行中的 UI/服务器，真实数据和安全启动未验收**。

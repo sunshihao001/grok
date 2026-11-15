@@ -46,6 +46,10 @@ CREATE TABLE IF NOT EXISTS wt_wallets (
   PRIMARY KEY (who, address)
 );
 CREATE INDEX IF NOT EXISTS wtw_addr ON wt_wallets(address);
+CREATE TABLE IF NOT EXISTS wt_groups (
+  who TEXT NOT NULL, id INTEGER NOT NULL, name TEXT NOT NULL,
+  PRIMARY KEY(who,id)
+);
 CREATE TABLE IF NOT EXISTS wt_feed (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   wallet TEXT NOT NULL, sig TEXT NOT NULL, mint TEXT NOT NULL, side TEXT NOT NULL,
@@ -62,6 +66,13 @@ CREATE INDEX IF NOT EXISTS wtt_t ON wt_transfers(t);
 `);
 // The wallet's picture (its pump.fun profile image), fetched once in the background; shown on every row of its trades.
 try { db.exec("ALTER TABLE wt_wallets ADD COLUMN pic TEXT"); } catch { /* already there */ }
+// Existing users keep their wallet rows while organization metadata is added.
+for (const [field, sql] of [
+  ['kind', 'ALTER TABLE wt_wallets ADD COLUMN kind TEXT'],
+  ['notes', 'ALTER TABLE wt_wallets ADD COLUMN notes TEXT'],
+]) {
+  if (!db.prepare('PRAGMA table_info(wt_wallets)').all().some(x => x.name === field)) db.exec(sql);
+}
 
 export const wtStats = { live: 0, chain: 0, transfers: 0, pushed: 0, lastLive: 0, lastChain: 0, dropped: 0, checked: 0 };
 let emit = () => {};
@@ -83,7 +94,78 @@ export const trackedCount = () => tracked.size;
 const cleanName = (s) => String(s ?? "").replace(/\s+/g, " ").trim().slice(0, 40) || null;
 const cleanEmoji = (s) => { const v = String(s ?? "").trim(); return v && [...v].length <= 2 ? v.slice(0, 8) : null; };
 const cleanColor = (s) => (COLORS.includes(String(s || "")) ? String(s) : null);
-const cleanGrp = (g) => (GROUPS.includes(Number(g)) ? Number(g) : 1);
+const cleanGrp = (g, who = '') => (GROUPS.includes(Number(g))
+  || db.prepare('SELECT 1 FROM wt_groups WHERE who=? AND id=?').get(who, Number(g)))
+  ? Number(g) : 1;
+const validGrp = (who, g) => GROUPS.includes(Number(g))
+  || Boolean(db.prepare('SELECT 1 FROM wt_groups WHERE who=? AND id=?').get(who, Number(g)));
+const cleanKind = (s) => {
+  if (s == null || String(s).trim() === '') return null;
+  const v = String(s).trim().toLowerCase();
+  if (!['dev', 'trader'].includes(v)) throw fail(400, 'Invalid wallet kind.');
+  return v;
+};
+const cleanNotes = (s) => String(s ?? '').trim().slice(0, 400) || null;
+const cleanGroupName = (s) => {
+  const v = String(s ?? '').replace(/\s+/g, ' ').trim().slice(0, 40);
+  if (!v) throw fail(400, 'Group name required.');
+  return v;
+};
+
+// Group identity is scoped to the member; P1-P3 remain the stable defaults.
+export function groupList(who) {
+  return [
+    ...GROUPS.map(id => ({ id, name: `P${id}` })),
+    ...db.prepare('SELECT id,name FROM wt_groups WHERE who=? ORDER BY id').all(who),
+  ];
+}
+export function saveGroup(who, { id = null, name } = {}) {
+  const clean = cleanGroupName(name);
+  const existing = groupList(who);
+  const chosen = id == null ? Math.max(3, ...existing.map(g => g.id)) + 1 : Number(id);
+  if (!Number.isInteger(chosen) || chosen < 4 || chosen > 100) throw fail(400, 'Default groups cannot be changed.');
+  if (existing.some(g => g.id !== chosen && g.name.toLowerCase() === clean.toLowerCase()))
+    throw fail(400, 'Group name already exists.');
+  if (id != null && !existing.some(g => g.id === chosen)) throw fail(404, 'Group not found.');
+  db.prepare(`INSERT INTO wt_groups(who,id,name) VALUES(?,?,?)
+    ON CONFLICT(who,id) DO UPDATE SET name=excluded.name`).run(who, chosen, clean);
+  return { id: chosen, name: clean };
+}
+export function removeGroup(who, id) {
+  const n = Number(id);
+  if (GROUPS.includes(n)) throw fail(400, 'Default groups cannot be removed.');
+  if (!db.prepare('SELECT 1 FROM wt_groups WHERE who=? AND id=?').get(who, n))
+    throw fail(404, 'Group not found.');
+  const own = !db.isTransaction;
+  if (own) db.exec('BEGIN');
+  try {
+    db.prepare('UPDATE wt_wallets SET grp=1 WHERE who=? AND grp=?').run(who, n);
+    db.prepare('DELETE FROM wt_groups WHERE who=? AND id=?').run(who, n);
+    if (own) db.exec('COMMIT');
+  } catch (e) {
+    if (own && db.isTransaction) db.exec('ROLLBACK');
+    throw e;
+  }
+  return { ok: true };
+}
+export function organize(who, { addresses, grp } = {}) {
+  if (!validGrp(who, grp)) throw fail(400, 'Invalid group.');
+  if (!Array.isArray(addresses) || addresses.length === 0) throw fail(400, 'Wallet selection required.');
+  const unique = [...new Set(addresses.map(x => String(x).trim()))];
+  // Validate entire selection before the first change.
+  if (unique.some(address => !row(who, address))) throw fail(404, 'Not on your list.');
+  const own = !db.isTransaction;
+  if (own) db.exec('BEGIN');
+  try {
+    const update = db.prepare('UPDATE wt_wallets SET grp=? WHERE who=? AND address=?');
+    for (const address of unique) update.run(Number(grp), who, address);
+    if (own) db.exec('COMMIT');
+  } catch (e) {
+    if (own && db.isTransaction) db.exec('ROLLBACK');
+    throw e;
+  }
+  return { updated: unique.length };
+}
 const cleanPic = (s) => { const v = String(s ?? "").trim(); return /^https:\/\/\S{8,300}$/.test(v) ? v : null; };
 const row = (who, address) => db.prepare("SELECT * FROM wt_wallets WHERE who = ? AND address = ?").get(who, address);
 
@@ -94,16 +176,18 @@ export function list(who) {
 }
 
 // Add (or edit, when already on the list). Nameless wallets get their Fomo handle or pump.fun name in the background.
-export function add(who, { address, name, emoji, color, grp, pic } = {}) {
+export function add(who, { address, name, emoji, color, grp, pic, kind, notes } = {}) {
   address = String(address || "").trim();
   if (!sol.validAddress(address)) throw fail(400, "That doesn't look like a Solana wallet address.");
   const cur = row(who, address);
   if (!cur && db.prepare("SELECT COUNT(*) n FROM wt_wallets WHERE who = ?").get(who).n >= MAX_WALLETS) throw fail(400, `At most ${MAX_WALLETS} wallets.`);
   if (cur) {
     db.prepare("UPDATE wt_wallets SET name = COALESCE(?, name), emoji = COALESCE(?, emoji), color = COALESCE(?, color), grp = ?, pic = COALESCE(?, pic) WHERE who = ? AND address = ?")
-      .run(cleanName(name), cleanEmoji(emoji), cleanColor(color), grp == null ? cur.grp : cleanGrp(grp), cleanPic(pic), who, address);
+      .run(cleanName(name), cleanEmoji(emoji), cleanColor(color), grp == null ? cur.grp : cleanGrp(grp, who), cleanPic(pic), who, address);
+    if (kind !== undefined) db.prepare('UPDATE wt_wallets SET kind=? WHERE who=? AND address=?').run(cleanKind(kind), who, address);
+    if (notes !== undefined) db.prepare('UPDATE wt_wallets SET notes=? WHERE who=? AND address=?').run(cleanNotes(notes), who, address);
   } else {
-    db.prepare("INSERT INTO wt_wallets (who, address, name, emoji, color, grp, added, pic) VALUES (?, ?, ?, ?, ?, ?, ?, ?)").run(who, address, cleanName(name), cleanEmoji(emoji), cleanColor(color), cleanGrp(grp), now(), cleanPic(pic));
+    db.prepare("INSERT INTO wt_wallets (who, address, name, emoji, color, grp, added, pic, kind, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)").run(who, address, cleanName(name), cleanEmoji(emoji), cleanColor(color), cleanGrp(grp, who), now(), cleanPic(pic), cleanKind(kind), cleanNotes(notes));
     reload(); if (cleanName(name) && !cleanPic(pic)) autoName(who, address);   // a named wallet still gets its picture
     // The shared chain reader follows it from now on (its stream and poll); what it already read shows at once.
     if (!cleanName(name)) autoName(who, address);
@@ -121,7 +205,9 @@ export function update(who, address, patch = {}) {
   if ("name" in patch) db.prepare("UPDATE wt_wallets SET name = ? WHERE who = ? AND address = ?").run(cleanName(patch.name), who, address);
   if ("emoji" in patch) db.prepare("UPDATE wt_wallets SET emoji = ? WHERE who = ? AND address = ?").run(cleanEmoji(patch.emoji), who, address);
   if ("color" in patch) db.prepare("UPDATE wt_wallets SET color = ? WHERE who = ? AND address = ?").run(cleanColor(patch.color), who, address);
-  if ("grp" in patch) db.prepare("UPDATE wt_wallets SET grp = ? WHERE who = ? AND address = ?").run(cleanGrp(patch.grp), who, address);
+  if ("grp" in patch) db.prepare("UPDATE wt_wallets SET grp = ? WHERE who = ? AND address = ?").run(cleanGrp(patch.grp, who), who, address);
+  if ("kind" in patch) db.prepare("UPDATE wt_wallets SET kind=? WHERE who=? AND address=?").run(cleanKind(patch.kind), who, address);
+  if ("notes" in patch) db.prepare("UPDATE wt_wallets SET notes=? WHERE who=? AND address=?").run(cleanNotes(patch.notes), who, address);
   if ("alerts" in patch) db.prepare("UPDATE wt_wallets SET alerts = ? WHERE who = ? AND address = ?").run(patch.alerts === false ? 0 : 1, who, address);
   return { ...row(who, address), name: row(who, address).name || short(address) };
 }
@@ -147,10 +233,12 @@ export function importText(who, text) {
   try { parsed = JSON.parse(t); } catch {}
   if (Array.isArray(parsed)) {
     for (const x of parsed) {
-      if (!x || typeof x !== "object") continue;
+      if (!x || typeof x !== 'object') continue;
       const address = x.trackedWalletAddress || x.address || x.wallet || x.walletAddress;
-      const grp = Array.isArray(x.groups) ? Number(String(x.groups[0] || "").replace(/\D/g, "")) || 1 : x.grp ?? x.group ?? 1;
-      items.push({ address, name: x.name || x.label || null, emoji: x.emoji || null, color: x.color || null, grp });
+      const label = Array.isArray(x.groups) ? String(x.groups[0] || '').trim() : '';
+      const grp = /^P[1-3]$/i.test(label) ? Number(label.slice(1)) : x.grp ?? x.group ?? 1;
+      items.push({ address, name: x.name || x.label || null, emoji: x.emoji || null,
+        color: x.color || null, grp, groupLabel: label, kind: x.kind, notes: x.notes });
     }
   } else {
     for (const line of t.split(/\r?\n/)) {
@@ -159,12 +247,28 @@ export function importText(who, text) {
     }
   }
   let added = 0, skipped = 0;
-  for (const it of items) { try { add(who, it); added++; } catch { skipped++; } }
+  for (const it of items) {
+    try {
+      if (!sol.validAddress(String(it.address || '').trim())) throw fail(400, 'Invalid wallet.');
+      const label = it.groupLabel;
+      if (label && !/^P[1-3]$/i.test(label)) {
+        let group = groupList(who).find(g => g.name.toLowerCase() === label.toLowerCase());
+        if (!group) group = saveGroup(who, { name: label });
+        it.grp = group.id;
+      }
+      add(who, it);
+      added++;
+    } catch { skipped++; }
+  }
   if (!added && !skipped) throw fail(400, "No wallet addresses found in that text.");
   return { added, skipped };
 }
 
-export const exportList = (who) => db.prepare("SELECT address trackedWalletAddress, name, emoji, color, grp FROM wt_wallets WHERE who = ? ORDER BY added").all(who).map((r) => ({ ...r, groups: [`P${r.grp || 1}`] }));
+export const exportList = (who) => {
+  const labels = new Map(groupList(who).map(g => [g.id, g.name]));
+  return db.prepare('SELECT address trackedWalletAddress, name, emoji, color, grp, kind, notes FROM wt_wallets WHERE who=? ORDER BY added')
+    .all(who).map(r => ({ ...r, groups: [labels.get(r.grp) || 'P1'] }));
+};
 
 // The name and the picture, from its Fomo handle (name) and its pump.fun profile (name and picture), filled in
 // only where the member left them blank.
@@ -293,7 +397,7 @@ export function fromEngine(ev) {
 }
 
 // ---------- transfers ----------
-const SYSTEM = new Set(["11111111111111111111111111111111", "ComputeBudget111111111111111111111111111111", "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA", "TokenzQdBNbLqP5VYzRBRT44hA3hGMSiYqt6vHu4x5Xm", "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"]);
+const SYSTEM = new Set(["11111111111111111111111111111111", "ComputeBudget111111111111111111111111111111", "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA", "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb", "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"]);
 // A transaction of a tracked wallet that was not a swap: SOL or one token moved in or out. The counterparty is the
 // account whose balance moved the other way the most (for SOL) or the other owner of the token (for a token).
 export function parseTransfer(tx, wallet) {
@@ -376,12 +480,13 @@ export function overview(who, { grp = null, limit = FEED_LIMIT } = {}) {
   const tr = wallets.tracking();
   return {
     wallets: list(who),
-    feed: named(who, feedRows({ who, grp: grp ? cleanGrp(grp) : null, limit })),
+    feed: named(who, feedRows({ who, grp: grp ? cleanGrp(grp, who) : null, limit })),
     transfers: named(who, transferRows({ who })),
     status: { stream: tr.stream.connected, streamWallets: tr.stream.wallets, backlog: tr.backlog, live: liveFeed.connected, lastLive: wtStats.lastLive, lastChain: wtStats.lastChain,
       fast: Boolean(tr.fast?.connected), fastWallets: tr.fast?.wallets || 0, fastReads: tr.fast?.reads || 0, dropped: wtStats.dropped },
     solUsd: liveFeed.solUsd || 150,
-    groups: GROUPS, colors: COLORS, max: MAX_WALLETS,
+    groups: groupList(who).map(g => g.id), groupLabels: groupList(who),
+    colors: COLORS, max: MAX_WALLETS,
   };
 }
 export const feedSince = (who, since, limit = 200) => ({ rows: named(who, feedRows({ who, since: Number(since) || 0, limit })) });

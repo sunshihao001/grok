@@ -9,6 +9,9 @@
 // the 3 s a dead socket waits, so the gap it opens is the handshake alone.
 export function startRpcStream({ url, request, WebSocketImpl = WebSocket, onStatus = () => {}, onEvent = () => {}, silentMs = 30_000, behind = null, maxBehind = 60, admit = () => true, meter = () => {} }) {
   let socket, timer, retry, stopped = false, upAt = 0, lateSince = 0;
+  // A reconnection restores the live subscription, not events missed while disconnected.
+  // Surface the interruption to the existing source-status consumer; do not claim backfill.
+  let interruption = null;
   const lagCheck = behind && setInterval(() => {
     if (!socket || !upAt || Date.now() - upAt < 15_000) { lateSince = 0; return; }
     const b = behind();
@@ -26,7 +29,8 @@ export function startRpcStream({ url, request, WebSocketImpl = WebSocket, onStat
   const fail = (error, delay = 3000) => {
     clearTimeout(timer);
     discard();
-    onStatus({ connected: false, error });
+    if (!interruption) interruption = { since: Date.now(), reason: error };
+    onStatus({ connected: false, error, coverageGap: { ...interruption, recovered: false } });
     if (!stopped && !retry) retry = setTimeout(() => { retry = null; connect(); }, delay);
   };
   const watch = (ms, error) => {
@@ -61,7 +65,8 @@ export function startRpcStream({ url, request, WebSocketImpl = WebSocket, onStat
       if (data.id === 1) {
         if (data.error || data.result == null) { fail("RPC provider rejected the subscription"); return; }
         subscribed = true; upAt = Date.now();
-        onStatus({ connected: true, error: null });
+        onStatus({ connected: true, error: null, ...(interruption ? { coverageGap: { ...interruption, until: Date.now(), recovered: false } } : {}) });
+        interruption = null;
       } else if (subscribed && (data.method === "logsNotification" || data.method === "accountNotification" || data.method === "programNotification" || data.method === "slotNotification")) {
         onEvent(data);
       } else return;

@@ -25,7 +25,12 @@
     "depth_axis": "L0治理横贯；L1链上事实；L2市场机制；L3经济主体/库存/行为；L4候选策略；L5执行和风险；L6实证反证横贯；L7单主体AI知识进化；L为知识层，非任务步骤",
     "domain_axis": "D01-D12是专业覆盖范围，保留152个原ID和来源；跨域关联不等于强制依赖",
     "storage_axis": "foundations / mechanisms / methods / cases / ai / references是原文主存放用途，可被多个领域交叉引用",
-    "evidence_axis": "来源/事实/供应商声明/推论/假说/离线测试/实际运行/失效与未知必须分开"
+    "evidence_axis": "来源/事实/供应商声明/推论/假说/离线测试/实际运行/失效与未知必须分开",
+    "conceptual_axis": "同义、相近、上下位和经济身份是不同语义关系；专业关键词连接研究问题但不直接证明链上同控",
+    "claim_relation_axis": "具体主张→源版本/交易证据/竞争解释/实现/测试/修订；不得用文档级映射代替逐主张证据",
+    "reality_axis": "Token、Token Account、Owner、Fee Payer、Pool、库存、Swap与经济主体是不同现实对象和事件",
+    "execution_axis": "输入数据→具体代码版本→执行记录→输出/证据/评估；代码存在与运行成功是不同状态",
+    "evolution_axis": "反证、新协议、历史回补与模型任务反馈只修订被证据影响的结论、方法和测试，保留原版本"
   },
   "goals": [
     {
@@ -1150,5 +1155,1059 @@
       "independent_source": "ai-d / Blix original / linked original repositories",
       "must_check": "Read source, compare full-product reuse, safety/permission, deliver-and-readback; no automatic trading"
     }
-  ]
+  ],
+  "cross_axis_alignment": {
+    "interpretationCapabilities": [
+      {
+        "id": "S1",
+        "name": "DIRECTION_AND_DECISIONS",
+        "responsibility": "Keep human-confirmed goals, value and authorization distinct from AI proposals",
+        "axes": [
+          "GOAL",
+          "EVOLUTION",
+          "EVIDENCE"
+        ],
+        "terms": [
+          "Anchoring",
+          "Goal Alignment",
+          "Requirements Decomposition",
+          "ADR"
+        ]
+      },
+      {
+        "id": "S2",
+        "name": "STRUCTURE_AND_SEMANTICS",
+        "responsibility": "Separate entity, knowledge and context levels before connecting",
+        "axes": [
+          "DEPTH",
+          "DOMAIN",
+          "KNOWLEDGE_OBJECT",
+          "SEMANTIC",
+          "ECONOMIC"
+        ],
+        "terms": [
+          "Layering",
+          "Abstraction",
+          "Aggregation",
+          "Ontology",
+          "Bounded Context",
+          "MBSE",
+          "SysML"
+        ]
+      },
+      {
+        "id": "S3",
+        "name": "MAPPING_AND_ALIGNMENT",
+        "responsibility": "Use typed conditional and revisable links rather than keyword matches",
+        "axes": [
+          "SEMANTIC",
+          "KNOWLEDGE_OBJECT",
+          "EXECUTION"
+        ],
+        "terms": [
+          "Structural Mapping",
+          "Semantic Mapping",
+          "Relational Mapping",
+          "Cross-layer Mapping",
+          "Dynamic Mapping",
+          "Knowledge Graph",
+          "Alignment"
+        ]
+      },
+      {
+        "id": "S4",
+        "name": "TRACEABILITY_AND_PROVENANCE",
+        "responsibility": "Trace upstream sources and downstream consumers including actual run identity",
+        "axes": [
+          "GOAL",
+          "EVIDENCE",
+          "TIME",
+          "EXECUTION"
+        ],
+        "terms": [
+          "Bidirectional Traceability",
+          "Data Lineage",
+          "Provenance",
+          "Digital Thread",
+          "Dependency",
+          "OpenLineage"
+        ]
+      },
+      {
+        "id": "S5",
+        "name": "CONTRACTS_AND_INVARIANTS",
+        "responsibility": "Ensure source semantics and inference boundaries are not silently promoted",
+        "axes": [
+          "SEMANTIC",
+          "ECONOMIC",
+          "EXECUTION",
+          "EVIDENCE"
+        ],
+        "terms": [
+          "Data Contract",
+          "Semantic Contract",
+          "Invariant",
+          "Assertion",
+          "Constraint Propagation",
+          "Consistency",
+          "Coverage",
+          "SHACL",
+          "Architecture Tests"
+        ]
+      },
+      {
+        "id": "S6",
+        "name": "ASSURANCE_AND_FALSIFICATION",
+        "responsibility": "Match strength of claim to independent evidence and negative cases",
+        "axes": [
+          "EVIDENCE",
+          "ECONOMIC",
+          "TIME",
+          "EXECUTION"
+        ],
+        "terms": [
+          "Verification",
+          "Validation",
+          "Triangulation",
+          "Cross-checking",
+          "Statistical Cross-validation",
+          "Falsification",
+          "Assurance Case",
+          "Regression Testing"
+        ]
+      },
+      {
+        "id": "S7",
+        "name": "CHANGE_AND_FEEDBACK",
+        "responsibility": "Find true dependent consumers and revise only affected decisions/code/tests",
+        "axes": [
+          "EVOLUTION",
+          "GOAL",
+          "TIME",
+          "EXECUTION",
+          "EVIDENCE"
+        ],
+        "terms": [
+          "Impact Analysis",
+          "Change Propagation",
+          "Observability",
+          "Versioning",
+          "Drift Detection",
+          "Feedback Loop",
+          "Continuous Improvement",
+          "Rollback"
+        ]
+      }
+    ],
+    "networkViews": [
+      {
+        "id": "N-G",
+        "name": "GOAL_NETWORK",
+        "axes": [
+          "GOAL",
+          "EVOLUTION"
+        ],
+        "purpose": "WHY and user-authorized scope"
+      },
+      {
+        "id": "N-K",
+        "name": "KNOWLEDGE_NETWORK",
+        "axes": [
+          "DOMAIN",
+          "DEPTH",
+          "KNOWLEDGE_OBJECT",
+          "SEMANTIC",
+          "EVIDENCE"
+        ],
+        "purpose": "MECHANISMS, claims and competing explanations"
+      },
+      {
+        "id": "N-D",
+        "name": "DATA_FACT_NETWORK",
+        "axes": [
+          "ECONOMIC",
+          "TIME",
+          "EVIDENCE"
+        ],
+        "purpose": "Observed original sources, transformations and coverage"
+      },
+      {
+        "id": "N-C",
+        "name": "ENGINEERING_NETWORK",
+        "axes": [
+          "EXECUTION",
+          "GOAL",
+          "EVIDENCE"
+        ],
+        "purpose": "Implemented functions, tool boundaries and data contracts"
+      },
+      {
+        "id": "N-V",
+        "name": "VERIFICATION_FEEDBACK_NETWORK",
+        "axes": [
+          "EVIDENCE",
+          "EVOLUTION",
+          "EXECUTION"
+        ],
+        "purpose": "Tests, runtime receipts, limitations and revision"
+      }
+    ],
+    "placementDecision": {
+      "status": "CONCEPTUAL_CROSSWALK_ONLY_NOT_AUTOMATED_IMPACT_ANALYSIS",
+      "singleAuthority": "docs/project/cross-layer-anchor-map-20261113.md",
+      "crossDomainSource": "https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/cross-layer-project-anchors.md",
+      "existingAxesPreserved": true,
+      "existingTypedRelationsPreserved": true,
+      "newEngineRequired": false,
+      "rules": [
+        "Do not treat shared terminology as verified dependency",
+        "Do not treat static source index as runtime lineage",
+        "Do not treat synthetic CI as live market acceptance",
+        "Never infer wallet controller or trading alpha from a conceptual link"
+      ]
+    },
+    "revision": "2026-11-13-typed-links-and-interpretation-v2",
+    "status": "CONCEPTUAL_CROSS_AXIS_GUIDANCE_NOT_RUNTIME_REASONING_ENGINE",
+    "purpose": "Connect existing G/L/D/storage/evidence with conceptual, economic, execution and feedback relations without collapsing different evidence identities or creating mandatory pipeline stages.",
+    "canonicalGuides": [
+      "knowledge/references/knowledge-lineage-lifecycle-20261113.md",
+      "knowledge/INTEGRATION-CROSSWALK.md",
+      "knowledge/references/p1-p2-knowledge-reconciliation-20261113.md",
+      "docs/project/build-register.md",
+      "docs/project/cross-layer-anchor-map-20261113.md"
+    ],
+    "independentAxes": [
+      {
+        "id": "GOAL",
+        "existing": "G0-G4",
+        "entity": "USER_INTENT_OR_BUSINESS_GOAL",
+        "question": "Why and for whom? Whose permission?",
+        "mustNotInfer": "A model-proposed goal is user authorization"
+      },
+      {
+        "id": "DEPTH",
+        "existing": "L0-L7",
+        "entity": "KNOWLEDGE_DEPTH_OR_CROSS_CUTTING_VIEW",
+        "question": "What level of market explanation?",
+        "mustNotInfer": "Higher layer means stronger evidence"
+      },
+      {
+        "id": "DOMAIN",
+        "existing": "D01-D12",
+        "entity": "PROFESSIONAL_SPECIALTY",
+        "question": "Which specialty and competing disciplines matter?",
+        "mustNotInfer": "Same domain means same type of relationship"
+      },
+      {
+        "id": "KNOWLEDGE_OBJECT",
+        "existing": "SOURCE/OBSERVATION/CONCEPT/CLAIM/METHOD/CASE/IMPLEMENTATION/DECISION/EVALUATION/REVISION",
+        "entity": "DISTINCT_RESEARCH_ARTIFACT",
+        "question": "Is this a documented statement, method, observation, claim or tested output?",
+        "mustNotInfer": "Imported document means verified claim"
+      },
+      {
+        "id": "SEMANTIC",
+        "existing": "exactMatch/closeMatch/broader/narrower/related",
+        "entity": "TERM_AND_CONCEPT",
+        "question": "Which expressions truly refer to the same thing?",
+        "mustNotInfer": "Token Account, Owner, Fee Payer and economic controller are identical"
+      },
+      {
+        "id": "ECONOMIC",
+        "existing": "OBSERVED_TRANSFER/FUNDING_CANDIDATE/SWAP/INVENTORY/CONTROL_HYPOTHESIS",
+        "entity": "ONCHAIN_ACTION_OR_ECONOMIC_INTERPRETATION",
+        "question": "What exact event, balance, right or mechanism is represented?",
+        "mustNotInfer": "Any funding/transfer edge proves controller or sale"
+      },
+      {
+        "id": "EVIDENCE",
+        "existing": "source/author-claim/raw-observation/inference/hypothesis/offline-test/live-readonly/unknown",
+        "entity": "CLAIM_AND_PROOF",
+        "question": "Which source and evidence exactly supports or contradicts which claim?",
+        "mustNotInfer": "A hash or green CI confirms an economic hypothesis"
+      },
+      {
+        "id": "TIME",
+        "existing": "event/capture/first-available/decision/quote/outcome/source-version",
+        "entity": "TEMPORAL_BOUNDARY",
+        "question": "When did it happen, become knowable, become executable, and get revised?",
+        "mustNotInfer": "New archive visibility implies newly observed live market activity"
+      },
+      {
+        "id": "EXECUTION",
+        "existing": "Blix original UI/API/SQLite/AI-tools/test/authorized-runtime",
+        "entity": "PROGRAM_AND_RUN",
+        "question": "What code and which actual run produced the assertion?",
+        "mustNotInfer": "Source code present equals deployed and executed"
+      },
+      {
+        "id": "EVOLUTION",
+        "existing": "counterexample/monitoring/evaluation/supersession/reopen",
+        "entity": "CHANGE_AND_FEEDBACK",
+        "question": "What result changes a claim, code behavior or next question?",
+        "mustNotInfer": "More knowledge entries automatically improve performance"
+      }
+    ],
+    "linkKinds": [
+      {
+        "kind": "semantic_match",
+        "from": "CONCEPT",
+        "to": "CONCEPT",
+        "meaning": "Synonym, broader/narrower or adjacent term only",
+        "neverPromoteTo": "ECONOMIC_COMMON_CONTROL"
+      },
+      {
+        "kind": "observed_economic_event",
+        "from": "ONCHAIN_OBSERVATION",
+        "to": "ONCHAIN_OBSERVATION",
+        "meaning": "Explicit signature + instruction position + owners, asset and time; economic event rather than semantic similarity",
+        "neverPromoteTo": "SAME_CONTROLLER"
+      },
+      {
+        "kind": "derived_from",
+        "from": "CLAIM",
+        "to": "SOURCE_OR_OBSERVATION",
+        "meaning": "Claim derived from an identified source version with an explicit reasoning bridge",
+        "neverPromoteTo": "INDEPENDENTLY_VALIDATED"
+      },
+      {
+        "kind": "supports",
+        "from": "EVIDENCE",
+        "to": "CLAIM",
+        "meaning": "Evidence bears on exactly this claim under stated scope/coverage and does not subsume the whole source",
+        "neverPromoteTo": "CERTAIN_CAUSATION"
+      },
+      {
+        "kind": "contradicts",
+        "from": "EVIDENCE",
+        "to": "CLAIM",
+        "meaning": "A repeatable counterexample or mutually inconsistent source result challenges this claim",
+        "neverPromoteTo": "ALL_OTHER_CLAIMS_FALSE"
+      },
+      {
+        "kind": "applies_to",
+        "from": "METHOD_OR_CLAIM",
+        "to": "TASK_CONTEXT",
+        "meaning": "Applicability depends on source data, role, fees, provider/time and missing evidence",
+        "neverPromoteTo": "UNIVERSAL_RULE"
+      },
+      {
+        "kind": "implemented_by",
+        "from": "METHOD_OR_CLAIM",
+        "to": "CODE",
+        "meaning": "Specific algorithm, file/commit and input/output contract implements only the stated subset",
+        "neverPromoteTo": "PRODUCTION_VERIFIED"
+      },
+      {
+        "kind": "tested_by",
+        "from": "IMPLEMENTATION",
+        "to": "TEST_OR_RUN",
+        "meaning": "Which fixture and commit checks which observable outcome",
+        "neverPromoteTo": "MAINNET_VALIDATED"
+      },
+      {
+        "kind": "selected_for_context",
+        "from": "KNOWLEDGE_SOURCE",
+        "to": "AI_TASK",
+        "meaning": "Source selected/available to model with provenance and exclusions",
+        "neverPromoteTo": "APPLIED_CORRECTLY"
+      },
+      {
+        "kind": "changes_decision",
+        "from": "NEW_EVIDENCE_OR_EVALUATION",
+        "to": "CLAIM_OR_PRODUCT_DECISION",
+        "meaning": "Trace affected conclusion and update only justified scope after review",
+        "neverPromoteTo": "NEW_USER_AUTHORIZATION"
+      },
+      {
+        "kind": "revised_from",
+        "from": "REVISED_CLAIM",
+        "to": "PRIOR_CLAIM",
+        "meaning": "Keep old claim/version and reason for correction or withdrawal",
+        "neverPromoteTo": "ERASE_PROVENANCE"
+      }
+    ],
+    "proofBoundaries": [
+      {
+        "temptation": "Common direct funder or same block",
+        "licensed": "POSSIBLE_ASSOCIATION",
+        "needs": "Exclude shared services; verify direct funding, economic capacity, multiple independent events and control indicators",
+        "forbidden": "COMMON_CONTROLLER_CONFIRMED"
+      },
+      {
+        "temptation": "Token A -> B then B later sold",
+        "licensed": "TRANSFER_AND_SELL_SUMMARY_TEMPORAL_CANDIDATE",
+        "needs": "Complete inventory/provenance, verified swap side and time",
+        "forbidden": "SOLD_THE_TRANSFERRED_INVENTORY"
+      },
+      {
+        "temptation": "BigInt raw transfer total or multi-hop sum",
+        "licensed": "CAPTURED_GROSS_TOKEN_TRANSFER",
+        "needs": "Token-2022 fees, pool identity, complete holdings and net balance changes",
+        "forbidden": "INDEPENDENT_DEMAND_OR_CURRENT_SELLABLE_BALANCE"
+      },
+      {
+        "temptation": "Same address appears for two Mints",
+        "licensed": "CROSS_MINT_ADDRESS_OVERLAP",
+        "needs": "Asset consideration, transaction path and wallet identity coverage",
+        "forbidden": "SAME_CAPITAL_OR_ORGANIZED_GROUP"
+      },
+      {
+        "temptation": "Knowledge snippet returned by loader",
+        "licensed": "RETRIEVED_VERSIONED_CANDIDATE",
+        "needs": "Model trace and controlled task evaluation",
+        "forbidden": "MODEL_KNOWLEDGE_CORRECTLY_USED"
+      },
+      {
+        "temptation": "Node CI tests pass",
+        "licensed": "OFFLINE_TEST_FOR_FIXED_FIXTURES",
+        "needs": "Real archive replay, live read-only verification and independent evaluation",
+        "forbidden": "ALL_MAINNET_DATA_AND_MARKET_MECHANISM_VERIFIED"
+      }
+    ],
+    "sampleTask": {
+      "intent": "这几个钱包收币后卖出，是一组人吗？",
+      "scope": "ONE_SELECTED_MINT_READ_ONLY",
+      "connect": [
+        {
+          "axis": "GOAL",
+          "reference": "G2-MINT",
+          "question": "Which Mint, wallet set, observation window and permission?"
+        },
+        {
+          "axis": "SEMANTIC",
+          "reference": "Token Account / Owner / public service / economic controller",
+          "question": "Are these the same type of actor?"
+        },
+        {
+          "axis": "ECONOMIC",
+          "reference": "TOKEN_TRANSFER_AND_LATER_LOCAL_SELL_SUMMARY",
+          "question": "Which specific event and inventory change happened?"
+        },
+        {
+          "axis": "EVIDENCE",
+          "reference": "RPC SHA256 + signature + instruction position + source coverage",
+          "question": "Can archived raw facts reproduce the graph edge?"
+        },
+        {
+          "axis": "DOMAIN",
+          "reference": "D01/D04/D05/D06/D07/D10/D11",
+          "question": "What do protocol, wallet role, funding, inventory, timing and failure modes say?"
+        },
+        {
+          "axis": "EXECUTION",
+          "reference": "server/economic-events.mjs + server/intelligence/economic-network.mjs",
+          "question": "Which implementation and tests support the output?"
+        },
+        {
+          "axis": "EVOLUTION",
+          "reference": "new RPC verification or public-service counterexample",
+          "question": "Which limited claim needs revision?"
+        }
+      ],
+      "allowableResult": "OBSERVED_TRANSFER_PLUS_TEMPORAL_SELL_CANDIDATE_WITH_ALTERNATIVES",
+      "disallowedResult": "VERIFIED_SAME_OPERATOR_AND_PROFIT",
+      "mainnetStatus": "NOT_VERIFIED_BY_THIS_STRUCTURAL_MODEL"
+    },
+    "navigationRule": "Use the few relevant axes for a task; claims must remain reversible to source, evidence and the specific execution that created them. These relations are not model/tool grants.",
+    "businessRouteGraph": {
+      "revision": "2026-11-14-meme-multipath-v0.1",
+      "status": "DECLARATIVE_MULTI_ROUTE_TRACE_ONLY_NOT_REALTIME_GRAPH_OR_VALIDATED_AI_WORKFLOW",
+      "purpose": "Meme market outcome paths, domain support, typed condition-bound handoffs and feedback loops share existing Blix sources, knowledge and tests; avoid new knowledge or market pipeline.",
+      "sourceOfTruth": "docs/project/cross-layer-anchor-map-20261113.md",
+      "genericCognitiveSource": "https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/knowledge-lifecycle-nine-stages.md",
+      "conceptCarriers": [
+        {
+          "id": "GOAL_ANCHOR",
+          "label": "目标锚定",
+          "supportCapability": "S1",
+          "axis": "GOAL",
+          "meaning": "恢复业务价值、明确调查或机会目的和授权",
+          "canonicalPath": "docs/project/goal-map.md",
+          "neverAssume": "AI建议不等于用户新授权"
+        },
+        {
+          "id": "SEMANTIC_IDENTITY",
+          "label": "语义消歧",
+          "supportCapability": "S2",
+          "axis": "SEMANTIC",
+          "meaning": "区分Mint、TokenAccount、Owner、FeePayer、Pool和经济控制者",
+          "canonicalPath": "knowledge/foundations/solana-chain-and-market.md",
+          "neverAssume": "相同地址/标签不等于同一控制"
+        },
+        {
+          "id": "COORDINATION",
+          "label": "任务协调",
+          "supportCapability": "S1",
+          "axis": "EXECUTION",
+          "meaning": "按业务问题选现成Blix能力、知识和只读工具，不固定工作流",
+          "canonicalPath": "docs/project/intelligence-layer.md",
+          "neverAssume": "模型不能指挥未授权采集、签名、交易"
+        },
+        {
+          "id": "COMPLEMENTARITY",
+          "label": "能力互补",
+          "supportCapability": "S3",
+          "axis": "DOMAIN",
+          "meaning": "将价格/钱包/库存/执行多种视角对齐同一对象与时点",
+          "canonicalPath": "knowledge/INTEGRATION-CROSSWALK.md",
+          "neverAssume": "同源重复标签不算独立支持"
+        },
+        {
+          "id": "APPLICABILITY",
+          "label": "知识适用性",
+          "supportCapability": "S2",
+          "axis": "KNOWLEDGE_OBJECT",
+          "meaning": "说明机制适用于哪种市场阶段、数据范围与前提",
+          "canonicalPath": "knowledge/README.md",
+          "neverAssume": "理论与旧阈值不直接等于交易规则"
+        },
+        {
+          "id": "PROVENANCE",
+          "label": "来源溯源",
+          "supportCapability": "S4",
+          "axis": "EVIDENCE",
+          "meaning": "保存源版本、签名、数据范围、供应商和知识出处",
+          "canonicalPath": "knowledge/references/knowledge-lineage-lifecycle-20261113.md",
+          "neverAssume": "文件已导入不等于主张经过实证"
+        },
+        {
+          "id": "LINEAGE",
+          "label": "处理血缘",
+          "supportCapability": "S4",
+          "axis": "EXECUTION",
+          "meaning": "关联输入、解析、SQLite、模型上下文、运行回执和输出",
+          "canonicalPath": "docs/project/cross-layer-anchor-map-20261113.md",
+          "neverAssume": "静态路径不等于运行时真实执行"
+        },
+        {
+          "id": "TIME_ALIGNMENT",
+          "label": "时间对齐",
+          "supportCapability": "S5",
+          "axis": "TIME",
+          "meaning": "区分event/slot、provider first-available、接收、决策、报价、结果",
+          "canonicalPath": "knowledge/foundations/solana-chain-and-market.md",
+          "neverAssume": "历史回补不能当实时领先信号"
+        },
+        {
+          "id": "DATA_CONTRACT",
+          "label": "语义契约",
+          "supportCapability": "S5",
+          "axis": "ECONOMIC",
+          "meaning": "定义同一Mint/Owner/池/资产/单位、覆盖与数据缺口",
+          "canonicalPath": "docs/project/intelligence-layer.md",
+          "neverAssume": "原始事实不可由模型补造"
+        },
+        {
+          "id": "COMPETING_HYPOTHESES",
+          "label": "竞争机制",
+          "supportCapability": "S6",
+          "axis": "KNOWLEDGE_OBJECT",
+          "meaning": "给出操盘/公共设施/普通交易/做市等可区分解释",
+          "canonicalPath": "knowledge/mechanisms/capital-organization-and-incentives.md",
+          "neverAssume": "关联并不证明共同控制"
+        },
+        {
+          "id": "FALSIFICATION",
+          "label": "反证与边界",
+          "supportCapability": "S6",
+          "axis": "EVIDENCE",
+          "meaning": "识别能推翻某个解释的原始签名、价格、库存、反例",
+          "canonicalPath": "knowledge/cases/independent-validation-and-failure-cases.md",
+          "neverAssume": "没有反证不等于证明"
+        },
+        {
+          "id": "EVALUATION",
+          "label": "可执行性与效果对照",
+          "supportCapability": "S6",
+          "axis": "EXECUTION",
+          "meaning": "分开调查价值/机会准备度，比较原版/确定性/AI与成本",
+          "canonicalPath": "knowledge/mechanisms/strategy-and-execution-economics.md",
+          "neverAssume": "纸面获利不等于可复制净利润"
+        },
+        {
+          "id": "IMPACT_ANALYSIS",
+          "label": "变化影响",
+          "supportCapability": "S7",
+          "axis": "EVOLUTION",
+          "meaning": "新资料或错误沿真实依赖找哪些具体报告/规则/测试受影响",
+          "canonicalPath": "docs/project/cross-layer-anchor-map-20261113.md",
+          "neverAssume": "不能沿关键词相似性波及全仓"
+        },
+        {
+          "id": "REVISION",
+          "label": "局部修订与闭环",
+          "supportCapability": "S7",
+          "axis": "EVOLUTION",
+          "meaning": "留存旧主张/撤回原因、校准知识适用和下次观察条件",
+          "canonicalPath": "docs/project/build-register.md",
+          "neverAssume": "反馈不授予资金权限或新框架"
+        }
+      ],
+      "businessOutcomes": [
+        {
+          "id": "O1",
+          "objective": "MARKET_DISCOVERY",
+          "domainRefs": [
+            "D02",
+            "D03",
+            "D07",
+            "D10",
+            "D11"
+          ],
+          "capabilityRefs": [
+            "S1",
+            "S3",
+            "S4",
+            "S6"
+          ],
+          "codeRefs": [
+            "server/engine.js",
+            "server/triage.js",
+            "server/early.js",
+            "server/wallets.js"
+          ],
+          "output": "MINT_CANDIDATE_WITH_SOURCE_AND_FIRST_AVAILABLE",
+          "verification": "LIVE_MARKET_UNIVERSE_UNVERIFIED"
+        },
+        {
+          "id": "O2",
+          "objective": "WALLET_ROLES",
+          "domainRefs": [
+            "D01",
+            "D04",
+            "D05",
+            "D07",
+            "D10"
+          ],
+          "capabilityRefs": [
+            "S2",
+            "S3",
+            "S4",
+            "S5"
+          ],
+          "codeRefs": [
+            "server/wallets.js",
+            "server/wtrack.js",
+            "server/coin.js"
+          ],
+          "output": "WALLET_ROLE_CANDIDATES_WITH_COVERAGE",
+          "verification": "CONTROL_ATTRIBUTION_UNVERIFIED"
+        },
+        {
+          "id": "O3",
+          "objective": "TOKEN_CAPITAL_INVENTORY",
+          "domainRefs": [
+            "D01",
+            "D05",
+            "D06",
+            "D10",
+            "D11"
+          ],
+          "capabilityRefs": [
+            "S2",
+            "S4",
+            "S5",
+            "S6"
+          ],
+          "codeRefs": [
+            "server/intelligence/economic-claim-trace.mjs",
+            "server/intelligence/offline-economic-reader.mjs"
+          ],
+          "output": "CAPTURED_ECONOMIC_EVENTS_AND_UNKNOWNS",
+          "verification": "FULL_MAINNET_INVENTORY_UNVERIFIED"
+        },
+        {
+          "id": "O4",
+          "objective": "CROSS_MINT_GROUP",
+          "domainRefs": [
+            "D04",
+            "D05",
+            "D06",
+            "D07",
+            "D10",
+            "D11"
+          ],
+          "capabilityRefs": [
+            "S2",
+            "S3",
+            "S4",
+            "S6"
+          ],
+          "codeRefs": [
+            "server/intelligence/economic-network.mjs",
+            "server/wallets.js"
+          ],
+          "output": "CROSS_MINT_ASSOCIATION_CANDIDATES",
+          "verification": "CROSS_MINT_CONTROL_UNVERIFIED"
+        },
+        {
+          "id": "O5",
+          "objective": "OPPORTUNITY_AND_FOLLOWABILITY",
+          "domainRefs": [
+            "D03",
+            "D06",
+            "D08",
+            "D09",
+            "D10",
+            "D11"
+          ],
+          "capabilityRefs": [
+            "S1",
+            "S5",
+            "S6"
+          ],
+          "codeRefs": [
+            "server/quote.js",
+            "server/paper.js",
+            "server/intelligence/followability-replay.mjs"
+          ],
+          "output": "RESEARCH_PRIORITY_SEPARATE_FROM_TRADE_READINESS",
+          "verification": "LIVE_FOLLOWABILITY_AND_ALPHA_UNVERIFIED"
+        },
+        {
+          "id": "O6",
+          "objective": "CASE_MONITORING_AND_REVISION",
+          "domainRefs": [
+            "D07",
+            "D10",
+            "D11",
+            "D12"
+          ],
+          "capabilityRefs": [
+            "S4",
+            "S6",
+            "S7"
+          ],
+          "codeRefs": [
+            "server/journal.js",
+            "server/wtrack.js",
+            "server/intelligence/investigation-continuation.mjs"
+          ],
+          "output": "NEW_EVIDENCE_OR_REVISIT_CONDITIONS",
+          "verification": "PERSISTENT_AGENT_CASE_WATCHER_NOT_RUNNING"
+        }
+      ],
+      "entryRoutes": [
+        {
+          "id": "MARKET_FIRST",
+          "entry": "Pulse/Discover",
+          "path": [
+            "O1",
+            "O5",
+            "O6"
+          ],
+          "optionalDetours": [
+            "O1→O2→O3→O5",
+            "O3→O4→O1"
+          ],
+          "gate": "real first-available and at-time quote required to evaluate trade readiness"
+        },
+        {
+          "id": "MINT_FIRST",
+          "entry": "Coin/explicit Mint",
+          "path": [
+            "O3",
+            "O2",
+            "O5"
+          ],
+          "optionalDetours": [
+            "O2→O3→O4→O1",
+            "O5→O6"
+          ],
+          "gate": "mint never substituted; absent local archive yields UNAVAILABLE"
+        },
+        {
+          "id": "WALLET_FIRST",
+          "entry": "Wallet Tracker/wallet buy",
+          "path": [
+            "O2",
+            "O1",
+            "O5"
+          ],
+          "optionalDetours": [
+            "O2→O3→O4→O1",
+            "O5→O6"
+          ],
+          "gate": "wallet role and observed buy do not equal same controller or profitable copy"
+        },
+        {
+          "id": "CROSS_MINT_FIRST",
+          "entry": "cross-Mint wallet or economic path",
+          "path": [
+            "O4",
+            "O1",
+            "O5",
+            "O6"
+          ],
+          "optionalDetours": [
+            "O4→O5→O3→O4",
+            "O6→O2→O3→O4"
+          ],
+          "gate": "same address or temporal overlap needs actual asset path; stop at hypothesis"
+        }
+      ],
+      "handoffs": [
+        {
+          "from": "O1",
+          "to": "O2",
+          "condition": "发现候选存在有辨识价值的早买/关键钱包",
+          "minimumHandoff": "MINT+source/first_available+wallet candidates",
+          "result": "WALLET_ROLE_REVIEW",
+          "relation": "CONDITIONAL_BUSINESS_HANDOFF_NOT_INFERRED_ECONOMIC_EDGE"
+        },
+        {
+          "from": "O1",
+          "to": "O5",
+          "condition": "市场价格/流动性/时点值得评估参与性",
+          "minimumHandoff": "MINT+observed time+pool/quote coverage",
+          "result": "TRADE_READINESS_REVIEW",
+          "relation": "CONDITIONAL_BUSINESS_HANDOFF_NOT_INFERRED_ECONOMIC_EDGE"
+        },
+        {
+          "from": "O2",
+          "to": "O1",
+          "condition": "追踪的钱包新增买入Mint且原引擎已adopt/vet",
+          "minimumHandoff": "wallet event+Mint+first available",
+          "result": "NEW_MARKET_CANDIDATE",
+          "relation": "CONDITIONAL_BUSINESS_HANDOFF_NOT_INFERRED_ECONOMIC_EDGE"
+        },
+        {
+          "from": "O2",
+          "to": "O3",
+          "condition": "收到/卖出/转仓钱包的经济事件有待核",
+          "minimumHandoff": "wallet owner+Mint+signature window",
+          "result": "ECONOMIC_TRACE",
+          "relation": "CONDITIONAL_BUSINESS_HANDOFF_NOT_INFERRED_ECONOMIC_EDGE"
+        },
+        {
+          "from": "O3",
+          "to": "O2",
+          "condition": "发现非Holder接收方或角色冲突",
+          "minimumHandoff": "receiving Owner+transaction evidence+role uncertainty",
+          "result": "EXPAND_WALLET_SET",
+          "relation": "CONDITIONAL_BUSINESS_HANDOFF_NOT_INFERRED_ECONOMIC_EDGE"
+        },
+        {
+          "from": "O3",
+          "to": "O4",
+          "condition": "卖出/转仓/资金外流提示跨Mint路径",
+          "minimumHandoff": "wallet+Mint+signature provenance+time",
+          "result": "CROSS_MINT_INVESTIGATION",
+          "relation": "CONDITIONAL_BUSINESS_HANDOFF_NOT_INFERRED_ECONOMIC_EDGE"
+        },
+        {
+          "from": "O4",
+          "to": "O1",
+          "condition": "同群钱包在另一Mint发生可见新事件",
+          "minimumHandoff": "Mint+wallet+source time+crossMint caveats",
+          "result": "CANDIDATE_DISCOVERY",
+          "relation": "CONDITIONAL_BUSINESS_HANDOFF_NOT_INFERRED_ECONOMIC_EDGE"
+        },
+        {
+          "from": "O3",
+          "to": "O5",
+          "condition": "真实库存/卖出压力可能影响参与条件",
+          "minimumHandoff": "captured inventory+coverage+market time",
+          "result": "REASSESS_EXECUTABILITY",
+          "relation": "CONDITIONAL_BUSINESS_HANDOFF_NOT_INFERRED_ECONOMIC_EDGE"
+        },
+        {
+          "from": "O4",
+          "to": "O5",
+          "condition": "群体/资金行为影响机会或风险假说",
+          "minimumHandoff": "hypothesis+counterevidence+temporal scope",
+          "result": "REASSESS_RISK",
+          "relation": "CONDITIONAL_BUSINESS_HANDOFF_NOT_INFERRED_ECONOMIC_EDGE"
+        },
+        {
+          "from": "O5",
+          "to": "O3",
+          "condition": "机会评估显示库存或报价冲突，需复核原经济事实",
+          "minimumHandoff": "Mint+pool/quote+conflicting claim",
+          "result": "TARGETED_EVIDENCE_REVIEW",
+          "relation": "CONDITIONAL_BUSINESS_HANDOFF_NOT_INFERRED_ECONOMIC_EDGE"
+        },
+        {
+          "from": "O5",
+          "to": "O6",
+          "condition": "需要后续动态验证、退出条件或观察截止",
+          "minimumHandoff": "Mint+decision/cutoff+future event+budget",
+          "result": "WATCH_IF_AUTHORIZED",
+          "relation": "CONDITIONAL_BUSINESS_HANDOFF_NOT_INFERRED_ECONOMIC_EDGE"
+        },
+        {
+          "from": "O6",
+          "to": "O1",
+          "condition": "新的市场事件或证实数据源回补改变候选状态",
+          "minimumHandoff": "event time+first available+new/backfill marker",
+          "result": "RECONSIDER_CANDIDATE",
+          "relation": "CONDITIONAL_BUSINESS_HANDOFF_NOT_INFERRED_ECONOMIC_EDGE"
+        },
+        {
+          "from": "O6",
+          "to": "O2",
+          "condition": "新的钱包角色或接收关系出现",
+          "minimumHandoff": "new signature+owner+coverage watermark",
+          "result": "REVISE_ROLE",
+          "relation": "CONDITIONAL_BUSINESS_HANDOFF_NOT_INFERRED_ECONOMIC_EDGE"
+        },
+        {
+          "from": "O6",
+          "to": "O3",
+          "condition": "真正新成交/转仓或回补改变库存估算",
+          "minimumHandoff": "signature+event/capture distinction+provenance",
+          "result": "RECALCULATE_ECONOMICS",
+          "relation": "CONDITIONAL_BUSINESS_HANDOFF_NOT_INFERRED_ECONOMIC_EDGE"
+        },
+        {
+          "from": "O6",
+          "to": "O5",
+          "condition": "实际后续可参与条件变化或估值失效",
+          "minimumHandoff": "quote timestamp+pool+cost+outcome/counterexample",
+          "result": "REVISE_TRADE_READINESS",
+          "relation": "CONDITIONAL_BUSINESS_HANDOFF_NOT_INFERRED_ECONOMIC_EDGE"
+        },
+        {
+          "from": "O2",
+          "to": "O5",
+          "condition": "钱包早买或角色行为成为可复制性或风险候选",
+          "minimumHandoff": "wallet event+first-available+address identity limitations+market state",
+          "result": "FOLLOWABILITY_HYPOTHESIS_ONLY",
+          "relation": "CONDITIONAL_BUSINESS_HANDOFF_NOT_INFERRED_ECONOMIC_EDGE"
+        }
+      ],
+      "feedbackLoops": [
+        {
+          "id": "MARKET_OUTCOME",
+          "path": [
+            "O1",
+            "O5",
+            "O6",
+            "O1"
+          ],
+          "reopenWhen": "new eligible observation or verified later outcome; separate historical backfill",
+          "change": "re-evaluate candidate and selection bias, not rewrite raw source"
+        },
+        {
+          "id": "WALLET_ECONOMIC",
+          "path": [
+            "O2",
+            "O3",
+            "O2"
+          ],
+          "reopenWhen": "new owner/TokenAccount role evidence or wallet history",
+          "change": "revise wallet role only after evidence and invalidate dependent claims"
+        },
+        {
+          "id": "CAPITAL_NETWORK",
+          "path": [
+            "O3",
+            "O4",
+            "O1",
+            "O2",
+            "O3"
+          ],
+          "reopenWhen": "cross-Mint path produces a concrete newly relevant wallet/Mint",
+          "change": "trace event provenance and reject common-service overattribution"
+        },
+        {
+          "id": "EXECUTION_FAILURE",
+          "path": [
+            "O3",
+            "O5",
+            "O6",
+            "O3"
+          ],
+          "reopenWhen": "new inventory/quote/exit evidence or missing data become available",
+          "change": "revise read-only followability assumptions, preserve invalid/unquotable cases"
+        },
+        {
+          "id": "OPPORTUNITY_REEVALUATION",
+          "path": [
+            "O5",
+            "O6",
+            "O5"
+          ],
+          "reopenWhen": "new execution conditions or decision invalidation event",
+          "change": "refresh trade readiness; do not turn historical pnl into alpha"
+        }
+      ],
+      "knowledgeLifecycle": [
+        {
+          "id": "K1",
+          "role": "goal/problem framing",
+          "supportCapability": "S1",
+          "canonicalPath": "docs/project/goal-map.md",
+          "failureOrCorrection": "reopen intent only if value or constraint changes"
+        },
+        {
+          "id": "K2",
+          "role": "external discovery",
+          "supportCapability": "S2",
+          "canonicalPath": "knowledge/references/source-coverage-v0.1.json",
+          "failureOrCorrection": "fetch missing original evidence, not new downstream market scanner"
+        },
+        {
+          "id": "K3",
+          "role": "source capture/provenance",
+          "supportCapability": "S4",
+          "canonicalPath": "knowledge/MIGRATION.json",
+          "failureOrCorrection": "never promote imported content to verified fact"
+        },
+        {
+          "id": "K4",
+          "role": "economic and conceptual understanding",
+          "supportCapability": "S2",
+          "canonicalPath": "knowledge/README.md",
+          "failureOrCorrection": "distinguish labels, sources, account roles and mechanism"
+        },
+        {
+          "id": "K5",
+          "role": "cross-source comparison / falsification",
+          "supportCapability": "S6",
+          "canonicalPath": "knowledge/cases/independent-validation-and-failure-cases.md",
+          "failureOrCorrection": "independent alternatives not three copies of same label"
+        },
+        {
+          "id": "K6",
+          "role": "canonical placement and relations",
+          "supportCapability": "S3",
+          "canonicalPath": "knowledge/INTEGRATION-CROSSWALK.md",
+          "failureOrCorrection": "keep one narrative authority and cross-links"
+        },
+        {
+          "id": "K7",
+          "role": "decision or authorized tool use",
+          "supportCapability": "S5",
+          "canonicalPath": "docs/project/intelligence-layer.md",
+          "failureOrCorrection": "no grant of trade/sign/pay rights"
+        },
+        {
+          "id": "K8",
+          "role": "test and real-world acceptance",
+          "supportCapability": "S6",
+          "canonicalPath": "docs/project/build-register.md",
+          "failureOrCorrection": "offline and live prove different claims"
+        },
+        {
+          "id": "K9",
+          "role": "in-place correction and feedback",
+          "supportCapability": "S7",
+          "canonicalPath": "docs/project/cross-layer-anchor-map-20261113.md",
+          "failureOrCorrection": "update only supported nodes and dependent claims"
+        }
+      ],
+      "stopBoundaries": [
+        "No real archive: claim UNAVAILABLE; do not synthesize chain events.",
+        "No same Mint/Owner/pool/time scope: do not join economic or quote claims.",
+        "Same block, shared funder, bundle label or source echo is not economic controller proof.",
+        "Missing observed entry/exit quotes, fees, depth or first available: no real trade-profit assertion.",
+        "Imported knowledge or retrieved snippet does not establish actual model use.",
+        "Offline/airgap CI and synthetic SQLite tests do not establish mainnet history, autonomous monitoring or Alpha.",
+        "Do not authorize network costs, payments, trading, signing or deployment via documentation."
+      ],
+      "proof": "static referential and graph-reachability checks only; use original source/CI/mainnet evidence for stronger claims"
+    }
+  }
 }

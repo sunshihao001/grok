@@ -3,7 +3,8 @@
 name: audit
 on:
   push:
-    branches: [main]
+    # Validate the integrated Draft even when a conflicting PR cannot generate pull_request checks.
+    branches: [main, integration/blix-evidence-readonly-20261108]
   pull_request:
   schedule:
     - cron: "17 6 * * 1"   # Mondays: advisories land without a push

@@ -178,7 +178,7 @@ test("a newly tracked wallet's quiet backfill reaches its feed without sending t
   const tx = { blockTime: time, meta: { err: null, fee: 5000,
     preBalances: [5e9, 1e9], postBalances: [4e9 - 5000, 2e9], preTokenBalances: [],
     postTokenBalances: [{ mint: MINT, owner: D, uiTokenAmount: { amount: "1000000000", decimals: 6 } }] },
-    transaction: { message: { accountKeys: [D, B] } } };
+    transaction: { signatures: ['quiet-backfill'], message: { accountKeys: [D, B], instructions: [] } } };
   const alerts = [];
   await wl.readTx({ address: D }, { sig: "quiet-backfill", t: time * 1000, quiet: true }, ev => alerts.push(ev), tx);
   assert.ok(db.prepare("SELECT 1 FROM wallet_trades WHERE sig = 'quiet-backfill'").get());
