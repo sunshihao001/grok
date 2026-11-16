@@ -68,18 +68,51 @@ flowchart LR
 本导航不会自动同步 GPT 记忆、ai-d Draft PR、Grok Bot 云电脑或主分支。它能帮助 AI 恢复项目，**不能单凭文件存在证明 AI 已掌握专业知识**；需要真实问题和对照测试。
 
 
-## 2026-11-15｜最新 Agent Runtime 架构认知
+## 2026-11-16｜最新 Meme Agent Runtime 与交易目标
 
-本项目新增统一基线：[Agent Runtime 策略与三平台研究](agent-runtime-strategy-20261115.md)。
+本项目最新架构基线见 [Meme Autonomous Trading Intelligence — Agent Runtime Architecture V0.1](meme-autonomous-trading-intelligence-v0.1.md)。
 
-**核心修正：Blix 是当前建设基础，不再等同于整个 AI 系统的唯一主体。** AI Agent 负责理解目标、研究、工具选择、反证、复盘；Agent Runtime 负责长期运行、Memory、Skill、Browser、Terminal、MCP、Subagent、Cron 等；Blix 负责现有成熟的 Meme 业务、数据、UI、API、MCP 和运行经验；Evidence/Core 与 Case/Opportunity 负责事实追踪和业务判断对象。
+**目标已进一步收敛：最终产品偏向实际交易，而不是停留在 Meme 知识库、研究助手、钱包监控或聊天机器人。** 核心业务对象是 **Opportunity / Trade Candidate**：系统必须从市场发现、证据重建、机会判断继续走到交易可执行性判断、持续监控、结果记录和反向验证。
 
-当前 Runtime 候选的最新判断：
-- **Hermes Agent（NousResearch）**：最高优先验证的长期自有 Runtime 候选。其官方能力与本项目需要的 Context/Memory/Skill/MCP/Solana/长期任务闭环高度匹配，但仍是**待真实任务验收的假设**。
-- **Muse**：成熟的产品化个人 AI + Secure VM，适合作为真实产品对照和能力参考，不预设为系统上层。
-- **Grok Bot**：成熟的持久 Cloud Computer / Bot / Skills / Routines / MCP 产品，也是本项目历史运行经验的重要来源；未来可以作为外部能力，但不再锁死为唯一主体。
+当前 AI 分工不再假设 Hermes 必须成为唯一主 Runtime：
 
-下一阶段不靠继续理论争论决定架构，而是用同一真实 Solana Meme 调查任务对三者进行受控比较，再决定是否让 Hermes 成为主 Runtime。测试标准包括目标理解、自主性、工具选择、链上调查深度、反证、证据纪律、Memory、Skill形成、Case形成、长任务、成本、安全和可维护性。
+- **Muse**：优先作为高频 Meme 主运行主体，负责持续运行、市场监控、候选初筛、工具/MCP调用、当前已验证工作流执行和异常/UNKNOWN上报。Muse 智能度不足时，不要求把它硬改造成 GPT，而是通过升级路径补偿。
+- **Hermes**：运行在 VPS 上，作为后台 Research / Correction / Evolution Agent。负责深度调查、否证旧判断、研究新机制、处理 Muse 无法解决的 UNKNOWN，并提出知识、规则、工作流的下一版本。Hermes 不是静态知识库，也不是未经验证就直接修改生产系统的超级权限。
+- **GPT**：作为高智能协调与复杂判断层，在用户需要或系统遇到高价值/高复杂度问题时介入；负责目标理解、跨 Agent 协调、复杂推理、系统性失败分析和高影响变更审查。GPT 不需要 24/7 处理每个市场事件。
+- **Blix**：继续作为成熟 Meme 产品、数据、UI、API、MCP、市场发现、钱包/持仓、交易记录、纸面交易、健康检查等基础设施，不被 AI 层替代。
 
-**注意：旧 Hermes 与 NousResearch Hermes Agent 不是同一个项目。** 旧 Hermes 属于历史专业知识资产；NousResearch Hermes Agent 是当前研究的通用 Agent Runtime。
+推荐运行闭环：
+
+```
+Blix / 原始市场数据
+        ↓
+Muse 高频运行与初筛
+        ↓
+Candidate / UNKNOWN
+        ↓
+证据重建与机会判断
+        ↓
+交易可执行性检查
+        ↓
+Trade Candidate
+        ↓
+持续监控与结果记录
+        ↓
+Hermes 研究 / 否证 / 修正
+        ↓
+高影响变化由 GPT 复核
+        ↓
+验证后的新版本
+        ↓
+Muse 使用
+        ↺
+```
+
+**Opportunity Score 与 Trade/Execution Score 必须分离。** 一个项目可能值得研究，但因为流动性、滑点、竞争、时机或退出条件不适合而不应交易。
+
+**自动化采用渐进式路线：** 自动发现 → 自动调查 → 自动监控 → Trade Candidate → 人工确认执行 → 经实证验证后再考虑隔离的自动执行引擎。任何自动交易层必须与 AI 推理、私钥和生产资金隔离，并具备仓位、滑点、流动性、kill switch 等硬约束。
+
+**成本原则：** 机械过滤优先由代码/规则完成；普通抽取与初筛使用本地/免费/低成本模型；Hermes承担深度研究与纠错；GPT只处理高价值复杂推理。目标是降低每个市场事件的模型成本，而不是让最强模型处理所有事件。
+
+旧的“把 Hermes 自动设为最高优先主 Runtime”的描述现在降级为历史研究判断；是否采用某一 Runtime，必须以真实任务验收为依据。
 
