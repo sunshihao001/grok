@@ -1,0 +1,22 @@
+name: AI copilot web build
+
+on:
+  pull_request:
+    paths:
+      - "web/**"
+      - ".github/workflows/ai-copilot-web.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install web dependencies
+        run: npm ci --prefix web
+      - name: Type-check and build unchanged Blix web with AI assistant
+        run: npm run build --prefix web

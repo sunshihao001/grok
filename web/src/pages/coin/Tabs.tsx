@@ -1,7 +1,7 @@
 // The tabs under the chart: recent trades, the holder ledger, top traders, Fomo's known holders (FomoTabs.tsx),
 // every thesis from pump.fun and Fomo (Theses.tsx), the dev's coins, the AI read and the safety check. Your position is in the right column.
 import { AiGate } from "../AiPicks";
-import { memo, type ReactNode, useEffect, useRef, useState } from "react";
+import { lazy, memo, Suspense, type ReactNode, useEffect, useRef, useState } from "react";
 import { tokN, usdK, type CoinData, type TokenDetail, type Trades } from "@/lib/coin";
 import { ageStr } from "@/lib/format";
 import { useNow } from "@/lib/route";
@@ -13,8 +13,10 @@ import { AllTheses } from "./Theses";
 import { Empty, SolAmt, Who } from "./parts";
 import { AiView, DevView, HoldersView, SafetyView, TradersView } from "./tabviews";
 
-type TabKey = "trades" | "holders" | "traders" | "known" | "theses" | "dev" | "ai" | "safety";
-const TABS: [TabKey, string][] = [["known", "Known holders"], ["trades", "Trades"], ["holders", "Holders"], ["traders", "Top traders"], ["theses", "Theses"], ["dev", "Dev tokens"], ["ai", "AI read"], ["safety", "Safety"]];
+const CoinAiCopilot = lazy(() => import("./AiCopilot").then((m) => ({ default: m.CoinAiCopilot })));
+
+type TabKey = "trades" | "holders" | "traders" | "known" | "theses" | "dev" | "ai" | "copilot" | "safety";
+const TABS: [TabKey, string][] = [["known", "Known holders"], ["trades", "Trades"], ["holders", "Holders"], ["traders", "Top traders"], ["theses", "Theses"], ["dev", "Dev tokens"], ["ai", "AI read"], ["copilot", "AI assistant"], ["safety", "Safety"]];
 type Filter = "all" | "dev" | "sniper" | "bundle" | "top10" | "followed" | "big";
 const FILTERS: [Filter, string][] = [["all", "All"], ["dev", "Dev"], ["sniper", "Snipers"], ["bundle", "Bundles"], ["top10", "Top 10"], ["followed", "Followed"], ["big", "≥ 1 SOL"]];
 
@@ -82,6 +84,7 @@ export function CoinTabs({ mint, r, c, trades, onPaper, sideTrades = false, end 
         {tab === "theses" && <AllTheses mint={mint} f={fomo} />}
         {tab === "dev" && (c?.dev ? <DevView mint={mint} c={c} /> : c ? <Empty title="Dev unknown" text="Neither Blix nor Jupiter knows who created this coin." /> : <Ghost />)}
         {tab === "ai" && <AiGate><AiView mint={mint} r={r} onRead={onPaper} /></AiGate>}
+        {tab === "copilot" && <AiGate><Suspense fallback={<div className="p-6 text-sm text-muted">Loading assistant…</div>}><CoinAiCopilot key={mint} mint={mint} token={r} coin={c} /></Suspense></AiGate>}
         {tab === "safety" && <SafetyView r={r} c={c} withMap={!sideTrades} />}
       </div>
     </div>
