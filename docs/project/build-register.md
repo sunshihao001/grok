@@ -1063,3 +1063,17 @@
 **本轮状态**：文档已提交并回读；未修改业务代码；未执行新的CI；不把文档固化等同于模型已经真正遵守。后续AI恢复项目时优先读取本节 + 本台账 + 当前HEAD源码/测试/CI，并对旧文档冲突做事实核验。
 
 **下一高价值工作**：R1固定真实Mint源级纵切，优先寻找能够推翻现有经济解释的反例，而不是继续扩展知识层级。
+
+
+### 2026-11-16｜R1纵切反证：同 Mint 接收后出售不能直接升级为转入库存已售
+
+- **本轮最高价值问题**：现有 PR #23 已把“接收钱包后续同 Mint sell”降级为 candidate，但产品仍缺一个可复核的更细证据层来回答：这笔 sell 的数量是否至少与该次 Token transfer 相容，以及是否存在更早的已捕获同 Mint 入账活动。否则后续机会判断很容易把“同钱包 + 同 Mint + 时间窗口”误读成“卖掉刚收到的库存”。
+- **源码依据**：server/economic-events.mjs 原有 recipientOutcomes() 仅按 to_owner + mint + time window 查 wallet_trades.side='sell'；本轮在同一模块原位增加 ownerTokenBalanceDeltaRaw()，从已归档 RPC 的 preTokenBalances/postTokenBalances 计算该 Owner/Mint 在出售签名中的净 Token 变化，并把结果分为：AMOUNT_COMPATIBLE_BUT_PROVENANCE_UNPROVEN、CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER、PRIOR_CAPTURED_INBOUND_ACTIVITY_EXISTS 或 PROVENANCE_UNKNOWN。没有新采集器、新账本或新服务。
+- **可复现反例**：test/wallet-evidence-chain.test.mjs 继续使用现有 A→B 400M Token transfer + B later sell 400M 的链路；新增 B 后续卖出 800M 的反例。测试要求：400M sell 只能得到“数量相容但来源未证”；800M sell 必须标记“不能完全由这一次 400M transfer 来源”。该反例直接阻止“同 Mint 后续卖出 = 卖掉刚收到库存”的证据跃迁。
+- **GitHub提交**：[经济证据改进 6eb2372](https://github.com/sunshihao001/grok/commit/6eb23720ce0614d9d4a63c8d35e6ca9b0ecb7f63)、[金额校验修正 6098ef5](https://github.com/sunshihao001/grok/commit/6098ef58b20cb036d85cafc466df96fa27d95402e)、[反例测试 496843f](https://github.com/sunshihao001/grok/commit/496843f06329c65ebf0de1866c8514b0b15868ae)。修改已回读确认；当前分支 HEAD 以最后一个测试提交为准，随后又有经济代码修正提交，因此需要按当前 HEAD 重新核验完整测试。
+- **CI状态**：fetch_commit_workflow_runs 对本轮最后代码/测试提交未返回 workflow run，get_commit_combined_status 亦无 status；本轮不能声称 CI 通过。容器尝试 clone GitHub 进行本地测试也因当前执行环境无法解析 github.com 而失败，因此 CODE_CHANGED / CI_NOT_VERIFIED。
+- **外部反证**：Solana 官方文档明确区分 preTokenBalances/postTokenBalances 的净余额变化与逐指令 transfer；复杂/多方交易仅靠余额差不能重建完整资金序列，生产级审计仍需逐指令解析。官方示例还指出新建 Token Account 可能没有 pre balance，应按 0 处理；Token-2022 交易费用会使 gross instruction amount 与实际收到余额不同。这支持本轮把“数量相容”和“库存来源证明”拆开，而不是把余额差本身当成最终 provenance。
+- **跨项目反证**：solana-wallet-tracker 将 swap 与 transfer 分开解析并依赖完整 enriched transaction；SolTrace 将 wallet profiling、fund flow、sybil clustering 作为不同证据域；Solana Tracker SDK 的 transfer stream 明确把 transfers、balance changes 与 swapTx 分开，并要求断线后用历史查询 reconcile。它们共同反驳“一个时间窗口内的 sell 行就足以解释库存来源”的简化模型。
+- **当前证据等级**：本轮实现与测试属于 CODE_OBSERVED + 待CI的 OFFLINE_TESTED（CI未验证）；没有真实主网回放、CONNECTED_READONLY_RUNTIME、PROSPECTIVE_SHADOW 或 SECURE_OPERATIONAL 证据。现有 public-provider-two-mints-20261101.json 只是真实供应商历史市场快照，不含链上交易/钱包证据，不能拿来冒充 R1 链上纵切。
+- **仍未解决**：本轮没有获得一枚可合法重放的真实主网 Mint 交易归档，因此没有声称 R1 已完成；没有证明 token account 连续持仓、库存成本、净 PnL、pool/market-maker 分类或跨 Mint 资金来源。另有 Token-2022 transfer fee / account-owner change / 多账户同 Mint 同交易等边界仍需真实样本反证。
+- **下一件最高价值工作**：在不启动原 Blix 服务的前提下，取得一个已有授权的真实主网交易归档（至少包含固定 Mint 的 transfer、接收方后续 sell、相关 SOL/WSOL 交易及完整 jsonParsed RPC），对本轮分类进行 ARCHIVED_REAL_REPLAY 验证；优先挑一个可能推翻“数量相容”判断的复杂交易（多次 transfer、已有库存、Token-2022 fee 或同交易多腿）。若拿不到真实归档，则明确保持 UNKNOWN，不继续扩展抽象知识层。
