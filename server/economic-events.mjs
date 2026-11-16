@@ -213,6 +213,29 @@ export function missingEvidence(db, wallet, limit = 100) {
 }
 
 /** Bounded local-only investigation of recipients; no RPC, enrollment, signing or AI. */
+function ownerTokenBalanceDeltaRaw(tx, owner, mint) {
+  if (!tx?.meta || typeof owner !== 'string' || typeof mint !== 'string') return null;
+  const keys = (tx.transaction?.message?.accountKeys || []).map(keyOf);
+  const pre = new Map(), post = new Map();
+  for (const row of tx.meta.preTokenBalances || []) {
+    if (row?.mint !== mint || row?.owner !== owner) continue;
+    const account = keys[row.accountIndex], amount = row.uiTokenAmount?.amount;
+    if (!account || !/^\\d+$/.test(String(amount ?? ''))) continue;
+    pre.set(account, (pre.get(account) || 0n) + BigInt(amount));
+  }
+  for (const row of tx.meta.postTokenBalances || []) {
+    if (row?.mint !== mint || row?.owner !== owner) continue;
+    const account = keys[row.accountIndex], amount = row.uiTokenAmount?.amount;
+    if (!account || !/^\\d+$/.test(String(amount ?? ''))) continue;
+    post.set(account, (post.get(account) || 0n) + BigInt(amount));
+  }
+  if (!pre.size && !post.size) return null;
+  const accounts = new Set([...pre.keys(), ...post.keys()]);
+  let delta = 0n;
+  for (const account of accounts) delta += (post.get(account) || 0n) - (pre.get(account) || 0n);
+  return delta.toString();
+}
+
 export function recipientOutcomes(db, sender, mint = null, limit = 20, maxHours = 24) {
   const direct = recipientCandidates(db, sender, mint, Math.min(30, Math.max(1, limit)));
   if (!evidenceAvailable(db)) return { ...direct, observation: 'LOCAL_INDEX_UNAVAILABLE', rows: [] };
@@ -224,10 +247,32 @@ export function recipientOutcomes(db, sender, mint = null, limit = 20, maxHours 
     const transferAt = Number.isFinite(r.block_time) ? r.block_time * 1000 : null;
     if (transferAt === null || !r.mint) return { ...r, followupStatus: 'TRANSFER_TIME_OR_MINT_UNKNOWN',
       sellObservation: 'TRANSFER_TIME_OR_MINT_UNKNOWN', observedSells: [], crossMintCandidates: [] };
-    const observedSells = sells.all(r.to_owner, r.mint, transferAt, transferAt + windowMs);
+    const observedSells = sells.all(r.to_owner, r.mint, transferAt, transferAt + windowMs).map(sell => {
+      const evidence = transactionEvidence(db, sell.sig);
+      const sellDeltaRaw = evidence ? ownerTokenBalanceDeltaRaw(evidence.rpc, r.to_owner, r.mint) : null;
+      const transferAmountRaw = /^\\d+$/.test(String(r.amount_raw ?? '')) ? String(r.amount_raw) : null;
+      let inventoryLink = 'PROVENANCE_UNKNOWN';
+      if (sellDeltaRaw !== null && transferAmountRaw !== null && BigInt(sellDeltaRaw) < 0n) {
+        const soldRaw = -BigInt(sellDeltaRaw);
+        const receivedRaw = BigInt(transferAmountRaw);
+        inventoryLink = soldRaw > receivedRaw
+          ? 'CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER'
+          : 'AMOUNT_COMPATIBLE_BUT_PROVENANCE_UNPROVEN';
+      }
+      const priorInbound = db.prepare(`SELECT 1 FROM econ_instructions
+        WHERE kind='TOKEN_TRANSFER' AND owner_conflict=0 AND to_owner=? AND mint=?
+          AND sig IN (SELECT sig FROM econ_transactions WHERE status='RPC_OBSERVED' AND block_time IS NOT NULL AND block_time < ?)
+        LIMIT 1`).get(r.to_owner, r.mint, Math.floor(transferAt / 1000));
+      if (priorInbound && inventoryLink !== 'CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER')
+        inventoryLink = 'PRIOR_CAPTURED_INBOUND_ACTIVITY_EXISTS';
+      return { ...sell, sellDeltaRaw, inventoryLink };
+    });
     const cross = crossMintCandidates(db, r.to_owner, Math.ceil(windowMs / 3600_000), 25).rows
       .filter(x => x.sold_mint === r.mint && x.sold_at >= transferAt && x.sold_at <= transferAt + windowMs);
-    return { ...r, followupStatus: 'LOCAL_OBSERVATIONS_ONLY', sellObservation: observedSells.length ? 'LOCAL_SELL_SUMMARY_OBSERVED' : 'NOT_OBSERVED_IN_CAPTURED_WINDOW', observedSells, crossMintCandidates: cross };
+    return { ...r, followupStatus: 'LOCAL_OBSERVATIONS_ONLY',
+      sellObservation: observedSells.length ? 'LOCAL_SELL_SUMMARY_OBSERVED' : 'NOT_OBSERVED_IN_CAPTURED_WINDOW',
+      inventoryProvenance: observedSells.map(x => x.inventoryLink),
+      observedSells, crossMintCandidates: cross };
   });
   return { ...direct, windowMs, observation: 'READ_ONLY_CAPTURED_EVIDENCE_AND_WALLET_TRADE_SUMMARIES',
     interpretation: 'Follow-up sells and cross-Mint paths are candidates, NOT transferred-inventory provenance or common control',
