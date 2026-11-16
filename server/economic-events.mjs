@@ -220,13 +220,13 @@ function ownerTokenBalanceDeltaRaw(tx, owner, mint) {
   for (const row of tx.meta.preTokenBalances || []) {
     if (row?.mint !== mint || row?.owner !== owner) continue;
     const account = keys[row.accountIndex], amount = row.uiTokenAmount?.amount;
-    if (!account || !/^\\d+$/.test(String(amount ?? ''))) continue;
+    if (!account || !/^\d+$/.test(String(amount ?? ''))) continue;
     pre.set(account, (pre.get(account) || 0n) + BigInt(amount));
   }
   for (const row of tx.meta.postTokenBalances || []) {
     if (row?.mint !== mint || row?.owner !== owner) continue;
     const account = keys[row.accountIndex], amount = row.uiTokenAmount?.amount;
-    if (!account || !/^\\d+$/.test(String(amount ?? ''))) continue;
+    if (!account || !/^\d+$/.test(String(amount ?? ''))) continue;
     post.set(account, (post.get(account) || 0n) + BigInt(amount));
   }
   if (!pre.size && !post.size) return null;
@@ -250,7 +250,7 @@ export function recipientOutcomes(db, sender, mint = null, limit = 20, maxHours 
     const observedSells = sells.all(r.to_owner, r.mint, transferAt, transferAt + windowMs).map(sell => {
       const evidence = transactionEvidence(db, sell.sig);
       const sellDeltaRaw = evidence ? ownerTokenBalanceDeltaRaw(evidence.rpc, r.to_owner, r.mint) : null;
-      const transferAmountRaw = /^\\d+$/.test(String(r.amount_raw ?? '')) ? String(r.amount_raw) : null;
+      const transferAmountRaw = /^\d+$/.test(String(r.amount_raw ?? '')) ? String(r.amount_raw) : null;
       let inventoryLink = 'PROVENANCE_UNKNOWN';
       if (sellDeltaRaw !== null && transferAmountRaw !== null && BigInt(sellDeltaRaw) < 0n) {
         const soldRaw = -BigInt(sellDeltaRaw);
