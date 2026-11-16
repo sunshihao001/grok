@@ -119,8 +119,25 @@ test('full read-only economic chain survives a post-capture failure and keeps ca
   assert.equal(result.rows.length,1);
   assert.equal(result.rows[0].sellObservation,'LOCAL_SELL_SUMMARY_OBSERVED');
   assert.equal(result.rows[0].observedSells[0].sig,'B-sells-M');
+  assert.equal(result.rows[0].observedSells[0].sellDeltaRaw,'-400000000');
+  assert.deepEqual(result.rows[0].inventoryProvenance,['AMOUNT_COMPATIBLE_BUT_PROVENANCE_UNPROVEN']);
   assert.equal(result.rows[0].crossMintCandidates[0].buy_sig,'C-buys-N');
   assert.match(result.interpretation,/NOT transferred-inventory provenance or common control/);
-  assert.equal(db.prepare('SELECT COUNT(*) n FROM econ_transactions').get().n,4);
+
+  // Counterexample: a later same-Mint sell can exceed the transferred amount.
+  // It is still a real local sell observation, but cannot be fully attributed to A's single transfer.
+  const largerSell=tx('B-sells-more-M',second+100,[B,POOL,'ATA_B','ATA_POOL',TOKEN],
+   {pre:[1.75e9,1e9,0,0,0],post:[2.75e9-5000,0,0,0,0],
+    preToken:[bal(2,B,M,800_000_000),bal(3,POOL,M,0)],
+    postToken:[bal(2,B,M,0),bal(3,POOL,M,800_000_000)],
+    ix:[tok('ATA_B','ATA_POOL',M,800_000_000)]});
+  await wallets.readTx({address:B},{sig:'B-sells-more-M',t:(second+100)*1000,quiet:true},()=>{},largerSell);
+  const withCounterexample=recipientOutcomes(db,A,M);
+  const larger=withCounterexample.rows[0].observedSells.find(x=>x.sig==='B-sells-more-M');
+  assert.equal(larger.sellDeltaRaw,'-800000000');
+  assert.equal(larger.inventoryLink,'CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER');
+  assert.ok(withCounterexample.rows[0].inventoryProvenance.includes('CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER'));
+
+  assert.equal(db.prepare('SELECT COUNT(*) n FROM econ_transactions').get().n,5);
  } finally {globalThis.fetch=original;}
 });
