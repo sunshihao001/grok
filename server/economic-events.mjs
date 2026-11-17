@@ -179,13 +179,19 @@ export function crossMintCandidates(db, address, maxHours = 24, limit = 40) {
   const window = Math.max(1, Math.min(168, maxHours)) * 3600_000;
   const rows = db.prepare(`SELECT a.wallet seller, a.mint sold_mint, a.sig sell_sig, a.t sold_at, a.sol sell_sol,
     b.wallet buyer, b.mint bought_mint, b.sig buy_sig, b.t bought_at,
-    x.sig funding_sig, x.outer_i, x.inner_i, x.amount_raw funding_lamports
-    FROM wallet_trades a JOIN econ_instructions x ON x.from_owner=a.wallet AND x.kind='SOL_TRANSFER'
+    x.sig funding_sig, x.outer_i, x.inner_i, x.amount_raw funding_lamports,
+    ta.slot sell_slot, t.slot funding_slot, tb.slot buy_slot
+    FROM wallet_trades a
+    JOIN econ_transactions ta ON ta.sig=a.sig AND ta.status='RPC_OBSERVED'
+    JOIN econ_instructions x ON x.from_owner=a.wallet AND x.kind='SOL_TRANSFER'
     JOIN econ_transactions t ON t.sig=x.sig AND t.status='RPC_OBSERVED'
     JOIN wallet_trades b ON b.wallet=x.to_owner AND b.side='buy' AND b.mint!=a.mint
-    WHERE a.wallet=? AND a.side='sell' AND a.t<=t.block_time*1000
+    JOIN econ_transactions tb ON tb.sig=b.sig AND tb.status='RPC_OBSERVED'
+    WHERE a.wallet=? AND a.side='sell'
+      AND ta.slot<t.slot AND t.slot<tb.slot
+      AND a.t<=t.block_time*1000
       AND b.t>=t.block_time*1000 AND b.t-a.t<=? AND x.to_owner IS NOT NULL
-      AND x.to_owner!=a.wallet ORDER BY b.t DESC LIMIT ?`)
+      AND x.to_owner!=a.wallet ORDER BY tb.slot DESC LIMIT ?`)
     .all(address,window,Math.max(1,Math.min(100,limit)));
   return { address, windowMs: window, coverage: 'WALLET_TRADES_AND_CAPTURED_SYSTEM_TRANSFERS_ONLY',
     interpretation: 'TEMPORAL_FUNDING_PATH_CANDIDATE_NOT_LAMPORT_PROVENANCE_OR_COMMON_CONTROL', rows };
@@ -240,14 +246,21 @@ export function recipientOutcomes(db, sender, mint = null, limit = 20, maxHours 
   const direct = recipientCandidates(db, sender, mint, Math.min(30, Math.max(1, limit)));
   if (!evidenceAvailable(db)) return { ...direct, observation: 'LOCAL_INDEX_UNAVAILABLE', rows: [] };
   const windowMs = Math.max(1, Math.min(168, Number(maxHours) || 24)) * 3600_000;
-  const sells = db.prepare(`SELECT sig, wallet, mint, side, sol, t FROM wallet_trades
-    WHERE wallet=? AND mint=? AND side='sell' AND t>=? AND t<=?
-    ORDER BY t ASC LIMIT 5`);
+  // blockTime is only second-resolution and cannot establish transaction order. Use the
+  // captured transaction slot as the minimum ordering fact; same-slot follow-ups remain UNKNOWN
+  // because getTransaction does not expose a block transaction index.
+  const sells = db.prepare(`SELECT w.sig, w.wallet, w.mint, w.side, w.sol, w.t,
+      e.slot AS sell_slot, e.block_time AS sell_block_time
+    FROM wallet_trades w JOIN econ_transactions e ON e.sig=w.sig
+    WHERE w.wallet=? AND w.mint=? AND w.side='sell' AND e.status='RPC_OBSERVED'
+      AND e.block_time IS NOT NULL AND e.block_time>=? AND e.block_time<=?
+      AND e.slot>? AND w.sig!=?
+    ORDER BY e.slot ASC LIMIT 5`);
   const rows = direct.rows.map(r => {
     const transferAt = Number.isFinite(r.block_time) ? r.block_time * 1000 : null;
     if (transferAt === null || !r.mint) return { ...r, followupStatus: 'TRANSFER_TIME_OR_MINT_UNKNOWN',
       sellObservation: 'TRANSFER_TIME_OR_MINT_UNKNOWN', observedSells: [], crossMintCandidates: [] };
-    const observedSells = sells.all(r.to_owner, r.mint, transferAt, transferAt + windowMs).map(sell => {
+    const observedSells = sells.all(r.to_owner, r.mint, transferAt, transferAt + windowMs, r.slot, r.sig).map(sell => {
       const evidence = transactionEvidence(db, sell.sig);
       const sellDeltaRaw = evidence ? ownerTokenBalanceDeltaRaw(evidence.rpc, r.to_owner, r.mint) : null;
       const transferAmountRaw = /^\d+$/.test(String(r.amount_raw ?? '')) ? String(r.amount_raw) : null;
