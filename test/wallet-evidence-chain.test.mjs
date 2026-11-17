@@ -138,6 +138,17 @@ test('full read-only economic chain survives a post-capture failure and keeps ca
   assert.equal(larger.inventoryLink,'CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER');
   assert.ok(withCounterexample.rows[0].inventoryProvenance.includes('CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER'));
 
-  assert.equal(db.prepare('SELECT COUNT(*) n FROM econ_transactions').get().n,5);
+  // Counterexample: blockTime has only second precision. A same-second/same-slot sell
+  // cannot be proven to occur after the transfer, so it must stay out of the follow-up set.
+  const sameSlotSell=tx('B-sells-same-slot',second,[B,POOL,'ATA_B','ATA_POOL',TOKEN],
+   {pre:[1e9,1e9,0,0,0],post:[1.75e9-5000,0.25e9,0,0,0],
+    preToken:[bal(2,B,M,400_000_000),bal(3,POOL,M,0)],
+    postToken:[bal(2,B,M,0),bal(3,POOL,M,400_000_000)],
+    ix:[tok('ATA_B','ATA_POOL',M,400_000_000)]});
+  await wallets.readTx({address:B},{sig:'B-sells-same-slot',t:second*1000,quiet:true},()=>{},sameSlotSell);
+  const ordered=recipientOutcomes(db,A,M);
+  assert.equal(ordered.rows[0].observedSells.some(x=>x.sig==='B-sells-same-slot'),false);
+
+  assert.equal(db.prepare('SELECT COUNT(*) n FROM econ_transactions').get().n,6);
  } finally {globalThis.fetch=original;}
 });
