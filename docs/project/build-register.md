@@ -5,6 +5,36 @@
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
 
+## 2026-11-17｜R-48：经济证据后续事件不能用 blockTime 排序（同slot反例修正）
+
+**本轮最高价值缺口**：R-47已经把“接收后卖出数量相容≠该批库存来源”做成反例，但继续审查 `server/economic-events.mjs` 发现另一个会直接污染 O3/O4 的时序问题：`wallet_trades.t`来自 `blockTime * 1000`，而 Solana 的 blockTime 只有秒级；仅按时间窗口会把**同一秒甚至同一slot内、实际顺序未知的卖出**误当成 transfer 之后的卖出。对 Meme 快速交易尤其危险。
+
+**原始源码依据与跨项目反证**：
+- 当前 `server/economic-events.mjs` 的旧 `recipientOutcomes()` 以 `t>=transferAt` 查询后续 sell；旧 `crossMintCandidates()` 也以 `a.t<=funding_time<=b.t` 建立跨Mint时序候选。
+- Solana RPC 的交易响应以 `slot` 标识所在区块；`blockTime` 是区块时间戳，并不是同slot内交易顺序。Solana 官方交易结构/JSON-RPC文档确认 transaction 由 slot/transaction message/指令构成，versioned transaction 还存在 lookup-table accounts；因此不能把秒级 `blockTime` 当作严格事件顺序。[官方 getTransaction](https://solana.com/docs/rpc/http/gettransaction)、[RPC JSON Structures](https://solana.com/docs/rpc/json-structures)。
+- 独立成品 `anchoys1337/solana-wallet-behavior-analysis`明确把 ledger ordering 作为归因基础，并使用 **slot → block time** 的顺序而不是处理到达顺序；同时把 transfer-out 与 sell 分开，避免把库存移动当价值实现。[GitHub](https://github.com/anchoys1337/solana-wallet-behavior-analysis)。
+
+**实际代码修正**：
+1. `recipientOutcomes()`现在只把已捕获、已验证的 sell transaction 纳入后续集合，并要求 `sell.slot > transfer.slot`；同slot卖出保持 UNKNOWN，不因为相同 `blockTime` 被升级为“后续卖出”。同一 signature 也排除。
+2. `crossMintCandidates()`现在要求 `sell.slot < funding.slot < buy.slot`，只有三段均有已捕获经济交易记录时才形成时间顺序候选；同slot路径不再被解释成资金先后。
+3. 没有新增采集器、数据库状态机或权限；只是收紧已有只读证据查询。原始 RPC仍完整保留。
+
+**可复现反例**：
+- 在现有 `test/wallet-evidence-chain.test.mjs` 新增：transfer 与 B sell 使用相同 `slot/blockTime`；旧实现会进入 follow-up sell，新实现必须排除。
+- 原有数量反例仍保留：400M transfer 后800M sell → `CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER`。
+- 该测试仍是 synthetic/offline，不代表真实主网验收。
+
+**证据等级**：
+- `CODE_OBSERVED`: 新查询已提交。
+- `OFFLINE_TESTED`: 同slot反例已进入现有经济证据测试，但本轮尚未得到对应新HEAD的GitHub CI运行结果。
+- `ARCHIVED_REAL_REPLAY`: 未取得。
+- `CONNECTED_READONLY_RUNTIME`: 未取得。
+- `SECURE_OPERATIONAL`: 未取得。
+- `MODEL_INTERPRETATION`: 不适用于此修正。
+- `UNKNOWN`: 同slot交易的真实全链归档覆盖、block内精确交易索引是否需要更高层 `getBlock`/ledger replay，当前仍未知；本修正选择“不确定就不升级”。
+
+**下一阻断/可证伪条件**：下一步不是继续扩大知识图，而是取得一个许可的真实Mint归档，验证同slot/跨slot的 transfer→sell 与 sell→fund→buy 顺序；若发现当前 `wallet_trades` 缺少足以严格排序的交易索引，则继续保持 UNKNOWN，并考虑只在已有 `getBlock` transaction index 或可证明顺序数据下提升证据等级。
+
 ## 2026-11-14｜R-47：将现有知识按O1–O6转成真实可见的证据缺口与AI取证问题（不新建目标层）
 
 **起点与纠偏**：用户要求“以积累知识进行真实转换，按子部锚点推进整体及别的锚点”。R-46已在原`DOMAIN-MODEL.v1.json`明确G0–G4目标层、O1–O6业务成果、四入口/条件交接与S1–S7方法。**本轮不是再画一次图**：直接审查`investigation-continuation.mjs`发现报告六阶段虽有状态，但不能具体说明哪条专业知识对应缺失哪种事实；更严重的是任意Coin指定Mint/`/inspect`也返回“用户提交或选择Pulse观察”，混淆本地档案与市场事实。初稿尝试使用G1–G5名称，核对现有原图后立即统一改为原业务O1–O6，避免重复目标体系。
