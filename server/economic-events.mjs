@@ -255,7 +255,7 @@ export function recipientOutcomes(db, sender, mint = null, limit = 20, maxHours 
     WHERE w.wallet=? AND w.mint=? AND w.side='sell' AND e.status='RPC_OBSERVED'
       AND e.block_time IS NOT NULL AND e.block_time>=? AND e.block_time<=?
       AND e.slot>? AND w.sig!=?
-    ORDER BY e.slot ASC LIMIT 5`);
+    ORDER BY e.slot ASC LIMIT 6`);
   const rows = direct.rows.map(r => {
     const transferAt = Number.isFinite(r.block_time) ? r.block_time * 1000 : null;
     if (transferAt === null || !r.mint) return { ...r, followupStatus: 'TRANSFER_TIME_OR_MINT_UNKNOWN',
