@@ -260,7 +260,9 @@ export function recipientOutcomes(db, sender, mint = null, limit = 20, maxHours 
     const transferAt = Number.isFinite(r.block_time) ? r.block_time * 1000 : null;
     if (transferAt === null || !r.mint) return { ...r, followupStatus: 'TRANSFER_TIME_OR_MINT_UNKNOWN',
       sellObservation: 'TRANSFER_TIME_OR_MINT_UNKNOWN', observedSells: [], crossMintCandidates: [] };
-    const observedSells = sells.all(r.to_owner, r.mint, transferAt, transferAt + windowMs, r.slot, r.sig).map(sell => {
+    const sellRows = sells.all(r.to_owner, r.mint, transferAt, transferAt + windowMs, r.slot, r.sig);
+    const observedSellsTruncated = sellRows.length > 5;
+    const observedSells = sellRows.slice(0, 5).map(sell => {
       const evidence = transactionEvidence(db, sell.sig);
       const sellDeltaRaw = evidence ? ownerTokenBalanceDeltaRaw(evidence.rpc, r.to_owner, r.mint) : null;
       const transferAmountRaw = /^\d+$/.test(String(r.amount_raw ?? '')) ? String(r.amount_raw) : null;
@@ -284,6 +286,7 @@ export function recipientOutcomes(db, sender, mint = null, limit = 20, maxHours 
       .filter(x => x.sold_mint === r.mint && x.sold_at >= transferAt && x.sold_at <= transferAt + windowMs);
     return { ...r, followupStatus: 'LOCAL_OBSERVATIONS_ONLY',
       sellObservation: observedSells.length ? 'LOCAL_SELL_SUMMARY_OBSERVED' : 'NOT_OBSERVED_IN_CAPTURED_WINDOW',
+      observedSellsTruncated,
       inventoryProvenance: observedSells.map(x => x.inventoryLink),
       observedSells, crossMintCandidates: cross };
   });
