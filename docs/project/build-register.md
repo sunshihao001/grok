@@ -1107,3 +1107,26 @@
 - **当前证据等级**：本轮实现与测试属于 CODE_OBSERVED + 待CI的 OFFLINE_TESTED（CI未验证）；没有真实主网回放、CONNECTED_READONLY_RUNTIME、PROSPECTIVE_SHADOW 或 SECURE_OPERATIONAL 证据。现有 public-provider-two-mints-20261101.json 只是真实供应商历史市场快照，不含链上交易/钱包证据，不能拿来冒充 R1 链上纵切。
 - **仍未解决**：本轮没有获得一枚可合法重放的真实主网 Mint 交易归档，因此没有声称 R1 已完成；没有证明 token account 连续持仓、库存成本、净 PnL、pool/market-maker 分类或跨 Mint 资金来源。另有 Token-2022 transfer fee / account-owner change / 多账户同 Mint 同交易等边界仍需真实样本反证。
 - **下一件最高价值工作**：在不启动原 Blix 服务的前提下，取得一个已有授权的真实主网交易归档（至少包含固定 Mint 的 transfer、接收方后续 sell、相关 SOL/WSOL 交易及完整 jsonParsed RPC），对本轮分类进行 ARCHIVED_REAL_REPLAY 验证；优先挑一个可能推翻“数量相容”判断的复杂交易（多次 transfer、已有库存、Token-2022 fee 或同交易多腿）。若拿不到真实归档，则明确保持 UNKNOWN，不继续扩展抽象知识层。
+
+## 2026-11-18｜R-49：recipientOutcomes 的固定 5 条上限会把“部分观察”伪装成完整观察
+
+**本轮最高价值缺口**：R-48 修正了同 slot 时序，但继续审查 `recipientOutcomes()` 发现另一个证据覆盖问题：后续 sell 查询固定 `LIMIT 5`，返回对象没有告诉调用方是否还有第 6 条及以后记录。于是“只观察到 5 条”与“完整历史只有 5 条”在输出层不可区分；在高频 Meme 钱包中，这会让库存/退出判断对未展示的后续 sell 过度自信。
+
+**源码依据**：`server/economic-events.mjs` 原查询固定 `ORDER BY e.slot ASC LIMIT 5`。本轮不扩大数据库、采集器或状态机，只把现有查询取 6 条作为截断探针，仍只返回前 5 条，同时增加 `observedSellsTruncated`。`true` 表示“至少还有一条满足当前窗口/slot条件的已捕获 sell”，不是完整历史证明。
+
+**可复现反例**：现有 `test/wallet-evidence-chain.test.mjs` 在原 A→B→sell→fund→cross-Mint 链路上增加 4 条有效后续同 Mint sell，使有效候选超过 5 条；测试要求输出仍最多 5 条，但 `observedSellsTruncated === true`，并将经济归因保持为候选而非完整库存历史。
+
+**跨项目反证**：`solana-foundation/trading-portfolio` 的交易接口使用稳定 cursor 分页，并明确返回 `historyTruncated`；其 PnL 也把 covered cost basis 与完整历史分开，不用截断窗口制造零成本或完整性假象。`MadeOnSol` 的 token trade tape 同样采用 cursor/has_more 并返回 coverage，强调历史范围与数据源范围。citeturn665165search3turn766120search3
+
+**协议依据**：Solana `getTransaction` 返回 transaction 的 `slot` 与该 slot 的 `blockTime`，其中 blockTime 是所在 block 的估计生产时间；`getBlock` 才返回一个 slot 的完整 transaction 数组。因此当前 Blix 仍只能对跨 slot 事件作严格最小排序；同 slot 交易继续 UNKNOWN。citeturn653646search0turn652532search1
+
+**证据等级**：
+- `CODE_OBSERVED`: 已提交 `observedSellsTruncated`。
+- `OFFLINE_TESTED`: 新反例已提交；GitHub CI需按新HEAD重新确认。
+- `ARCHIVED_REAL_REPLAY`: 未取得。
+- `CONNECTED_READONLY_RUNTIME`: 未取得。
+- `SECURE_OPERATIONAL`: 未取得。
+- `MODEL_INTERPRETATION`: 不适用。
+- `UNKNOWN`: 第6条及以后仅在“当前已捕获且满足窗口/slot条件”的局部集合内可证明存在；不能推断钱包完整历史。
+
+**下一阻断/可证伪条件**：下一轮优先研究 `getBlock` 的同-slot transaction ordering 如何在不建立第二采集状态机的情况下作为已有 `econ_transactions` 的可选补证；先用离线 block fixture 验证，再决定是否值得进入真实归档。若没有授权真实归档，保持 UNKNOWN，不把 block-order fixture 当主网验收。
