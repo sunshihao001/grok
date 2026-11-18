@@ -1112,7 +1112,7 @@
 
 **本轮最高价值缺口**：R-48 修正了同 slot 时序，但继续审查 `recipientOutcomes()` 发现另一个证据覆盖问题：后续 sell 查询固定 `LIMIT 5`，返回对象没有告诉调用方是否还有第 6 条及以后记录。于是“只观察到 5 条”与“完整历史只有 5 条”在输出层不可区分；在高频 Meme 钱包中，这会让库存/退出判断对未展示的后续 sell 过度自信。
 
-**源码依据**：`server/economic-events.mjs` 原查询固定 `ORDER BY e.slot ASC LIMIT 5`。本轮不扩大数据库、采集器或状态机，只把现有查询取 6 条作为截断探针，仍只返回前 5 条，同时增加 `observedSellsTruncated`。`true` 表示“至少还有一条满足当前窗口/slot条件的已捕获 sell”，不是完整历史证明。
+**源码依据**：`server/economic-events.mjs` 原查询固定 `ORDER BY e.slot ASC LIMIT 5`。本轮不扩大数据库、采集器或状态机，只把现有查询取 6 条作为截断探针，仍只返回前 5 条，同时增加 `observedSellsTruncated`。代码提交：[6f62b43](https://github.com/sunshihao001/grok/commit/6f62b4376259fbff7f81344ad710b3f68363336c)、[e454208](https://github.com/sunshihao001/grok/commit/e4542081a92a3796777603f452925ef59d0d42ed)；反例测试：[e838f25](https://github.com/sunshihao001/grok/commit/e838f250bc949a904685c5396ff78c001e075566)。`true` 表示“至少还有一条满足当前窗口/slot条件的已捕获 sell”，不是完整历史证明。
 
 **可复现反例**：现有 `test/wallet-evidence-chain.test.mjs` 在原 A→B→sell→fund→cross-Mint 链路上增加 4 条有效后续同 Mint sell，使有效候选超过 5 条；测试要求输出仍最多 5 条，但 `observedSellsTruncated === true`，并将经济归因保持为候选而非完整库存历史。
 
