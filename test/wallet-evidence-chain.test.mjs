@@ -149,6 +149,20 @@ test('full read-only economic chain survives a post-capture failure and keeps ca
   const ordered=recipientOutcomes(db,A,M);
   assert.equal(ordered.rows[0].observedSells.some(x=>x.sig==='B-sells-same-slot'),false);
 
-  assert.equal(db.prepare('SELECT COUNT(*) n FROM econ_transactions').get().n,6);
+  // Coverage counterexample: more than five valid follow-up sells must not silently
+  // look like a complete five-row history.
+  for (let i=0;i<4;i++) {
+    const extra=tx('B-sells-extra-'+i,second+200+i,[B,POOL,'ATA_B','ATA_POOL',TOKEN],
+      {pre:[2e9,1e9,0,0,0],post:[2.25e9-5000,0.75e9,0,0,0],
+       preToken:[bal(2,B,M,100_000_000),bal(3,POOL,M,0)],
+       postToken:[bal(2,B,M,0),bal(3,POOL,M,100_000_000)],
+       ix:[tok('ATA_B','ATA_POOL',M,100_000_000)]});
+    await wallets.readTx({address:B},{sig:'B-sells-extra-'+i,t:(second+200+i)*1000,quiet:true},()=>{},extra);
+  }
+  const capped=recipientOutcomes(db,A,M);
+  assert.equal(capped.rows[0].observedSells.length,5);
+  assert.equal(capped.rows[0].observedSellsTruncated,true);
+
+  assert.equal(db.prepare('SELECT COUNT(*) n FROM econ_transactions').get().n,10);
  } finally {globalThis.fetch=original;}
 });
