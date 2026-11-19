@@ -13,7 +13,7 @@ process.env.BLIX_MARKET_FEEDS='0';
 const { db } = await import('../server/db.js');
 const wallets=await import('../server/wallets.js');
 const wtrack=await import('../server/wtrack.js');
-const { recipientOutcomes, recipientCandidates, transactionEvidence, walletProcessing } = await import('../server/economic-events.mjs');
+const { recipientOutcomes, recipientCandidates, transactionEvidence, walletProcessing, recordBlockTransactionOrder } = await import('../server/economic-events.mjs');
 const { checkpointWalletPage, pendingWalletSignatures } =
   await import('../server/wallet-signature-coverage.mjs');
 
@@ -148,6 +148,21 @@ test('full read-only economic chain survives a post-capture failure and keeps ca
   await wallets.readTx({address:B},{sig:'B-sells-same-slot',t:second*1000,quiet:true},()=>{},sameSlotSell);
   const ordered=recipientOutcomes(db,A,M);
   assert.equal(ordered.rows[0].observedSells.some(x=>x.sig==='B-sells-same-slot'),false);
+
+  // A complete getBlock response can provide deterministic ordering inside one slot.
+  // Indexing is optional evidence: until both transactions are present in that block,
+  // same-slot ordering remains UNKNOWN.
+  const blockSlot=ordered.rows[0].slot;
+  const order=recordBlockTransactionOrder(db,{
+    slot:blockSlot,
+    transactions:[
+      {transaction:{signatures:['buy-and-transfer']}},
+      {transaction:{signatures:['B-sells-same-slot']}},
+    ],
+  });
+  assert.equal(order.matched,2);
+  const orderedWithBlock=recipientOutcomes(db,A,M);
+  assert.equal(orderedWithBlock.rows[0].observedSells.some(x=>x.sig==='B-sells-same-slot'),true);
 
   // Coverage counterexample: more than five valid follow-up sells must not silently
   // look like a complete five-row history.
