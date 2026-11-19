@@ -138,8 +138,9 @@ export function persistEvidence(db, sig, tx, observedAt = Date.now(), provenance
   try {
     db.prepare(`INSERT INTO econ_transactions (sig, slot, block_time, block_tx_index, status, rpc_json, sha256, observed_at, capture_source, commitment)
       VALUES (?, ?, ?, NULL, ?, ?, ?, ?, ?, ?) ON CONFLICT(sig) DO UPDATE SET
-      slot=excluded.slot, block_time=excluded.block_time, status=excluded.status,
-      rpc_json=excluded.rpc_json, sha256=excluded.sha256, observed_at=excluded.observed_at,
+      slot=excluded.slot, block_time=excluded.block_time,
+      block_tx_index=CASE WHEN econ_transactions.slot IS NOT excluded.slot THEN NULL ELSE econ_transactions.block_tx_index END,
+      status=excluded.status, rpc_json=excluded.rpc_json, sha256=excluded.sha256, observed_at=excluded.observed_at,
       capture_source=excluded.capture_source, commitment=excluded.commitment`)
       .run(sig, tx.slot ?? null, tx.blockTime ?? null, tx.meta.err ? 'FAILED' : 'RPC_OBSERVED', raw, hash, observedAt, captureSource, commitment);
     db.prepare('DELETE FROM econ_instructions WHERE sig = ?').run(sig);
