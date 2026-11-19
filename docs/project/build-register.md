@@ -5,6 +5,38 @@
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
 
+## 2026-11-19｜R-50：同slot交易只有在已有 getBlock 顺序证据存在时才升级为后续事件
+
+**本轮最高价值缺口**：R-48 将同slot transfer→sell 保持 UNKNOWN 是正确的，但 Solana 官方 getBlock(slot) 返回该 slot 的完整 transaction 数组；如果当前已有 econ_transactions 中的两笔交易都能在同一个完整 block 归档里定位，就不必永久丢弃同slot顺序证据。问题应解决为“可选补证”，而不是新建第二采集状态机。
+
+**协议与成品反证**：
+- Solana 官方 getTransaction 只返回单笔交易的 slot、blockTime、transaction/meta；没有同slot block transaction index。getBlock 返回指定 slot 的 transactions[]，因此只有 block-level archive 才能提供同slot位置证据。[getTransaction](https://solana.com/docs/rpc/http/gettransaction)、[getBlock](https://solana.com/docs/rpc/http/getblock)、[RPC JSON Structures](https://solana.com/docs/rpc/json-structures)。
+- Solana 官方代码文档的 transaction introspection 继续把交易内部 instruction order 与 block/transaction context 区分，不能用处理到达顺序替代账本事实。[transaction introspection](https://github.com/solana-foundation/solana-com/blob/main/apps/docs/content/docs/en/core/transactions/transaction-introspection.mdx)。
+- GitHub 成品/索引项目也把 slot、transaction、instruction 分开保存，而不是从单笔交易的时间戳推断全局顺序；例如 Indexer_TX 明确保存 transaction slot/blockTime 并在链上数据上做分类，完整历史索引项目则以 block/transaction/instruction 为不同层级数据。[Indexer_TX](https://github.com/kotarowatanabe107/Indexer_TX)、[GetBlock indexed archive](https://github.com/GetBlock-io/getblock-docs/blob/main/solana-advanced-data-tools/solana-indexed-archive.md)。
+
+**原位代码改进**：
+1. server/economic-events.mjs 给现有 econ_transactions 增加可空 block_tx_index，不新增采集器/状态机。
+2. 新增 recordBlockTransactionOrder(db, block, slot)：只接受已有 block 归档对象，按 transactions[] 中签名位置写入对应已捕获 transaction；重复 signature、缺 slot 等输入拒绝；如果重新捕获同 signature 发现 slot 变化，会清空旧 block index，避免错误复用。
+3. recipientOutcomes() 继续以 sell.slot > transfer.slot 为默认规则；只有 transfer/sell 同slot且两边都有 block_tx_index、且 sell index 更大时，才把 sell 纳入 follow-up。没有 block index 仍是 UNKNOWN。
+4. test/wallet-evidence-chain.test.mjs 新增离线反例：同slot sell 初始不进入；注入一个 getBlock 形状的 block fixture，transfer index=0、sell index=1 后，该 sell 才进入。已有“数量超过5条”“数量大于单次transfer”等反例继续保留。
+
+**证据等级**：
+- CODE_OBSERVED: block_tx_index 与 recordBlockTransactionOrder() 已提交。
+- OFFLINE_TESTED: block-order fixture 已加入现有经济证据测试；GitHub CI需按最新HEAD单独确认。
+- ARCHIVED_REAL_REPLAY: 未取得。
+- CONNECTED_READONLY_RUNTIME: 未取得。
+- SECURE_OPERATIONAL: 未取得。
+- MODEL_INTERPRETATION: 不适用。
+- UNKNOWN: 真实主网 block archive 的可获得性、RPC ledger retention、同slot复杂 CPI/多池交易的完整覆盖仍未知。
+
+**错误/反例边界**：
+- getBlock 返回 block transactions ≠ 自动证明交易是“经济上的先后因果”；它只解决 ledger transaction order。
+- block index ≠ inventory provenance；接收前已有库存、同Mint多次转入、部分卖出仍需库存账本证据。
+- 同slot没有完整 block 归档 → 继续 UNKNOWN。
+- 只拿 signature list 而没有 block-level order → 不能升级同slot顺序。
+
+**下一阻断/可证伪条件**：取得一个许可的真实 Mint 归档，至少包含一个同slot transfer/sell 对及对应完整 block transactions[]，验证该补证是否与现有 econ_transactions 一致；若真实样本发现 block archive 常缺失或交易详情被裁剪，则保持 UNKNOWN，并评估是否只对已有完整归档开放该证据等级。
+
 ## 2026-11-17｜R-48：经济证据后续事件不能用 blockTime 排序（同slot反例修正）
 
 **本轮最高价值缺口**：R-47已经把“接收后卖出数量相容≠该批库存来源”做成反例，但继续审查 `server/economic-events.mjs` 发现另一个会直接污染 O3/O4 的时序问题：`wallet_trades.t`来自 `blockTime * 1000`，而 Solana 的 blockTime 只有秒级；仅按时间窗口会把**同一秒甚至同一slot内、实际顺序未知的卖出**误当成 transfer 之后的卖出。对 Meme 快速交易尤其危险。
