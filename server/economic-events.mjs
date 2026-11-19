@@ -8,7 +8,7 @@ let initialized = new WeakSet();
 export function initEvidence(db) {
   if (initialized.has(db)) return;
   db.exec(`CREATE TABLE IF NOT EXISTS econ_transactions (
-    sig TEXT PRIMARY KEY, slot INTEGER, block_time INTEGER, status TEXT NOT NULL,
+    sig TEXT PRIMARY KEY, slot INTEGER, block_time INTEGER, block_tx_index INTEGER,
     rpc_json TEXT NOT NULL, sha256 TEXT NOT NULL, observed_at INTEGER NOT NULL,
     coverage TEXT NOT NULL DEFAULT 'RPC_JSONPARSED_NOT_COMPLETE_WALLET_HISTORY',
     capture_source TEXT NOT NULL DEFAULT 'UNKNOWN', commitment TEXT);
@@ -28,6 +28,7 @@ export function initEvidence(db) {
   for (const [table, column, ddl] of [
     ['econ_transactions','capture_source',"ALTER TABLE econ_transactions ADD COLUMN capture_source TEXT NOT NULL DEFAULT 'UNKNOWN'"],
     ['econ_transactions','commitment',"ALTER TABLE econ_transactions ADD COLUMN commitment TEXT"],
+    ['econ_transactions','block_tx_index',"ALTER TABLE econ_transactions ADD COLUMN block_tx_index INTEGER"],
     ['econ_instructions','owner_conflict',"ALTER TABLE econ_instructions ADD COLUMN owner_conflict INTEGER NOT NULL DEFAULT 0"],
   ]) {
     if (!db.prepare('PRAGMA table_info(' + table + ')').all().some(r => r.name === column)) db.exec(ddl);
@@ -135,8 +136,8 @@ export function persistEvidence(db, sig, tx, observedAt = Date.now(), provenance
   const own = !db.isTransaction;
   if (own) db.exec('BEGIN');
   try {
-    db.prepare(`INSERT INTO econ_transactions (sig, slot, block_time, status, rpc_json, sha256, observed_at, capture_source, commitment)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(sig) DO UPDATE SET
+    db.prepare(`INSERT INTO econ_transactions (sig, slot, block_time, block_tx_index, status, rpc_json, sha256, observed_at, capture_source, commitment)
+      VALUES (?, ?, ?, NULL, ?, ?, ?, ?, ?, ?) ON CONFLICT(sig) DO UPDATE SET
       slot=excluded.slot, block_time=excluded.block_time, status=excluded.status,
       rpc_json=excluded.rpc_json, sha256=excluded.sha256, observed_at=excluded.observed_at,
       capture_source=excluded.capture_source, commitment=excluded.commitment`)
@@ -150,6 +151,33 @@ export function persistEvidence(db, sig, tx, observedAt = Date.now(), provenance
   } catch (e) { if (own && db.isTransaction) db.exec('ROLLBACK'); throw e; }
   return { sig, duplicate: false, hash, instructions: decoded.length };
 }
+export function recordBlockTransactionOrder(db, block, slot = null) {
+  initEvidence(db);
+  const txs = Array.isArray(block?.transactions) ? block.transactions : [];
+  const blockSlot = Number.isInteger(slot) ? slot : (Number.isInteger(block?.slot) ? block.slot : null);
+  if (blockSlot === null || !Number.isInteger(blockSlot) || blockSlot < 0) throw new Error('block slot required');
+  const seen = new Set(), rows = [];
+  for (let index = 0; index < txs.length; index++) {
+    const sig = txs[index]?.transaction?.signatures?.[0];
+    if (typeof sig !== 'string' || !sig) continue;
+    if (seen.has(sig)) throw new Error('duplicate transaction signature in block');
+    seen.add(sig);
+    rows.push({ sig, index });
+  }
+  const update = db.prepare('UPDATE econ_transactions SET block_tx_index=? WHERE sig=? AND slot=?');
+  const own = !db.isTransaction;
+  if (own) db.exec('BEGIN');
+  try {
+    let matched = 0;
+    for (const row of rows) matched += Number(update.run(row.index, row.sig, blockSlot).changes || 0);
+    if (own) db.exec('COMMIT');
+    return { slot: blockSlot, transactionCount: txs.length, indexedTransactions: rows.length, matched };
+  } catch (e) {
+    if (own && db.isTransaction) db.exec('ROLLBACK');
+    throw e;
+  }
+}
+
 export function transactionEvidence(db, sig) {
   if (!evidenceAvailable(db)) return null;
   const tx = db.prepare('SELECT * FROM econ_transactions WHERE sig = ?').get(sig);
@@ -163,6 +191,7 @@ export function recipientCandidates(db, sender, mint = null, limit = 100) {
   const rows = db.prepare(`SELECT i.sig, i.outer_i, i.inner_i, i.from_owner, i.to_owner, i.mint,
      i.from_account, i.to_account, i.amount_raw, t.block_time, t.slot,
      t.sha256 AS archive_sha256, t.capture_source AS capture_source,
+     t.block_tx_index AS block_tx_index,
      t.observed_at AS capture_observed_at_ms, t.commitment AS commitment
      FROM econ_instructions i JOIN econ_transactions t ON t.sig=i.sig
      WHERE t.status='RPC_OBSERVED' AND i.kind='TOKEN_TRANSFER' AND i.owner_conflict=0 AND i.from_owner=?
@@ -250,17 +279,18 @@ export function recipientOutcomes(db, sender, mint = null, limit = 20, maxHours 
   // captured transaction slot as the minimum ordering fact; same-slot follow-ups remain UNKNOWN
   // because getTransaction does not expose a block transaction index.
   const sells = db.prepare(`SELECT w.sig, w.wallet, w.mint, w.side, w.sol, w.t,
-      e.slot AS sell_slot, e.block_time AS sell_block_time
+      e.slot AS sell_slot, e.block_time AS sell_block_time, e.block_tx_index AS sell_block_tx_index
     FROM wallet_trades w JOIN econ_transactions e ON e.sig=w.sig
     WHERE w.wallet=? AND w.mint=? AND w.side='sell' AND e.status='RPC_OBSERVED'
       AND e.block_time IS NOT NULL AND e.block_time>=? AND e.block_time<=?
-      AND e.slot>? AND w.sig!=?
-    ORDER BY e.slot ASC LIMIT 6`);
+      AND (e.slot>? OR (e.slot=? AND e.block_tx_index IS NOT NULL)) AND w.sig!=?
+    ORDER BY e.slot ASC, e.block_tx_index ASC LIMIT 6`);
   const rows = direct.rows.map(r => {
     const transferAt = Number.isFinite(r.block_time) ? r.block_time * 1000 : null;
     if (transferAt === null || !r.mint) return { ...r, followupStatus: 'TRANSFER_TIME_OR_MINT_UNKNOWN',
       sellObservation: 'TRANSFER_TIME_OR_MINT_UNKNOWN', observedSells: [], crossMintCandidates: [] };
-    const sellRows = sells.all(r.to_owner, r.mint, transferAt, transferAt + windowMs, r.slot, r.sig);
+    const sellRows = sells.all(r.to_owner, r.mint, transferAt, transferAt + windowMs, r.slot, r.slot, r.sig).filter(sell =>
+      sell.sell_slot > r.slot || (sell.sell_slot === r.slot && r.block_tx_index !== null && sell.sell_block_tx_index !== null && sell.sell_block_tx_index > r.block_tx_index));
     const observedSellsTruncated = sellRows.length > 5;
     const observedSells = sellRows.slice(0, 5).map(sell => {
       const evidence = transactionEvidence(db, sell.sig);
