@@ -9,6 +9,7 @@ export function initEvidence(db) {
   if (initialized.has(db)) return;
   db.exec(`CREATE TABLE IF NOT EXISTS econ_transactions (
     sig TEXT PRIMARY KEY, slot INTEGER, block_time INTEGER, block_tx_index INTEGER,
+    status TEXT NOT NULL DEFAULT 'RPC_OBSERVED',
     rpc_json TEXT NOT NULL, sha256 TEXT NOT NULL, observed_at INTEGER NOT NULL,
     coverage TEXT NOT NULL DEFAULT 'RPC_JSONPARSED_NOT_COMPLETE_WALLET_HISTORY',
     capture_source TEXT NOT NULL DEFAULT 'UNKNOWN', commitment TEXT);
@@ -29,6 +30,7 @@ export function initEvidence(db) {
     ['econ_transactions','capture_source',"ALTER TABLE econ_transactions ADD COLUMN capture_source TEXT NOT NULL DEFAULT 'UNKNOWN'"],
     ['econ_transactions','commitment',"ALTER TABLE econ_transactions ADD COLUMN commitment TEXT"],
     ['econ_transactions','block_tx_index',"ALTER TABLE econ_transactions ADD COLUMN block_tx_index INTEGER"],
+    ['econ_transactions','status',"ALTER TABLE econ_transactions ADD COLUMN status TEXT NOT NULL DEFAULT 'RPC_OBSERVED'"],
     ['econ_instructions','owner_conflict',"ALTER TABLE econ_instructions ADD COLUMN owner_conflict INTEGER NOT NULL DEFAULT 0"],
   ]) {
     if (!db.prepare('PRAGMA table_info(' + table + ')').all().some(r => r.name === column)) db.exec(ddl);
@@ -66,6 +68,15 @@ function evidenceAvailable(db) {
     && db.prepare('PRAGMA table_info(econ_instructions)').all().some(r => r.name === 'owner_conflict');
 }
 const keyOf = k => typeof k === 'string' ? k : (k?.pubkey ?? null);
+// jsonParsed message.accountKeys contains static transaction keys; versioned transactions can
+// add lookup-table addresses in meta.loadedAddresses. Token-balance accountIndex and compiled
+// instruction programIdIndex resolve against the combined list in writable-then-readonly order.
+function fullAccountKeys(tx) {
+  const staticKeys = (tx.transaction?.message?.accountKeys || []).map(keyOf);
+  const writable = (tx.meta?.loadedAddresses?.writable || []).map(keyOf);
+  const readonly = (tx.meta?.loadedAddresses?.readonly || []).map(keyOf);
+  return [...staticKeys, ...writable, ...readonly];
+}
 function tokenOwners(tx, keys) {
   const out = new Map();
   for (const b of [...(tx.meta?.preTokenBalances || []), ...(tx.meta?.postTokenBalances || [])]) {
@@ -83,7 +94,7 @@ function tokenOwners(tx, keys) {
 
 export function decodeEvidence(tx) {
   if (!tx?.transaction?.message || !tx.meta) throw new Error('Missing transaction/message/meta; cannot claim complete RPC capture');
-  const keys = (tx.transaction.message.accountKeys || []).map(keyOf);
+  const keys = fullAccountKeys(tx);
   const owners = tokenOwners(tx, keys);
   const outer = tx.transaction.message.instructions || [];
   const inner = new Map();
@@ -251,7 +262,7 @@ export function missingEvidence(db, wallet, limit = 100) {
 /** Bounded local-only investigation of recipients; no RPC, enrollment, signing or AI. */
 function ownerTokenBalanceDeltaRaw(tx, owner, mint) {
   if (!tx?.meta || typeof owner !== 'string' || typeof mint !== 'string') return null;
-  const keys = (tx.transaction?.message?.accountKeys || []).map(keyOf);
+  const keys = fullAccountKeys(tx);
   const pre = new Map(), post = new Map();
   for (const row of tx.meta.preTokenBalances || []) {
     if (row?.mint !== mint || row?.owner !== owner) continue;
