@@ -5,6 +5,40 @@
 > 主体：`sunshihao001/grok` 的完整原版 `blix` 产品。**2026-11-09 当前唯一集成候选为 [Draft PR #23](https://github.com/sunshihao001/grok/pull/23)，现已直接以 `blix` 为base，包含历史PR #18/#22能力而非待合并的平行产品；仍未合并/部署**。本表下方旧日期的PR #18状态为历史记录，必须以最新状态节和GitHub CI为准。
 
 
+## 2026-11-20｜R-51：经济证据表自初始化契约与 Versioned/ALT 地址索引反例
+
+**本轮最高价值缺口**：复核 R-50 后没有继续扩展 block-order。直接重新检查 `server/economic-events.mjs` 的“新库可从零工作”与 Solana versioned transaction 解码，发现两个会让 O3/O4 证据出现**静默错误或直接不可写**的基础问题：
+
+1. `persistEvidence()` 已经写入 `econ_transactions.status`，但该表的首次 `CREATE TABLE` 定义没有 `status`，且原 migration 列表也没有补这个列。对真正从空 SQLite 开始的 evidence journal，这是 schema/写入契约不一致；不能用历史绿色CI替代当前HEAD的 fresh-DB 证明。
+2. `decodeEvidence()` 和 `ownerTokenBalanceDeltaRaw()` 原先只用 `message.accountKeys` 解析 `accountIndex`。Solana versioned transaction 的 lookup-table 地址需要与静态 key 合并；否则 Token Account 的 `preTokenBalances/postTokenBalances.accountIndex` 可能无法映射到 Token Account，进而把 Owner/库存变化降级为缺失或错误。
+
+**原始协议依据与成品反证**：
+- Solana 官方 RPC JSON 结构说明：parsed transaction 的 `message.accountKeys`包含账户元数据；versioned transaction 可以使用 address table lookups；`meta.loadedAddresses` 是另一组加载地址，且不同响应模式对该字段有差异，因此实际归档必须保留可用于账户解析的完整结构/适当响应模式。[Solana RPC JSON Structures](https://solana.com/docs/rpc/json-structures)。
+- 官方结构同时说明 `accountIndex` / `programIdIndex` 依赖交易账户索引，因此不能只看静态 `message.accountKeys`。
+- GitHub 成品实现中可看到同样的组合规则：`solana-defi` 在解析 ALT 时显式维护 `loadedAddresses` 并把账户索引映射到完整账户列表；`Solana Explorer` 也保留 `meta.loadedAddresses`；`BEpusdt` 与 `solana-dex-cli` 均将 loaded writable/readonly 地址追加到账户列表。[solana-defi](https://github.com/Shyft-to/solana-defi/blob/c1bef8ac15075ca3a2909c48c841d44a5adc0684/Bots/Typescript/grpc-copytrade/utils/transaction-formatter.ts)、[BEpusdt](https://github.com/v03413/BEpusdt/blob/8a91be6a155c28cc07db18aa0ed0ecd06aae71582/app/task/solana.go)、[Solana Explorer](https://github.com/solana-foundation/explorer/blob/b1231e17daaeaa011a520360944c4c469a1533f9/app/entities/transaction-data/lib/adapt-parsed-transaction.ts)。
+
+**原位修正**：
+1. `econ_transactions`首次建表加入 `status TEXT NOT NULL DEFAULT 'RPC_OBSERVED'`，并增加兼容旧库的 `ALTER TABLE` migration；这与现有 `persistEvidence()` / `recipientCandidates()` / `recipientOutcomes()` 的事实状态字段一致。
+2. 新增 `fullAccountKeys(tx)`，按 **static transaction keys → loaded writable → loaded readonly** 组合；`decodeEvidence()` 与 `ownerTokenBalanceDeltaRaw()`统一使用它。没有新表、新采集器、新权限。
+3. 现有 `test/wallet-evidence-chain.test.mjs`增加 fresh-schema 断言和一个 versioned/ALT fixture：Token Account 只出现在 loaded writable 中，`pre/postTokenBalances.accountIndex`必须仍能解析出 B/POOL Owner；若以后移除组合逻辑，该测试会直接失败。
+
+**关键错误/反例**：
+- “历史CI曾绿”不能证明当前分支新建空DB时schema一定一致；这轮将其变成可复现 schema assertion。
+- `message.accountKeys` 只有静态 key 时，ALT Token Account 的 balance index可能没有对应地址；不能把 `owner=null` 当成“没有Owner”。
+- ALT address resolution 成功也只证明账户索引映射正确；仍不能证明 Token Account Owner=控制人、Transfer=Sale、或库存来源。
+- 不同 RPC encoding/mode 对 versioned transaction 的 loaded-address字段存在差异；真实归档必须确认当前请求模式是否保留足够字段，否则应标 `UNKNOWN`，不能靠AI补齐。
+
+**证据等级**：
+- `CODE_OBSERVED`: schema migration 与 full-account-key resolver 已提交。
+- `OFFLINE_TESTED`: fresh schema + ALT fixture 已提交到现有经济证据测试；当前HEAD的GitHub CI需要重新检查。
+- `ARCHIVED_REAL_REPLAY`: 未取得。
+- `CONNECTED_READONLY_RUNTIME`: 未取得。
+- `SECURE_OPERATIONAL`: 未取得。
+- `MODEL_INTERPRETATION`: 不适用。
+- `UNKNOWN`: 真实主网 versioned transaction 的归档覆盖、RPC encoding/mode组合、复杂 CPI/Token-2022 与 ALT 的联合样本仍未验证。
+
+**下一阻断/可证伪条件**：取得一个许可的真实 versioned Mint transaction（最好包含 ALT + Token transfer/CPI），用现有原始归档完整重放；对照 `message.accountKeys`、loaded addresses、Token Account/Owner、instruction index 与实际 balance delta。若当前RPC/归档模式不能同时提供足够字段，就明确把该交易降为 `UNKNOWN`，而不是继续扩展推断层。
+
 ## 2026-11-19｜R-50：同slot交易只有在已有 getBlock 顺序证据存在时才升级为后续事件
 
 **本轮最高价值缺口**：R-48 将同slot transfer→sell 保持 UNKNOWN 是正确的，但 Solana 官方 getBlock(slot) 返回该 slot 的完整 transaction 数组；如果当前已有 econ_transactions 中的两笔交易都能在同一个完整 block 归档里定位，就不必永久丢弃同slot顺序证据。问题应解决为“可选补证”，而不是新建第二采集状态机。
