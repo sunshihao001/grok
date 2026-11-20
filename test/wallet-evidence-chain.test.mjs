@@ -13,7 +13,7 @@ process.env.BLIX_MARKET_FEEDS='0';
 const { db } = await import('../server/db.js');
 const wallets=await import('../server/wallets.js');
 const wtrack=await import('../server/wtrack.js');
-const { recipientOutcomes, recipientCandidates, transactionEvidence, walletProcessing, recordBlockTransactionOrder } = await import('../server/economic-events.mjs');
+const { decodeEvidence, recipientOutcomes, recipientCandidates, transactionEvidence, walletProcessing, recordBlockTransactionOrder } = await import('../server/economic-events.mjs');
 const { checkpointWalletPage, pendingWalletSignatures } =
   await import('../server/wallet-signature-coverage.mjs');
 
@@ -35,6 +35,32 @@ const tx=(sig,at,keys,{pre,post,preToken=[],postToken=[],ix=[],inner=[]})=>({
  transaction:{signatures:[sig],message:{accountKeys:keys,instructions:ix}}
 });
 test.after(()=>{try{db.close();}catch{}fs.rmSync(folder,{recursive:true,force:true});});
+
+test('fresh evidence schema and versioned ALT account indexes remain decodable',()=>{
+  const columns=db.prepare('PRAGMA table_info(econ_transactions)').all().map(r=>r.name);
+  assert.ok(columns.includes('status'),'fresh evidence schema must include the status column used by persistEvidence');
+  const versioned={
+    slot:2000, blockTime:2000,
+    meta:{
+      err:null,
+      loadedAddresses:{writable:['ALT_ATA_B','ALT_ATA_POOL'],readonly:[]},
+      preTokenBalances:[bal(3,B,M,400_000_000),bal(4,POOL,M,0)],
+      postTokenBalances:[bal(3,B,M,0),bal(4,POOL,M,400_000_000)],
+      innerInstructions:[],logMessages:[]
+    },
+    transaction:{signatures:['ALT-sell'],message:{
+      accountKeys:[B,POOL],instructions:[tok('ALT_ATA_B','ALT_ATA_POOL',M,400_000_000)]
+    }}
+  };
+  const rows=decodeEvidence(versioned).filter(r=>r.kind==='TOKEN_TRANSFER');
+  assert.equal(rows.length,1);
+  assert.equal(rows[0].from_account,'ALT_ATA_B');
+  assert.equal(rows[0].to_account,'ALT_ATA_POOL');
+  assert.equal(rows[0].from_owner,B);
+  assert.equal(rows[0].to_owner,POOL);
+  assert.equal(rows[0].owner_conflict,false);
+});
+
 
 test('unanchored incremental signature polling reports a capped window as a gap, not an reached cursor',async()=>{
  const calls=[];
