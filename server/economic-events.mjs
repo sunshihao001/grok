@@ -72,7 +72,16 @@ const keyOf = k => typeof k === 'string' ? k : (k?.pubkey ?? null);
 // add lookup-table addresses in meta.loadedAddresses. Token-balance accountIndex and compiled
 // instruction programIdIndex resolve against the combined list in writable-then-readonly order.
 function fullAccountKeys(tx) {
-  const staticKeys = (tx.transaction?.message?.accountKeys || []).map(keyOf);
+  const accountKeys = tx.transaction?.message?.accountKeys || [];
+  // jsonParsed getTransaction responses already materialize lookup-table accounts in
+  // message.accountKeys and label them source=lookupTable. Do not append meta.loadedAddresses
+  // to that representation or accountIndex resolution would shift/duplicate addresses.
+  if (accountKeys.some(k => k && typeof k === 'object' && k.source === 'lookupTable')) {
+    return accountKeys.map(keyOf);
+  }
+  // Raw/full JSON responses keep static message.accountKeys and expose loadedAddresses
+  // separately. Support that representation too, without claiming fields that are absent.
+  const staticKeys = accountKeys.map(keyOf);
   const writable = (tx.meta?.loadedAddresses?.writable || []).map(keyOf);
   const readonly = (tx.meta?.loadedAddresses?.readonly || []).map(keyOf);
   return [...staticKeys, ...writable, ...readonly];
