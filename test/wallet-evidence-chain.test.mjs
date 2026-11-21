@@ -43,13 +43,19 @@ test('fresh evidence schema and versioned ALT account indexes remain decodable',
     slot:2000, blockTime:2000,
     meta:{
       err:null,
-      loadedAddresses:{writable:['ALT_ATA_B','ALT_ATA_POOL'],readonly:[]},
-      preTokenBalances:[bal(3,B,M,400_000_000),bal(4,POOL,M,0)],
-      postTokenBalances:[bal(3,B,M,0),bal(4,POOL,M,400_000_000)],
+      preTokenBalances:[bal(2,B,M,400_000_000),bal(3,POOL,M,0)],
+      postTokenBalances:[bal(2,B,M,0),bal(3,POOL,M,400_000_000)],
       innerInstructions:[],logMessages:[]
     },
     transaction:{signatures:['ALT-sell'],message:{
-      accountKeys:[B,POOL],instructions:[tok('ALT_ATA_B','ALT_ATA_POOL',M,400_000_000)]
+      // Actual jsonParsed shape: lookup-table accounts are already in message.accountKeys.
+      accountKeys:[
+        {pubkey:B,source:'transaction',signer:true,writable:true},
+        {pubkey:POOL,source:'transaction',signer:false,writable:true},
+        {pubkey:'ALT_ATA_B',source:'lookupTable',signer:false,writable:true},
+        {pubkey:'ALT_ATA_POOL',source:'lookupTable',signer:false,writable:true},
+      ],
+      instructions:[tok('ALT_ATA_B','ALT_ATA_POOL',M,400_000_000)]
     }}
   };
   const rows=decodeEvidence(versioned).filter(r=>r.kind==='TOKEN_TRANSFER');
