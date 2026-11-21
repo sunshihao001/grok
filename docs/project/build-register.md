@@ -1,3 +1,33 @@
+## 2026-11-21｜R-52：否证并修正 R-51 的 Versioned/ALT jsonParsed 假设
+
+**本轮最高价值缺口**：不是继续扩展 ALT 规则，而是主动否证上一轮 R-51。对照 Solana 官方 RPC JSON 结构后发现：R-51 的离线 fixture 把 `meta.loadedAddresses` 与 `message.accountKeys` 同时作为 `jsonParsed` 输入，但官方定义中 **jsonParsed 的 `message.accountKeys[]` 已包含 lookup-table accounts，并以 `source:"lookupTable"` 标记；`meta.loadedAddresses` 在 jsonParsed 模式被省略**。因此上一轮“static keys + loadedAddresses”的 fixture 不是实际 jsonParsed 形态，不能继续作为真实 RPC 形态依据。这是本轮必须修正的错误，不保留错误知识。
+
+**原始协议依据**：
+- Solana 官方 RPC JSON Structures：parsed transaction 的 `message.accountKeys[]` 包含 static 与 lookup-table accounts；lookup-table account 的 `source` 为 `lookupTable`。同一文档明确 `meta.loadedAddresses` 在 `json/full` 中存在，而在 `jsonParsed` 中 omitted。[官方 JSON Structures](https://solana.com/docs/rpc/json-structures)
+- 当前 `server/solana.js` 的真实请求仍使用 `getTransaction(..., { maxSupportedTransactionVersion: 1, encoding: "jsonParsed", commitment: "confirmed" })`，所以 R-51 的 ALT fixture 必须首先符合 jsonParsed 形态，而不是把 raw/full 形态混入其中。[当前代码](https://github.com/sunshihao001/grok/blob/integration/blix-evidence-readonly-20261108/server/solana.js)
+
+**原位修正**：
+1. `server/economic-events.mjs` 的 `fullAccountKeys(tx)` 现在先判断 `message.accountKeys` 是否包含 `source:"lookupTable"` 的 parsed account；若存在，直接使用该完整 accountKeys，不再追加 `meta.loadedAddresses`，避免 accountIndex 被重复/错位。
+2. 若输入是 raw/full JSON 形态（static `accountKeys` + `meta.loadedAddresses.writable/readonly`），仍支持按 static → loaded writable → loaded readonly 组合；但这种路径不冒充 jsonParsed。
+3. 现有 `test/wallet-evidence-chain.test.mjs` 的 ALT fixture 已改成真实 jsonParsed 形态：lookup-table Token Account 位于 `message.accountKeys`，`source:"lookupTable"`，`pre/postTokenBalances.accountIndex` 直接解析到 B/POOL Owner。没有新表、新采集器或新状态机。
+
+**关键错误/反例**：
+- 错误：把 `jsonParsed` 理解为“static accountKeys + meta.loadedAddresses”。官方文档否证。
+- 错误：如果继续追加两份地址，`accountIndex` 会发生位移，可能把 Token Account/Owner 解析到错误地址。
+- 边界：parsed accountKeys 的存在只解决地址索引；仍不能证明 Owner 是实际控制人、Transfer 是 Sale、或 Sell 使用的是刚接收库存。
+- raw/full JSON 与 jsonParsed 是不同 response representation；以后真实归档必须先记录 encoding/mode，再选择解析路径。
+
+**证据等级**：
+- `CODE_OBSERVED`: 修正后的 resolver 已提交。
+- `OFFLINE_TESTED`: 现有 ALT regression fixture 已修正为官方 jsonParsed 形态；新HEAD CI需要单独核查。
+- `ARCHIVED_REAL_REPLAY`: 未取得。
+- `CONNECTED_READONLY_RUNTIME`: 未取得。
+- `SECURE_OPERATIONAL`: 未取得。
+- `MODEL_INTERPRETATION`: 不适用。
+- `UNKNOWN`: 尚未取得一个真实主网 versioned transaction 的完整归档来验证当前 resolver 对复杂 CPI/Token-2022/ALT 联合样本的覆盖。
+
+**下一阻断/可证伪条件**：取得许可的真实 versioned Mint transaction，确认实际 `encoding=jsonParsed` 返回的 `message.accountKeys`、`source:lookupTable`、Token Account/Owner、CPI 与 pre/post balance 是否能被现有 resolver 一致重建；若真实样本需要 raw/full 才能补足字段，则把两种 representation 的证据等级分开，不让 AI 混用。
+
 # Blix 滚动建设台账｜继承、修复、研究与验收
 
 > 2026-11-08 初版。**这不是新的产品架构或专家体系**，仅作为当前 `blix` 主体的一个持续更新的工程事实清单；以后说“按照建设来”时，先更新状态和证据，再按信息价值/业务价值选下一项工作。旧知识和历史参考原位保留，不机械挪入本表。
