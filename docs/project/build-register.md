@@ -1,3 +1,43 @@
+## 2026-11-22｜R-53：同一卖出交易的同Mint净余额变化不能直接作为库存来源证据
+
+**本轮最高价值缺口**：继续追 R-52 的底层解析后，发现当前 `recipientOutcomes()` 在判断“接收钱包后续卖出是否与这次 Transfer 数量相容”时，使用 `ownerTokenBalanceDeltaRaw()` 的**净** Token balance delta。这个值在简单卖出中有用，但在一笔复杂交易同时发生同 Mint 入账与出账时会被抵消，从而产生一个危险的假阳性：例如钱包在同一交易中先收到 100M、又转出 500M，Owner 的净变化是 -400M；如果前一笔外部 Transfer 也是 400M，旧逻辑会把它标成 `AMOUNT_COMPATIBLE_BUT_PROVENANCE_UNPROVEN`，但真实 gross outbound 是 500M，净值不能代表出售数量或库存来源。
+
+**原始协议/成品反证**：
+- Solana 官方 transaction introspection 明确把一笔交易的 outer/inner instruction 顺序作为独立结构，并说明 versioned transaction/CPI 需要从 instruction tree 与 balance metadata 一起解析；不能把一个 owner/mint 的最终净余额变化当作完整执行语义。[官方 Transaction Introspection](https://solana.com/docs/core/transactions/transaction-introspection)
+- Solana 官方交易历史验证示例使用 token account 的 pre/post balance 判断方向/金额，但这只能在该账户变化足以代表单一支付事件时成立；复杂交易仍需结合交易结构。[官方 Verification Tools](https://solana.com/docs/payments/accept-payments/verification-tools)
+- GitHub 的实际 DEX parser 已把“同时 buy/sell”的复杂交易视为解析边界；其 issue #28 记录了同一 transaction 同时买卖时，简单 unique-token 假设会失败。[solana-dex-parser issue #28](https://github.com/cxcx-ai/solana-dex-parser/issues/28)
+- 当前 Blix 的经济证据表已经保存同一 transaction 的 outer/inner Token Transfer instruction，因此不需要建立新采集器；可以在现有证据上识别“同Mint同一交易同时 inbound/outbound”的歧义。
+
+**原位修正**：
+1. `recipientOutcomes()` 在计算 sell 的 `inventoryLink` 前，检查该 sell transaction 中同 Mint、同 Owner 的 TOKEN_TRANSFER 是否同时存在 inbound 与 outbound。
+2. 若同时存在，则不再使用净 balance delta 给出“数量相容”结论，改为 `INTRA_TRANSACTION_NET_DELTA_AMBIGUOUS`。
+3. 原有“卖出数量超过单次 Transfer”反例、same-slot UNKNOWN、observedSellsTruncated 等继续保留。
+4. 没有新表、新采集器、新状态机、新 Agent；只是在现有 `econ_instructions` 事实之上降低错误的库存来源解释。
+
+**可复现反例**：
+- 外部：A → B = 400M M。
+- 后续复杂交易：B 同一 transaction 收到 100M M，同时从自己的 Token Account 转出 500M M。
+- Owner 净变化 = -400M。
+- 旧逻辑：可能误标 `AMOUNT_COMPATIBLE_BUT_PROVENANCE_UNPROVEN`。
+- 新逻辑：`INTRA_TRANSACTION_NET_DELTA_AMBIGUOUS`。
+- 这只否定错误的“净变化=卖出数量/库存来源”解释，不声称已经解析出真实 swap/gross sale amount。
+
+**证据等级**：
+- `CODE_OBSERVED`: 新歧义检测已提交。
+- `OFFLINE_TESTED`: 现有 wallet-evidence-chain 测试加入 mixed same-Mint inbound/outbound counterexample；当前新HEAD GitHub CI 尚未取得。
+- `ARCHIVED_REAL_REPLAY`: 未取得。
+- `CONNECTED_READONLY_RUNTIME`: 未取得。
+- `SECURE_OPERATIONAL`: 未取得。
+- `MODEL_INTERPRETATION`: 不适用。
+- `UNKNOWN`: 真实主网复杂 swap/transfer 同交易样本、Token-2022 fee、WSOL wrapping、multi-pool 路径仍未验证。
+
+**错误/反例边界**：
+- “净余额下降 400M”不等于“gross sell 400M”。
+- “同交易存在 outbound Token Transfer”也不等于“这就是 DEX sell”；当前代码只把证据降级为 ambiguous，不重新发明 swap parser。
+- 只有明确的 protocol-level swap/transfer 解析，才可能继续讨论 gross executed amount；当前 Blix 不应从净 balance delta 推断。
+
+**下一阻断/可证伪条件**：取得一个许可的真实复杂 versioned Mint transaction，至少包含同 Mint inbound + outbound 或 swap + transfer，比较 `pre/postTokenBalances`、outer/inner Token instructions、实际 DEX event；如果真实样本证明当前歧义检测仍会漏掉 gross-flow masking，再决定是否需要在现有 decoder 中增加更细的 transaction-level flow summary，否则保持 UNKNOWN。 
+
 ## 2026-11-21｜R-52：否证并修正 R-51 的 Versioned/ALT jsonParsed 假设
 
 **本轮最高价值缺口**：不是继续扩展 ALT 规则，而是主动否证上一轮 R-51。对照 Solana 官方 RPC JSON 结构后发现：R-51 的离线 fixture 把 `meta.loadedAddresses` 与 `message.accountKeys` 同时作为 `jsonParsed` 输入，但官方定义中 **jsonParsed 的 `message.accountKeys[]` 已包含 lookup-table accounts，并以 `source:"lookupTable"` 标记；`meta.loadedAddresses` 在 jsonParsed 模式被省略**。因此上一轮“static keys + loadedAddresses”的 fixture 不是实际 jsonParsed 形态，不能继续作为真实 RPC 形态依据。这是本轮必须修正的错误，不保留错误知识。
