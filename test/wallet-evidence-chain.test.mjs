@@ -170,6 +170,26 @@ test('full read-only economic chain survives a post-capture failure and keeps ca
   assert.equal(larger.inventoryLink,'CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER');
   assert.ok(withCounterexample.rows[0].inventoryProvenance.includes('CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER'));
 
+  // Counterexample: a single swap-like transaction can receive and send the same Mint.
+  // The owner's net delta can equal the original transfer even though the gross outbound
+  // amount was larger; net balance alone cannot establish inventory provenance.
+  const mixedFlow=tx('B-mixed-M-flow',second+110,[B,'OTHER',POOL,'ATA_B_IN','ATA_B_OUT','ATA_POOL',TOKEN],{
+    pre:[1e9,1e9,1e9,0,500_000_000,0,0],
+    post:[1.4e9-5000,0.6e9,1e9,100_000_000,0,0,0],
+    preToken:[bal(3,B,M,0),bal(4,B,M,500_000_000),bal(5,POOL,M,0)],
+    postToken:[bal(3,B,M,100_000_000),bal(4,B,M,0),bal(5,POOL,M,500_000_000)],
+    ix:[
+      tok('OTHER','ATA_B_IN',M,100_000_000),
+      tok('ATA_B_OUT','ATA_POOL',M,500_000_000)
+    ]
+  });
+  await wallets.readTx({address:B},{sig:'B-mixed-M-flow',t:(second+110)*1000,quiet:true},()=>{},mixedFlow);
+  const mixed=recipientOutcomes(db,A,M);
+  const mixedRow=mixed.rows[0].observedSells.find(x=>x.sig==='B-mixed-M-flow');
+  assert.equal(mixedRow.sellDeltaRaw,'-400000000');
+  assert.equal(mixedRow.inventoryLink,'INTRA_TRANSACTION_NET_DELTA_AMBIGUOUS');
+  assert.ok(mixed.rows[0].inventoryProvenance.includes('INTRA_TRANSACTION_NET_DELTA_AMBIGUOUS'));
+
   // Counterexample: blockTime has only second precision. A same-second/same-slot sell
   // cannot be proven to occur after the transfer, so it must stay out of the follow-up set.
   const sameSlotSell=tx('B-sells-same-slot',second,[B,POOL,'ATA_B','ATA_POOL',TOKEN],
