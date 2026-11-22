@@ -317,8 +317,19 @@ export function recipientOutcomes(db, sender, mint = null, limit = 20, maxHours 
       const evidence = transactionEvidence(db, sell.sig);
       const sellDeltaRaw = evidence ? ownerTokenBalanceDeltaRaw(evidence.rpc, r.to_owner, r.mint) : null;
       const transferAmountRaw = /^\d+$/.test(String(r.amount_raw ?? '')) ? String(r.amount_raw) : null;
+      const sameMintDirections = evidence
+        ? evidence.instructions.filter(ix => ix.kind === 'TOKEN_TRANSFER' && ix.mint === r.mint
+          && ix.owner_conflict === 0
+          && (ix.from_owner === r.to_owner || ix.to_owner === r.to_owner))
+        : [];
+      const hasMixedSameMintFlow = sameMintDirections.some(ix => ix.from_owner === r.to_owner)
+        && sameMintDirections.some(ix => ix.to_owner === r.to_owner);
       let inventoryLink = 'PROVENANCE_UNKNOWN';
-      if (sellDeltaRaw !== null && transferAmountRaw !== null && BigInt(sellDeltaRaw) < 0n) {
+      if (hasMixedSameMintFlow) {
+        // Net owner balance can hide simultaneous inbound/outbound inventory in one transaction.
+        // Do not call a net-compatible delta provenance evidence.
+        inventoryLink = 'INTRA_TRANSACTION_NET_DELTA_AMBIGUOUS';
+      } else if (sellDeltaRaw !== null && transferAmountRaw !== null && BigInt(sellDeltaRaw) < 0n) {
         const soldRaw = -BigInt(sellDeltaRaw);
         const receivedRaw = BigInt(transferAmountRaw);
         inventoryLink = soldRaw > receivedRaw
