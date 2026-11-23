@@ -1266,3 +1266,28 @@
 - `UNKNOWN`: 第6条及以后仅在“当前已捕获且满足窗口/slot条件”的局部集合内可证明存在；不能推断钱包完整历史。
 
 **下一阻断/可证伪条件**：下一轮优先研究 `getBlock` 的同-slot transaction ordering 如何在不建立第二采集状态机的情况下作为已有 `econ_transactions` 的可选补证；先用离线 block fixture 验证，再决定是否值得进入真实归档。若没有授权真实归档，保持 UNKNOWN，不把 block-order fixture 当主网验收。
+
+## 2026-11-23｜R-54：Token-2022 TransferCheckedWithFee 的 gross / fee / 可用余额不能混成同一数量
+
+**选择理由**：R-53 已禁止把同交易 inbound/outbound 的 owner 净余额变化直接当作库存来源；继续纵深后发现另一个会直接污染 O3 库存与后续卖出判断的缺口：现有经济证据把 Token-2022 `TransferCheckedWithFee` 的 instruction amount 直接作为普通 transfer amount 使用，没有区分 gross transfer amount 与 destination 上被 withheld 的 fee。Solana 官方 Token-2022 文档明确：TransferFeeConfig 会对每次转移收取费用，费用在目的 Token Account 的 withheld 区域记录；`TransferCheckedWithFee` 指令同时携带 amount 与 expected fee。citeturn840435search3turn120402search0turn120402search1
+
+**当前代码依据**：`server/economic-events.mjs` 的 `decodeEvidence()` 原来对 `transferCheckedWithFee` 与普通 token transfer 一样只保存 `amount_raw`；`recipientOutcomes()` 随后用该数量与后续 sell 的 owner net delta 做数量相容判断。这在 fee 存在时可能把 gross 400M 与实际可用 395M 混为一谈。
+
+**本轮修正**：不新增表、不新增采集器。`recipientOutcomes()` 直接回读现有 `econ_instructions.raw_json`，识别原始 transfer instruction 的 `parsed.type=transferCheckedWithFee` 和 `feeAmount/fee`，派生 `transferFeeRaw` 与 `transferNetAmountRaw`；库存相容判断优先使用 net amount。若 sell 不超过 net amount，也只标记 `TOKEN_2022_TRANSFER_FEE_PRESENT_PROVENANCE_UNPROVEN`；超过 net amount 则保持 `CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER`。原始 `amount_raw` 不被改写，保留 gross instruction fact。
+
+**可复现反例**：A→B 的 Token-2022 `TransferCheckedWithFee` gross=400M、fee=5M、B 可用收到=395M；B 后续卖 395M。测试要求结果携带 `transferFeeRaw=5M`、`transferNetAmountRaw=395M`，且不能再走普通 `AMOUNT_COMPATIBLE_BUT_PROVENANCE_UNPROVEN` 分支。该测试仅为离线 synthetic evidence，不能证明真实主网 RPC 已覆盖所有 Token-2022 变体。
+
+**外部反证**：Solana 官方 Token-2022 transfer-fee 文档说明 fee 会被 withheld 在 destination token account；官方示例的 `TransferCheckedWithFee` 明确同时传入 gross amount 与 fee；Token-2022 解码资料将 `amount` 与 `fee` 作为两个独立 instruction 字段。citeturn120402search0turn120402search1
+
+**证据等级**：
+- `CODE_OBSERVED`: 已提交现有经济证据模块的最小修正。
+- `OFFLINE_TESTED`: 新 Token-2022 gross/fee/net 反例已提交；本轮 GitHub CI 尚未取得。
+- `ARCHIVED_REAL_REPLAY`: 未取得。
+- `CONNECTED_READONLY_RUNTIME`: 未取得。
+- `SECURE_OPERATIONAL`: 未取得。
+- `MODEL_INTERPRETATION`: 不适用。
+- `UNKNOWN`: 真实 RPC `jsonParsed` 对不同 Token-2022 fee 指令的字段形态、withheld balance 在 `pre/postTokenBalances` 中的表现，以及复杂 swap/CPI 中 fee 的完整可追踪性仍未主网回放验证。
+
+**错误/边界**：本修正不证明 transfer 是 sale，不证明 B 控制某主体，也不证明后续 sell 来自该 transfer。它只修正数量证据的语义：gross instruction amount ≠ 可直接消费的净收到数量。Token-2022 fee receiver/withheld 资金的后续流动仍需单独证据。
+
+**下一阻断/可证伪条件**：下一轮优先取得一个合法真实 `TransferCheckedWithFee` 历史归档，比较 `parsed instruction amount/fee`、source/destination Token Account `pre/post`、withheld amount 与后续可用余额；若真实 RPC 结构与当前解析假设不同，则把对应字段继续降级为 UNKNOWN，不增加猜测层。
