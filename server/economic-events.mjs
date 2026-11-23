@@ -317,6 +317,22 @@ export function recipientOutcomes(db, sender, mint = null, limit = 20, maxHours 
       const evidence = transactionEvidence(db, sell.sig);
       const sellDeltaRaw = evidence ? ownerTokenBalanceDeltaRaw(evidence.rpc, r.to_owner, r.mint) : null;
       const transferAmountRaw = /^\d+$/.test(String(r.amount_raw ?? '')) ? String(r.amount_raw) : null;
+      // Token-2022 TransferCheckedWithFee amount is gross; the fee is withheld
+      // separately on the destination token account. Preserve that distinction.
+      const transferInstruction = db.prepare('SELECT raw_json, program, kind FROM econ_instructions WHERE sig=? AND outer_i=? AND inner_i=? LIMIT 1').get(r.sig, r.outer_i, r.inner_i);
+      let transferFeeRaw = null;
+      let transferNetAmountRaw = transferAmountRaw;
+      try {
+        const parsedTransfer = transferInstruction?.raw_json ? JSON.parse(transferInstruction.raw_json) : null;
+        const info = parsedTransfer?.parsed?.info;
+        const fee = info?.feeAmount ?? info?.fee ?? null;
+        if (parsedTransfer?.parsed?.type === 'transferCheckedWithFee' && /^\d+$/.test(String(fee ?? ''))) {
+          transferFeeRaw = String(fee);
+          const gross = BigInt(transferAmountRaw ?? '0');
+          const feeBig = BigInt(transferFeeRaw);
+          transferNetAmountRaw = feeBig <= gross ? (gross - feeBig).toString() : null;
+        }
+      } catch {}
       const sameMintDirections = evidence
         ? evidence.instructions.filter(ix => ix.kind === 'TOKEN_TRANSFER' && ix.mint === r.mint
           && ix.owner_conflict === 0
@@ -331,10 +347,16 @@ export function recipientOutcomes(db, sender, mint = null, limit = 20, maxHours 
         inventoryLink = 'INTRA_TRANSACTION_NET_DELTA_AMBIGUOUS';
       } else if (sellDeltaRaw !== null && transferAmountRaw !== null && BigInt(sellDeltaRaw) < 0n) {
         const soldRaw = -BigInt(sellDeltaRaw);
-        const receivedRaw = BigInt(transferAmountRaw);
-        inventoryLink = soldRaw > receivedRaw
-          ? 'CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER'
-          : 'AMOUNT_COMPATIBLE_BUT_PROVENANCE_UNPROVEN';
+        const receivedRaw = BigInt(transferNetAmountRaw ?? transferAmountRaw);
+        if (transferFeeRaw !== null) {
+          inventoryLink = soldRaw > receivedRaw
+            ? 'CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER'
+            : 'TOKEN_2022_TRANSFER_FEE_PRESENT_PROVENANCE_UNPROVEN';
+        } else {
+          inventoryLink = soldRaw > receivedRaw
+            ? 'CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER'
+            : 'AMOUNT_COMPATIBLE_BUT_PROVENANCE_UNPROVEN';
+        }
       }
       const priorInbound = db.prepare(`SELECT 1 FROM econ_instructions
         WHERE kind='TOKEN_TRANSFER' AND owner_conflict=0 AND to_owner=? AND mint=?
@@ -342,7 +364,7 @@ export function recipientOutcomes(db, sender, mint = null, limit = 20, maxHours 
         LIMIT 1`).get(r.to_owner, r.mint, Math.floor(transferAt / 1000));
       if (priorInbound && inventoryLink !== 'CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER')
         inventoryLink = 'PRIOR_CAPTURED_INBOUND_ACTIVITY_EXISTS';
-      return { ...sell, sellDeltaRaw, inventoryLink };
+      return { ...sell, sellDeltaRaw, transferFeeRaw, transferNetAmountRaw, inventoryLink };
     });
     const cross = crossMintCandidates(db, r.to_owner, Math.ceil(windowMs / 3600_000), 25).rows
       .filter(x => x.sold_mint === r.mint && x.sold_at >= transferAt && x.sold_at <= transferAt + windowMs);
