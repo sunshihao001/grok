@@ -170,6 +170,30 @@ test('full read-only economic chain survives a post-capture failure and keeps ca
   assert.equal(larger.inventoryLink,'CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER');
   assert.ok(withCounterexample.rows[0].inventoryProvenance.includes('CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER'));
 
+  // Counterexample: a Token-2022 transfer fee means the gross transfer amount
+  // and spendable received amount differ. The follow-up sell is deliberately
+  // larger than the net received amount but smaller than gross.
+  const feeTransfer=tx('A-fee-transfer',second+90,[A,B,'ATA_A_FEE','ATA_B_FEE','ATA_POOL_FEE',TOKEN],{
+    pre:[1e9,1e9,0,0,0,0],post:[0.6e9-5000,1.4e9,0,0,0,0],
+    preToken:[bal(2,A,M,400_000_000),bal(3,B,M,0),bal(4,'FEE',M,0)],
+    postToken:[bal(2,A,M,0),bal(3,B,M,395_000_000),bal(4,'FEE',M,0)],
+    ix:[{programId:'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',program:'spl-token-2022',
+      parsed:{type:'transferCheckedWithFee',info:{source:'ATA_A_FEE',destination:'ATA_B_FEE',mint:M,
+        tokenAmount:{amount:'400000000',decimals:6},feeAmount:'5000000'}}}]
+  });
+  await wallets.readTx({address:A},{sig:'A-fee-transfer',t:(second+90)*1000,quiet:true},()=>{},feeTransfer);
+  const feeSell=tx('B-sells-token2022-fee-case',second+105,[B,POOL,'ATA_B_FEE','ATA_POOL_FEE',TOKEN],{
+    pre:[1e9,1e9,0,0,0],post:[1.395e9-5000,0.605e9,0,0,0],
+    preToken:[bal(2,B,M,395_000_000),bal(3,POOL,M,0)],
+    postToken:[bal(2,B,M,0),bal(3,POOL,M,395_000_000)],
+    ix:[tok('ATA_B_FEE','ATA_POOL_FEE',M,395_000_000)]
+  });
+  await wallets.readTx({address:B},{sig:'B-sells-token2022-fee-case',t:(second+105)*1000,quiet:true},()=>{},feeSell);
+  const feeCase=recipientOutcomes(db,A,M);
+  const feeRow=feeCase.rows.find(x=>x.sig==='A-fee-transfer')?.observedSells.find(x=>x.sig==='B-sells-token2022-fee-case');
+  assert.equal(feeRow.transferFeeRaw,'5000000');
+  assert.equal(feeRow.transferNetAmountRaw,'395000000');
+  assert.equal(feeRow.inventoryLink,'TOKEN_2022_TRANSFER_FEE_PRESENT_PROVENANCE_UNPROVEN');
   // Counterexample: a single swap-like transaction can receive and send the same Mint.
   // The owner's net delta can equal the original transfer even though the gross outbound
   // amount was larger; net balance alone cannot establish inventory provenance.
