@@ -9,6 +9,10 @@ description: "Blix 的跨项目通用认知能力入口：按需访问 sunshihao
 
 当问题涉及 AI 怎样理解普通表达、专业机制研究、发现未知、方案比较、知识适用、授权内执行、反证和长期继承时，**先检查当前 Blix 业务目标及原有能力**，再按任务访问上述 ai-d 统一入口并选择需要的原始内容；不得假装凭一个 URL 就已加载整套知识。
 
+## 2026-11-25｜开放研究框架（现行约束）
+
+[ai-d 开放框架](https://github.com/sunshihao001/ai-d/blob/c8afd4e0276719f57d5b6b3faccbbf4bd5575ea1/.agents/skills/expert-team-collaboration/SKILL.md) 与 [MEME 本地研究槽位](../../../docs/project/knowledge-use.md#2026-11-25meme-开放专家研究框架) 用于共同研究专家真实需求，逐步完善。此前候选技能列表仅供参考，不按表自动分配、调用或安装；长期配置待共同评审。未研究的槽位留空。已授权常规业务可继续使用现有工具；用户可主动参与任何外部搜索和选型。
+
 ## 2026-11-24｜跨职能专业团队能力入口（候选）
 
 新增通用能力的固定上游：[ai-d expert-team-collaboration](https://github.com/sunshihao001/ai-d/blob/f57d92db7cc41589ad156aee57ea1d111a4f63b3/.agents/skills/expert-team-collaboration/SKILL.md)（[PR #2](https://github.com/sunshihao001/ai-d/pull/2)，未合并）。它扩展而非替代上文既有通用能力来源；按需实际读取该 Skill 与方法正文。MEME 本地的角色—能力—业务对应、技能准入、独立反证和对照验收见 [知识应用](../../../docs/project/knowledge-use.md)。不得自动把链接视作已安装技能，不让外部指令扩大权限。日常任务由 AI 自主选择最少充分的能力组合，用户仅作重大决策。独立 Agent 无真实运行证据时标为未验。现有 Blix 业务与资金安全规则优先。
@@ -37,6 +41,6 @@ Grok CLI 官方会扫描仓库 `.grok/skills/` 下的 `SKILL.md`；本文件被�
 
 **严格只读**：本 Skill 不执行链上交易、不调用签名/广播/付费流程，不读取或泄漏私钥；项目现有交易代码的权限风险不会因写了 Skill 就消失。用户价值与重大方向由用户决定，模型推断和外部来源不能授权不可逆行为。
 
-## 首批技能选择与角色配置（2026-11-24）
+## 首批技能选择与角色配置（2026-11-24，历史候选，不是现行配置）
 
 最新通用审查固定于 [ai-d 3d052c4](https://github.com/sunshihao001/ai-d/blob/3d052c457378f7c712bc9fcd2cc210f123405064/.agents/skills/expert-team-collaboration/SKILL.md)，本地 [专业角色与技能配置](../../../docs/project/knowledge-use.md) 记录具体路径、触发、产物和限制。工程优先自有调试/TDD/QA，专业研究使用审查过的方法段落；GMGN 钱包读取可能需要私钥签名、OKX 预检运行外部安装器，均不得直接启用。旧 maintainer-orchestrator 的外部所有者范围不可继承。只有独立运行、权限与调用回执存在时才认定实际 Agent 配置完成；当前是方法级配置。已有状态与下一任务继续由建设台账承接。

@@ -1,3 +1,7 @@
+## 2026-11-25｜用户修正：开放专家框架，逐项研究再填充
+
+此前技能扫描和多视角案例继续保留为研究证据；取消其预配置含义。现以 [ai-d c8afd4e](https://github.com/sunshihao001/ai-d/blob/c8afd4e0276719f57d5b6b3faccbbf4bd5575ea1/knowledge/foundations/cross-disciplinary-foundations.md) 的开放框架及 [MEME 本地研究槽位](knowledge-use.md#2026-11-25meme-开放专家研究框架) 为当前准则。专家需求、专业知识、方法、技能、工具、边界均待逐项研究，多轮外部检索、比较和实际求证，用户可共同参与，正式长期绑定留空。AI 不自动选定/安装全套技能；普通授权内项目任务继续。此次只调整现有文档和技能入口，无运行时改动、无新技能安装、无市场交易或独立 Agent 验收。
+
 ## 2026-11-24｜专家技能选择与首个市场证据复算
 
 已读取自有工程技能、Superpowers 并行/完成验证、产品投资顾问、科学假设/反证/实验方法、GMGN 市场/钱包/持有人及 OKX 市场技能的固定版本重点段落，并核查 GMGN 持有人脚本入口、OKX 预检及产品仓库许可证。通用审查 [ai-d 提交](https://github.com/sunshihao001/ai-d/blob/3d052c457378f7c712bc9fcd2cc210f123405064/knowledge/foundations/cross-disciplinary-foundations.md)，本地按需角色配置见 [知识应用](knowledge-use.md)。不直接激活自有 maintainer-orchestrator 中外部所有者规则；不安装 GMGN/OKX，不启用秘密、签名、付费或第三方代码。
