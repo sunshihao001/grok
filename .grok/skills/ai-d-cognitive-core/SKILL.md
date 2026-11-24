@@ -36,3 +36,7 @@ Blix 的**Solana Meme 专业知识和产品本身仍是业务主体**。ai-d 负
 Grok CLI 官方会扫描仓库 `.grok/skills/` 下的 `SKILL.md`；本文件被存入该位置，只代表 **Grok CLI 兼容的发现候选**，尚未在云端实际运行和验证自动发现。Grok Bot 的私人共享 Skill 属于单独的 Bot 技能库，需要在该产品启用并测试；**此处的文件不会自动安装到 Grok Bot 云电脑原生 Bot**。其他使用 Blix 的 ChatGPT/Codex 应根据其各自的项目资料与 Skill 机制接入，而不是假定所有客户端都会读取该文件。
 
 **严格只读**：本 Skill 不执行链上交易、不调用签名/广播/付费流程，不读取或泄漏私钥；项目现有交易代码的权限风险不会因写了 Skill 就消失。用户价值与重大方向由用户决定，模型推断和外部来源不能授权不可逆行为。
+
+## 首批技能选择与角色配置（2026-11-24）
+
+最新通用审查固定于 [ai-d 3d052c4](https://github.com/sunshihao001/ai-d/blob/3d052c457378f7c712bc9fcd2cc210f123405064/.agents/skills/expert-team-collaboration/SKILL.md)，本地 [专业角色与技能配置](../../../docs/project/knowledge-use.md) 记录具体路径、触发、产物和限制。工程优先自有调试/TDD/QA，专业研究使用审查过的方法段落；GMGN 钱包读取可能需要私钥签名、OKX 预检运行外部安装器，均不得直接启用。旧 maintainer-orchestrator 的外部所有者范围不可继承。只有独立运行、权限与调用回执存在时才认定实际 Agent 配置完成；当前是方法级配置。已有状态与下一任务继续由建设台账承接。

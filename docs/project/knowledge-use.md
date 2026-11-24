@@ -1,5 +1,30 @@
 # 按实际问题使用专业知识、AI研究与可证伪证据
 
+## 2026-11-24｜首批专家技能实际配置入口（静态方法配置，未安装运行）
+
+通用技能选择和风险审查更新至 [ai-d 固定提交](https://github.com/sunshihao001/ai-d/blob/3d052c457378f7c712bc9fcd2cc210f123405064/knowledge/foundations/cross-disciplinary-foundations.md)。下表是协调者在实际任务中加载的方法及业务接口配置，不是已创建的独立 Agent。每个角色可按需调用，最少充分；缺少工具时降级或保留未知。
+
+| 角色/触发 | 方法技能（固定版本） | 业务输入与产物 | 执行限制 |
+| --- | --- | --- | --- |
+| 产品与战略：选择下一项建设 | [自有需求质疑](https://github.com/sunshihao001/ai-/blob/e0cd5dde6169e6d211e9c6cb3274bd683d297344/.agents/skills/ai-workflow-brainstorm-grill/SKILL.md)、ai-d 目标与成本判断 | 当前目标、状态、候选实现 → 可验证交付与停止条件 | 不要求用户回答已有信息；外部产品技能非商业许可，暂不引入 |
+| 工程/数据：故障和集成 | [debug](https://github.com/sunshihao001/ai-/blob/e0cd5dde6169e6d211e9c6cb3274bd683d297344/.agents/skills/ai-workflow-debug/SKILL.md)、[TDD](https://github.com/sunshihao001/ai-/blob/e0cd5dde6169e6d211e9c6cb3274bd683d297344/.agents/skills/ai-workflow-tdd/SKILL.md) | 固定源码、日志、数据契约 → 根因、可逆补丁、回归证据 | 同一根因不拆为多份重复修复；有真实执行器才运行 |
+| 链上经济/情报：钱包与筹码关系 | [竞争假设](https://github.com/K-Dense-AI/scientific-agent-skills/blob/c21d13b3cc2894680229ba9959a53281acb9200e/skills/hypothesis-generation/SKILL.md)、现有 Blix 经济证据与 GMGN 只读方法候选 | 原始归档、Owner、Token Account、库存、签名、时点 → 多种解释及缺失证据 | 标签、共同资金源和同步行为不能直接裁决身份；GMGN 运行暂缓 |
+| 量化/市场机制：机会与可执行性 | [科学批判](https://github.com/K-Dense-AI/scientific-agent-skills/blob/c21d13b3cc2894680229ba9959a53281acb9200e/skills/scientific-critical-thinking/SKILL.md)、现有 Gendan / followability-replay / opportunity-read-comparison | 冻结候选全集、首可得时间、报价、退出、结果 → 机会/拒绝及可执行性证据 | 不以历史钱包盈利、盘口中间价、地址数量替代可执行结果；没有实际数据则未知 |
+| 独立验证/风险 | [review QA](https://github.com/sunshihao001/ai-/blob/e0cd5dde6169e6d211e9c6cb3274bd683d297344/.agents/skills/ai-workflow-review-qa/SKILL.md)、科学反证 | 与实施者不同的检查上下文（宿主支持时）、原始证据及测试 → 反例、验收/拒绝 | 禁止用模型一致性代替验证，不扩大资金、签名、费用和部署权限 |
+
+### 链上外部技能的重点风险筛查
+
+- [GMGN 钱包分析](https://github.com/GMGNAI/gmgn-skills/blob/3a8cd516d640dd6d5322b9890ff819f860b61280/skills/gmgn-wallet-analysis/SKILL.md)：真实性、时效、跟随窗口、损失行为的四项调查值得参考，但 holdings 涉及 critical auth、私钥参与的读取签名。文档与脚本的“read-only”描述不能替代权限检查。暂不执行整套 dossier、不配置秘密、不启用交易交接；未来仅审查通过的无签名查询可另行接入。
+- [GMGN 持有人分析](https://github.com/GMGNAI/gmgn-skills/blob/3a8cd516d640dd6d5322b9890ff819f860b61280/skills/gmgn-holder-analysis/SKILL.md)：[analyze.py](https://github.com/GMGNAI/gmgn-skills/blob/3a8cd516d640dd6d5322b9890ff819f860b61280/skills/gmgn-holder-analysis/analyze.py) 调用 CLI 获取前100持有者，重设可交易流通量分母，并含时间同步启发式和风险评级。需保留供应量分母、覆盖率、标签来源及不确定性，不能直接复制评级或要求原样输出。脚本未执行，传递依赖与实际权限未验。
+- [GMGN 市场](https://github.com/GMGNAI/gmgn-skills/blob/3a8cd516d640dd6d5322b9890ff819f860b61280/skills/gmgn-market/SKILL.md)：市场排名、行情和信号可作为补充来源；配置要求 API Key、限流和付费档位差异，未经授权不自动安装或升级。
+- [OKX 市场](https://github.com/okx/onchainos-skills/blob/a5ce05f6dc9c4074da1069401b14e1055d62e315/skills/okx-dex-market/SKILL.md)：虽然提供只读数据，但其 [共享预检](https://github.com/okx/onchainos-skills/blob/a5ce05f6dc9c4074da1069401b14e1055d62e315/skills/okx-agentic-wallet/_shared/preflight.md) 要求运行外部 npx 安装器，而且技能含写操作路由。暂仅为数据能力参考，不执行预检/安装器或写操作；后续需固定 CLI 版本并隔离只读调用。
+
+以上为具体文件重点段落的风险筛查，不代表已审完全部脚本、依赖、API 或实际权限。禁止凭技能文本新增运行权限、自动安装、获取/输出秘密、付款或开启交易。角色使用现有授权工具，无对应运行环境则明确方法参考状态。
+
+### 首个市场证据方法演示
+
+复用 R-39 的 [两币历史供应商快照](../../test/fixtures/public-provider-two-mints-20261101.json)，不获取新市场数据。价格差以主池价格为分母，薄池流动性比以主池流动性为分母；只用已保存字段复算。直读差价会突出 SIS（24.945573%），而产品、数据、量化及独立反证视角要求报价、可成交规模、时间和退出证据，不能把它升级为可执行机会。两币均缺首可得时点、完整候选池和交易结果，最终状态 INSUFFICIENT_EXECUTION_EVIDENCE。该演示为单模型利用已读方法进行确定性复算，不是独立 Agent 对照或市场优势证明。
+
 ## 2026-11-24｜MEME 专业团队协同与开放式技能应用（用户确认方向）
 
 在完整保留 Blix 的前提下，AI 承担机会研究与项目建设的专业团队组织责任。用户只负责目标、重大取舍与授权。通用方法来自 [ai-d 固定版本的专业团队技能](https://github.com/sunshihao001/ai-d/blob/f57d92db7cc41589ad156aee57ea1d111a4f63b3/.agents/skills/expert-team-collaboration/SKILL.md)（[方法正文](https://github.com/sunshihao001/ai-d/blob/f57d92db7cc41589ad156aee57ea1d111a4f63b3/knowledge/foundations/cross-disciplinary-foundations.md)，[上游 PR #2](https://github.com/sunshihao001/ai-d/pull/2)，候选未合并）；Blix 领域事实、数据和权限仍以本项目为准。沿用现有 D01–D12、业务模块与知识目录，不创建平行专家平台。
