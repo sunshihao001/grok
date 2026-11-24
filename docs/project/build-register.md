@@ -3,7 +3,7 @@
 **本轮最高价值缺口**：继续追 R-54 后没有再增加 Token-2022 规则，而是寻找真实主网 `transferCheckedWithFee` 交易来跨过 `OFFLINE_TESTED → ARCHIVED_REAL_REPLAY` 的证据门槛。
 
 **实际外部证据**：
-- 当前公开 Solscan 账户索引页面已经显示真实主网账户存在 `transferCheckedWithFee` 活动，并给出具体 transaction signature；例如 KuCoin Cold Wallet 页面列出 `2dRcDZxEtwYtrSumZB1dF7M5RyF2EnhdGCz2Fc53oRFXZv6jF7M5RyF2EnhdGCz2Fc53oRFXZvFjR2YLKHCLET287NsRT3NJAVFxczV8BShanMZin` 的 `transferCheckedWithFee` 活动。[Solscan account](https://solscan.io/account/6BhBoBB47wSGjK5uzcGWNcTf2oNRPQNuv6GVdkNyj9PB)
+- 当前公开 Solscan 账户索引页面已经显示真实主网账户存在 `transferCheckedWithFee` 活动，并给出具体 transaction signature；例如 KuCoin Cold Wallet 页面列出 `2dRcDZxEtwYtrSumZB1dF7M5RyF2EnhdGCz2Fc53oRFXZvFjR2YLKHCLET287NsRT3NJAVFxczV8BShanMZin` 的 `transferCheckedWithFee` 活动。[Solscan account](https://solscan.io/account/6BhBoBB47wSGjK5uzcGWNcTf2oNRPQNuv6GVdkNyj9PB)
 - Solana 官方 Token-2022 文档确认 `TransferCheckedWithFee` 携带 transfer amount 与 fee；fee 在目的 Token Account withheld，而不是简单等同于完整交易成本。[官方 Transfer Fees](https://solana.com/docs/tokens/extensions/transfer-fees)
 - Envio 的实证索引文章进一步指出 `transferCheckedWithFee` 既可作为 top-level instruction，也大量出现在 inner instructions；这支持继续把 outer/inner 两层都作为 Blix 的证据入口，而不是只看顶层。[Envio Solana transfer indexing](https://docs.envio.dev/blog/index-solana-stablecoin-transfers)
 
@@ -497,25 +497,3 @@
 - [Blix多层锚点第12节：纠偏对象、归属、样例与验证](cross-layer-anchor-map-20261113.md#12-2026-11-13纠偏的专业扩写从修一处错到首个失效环节职责与全链结果-v03)，只在现有O1–O6/源/代码/测试中追查，不创建新的全仓映射引擎。
 
 **源码核对与风险优先级**：原版rpc-stream.js重连有从链头接续且跳过消息的明确实现取舍；sources.js PumpPortal WS已有重连，**但不能只看此文件就推断Blix没有发行补查**：engine.js::backfillLaunches已有启动和周期有界近期列表回填，fillLaunchGaps通过livetrades.js交叉发现；钱包端wallets.js已有轮询补查，wallet-signature-coverage.mjs仍清楚记录初次采样不足/历史不完整，economic-claim-trace.mjs明确sell摘要不能证明同批转入库存；pulse-discovery.mjs只处理有限浏览器候选；followability-replay.mjs可计算有严格来源的纸面收据但不证明真实盈利。**这些只是源可见事实与潜在错误传播路径，不证明供应商/真实市场实际漏包或已验证的具体资金错误**。见原映射中带证据等级的优先对象表。
-
-**新增判断**：
-1. 错误分层：现象/真实根因/促成因素/错误传播/验收失败，不能见到一处不合预期就说“已确认八个BUG”。
-2. 权限分层：下游AI可以发现并解释，但数据源损伤由原采集/供应商接入所有者改；协议事实由确定性解析；高风险/资金/对外操作仍需许可。
-3. 深度选择：简单局部错误直接修并回归；反复、跨模块和高成本错误才展开RCA、反证、影响检查。若目标认识本身错了，按双环方式调整假设并保持用户最终目的由本人决定。
-4. 效果验收：一个报告改好≠源端改善；源码/合成测试≠主网有效；修了一个问题还要核查下游消费者和回归，没有新增真实证据不能升级状态。
-5. 防止过度纠偏：若又开始反复增加流程/概念而缺工程实证，应停止写报告，回到R0/R1已有实际阻断。
-
-**本轮动作**：研究成熟ASQ、Google SRE、Argyris原始来源，结合Blix已存在源码，在原文档与现有台账原位更新。没有运行市场采集、交易、付费服务；没有修改运行源码或解决PR#23合并冲突。
-
-**后续真实执行优先顺序**：R0权限/原版/PR冲突核查；R1优先对源端WS/RPC断流后的缺口记录与补查机制，先核已有逻辑/外部供应商历史能力，再选择有权修改的公共组件实施；用真实或可控反例验证同一上游纠正能否同时惠及多个下游，绝不在AI sidecar平行造数据源。失败或阻断必须保留UNKNOWN和复开条件。
-
-**状态**：CROSS_LAYER_CORRECTION_RESEARCHED + SOURCE_CODE_BOUNDARY_REVIEWED + REMEDIATION_CANDIDATES_REGISTERED / NO_NEW_RUNTIME_VERIFICATION。
-
-**2026-11-13 R-31补充｜预防性纠偏，不只做事后复盘**：在[跨层锚点第12.5节](cross-layer-anchor-map-20261113.md#125-预防性纠偏对重要公共风险提前预演但不能把风险候选报成已发现bug)以FMEA思路检查高损失、跨模块、难察觉的潜在失效，登记源重连窗口、Pulse采样误用、Owner/库存归因、纸面收益错级、只读权限和纠偏本身膨胀六类**风险候选**；并在[ai-d通用知识第13.10节](https://github.com/sunshihao001/ai-d/blob/main/knowledge/foundations/cross-layer-project-anchors.md#1310-预测性纠偏与误差控制不只等错误发生后纠正)补足“已发生的反应性纠错/尚未发生的预防性纠偏”与停止边界。依据[ASQ FMEA](https://asq.org/quality-resources/fmea)，但未给无证据的缺陷虚构概率或将候选写成BUG。仍未运行真实源、未修改运行代码；验收必须在原数据源/解析所有者和真实业务反例中完成，不再扩建纠偏Agent/独立管理系统。
-
-## 2026-11-13｜R-30：数据源责任纠偏——优先提高上游共同能力，不让AI替数据源补个例
-
-**用户明确要求**：“尽量不要直接做数据源应该做的，因为没有提高数据源。”此要求修正R0/R1实施焦点：下游单Mint报告和AI工作台可以检查事实与提出补查需求，但**不承担重复抓取全市场、为单币另建RPC签名游标、手工拼齐历史、把客户端时间当源端首次可见**。应把查到的缺口反馈给真正拥有该职责的原版Blix采集/持久化或外部供应商选择层。
-
-**本轮源级源码事实与候选改进**：
-- server/sources.js::pumpStream 使用PumpPortal WS和重连；经**跨文件二次核查**，原版server/engine.js::backfillLaunches（启动有界8页、每45秒有界4页的pump.fun近期列表查询，429停止）和fillLaunchGaps（livetrades链上create交叉发现）**已经提供部分发行补查**，server/livetrades.js也有短时间运行状态恢复。先测试它们是否满足指定断流/重启窗口，再讨论补充事件级缺口水位或供应商历史能力。不能再将“pumpStream文件中没有补查”误写为“整个Blix没有补查”。已有补查不代表全部交易事件、源首次可得时间和全市场覆盖完整。
