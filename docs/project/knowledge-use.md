@@ -1,5 +1,68 @@
 # 按实际问题使用专业知识、AI研究与可证伪证据
 
+## 2026-11-25｜MEME 开放专家研究框架
+
+**现行用户决定：** 先留开放底子，专家专业需求本身必须经过研究求证；不先按已找到的技能定义专家，不冻结团队结构，也不将候选技能安排成正式配置。使用 [ai-d 通用开放框架](https://github.com/sunshihao001/ai-d/blob/c8afd4e0276719f57d5b6b3faccbbf4bd5575ea1/knowledge/foundations/cross-disciplinary-foundations.md#2026-11-25开放专家框架与逐项研究)，领域事实与既有业务仍以 Blix 为准。如下仅为研究槽位，可拆分、合并、增加或取消。
+
+| 初始研究槽位 | 初步业务问题（不等于已确定职责） | 详细专业需求 | 正式技能/工具绑定 | 状态 |
+| --- | --- | --- | --- | --- |
+| 战略与项目价值 | 建设目标、投入取舍 | 待研究 | 留空 | 未配置 |
+| 产品与使用场景 | 用户需求、机会调查产品 | 待研究 | 留空 | 未配置 |
+| 软件与系统工程 | 实现、维护、运行质量 | 待研究 | 留空 | 未配置 |
+| 数据与证据工程 | 采集、归档、语义、数据质量 | 待研究 | 留空 | 未配置 |
+| 链上经济与市场参与者 | 钱包、筹码、库存、资金行为 | 待研究 | 留空 | 未配置 |
+| 金融量化与交易执行 | 微观结构、机会、成本、退出 | 待研究 | 留空 | 未配置 |
+| 科学研究与跨行业专家 | 未知机制、外部方法与反证 | 待研究 | 留空 | 未配置 |
+| 风险与独立验证 | 失败、权限、证据及验收 | 待研究 | 留空 | 未配置 |
+| 团队协调 | 专业互补、冲突和成果整合 | 待研究 | 留空 | 未配置 |
+
+每个槽位后续独立进行专业研究：真实专家的工作对象、决策与职责边界 → 所需知识、理论、实践、方法、技能和数据工具 → 多语言、多渠道外部搜索 → 候选版本、适用性与对比 → 实际任务求证和反例 → 用户与 AI 共同评审 → 正式填充与运行验收。该关系用于组织研究，不是强制阶段；研究可以由新发现反向修订角色及需求。每次只完善有实际依据的部分，不为填空强行选技能。用户可以主动补充任何领域的候选；AI 可主动检索与提出建议，但不得擅自确定长期绑定。
+
+建议在本节按研究槽位继续追加：专业需求证据、外部搜索词、候选来源与版本、实际研究结论、反例、未解决事项、用户共同评审、正式绑定、运行验收。后两项当前保持留空。可用既有 Blix 工具开展授权内常规任务，不将历史知识、候选技能或当前工具使用等同于新专家配置。不创建平行平台；不得自动安装或扩大资金、签名、付费、部署权限。
+
+**状态：OPEN_FRAMEWORK / RESEARCH_PENDING / NO_EXPERT_SKILL_BINDINGS。** 下文11月24日映射与风险筛查是历史候选研究记录，不具有默认分配、准入或执行权；历史快照复算也不是团队效果验证。
+
+## 2026-11-24｜首批专家技能实际配置入口（历史候选映射，未安装运行）
+
+通用技能选择和风险审查更新至 [ai-d 固定提交](https://github.com/sunshihao001/ai-d/blob/3d052c457378f7c712bc9fcd2cc210f123405064/knowledge/foundations/cross-disciplinary-foundations.md)。下表是此前提出的候选方法及业务接口研究线索，不是正式配置或已创建的独立 Agent。每个角色可按需调用，最少充分；缺少工具时降级或保留未知。
+
+| 角色/触发 | 方法技能（固定版本） | 业务输入与产物 | 执行限制 |
+| --- | --- | --- | --- |
+| 产品与战略：选择下一项建设 | [自有需求质疑](https://github.com/sunshihao001/ai-/blob/e0cd5dde6169e6d211e9c6cb3274bd683d297344/.agents/skills/ai-workflow-brainstorm-grill/SKILL.md)、ai-d 目标与成本判断 | 当前目标、状态、候选实现 → 可验证交付与停止条件 | 不要求用户回答已有信息；外部产品技能非商业许可，暂不引入 |
+| 工程/数据：故障和集成 | [debug](https://github.com/sunshihao001/ai-/blob/e0cd5dde6169e6d211e9c6cb3274bd683d297344/.agents/skills/ai-workflow-debug/SKILL.md)、[TDD](https://github.com/sunshihao001/ai-/blob/e0cd5dde6169e6d211e9c6cb3274bd683d297344/.agents/skills/ai-workflow-tdd/SKILL.md) | 固定源码、日志、数据契约 → 根因、可逆补丁、回归证据 | 同一根因不拆为多份重复修复；有真实执行器才运行 |
+| 链上经济/情报：钱包与筹码关系 | [竞争假设](https://github.com/K-Dense-AI/scientific-agent-skills/blob/c21d13b3cc2894680229ba9959a53281acb9200e/skills/hypothesis-generation/SKILL.md)、现有 Blix 经济证据与 GMGN 只读方法候选 | 原始归档、Owner、Token Account、库存、签名、时点 → 多种解释及缺失证据 | 标签、共同资金源和同步行为不能直接裁决身份；GMGN 运行暂缓 |
+| 量化/市场机制：机会与可执行性 | [科学批判](https://github.com/K-Dense-AI/scientific-agent-skills/blob/c21d13b3cc2894680229ba9959a53281acb9200e/skills/scientific-critical-thinking/SKILL.md)、现有 Gendan / followability-replay / opportunity-read-comparison | 冻结候选全集、首可得时间、报价、退出、结果 → 机会/拒绝及可执行性证据 | 不以历史钱包盈利、盘口中间价、地址数量替代可执行结果；没有实际数据则未知 |
+| 独立验证/风险 | [review QA](https://github.com/sunshihao001/ai-/blob/e0cd5dde6169e6d211e9c6cb3274bd683d297344/.agents/skills/ai-workflow-review-qa/SKILL.md)、科学反证 | 与实施者不同的检查上下文（宿主支持时）、原始证据及测试 → 反例、验收/拒绝 | 禁止用模型一致性代替验证，不扩大资金、签名、费用和部署权限 |
+
+### 链上外部技能的重点风险筛查
+
+- [GMGN 钱包分析](https://github.com/GMGNAI/gmgn-skills/blob/3a8cd516d640dd6d5322b9890ff819f860b61280/skills/gmgn-wallet-analysis/SKILL.md)：真实性、时效、跟随窗口、损失行为的四项调查值得参考，但 holdings 涉及 critical auth、私钥参与的读取签名。文档与脚本的“read-only”描述不能替代权限检查。暂不执行整套 dossier、不配置秘密、不启用交易交接；未来仅审查通过的无签名查询可另行接入。
+- [GMGN 持有人分析](https://github.com/GMGNAI/gmgn-skills/blob/3a8cd516d640dd6d5322b9890ff819f860b61280/skills/gmgn-holder-analysis/SKILL.md)：[analyze.py](https://github.com/GMGNAI/gmgn-skills/blob/3a8cd516d640dd6d5322b9890ff819f860b61280/skills/gmgn-holder-analysis/analyze.py) 调用 CLI 获取前100持有者，重设可交易流通量分母，并含时间同步启发式和风险评级。需保留供应量分母、覆盖率、标签来源及不确定性，不能直接复制评级或要求原样输出。脚本未执行，传递依赖与实际权限未验。
+- [GMGN 市场](https://github.com/GMGNAI/gmgn-skills/blob/3a8cd516d640dd6d5322b9890ff819f860b61280/skills/gmgn-market/SKILL.md)：市场排名、行情和信号可作为补充来源；配置要求 API Key、限流和付费档位差异，未经授权不自动安装或升级。
+- [OKX 市场](https://github.com/okx/onchainos-skills/blob/a5ce05f6dc9c4074da1069401b14e1055d62e315/skills/okx-dex-market/SKILL.md)：虽然提供只读数据，但其 [共享预检](https://github.com/okx/onchainos-skills/blob/a5ce05f6dc9c4074da1069401b14e1055d62e315/skills/okx-agentic-wallet/_shared/preflight.md) 要求运行外部 npx 安装器，而且技能含写操作路由。暂仅为数据能力参考，不执行预检/安装器或写操作；后续需固定 CLI 版本并隔离只读调用。
+
+以上为具体文件重点段落的风险筛查，不代表已审完全部脚本、依赖、API 或实际权限。禁止凭技能文本新增运行权限、自动安装、获取/输出秘密、付款或开启交易。角色使用现有授权工具，无对应运行环境则明确方法参考状态。
+
+### 首个市场证据方法演示
+
+复用 R-39 的 [两币历史供应商快照](../../test/fixtures/public-provider-two-mints-20261101.json)，不获取新市场数据。价格差以主池价格为分母，薄池流动性比以主池流动性为分母；只用已保存字段复算。直读差价会突出 SIS（24.945573%），而产品、数据、量化及独立反证视角要求报价、可成交规模、时间和退出证据，不能把它升级为可执行机会。两币均缺首可得时点、完整候选池和交易结果，最终状态 INSUFFICIENT_EXECUTION_EVIDENCE。该演示为单模型利用已读方法进行确定性复算，不是独立 Agent 对照或市场优势证明。
+
+## 2026-11-24｜MEME 专业团队协同与开放式技能应用（用户确认方向）
+
+在完整保留 Blix 的前提下，AI 承担机会研究与项目建设的专业团队组织责任。用户只负责目标、重大取舍与授权。通用方法来自 [ai-d 固定版本的专业团队技能](https://github.com/sunshihao001/ai-d/blob/f57d92db7cc41589ad156aee57ea1d111a4f63b3/.agents/skills/expert-team-collaboration/SKILL.md)（[方法正文](https://github.com/sunshihao001/ai-d/blob/f57d92db7cc41589ad156aee57ea1d111a4f63b3/knowledge/foundations/cross-disciplinary-foundations.md)，[上游 PR #2](https://github.com/sunshihao001/ai-d/pull/2)，候选未合并）；Blix 领域事实、数据和权限仍以本项目为准。沿用现有 D01–D12、业务模块与知识目录，不创建平行专家平台。
+
+| 任务所需专业能力 | 具体业务责任与已有入口 | 候选技能/工具 |
+| --- | --- | --- |
+| 产品、战略与协调 | 明确是调查价值、交易机会还是执行可行性；用目标图、状态、交付记录选择工作，比较复用和自建 | ai-d 专业团队技能；ai- 需求/维护者编排；Product Manager Skills 待审 |
+| 链上经济、法务会计、情报分析 | 钱包/Owner/Token Account、转移与成交、资金库存及独立主体竞争解释；经济证据与归档 | `server/economic-events.mjs`、`server/intelligence/mint-economic-evidence.mjs`、Blix 既有工具；[GMGN](https://github.com/GMGNAI/gmgn-skills)、[OKX](https://github.com/okx/onchainos-skills) 仅经审查的只读能力候选 |
+| 量化、微观结构、行为与跨学科科学 | 可得时间、群体信号、筹码迁移、流动性/滑点/退出、反例、资本循环；不将结构代理当优势 | Gendan 专项研究、[Scientific Agent Skills](https://github.com/K-Dense-AI/scientific-agent-skills) 待审；`server/intelligence/opportunity-read-comparison.mjs`、`followability-replay.mjs` |
+| 架构、开发、数据、质量与安全 | 先复用 Blix 采集/UI/只读调查；定位首个责任层、保持原版、隔离资金权限、测试和回归 | [自有 ai-](https://github.com/sunshihao001/ai-) 的调试/TDD/审查技能；Superpowers 等待审；现有 Node 测试及安全专项 |
+| 独立反证、成本与进化 | 针对关键假设提出竞争解释；比较任务结果、工具/模型成本、人工干预与维护负担；反馈现有建设台账 | 现有离线测试、原始归档、同候选池对照与 ai-d 评测方法 |
+
+按实际任务动态选择最少充分的互补专业角色；必要时发现未列出的行业方法。读取具体 SKILL.md/源码及固定版本，核查依赖、许可证、权限、外传、费用、维护和效果，未审不执行。外部技能不得扩大授权或绕过现有只读工具边界，不能启用钱包、签名、广播、付款或未批准模型/部署；不可用角色/技能明确记录缺口，不假称加载。真正独立智能体须有独立上下文、工具调用与产物记录；不支持时说明是单模型多视角。先独立调查再交叉反证，不以共识代替证据。简单任务直接处理。
+
+**应用验收。** 对当前真实工程阻塞先使用冻结提交、CI 和源码核对，区别事实、假设、交付、成本；对市场问题复用原版与增强版同候选池比较、真实归档和纸面回放，另行核实报价/费用/滑点/退出与事后结果。对照直接模型、单模型按需技能及实际独立团队（宿主支持时），记录技能版本、关键遗漏/误报、反证、成果、调用成本、人工干预；有有效增量才扩大团队。未知保持未知，禁止以离线或角色扮演证明市场优势。工作成果与下一任务回写既有建设台账；无授权/资源或高价值任务已完成时保存断点，不虚称后台。状态：用户确认方向，仓库入口候选，技能实际安装、独立团队和市场收益均未验。
+
 **2026-11-24｜知识进入业务的证据。** 钱包身份、费用、库存流与区块内顺序已落实到经济证据规则、只读报告及离线反例。知识加载器可以按范围提供来源，受控测试观察到它改变工具选择和追加调查。执行集群归因、跟随性和机会优势仍需真实案例对照。旧 Hermes 反例继续保留；转账、净流量和共同服务分别保留语义，缺数据时保留未知。市场时点、可执行成本、退出证据与发现效果用[交付记录](delivery.md)中的同源案例验收，运行结论见[建设台账](build-register.md)。
 
 
