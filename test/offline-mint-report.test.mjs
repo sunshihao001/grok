@@ -45,6 +45,12 @@ test('an existing local transaction archive yields a sender-to-recipient Mint re
     persistEvidence(db,'archive-only-transfer',original);
     db.prepare('INSERT INTO wallet_trades(sig,wallet,mint,side,sol,t) VALUES(?,?,?,?,?,?)')
       .run('recipient-later-sale',B,M,'sell',1,1700000080000);
+    // A local sell summary needs a matching successful archive entry for chain order.
+    persistEvidence(db,'recipient-later-sale',{
+      slot:152, blockTime:1700000080,
+      transaction:{signatures:['recipient-later-sale'],message:{accountKeys:[B],instructions:[]}},
+      meta:{err:null},
+    });
     db.close();
     const before = hash(file);
     const report = JSON.parse(execFileSync(process.execPath,args(file),{encoding:'utf8',timeout:15000}));
@@ -56,6 +62,8 @@ test('an existing local transaction archive yields a sender-to-recipient Mint re
     assert.equal(report.recipients[0].amountRaw,'400000000');
     assert.equal(report.recipients[0].sellObservation,'LOCAL_SELL_SUMMARY_OBSERVED');
     assert.deepEqual(report.recipients[0].observedSells.map(x=>x.sig),['recipient-later-sale']);
+    assert.equal(report.recipients[0].observedSells[0].blockTime,1700000080);
+    assert.equal(report.recipients[0].observedSells[0].inventoryLink,'PROVENANCE_UNKNOWN');
     assert.ok(!JSON.stringify(report).includes('rpc_json'),'report exposes metadata, not whole raw transaction');
     assert.equal(hash(file),before,'even in shared filesystem the report leaves the SQLite bytes unchanged');
     // The user-facing investigation starts with a Mint, not a preselected wallet.

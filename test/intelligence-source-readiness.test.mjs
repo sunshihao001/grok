@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { execFileSync,spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
+import { initEvidence, persistEvidence } from '../server/economic-events.mjs';
 
 const script=fileURLToPath(new URL('../scripts/audit-intelligence-source-readiness.mjs',import.meta.url));
 const mint='EYqygbhZjP7EbM4fSn8devctnksAvPAD1Bt57XBFpump';
@@ -153,9 +154,22 @@ test('Mint-specific preflight reads only existing indexed rows and cannot create
     assert.equal((await probeExistingEconomicMint({databasePath:absentPath,mint})).ready,false);
     assert.equal(existsSync(absentPath),false);
     assert.equal((await probeExistingEconomicMint({databasePath:absentPath,mint:'invalid'})).status,'INVALID_MINT_SCOPE');
+    const legacy=new DatabaseSync(file);
+    legacy.exec('CREATE TABLE econ_transactions(sig TEXT PRIMARY KEY,slot INTEGER,block_time INTEGER,rpc_json TEXT NOT NULL,sha256 TEXT NOT NULL,observed_at INTEGER NOT NULL);'
+      +'CREATE TABLE wallet_trades(sig TEXT,wallet TEXT,mint TEXT,side TEXT,sol REAL,t INTEGER)');
+    legacy.close();
+    const legacyDigest=digest(file);
+    assert.deepEqual(await probeExistingEconomicMint({databasePath:file,mint}),
+      {ready:false,status:'ECONOMIC_ARCHIVE_SCHEMA_UNAVAILABLE'});
+    assert.equal(digest(file),legacyDigest,'preflight must not migrate an older archive');
     const db=new DatabaseSync(file);
-    db.exec('CREATE TABLE econ_instructions(mint TEXT); CREATE TABLE wallet_trades(mint TEXT)');
-    db.prepare('INSERT INTO econ_instructions(mint) VALUES(?)').run(mint);
+    initEvidence(db);
+    persistEvidence(db,'local-indexed',{
+      slot:1,blockTime:1,meta:{err:null},
+      transaction:{signatures:['local-indexed'],message:{accountKeys:[],instructions:[{
+        program:'spl-token',parsed:{type:'transferChecked',info:{mint,source:'A',destination:'B',tokenAmount:{amount:'1'}}},
+      }]}},
+    });
     db.close();
     const before=digest(file);
     assert.deepEqual(await probeExistingEconomicMint({databasePath:file,mint}),

@@ -13,7 +13,7 @@ process.env.BLIX_MARKET_FEEDS='0';
 const { db } = await import('../server/db.js');
 const wallets=await import('../server/wallets.js');
 const wtrack=await import('../server/wtrack.js');
-const { decodeEvidence, recipientOutcomes, recipientCandidates, transactionEvidence, walletProcessing, recordBlockTransactionOrder } = await import('../server/economic-events.mjs');
+const { initEvidence, decodeEvidence, recipientOutcomes, recipientCandidates, transactionEvidence, walletProcessing, recordBlockTransactionOrder } = await import('../server/economic-events.mjs');
 const { checkpointWalletPage, pendingWalletSignatures } =
   await import('../server/wallet-signature-coverage.mjs');
 
@@ -37,6 +37,7 @@ const tx=(sig,at,keys,{pre,post,preToken=[],postToken=[],ix=[],inner=[]})=>({
 test.after(()=>{try{db.close();}catch{}fs.rmSync(folder,{recursive:true,force:true});});
 
 test('fresh evidence schema and versioned ALT account indexes remain decodable',()=>{
+  initEvidence(db);
   const columns=db.prepare('PRAGMA table_info(econ_transactions)').all().map(r=>r.name);
   assert.ok(columns.includes('status'),'fresh evidence schema must include the status column used by persistEvidence');
   const versioned={
@@ -179,7 +180,7 @@ test('full read-only economic chain survives a post-capture failure and keeps ca
     postToken:[bal(2,A,M,0),bal(3,B,M,395_000_000),bal(4,'FEE',M,0)],
     ix:[{programId:'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',program:'spl-token-2022',
       parsed:{type:'transferCheckedWithFee',info:{source:'ATA_A_FEE',destination:'ATA_B_FEE',mint:M,
-        tokenAmount:{amount:'400000000',decimals:6},feeAmount:'5000000'}}}]
+        tokenAmount:{amount:'400000000',decimals:6},feeAmount:{amount:'5000000',decimals:6}}}}]
   });
   await wallets.readTx({address:A},{sig:'A-fee-transfer',t:(second+90)*1000,quiet:true},()=>{},feeTransfer);
   const feeSell=tx('B-sells-token2022-fee-case',second+105,[B,POOL,'ATA_B_FEE','ATA_POOL_FEE',TOKEN],{
@@ -191,6 +192,7 @@ test('full read-only economic chain survives a post-capture failure and keeps ca
   await wallets.readTx({address:B},{sig:'B-sells-token2022-fee-case',t:(second+105)*1000,quiet:true},()=>{},feeSell);
   const feeCase=recipientOutcomes(db,A,M);
   const feeRow=feeCase.rows.find(x=>x.sig==='A-fee-transfer')?.observedSells.find(x=>x.sig==='B-sells-token2022-fee-case');
+  assert.equal(feeRow.priorCapturedInbound,true);
   assert.equal(feeRow.transferFeeRaw,'5000000');
   assert.equal(feeRow.transferNetAmountRaw,'395000000');
   assert.equal(feeRow.inventoryLink,'TOKEN_2022_TRANSFER_FEE_PRESENT_PROVENANCE_UNPROVEN');
@@ -209,10 +211,11 @@ test('full read-only economic chain survives a post-capture failure and keeps ca
   });
   await wallets.readTx({address:B},{sig:'B-mixed-M-flow',t:(second+110)*1000,quiet:true},()=>{},mixedFlow);
   const mixed=recipientOutcomes(db,A,M);
-  const mixedRow=mixed.rows[0].observedSells.find(x=>x.sig==='B-mixed-M-flow');
+  const originalReceipt = report => report.rows.find(x=>x.sig==='buy-and-transfer');
+  const mixedRow=originalReceipt(mixed).observedSells.find(x=>x.sig==='B-mixed-M-flow');
   assert.equal(mixedRow.sellDeltaRaw,'-400000000');
   assert.equal(mixedRow.inventoryLink,'INTRA_TRANSACTION_NET_DELTA_AMBIGUOUS');
-  assert.ok(mixed.rows[0].inventoryProvenance.includes('INTRA_TRANSACTION_NET_DELTA_AMBIGUOUS'));
+  assert.ok(originalReceipt(mixed).inventoryProvenance.includes('INTRA_TRANSACTION_NET_DELTA_AMBIGUOUS'));
 
   // Counterexample: blockTime has only second precision. A same-second/same-slot sell
   // cannot be proven to occur after the transfer, so it must stay out of the follow-up set.
@@ -223,12 +226,12 @@ test('full read-only economic chain survives a post-capture failure and keeps ca
     ix:[tok('ATA_B','ATA_POOL',M,400_000_000)]});
   await wallets.readTx({address:B},{sig:'B-sells-same-slot',t:second*1000,quiet:true},()=>{},sameSlotSell);
   const ordered=recipientOutcomes(db,A,M);
-  assert.equal(ordered.rows[0].observedSells.some(x=>x.sig==='B-sells-same-slot'),false);
+  assert.equal(originalReceipt(ordered).observedSells.some(x=>x.sig==='B-sells-same-slot'),false);
 
   // A complete getBlock response can provide deterministic ordering inside one slot.
   // Indexing is optional evidence: until both transactions are present in that block,
   // same-slot ordering remains UNKNOWN.
-  const blockSlot=ordered.rows[0].slot;
+  const blockSlot=originalReceipt(ordered).slot;
   const order=recordBlockTransactionOrder(db,{
     slot:blockSlot,
     transactions:[
@@ -238,7 +241,7 @@ test('full read-only economic chain survives a post-capture failure and keeps ca
   });
   assert.equal(order.matched,2);
   const orderedWithBlock=recipientOutcomes(db,A,M);
-  assert.equal(orderedWithBlock.rows[0].observedSells.some(x=>x.sig==='B-sells-same-slot'),true);
+  assert.equal(originalReceipt(orderedWithBlock).observedSells.some(x=>x.sig==='B-sells-same-slot'),true);
 
   // Coverage counterexample: more than five valid follow-up sells must not silently
   // look like a complete five-row history.
@@ -251,9 +254,11 @@ test('full read-only economic chain survives a post-capture failure and keeps ca
     await wallets.readTx({address:B},{sig:'B-sells-extra-'+i,t:(second+200+i)*1000,quiet:true},()=>{},extra);
   }
   const capped=recipientOutcomes(db,A,M);
-  assert.equal(capped.rows[0].observedSells.length,5);
-  assert.equal(capped.rows[0].observedSellsTruncated,true);
+  assert.equal(originalReceipt(capped).observedSells.length,5);
+  assert.equal(originalReceipt(capped).observedSellsTruncated,true);
 
-  assert.equal(db.prepare('SELECT COUNT(*) n FROM econ_transactions').get().n,10);
+  const archived = db.prepare('SELECT sig FROM econ_transactions ORDER BY sig').all().map(row => row.sig);
+  assert.deepEqual(archived, [first, sell, transfer, buyN, largerSell, feeTransfer, feeSell, mixedFlow, sameSlotSell]
+    .map(row => row.transaction.signatures[0]).concat(['B-sells-extra-0','B-sells-extra-1','B-sells-extra-2','B-sells-extra-3']).sort());
  } finally {globalThis.fetch=original;}
 });

@@ -39,6 +39,12 @@ function seededArchive(file) {
   });
   db.prepare('INSERT INTO wallet_trades(sig,wallet,mint,side,sol,t) VALUES (?,?,?,?,?,?)')
     .run('receiver-sells',B,M,'sell',1,1700000080000);
+  // A local sell summary needs a matching successful archive entry for chain order.
+  persistEvidence(db,'receiver-sells',{
+    slot:152, blockTime:1700000080,
+    transaction:{signatures:['receiver-sells'],message:{accountKeys:[B],instructions:[]}},
+    meta:{err:null},
+  });
   db.close();
 }
 

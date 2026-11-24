@@ -16,8 +16,11 @@ test('user decision is distinguished from production verification', () => {
   assert.equal(state.branch,'blix');
   assert.equal(state.decision.status,'USER_CONFIRMED');
   assert.equal(state.decision.live_state,'NOT_VERIFIED');
-  assert.equal(state.next.find(t => t.id === 'SAFE').status, 'STATIC_AUDIT_ONLY_NO_RUNTIME');
-  assert.equal(state.next.find(t => t.id === 'MINT').status, 'PAUSED_UNTIL_USER_AUTHORIZES_EXECUTION');
+  assert.equal(state.next.find(t => t.id === 'RUNTIME_HANDOFF').status, 'TARGET_RUNTIME_ACCESS_AND_CASE_RECEIPTS_REQUIRED');
+  assert.equal(state.next.find(t => t.id === 'OPPORTUNITY_CASE').status, 'REAL_CANDIDATE_AND_RAW_ARCHIVE_REQUIRED');
+  assert.equal(state.runtime_architecture.status,'CANDIDATE_ARCHITECTURE_CROSS_AGENT_NOT_VERIFIED');
+  for (const permission of ['TRADE','SIGN','PAY','MODEL_OR_PAID_PROVIDER_ACTIVATION','CLOUD_DEPLOY'])
+    assert.ok(state.current_policy.paused.includes(permission));
   assert.equal(state.audit.live_data_test, 'NOT_RUN');
 });
 test('both independent AI and historical market references remain', () => {

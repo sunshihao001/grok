@@ -62,10 +62,19 @@ export function setWalletProcessing(db, sig, wallet, state, error = null) {
   return walletProcessing(db,sig,wallet);
 }
 // GET endpoints must never implicitly migrate or initialize the database.
-function evidenceAvailable(db) {
-  const rows = db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name IN ('econ_transactions','econ_instructions')").all();
-  return rows.length === 2
-    && db.prepare('PRAGMA table_info(econ_instructions)').all().some(r => r.name === 'owner_conflict');
+const evidenceColumns = {
+  econ_transactions: ['sig', 'slot', 'block_time', 'block_tx_index', 'status', 'rpc_json', 'sha256',
+    'observed_at', 'capture_source', 'commitment'],
+  econ_instructions: ['sig', 'outer_i', 'inner_i', 'kind', 'program', 'mint', 'from_account',
+    'to_account', 'from_owner', 'to_owner', 'amount_raw', 'owner_conflict', 'raw_json'],
+  wallet_trades: ['sig', 'wallet', 'mint', 'side', 'sol', 't'],
+};
+export function evidenceAvailable(db, { walletTrades = false } = {}) {
+  const tables = walletTrades ? Object.keys(evidenceColumns) : ['econ_transactions', 'econ_instructions'];
+  return tables.every(table => {
+    const columns = new Set(db.prepare('PRAGMA table_info(' + table + ')').all().map(row => row.name));
+    return evidenceColumns[table].every(column => columns.has(column));
+  });
 }
 const keyOf = k => typeof k === 'string' ? k : (k?.pubkey ?? null);
 // jsonParsed message.accountKeys contains static transaction keys; versioned transactions can
@@ -222,13 +231,13 @@ export function recipientCandidates(db, sender, mint = null, limit = 100) {
   return { sender, mint, coverage: 'ONLY_CAPTURED_RPC_TX_AND_RESOLVED_TOKEN_ACCOUNT_OWNERS',
     interpretation: 'OBSERVED_INSTRUCTION_TRANSFER; receiving wallet is a candidate, not controlled identity or a proven later sale', rows };
 }
-export function crossMintCandidates(db, address, maxHours = 24, limit = 40) {
-  if (!evidenceAvailable(db)) return { address, coverage: 'EVIDENCE_NOT_INITIALIZED',
+export function crossMintCandidates(db, address, maxHours = 24, limit = 40, receipt = null) {
+  if (!evidenceAvailable(db, { walletTrades: true })) return { address, coverage: 'EVIDENCE_NOT_INITIALIZED',
     interpretation: 'Local evidence index unavailable, not a claim of no funding', rows: [] };
   // Use the existing wallet ledger as a hypothesis source. It is not an execution-level asset ledger.
   const window = Math.max(1, Math.min(168, maxHours)) * 3600_000;
-  const rows = db.prepare(`SELECT a.wallet seller, a.mint sold_mint, a.sig sell_sig, a.t sold_at, a.sol sell_sol,
-    b.wallet buyer, b.mint bought_mint, b.sig buy_sig, b.t bought_at,
+  const rows = db.prepare(`SELECT a.wallet seller, a.mint sold_mint, a.sig sell_sig, ta.block_time*1000 sold_at, a.sol sell_sol,
+    b.wallet buyer, b.mint bought_mint, b.sig buy_sig, tb.block_time*1000 bought_at,
     x.sig funding_sig, x.outer_i, x.inner_i, x.amount_raw funding_lamports,
     ta.slot sell_slot, t.slot funding_slot, tb.slot buy_slot
     FROM wallet_trades a
@@ -238,11 +247,17 @@ export function crossMintCandidates(db, address, maxHours = 24, limit = 40) {
     JOIN wallet_trades b ON b.wallet=x.to_owner AND b.side='buy' AND b.mint!=a.mint
     JOIN econ_transactions tb ON tb.sig=b.sig AND tb.status='RPC_OBSERVED'
     WHERE a.wallet=? AND a.side='sell'
-      AND ta.slot<t.slot AND t.slot<tb.slot
-      AND a.t<=t.block_time*1000
-      AND b.t>=t.block_time*1000 AND b.t-a.t<=? AND x.to_owner IS NOT NULL
-      AND x.to_owner!=a.wallet ORDER BY tb.slot DESC LIMIT ?`)
-    .all(address,window,Math.max(1,Math.min(100,limit)));
+      AND (ta.slot<t.slot OR (ta.slot=t.slot AND ta.block_tx_index<t.block_tx_index))
+      AND (t.slot<tb.slot OR (t.slot=tb.slot AND t.block_tx_index<tb.block_tx_index))
+      AND ta.block_time<=t.block_time AND t.block_time<=tb.block_time
+      AND (tb.block_time-ta.block_time)*1000<=?
+      AND x.to_owner!=a.wallet AND CAST(x.amount_raw AS INTEGER)>0
+      AND (? IS NULL OR (a.mint=? AND ta.block_time BETWEEN ? AND ?
+        AND (ta.slot>? OR (ta.slot=? AND ta.block_tx_index>?))))
+    ORDER BY tb.slot DESC, tb.block_tx_index DESC, b.sig, x.sig, x.outer_i, x.inner_i, a.sig LIMIT ?`)
+    .all(address, window, receipt?.mint ?? null, receipt?.mint ?? null, receipt?.block_time ?? null,
+      receipt ? receipt.block_time + window / 1000 : null, receipt?.slot ?? null, receipt?.slot ?? null,
+      receipt?.block_tx_index ?? null, Math.max(1, Math.min(100, limit)));
   return { address, windowMs: window, coverage: 'WALLET_TRADES_AND_CAPTURED_SYSTEM_TRANSFERS_ONLY',
     interpretation: 'TEMPORAL_FUNDING_PATH_CANDIDATE_NOT_LAMPORT_PROVENANCE_OR_COMMON_CONTROL', rows };
 }
@@ -294,45 +309,47 @@ function ownerTokenBalanceDeltaRaw(tx, owner, mint) {
 
 export function recipientOutcomes(db, sender, mint = null, limit = 20, maxHours = 24) {
   const direct = recipientCandidates(db, sender, mint, Math.min(30, Math.max(1, limit)));
-  if (!evidenceAvailable(db)) return { ...direct, observation: 'LOCAL_INDEX_UNAVAILABLE', rows: [] };
+  if (!evidenceAvailable(db, { walletTrades: true })) return { ...direct, observation: 'LOCAL_INDEX_UNAVAILABLE',
+    rows: direct.rows.map(row => ({ ...row, followupStatus: 'LOCAL_INDEX_UNAVAILABLE',
+      sellObservation: 'LOCAL_INDEX_UNAVAILABLE', observedSells: [], crossMintCandidates: [] })) };
   const windowMs = Math.max(1, Math.min(168, Number(maxHours) || 24)) * 3600_000;
-  // blockTime is only second-resolution and cannot establish transaction order. Use the
-  // captured transaction slot as the minimum ordering fact; same-slot follow-ups remain UNKNOWN
-  // because getTransaction does not expose a block transaction index.
+  // RPC blockTime uses seconds. Slot and the optional block index establish ordering.
+  // Apply order before LIMIT so earlier same-slot sells cannot hide eligible sells.
   const sells = db.prepare(`SELECT w.sig, w.wallet, w.mint, w.side, w.sol, w.t,
       e.slot AS sell_slot, e.block_time AS sell_block_time, e.block_tx_index AS sell_block_tx_index
     FROM wallet_trades w JOIN econ_transactions e ON e.sig=w.sig
     WHERE w.wallet=? AND w.mint=? AND w.side='sell' AND e.status='RPC_OBSERVED'
       AND e.block_time IS NOT NULL AND e.block_time>=? AND e.block_time<=?
-      AND (e.slot>? OR (e.slot=? AND e.block_tx_index IS NOT NULL)) AND w.sig!=?
-    ORDER BY e.slot ASC, e.block_tx_index ASC LIMIT 6`);
+      AND (e.slot>? OR (e.slot=? AND e.block_tx_index>?)) AND w.sig!=?
+    ORDER BY e.slot ASC, e.block_tx_index ASC, w.sig LIMIT 6`);
   const rows = direct.rows.map(r => {
-    const transferAt = Number.isFinite(r.block_time) ? r.block_time * 1000 : null;
-    if (transferAt === null || !r.mint) return { ...r, followupStatus: 'TRANSFER_TIME_OR_MINT_UNKNOWN',
+    if (!Number.isFinite(r.block_time) || !Number.isInteger(r.slot) || !r.mint) return { ...r, followupStatus: 'TRANSFER_TIME_OR_MINT_UNKNOWN',
       sellObservation: 'TRANSFER_TIME_OR_MINT_UNKNOWN', observedSells: [], crossMintCandidates: [] };
-    const sellRows = sells.all(r.to_owner, r.mint, transferAt, transferAt + windowMs, r.slot, r.slot, r.sig).filter(sell =>
-      sell.sell_slot > r.slot || (sell.sell_slot === r.slot && r.block_tx_index !== null && sell.sell_block_tx_index !== null && sell.sell_block_tx_index > r.block_tx_index));
+    const sellRows = sells.all(r.to_owner, r.mint, r.block_time, r.block_time + windowMs / 1000,
+      r.slot, r.slot, r.block_tx_index, r.sig);
     const observedSellsTruncated = sellRows.length > 5;
+    const transferAmountRaw = /^\d+$/.test(String(r.amount_raw ?? '')) ? String(r.amount_raw) : null;
+    const transfer = db.prepare('SELECT raw_json FROM econ_instructions WHERE sig=? AND outer_i=? AND inner_i=?')
+      .get(r.sig, r.outer_i, r.inner_i);
+    const parsedTransfer = JSON.parse(transfer.raw_json).parsed;
+    const hasTransferFee = parsedTransfer?.type === 'transferCheckedWithFee';
+    const fee = parsedTransfer?.info?.feeAmount ?? parsedTransfer?.info?.fee;
+    const rawFee = typeof fee === 'object' ? fee?.amount : fee;
+    const transferFeeRaw = hasTransferFee && /^\d+$/.test(String(rawFee ?? '')) ? String(rawFee) : null;
+    let transferNetAmountRaw = transferAmountRaw;
+    if (hasTransferFee) {
+      transferNetAmountRaw = transferAmountRaw !== null && transferFeeRaw !== null
+        && BigInt(transferFeeRaw) <= BigInt(transferAmountRaw)
+        ? (BigInt(transferAmountRaw) - BigInt(transferFeeRaw)).toString() : null;
+    }
+    const priorCapturedInbound = Boolean(db.prepare(`SELECT 1 FROM econ_instructions i
+      JOIN econ_transactions e ON e.sig=i.sig WHERE i.kind='TOKEN_TRANSFER' AND i.owner_conflict=0
+        AND i.to_owner=? AND i.mint=? AND e.status='RPC_OBSERVED'
+        AND (e.slot<? OR (e.slot=? AND e.block_tx_index<?))
+      LIMIT 1`).get(r.to_owner, r.mint, r.slot, r.slot, r.block_tx_index));
     const observedSells = sellRows.slice(0, 5).map(sell => {
       const evidence = transactionEvidence(db, sell.sig);
       const sellDeltaRaw = evidence ? ownerTokenBalanceDeltaRaw(evidence.rpc, r.to_owner, r.mint) : null;
-      const transferAmountRaw = /^\d+$/.test(String(r.amount_raw ?? '')) ? String(r.amount_raw) : null;
-      // Token-2022 TransferCheckedWithFee amount is gross; the fee is withheld
-      // separately on the destination token account. Preserve that distinction.
-      const transferInstruction = db.prepare('SELECT raw_json, program, kind FROM econ_instructions WHERE sig=? AND outer_i=? AND inner_i=? LIMIT 1').get(r.sig, r.outer_i, r.inner_i);
-      let transferFeeRaw = null;
-      let transferNetAmountRaw = transferAmountRaw;
-      try {
-        const parsedTransfer = transferInstruction?.raw_json ? JSON.parse(transferInstruction.raw_json) : null;
-        const info = parsedTransfer?.parsed?.info;
-        const fee = info?.feeAmount ?? info?.fee ?? null;
-        if (parsedTransfer?.parsed?.type === 'transferCheckedWithFee' && /^\d+$/.test(String(fee ?? ''))) {
-          transferFeeRaw = String(fee);
-          const gross = BigInt(transferAmountRaw ?? '0');
-          const feeBig = BigInt(transferFeeRaw);
-          transferNetAmountRaw = feeBig <= gross ? (gross - feeBig).toString() : null;
-        }
-      } catch {}
       const sameMintDirections = evidence
         ? evidence.instructions.filter(ix => ix.kind === 'TOKEN_TRANSFER' && ix.mint === r.mint
           && ix.owner_conflict === 0
@@ -345,29 +362,22 @@ export function recipientOutcomes(db, sender, mint = null, limit = 20, maxHours 
         // Net owner balance can hide simultaneous inbound/outbound inventory in one transaction.
         // Do not call a net-compatible delta provenance evidence.
         inventoryLink = 'INTRA_TRANSACTION_NET_DELTA_AMBIGUOUS';
-      } else if (sellDeltaRaw !== null && transferAmountRaw !== null && BigInt(sellDeltaRaw) < 0n) {
-        const soldRaw = -BigInt(sellDeltaRaw);
-        const receivedRaw = BigInt(transferNetAmountRaw ?? transferAmountRaw);
-        if (transferFeeRaw !== null) {
-          inventoryLink = soldRaw > receivedRaw
-            ? 'CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER'
-            : 'TOKEN_2022_TRANSFER_FEE_PRESENT_PROVENANCE_UNPROVEN';
+      } else if (hasTransferFee && transferNetAmountRaw === null) {
+        inventoryLink = 'TOKEN_2022_TRANSFER_FEE_AMOUNT_UNKNOWN';
+      } else if (sellDeltaRaw !== null && transferNetAmountRaw !== null && BigInt(sellDeltaRaw) < 0n) {
+        if (-BigInt(sellDeltaRaw) > BigInt(transferNetAmountRaw)) {
+          inventoryLink = 'CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER';
+        } else if (hasTransferFee) {
+          inventoryLink = 'TOKEN_2022_TRANSFER_FEE_PRESENT_PROVENANCE_UNPROVEN';
         } else {
-          inventoryLink = soldRaw > receivedRaw
-            ? 'CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER'
-            : 'AMOUNT_COMPATIBLE_BUT_PROVENANCE_UNPROVEN';
+          inventoryLink = 'AMOUNT_COMPATIBLE_BUT_PROVENANCE_UNPROVEN';
         }
       }
-      const priorInbound = db.prepare(`SELECT 1 FROM econ_instructions
-        WHERE kind='TOKEN_TRANSFER' AND owner_conflict=0 AND to_owner=? AND mint=?
-          AND sig IN (SELECT sig FROM econ_transactions WHERE status='RPC_OBSERVED' AND block_time IS NOT NULL AND block_time < ?)
-        LIMIT 1`).get(r.to_owner, r.mint, Math.floor(transferAt / 1000));
-      if (priorInbound && inventoryLink !== 'CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER')
+      if (priorCapturedInbound && ['PROVENANCE_UNKNOWN', 'AMOUNT_COMPATIBLE_BUT_PROVENANCE_UNPROVEN'].includes(inventoryLink))
         inventoryLink = 'PRIOR_CAPTURED_INBOUND_ACTIVITY_EXISTS';
-      return { ...sell, sellDeltaRaw, transferFeeRaw, transferNetAmountRaw, inventoryLink };
+      return { ...sell, sellDeltaRaw, transferFeeRaw, transferNetAmountRaw, priorCapturedInbound, inventoryLink };
     });
-    const cross = crossMintCandidates(db, r.to_owner, Math.ceil(windowMs / 3600_000), 25).rows
-      .filter(x => x.sold_mint === r.mint && x.sold_at >= transferAt && x.sold_at <= transferAt + windowMs);
+    const cross = crossMintCandidates(db, r.to_owner, windowMs / 3600_000, 25, r).rows;
     return { ...r, followupStatus: 'LOCAL_OBSERVATIONS_ONLY',
       sellObservation: observedSells.length ? 'LOCAL_SELL_SUMMARY_OBSERVED' : 'NOT_OBSERVED_IN_CAPTURED_WINDOW',
       observedSellsTruncated,

@@ -25,9 +25,41 @@ test('two distinct recipients in one signature remain distinct, no balance-delta
 test('unknown token account owner remains null and is not invented as a candidate',()=>{const d=setup();const t=tx({instructions:[transfer('ATA_A','ATA_B',10)],preTokenBalances:[bal(2,A,M,10)],postTokenBalances:[bal(2,A,M,0)]});store(d,'missing-owner',t);assert.equal(recipientCandidates(d,A).rows.length,0);assert.equal(transactionEvidence(d,'missing-owner').instructions[0].to_owner,null);d.close();});
 test('conflicting owner mappings fail closed instead of guessing',()=>{const d=setup();const t=tx({instructions:[transfer('ATA_A','ATA_B',10)],preTokenBalances:[bal(2,A,M,10),bal(3,B,M,0)],postTokenBalances:[bal(2,A,M,0),bal(3,C,M,10)]});store(d,'conflict',t);assert.equal(recipientCandidates(d,A).rows.length,0);d.close();});
 test('failed chain transaction preserves evidence but produces no recipient candidate',()=>{const d=setup();const t=mixed();t.meta.err={InstructionError:[0,'Custom']};store(d,'failed',t);assert.equal(recipientCandidates(d,A).rows.length,0);assert.equal(transactionEvidence(d,'failed').status,'FAILED');d.close();});
-test('cross Mint chain B sell M -> B sends SOL to C -> C buys N is candidate only',()=>{const d=setup();store(d,'B_to_C',tx({at:1200,instructions:[solTransfer(B,C,1_000_000_000)],accounts:[B,C,SYSTEM]}));d.prepare('INSERT INTO wallet_trades VALUES(?,?,?,?,?,?)').run('B_sells',B,M,'sell',1100_000,1.1);d.prepare('INSERT INTO wallet_trades VALUES(?,?,?,?,?,?)').run('C_buys',C,N,'buy',1300_000,1);const r=crossMintCandidates(d,B);assert.equal(r.rows.length,1);assert.equal(r.rows[0].funding_sig,'B_to_C');assert.equal(r.rows[0].bought_mint,N);assert.match(r.interpretation,/NOT_LAMPORT_PROVENANCE/);d.close();});
-test('no cross Mint claim without explicit captured SOL transfer',()=>{const d=setup();store(d,'B_to_C_token',tx({at:1200,instructions:[transfer('ATA_A','ATA_B',1)]}));d.prepare('INSERT INTO wallet_trades VALUES(?,?,?,?,?,?)').run('B_sells',B,M,'sell',1100_000,1.1);d.prepare('INSERT INTO wallet_trades VALUES(?,?,?,?,?,?)').run('C_buys',C,N,'buy',1300_000,1);assert.equal(crossMintCandidates(d,B).rows.length,0);d.close();});
-test('same Mint follow-up is not misclassified as cross Mint',()=>{const d=setup();store(d,'B_to_C',tx({at:1200,instructions:[solTransfer(B,C,1_000_000_000)],accounts:[B,C,SYSTEM]}));d.prepare('INSERT INTO wallet_trades VALUES(?,?,?,?,?,?)').run('B_sells',B,M,'sell',1100_000,1);d.prepare('INSERT INTO wallet_trades VALUES(?,?,?,?,?,?)').run('C_buys',C,M,'buy',1300_000,1);assert.equal(crossMintCandidates(d,B).rows.length,0);d.close();});
+function seedCrossMint(db, { buyMint = N, fundingInstruction = solTransfer(B,C,1_000_000_000),
+  sellSlot = 21, archiveSell = true } = {}) {
+ const trade = db.prepare('INSERT INTO wallet_trades VALUES(?,?,?,?,?,?)');
+ trade.run('B-sell',B,M,'sell',1100_000,1.1);
+ trade.run('C-buy',C,buyMint,'buy',1300_000,1);
+ if (archiveSell) store(db,'B-sell',tx({at:1100,slot:sellSlot}));
+ store(db,'B-to-C',tx({at:1200,slot:22,instructions:[fundingInstruction],accounts:[B,C,SYSTEM]}));
+ store(db,'C-buy',tx({at:1300,slot:23}));
+}
+test('cross Mint chain B sell M -> B sends SOL to C -> C buys N is candidate only',()=>{
+ const d=setup(); seedCrossMint(d);
+ const r=crossMintCandidates(d,B);
+ assert.equal(r.rows.length,1);
+ assert.equal(r.rows[0].funding_sig,'B-to-C');
+ assert.equal(r.rows[0].bought_mint,N);
+ assert.match(r.interpretation,/NOT_LAMPORT_PROVENANCE/);
+ d.close();
+});
+test('no cross Mint claim without explicit captured SOL transfer',()=>{
+ const d=setup(); seedCrossMint(d,{fundingInstruction:transfer('ATA_A','ATA_B',1)});
+ assert.equal(crossMintCandidates(d,B).rows.length,0);
+ d.close();
+});
+test('same Mint follow-up is not misclassified as cross Mint',()=>{
+ const d=setup(); seedCrossMint(d,{buyMint:M});
+ assert.equal(crossMintCandidates(d,B).rows.length,0);
+ d.close();
+});
+test('a summary-only sell or an out-of-order slot cannot support a cross Mint path',()=>{
+ for (const options of [{archiveSell:false},{sellSlot:24}]) {
+  const d=setup(); seedCrossMint(d,options);
+  assert.equal(crossMintCandidates(d,B).rows.length,0);
+  d.close();
+ }
+});
 test('multi-swap and opaque program bytes never silently inferred as a verified purchase',()=>{const d=setup();const t=tx({instructions:[{programId:'ROUTER',data:'base64-or-opaque'}, {programId:'COMPUTE',data:'opaque'}]});store(d,'opaque',t);assert.deepEqual(transactionEvidence(d,'opaque').instructions.map(i=>i.kind),['OTHER','OTHER']);assert.equal(recipientCandidates(d,A).rows.length,0);d.close();});
 
 test('missing evidence identifies legacy trade signatures and clears on archived replay',()=>{
@@ -94,9 +126,7 @@ test('contradictory owners persist a conflict marker and never become recipients
 });
 test('recipient followup finds already observed sell and later cross Mint candidate only',()=>{
  const d=setup();store(d,'A-to-B',mixed());
- store(d,'B-to-C',tx({at:1200,instructions:[solTransfer(B,C,900_000_000)],accounts:[B,C,SYSTEM]}));
- d.prepare('INSERT INTO wallet_trades VALUES(?,?,?,?,?,?)').run('B-sell',B,M,'sell',1100_000,1);
- d.prepare('INSERT INTO wallet_trades VALUES(?,?,?,?,?,?)').run('C-buy',C,N,'buy',1300_000,1);
+ seedCrossMint(d);
  const r=recipientOutcomes(d,A,M,20,24);
  assert.equal(r.rows.length,1);assert.equal(r.rows[0].to_owner,B);
  assert.equal(r.rows[0].observedSells[0].sig,'B-sell');

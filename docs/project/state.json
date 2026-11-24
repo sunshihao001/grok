@@ -1,8 +1,8 @@
 {
   "schema_version": "0.1",
-  "date": "2026-11-09",
+  "date": "2026-11-24",
   "branch": "blix",
-  "purpose": "full_original_blix_product_preserved_plus_professional_second_stage_extension; this file documents project state, not runtime certification",
+  "purpose": "完整保留 Blix，在其上建设面向可执行候选机会的 Solana MEME 自主交易智能系统。",
   "sources": [
     {
       "id": "BLIX",
@@ -41,14 +41,14 @@
     {
       "id": "G0",
       "level": "purpose",
-      "text": "理解市场风险和潜在机会，降低用户专业负担",
+      "text": "持续发现、调查、验证、判断和监控交易机会，并由结果驱动反证、纠错和能力进化",
       "authority": "user",
       "status": "USER_CONFIRMED"
     },
     {
       "id": "G1-MARKET",
       "level": "strategy",
-      "text": "完整Blix成熟终端基础上的Solana Meme市场情报、调查与专业机制扩展（原版能力全部保留）",
+      "text": "完整 Blix 上的 Solana MEME 市场发现、经济证据重建、机会价值和交易可执行性判断",
       "authority": "user",
       "status": "USER_CONFIRMED"
     },
@@ -242,32 +242,26 @@
       "运行模式无法隔离真实交易、签名和费用时，暂停相应真实运行路径并调整隔离方案",
       "成熟成品能以更少成本扩展既有Blix时，优先改用复用方案（保留原版功能）"
     ],
-    "current_product_definition": "Preserve all original Blix product capabilities plus added professional Solana Meme intelligence; read-only isolation applies only to currently unauthorized research/testing workflows"
+    "current_product_definition": "完整保留 Blix，在其上建设面向可执行候选机会的 Solana MEME 自主交易智能系统。"
   },
   "next": [
     {
-      "id": "WHOLE",
-      "goal_id": "G4-STUDY",
+      "id": "RECONCILE",
+      "goal_id": "G4-ORIENT",
       "priority": 1,
-      "status": "SOURCE_RESEARCH_IN_PROGRESS"
+      "status": "INDEPENDENT_REVIEW_BRANCH"
     },
     {
-      "id": "FACTS",
-      "goal_id": "G4-STUDY",
+      "id": "OPPORTUNITY_CASE",
+      "goal_id": "G4-MINT",
       "priority": 2,
-      "status": "STATIC_RESEARCH_ONLY"
+      "status": "REAL_CANDIDATE_AND_RAW_ARCHIVE_REQUIRED"
     },
     {
-      "id": "SAFE",
+      "id": "RUNTIME_HANDOFF",
       "goal_id": "G4-SAFETY",
       "priority": 3,
-      "status": "STATIC_AUDIT_ONLY_NO_RUNTIME"
-    },
-    {
-      "id": "MINT",
-      "goal_id": "G4-MINT",
-      "priority": 4,
-      "status": "PAUSED_UNTIL_USER_AUTHORIZES_EXECUTION"
+      "status": "TARGET_RUNTIME_ACCESS_AND_CASE_RECEIPTS_REQUIRED"
     }
   ],
   "audit": {
@@ -320,7 +314,7 @@
       "PAY",
       "AUTOCLAIM"
     ],
-    "completion": "Preserve original product and UX; advance reversible professional feature integration, source-differential checks, offline regression and gated real-data acceptance; research and runtime verified separately",
+    "completion": "以候选机会贯通发现、经济证据、执行条件和后验验证；操作权限与产品能力分别记录。",
     "history_note": "Earlier 2026-11-06 static-only state remains documented below and in historical project reports, but is not the permanent Blix product direction."
   },
   "whole_product_review": {
@@ -585,9 +579,10 @@
       "live": "NOT_VERIFIED"
     },
     "economic_intelligence_extension": {
-      "status": "DRAFT_OFFLINE_CI_VERIFIED",
-      "candidate": "Draft PR #23 directly targets blix (cumulative #18 and #22 ancestry), NOT_MERGED",
-      "ci": {
+      "status": "INDEPENDENT_RECONCILIATION_OFFLINE_REVIEW_PENDING",
+      "candidate": "PR #23 upstream 36a97e27298408eafc441442769c7eedf5c5935c; current reconciliation evidence: docs/project/build-register.md",
+      "target_branch": "blix",
+      "historical_ci": {
         "sha": "bae4fec049be8b5dd14522e104291b0ee969dc6c",
         "url": "https://github.com/sunshihao001/grok/actions/runs/42537815318",
         "all_tests": "452/452",
@@ -595,9 +590,7 @@
         "evidence": "42/42",
         "audit": "https://github.com/sunshihao001/grok/actions/runs/42537815434",
         "scope": "PULL_REQUEST_CI_OFFLINE_NOT_LIVE"
-      },
-      "target_branch": "blix",
-      "mergeable_pr_as_checked": "CLEAN_NO_CONFLICT_NOT_MERGED"
+      }
     },
     "domain_knowledge": {
       "status": "SOURCE_INDEXED_AND_PARTIALLY_STUDIED_NOT_FULL_RUNTIME_ACTIVATION",
@@ -625,5 +618,11 @@
       "status": "NOT_LIVE_VERIFIED",
       "notes": "Existing legacy server has signing/trading/auto-claim/billing; gated startup is not a sandbox"
     }
-  }
+  },
+  "runtime_architecture": {
+    "source": "docs/project/meme-autonomous-trading-intelligence-v0.1.md",
+    "previous_platform_research": "docs/project/agent-runtime-strategy-20261115.md",
+    "status": "CANDIDATE_ARCHITECTURE_CROSS_AGENT_NOT_VERIFIED"
+  },
+  "current_evidence": "docs/project/build-register.md"
 }

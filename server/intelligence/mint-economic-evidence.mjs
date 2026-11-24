@@ -46,6 +46,7 @@ export async function run({ mint, readEconomic, now = Date.now } = {}) {
     fromAccount: row.fromAccount ?? null, toAccount: row.toAccount ?? null,
     amountRaw: row.amountRaw ?? null,
     sellObservation: row.sellObservation ?? 'TRANSFER_TIME_OR_MINT_UNKNOWN',
+    observedSellsTruncated: typeof row.observedSellsTruncated === 'boolean' ? row.observedSellsTruncated : null,
     observedSells: Array.isArray(row.observedSells) ? row.observedSells.slice(0, 5) : [],
     crossMintCandidates: Array.isArray(row.crossMintCandidates) ? row.crossMintCandidates.slice(0, 25) : [],
   }));

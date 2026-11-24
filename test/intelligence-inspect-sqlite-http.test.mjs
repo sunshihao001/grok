@@ -48,6 +48,12 @@ test('no-model Blix Mint inspection reads a real disposable SQLite file through 
   persistEvidence(db,'synthetic-transfer',synthetic);
   db.prepare('INSERT INTO wallet_trades(sig,wallet,mint,side,sol,t) VALUES(?,?,?,?,?,?)')
     .run('synthetic-local-sell',toOwner,mint,'sell',1,1700000080000);
+  // A local sell summary needs a matching successful archive entry for chain order.
+  persistEvidence(db,'synthetic-local-sell',{
+    slot:152, blockTime:1700000080,
+    transaction:{signatures:['synthetic-local-sell'],message:{accountKeys:[toOwner],instructions:[]}},
+    meta:{err:null},
+  });
   db.close();
   const hashBefore=digest(file);
   const server=createResearchHttpServer({

@@ -4,7 +4,7 @@
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
-import { decodeEvidence, recipientOutcomes } from '../server/economic-events.mjs';
+import { decodeEvidence, evidenceAvailable, recipientOutcomes } from '../server/economic-events.mjs';
 
 const args = process.argv.slice(2);
 const allowed = new Set(['--db','--wallet','--mint','--hours']);
@@ -29,7 +29,7 @@ if (bad || !opts['--db'] || (opts['--wallet'] !== undefined && !validAddress(opt
     db = new DatabaseSync(opts['--db'], { readOnly: true });
     db.exec('PRAGMA query_only=ON');
     const has = name => Boolean(db.prepare("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?").get(name));
-    const available = ['econ_transactions','econ_instructions','wallet_trades'].every(has);
+    const available = evidenceAvailable(db, { walletTrades: true });
     const wallet = opts['--wallet'], mint = opts['--mint'];
     // Match the ORIGINAL Research raw-address metric on existing local rows;
     // deliberately do not import wallets.js, start a server or infer controller groups.
@@ -48,7 +48,7 @@ if (bad || !opts['--db'] || (opts['--wallet'] !== undefined && !validAddress(opt
       groupingStatus: 'NOT_COMPUTED_BY_OFFLINE_READER',
       coverage: 'PARTIAL_LOCAL_LEDGER_NOT_COMPLETE_ADDRESS_HISTORY',
     };
-    const sameSignatureBuy = has('wallet_trades') ? db.prepare(
+    const sameSignatureBuy = available ? db.prepare(
       `SELECT 1 FROM wallet_trades WHERE sig=? AND wallet=? AND mint=? AND side='buy' LIMIT 1`) : null;
     // Mint-first discovery is bounded and uses only locally indexed, successful RPC transfers.
     // The selected senders are observed token-account owners, not proven traders or controllers.
@@ -71,7 +71,9 @@ if (bad || !opts['--db'] || (opts['--wallet'] !== undefined && !validAddress(opt
     const coverage = available
       ? 'ONLY_CAPTURED_RPC_TX_AND_RESOLVED_TOKEN_ACCOUNT_OWNERS'
       : 'LOCAL_EVIDENCE_OR_WALLET_SUMMARY_MISSING';
-    const window = wallet && has('wallet_sig_windows')
+    const windowColumns = new Set(db.prepare('PRAGMA table_info(wallet_sig_windows)').all().map(row => row.name));
+    const window = wallet && ['wallet','observation','checked_at_ms','signatures_found','anchor_reached','gaps_seen','ever_initial_sample']
+      .every(column => windowColumns.has(column))
       ? db.prepare('SELECT observation,checked_at_ms,signatures_found,anchor_reached,gaps_seen,ever_initial_sample FROM wallet_sig_windows WHERE wallet=?').get(wallet) || null
       : null;
     const captured = available
@@ -121,10 +123,17 @@ if (bad || !opts['--db'] || (opts['--wallet'] !== undefined && !validAddress(opt
       fromAccount: row.from_account, toAccount: row.to_account,
       fromOwner: row.from_owner, toOwner: row.to_owner, amountRaw: row.amount_raw,
       sellObservation: row.sellObservation || 'TRANSFER_TIME_OR_MINT_UNKNOWN',
-      observedSells: (row.observedSells || []).map(x => ({ sig: x.sig, mint: x.mint, t: x.t, sol: x.sol })),
+      observedSellsTruncated: row.observedSellsTruncated ?? null,
+      observedSells: (row.observedSells || []).map(x => ({
+        sig: x.sig, mint: x.mint, t: x.t, sol: x.sol,
+        slot: x.sell_slot, blockTime: x.sell_block_time, blockTransactionIndex: x.sell_block_tx_index,
+        sellDeltaRaw: x.sellDeltaRaw, transferFeeRaw: x.transferFeeRaw, transferNetAmountRaw: x.transferNetAmountRaw,
+        priorCapturedInbound: x.priorCapturedInbound, inventoryLink: x.inventoryLink,
+      })),
       crossMintCandidates: (row.crossMintCandidates || []).map(x => ({
         soldMint: x.sold_mint, sellSig: x.sell_sig,
         fundingSig: x.funding_sig, boughtMint: x.bought_mint, buySig: x.buy_sig,
+        sellSlot: x.sell_slot, fundingSlot: x.funding_slot, buySlot: x.buy_slot,
       })),
     };
     });

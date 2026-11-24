@@ -1,3 +1,23 @@
+## 2026-11-24｜全局一致性重整与经济证据回归
+
+**基线。** 正式 `blix` 为 `303365a7fe72de1c617b4cff9356863a0b863f48`，PR #23 候选为 `36a97e27298408eafc441442769c7eedf5c5935c`，共同祖先为 `1560528a8812c4623b2e1e54f4d614139017e6e7`。从共同祖先计，正式分支独有 6 个提交，候选独有 525 个提交。实际 Git 合并只在本项目入口 README 发生文本冲突，目标图虽能自动合并仍有重复优先级。这次独立分支合流了两边的历史，并在现有目标图、状态、交付及工作入口中裁决顺序。11月15日平台比较作为历史研究保留，11月16日分工作为候选，11月24日用户确认机会导向目标。
+
+**分支处理。** #18 `d3da7c9c` 与 #22 `9d1d07b6` 已是 #23 祖先。#19 及 #21 的部分有效防护与合成验证已移植；#21 的重复处理状态实现不纳入。#24 `434425cc` 头不在 #23 祖先中，但其受限人工智能工作流、测试、Coin 助手及构建在 #23 已有对应实现，候选还增加了只读 HTTP 和归档入口。#20 `d735108f` 独有文档台账入口及文件，保留为历史调查资产；当前状态继续由本台账承接。所查分支与拉取请求中 #23 是最新累计代码基线。
+
+| 现象与首个责任层 | 纠偏与验收 |
+| --- | --- |
+| 接收方卖出被漏掉。经济查询用毫秒边界比较秒级区块时间，并在限额后过滤更早的同槽卖出 | 查询直接用秒级区块时间，用槽位及明确的区块内位置排序，并在取样上限前过滤。 |
+| 跨代币归因可能依赖旧钱包摘要时间，限定代币和收款时窗发生在查询裁剪后 | 要求已归档的买卖锚点和正额 SOL 转账，按区块顺序与捕获时间判断，先限定当前收款与代币再裁剪。输出仍然只是时序候选。 |
+| 预检与实际查询所需列不一致，旧库可能在只读入口被误报可用 | 同一读取契约供预检、报告与底层使用。旧库显式不可用，写入侧原有初始化与迁移负责补列。用数据库字节摘要验证读取未改库。 |
+| Token-2022 旧样本使用标量手续费。节点代码的 `feeAmount` 是含 `amount` 的对象。先前入账还可能掩盖费用或混合净流量的诊断 | 同时读取对象和历史标量格式，费用未知时保留数量不确定，独立记录先前入账。离线报告和人工智能调查结果传递卖出顺序、库存限制和截断信息。 [Agave 节点解析源码](https://github.com/anza-xyz/agave/blob/master/transaction-status/src/parse_token/extension/transfer_fee.rs) |
+| 测试准备与新契约不一致 | 对明确应观察到的卖出补齐成功归档和槽位，增加缺归档和错序的反例。新库测试先调用真实初始化。区块顺序测试按收款签名选对象，清点确切归档签名并检查重试无重复。保留错误拒绝、部分观察、重试与签名去重原有断言。 |
+
+**本地验收。** 使用 Node 24.22.3，备份测试临时目录置于满足原版磁盘空间门槛的工作区。PR #23 原始基线综合 598/605、经济证据 88/95。独立合流候选综合 606/606、经济证据 96/96、安全 20/20、智能调查 86/86、原版保护 5/5（含 767 个原版路径、28 个关键模块字节检查）；前端类型检查及 Vite 构建通过，仍有品牌图片路径和混合导入两条构建提示。覆盖合成交易全链、归档恢复与去重、无模型本地 HTTP、受控知识选择、同候选池机会对照和真实供应商两币快照。GitHub 拉取请求运行查询未返回候选头对应记录，本轮数据为本地离线复测。
+
+**最新研究断点。** R-54 记录从 `901f51c` 恢复。R-55 是所查引用中的最新研究编号，公共只读交易详情请求在此环境超时，完整原始归档及主网回放未完成。已有真实供应商快照只提供市场观察。下一次以[实际机会纵切验收](delivery.md)决定是否需要针对某个候选继续研究转账费，保持原始归档、执行条件与事后结果可分别证伪。
+
+**目标偏移复核。** 本次在首个证据责任层修复并复用已有交易与调查能力，未扩建运行平台或知识体系。原版保护经回归，候选机会出口仍缺真实时点、报价和退出证据，四主体的实际交接、持续运行、恢复、成本及市场优势均待核验。条件、授权和后续可验收工作见[交付记录](delivery.md)。
+
 ## 2026-11-24｜R-55：真实 Token-2022 fee 主网证据已定位，但 Blix 尚未完成归档回放
 
 **本轮最高价值缺口**：继续追 R-54 后没有再增加 Token-2022 规则，而是寻找真实主网 `transferCheckedWithFee` 交易来跨过 `OFFLINE_TESTED → ARCHIVED_REAL_REPLAY` 的证据门槛。
@@ -10,7 +30,7 @@
 **当前 Blix 源码状态**：
 - `server/economic-events.mjs` 已存在 `transferCheckedWithFee` 的识别、`transferFeeRaw` / `transferNetAmountRaw` 派生和 `TOKEN_2022_TRANSFER_FEE_PRESENT_PROVENANCE_UNPROVEN` 降级。
 - `test/wallet-evidence-chain.test.mjs` 已存在 gross=400M、fee=5M、net=395M 的离线反例。
-- 这部分源码已经存在于当前开发分支，但 **build-register 在 R-53 后没有单独登记 R-54**；本轮补齐台账，避免代码与项目状态再次脱节。
+- 后续 R-55 写入台账时丢失了 R-54 的正文。已从提交 `901f51c` 恢复其原始结论，并在本轮工程复核中更新实际解析格式。
 
 **本轮没有声称的部分**：
 - Solscan 页面只证明真实主网存在该 instruction/signature，当前工具没有取得该 signature 的完整 raw/jsonParsed RPC response，因此**尚不能称 `ARCHIVED_REAL_REPLAY`**。
@@ -19,6 +39,31 @@
 - GitHub CI 对当前最新代码 HEAD 尚未取得新的运行结果；历史绿色 CI 不覆盖未验证的新 HEAD。
 
 **下一阻断/可证伪条件**：用许可的只读 RPC/归档来源取得上述真实 signature 的完整 `jsonParsed` transaction；对照 instruction `amount`、`feeAmount`、source/destination Token Account、owner、pre/postTokenBalances 与 withheld 字段。如果现有 decoder 能完整重建，则 R-54 可以升级为 `ARCHIVED_REAL_REPLAY`；如果缺字段或语义无法重建，直接标 `UNKNOWN / insufficient RPC representation`，不继续用金额差值推断。
+## 2026-11-23｜R-54：Token-2022 TransferCheckedWithFee 的 gross / fee / 可用余额不能混成同一数量
+
+**选择理由**：R-53 已禁止把同交易 inbound/outbound 的 owner 净余额变化直接当作库存来源；继续纵深后发现另一个会直接污染 O3 库存与后续卖出判断的缺口：现有经济证据把 Token-2022 `TransferCheckedWithFee` 的 instruction amount 直接作为普通 transfer amount 使用，没有区分 gross transfer amount 与 destination 上被 withheld 的 fee。Solana 官方 Token-2022 文档明确：TransferFeeConfig 会对每次转移收取费用，费用在目的 Token Account 的 withheld 区域记录；`TransferCheckedWithFee` 指令同时携带 amount 与 expected fee。[Solana 转账手续费](https://solana.com/docs/tokens/extensions/transfer-fees)
+
+**当前代码依据**：`server/economic-events.mjs` 的 `decodeEvidence()` 原来对 `transferCheckedWithFee` 与普通 token transfer 一样只保存 `amount_raw`；`recipientOutcomes()` 随后用该数量与后续 sell 的 owner net delta 做数量相容判断。这在 fee 存在时可能把 gross 400M 与实际可用 395M 混为一谈。
+
+**本轮修正**：不新增表、不新增采集器。`recipientOutcomes()` 直接回读现有 `econ_instructions.raw_json`，识别原始 transfer instruction 的 `parsed.type=transferCheckedWithFee` 和 `feeAmount/fee`，派生 `transferFeeRaw` 与 `transferNetAmountRaw`；库存相容判断优先使用 net amount。若 sell 不超过 net amount，也只标记 `TOKEN_2022_TRANSFER_FEE_PRESENT_PROVENANCE_UNPROVEN`；超过 net amount 则保持 `CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER`。原始 `amount_raw` 不被改写，保留 gross instruction fact。
+
+**可复现反例**：A→B 的 Token-2022 `TransferCheckedWithFee` gross=400M、fee=5M、B 可用收到=395M；B 后续卖 395M。测试要求结果携带 `transferFeeRaw=5M`、`transferNetAmountRaw=395M`，且不能再走普通 `AMOUNT_COMPATIBLE_BUT_PROVENANCE_UNPROVEN` 分支。该测试仅为离线 synthetic evidence，不能证明真实主网 RPC 已覆盖所有 Token-2022 变体。
+
+**外部反证**：Solana 官方 Token-2022 transfer-fee 文档说明 fee 会被 withheld 在 destination token account；官方示例的 `TransferCheckedWithFee` 明确同时传入 gross amount 与 fee；Token-2022 解码资料将 `amount` 与 `fee` 作为两个独立 instruction 字段。[Solana 转账手续费](https://solana.com/docs/tokens/extensions/transfer-fees)
+
+**证据等级**：
+- `CODE_OBSERVED`: 已提交现有经济证据模块的最小修正。
+- `OFFLINE_TESTED`: 新 Token-2022 gross/fee/net 反例已提交；本轮 GitHub CI 尚未取得。
+- `ARCHIVED_REAL_REPLAY`: 未取得。
+- `CONNECTED_READONLY_RUNTIME`: 未取得。
+- `SECURE_OPERATIONAL`: 未取得。
+- `MODEL_INTERPRETATION`: 不适用。
+- `UNKNOWN`: 真实 RPC `jsonParsed` 对不同 Token-2022 fee 指令的字段形态、withheld balance 在 `pre/postTokenBalances` 中的表现，以及复杂 swap/CPI 中 fee 的完整可追踪性仍未主网回放验证。
+
+**错误/边界**：本修正不证明 transfer 是 sale，不证明 B 控制某主体，也不证明后续 sell 来自该 transfer。它只修正数量证据的语义：gross instruction amount ≠ 可直接消费的净收到数量。Token-2022 fee receiver/withheld 资金的后续流动仍需单独证据。
+
+**下一阻断/可证伪条件**：下一轮优先取得一个合法真实 `TransferCheckedWithFee` 历史归档，比较 `parsed instruction amount/fee`、source/destination Token Account `pre/post`、withheld amount 与后续可用余额；若真实 RPC 结构与当前解析假设不同，则把对应字段继续降级为 UNKNOWN，不增加猜测层。
+
 ## 2026-11-22｜R-53：同一卖出交易的同Mint净余额变化不能直接作为库存来源证据
 
 **本轮最高价值缺口**：继续追 R-52 的底层解析后，发现当前 `recipientOutcomes()` 在判断“接收钱包后续卖出是否与这次 Transfer 数量相容”时，使用 `ownerTokenBalanceDeltaRaw()` 的**净** Token balance delta。这个值在简单卖出中有用，但在一笔复杂交易同时发生同 Mint 入账与出账时会被抵消，从而产生一个危险的假阳性：例如钱包在同一交易中先收到 100M、又转出 500M，Owner 的净变化是 -400M；如果前一笔外部 Transfer 也是 400M，旧逻辑会把它标成 `AMOUNT_COMPATIBLE_BUT_PROVENANCE_UNPROVEN`，但真实 gross outbound 是 500M，净值不能代表出售数量或库存来源。
