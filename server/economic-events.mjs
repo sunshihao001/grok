@@ -362,7 +362,10 @@ export function recipientOutcomes(db, sender, mint = null, limit = 20, maxHours 
         WHERE kind='TOKEN_TRANSFER' AND owner_conflict=0 AND to_owner=? AND mint=?
           AND sig IN (SELECT sig FROM econ_transactions WHERE status='RPC_OBSERVED' AND block_time IS NOT NULL AND block_time < ?)
         LIMIT 1`).get(r.to_owner, r.mint, Math.floor(transferAt / 1000));
-      if (priorInbound && inventoryLink !== 'CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER')
+      // A prior inbound is only weak contextual evidence. It must not overwrite
+      // stronger transaction-local ambiguity (mixed same-Mint flow) or explicit
+      // Token-2022 fee semantics, because those facts are about the current transfer.
+      if (priorInbound && ['PROVENANCE_UNKNOWN', 'AMOUNT_COMPATIBLE_BUT_PROVENANCE_UNPROVEN'].includes(inventoryLink))
         inventoryLink = 'PRIOR_CAPTURED_INBOUND_ACTIVITY_EXISTS';
       return { ...sell, sellDeltaRaw, transferFeeRaw, transferNetAmountRaw, inventoryLink };
     });
