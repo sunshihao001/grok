@@ -497,3 +497,18 @@
 - [Blix多层锚点第12节：纠偏对象、归属、样例与验证](cross-layer-anchor-map-20261113.md#12-2026-11-13纠偏的专业扩写从修一处错到首个失效环节职责与全链结果-v03)，只在现有O1–O6/源/代码/测试中追查，不创建新的全仓映射引擎。
 
 **源码核对与风险优先级**：原版rpc-stream.js重连有从链头接续且跳过消息的明确实现取舍；sources.js PumpPortal WS已有重连，**但不能只看此文件就推断Blix没有发行补查**：engine.js::backfillLaunches已有启动和周期有界近期列表回填，fillLaunchGaps通过livetrades.js交叉发现；钱包端wallets.js已有轮询补查，wallet-signature-coverage.mjs仍清楚记录初次采样不足/历史不完整，economic-claim-trace.mjs明确sell摘要不能证明同批转入库存；pulse-discovery.mjs只处理有限浏览器候选；followability-replay.mjs可计算有严格来源的纸面收据但不证明真实盈利。**这些只是源可见事实与潜在错误传播路径，不证明供应商/真实市场实际漏包或已验证的具体资金错误**。见原映射中带证据等级的优先对象表。
+
+
+## 2026-11-25｜R-56：弱历史 inbound 不得覆盖当前交易的强歧义证据
+
+**本轮高价值缺口**：复核 R-54 Token-2022 fee 与 R-53 mixed-flow 判断在同一 `recipientOutcomes()` 路径中的优先级。源码显示，`priorInbound` 只证明“该接收钱包在更早时间有过同 Mint inbound activity”，证据强度明显低于当前交易的 mixed same-Mint flow 或 Token-2022 transfer-fee 事实。
+
+**发现**：原逻辑会在当前交易已经得到 `INTRA_TRANSACTION_NET_DELTA_AMBIGUOUS` 或 `TOKEN_2022_TRANSFER_FEE_PRESENT_PROVENANCE_UNPROVEN` 后，再用任意更早 inbound 覆盖为 `PRIOR_CAPTURED_INBOUND_ACTIVITY_EXISTS`。这会丢失更强、与当前交易直接相关的证据。
+
+**修正**：仅当当前 `inventoryLink` 为 `PROVENANCE_UNKNOWN` 或 `AMOUNT_COMPATIBLE_BUT_PROVENANCE_UNPROVEN` 时，弱 prior-inbound context 才能覆盖；不得覆盖 `INTRA_TRANSACTION_NET_DELTA_AMBIGUOUS`、`CANNOT_BE_FULLY_SOURCED_FROM_THIS_SINGLE_TRANSFER` 或 `TOKEN_2022_TRANSFER_FEE_PRESENT_PROVENANCE_UNPROVEN`。
+
+**证据等级**：源码修正 = `CODE_OBSERVED`；现有 R-53/R-54 fixtures 可作为离线回归入口，但本次新 HEAD 的 CI = `UNKNOWN/NOT VERIFIED`，真实主网库存归因 = `UNKNOWN`。本修正不证明 provenance、common control、PnL 或交易机会。
+
+**外部反证**：Solana 官方 `getTransaction` 将 innerInstructions、pre/post token balances、fee 分开定义；token balance 是 account-level state，而 instruction amount/fee 是 execution-level facts，因此不同证据强度不应在后处理阶段互相覆盖。citeturn149341search1turn149341search12 GitHub 的 solana-explain 也将 token balance fixtures、WSOL wrap/unwrap、Jupiter swap 与 Token-2022 fee 作为不同 transaction cases，而不是用单一 net delta 解释全部行为。citeturn149341search17
+
+**下一阻断**：继续 R-56/R-57 的最高价值验证应是把一个真实 archived transaction 同时跑过 mixed-flow、Token-2022 fee、WSOL/SOL balance 与 block order，确认当前证据优先级在真实样本上不会产生错误升级。
