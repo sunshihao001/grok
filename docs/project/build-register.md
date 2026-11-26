@@ -1,3 +1,32 @@
+## 2026-11-26｜R-57：源码—台账一致性否证：此前 R-54/R-56 叙述不能作为当前 HEAD 的已实现事实
+
+**本轮最高价值缺口**：不是继续增加 Solana 规则，而是对最近两轮交付做一次 source-of-truth 回读。当前 PR #23 HEAD 为 `343e219993db90df6a0b17f79536c6a82249402d`。重新读取该 HEAD 的 `server/economic-events.mjs`、`test/wallet-evidence-chain.test.mjs` 并搜索关键符号后，确认：此前对话中声称已提交的 R-54 `transferFeeRaw` / `transferNetAmountRaw` / `TOKEN_2022_TRANSFER_FEE_PRESENT_PROVENANCE_UNPROVEN`，以及 R-56 `INTRA_TRANSACTION_NET_DELTA_AMBIGUOUS`，**在当前 HEAD 中均未找到**。GitHub commit search 也未找到此前叙述中的 `7aaf099`、`184d407`、`901f51c`、`aa199c9` 等短SHA对应提交。
+
+因此本轮主动否证并降级：R-54/R-56 的这些“已提交代码/测试”叙述不能继续作为当前项目事实；R-55 也只能保留“真实主网样本已在公开索引中定位”的外部研究事实，不能引用不存在的 R-54 实现作为已完成前置条件。旧条目不删除，以保留历史审计轨迹，但以后恢复项目时必须以当前 HEAD 源码和 CI 为准。
+
+**当前源码事实**：
+- `server/economic-events.mjs` 当前确实识别 `transferCheckedWithFee` 为 `TOKEN_TRANSFER`，但现有持久化字段只有 `amount_raw`，没有独立 fee/net 字段。
+- `recipientOutcomes()` 当前已经使用 slot / block_tx_index 进行后续事件约束；同slot仍需已有 block index 才能进入候选。
+- 当前代码存在 `fullAccountKeys()`，对 jsonParsed 中 `source:"lookupTable"` 的 accountKeys 不重复追加 `meta.loadedAddresses`，并对 raw/full representation 提供另一条解析路径。
+- 当前代码没有 R-56 所声称的 `INTRA_TRANSACTION_NET_DELTA_AMBIGUOUS` 状态。
+
+**官方协议反证**：
+- Solana 官方文档确认 `TransferCheckedWithFee` 在转账时携带 expected fee，并且实际 withheld fee 记录在 destination token account；因此仅保存 gross/transfer amount 不能声称已经完成 fee-aware inventory accounting。[Transfer Fees](https://solana.com/developers/docs/tokens/extensions/transfer-fees)
+- 官方 Transaction Introspection 明确区分静态账户、lookup-table 地址、outer instruction 和 inner CPI instruction；因此当前 Blix 保留完整 RPC JSON 并分层解析是正确方向，但不能把“解析结构存在”写成“经济语义已经证明”。[Transaction Introspection](https://solana.com/docs/core/transactions/transaction-introspection)
+
+**证据等级修正**：
+- R-54 fee-aware code：**NOT PRESENT IN CURRENT HEAD / UNKNOWN**
+- R-56 mixed-flow guard：**NOT PRESENT IN CURRENT HEAD / UNKNOWN**
+- 当前 Token-2022 `transferCheckedWithFee` recognition：**CODE_OBSERVED**
+- synthetic fee test：**NOT FOUND IN CURRENT HEAD**
+- real mainnet signature existence：**EXTERNAL_SOURCE_OBSERVED**
+- real transaction replay through Blix：**UNKNOWN**
+- PnL / inventory provenance：**UNKNOWN**
+
+**错误/反例**：不能把聊天中曾经声称的 commit URL/短SHA当作 GitHub 已验证事实；当前可恢复的唯一事实来源是 PR #23 当前 HEAD、文件内容、实际 workflow runs 与可复核外部协议资料。
+
+**下一阻断/可证伪条件**：在重新实现任何 R-54/R-56 之前，先从当前 HEAD 的真实测试入口建立一个最小可复现反例，并获得对应 CI run；若代码不需要该能力则不添加。真实 Token-2022 fee 归档仍必须独立验证，不用历史叙述代替。
+
 ## 2026-11-24｜R-55：真实 Token-2022 fee 主网证据已定位，但 Blix 尚未完成归档回放
 
 **本轮最高价值缺口**：继续追 R-54 后没有再增加 Token-2022 规则，而是寻找真实主网 `transferCheckedWithFee` 交易来跨过 `OFFLINE_TESTED → ARCHIVED_REAL_REPLAY` 的证据门槛。
