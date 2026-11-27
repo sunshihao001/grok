@@ -625,5 +625,62 @@
       "status": "NOT_LIVE_VERIFIED",
       "notes": "Existing legacy server has signing/trading/auto-claim/billing; gated startup is not a sandbox"
     }
+  },
+  "autonomous_build": {
+    "version": "2.0",
+    "date": "2026-11-24",
+    "authority": "user instruction in ChatGPT; candidate branch only",
+    "objective": "Preserve full Blix; evidence-based execution-aware opportunities and outcome-driven learning",
+    "architecture": {
+      "source": "https://github.com/sunshihao001/grok/blob/1560528a8812c4623b2e1e54f4d614139017e6e7/docs/project/meme-autonomous-trading-intelligence-v0.1.md",
+      "muse": "preferred operational candidate; unverified",
+      "hermes": "research and falsification candidate; unverified",
+      "gpt": "high-value coordination",
+      "blix": "product and data foundation",
+      "closed_loop": "NOT_VERIFIED"
+    },
+    "baseline": {
+      "official_branch": "blix",
+      "official_sha": "1560528a8812c4623b2e1e54f4d614139017e6e7",
+      "integration_pr": 23,
+      "integration_sha": "36a97e27298408eafc441442769c7eedf5c5935c",
+      "mergeable": false,
+      "verification": "https://github.com/sunshihao001/grok/actions/runs/45373146418/job/138372262839"
+    },
+    "current_work": {
+      "id": "RECIPIENT-TIME-UNITS",
+      "status": "PATCH_CANDIDATE_TEST_PENDING",
+      "reason": "econ_transactions.block_time is seconds; recipient query incorrectly received milliseconds",
+      "paths": [
+        "server/economic-events.mjs",
+        "test/economic-events.test.mjs"
+      ],
+      "acceptance": "archived sell inside inclusive seconds window is observed; outside window, failed or missing archive and unresolved same-slot order are not promoted; existing evidence suite passes"
+    },
+    "next_actions": [
+      {
+        "id": "VERIFY-RECIPIENT-PATCH",
+        "status": "READY",
+        "action": "Run isolated economic-events tests then existing evidence suite; record exact candidate SHA, failures and evidence. Do not relax archive or ordering gates."
+      },
+      {
+        "id": "TRIAGE-REMAINING-REGRESSIONS",
+        "status": "READY_AFTER_VERIFICATION",
+        "action": "Distinguish missing archive fixtures from lazy schema initialization and genuine implementation defects; fix responsible layer and rerun."
+      },
+      {
+        "id": "INTEGRATION-RECONCILIATION",
+        "status": "BLOCKED_PENDING_VERIFICATION",
+        "action": "Compare candidate against current blix and PR23; preserve architecture and original product; propose conflict resolution without merging."
+      },
+      {
+        "id": "OPPORTUNITY-VALUE",
+        "status": "RESEARCH_CANDIDATE",
+        "action": "Use an archived case to compare original and enhanced opportunity judgement; quantify missing/false observations and executable constraints, not profitability claims."
+      }
+    ],
+    "runtime": "NO_SCHEDULER_OR_CROSS_AGENT_RUN_VERIFIED",
+    "human_gate": "only existing authorization applies; no automatic spending or deployment or trading or merge",
+    "legacy_state_note": "Top-level dated records and next array are retained for compatibility and historical trace; autonomous_build is current work checkpoint, not proof of running automation."
   }
 }

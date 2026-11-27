@@ -310,7 +310,8 @@ export function recipientOutcomes(db, sender, mint = null, limit = 20, maxHours 
     const transferAt = Number.isFinite(r.block_time) ? r.block_time * 1000 : null;
     if (transferAt === null || !r.mint) return { ...r, followupStatus: 'TRANSFER_TIME_OR_MINT_UNKNOWN',
       sellObservation: 'TRANSFER_TIME_OR_MINT_UNKNOWN', observedSells: [], crossMintCandidates: [] };
-    const sellRows = sells.all(r.to_owner, r.mint, transferAt, transferAt + windowMs, r.slot, r.slot, r.sig).filter(sell =>
+    // econ_transactions.block_time is in seconds; wallet ledger/output windows are milliseconds.
+    const sellRows = sells.all(r.to_owner, r.mint, r.block_time, r.block_time + windowMs / 1000, r.slot, r.slot, r.sig).filter(sell =>
       sell.sell_slot > r.slot || (sell.sell_slot === r.slot && r.block_tx_index !== null && sell.sell_block_tx_index !== null && sell.sell_block_tx_index > r.block_tx_index));
     const observedSellsTruncated = sellRows.length > 5;
     const observedSells = sellRows.slice(0, 5).map(sell => {

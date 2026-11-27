@@ -160,3 +160,28 @@ test('missing RPC blockTime must remain UNKNOWN even when the recipient has a lo
  assert.deepEqual(result.rows[0].observedSells,[]);
  d.close();
 });
+
+test('recipient follow-up uses archived block seconds, includes window boundary, and requires ordered successful evidence',()=>{
+ const d=setup();
+ try {
+  store(d,'transfer-seconds',mixed());
+  const candidates=[
+   ['before',999,21,null],
+   ['same-slot',1000,20,null],
+   ['inside',1001,21,null],
+   ['boundary',4600,22,null],
+   ['outside',4601,23,null],
+   ['failed',1002,24,{InstructionError:[0,'Custom']}]
+  ];
+  for(const [sig,at,slot,err] of candidates){
+   store(d,sig,tx({at,slot,err}));
+   d.prepare('INSERT INTO wallet_trades VALUES(?,?,?,?,?,?)').run(sig,B,M,'sell',at*1000,1);
+  }
+  d.prepare('INSERT INTO wallet_trades VALUES(?,?,?,?,?,?)').run('unarchived',B,M,'sell',1003_000,1);
+  const row=recipientOutcomes(d,A,M,20,1).rows[0];
+  assert.equal(row.sellObservation,'LOCAL_SELL_SUMMARY_OBSERVED');
+  assert.deepEqual(row.observedSells.map(x=>x.sig),['inside','boundary']);
+  assert.equal(row.observedSellsTruncated,false);
+  assert.ok(row.observedSells.every(x=>x.inventoryLink==='PROVENANCE_UNKNOWN'));
+ } finally {d.close();}
+});
