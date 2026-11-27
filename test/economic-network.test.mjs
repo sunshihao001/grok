@@ -26,6 +26,19 @@ test('conflicting duplicate instruction is flagged not counted twice',()=>{
  const g=projectMintNetwork({mint:M,recipients:[row('s',0,1,'A','B','10'),row('s',0,1,'A','C','10')]});
  assert.equal(g.eventCount,1);assert.equal(g.conflictingEventIdentities,1);
 });
+test('graph chronology prefers canonical slot order over estimated block time',()=>{
+ const g=projectMintNetwork({mint:M,recipients:[
+   row('later-slot',0,-1,'A','B','1', {slot:201,blockTime:1000}),
+   row('earlier-slot',0,-1,'A','C','1', {slot:200,blockTime:1001}),
+   row('unknown-time',0,-1,'A','D','1', {slot:199,blockTime:null}),
+ ]});
+ assert.deepEqual(g.events.map(x=>[x.signature,x.slot,x.blockTime]),[
+   ['unknown-time',199,null],
+   ['earlier-slot',200,1001],
+   ['later-slot',201,1000],
+ ]);
+});
+
 test('bounded source makes truncation visible',()=>{
  const g=projectMintNetwork({mint:M,recipients:Array.from({length:230},(_,i)=>row('s'+i,0,-1,'A','B','1'))});
  assert.equal(g.eventCount,200);assert.equal(g.knownRawTransferred,'200');assert.equal(g.inputTruncated,true);
