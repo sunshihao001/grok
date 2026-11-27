@@ -1,3 +1,39 @@
+## 2026-11-27｜R-58：经济图谱时间排序改为 slot-first，避免 estimated blockTime 反转已知链上顺序
+
+**本轮最高价值缺口**：不是继续增加 Token-2022/PnL 规则，而是检查现有经济图谱是否把“时间”当成事实使用。server/intelligence/economic-network.mjs 原来的 chronological() 先按 blockTime 排序，再按 slot；但 Solana RPC 将 slot 定义为包含该交易的 slot，而 blockTime 是估算的 Unix 时间，可能为 null。对图谱展示/下游排序，已知 slot 应优先于估计 wall-clock 时间。
+
+**原始源码依据**：
+- 当前 economic-network.mjs 的 projectMintNetwork() 会对事件执行 events.sort(chronological)；因此该比较器直接决定图谱事件顺序。
+- 原实现：blockTime → slot → eventId。
+- 本轮修正：slot → blockTime（仅在 slot 缺失/相同时作为回退）→ eventId。 不改变事件事实、金额、边、来源或任何交易语义。
+
+**协议反证**：
+- Solana getTransaction 返回 slot 与 blockTime 两个不同字段；slot 是包含该交易的 slot，blockTime 是估算的处理时间。citeturn141404search8turn141404search16
+- getBlockTime 官方说明明确将 block time 定义为估算的生产时间，并可能返回 null。因此它不是图谱中应覆盖已知 slot 顺序的主排序键。citeturn141404search6
+- getBlock 返回指定 slot 的交易数组；同一 slot 内若需要确定交易先后，应使用 block transaction index/完整 block 交易顺序，而不是只看 blockTime。citeturn141404search2
+
+**可复现反例**：
+- 事件 A：slot=200、blockTime=1001。
+- 事件 B：slot=201、blockTime=1000。
+- 旧排序会把 B 放在 A 前面；新排序按 slot 得到 200 → 201。
+- 另测试 slot=199、blockTime=null：已知 slot 仍排在 slot=200/201 之前，不因缺少估算时间而被放到末尾。
+
+**原位修正**：
+1. 仅修改现有 economic-network.mjs 的排序函数。
+2. 现有 test/economic-network.test.mjs 增加 slot-first regression。
+3. 不新增表、采集器、状态机、图数据库或 AI 工具。
+4. 该修正只保证事件排序事实；不证明跨 Mint 因果、资金来源、共同控制或库存/PnL。
+
+**证据等级**：
+- CODE_OBSERVED: 已提交。
+- OFFLINE_TESTED: regression 已提交；最终 GitHub CI 需按最新 commit 独立核验。
+- ARCHIVED_REAL_REPLAY: 未取得。
+- CONNECTED_READONLY_RUNTIME: 未取得。
+- MODEL_INTERPRETATION: 不适用。
+- UNKNOWN: 真实主网图谱中 blockTime/slot 异常组合的频率未测量；本轮不把 synthetic counterexample 当主网统计。
+
+**下一阻断/可证伪条件**：对一个真实 archived getBlock/getTransaction 样本比较 slot → transaction index → blockTime，确认图谱输出顺序与完整 block 顺序一致；若真实数据发现同 slot 的事件仍需要 block index 才能保持因果顺序，则继续保持同-slot无index为 UNKNOWN，不用 blockTime 猜测。
+
 ## 2026-11-26｜R-57：源码—台账一致性否证：此前 R-54/R-56 叙述不能作为当前 HEAD 的已实现事实
 
 **本轮最高价值缺口**：不是继续增加 Solana 规则，而是对最近两轮交付做一次 source-of-truth 回读。当前 PR #23 HEAD 为 `343e219993db90df6a0b17f79536c6a82249402d`。重新读取该 HEAD 的 `server/economic-events.mjs`、`test/wallet-evidence-chain.test.mjs` 并搜索关键符号后，确认：此前对话中声称已提交的 R-54 `transferFeeRaw` / `transferNetAmountRaw` / `TOKEN_2022_TRANSFER_FEE_PRESENT_PROVENANCE_UNPROVEN`，以及 R-56 `INTRA_TRANSACTION_NET_DELTA_AMBIGUOUS`，**在当前 HEAD 中均未找到**。GitHub commit search 也未找到此前叙述中的 `7aaf099`、`184d407`、`901f51c`、`aa199c9` 等短SHA对应提交。
