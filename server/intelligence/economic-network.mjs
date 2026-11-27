@@ -3,9 +3,21 @@
 // PnL, ownership or new historical transaction index.
 const LIMIT = 200;
 const raw = x => typeof x === 'string' && /^\d+$/.test(x) ? BigInt(x) : null;
-const chronological = (a,b) => (a.blockTime ?? Number.MAX_SAFE_INTEGER) -
-  (b.blockTime ?? Number.MAX_SAFE_INTEGER) || (a.slot ?? 0) - (b.slot ?? 0) ||
-  a.eventId.localeCompare(b.eventId);
+// Slot is the canonical chain position. blockTime is only an estimated wall-clock timestamp and can be null;
+// never let timestamp ordering override a known slot ordering in the graph view.
+const chronological = (a,b) => {
+  const aSlot = Number.isSafeInteger(a.slot) ? a.slot : null;
+  const bSlot = Number.isSafeInteger(b.slot) ? b.slot : null;
+  if (aSlot !== null && bSlot !== null && aSlot !== bSlot) return aSlot - bSlot;
+  if (aSlot === null && bSlot !== null) return 1;
+  if (aSlot !== null && bSlot === null) return -1;
+  const aTime = Number.isSafeInteger(a.blockTime) ? a.blockTime : null;
+  const bTime = Number.isSafeInteger(b.blockTime) ? b.blockTime : null;
+  if (aTime !== null && bTime !== null && aTime !== bTime) return aTime - bTime;
+  if (aTime === null && bTime !== null) return 1;
+  if (aTime !== null && bTime === null) return -1;
+  return a.eventId.localeCompare(b.eventId);
+};
 
 export function projectMintNetwork({ mint, recipients = [] } = {}) {
   if (typeof mint !== 'string' || !Array.isArray(recipients)) throw Error('NETWORK_INPUT_INVALID');
