@@ -68,6 +68,29 @@ test('fresh evidence schema and versioned ALT account indexes remain decodable',
 });
 
 
+test('recipient candidate ordering prefers canonical slot over estimated block time',()=>{
+  const SENDER='SLOT_ORDER_SENDER';
+  const rows=[
+    {sig:'slot-200',slot:200,blockTime:1001,amount:'10'},
+    {sig:'slot-201',slot:201,blockTime:1000,amount:'20'},
+  ];
+  const insertTx=db.prepare(`INSERT INTO econ_transactions
+    (sig,slot,block_time,status,rpc_json,sha256,observed_at,capture_source,commitment)
+    VALUES (?,?,?,?,?,?,?,?,?)`);
+  const insertIx=db.prepare(`INSERT INTO econ_instructions
+    (sig,outer_i,inner_i,kind,program,mint,from_account,to_account,from_owner,to_owner,amount_raw,owner_conflict,raw_json)
+    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`);
+  for (const r of rows) {
+    insertTx.run(r.sig,r.slot,r.blockTime,'RPC_OBSERVED','{}','slot-order-'+r.sig,Date.now(),'OFFLINE_ARCHIVE','confirmed');
+    insertIx.run(r.sig,0,0,'TOKEN_TRANSFER',TOKEN,M,'ATA_SENDER_'+r.sig,'ATA_B_'+r.sig,SENDER,B,r.amount,0,'{}');
+  }
+  const candidates=recipientCandidates(db,SENDER,M,10).rows;
+  assert.deepEqual(candidates.map(x=>[x.sig,x.slot,x.block_time]),[
+    ['slot-201',201,1000],
+    ['slot-200',200,1001],
+  ]);
+});
+
 test('unanchored incremental signature polling reports a capped window as a gap, not an reached cursor',async()=>{
  const calls=[];
  const fullPage=async options=>{
