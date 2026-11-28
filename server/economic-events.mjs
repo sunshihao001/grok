@@ -217,7 +217,7 @@ export function recipientCandidates(db, sender, mint = null, limit = 100) {
      FROM econ_instructions i JOIN econ_transactions t ON t.sig=i.sig
      WHERE t.status='RPC_OBSERVED' AND i.kind='TOKEN_TRANSFER' AND i.owner_conflict=0 AND i.from_owner=?
        AND i.to_owner IS NOT NULL AND i.to_owner!=i.from_owner
-       AND (? IS NULL OR i.mint=?) ORDER BY t.block_time DESC, t.slot DESC LIMIT ?`)
+       AND (? IS NULL OR i.mint=?) ORDER BY t.slot DESC, t.block_time DESC LIMIT ?`)
     .all(sender, mint, mint, Math.max(1, Math.min(500, limit)));
   return { sender, mint, coverage: 'ONLY_CAPTURED_RPC_TX_AND_RESOLVED_TOKEN_ACCOUNT_OWNERS',
     interpretation: 'OBSERVED_INSTRUCTION_TRANSFER; receiving wallet is a candidate, not controlled identity or a proven later sale', rows };
