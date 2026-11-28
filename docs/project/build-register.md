@@ -1,3 +1,37 @@
+## 2026-11-28｜R-59：recipient follow-up 查询也改为 slot-first，避免把接收→出售时间线按 estimated blockTime 排反
+
+本轮最高价值缺口：R-58 已修正 server/intelligence/economic-network.mjs 的图谱排序，但继续核查同一证据链后发现 server/economic-events.mjs::recipientCandidates() 仍使用 ORDER BY t.block_time DESC, t.slot DESC。这会让“接收钱包候选”在跨 slot 的异常/估算时间组合下与 canonical chain position 反序。因为 recipientOutcomes() 以这些候选作为后续观察入口，R-58 只修图谱而不修这里会留下同一业务链的时间语义分裂。
+
+可复现反例：
+- candidate A：slot=200，blockTime=1001
+- candidate B：slot=201，blockTime=1000
+- 旧 DESC 排序：A → B；但 canonical chain position 的最新事件应是 B(slot 201) → A(slot 200)
+- 新排序：slot DESC, block_time DESC；slot 不能被 estimated blockTime 覆盖。
+
+原始源码依据：
+- recipientCandidates() 当前从 econ_transactions 读取 slot、block_time，再供 recipientOutcomes() 做 follow-up observation。
+- economic-network.mjs 已经采用 slot-first；本轮把同一证据原则落实到 recipient candidate consumer，避免图谱与 follow-up 查询各用一套时间语义。
+- recipientOutcomes() 本身已经以 e.slot > r.slot 或同 slot + block_tx_index 判断 follow-up，因此本轮不修改该更严格的资格判断，只修 candidate list 的排序。
+
+原位修正：
+1. server/economic-events.mjs：recipientCandidates() 从 ORDER BY block_time DESC, slot DESC 改为 ORDER BY slot DESC, block_time DESC。
+2. test/wallet-evidence-chain.test.mjs：增加独立 regression，使用 slot 200/blockTime 1001 与 slot 201/blockTime 1000，要求返回 slot 201 → 200。
+3. 无新表、采集器、状态机、AI Agent、RPC 连接或生产服务。
+
+证据等级：
+- CODE_OBSERVED：提交到 PR #23 当前开发分支。
+- OFFLINE_TESTED：regression 已提交；本轮最新 commit 尚无 GitHub Actions run，因此不能写 CI PASS。
+- ARCHIVED_REAL_REPLAY：未取得。
+- CONNECTED_READONLY_RUNTIME：未取得。
+- MODEL_INTERPRETATION：不适用。
+- UNKNOWN：真实主网中异常 blockTime/slot 排序组合的发生频率未测量；synthetic regression 不代表主网统计。
+
+当前状态复核：
+- PR #23 当前 head 在本轮开始时为 6bc5af8d009e5e190b549c61ad5dd7d70cb2c317；R-54/R-56 的实际代码在该 HEAD 中确实存在：transferCheckedWithFee fee/net 派生、mixed same-Mint ambiguity、prior-inbound 不覆盖强证据，以及相应 offline fixtures。因此不能继续引用 R-57 中“这些代码不存在于当前 HEAD”的旧判断；R-57 本身应视为一次已经被后续 HEAD 纠正的历史审计记录。
+- 当前新提交链为：91e945a（代码）→ 94d5a08（回归测试）。CI 尚未运行。
+
+下一阻断/可证伪条件：优先取得一个许可的真实 archived block/getTransaction 样本，同时包含跨 slot recipient transfer 与后续 sell；比较 slot → block_tx_index → blockTime 和 recipientOutcomes() 最终 observedSells 顺序。如果真实样本一致，R-59 停止；若同 slot 且无 block index 仍被错误升级，再只补已有 evidence journal 的 block transaction index 证据，不创建新采集器。
+
 ## 2026-11-27｜R-58：经济图谱时间排序改为 slot-first，避免 estimated blockTime 反转已知链上顺序
 
 **本轮最高价值缺口**：不是继续增加 Token-2022/PnL 规则，而是检查现有经济图谱是否把“时间”当成事实使用。server/intelligence/economic-network.mjs 原来的 chronological() 先按 blockTime 排序，再按 slot；但 Solana RPC 将 slot 定义为包含该交易的 slot，而 blockTime 是估算的 Unix 时间，可能为 null。对图谱展示/下游排序，已知 slot 应优先于估计 wall-clock 时间。
