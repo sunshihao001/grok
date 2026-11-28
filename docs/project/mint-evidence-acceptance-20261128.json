@@ -1,0 +1,162 @@
+{
+  "baseline": "303365a7fe72de1c617b4cff9356863a0b863f48",
+  "aiD": "6693df6f20f5e1ba3dcf6fd93a213f95c2f0d05c",
+  "scope": "source-function isolated execution and deterministic fixtures, no live chain or full Node suite",
+  "task": "单Mint证据对象与供应分母归属，保守向执行集群调查交接",
+  "sourcePins": [
+    {
+      "path": "server/holders.js",
+      "blob": "5050a075144993828209340d6013213364bf1849"
+    },
+    {
+      "path": "server/intelligence/mint-facts.mjs",
+      "blob": "22906314742329563d01254166dbcd3a899084b8"
+    },
+    {
+      "path": "test/intelligence-layer.test.mjs",
+      "blob": "f8e738077dbdad31235708fd50d387176809b8b4"
+    },
+    {
+      "path": "docs/project/intelligence-layer.md",
+      "blob": "098306654cf8c91287c9827f3e0a1a055e731bcf"
+    },
+    {
+      "path": "docs/project/knowledge-use.md",
+      "blob": "e176816a6c42e271ae1f4f74881515bf31404f20"
+    }
+  ],
+  "prior": {
+    "oldSourceNoMint": true,
+    "oldSourceNoSupplyBasis": true,
+    "oldWrongHolderAccepted": true,
+    "oldNullRowCrashes": true,
+    "oldFallbackTop10": 3
+  },
+  "fixture": {
+    "knownSupply": 500000000,
+    "assumedSupply": 1000000000,
+    "observedTokens": 30000000,
+    "knownTop10Pct": 6,
+    "fallbackTop10Pct": 3
+  },
+  "checks": [
+    {
+      "name": "source identity and supplier denominator",
+      "pass": true
+    },
+    {
+      "name": "source fallback denominator explicit",
+      "pass": true
+    },
+    {
+      "name": "known supply still unverified",
+      "pass": true
+    },
+    {
+      "name": "fallback not promoted",
+      "pass": true
+    },
+    {
+      "name": "legacy missing identity and denominator",
+      "pass": true
+    },
+    {
+      "name": "wrong mint quarantined",
+      "pass": true
+    },
+    {
+      "name": "malformed row isolated",
+      "pass": true
+    },
+    {
+      "name": "invalid default denominator unknown",
+      "pass": true
+    },
+    {
+      "name": "zero preserved",
+      "pass": true
+    },
+    {
+      "name": "negative invalid not zero",
+      "pass": true
+    },
+    {
+      "name": "token wrong mint still rejected",
+      "pass": true
+    },
+    {
+      "name": "existing/new test body: one allowlisted capability is visible; no implicit execution",
+      "pass": true
+    },
+    {
+      "name": "existing/new test body: Mint and Holder facts preserve provenance, partial coverage and source tags",
+      "pass": true
+    },
+    {
+      "name": "existing/new test body: unavailable ledger is not silently called complete",
+      "pass": true
+    },
+    {
+      "name": "existing/new test body: mismatching source Mint is reported, never accepted",
+      "pass": true
+    },
+    {
+      "name": "existing/new test body: local API reader only issues fixed GET routes on loopback",
+      "pass": true
+    },
+    {
+      "name": "existing/new test body: HTTP 200 with malformed source data is not considered a completed observation",
+      "pass": true
+    },
+    {
+      "name": "existing/new test body: explicit holder Mint mismatch is quarantined",
+      "pass": true
+    },
+    {
+      "name": "existing/new test body: holder denominator and response identity remain source-qualified",
+      "pass": true
+    },
+    {
+      "name": "existing/new test body: legacy response has no verified identity or denominator; actual zero remains zero",
+      "pass": true
+    }
+  ],
+  "receipt": [
+    [
+      "G1/G2",
+      "业务规格",
+      "保留发现、调查、跨币、机会/执行区别；先修单币证据"
+    ],
+    [
+      "C1",
+      "证据",
+      "holdersFor、mint-facts、原测试、PR23相同适配器"
+    ],
+    [
+      "C2/C3",
+      "条件知识",
+      "K-DATA:分母、K-PROV:源身份、K-HOOK:源/消费依赖、K-EVAL:反例与真值"
+    ],
+    [
+      "C4",
+      "实际产物",
+      "源端补字段、适配器拒错绑、兼容旧响应、隔离空行、扩展测试"
+    ],
+    [
+      "C5",
+      "验收",
+      "真实源码函数隔离运行，原/新测试体；完整Node与真实主网未跑"
+    ],
+    [
+      "S2/S3",
+      "反馈",
+      "源端自报不等于真值，知识入口原位登记；独立候选提交回读另验"
+    ]
+  ],
+  "limits": [
+    "夹具为构造，不是真实链上代币数据",
+    "仅抽取holdersFor执行，未启动含副作用的原服务器",
+    "Node test runner/CI 未跑；现有测试体经轻量JS断言适配执行",
+    "不确认内幕、共控、盈利或可交易性"
+  ]
+}
