@@ -64,3 +64,20 @@ test("HTTP 200 with malformed source data is not considered a completed observat
   assert.equal(result.facts.token, null);
   assert.equal(result.facts.holderLedger, null);
 });
+
+test("explicit holder Mint mismatch is quarantined", async () => {
+  const result = await runCapability("mint-facts", { mint, read: async p => p.includes("/token/") ? {ok:true,status:200,data:{token:{mint}}} : {ok:true,status:200,data:{mint:"wrong",holders:2,top:[]}} });
+  assert.equal(result.status,"SOURCE_MISMATCH"); assert.equal(result.facts.holderLedger,null);
+});
+test("holder denominator and response identity remain source-qualified", async () => {
+  const read = async p => p.includes("/token/") ? {ok:true,status:200,data:{token:{mint}}} : {ok:true,status:200,data:{mint,holders:2,top10:3,partial:false,supplyBasis:{tokens:1e9,source:"DEFAULT_1B_ASSUMPTION"},top:[null,{wallet:"address1",pct:3}]}};
+  const result=await runCapability("mint-facts",{mint,read});
+  assert.equal(result.facts.holderLedger.mintBinding,"SOURCE_REPORTED_MATCH");
+  assert.equal(result.facts.holderLedger.supplyBasis.source,"DEFAULT_1B_ASSUMPTION");
+  assert.equal(result.facts.holderLedger.top.length,1);assert.match(result.unknowns.join(" "),/assumed one-billion/);
+  assert.match(result.unknowns.join(" "),/Malformed holder rows/);
+});
+test("legacy response has no verified identity or denominator; actual zero remains zero",async()=>{
+  const result=await runCapability("mint-facts",{mint,read:async p=>p.includes("/token/")?{ok:true,status:200,data:{token:{mint}}}:{ok:true,status:200,data:{holders:0,top10:0,top:[]}}});
+  assert.equal(result.facts.holderLedger.mintBinding,"REQUEST_PATH_ONLY");assert.equal(result.facts.holderLedger.supplyBasis,null);assert.equal(result.facts.holderLedger.top10Pct,0);
+});

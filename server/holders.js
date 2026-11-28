@@ -117,7 +117,9 @@ export function holdersFor(mint, { top = 10 } = {}) {
   for (const [wallet, w] of b.bal) if (w.b > 0.5) { holders++; held.push([wallet, w]); }
   held.sort((a, c) => c[1].b - a[1].b);
   // Shares of the coin's own supply when Jupiter has said it (a coin that is not pump.fun's 1B), else of 1B.
-  const sup = knownSupply(mint) || SUPPLY;
+  const reportedSupply = knownSupply(mint);
+  const hasReportedSupply = Number.isFinite(reportedSupply) && reportedSupply > 0;
+  const sup = hasReportedSupply ? reportedSupply : SUPPLY;
   const pct = (tokens) => +((tokens / sup) * 100).toFixed(2);
   const top10 = pct(held.slice(0, 10).reduce((s_, [, w]) => s_ + w.b, 0));
   const tag = (wallet) => wallet === creator ? "dev" : b.bundle.has(wallet) ? "bundle" : b.snipers.has(wallet) ? "sniper" : null;
@@ -131,6 +133,7 @@ export function holdersFor(mint, { top = 10 } = {}) {
     return { n: set.size, pct: pct(tokens), maxPct: pct(max), sold };
   };
   b.sum = {
+    mint, supplyBasis: { tokens: sup, source: hasReportedSupply ? "JUPITER_REPORTED" : "DEFAULT_1B_ASSUMPTION" },
     holders, top10, top: list, trades: b.trades, since: b.t0, last: b.last, genesis: b.genesis, seeded: b.seeded || null, partial: isPartial(b),
     dev: creator ? { wallet: creator, pct: dev ? pct(dev.b) : 0, maxPct: dev ? pct(dev.max) : 0, sol: dev ? +(dev.in - dev.out).toFixed(3) : 0, sold: devSold, seen: Boolean(dev) } : null,
     snipers: b.genesis ? group(b.snipers) : null, bundle: b.genesis ? group(b.bundle) : null,
